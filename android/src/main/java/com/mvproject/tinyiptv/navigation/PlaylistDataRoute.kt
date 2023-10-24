@@ -10,14 +10,14 @@ package com.mvproject.tinyiptv.navigation
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
-import cafe.adriel.voyager.androidx.AndroidScreen
+import cafe.adriel.voyager.core.screen.Screen
 import cafe.adriel.voyager.navigator.LocalNavigator
 import cafe.adriel.voyager.navigator.currentOrThrow
 import com.mvproject.tinyiptv.ui.screens.groups.GroupView
 import com.mvproject.tinyiptv.ui.screens.groups.GroupViewModel
 import org.koin.androidx.compose.koinViewModel
 
-class PlaylistDataRoute : AndroidScreen() {
+object PlaylistDataRoute : Screen {
 
     @Composable
     override fun Content() {
@@ -28,7 +28,7 @@ class PlaylistDataRoute : AndroidScreen() {
         GroupView(
             dataState = playlistDataState,
             onNavigateToSettings = {
-                navigator.push(SettingsRoute())
+                navigator.push(SettingsRoute)
             },
             onNavigateToGroup = {
                 navigator.push(

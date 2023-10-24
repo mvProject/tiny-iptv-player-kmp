@@ -6,13 +6,13 @@
  */
 
 plugins {
-    id("com.android.application") version "8.1.0" apply false
-    id("com.android.library") version "8.1.0" apply false
-    id("org.jetbrains.kotlin.android") version "1.9.0" apply false
-    //   id("com.squareup.sqldelight") version "1.5.5" apply false
-    id("app.cash.sqldelight") version "2.0.0" apply false
-    id("org.jetbrains.kotlin.plugin.serialization") version "1.9.0" apply false
-    // id("com.google.devtools.ksp").version("1.9.0-1.0.12")
+    alias(libs.plugins.android.application) apply false
+    alias(libs.plugins.android.library) apply false
+    alias(libs.plugins.android.kotlin) apply false
+    alias(libs.plugins.multiplatform) apply false
+    alias(libs.plugins.compose.multiplatform)
+    alias(libs.plugins.sqlDelight.plugin) apply false
+    alias(libs.plugins.kotlinX.serialization.plugin) apply false
 }
 
 tasks.register("clean", Delete::class) {

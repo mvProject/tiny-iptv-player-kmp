@@ -11,7 +11,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
-import cafe.adriel.voyager.androidx.AndroidScreen
+import cafe.adriel.voyager.core.screen.Screen
 import cafe.adriel.voyager.navigator.LocalNavigator
 import cafe.adriel.voyager.navigator.currentOrThrow
 import com.mvproject.tinyiptv.ui.screens.playlist.PlaylistView
@@ -22,7 +22,7 @@ import org.koin.androidx.compose.koinViewModel
 
 data class PlaylistDetailRoute(
     val id: String = AppConstants.EMPTY_STRING
-) : AndroidScreen() {
+) : Screen {
 
     @Composable
     override fun Content() {

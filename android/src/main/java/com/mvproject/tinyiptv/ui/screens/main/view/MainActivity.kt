@@ -34,7 +34,7 @@ class MainActivity : ComponentActivity() {
 
             VideoAppTheme {
                 Navigator(
-                    screen = PlaylistDataRoute()
+                    screen = PlaylistDataRoute
                 )
             }
         }

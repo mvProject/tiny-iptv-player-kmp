@@ -10,14 +10,14 @@ package com.mvproject.tinyiptv.navigation
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
-import cafe.adriel.voyager.androidx.AndroidScreen
+import cafe.adriel.voyager.core.screen.Screen
 import cafe.adriel.voyager.navigator.LocalNavigator
 import cafe.adriel.voyager.navigator.currentOrThrow
 import com.mvproject.tinyiptv.ui.screens.settings.general.SettingsView
 import com.mvproject.tinyiptv.ui.screens.settings.general.SettingsViewModel
 import org.koin.androidx.compose.koinViewModel
 
-class SettingsRoute : AndroidScreen() {
+object SettingsRoute : Screen {
 
     @Composable
     override fun Content() {

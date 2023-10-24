@@ -8,7 +8,7 @@
 package com.mvproject.tinyiptv.navigation
 
 import androidx.compose.runtime.Composable
-import cafe.adriel.voyager.androidx.AndroidScreen
+import cafe.adriel.voyager.core.screen.Screen
 import com.mvproject.tinyiptv.ui.screens.player.VideoView
 import com.mvproject.tinyiptv.ui.screens.player.VideoViewViewModel
 import org.koin.androidx.compose.koinViewModel
@@ -16,7 +16,7 @@ import org.koin.androidx.compose.koinViewModel
 data class PlayerScreenRoute(
     val mediaUrl: String,
     val mediaGroup: String
-) : AndroidScreen() {
+) : Screen {
 
     @Composable
     override fun Content() {

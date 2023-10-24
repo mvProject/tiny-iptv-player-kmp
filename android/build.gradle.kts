@@ -8,11 +8,11 @@
 import java.util.Properties
 
 plugins {
-    id("com.android.application")
-    kotlin("android")
-    kotlin("kapt")
-    id("app.cash.sqldelight")
-    id("kotlinx-serialization")
+    alias(libs.plugins.android.application)
+    alias(libs.plugins.android.kotlin)
+    alias(libs.plugins.compose.multiplatform)
+    alias(libs.plugins.sqlDelight.plugin)
+    alias(libs.plugins.kotlinX.serialization.plugin)
 }
 
 android {
@@ -74,7 +74,7 @@ android {
         compose = true
     }
     composeOptions {
-        kotlinCompilerExtensionVersion = "1.5.0"
+        kotlinCompilerExtensionVersion = "1.5.2"
     }
     packaging {
         resources {
@@ -99,80 +99,76 @@ dependencies {
     implementation(fileTree(mapOf("dir" to "libs", "include" to listOf("*.aar"))))
 
     // DataStore
-    implementation("androidx.datastore:datastore-preferences:1.0.0")
+    implementation(libs.datastore.preferences)
 
     // DateTime
-    implementation("org.jetbrains.kotlinx:kotlinx-datetime:0.4.1")
+    implementation(libs.kotlinX.dateTime)
 
     //Logging
-    implementation("io.github.aakira:napier:2.6.1")
+    implementation(libs.napier)
 
     // Integration with activity and viewmodels
-    implementation("androidx.activity:activity-compose:1.8.0")
-    implementation("androidx.lifecycle:lifecycle-viewmodel-compose:2.6.2")
+    implementation(libs.androidx.compose.activity)
+    implementation(libs.androidx.compose.lifecycle.viewmodel)
 
     // Compose Bom
-    val composeBom = platform("androidx.compose:compose-bom:2023.08.00")
+    val composeBom = platform(libs.androidx.compose.bom)
     implementation(composeBom)
     androidTestImplementation(composeBom)
     // Compose UI
-    implementation("androidx.compose.ui:ui")
-    implementation("androidx.compose.material:material-icons-core")
-    implementation("androidx.compose.material:material-icons-extended")
-    implementation("androidx.compose.runtime:runtime-livedata")
-    implementation("androidx.compose.material3:material3")
+    implementation(libs.androidx.compose.material.icons.core)
+    implementation(libs.androidx.compose.material.icons.extended)
+
+    implementation(compose.ui)
+    implementation(compose.material3)
+
     implementation("androidx.compose.material3:material3-window-size-class")
-    implementation("androidx.compose.animation:animation")
 
     // DI
-    implementation("io.insert-koin:koin-androidx-compose:3.4.4")
-
-    // WorkManager
-    implementation("androidx.work:work-runtime-ktx:2.8.1")
+    implementation(libs.koin.android.compose)
 
     // Navigation
-    implementation("cafe.adriel.voyager:voyager-androidx:1.0.0-rc06")
-    implementation("cafe.adriel.voyager:voyager-koin:1.0.0-rc06")
-    implementation("cafe.adriel.voyager:voyager-navigator:1.0.0-rc06")
-    implementation("cafe.adriel.voyager:voyager-transitions:1.0.0-rc06")
+    implementation(libs.voyager.koin)
+    implementation(libs.voyager.navigator)
 
     // Image processing
-    implementation("io.coil-kt:coil:2.4.0")
-    implementation("io.coil-kt:coil-compose:2.4.0")
+    implementation(libs.coil)
+    implementation(libs.coil.compose)
 
     // Exoplayer
-    implementation("androidx.media3:media3-exoplayer:1.2.0-beta01")
-    implementation("androidx.media3:media3-ui:1.2.0-beta01")
-    implementation("androidx.media3:media3-exoplayer-hls:1.2.0-beta01")
+    implementation(libs.media3.exoplayer)
+    implementation(libs.media3.ui)
+    implementation(libs.media3.exoplayer.hls)
 
     // Ktor
-    implementation("io.ktor:ktor-client-android:2.3.0")
-    implementation("io.ktor:ktor-client-logging-jvm:2.3.0")
-    implementation("io.ktor:ktor-client-content-negotiation:2.3.0")
-    implementation("io.ktor:ktor-serialization-kotlinx-json:2.3.0")
+    implementation(libs.ktor.client.android)
+    implementation(libs.ktor.client.logging.jvm)
+    implementation(libs.ktor.client.content.negotiation)
+    implementation(libs.ktor.ktor.serialization.kotlinx.json)
 
     // SQL Delight
-    implementation("app.cash.sqldelight:android-driver:2.0.0")
-    implementation("app.cash.sqldelight:coroutines-extensions:2.0.0")
+    implementation(libs.sqldelight.android.driver)
+    implementation(libs.sqldelight.coroutines.extensions)
 
     // Misc
-    implementation("org.jetbrains.kotlinx:kotlinx-collections-immutable:0.3.5")
-    implementation("com.google.accompanist:accompanist-permissions:0.28.0")
-    implementation("com.google.accompanist:accompanist-systemuicontroller:0.31.2-alpha")
-    implementation("com.google.accompanist:accompanist-adaptive:0.31.2-alpha")
+    implementation(libs.kotlinx.collections.immutable)
+
+    implementation(libs.accompanist.permissions)
+    implementation(libs.accompanist.systemuicontroller)
+    implementation(libs.accompanist.adaptive)
 
     // Tests
-    testImplementation("junit:junit:4.13.2")
-    androidTestImplementation("androidx.test.ext:junit:1.1.5")
-    androidTestImplementation("androidx.test.espresso:espresso-core:3.5.1")
+    testImplementation(libs.test.junit)
+    androidTestImplementation(libs.test.ext.junit)
+    androidTestImplementation(libs.test.espresso.core)
 
     // UI Tests
-    androidTestImplementation("androidx.compose.ui:ui-test-junit4")
-    debugImplementation("androidx.compose.ui:ui-test-manifest")
+    androidTestImplementation(libs.androidx.compose.ui.test.junit4)
+    debugImplementation(libs.androidx.compose.ui.test.manifest)
 
     // Android Studio Preview support
-    debugImplementation("androidx.compose.ui:ui-tooling")
-    implementation("androidx.compose.ui:ui-tooling-preview")
+    debugImplementation(libs.androidx.compose.ui.tooling)
+    implementation(libs.androidx.compose.ui.tooling.preview)
 }
 
 sqldelight {
