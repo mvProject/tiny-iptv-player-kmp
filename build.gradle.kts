@@ -10,6 +10,7 @@ plugins {
     alias(libs.plugins.android.library) apply false
     alias(libs.plugins.android.kotlin) apply false
     alias(libs.plugins.multiplatform) apply false
+    alias(libs.plugins.jvm) apply false
     alias(libs.plugins.compose.multiplatform)
     alias(libs.plugins.sqlDelight.plugin) apply false
     alias(libs.plugins.kotlinX.serialization.plugin) apply false

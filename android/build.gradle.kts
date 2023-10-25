@@ -98,11 +98,12 @@ fun readProperties(propertiesFile: File) = Properties().apply {
 dependencies {
     implementation(fileTree(mapOf("dir" to "libs", "include" to listOf("*.aar"))))
 
+    implementation(project(":common"))
     // DataStore
     implementation(libs.datastore.preferences)
 
     // DateTime
-    implementation(libs.kotlinX.dateTime)
+    implementation(libs.kotlinx.dateTime)
 
     //Logging
     implementation(libs.napier)
@@ -147,13 +148,13 @@ dependencies {
     implementation(libs.ktor.ktor.serialization.kotlinx.json)
 
     // SQL Delight
-    implementation(libs.sqldelight.android.driver)
+    implementation(libs.sqldelight.driver.android)
     implementation(libs.sqldelight.coroutines.extensions)
 
     // Misc
     implementation(libs.kotlinx.collections.immutable)
 
-    implementation(libs.accompanist.permissions)
+    //   implementation(libs.accompanist.permissions)
     implementation(libs.accompanist.systemuicontroller)
     implementation(libs.accompanist.adaptive)
 

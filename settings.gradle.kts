@@ -23,3 +23,5 @@ dependencyResolutionManagement {
 }
 rootProject.name = "Tiny Iptv"
 include(":android")
+include(":common")
+include(":desktop")
