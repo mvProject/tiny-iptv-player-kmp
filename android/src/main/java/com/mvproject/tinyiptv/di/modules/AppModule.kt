@@ -17,7 +17,7 @@ import app.cash.sqldelight.driver.android.AndroidSqliteDriver
 import coil.ImageLoader
 import coil.disk.DiskCache
 import coil.memory.MemoryCache
-import com.mvproject.tinyiptv.VideoAppDatabase
+import com.mvproject.tinyiptv.TinyIptvDatabase
 import io.github.aakira.napier.Napier
 import io.ktor.client.HttpClient
 import io.ktor.client.engine.android.Android
@@ -37,7 +37,7 @@ import org.koin.android.ext.koin.androidContext
 import org.koin.core.qualifier.named
 import org.koin.dsl.module
 
-private const val VIDEO_APP_PREFERENCES = "video_app_preferences"
+private const val VIDEO_APP_PREFERENCES = "tiny_iptv_preferences"
 
 val appModule = module {
     single(named("IODispatcher")) { Dispatchers.IO }
@@ -67,9 +67,6 @@ val appModule = module {
             }
 
             install(HttpTimeout)
-            //{
-            //    requestTimeoutMillis = 15000
-            //}
         }
     }
 
@@ -101,10 +98,10 @@ val appModule = module {
 
     single<SqlDriver> {
         AndroidSqliteDriver(
-            schema = VideoAppDatabase.Schema,
+            schema = TinyIptvDatabase.Schema,
             context = androidContext(),
-            name = "videoapp.db",
-            callback = object : AndroidSqliteDriver.Callback(VideoAppDatabase.Schema) {
+            name = "tinyiptv.db",
+            callback = object : AndroidSqliteDriver.Callback(TinyIptvDatabase.Schema) {
                 override fun onConfigure(db: SupportSQLiteDatabase) {
                     super.onConfigure(db)
                     setPragma(db, "JOURNAL_MODE = WAL")
@@ -122,6 +119,6 @@ val appModule = module {
 
 
     single {
-        VideoAppDatabase(get())
+        TinyIptvDatabase(get())
     }
 }

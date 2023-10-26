@@ -55,7 +55,7 @@ fun OptionsDialog(
             ) {
                 val listState = rememberLazyListState()
                 if (selectedIndex > AppConstants.INT_NO_VALUE) {
-                    LaunchedEffect("ScrollToSelected") {
+                    LaunchedEffect(selectedIndex) {
                         listState.scrollToItem(index = selectedIndex)
                     }
                 }

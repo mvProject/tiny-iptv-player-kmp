@@ -63,7 +63,7 @@ fun VideoView(
 ) {
     val context = LocalContext.current
     val activity = context.findActivity()
-    val windowSizeClass = calculateWindowSizeClass(activity)
+    val windowSizeClass = calculateWindowSizeClass()
     val displayFeatures = calculateDisplayFeatures(activity)
 
     val connection by networkConnectionState()

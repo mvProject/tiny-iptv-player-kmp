@@ -7,14 +7,14 @@
 
 package com.mvproject.tinyiptv.data.repository
 
-import com.mvproject.tinyiptv.VideoAppDatabase
+import com.mvproject.tinyiptv.TinyIptvDatabase
 import com.mvproject.tinyiptv.data.mappers.EntityMapper.toSelectedEpg
 import com.mvproject.tinyiptv.data.models.epg.SelectedEpg
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
-import videoappdb.SelectedEpgEntity
+import tinyiptvdb.SelectedEpgEntity
 
-class SelectedEpgRepository(private val db: VideoAppDatabase) {
+class SelectedEpgRepository(private val db: TinyIptvDatabase) {
     private val selectedEpgQueries = db.selectedEpgEntityQueries
 
     suspend fun addSelectedEpg(epg: SelectedEpg) {

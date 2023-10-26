@@ -117,13 +117,12 @@ dependencies {
     implementation(composeBom)
     androidTestImplementation(composeBom)
     // Compose UI
-    implementation(libs.androidx.compose.material.icons.core)
-    implementation(libs.androidx.compose.material.icons.extended)
 
     implementation(compose.ui)
     implementation(compose.material3)
+    implementation(compose.materialIconsExtended)
 
-    implementation("androidx.compose.material3:material3-window-size-class")
+    implementation(libs.material3.window.size.multiplatform)
 
     // DI
     implementation(libs.koin.android.compose)
@@ -143,6 +142,7 @@ dependencies {
 
     // Ktor
     implementation(libs.ktor.client.android)
+    implementation(libs.ktor.client.core)
     implementation(libs.ktor.client.logging.jvm)
     implementation(libs.ktor.client.content.negotiation)
     implementation(libs.ktor.ktor.serialization.kotlinx.json)
@@ -154,7 +154,6 @@ dependencies {
     // Misc
     implementation(libs.kotlinx.collections.immutable)
 
-    //   implementation(libs.accompanist.permissions)
     implementation(libs.accompanist.systemuicontroller)
     implementation(libs.accompanist.adaptive)
 
@@ -174,7 +173,7 @@ dependencies {
 
 sqldelight {
     databases {
-        create("VideoAppDatabase") {
+        create("TinyIptvDatabase") {
             packageName.set("com.mvproject.tinyiptv")
         }
     }

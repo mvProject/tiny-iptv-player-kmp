@@ -7,14 +7,14 @@
 
 package com.mvproject.tinyiptv.data.repository
 
-import com.mvproject.tinyiptv.VideoAppDatabase
+import com.mvproject.tinyiptv.TinyIptvDatabase
 import com.mvproject.tinyiptv.data.mappers.EntityMapper.toEpgProgram
 import com.mvproject.tinyiptv.data.mappers.EntityMapper.toEpgProgramEntity
 import com.mvproject.tinyiptv.data.models.epg.EpgProgram
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 
-class EpgProgramRepository(private val db: VideoAppDatabase) {
+class EpgProgramRepository(private val db: TinyIptvDatabase) {
 
     private val epgProgramQueries = db.epgProgramEntityQueries
 

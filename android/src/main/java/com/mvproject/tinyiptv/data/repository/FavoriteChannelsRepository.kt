@@ -7,15 +7,15 @@
 
 package com.mvproject.tinyiptv.data.repository
 
-import com.mvproject.tinyiptv.VideoAppDatabase
+import com.mvproject.tinyiptv.TinyIptvDatabase
 import com.mvproject.tinyiptv.data.models.channels.PlaylistChannel
 import com.mvproject.tinyiptv.data.models.channels.TvPlaylistChannel
 import com.mvproject.tinyiptv.utils.AppConstants.INT_VALUE_1
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
-import videoappdb.FavoriteChannelEntity
+import tinyiptvdb.FavoriteChannelEntity
 
-class FavoriteChannelsRepository(private val db: VideoAppDatabase) {
+class FavoriteChannelsRepository(private val db: TinyIptvDatabase) {
     private val favoriteChannelQueries = db.favoriteChannelEntityQueries
 
     suspend fun addChannelToFavorite(channel: TvPlaylistChannel, listId: Long) {

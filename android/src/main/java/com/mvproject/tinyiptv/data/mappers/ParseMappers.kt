@@ -15,7 +15,7 @@ import com.mvproject.tinyiptv.utils.AppConstants.LONG_NO_VALUE
 import com.mvproject.tinyiptv.utils.AppConstants.LONG_VALUE_ZERO
 import com.mvproject.tinyiptv.utils.TimeUtils.actualDate
 import kotlinx.datetime.Instant
-import videoappdb.EpgInfoEntity
+import tinyiptvdb.EpgInfoEntity
 import java.text.SimpleDateFormat
 import java.util.Locale
 import kotlin.time.Duration.Companion.hours

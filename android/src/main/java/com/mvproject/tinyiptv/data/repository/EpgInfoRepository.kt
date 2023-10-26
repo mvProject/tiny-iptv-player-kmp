@@ -7,7 +7,7 @@
 
 package com.mvproject.tinyiptv.data.repository
 
-import com.mvproject.tinyiptv.VideoAppDatabase
+import com.mvproject.tinyiptv.TinyIptvDatabase
 import com.mvproject.tinyiptv.data.mappers.EntityMapper.toEpgInfo
 import com.mvproject.tinyiptv.data.mappers.ParseMappers.toEpgInfoEntity
 import com.mvproject.tinyiptv.data.models.epg.EpgInfo
@@ -17,7 +17,7 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 
 class EpgInfoRepository(
-    private val db: VideoAppDatabase
+    private val db: TinyIptvDatabase
 ) {
     private val epgInfoQueries = db.epgInfoEntityQueries
     /*    suspend fun getEpgInfo(): List<AvailableChannelParseModel> {

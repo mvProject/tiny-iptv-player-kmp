@@ -7,14 +7,14 @@
 
 package com.mvproject.tinyiptv.data.repository
 
-import com.mvproject.tinyiptv.VideoAppDatabase
+import com.mvproject.tinyiptv.TinyIptvDatabase
 import com.mvproject.tinyiptv.data.mappers.EntityMapper.toPlaylistChannel
 import com.mvproject.tinyiptv.data.mappers.EntityMapper.toPlaylistChannelEntity
 import com.mvproject.tinyiptv.data.models.channels.PlaylistChannel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 
-class PlaylistChannelsRepository(private val db: VideoAppDatabase) {
+class PlaylistChannelsRepository(private val db: TinyIptvDatabase) {
     private val playlistChannelQueries = db.playlistChannelEntityQueries
 
     suspend fun addPlaylistChannels(channels: List<PlaylistChannel>) {

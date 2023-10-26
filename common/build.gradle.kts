@@ -8,16 +8,16 @@
 plugins {
     alias(libs.plugins.multiplatform)
     alias(libs.plugins.android.library)
-    alias(libs.plugins.kotlinX.serialization.plugin)
-    alias(libs.plugins.sqlDelight.plugin)
+    // alias(libs.plugins.kotlinX.serialization.plugin)
+    // alias(libs.plugins.sqlDelight.plugin)
     alias(libs.plugins.compose.multiplatform)
 }
 
 android {
     namespace = "com.mvproject.tinyiptv.common"
-    /*  sourceSets["main"].manifest.srcFile("src/androidMain/AndroidManifest.xml")
-      sourceSets["main"].res.srcDirs("src/commonMain/resources")
-      sourceSets["main"].resources.srcDirs("src/commonMain/resources")*/
+    sourceSets["main"].manifest.srcFile("src/androidMain/AndroidManifest.xml")
+    sourceSets["main"].res.srcDirs("src/commonMain/resources")
+    sourceSets["main"].resources.srcDirs("src/commonMain/resources")
     compileSdk = 34
     defaultConfig {
         minSdk = 26
@@ -35,33 +35,40 @@ kotlin {
     sourceSets {
         val commonMain by getting {
             dependencies {
+                implementation(compose.runtime)
+                implementation(compose.ui)
+                implementation(compose.material3)
+                implementation(compose.materialIconsExtended)
+
+                implementation("co.touchlab:kermit:2.0.0-RC4")
+
                 /*
-                       implementation(compose.ui)
-                       implementation(compose.material3)
-                       implementation(compose.materialIconsExtended)
+                           implementation(compose.ui)
+                           implementation(compose.material3)
+                           implementation(compose.materialIconsExtended)
 
-                         implementation(libs.material3.window.size.multiplatform)
+                             implementation(libs.material3.window.size.multiplatform)
 
-                         implementation(libs.sqldelight.runtime)
-                         implementation(libs.sqldelight.coroutines.extensions)
+                             implementation(libs.sqldelight.runtime)
+                             implementation(libs.sqldelight.coroutines.extensions)
 
-                         implementation(libs.kotlinx.dateTime)
+                             implementation(libs.kotlinx.dateTime)
 
-                         implementation(libs.napier)
+                             implementation(libs.napier)
 
-                         implementation(libs.kotlinx.serializationJson)
+                             implementation(libs.kotlinx.serializationJson)
 
-                         implementation(libs.kotlinx.collections.immutable)
+                             implementation(libs.kotlinx.collections.immutable)
 
-                         @OptIn(org.jetbrains.compose.ExperimentalComposeLibrary::class)
-                         implementation(compose.components.resources)
+                             @OptIn(org.jetbrains.compose.ExperimentalComposeLibrary::class)
+                             implementation(compose.components.resources)
 
-                         implementation(libs.ktor.client.core)
-                         implementation(libs.ktor.client.logging.jvm)
-                         implementation(libs.ktor.client.content.negotiation)
-                         implementation(libs.ktor.ktor.serialization.kotlinx.json)
+                             implementation(libs.ktor.client.core)
+                             implementation(libs.ktor.client.logging.jvm)
+                             implementation(libs.ktor.client.content.negotiation)
+                             implementation(libs.ktor.ktor.serialization.kotlinx.json)
 
-         */
+             */
             }
         }
 
@@ -78,13 +85,15 @@ kotlin {
 
                             implementation(libs.core)
                          */
+
+
             }
         }
 
         val desktopMain by getting {
             dependencies {
-                implementation(libs.sqldelight.driver.jvm)
-                implementation(compose.desktop.common)
+                // implementation(libs.sqldelight.driver.jvm)
+                // implementation(compose.desktop.common)
                 /*
                                 implementation(libs.kotlinx.coroutines.swing)
 
@@ -96,10 +105,11 @@ kotlin {
     }
 }
 
+/*
 sqldelight {
     databases {
         create("TinyIptvDatabase") {
             packageName.set("com.mvproject.tinyiptv")
         }
     }
-}
+}*/

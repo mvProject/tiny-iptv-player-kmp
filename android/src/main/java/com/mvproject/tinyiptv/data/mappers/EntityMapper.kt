@@ -16,11 +16,11 @@ import com.mvproject.tinyiptv.data.models.playlist.Playlist
 import com.mvproject.tinyiptv.utils.TimeUtils.correctTimeZone
 import com.mvproject.tinyiptv.utils.TimeUtils.toBoolean
 import com.mvproject.tinyiptv.utils.TimeUtils.toLong
-import videoappdb.EpgInfoEntity
-import videoappdb.EpgProgramEntity
-import videoappdb.PlaylistChannelEntity
-import videoappdb.PlaylistEntity
-import videoappdb.SelectedEpgEntity
+import tinyiptvdb.EpgInfoEntity
+import tinyiptvdb.EpgProgramEntity
+import tinyiptvdb.PlaylistChannelEntity
+import tinyiptvdb.PlaylistEntity
+import tinyiptvdb.SelectedEpgEntity
 
 object EntityMapper {
     fun PlaylistChannelEntity.toPlaylistChannel() = with(this) {

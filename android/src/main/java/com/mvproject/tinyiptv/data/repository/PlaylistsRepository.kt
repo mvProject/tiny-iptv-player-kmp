@@ -9,7 +9,7 @@ package com.mvproject.tinyiptv.data.repository
 
 import app.cash.sqldelight.coroutines.asFlow
 import app.cash.sqldelight.coroutines.mapToList
-import com.mvproject.tinyiptv.VideoAppDatabase
+import com.mvproject.tinyiptv.TinyIptvDatabase
 import com.mvproject.tinyiptv.data.mappers.EntityMapper.toPlaylist
 import com.mvproject.tinyiptv.data.mappers.EntityMapper.toPlaylistEntity
 import com.mvproject.tinyiptv.data.models.playlist.Playlist
@@ -18,7 +18,7 @@ import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.withContext
 
-class PlaylistsRepository(private val db: VideoAppDatabase) {
+class PlaylistsRepository(private val db: TinyIptvDatabase) {
     private val queries = db.playlistQueries
 
     suspend fun getPlaylistById(id: Long): Playlist? {

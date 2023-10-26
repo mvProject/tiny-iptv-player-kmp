@@ -24,11 +24,11 @@ compose-viewmodel-lifecycle = "2.6.2"
 androidxComposeBom = "2023.08.00"
 
 kotlinxCoroutinesSwing = "1.7.3"
+kotlinxCoroutinesCore = "1.7.3"
 componentsResources = "1.5.3"
 
 kotlinx-collections = "0.3.5"
 accompanist = "0.31.2-alpha"
-accompanist-permissions = "0.28.0"
 
 kotlinxSerializationJson = "1.6.0"
 material3WindowSizeClassMultiplatform = "0.3.1"
@@ -36,6 +36,7 @@ material3WindowSizeClassMultiplatform = "0.3.1"
 junit = "4.13.2"
 ext-junit = "1.1.5"
 espresso-core = "3.5.1"
+moko-version = "0.23.0"
 
 [plugins]
 
@@ -51,6 +52,15 @@ sqlDelight-plugin = { id = "app.cash.sqldelight", version.ref = "sqldelight" }
 jvm = { id = "org.jetbrains.kotlin.jvm", version.ref = "kotlin" }
 
 [libraries]
+
+kotlinx-coroutines-swing = { module = "org.jetbrains.kotlinx:kotlinx-coroutines-swing", version.ref = "kotlinxCoroutinesSwing" }
+kotlinx-coroutines-core = { module = "org.jetbrains.kotlinx:kotlinx-coroutines-core", version.ref = "kotlinxCoroutinesCore" }
+
+kotlinx-serializationJson = { module = "org.jetbrains.kotlinx:kotlinx-serialization-core", version.ref = "kotlinxSerializationJson" }
+
+kotlinx-collections-immutable = { module = "org.jetbrains.kotlinx:kotlinx-collections-immutable", version.ref = "kotlinx-collections" }
+
+kotlinx-dateTime = { module = "org.jetbrains.kotlinx:kotlinx-datetime", version.ref = "kotlinxDateTime" }
 
 androidx-compose-bom = { group = "androidx.compose", name = "compose-bom", version.ref = "androidxComposeBom" }
 androidx-compose-ui-ui = { group = "androidx.compose.ui", name = "ui" }
@@ -74,7 +84,7 @@ coil-compose = { module = "io.coil-kt:coil-compose", version.ref = "coil" }
 
 napier = { module = "io.github.aakira:napier", version.ref = "napier" }
 
-kotlinx-dateTime = { module = "org.jetbrains.kotlinx:kotlinx-datetime", version.ref = "kotlinxDateTime" }
+components-resources = { module = "org.jetbrains.compose.components:components-resources", version.ref = "componentsResources" }
 
 # voyager-androidx = { module = "cafe.adriel.voyager:voyager-androidx", version.ref = "voyager" }
 voyager-koin = { module = "cafe.adriel.voyager:voyager-koin", version.ref = "voyager" }
@@ -96,22 +106,16 @@ sqldelight-driver-native = { module = "app.cash.sqldelight:native-driver", versi
 sqldelight-driver-jvm = { module = "app.cash.sqldelight:sqlite-driver", version.ref = "sqldelight" }
 sqldelight-coroutines-extensions = { module = "app.cash.sqldelight:coroutines-extensions", version.ref = "sqldelight" }
 
-
 koin-core = { module = "io.insert-koin:koin-core", version.ref = "koinCore" }
 koin-compose = { module = "io.insert-koin:koin-compose", version.ref = "koinCompose" }
 koin-android = { module = "io.insert-koin:koin-android", version.ref = "koinAndroid" }
 koin-android-compose = { module = "io.insert-koin:koin-androidx-compose", version.ref = "koinAndroidCompose" }
 
-kotlinx-collections-immutable = { module = "org.jetbrains.kotlinx:kotlinx-collections-immutable", version.ref = "kotlinx-collections" }
-components-resources = { module = "org.jetbrains.compose.components:components-resources", version.ref = "componentsResources" }
-kotlinx-coroutines-swing = { module = "org.jetbrains.kotlinx:kotlinx-coroutines-swing", version.ref = "kotlinxCoroutinesSwing" }
-kotlinx-serializationJson = { module = "org.jetbrains.kotlinx:kotlinx-serialization-core", version.ref = "kotlinxSerializationJson" }
-
-accompanist-permissions = { module = "com.google.accompanist:accompanist-permissions", version.ref = "accompanist-permissions" }
 accompanist-systemuicontroller = { module = "com.google.accompanist:accompanist-systemuicontroller", version.ref = "accompanist" }
 accompanist-adaptive = { module = "com.google.accompanist:accompanist-adaptive", version.ref = "accompanist" }
 
 test-junit = { module = "junit:junit", version.ref = "junit" }
 test-ext-junit = { module = "androidx.test.ext:junit", version.ref = "ext-junit" }
 test-espresso-core = { module = "androidx.test.espresso:espresso-core", version.ref = "espresso-core" }
-androidx-material3 = { group = "androidx.compose.material3", name = "material3", version = "1.1.2" }
+
+[bundles]
