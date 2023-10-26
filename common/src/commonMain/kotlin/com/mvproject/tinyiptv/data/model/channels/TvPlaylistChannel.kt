@@ -5,9 +5,9 @@
  *
  */
 
-package com.mvproject.tinyiptv.data.models.channels
+package com.mvproject.tinyiptv.data.model.channels
 
-import com.mvproject.tinyiptv.data.models.epg.EpgProgram
+import com.mvproject.tinyiptv.data.model.epg.EpgProgram
 import com.mvproject.tinyiptv.utils.AppConstants.EMPTY_STRING
 
 data class TvPlaylistChannel(

@@ -9,7 +9,7 @@ package com.mvproject.tinyiptv.data.repository
 
 import com.mvproject.tinyiptv.TinyIptvDatabase
 import com.mvproject.tinyiptv.data.mappers.EntityMapper.toSelectedEpg
-import com.mvproject.tinyiptv.data.models.epg.SelectedEpg
+import com.mvproject.tinyiptv.data.model.epg.SelectedEpg
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 import tinyiptvdb.SelectedEpgEntity

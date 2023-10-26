@@ -10,8 +10,8 @@ package com.mvproject.tinyiptv.data.repository
 import com.mvproject.tinyiptv.TinyIptvDatabase
 import com.mvproject.tinyiptv.data.mappers.EntityMapper.toEpgInfo
 import com.mvproject.tinyiptv.data.mappers.ParseMappers.toEpgInfoEntity
-import com.mvproject.tinyiptv.data.models.epg.EpgInfo
-import com.mvproject.tinyiptv.data.models.response.EpgInfoResponse
+import com.mvproject.tinyiptv.data.model.epg.EpgInfo
+import com.mvproject.tinyiptv.data.model.response.EpgInfoResponse
 import io.github.aakira.napier.Napier
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext

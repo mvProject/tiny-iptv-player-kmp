@@ -9,7 +9,7 @@ package com.mvproject.tinyiptv.data.usecases
 
 import android.net.Uri
 import com.mvproject.tinyiptv.data.datasource.LocalPlaylistDataSource
-import com.mvproject.tinyiptv.data.models.playlist.Playlist
+import com.mvproject.tinyiptv.data.model.playlist.Playlist
 import com.mvproject.tinyiptv.data.repository.PlaylistChannelsRepository
 import com.mvproject.tinyiptv.data.repository.PlaylistsRepository
 import com.mvproject.tinyiptv.data.repository.PreferenceRepository

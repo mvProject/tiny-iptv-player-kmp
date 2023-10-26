@@ -7,7 +7,7 @@
 
 package com.mvproject.tinyiptv.data.usecases
 
-import com.mvproject.tinyiptv.data.models.playlist.Playlist
+import com.mvproject.tinyiptv.data.model.playlist.Playlist
 import com.mvproject.tinyiptv.data.repository.FavoriteChannelsRepository
 import com.mvproject.tinyiptv.data.repository.PlaylistChannelsRepository
 import com.mvproject.tinyiptv.data.repository.PlaylistsRepository

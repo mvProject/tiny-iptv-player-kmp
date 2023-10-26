@@ -22,12 +22,12 @@ object TimeUtils {
     val actualDate
         get() = Clock.System.now().toEpochMilliseconds()
 
-    /**
-     * Extension Method to non-null long variable which
-     * convert value to specified time with local timezone
-     *
-     * @return String converted time value
-     */
+    //**
+    // * Extension Method to non-null long variable which
+    // * convert value to specified time with local timezone
+    // *
+    // * @return String converted time value
+    //*
     fun Long.convertTimeToReadableFormat(): String {
         val local = Instant
             .fromEpochMilliseconds(this)

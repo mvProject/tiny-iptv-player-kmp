@@ -5,7 +5,7 @@
  *
  */
 
-package com.mvproject.tinyiptv.data.models.epg
+package com.mvproject.tinyiptv.data.model.epg
 
 import com.mvproject.tinyiptv.utils.AppConstants
 

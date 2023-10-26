@@ -5,7 +5,7 @@
  *
  */
 
-package com.mvproject.tinyiptv.data.models.response
+package com.mvproject.tinyiptv.data.model.response
 
 import com.mvproject.tinyiptv.utils.AppConstants.EMPTY_STRING
 import kotlinx.serialization.Serializable

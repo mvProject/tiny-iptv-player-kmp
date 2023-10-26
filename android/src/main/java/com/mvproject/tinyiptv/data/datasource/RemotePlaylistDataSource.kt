@@ -7,7 +7,7 @@
 
 package com.mvproject.tinyiptv.data.datasource
 
-import com.mvproject.tinyiptv.data.models.channels.PlaylistChannel
+import com.mvproject.tinyiptv.data.model.channels.PlaylistChannel
 import com.mvproject.tinyiptv.data.network.NetworkRepository
 import com.mvproject.tinyiptv.data.parser.M3UParser
 import io.ktor.client.statement.bodyAsChannel

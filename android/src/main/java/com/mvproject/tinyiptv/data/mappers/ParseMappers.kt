@@ -7,9 +7,9 @@
 
 package com.mvproject.tinyiptv.data.mappers
 
-import com.mvproject.tinyiptv.data.models.epg.EpgProgram
-import com.mvproject.tinyiptv.data.models.response.EpgInfoResponse
-import com.mvproject.tinyiptv.data.models.response.EpgProgramResponse
+import com.mvproject.tinyiptv.data.model.epg.EpgProgram
+import com.mvproject.tinyiptv.data.model.response.EpgInfoResponse
+import com.mvproject.tinyiptv.data.model.response.EpgProgramResponse
 import com.mvproject.tinyiptv.utils.AppConstants.INT_VALUE_ZERO
 import com.mvproject.tinyiptv.utils.AppConstants.LONG_NO_VALUE
 import com.mvproject.tinyiptv.utils.AppConstants.LONG_VALUE_ZERO

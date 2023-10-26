@@ -7,8 +7,8 @@
 
 package com.mvproject.tinyiptv.data.usecases
 
-import com.mvproject.tinyiptv.data.models.channels.TvPlaylistChannel
-import com.mvproject.tinyiptv.data.models.epg.SelectedEpg
+import com.mvproject.tinyiptv.data.model.channels.TvPlaylistChannel
+import com.mvproject.tinyiptv.data.model.epg.SelectedEpg
 import com.mvproject.tinyiptv.data.repository.PreferenceRepository
 import com.mvproject.tinyiptv.data.repository.SelectedEpgRepository
 

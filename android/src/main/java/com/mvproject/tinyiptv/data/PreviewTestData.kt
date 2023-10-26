@@ -7,10 +7,10 @@
 
 package com.mvproject.tinyiptv.data
 
-import com.mvproject.tinyiptv.data.models.channels.ChannelsGroup
-import com.mvproject.tinyiptv.data.models.channels.TvPlaylistChannel
-import com.mvproject.tinyiptv.data.models.epg.EpgProgram
-import com.mvproject.tinyiptv.data.models.playlist.Playlist
+import com.mvproject.tinyiptv.data.model.channels.ChannelsGroup
+import com.mvproject.tinyiptv.data.model.channels.TvPlaylistChannel
+import com.mvproject.tinyiptv.data.model.epg.EpgProgram
+import com.mvproject.tinyiptv.data.model.playlist.Playlist
 import com.mvproject.tinyiptv.utils.TimeUtils.actualDate
 import kotlin.random.Random
 import kotlin.time.Duration.Companion.minutes

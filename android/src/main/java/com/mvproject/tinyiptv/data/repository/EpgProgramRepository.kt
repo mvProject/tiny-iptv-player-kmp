@@ -10,7 +10,7 @@ package com.mvproject.tinyiptv.data.repository
 import com.mvproject.tinyiptv.TinyIptvDatabase
 import com.mvproject.tinyiptv.data.mappers.EntityMapper.toEpgProgram
 import com.mvproject.tinyiptv.data.mappers.EntityMapper.toEpgProgramEntity
-import com.mvproject.tinyiptv.data.models.epg.EpgProgram
+import com.mvproject.tinyiptv.data.model.epg.EpgProgram
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 

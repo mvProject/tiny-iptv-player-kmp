@@ -10,7 +10,7 @@ package com.mvproject.tinyiptv.data.repository
 import com.mvproject.tinyiptv.TinyIptvDatabase
 import com.mvproject.tinyiptv.data.mappers.EntityMapper.toPlaylistChannel
 import com.mvproject.tinyiptv.data.mappers.EntityMapper.toPlaylistChannelEntity
-import com.mvproject.tinyiptv.data.models.channels.PlaylistChannel
+import com.mvproject.tinyiptv.data.model.channels.PlaylistChannel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 

@@ -5,7 +5,7 @@
  *
  */
 
-package com.mvproject.tinyiptv.data.models.channels
+package com.mvproject.tinyiptv.data.model.channels
 
 import com.mvproject.tinyiptv.utils.AppConstants.EMPTY_STRING
 

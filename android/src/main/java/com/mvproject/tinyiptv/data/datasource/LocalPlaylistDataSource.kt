@@ -10,7 +10,7 @@ package com.mvproject.tinyiptv.data.datasource
 import android.annotation.SuppressLint
 import android.content.Context
 import android.net.Uri
-import com.mvproject.tinyiptv.data.models.channels.PlaylistChannel
+import com.mvproject.tinyiptv.data.model.channels.PlaylistChannel
 import com.mvproject.tinyiptv.data.parser.M3UParser
 import java.io.BufferedReader
 import java.io.FileInputStream

@@ -7,7 +7,7 @@
 
 package com.mvproject.tinyiptv.data.usecases
 
-import com.mvproject.tinyiptv.data.models.channels.ChannelsGroup
+import com.mvproject.tinyiptv.data.model.channels.ChannelsGroup
 import com.mvproject.tinyiptv.data.repository.PlaylistChannelsRepository
 import com.mvproject.tinyiptv.data.repository.PreferenceRepository
 import com.mvproject.tinyiptv.utils.AppConstants

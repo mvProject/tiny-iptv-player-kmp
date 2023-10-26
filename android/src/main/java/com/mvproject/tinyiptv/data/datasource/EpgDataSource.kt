@@ -8,7 +8,7 @@
 package com.mvproject.tinyiptv.data.datasource
 
 import com.mvproject.tinyiptv.data.mappers.ParseMappers.asProgramEntities
-import com.mvproject.tinyiptv.data.models.epg.EpgProgram
+import com.mvproject.tinyiptv.data.model.epg.EpgProgram
 import com.mvproject.tinyiptv.data.network.NetworkRepository
 import com.mvproject.tinyiptv.utils.TimeUtils.actualDate
 import io.github.aakira.napier.Napier

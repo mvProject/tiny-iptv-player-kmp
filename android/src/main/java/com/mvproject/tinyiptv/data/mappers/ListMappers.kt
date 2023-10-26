@@ -9,8 +9,8 @@ package com.mvproject.tinyiptv.data.mappers
 
 import androidx.media3.common.MediaItem
 import androidx.media3.common.MediaMetadata
-import com.mvproject.tinyiptv.data.models.channels.TvPlaylistChannel
-import com.mvproject.tinyiptv.data.models.epg.EpgProgram
+import com.mvproject.tinyiptv.data.model.channels.TvPlaylistChannel
+import com.mvproject.tinyiptv.data.model.epg.EpgProgram
 import com.mvproject.tinyiptv.utils.TimeUtils.actualDate
 
 object ListMappers {

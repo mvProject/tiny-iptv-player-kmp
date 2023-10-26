@@ -5,7 +5,7 @@
  *
  */
 
-package com.mvproject.tinyiptv.data.models.response
+package com.mvproject.tinyiptv.data.model.response
 
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable

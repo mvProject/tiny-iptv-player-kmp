@@ -7,7 +7,7 @@
 
 package com.mvproject.tinyiptv.data.helpers
 
-import com.mvproject.tinyiptv.data.models.playlist.Playlist
+import com.mvproject.tinyiptv.data.model.playlist.Playlist
 import com.mvproject.tinyiptv.data.repository.PlaylistsRepository
 import com.mvproject.tinyiptv.data.repository.PreferenceRepository
 

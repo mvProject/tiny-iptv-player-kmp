@@ -14,8 +14,13 @@ plugins {
     alias(libs.plugins.compose.multiplatform)
     alias(libs.plugins.sqlDelight.plugin) apply false
     alias(libs.plugins.kotlinX.serialization.plugin) apply false
+   // alias(libs.plugins.mokoResources) apply false
 }
-
+/*buildscript {
+    dependencies {
+        classpath("io.github.skeptick.libres:gradle-plugin:1.2.0-beta01")
+    }
+}*/
 tasks.register("clean", Delete::class) {
     delete(rootProject.buildDir)
 }

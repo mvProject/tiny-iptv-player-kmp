@@ -7,7 +7,7 @@
 
 package com.mvproject.tinyiptv.data.datasource
 
-import com.mvproject.tinyiptv.data.models.response.EpgInfoResponse
+import com.mvproject.tinyiptv.data.model.response.EpgInfoResponse
 import com.mvproject.tinyiptv.data.network.NetworkRepository
 
 class EpgInfoDataSource(

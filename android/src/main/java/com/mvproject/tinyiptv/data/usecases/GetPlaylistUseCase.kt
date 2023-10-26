@@ -7,7 +7,7 @@
 
 package com.mvproject.tinyiptv.data.usecases
 
-import com.mvproject.tinyiptv.data.models.playlist.Playlist
+import com.mvproject.tinyiptv.data.model.playlist.Playlist
 import com.mvproject.tinyiptv.data.repository.PlaylistsRepository
 import com.mvproject.tinyiptv.utils.AppConstants.LONG_VALUE_ZERO
 

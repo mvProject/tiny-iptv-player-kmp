@@ -5,7 +5,7 @@
  *
  */
 
-package com.mvproject.tinyiptv.data.models.epg
+package com.mvproject.tinyiptv.data.model.epg
 
 data class SelectedEpg(
     val channelEpgId: String,

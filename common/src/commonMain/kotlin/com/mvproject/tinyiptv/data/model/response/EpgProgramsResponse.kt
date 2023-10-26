@@ -1,11 +1,11 @@
 /*
  *  Created by Medvediev Viktor [mvproject]
  *  Copyright © 2023
- *  last modified : 04.05.23, 10:59
+ *  last modified : 25.10.23, 16:34
  *
  */
 
-package com.mvproject.tinyiptv.data.models.response
+package com.mvproject.tinyiptv.data.model.response
 
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable

@@ -7,12 +7,12 @@
 
 package com.mvproject.tinyiptv.data.mappers
 
-import com.mvproject.tinyiptv.data.models.channels.PlaylistChannel
-import com.mvproject.tinyiptv.data.models.channels.TvPlaylistChannel
-import com.mvproject.tinyiptv.data.models.epg.EpgInfo
-import com.mvproject.tinyiptv.data.models.epg.EpgProgram
-import com.mvproject.tinyiptv.data.models.epg.SelectedEpg
-import com.mvproject.tinyiptv.data.models.playlist.Playlist
+import com.mvproject.tinyiptv.data.model.channels.PlaylistChannel
+import com.mvproject.tinyiptv.data.model.channels.TvPlaylistChannel
+import com.mvproject.tinyiptv.data.model.epg.EpgInfo
+import com.mvproject.tinyiptv.data.model.epg.EpgProgram
+import com.mvproject.tinyiptv.data.model.epg.SelectedEpg
+import com.mvproject.tinyiptv.data.model.playlist.Playlist
 import com.mvproject.tinyiptv.utils.TimeUtils.correctTimeZone
 import com.mvproject.tinyiptv.utils.TimeUtils.toBoolean
 import com.mvproject.tinyiptv.utils.TimeUtils.toLong

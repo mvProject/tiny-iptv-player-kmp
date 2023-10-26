@@ -12,7 +12,7 @@ import app.cash.sqldelight.coroutines.mapToList
 import com.mvproject.tinyiptv.TinyIptvDatabase
 import com.mvproject.tinyiptv.data.mappers.EntityMapper.toPlaylist
 import com.mvproject.tinyiptv.data.mappers.EntityMapper.toPlaylistEntity
-import com.mvproject.tinyiptv.data.models.playlist.Playlist
+import com.mvproject.tinyiptv.data.model.playlist.Playlist
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.map

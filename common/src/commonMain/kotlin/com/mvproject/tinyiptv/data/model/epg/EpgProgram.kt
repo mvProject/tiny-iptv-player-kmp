@@ -1,14 +1,14 @@
 /*
  *  Created by Medvediev Viktor [mvproject]
  *  Copyright © 2023
- *  last modified : 10.05.23, 20:28
+ *  last modified : 26.10.23, 15:44
  *
  */
 
-package com.mvproject.tinyiptv.data.models.epg
+package com.mvproject.tinyiptv.data.model.epg
 
 import com.mvproject.tinyiptv.utils.AppConstants
-import com.mvproject.tinyiptv.utils.calculateProgramProgress
+import com.mvproject.tinyiptv.utils.TimeUtils.calculateProgramProgress
 
 data class EpgProgram(
     val start: Long,

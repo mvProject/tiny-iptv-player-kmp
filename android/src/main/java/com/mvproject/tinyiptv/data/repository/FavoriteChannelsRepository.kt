@@ -8,8 +8,8 @@
 package com.mvproject.tinyiptv.data.repository
 
 import com.mvproject.tinyiptv.TinyIptvDatabase
-import com.mvproject.tinyiptv.data.models.channels.PlaylistChannel
-import com.mvproject.tinyiptv.data.models.channels.TvPlaylistChannel
+import com.mvproject.tinyiptv.data.model.channels.PlaylistChannel
+import com.mvproject.tinyiptv.data.model.channels.TvPlaylistChannel
 import com.mvproject.tinyiptv.utils.AppConstants.INT_VALUE_1
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
