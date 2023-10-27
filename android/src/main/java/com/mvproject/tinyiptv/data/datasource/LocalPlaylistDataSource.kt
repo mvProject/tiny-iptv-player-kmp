@@ -39,7 +39,7 @@ class LocalPlaylistDataSource(
                     val filtered = parsed.filter {
                         it.mChannel.isNotEmpty() && it.mStreamURL.isNotEmpty()
                     }
-                    val mapped = filtered.map { model ->
+                    val channels = filtered.map { model ->
                         PlaylistChannel(
                             channelName = model.mChannel,
                             channelLogo = model.mLogoURL,
@@ -49,7 +49,12 @@ class LocalPlaylistDataSource(
                         )
                     }
 
-                    addAll(mapped)
+                    /*          val channels = ParseMappers.parseStringToChannels(
+                                  playlistId = playlistId,
+                                  source = content
+                              )*/
+
+                    addAll(channels)
                 }
             }
         }

@@ -7,9 +7,11 @@
 
 package com.mvproject.tinyiptv.data.mappers
 
+import com.mvproject.tinyiptv.data.model.channels.PlaylistChannel
 import com.mvproject.tinyiptv.data.model.epg.EpgProgram
 import com.mvproject.tinyiptv.data.model.response.EpgInfoResponse
 import com.mvproject.tinyiptv.data.model.response.EpgProgramResponse
+import com.mvproject.tinyiptv.data.parser.M3UParser
 import com.mvproject.tinyiptv.utils.AppConstants.INT_VALUE_ZERO
 import com.mvproject.tinyiptv.utils.AppConstants.LONG_NO_VALUE
 import com.mvproject.tinyiptv.utils.AppConstants.LONG_VALUE_ZERO
@@ -21,33 +23,6 @@ import java.util.Locale
 import kotlin.time.Duration.Companion.hours
 
 object ParseMappers {
-    /*    fun EpgProgramParseModel.toEpgProgram() = with(this) {
-            EpgProgram(
-                start = start.dateEpgToIsoString().isoStringToMillis(),
-                stop = stop.dateEpgToIsoString().isoStringToMillis(),
-                channelId = channelId,
-                title = title,
-                description = description
-            )
-        }*/
-
-    /*    fun ChannelsInfoParseModel.toChannelInfoMainEntity() = with(this) {
-            ChannelInfoMainEntity(
-                channelInfoId = id.trim().toLong(),
-                channelInfoName = title.trim(),
-                channelInfoLogo = logo,
-            )
-        }*/
-
-    /*    fun EpgInfoResponse.toChannelInfoAlterEntity() = with(this) {
-            ChannelInfoAlterEntity(
-                channelId = channelId,
-                channelInfoId = channelId.hashCode().toLong(),
-                channelInfoName = channelNames.trim(),
-                channelInfoLogo = channelIcon,
-            )
-        }*/
-
     fun EpgInfoResponse.toEpgInfoEntity() = with(this) {
         EpgInfoEntity(
             channelId = channelId,
@@ -156,4 +131,22 @@ object ParseMappers {
 
     private const val DATE_FORMAT = "dd-MM-yyyy HH:mm"
     private const val NO_END_PROGRAM_DURATION = 2
+
+    fun parseStringToChannels(playlistId: Long, source: String): List<PlaylistChannel> {
+        val parsed = M3UParser.parsePlaylist(source)
+        val filtered = parsed.filter {
+            it.mChannel.isNotEmpty() && it.mStreamURL.isNotEmpty()
+        }
+        val mappedResult = filtered.map { model ->
+            PlaylistChannel(
+                channelName = model.mChannel,
+                channelLogo = model.mLogoURL,
+                channelUrl = model.mStreamURL,
+                channelGroup = model.mGroupTitle,
+                parentListId = playlistId
+            )
+        }
+
+        return mappedResult
+    }
 }

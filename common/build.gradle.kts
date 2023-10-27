@@ -9,7 +9,7 @@ plugins {
     alias(libs.plugins.multiplatform)
     alias(libs.plugins.android.library)
     alias(libs.plugins.kotlinX.serialization.plugin)
-    // alias(libs.plugins.sqlDelight.plugin)
+    alias(libs.plugins.sqlDelight.plugin)
     alias(libs.plugins.compose.multiplatform)
     /*    id("io.github.skeptick.libres")
         alias(libs.plugins.mokoResources)*/
@@ -52,13 +52,11 @@ kotlin {
                 implementation(compose.material3)
                 implementation(compose.materialIconsExtended)
 
-                implementation("co.touchlab:kermit:2.0.0-RC4")
-
-                //  implementation(libs.stdlib)
 
                 implementation(libs.datastore.preferences.core)
                 implementation(libs.kotlinx.coroutines.core)
 
+                //  implementation(libs.stdlib)
                 /*          implementation("io.github.skeptick.libres:libres-compose:1.2.0-beta01")
                           api(libs.moko.resources)
                           api(libs.moko.resources.compose)*/
@@ -68,23 +66,24 @@ kotlin {
 
                 implementation(libs.kotlinx.dateTime)
 
-                implementation(libs.ktor.ktor.serialization.kotlinx.json)
+                implementation(libs.koin.core)
+                implementation(libs.koin.compose)
 
-                /*
-                             implementation(libs.material3.window.size.multiplatform)
+                implementation(libs.sqldelight.runtime)
+                implementation(libs.sqldelight.coroutines.extensions)
 
-                             implementation(libs.sqldelight.runtime)
-                             implementation(libs.sqldelight.coroutines.extensions)
+                implementation(libs.ktor.client.core)
+                implementation(libs.ktor.client.content.negotiation)
+                implementation(libs.ktor.client.logging)
+                implementation(libs.ktor.serialization.kotlinx.json)
 
-                             implementation(libs.napier)
+                implementation(libs.androidx.annotation)
 
-                             implementation(libs.kotlinx.collections.immutable)
+                implementation(libs.napier)
+                implementation(libs.kermit)
 
-                             implementation(libs.ktor.client.core)
-                             implementation(libs.ktor.client.logging.jvm)
-                             implementation(libs.ktor.client.content.negotiation)
-
-             */
+                implementation(libs.material3.window.size.multiplatform)
+                implementation(libs.kotlinx.collections.immutable)
             }
         }
 
@@ -92,27 +91,30 @@ kotlin {
             dependencies {
 
                 implementation(libs.androidx.compose.activity)
+
+                implementation(libs.sqldelight.driver.android)
+
+                implementation(libs.koin.android)
+
+                implementation(libs.ktor.client.android)
+
+                implementation(libs.accompanist.systemuicontroller)
+                implementation(libs.accompanist.adaptive)
+
                 /*
                     implementation(libs.androidx.compose.lifecycle.viewmodel)
-
-                    implementation(libs.sqldelight.driver.android)
-
-                    implementation(libs.accompanist.systemuicontroller)
-                    implementation(libs.accompanist.adaptive)
-
-
-                                implementation(libs.core)
+                    implementation(libs.core)
                              */
-
-
             }
         }
 
         val desktopMain by getting {
             dependencies {
-                // implementation(libs.sqldelight.driver.jvm)
                 implementation(compose.desktop.common)
                 implementation(libs.kotlinx.coroutines.swing)
+                // implementation(libs.ktor.client.okhttp)
+                implementation(libs.ktor.client.java)
+                implementation(libs.sqldelight.driver.jvm)
                 /*
 
 
@@ -132,11 +134,10 @@ multiplatformResources {
     multiplatformResourcesPackage = "com.mvproject.tinyiptv.common"
 }*/
 
-/*
 sqldelight {
     databases {
         create("TinyIptvDatabase") {
             packageName.set("com.mvproject.tinyiptv")
         }
     }
-}*/
+}

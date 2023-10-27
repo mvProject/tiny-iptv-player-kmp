@@ -20,25 +20,11 @@ enum class ResizeMode(val value: Int, @StringRes val title: Int) {
     companion object {
         fun toggleResizeMode(current: ResizeMode) =
             when (current) {
-                Fit -> {
-                    Fill
-                }
-
-                Fill -> {
-                    Zoom
-                }
-
-                Zoom -> {
-                    FixedHeight
-                }
-
-                FixedHeight -> {
-                    FixedWidth
-                }
-
-                FixedWidth -> {
-                    Fit
-                }
+                Fit -> Fill
+                Fill -> Zoom
+                Zoom -> FixedHeight
+                FixedHeight -> FixedWidth
+                FixedWidth -> Fit
             }
     }
 }

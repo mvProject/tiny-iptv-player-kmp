@@ -11,7 +11,7 @@ plugins {
     alias(libs.plugins.android.application)
     alias(libs.plugins.android.kotlin)
     alias(libs.plugins.compose.multiplatform)
-    alias(libs.plugins.sqlDelight.plugin)
+  //  alias(libs.plugins.sqlDelight.plugin)
     alias(libs.plugins.kotlinX.serialization.plugin)
 }
 
@@ -100,7 +100,7 @@ dependencies {
 
     implementation(project(":common"))
     // DataStore
-    implementation(libs.datastore.preferences)
+    // implementation(libs.datastore.preferences)
 
     // DateTime
     implementation(libs.kotlinx.dateTime)
@@ -143,13 +143,13 @@ dependencies {
     // Ktor
     implementation(libs.ktor.client.android)
     implementation(libs.ktor.client.core)
-    implementation(libs.ktor.client.logging.jvm)
+    implementation(libs.ktor.client.logging)
     implementation(libs.ktor.client.content.negotiation)
-    implementation(libs.ktor.ktor.serialization.kotlinx.json)
+    implementation(libs.ktor.serialization.kotlinx.json)
 
     // SQL Delight
-    implementation(libs.sqldelight.driver.android)
-    implementation(libs.sqldelight.coroutines.extensions)
+    //implementation(libs.sqldelight.driver.android)
+    //implementation(libs.sqldelight.coroutines.extensions)
 
     // Misc
     implementation(libs.kotlinx.collections.immutable)
@@ -171,10 +171,4 @@ dependencies {
     implementation(libs.androidx.compose.ui.tooling.preview)
 }
 
-sqldelight {
-    databases {
-        create("TinyIptvDatabase") {
-            packageName.set("com.mvproject.tinyiptv")
-        }
-    }
-}
+
