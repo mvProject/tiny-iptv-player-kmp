@@ -7,12 +7,11 @@
 
 import java.util.Properties
 
+@Suppress("DSL_SCOPE_VIOLATION")
 plugins {
     alias(libs.plugins.android.application)
     alias(libs.plugins.android.kotlin)
     alias(libs.plugins.compose.multiplatform)
-  //  alias(libs.plugins.sqlDelight.plugin)
-    alias(libs.plugins.kotlinX.serialization.plugin)
 }
 
 android {

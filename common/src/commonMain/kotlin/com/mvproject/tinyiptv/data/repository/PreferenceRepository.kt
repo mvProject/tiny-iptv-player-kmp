@@ -1,7 +1,7 @@
 /*
  *  Created by Medvediev Viktor [mvproject]
  *  Copyright © 2023
- *  last modified : 26.10.23, 14:36
+ *  last modified : 26.10.23, 14:50
  *
  */
 
@@ -19,7 +19,7 @@ import com.mvproject.tinyiptv.utils.AppConstants.INT_VALUE_ZERO
 import com.mvproject.tinyiptv.utils.AppConstants.LONG_NO_VALUE
 import com.mvproject.tinyiptv.utils.AppConstants.LONG_VALUE_ZERO
 import com.mvproject.tinyiptv.utils.TimeUtils.actualDate
-import com.mvproject.tinyiptv.utils.typeToDuration
+import com.mvproject.tinyiptv.utils.TimeUtils.typeToDuration
 import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.map

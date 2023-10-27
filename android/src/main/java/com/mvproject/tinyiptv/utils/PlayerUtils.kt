@@ -11,13 +11,6 @@ import android.app.Activity
 import android.content.Context
 import android.content.ContextWrapper
 import android.net.Uri
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.rounded.BrightnessHigh
-import androidx.compose.material.icons.rounded.BrightnessLow
-import androidx.compose.material.icons.rounded.BrightnessMedium
-import androidx.compose.material.icons.rounded.VolumeDown
-import androidx.compose.material.icons.rounded.VolumeMute
-import androidx.compose.material.icons.rounded.VolumeUp
 import androidx.compose.ui.unit.Constraints
 import androidx.media3.common.PlaybackException
 import androidx.media3.common.VideoSize
@@ -156,7 +149,7 @@ fun String.isoStringToMillis(): Long {
         .toEpochMilliseconds()
 }
 
-fun getProperVolumeIcon(value: Int) = when {
+/*fun getProperVolumeIcon(value: Int) = when {
     value < 35 -> Icons.Rounded.VolumeMute
     value > 65 -> Icons.Rounded.VolumeUp
     else -> Icons.Rounded.VolumeDown
@@ -166,9 +159,9 @@ fun getProperBrightnessIcon(value: Int) = when {
     value < 35 -> Icons.Rounded.BrightnessLow
     value > 65 -> Icons.Rounded.BrightnessHigh
     else -> Icons.Rounded.BrightnessMedium
-}
+}*/
 
-fun calculateProgramProgress(startTime: Long, endTime: Long): Float {
+/*fun calculateProgramProgress(startTime: Long, endTime: Long): Float {
     var progressValue = 0f
     val currTime = System.currentTimeMillis()
     if (currTime > startTime) {
@@ -177,7 +170,7 @@ fun calculateProgramProgress(startTime: Long, endTime: Long): Float {
         progressValue = (spendValue / endValue).toFloat()
     }
     return progressValue
-}
+}*/
 
 fun typeToDuration(type: Int): Long =
     when (type) {

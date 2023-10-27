@@ -4,7 +4,7 @@
  *  last modified : 25.10.23, 10:49
  *
  */
-
+@Suppress("DSL_SCOPE_VIOLATION")
 plugins {
     alias(libs.plugins.multiplatform)
     alias(libs.plugins.android.library)

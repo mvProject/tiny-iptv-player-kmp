@@ -8,11 +8,9 @@
 package com.mvproject.tinyiptv.di.modules
 
 import com.mvproject.tinyiptv.data.network.NetworkConnectivityObserver
-import com.mvproject.tinyiptv.data.network.NetworkRepository
 import org.koin.core.module.dsl.singleOf
 import org.koin.dsl.module
 
 val networkModule = module {
-    singleOf(::NetworkRepository)
     singleOf(::NetworkConnectivityObserver)
 }
