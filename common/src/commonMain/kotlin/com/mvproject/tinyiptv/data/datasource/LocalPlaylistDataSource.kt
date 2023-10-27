@@ -1,34 +1,34 @@
 /*
  *  Created by Medvediev Viktor [mvproject]
  *  Copyright © 2023
- *  last modified : 03.09.23, 21:42
+ *  last modified : 27.10.23, 16:59
  *
  */
 
 package com.mvproject.tinyiptv.data.datasource
 
 import com.mvproject.tinyiptv.data.model.channels.PlaylistChannel
-import com.mvproject.tinyiptv.data.network.NetworkRepository
-import com.mvproject.tinyiptv.data.parser.M3UParser
-import io.ktor.client.statement.bodyAsChannel
-import io.ktor.utils.io.jvm.javaio.toInputStream
-import java.io.BufferedReader
-import java.io.InputStreamReader
 
-class RemotePlaylistDataSource(
-    private val networkRepository: NetworkRepository
-) {
-    suspend fun getFromRemotePlaylist(
+class LocalPlaylistDataSource() {
+    // private val context: Context
+    // @SuppressLint("Recycle")
+    fun getFromLocalPlaylist(
         playlistId: Long,
-        url: String
+        uri: String
     ): List<PlaylistChannel> {
-        val resultStream = networkRepository.loadPlaylistData(url)
-            .bodyAsChannel()
-            .toInputStream()
+        // todo fix local load
+        // todo parse to Uri
+        // uri = Uri.parse(source)
+
+        /*val file = context.contentResolver
+            .openFileDescriptor(uri, MODE_READ_ONLY)
+            ?.fileDescriptor
 
         return buildList {
             BufferedReader(
-                InputStreamReader(resultStream)
+                InputStreamReader(
+                    FileInputStream(file)
+                )
             ).use { reader ->
                 reader.readText().also { content ->
                     val parsed = M3UParser.parsePlaylist(content)
@@ -45,14 +45,19 @@ class RemotePlaylistDataSource(
                         )
                     }
 
-                    /*      val channels = ParseMappers.parseStringToChannels(
-                              playlistId = playlistId,
-                              source = content
-                          )*/
+                    *//*          val channels = ParseMappers.parseStringToChannels(
+                                  playlistId = playlistId,
+                                  source = content
+                              )*//*
 
                     addAll(channels)
                 }
             }
-        }
+        }*/
+        return emptyList()
+    }
+
+    private companion object {
+        const val MODE_READ_ONLY = "r"
     }
 }

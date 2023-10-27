@@ -15,6 +15,7 @@ plugins {
     alias(libs.plugins.sqlDelight.plugin) apply false
     alias(libs.plugins.kotlinX.serialization.plugin) apply false
    // alias(libs.plugins.mokoResources) apply false
+    // alias(libs.plugins.libresResources) apply false
 }
 /*buildscript {
     dependencies {

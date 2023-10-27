@@ -15,14 +15,11 @@ import androidx.compose.ui.unit.Constraints
 import androidx.media3.common.PlaybackException
 import androidx.media3.common.VideoSize
 import com.mvproject.tinyiptv.data.enums.ResizeMode
-import com.mvproject.tinyiptv.data.enums.UpdatePeriod
 import com.mvproject.tinyiptv.utils.AppConstants.EMPTY_STRING
 import io.github.aakira.napier.Napier
 import kotlinx.datetime.LocalDateTime
 import kotlinx.datetime.toInstant
 import kotlin.time.Duration
-import kotlin.time.Duration.Companion.days
-import kotlin.time.Duration.Companion.hours
 import kotlin.time.Duration.Companion.minutes
 
 private const val MAX_ASPECT_RATIO_DIFFERENCE_FRACTION = 0.01f
@@ -172,36 +169,6 @@ fun getProperBrightnessIcon(value: Int) = when {
     return progressValue
 }*/
 
-fun typeToDuration(type: Int): Long =
-    when (type) {
-        UpdatePeriod.NO_UPDATE.value -> {
-            AppConstants.LONG_VALUE_ZERO
-        }
-
-        UpdatePeriod.HOURS_6.value -> {
-            6.hours.inWholeMilliseconds
-        }
-
-        UpdatePeriod.HOURS_12.value -> {
-            12.hours.inWholeMilliseconds
-        }
-
-        UpdatePeriod.HOURS_24.value -> {
-            24.hours.inWholeMilliseconds
-        }
-
-        UpdatePeriod.DAYS_2.value -> {
-            2.days.inWholeMilliseconds
-        }
-
-        UpdatePeriod.WEEK_1.value -> {
-            7.days.inWholeMilliseconds
-        }
-
-        else -> {
-            AppConstants.LONG_NO_VALUE
-        }
-    }
 
 fun isMediaPlayable(errorCode: Int?): Boolean {
     val isMediaPlayable = when (errorCode) {

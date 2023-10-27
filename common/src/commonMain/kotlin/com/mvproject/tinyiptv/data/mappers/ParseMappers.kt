@@ -7,9 +7,11 @@
 
 package com.mvproject.tinyiptv.data.mappers
 
+import com.mvproject.tinyiptv.data.model.channels.PlaylistChannel
 import com.mvproject.tinyiptv.data.model.epg.EpgProgram
 import com.mvproject.tinyiptv.data.model.response.EpgInfoResponse
 import com.mvproject.tinyiptv.data.model.response.EpgProgramResponse
+import com.mvproject.tinyiptv.data.parser.M3UParser
 import com.mvproject.tinyiptv.utils.AppConstants.INT_VALUE_ZERO
 import com.mvproject.tinyiptv.utils.AppConstants.LONG_NO_VALUE
 import com.mvproject.tinyiptv.utils.AppConstants.LONG_VALUE_ZERO
@@ -126,6 +128,25 @@ object ParseMappers {
     fun Long.getLastItemEnding() =
         (Instant.fromEpochMilliseconds(this) + NO_END_PROGRAM_DURATION.hours)
             .toEpochMilliseconds()
+
+    fun parseStringToChannels(playlistId: Long, source: String): List<PlaylistChannel> {
+        val parsed = M3UParser.parsePlaylist(source)
+        val filtered = parsed.filter {
+            it.mChannel.isNotEmpty() && it.mStreamURL.isNotEmpty()
+        }
+        val mappedResult = filtered.map { model ->
+            PlaylistChannel(
+                channelName = model.mChannel,
+                channelLogo = model.mLogoURL,
+                channelUrl = model.mStreamURL,
+                channelGroup = model.mGroupTitle,
+                parentListId = playlistId
+            )
+        }
+
+        return mappedResult
+    }
+
 
     private const val DATE_FORMAT = "dd-MM-yyyy HH:mm"
     private const val NO_END_PROGRAM_DURATION = 2

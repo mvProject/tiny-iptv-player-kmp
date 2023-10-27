@@ -1,13 +1,13 @@
 /*
  *  Created by Medvediev Viktor [mvproject]
  *  Copyright © 2023
- *  last modified : 03.09.23, 21:48
+ *  last modified : 27.10.23, 17:12
  *
  */
 
 package com.mvproject.tinyiptv.data.usecases
 
-import android.net.Uri
+
 import com.mvproject.tinyiptv.data.datasource.LocalPlaylistDataSource
 import com.mvproject.tinyiptv.data.model.playlist.Playlist
 import com.mvproject.tinyiptv.data.repository.PlaylistChannelsRepository
@@ -28,7 +28,8 @@ class AddLocalPlaylistUseCase(
     ) {
         val channels = localPlaylistDataSource.getFromLocalPlaylist(
             playlistId = playlist.id,
-            uri = Uri.parse(source)
+
+            uri = source
         )
 
         playlistChannelsRepository.addPlaylistChannels(channels = channels)

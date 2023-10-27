@@ -7,6 +7,7 @@
 
 package com.mvproject.tinyiptv.utils
 
+import com.mvproject.tinyiptv.data.enums.UpdatePeriod
 import kotlinx.datetime.Clock
 import kotlinx.datetime.Instant
 import kotlinx.datetime.TimeZone
@@ -48,12 +49,12 @@ object TimeUtils {
 
     fun typeToDuration(type: Int): Long =
         when (type) {
-            0 -> AppConstants.LONG_VALUE_ZERO
-            1 -> 6.hours.inWholeMilliseconds
-            2 -> 12.hours.inWholeMilliseconds
-            3 -> 24.hours.inWholeMilliseconds
-            4 -> 2.days.inWholeMilliseconds
-            5 -> 7.days.inWholeMilliseconds
+            UpdatePeriod.NO_UPDATE.value -> AppConstants.LONG_VALUE_ZERO
+            UpdatePeriod.HOURS_6.value -> 6.hours.inWholeMilliseconds
+            UpdatePeriod.HOURS_12.value -> 12.hours.inWholeMilliseconds
+            UpdatePeriod.HOURS_24.value -> 24.hours.inWholeMilliseconds
+            UpdatePeriod.DAYS_2.value -> 2.days.inWholeMilliseconds
+            UpdatePeriod.WEEK_1.value -> 7.days.inWholeMilliseconds
             else -> AppConstants.LONG_NO_VALUE
         }
 

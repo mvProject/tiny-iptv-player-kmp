@@ -38,6 +38,7 @@ ext-junit = "1.1.5"
 espresso-core = "3.5.1"
 
 mokoResources = "0.23.0"
+libresResources = "1.2.0-beta01"
 
 [plugins]
 
@@ -53,6 +54,7 @@ sqlDelight-plugin = { id = "app.cash.sqldelight", version.ref = "sqldelight" }
 jvm = { id = "org.jetbrains.kotlin.jvm", version.ref = "kotlin" }
 
 mokoResources = { id = "dev.icerock.mobile.multiplatform-resources", version.ref = "mokoResources" }
+libresResources = { id = "io.github.skeptick.libres:gradle-plugin", version.ref = "libresResources" }
 
 [libraries]
 

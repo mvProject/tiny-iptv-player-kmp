@@ -1,3 +1,10 @@
+/*
+ *  Created by Medvediev Viktor [mvproject]
+ *  Copyright © 2023
+ *  last modified : 27.10.23, 11:06
+ *
+ */
+
 package com.mvproject.tinyiptv.platform
 
 import android.annotation.SuppressLint

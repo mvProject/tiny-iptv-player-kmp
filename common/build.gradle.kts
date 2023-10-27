@@ -11,8 +11,10 @@ plugins {
     alias(libs.plugins.kotlinX.serialization.plugin)
     alias(libs.plugins.sqlDelight.plugin)
     alias(libs.plugins.compose.multiplatform)
-    /*    id("io.github.skeptick.libres")
-        alias(libs.plugins.mokoResources)*/
+    /*
+        alias(libs.plugins.mokoResources)
+        alias(libs.plugins.libresResources)
+        */
 }
 
 android {
