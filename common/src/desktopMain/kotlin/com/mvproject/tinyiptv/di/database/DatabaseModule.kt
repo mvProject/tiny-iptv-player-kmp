@@ -15,9 +15,7 @@ import org.koin.dsl.module
 
 actual fun platformDatabaseModule(): Module = module {
     single<SqlDriver> {
-        JdbcSqliteDriver(JdbcSqliteDriver.IN_MEMORY).apply {
-            TinyIptvDatabase.Schema.create(this)
-        }
+        JdbcSqliteDriver(url = "jdbc:sqlite:tinyiptv.db", schema = TinyIptvDatabase.Schema)
     }
 
 

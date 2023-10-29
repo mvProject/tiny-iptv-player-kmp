@@ -1,7 +1,7 @@
 /*
  *  Created by Medvediev Viktor [mvproject]
  *  Copyright © 2023
- *  last modified : 23.10.23, 10:18
+ *  last modified : 28.10.23, 15:55
  *
  */
 
@@ -33,8 +33,8 @@ import com.google.accompanist.adaptive.TwoPane
 import com.google.accompanist.adaptive.VerticalTwoPaneStrategy
 import com.google.accompanist.adaptive.calculateDisplayFeatures
 import com.google.accompanist.systemuicontroller.rememberSystemUiController
-import com.mvproject.tinyiptv.R
-import com.mvproject.tinyiptv.data.mappers.ListMappers.createMediaItems
+import com.mvproject.tinyiptv.common.R
+import com.mvproject.tinyiptv.data.mappers.AndroidListMappers.createMediaItems
 import com.mvproject.tinyiptv.ui.components.ConnectionState
 import com.mvproject.tinyiptv.ui.components.epg.PlayerEpgContent
 import com.mvproject.tinyiptv.ui.components.networkConnectionState
@@ -45,7 +45,6 @@ import com.mvproject.tinyiptv.ui.components.overlay.OverlayEpg
 import com.mvproject.tinyiptv.ui.components.player.PlayerView
 import com.mvproject.tinyiptv.ui.components.views.LoadingView
 import com.mvproject.tinyiptv.ui.components.views.NoPlaybackView
-import com.mvproject.tinyiptv.ui.components.views.VolumeProgressView
 import com.mvproject.tinyiptv.ui.screens.player.events.PlaybackEvents
 import com.mvproject.tinyiptv.ui.screens.player.state.rememberVideoPlayerState
 import com.mvproject.tinyiptv.ui.theme.dimens
@@ -62,9 +61,8 @@ fun VideoView(
     channelGroup: String
 ) {
     val context = LocalContext.current
-    val activity = context.findActivity()
     val windowSizeClass = calculateWindowSizeClass()
-    val displayFeatures = calculateDisplayFeatures(activity)
+    val displayFeatures = calculateDisplayFeatures(activity = context.findActivity())
 
     val connection by networkConnectionState()
     when (connection) {
@@ -171,7 +169,6 @@ fun VideoView(
     ) {
         if (playerState.isFullscreen.value) {
             PlayerView(
-                modifier = Modifier,
                 playerState = playerState,
                 currentChannel = videoViewState.currentChannel,
                 onPlaybackAction = viewModel::processPlaybackActions
@@ -180,7 +177,6 @@ fun VideoView(
             TwoPane(
                 first = {
                     PlayerView(
-                        modifier = Modifier,
                         playerState = playerState,
                         currentChannel = videoViewState.currentChannel,
                         onPlaybackAction = viewModel::processPlaybackActions
@@ -289,21 +285,6 @@ fun VideoView(
             exit = fadeOut()
         ) {
             LoadingView()
-        }
-
-        AnimatedVisibility(
-            visible = playerState.isVolumeUiVisible.value,
-            enter = fadeIn(),
-            exit = fadeOut()
-        ) {
-            Box(
-                modifier = Modifier.fillMaxSize(0.5f),
-                contentAlignment = Alignment.Center
-            ) {
-                VolumeProgressView(
-                    value = playerState.player.volume
-                )
-            }
         }
     }
 

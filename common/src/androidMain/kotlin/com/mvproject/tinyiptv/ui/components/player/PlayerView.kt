@@ -1,7 +1,7 @@
 /*
  *  Created by Medvediev Viktor [mvproject]
  *  Copyright © 2023
- *  last modified : 20.10.23, 13:53
+ *  last modified : 26.10.23, 15:44
  *
  */
 
@@ -16,17 +16,19 @@ import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.DisposableEffect
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalLifecycleOwner
 import androidx.compose.ui.viewinterop.AndroidView
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.LifecycleEventObserver
 import androidx.lifecycle.LifecycleOwner
-import com.mvproject.tinyiptv.data.models.channels.TvPlaylistChannel
+import com.mvproject.tinyiptv.data.model.channels.TvPlaylistChannel
 import com.mvproject.tinyiptv.ui.components.modifiers.adaptiveLayout
 import com.mvproject.tinyiptv.ui.components.modifiers.defaultPlayerHorizontalGestures
 import com.mvproject.tinyiptv.ui.components.modifiers.defaultPlayerTapGesturesState
 import com.mvproject.tinyiptv.ui.components.modifiers.defaultPlayerVerticalGestures
+import com.mvproject.tinyiptv.ui.components.views.VolumeProgressView
 import com.mvproject.tinyiptv.ui.screens.player.action.PlaybackActions
 import com.mvproject.tinyiptv.ui.screens.player.state.VideoPlayerState
 
@@ -78,6 +80,21 @@ fun PlayerView(
                 isFullScreen = playerState.isFullscreen.value,
                 onPlaybackAction = onPlaybackAction
             )
+        }
+
+        AnimatedVisibility(
+            visible = playerState.isVolumeUiVisible.value,
+            enter = fadeIn(),
+            exit = fadeOut()
+        ) {
+            Box(
+                modifier = Modifier.fillMaxSize(),
+                contentAlignment = Alignment.Center
+            ) {
+                VolumeProgressView(
+                    value = playerState.player.volume
+                )
+            }
         }
     }
 

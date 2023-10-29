@@ -1,7 +1,7 @@
 /*
  *  Created by Medvediev Viktor [mvproject]
  *  Copyright © 2023
- *  last modified : 10.10.23, 15:28
+ *  last modified : 25.10.23, 16:34
  *
  */
 
@@ -19,6 +19,7 @@ import androidx.media3.common.AudioAttributes
 import androidx.media3.common.C
 import androidx.media3.common.MediaItem
 import androidx.media3.common.Player
+import androidx.media3.common.Tracks
 import androidx.media3.datasource.DefaultHttpDataSource
 import androidx.media3.exoplayer.DefaultRenderersFactory
 import androidx.media3.exoplayer.ExoPlayer
@@ -74,7 +75,7 @@ fun rememberVideoPlayerState(
         .setReadTimeoutMs(DefaultHttpDataSource.DEFAULT_READ_TIMEOUT_MILLIS)
 
     val source = HlsMediaSource.Factory(defaultDataSourceFactory)
-        .setAllowChunklessPreparation(true)
+        .setAllowChunklessPreparation(false)
 
     val audioAttributes = AudioAttributes.Builder()
         .setUsage(C.USAGE_MEDIA)
@@ -239,21 +240,21 @@ class VideoPlayerStateImpl(
         onPlaybackStateAction(PlaybackStateActions.OnPlaybackState(state))
     }
 
-    /*    override fun onTracksChanged(tracks: Tracks) {
+    override fun onTracksChanged(tracks: Tracks) {
 
-            tracks.groups.forEachIndexed { _, group ->
-                if (group.type == C.TRACK_TYPE_AUDIO) {
-                    for (i in 0..group.length - 1) {
-                        val trackFormat = group.getTrackFormat(i)
-                        val audioTrackLanguage = trackFormat.language.toString()
-                        val audioTrackLabel = trackFormat.label.toString()
-                        Napier.i("testing group trackFormat $trackFormat")
-                        Napier.i("testing group audioTrackLanguage $audioTrackLanguage")
-                        Napier.i("testing group audioTrackLabel $audioTrackLabel")
+        tracks.groups.forEachIndexed { _, group ->
+            if (group.type == C.TRACK_TYPE_AUDIO) {
+                for (i in 0..group.length - 1) {
+                    val trackFormat = group.getTrackFormat(i)
+                    val audioTrackLanguage = trackFormat.language.toString()
+                    val audioTrackLabel = trackFormat.label.toString()
+                    Napier.i("testing group trackFormat $trackFormat")
+                    Napier.i("testing group audioTrackLanguage $audioTrackLanguage")
+                    Napier.i("testing group audioTrackLabel $audioTrackLabel")
                     }
                 }
             }
-        }*/
+    }
 
     //override fun onVideoSizeChanged(videoSize: VideoSize) {
     //    Napier.e("testing onVideoSizeChanged videoSize:$videoSize")

@@ -1,15 +1,15 @@
 /*
  *  Created by Medvediev Viktor [mvproject]
  *  Copyright © 2023
- *  last modified : 10.05.23, 20:16
+ *  last modified : 28.10.23, 21:19
  *
  */
 
-package com.mvproject.tinyiptv.di
+package com.mvproject.tinyiptv
 
 import android.app.Application
+import com.mvproject.tinyiptv.di.initKoin
 import com.mvproject.tinyiptv.di.modules.imageModule
-import com.mvproject.tinyiptv.di.modules.viewModelModule
 import io.github.aakira.napier.DebugAntilog
 import io.github.aakira.napier.Napier
 import org.koin.android.ext.koin.androidContext
@@ -25,7 +25,6 @@ class App : Application() {
             androidLogger()
             androidContext(this@App)
             modules(
-                viewModelModule,
                 imageModule
             )
         }
