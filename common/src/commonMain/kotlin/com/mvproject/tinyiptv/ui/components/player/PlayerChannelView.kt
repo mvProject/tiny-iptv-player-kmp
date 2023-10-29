@@ -1,7 +1,7 @@
 /*
  *  Created by Medvediev Viktor [mvproject]
  *  Copyright © 2023
- *  last modified : 23.10.23, 19:16
+ *  last modified : 26.10.23, 16:28
  *
  */
 
@@ -24,16 +24,12 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.alpha
 import androidx.compose.ui.text.style.TextAlign
-import androidx.compose.ui.tooling.preview.Preview
 import com.mvproject.tinyiptv.data.mappers.ListMappers.toActual
-import com.mvproject.tinyiptv.data.models.channels.TvPlaylistChannel
-import com.mvproject.tinyiptv.data.models.epg.EpgProgram
+import com.mvproject.tinyiptv.data.model.channels.TvPlaylistChannel
 import com.mvproject.tinyiptv.ui.components.epg.PlayerChannelEpgItem
 import com.mvproject.tinyiptv.ui.screens.player.action.PlaybackActions
-import com.mvproject.tinyiptv.ui.theme.VideoAppTheme
 import com.mvproject.tinyiptv.ui.theme.dimens
 import com.mvproject.tinyiptv.utils.AppConstants
-import kotlin.time.Duration.Companion.minutes
 
 @Composable
 fun PlayerChannelView(
@@ -104,6 +100,8 @@ fun PlayerChannelView(
     }
 }
 
+// todo replace preview
+/*
 @Composable
 @Preview(showBackground = true)
 fun DarkPreviewPlayerChannelView() {
@@ -123,4 +121,4 @@ fun DarkPreviewPlayerChannelView() {
             )
         )
     }
-}
+}*/

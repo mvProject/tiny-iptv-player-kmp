@@ -50,12 +50,6 @@
             </intent-filter>
         </activity>
 
-        <!--
-                <provider
-                    android:name="androidx.startup.InitializationProvider"
-                    android:authorities="com.mvproject.tinyiptv.androidx-startup"
-                    tools:node="remove" />-->
-
     </application>
 
 </manifest>

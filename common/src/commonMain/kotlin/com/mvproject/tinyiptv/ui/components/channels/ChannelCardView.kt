@@ -26,8 +26,9 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.text.style.TextAlign
 import com.mvproject.tinyiptv.data.model.channels.TvPlaylistChannel
 import com.mvproject.tinyiptv.ui.theme.dimens
+import org.jetbrains.compose.resources.ExperimentalResourceApi
 
-@OptIn(ExperimentalFoundationApi::class)
+@OptIn(ExperimentalFoundationApi::class, ExperimentalResourceApi::class)
 @Composable
 fun ChannelCardView(
     modifier: Modifier = Modifier,
@@ -51,20 +52,11 @@ fun ChannelCardView(
             horizontalAlignment = Alignment.CenterHorizontally,
             verticalArrangement = Arrangement.SpaceEvenly
         ) {
-// todo image fix
 
-            /*            AsyncImage(
-                            model = ImageRequest.Builder(LocalContext.current)
-                                .data(channel.channelLogo)
-                                .crossfade(true)
-                                .placeholder(R.drawable.no_channel_logo)
-                                .error(R.drawable.no_channel_logo)
-                                .build(),
-                            contentDescription = channel.channelName,
-                            modifier = Modifier
-                                .size(MaterialTheme.dimens.size112)
-                                .clip(MaterialTheme.shapes.extraSmall)
-                        )*/
+            ChannelImageLogo(
+                channelLogo = channel.channelLogo,
+                channelName = channel.channelName,
+            )
 
             Spacer(modifier = Modifier.height(MaterialTheme.dimens.size12))
 

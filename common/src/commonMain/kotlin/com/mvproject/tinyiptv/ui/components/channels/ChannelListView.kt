@@ -26,8 +26,9 @@ import com.mvproject.tinyiptv.data.mappers.ListMappers.toActual
 import com.mvproject.tinyiptv.data.model.channels.TvPlaylistChannel
 import com.mvproject.tinyiptv.ui.components.epg.ScheduleEpgItemView
 import com.mvproject.tinyiptv.ui.theme.dimens
+import org.jetbrains.compose.resources.ExperimentalResourceApi
 
-@OptIn(ExperimentalFoundationApi::class)
+@OptIn(ExperimentalFoundationApi::class, ExperimentalResourceApi::class)
 @Composable
 fun ChannelListView(
     modifier: Modifier = Modifier,
@@ -48,20 +49,11 @@ fun ChannelListView(
                 .fillMaxWidth(),
             verticalAlignment = Alignment.CenterVertically
         ) {
-// todo image fix
 
-            /*            AsyncImage(
-                            model = ImageRequest.Builder(LocalContext.current)
-                                .data(channel.channelLogo)
-                                .crossfade(true)
-                                .placeholder(R.drawable.no_channel_logo)
-                                .error(R.drawable.no_channel_logo)
-                                .build(),
-                            contentDescription = channel.channelName,
-                            modifier = Modifier
-                                .size(MaterialTheme.dimens.size42)
-                                .clip(MaterialTheme.shapes.small)
-                        )*/
+            ChannelImageLogo(
+                channelLogo = channel.channelLogo,
+                channelName = channel.channelName,
+            )
 
             Spacer(modifier = Modifier.width(MaterialTheme.dimens.size8))
 
@@ -100,9 +92,8 @@ fun ChannelListView(
 }
 
 // todo replace preview
-/*
-@Composable
-@Preview(showBackground = true)
+/*@Composable
+@Preview()
 fun DarkPreviewChannelListViewFav() {
     VideoAppTheme(darkTheme = true) {
         ChannelListView(channel = testProgram.copy(isInFavorites = true))

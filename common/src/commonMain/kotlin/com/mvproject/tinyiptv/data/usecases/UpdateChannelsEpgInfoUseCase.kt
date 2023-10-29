@@ -41,12 +41,10 @@ class UpdateChannelsEpgInfoUseCase(
                     }
 
                     if (epgInfo != null) {
-                        Napier.i("testing epgInfo.channelLogo ${epgInfo.channelLogo}")
-                        Napier.i("testing epgInfo.channelId ${epgInfo.channelId}")
-                        channel.copy(
-                            channelLogo = epgInfo.channelLogo,
-                            epgId = epgInfo.channelId
-                        )
+                            channel.copy(
+                                channelLogo = epgInfo.channelLogo,
+                                epgId = epgInfo.channelId
+                            )
                     } else {
                         channel // If no match is found, keep the original Class1 object
                     }
