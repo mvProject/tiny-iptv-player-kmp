@@ -9,11 +9,11 @@ package com.mvproject.tinyiptv.navigation
 
 import androidx.compose.runtime.Composable
 import cafe.adriel.voyager.core.screen.Screen
+import cafe.adriel.voyager.koin.getScreenModel
 import cafe.adriel.voyager.navigator.LocalNavigator
 import cafe.adriel.voyager.navigator.currentOrThrow
 import com.mvproject.tinyiptv.ui.screens.channels.TvPlaylistChannelsView
 import com.mvproject.tinyiptv.ui.screens.channels.TvPlaylistChannelsViewModel
-import org.koin.androidx.compose.koinViewModel
 
 data class PlaylistGroupScreenRoute(
     val group: String
@@ -21,7 +21,7 @@ data class PlaylistGroupScreenRoute(
 
     @Composable
     override fun Content() {
-        val tvPlaylistChannelsViewModel: TvPlaylistChannelsViewModel = koinViewModel()
+        val tvPlaylistChannelsViewModel: TvPlaylistChannelsViewModel = getScreenModel()
         val navigator = LocalNavigator.currentOrThrow
 
         TvPlaylistChannelsView(

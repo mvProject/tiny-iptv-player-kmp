@@ -1,7 +1,7 @@
 /*
  *  Created by Medvediev Viktor [mvproject]
  *  Copyright © 2023
- *  last modified : 10.05.23, 20:21
+ *  last modified : 27.10.23, 21:31
  *
  */
 
@@ -11,17 +11,17 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import cafe.adriel.voyager.core.screen.Screen
+import cafe.adriel.voyager.koin.getScreenModel
 import cafe.adriel.voyager.navigator.LocalNavigator
 import cafe.adriel.voyager.navigator.currentOrThrow
 import com.mvproject.tinyiptv.ui.screens.settings.playlist.SettingsPlaylistView
 import com.mvproject.tinyiptv.ui.screens.settings.playlist.SettingsPlaylistViewModel
-import org.koin.androidx.compose.koinViewModel
 
 object SettingsPlaylistRoute : Screen {
 
     @Composable
     override fun Content() {
-        val settingsPlaylistViewModel: SettingsPlaylistViewModel = koinViewModel()
+        val settingsPlaylistViewModel: SettingsPlaylistViewModel = getScreenModel()
         val playlistDataState by settingsPlaylistViewModel.playlistDataState.collectAsState()
         val navigator = LocalNavigator.currentOrThrow
 

@@ -11,17 +11,17 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import cafe.adriel.voyager.core.screen.Screen
+import cafe.adriel.voyager.koin.getScreenModel
 import cafe.adriel.voyager.navigator.LocalNavigator
 import cafe.adriel.voyager.navigator.currentOrThrow
 import com.mvproject.tinyiptv.ui.screens.groups.GroupView
 import com.mvproject.tinyiptv.ui.screens.groups.GroupViewModel
-import org.koin.androidx.compose.koinViewModel
 
 object PlaylistDataRoute : Screen {
 
     @Composable
     override fun Content() {
-        val groupViewModel: GroupViewModel = koinViewModel()
+        val groupViewModel: GroupViewModel = getScreenModel()
         val navigator = LocalNavigator.currentOrThrow
         val playlistDataState by groupViewModel.playlistDataState.collectAsState()
 
