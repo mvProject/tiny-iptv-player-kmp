@@ -11,10 +11,6 @@ plugins {
     alias(libs.plugins.kotlinX.serialization.plugin)
     alias(libs.plugins.sqlDelight.plugin)
     alias(libs.plugins.compose.multiplatform)
-    /*
-        alias(libs.plugins.mokoResources)
-        alias(libs.plugins.libresResources)
-        */
 }
 
 android {
@@ -50,18 +46,13 @@ kotlin {
         val commonMain by getting {
             dependencies {
                 implementation(compose.runtime)
+                implementation(compose.foundation)
                 implementation(compose.ui)
                 implementation(compose.material3)
                 implementation(compose.materialIconsExtended)
 
-
                 implementation(libs.datastore.preferences.core)
                 implementation(libs.kotlinx.coroutines.core)
-
-                //  implementation(libs.stdlib)
-                /*          implementation("io.github.skeptick.libres:libres-compose:1.2.0-beta01")
-                          api(libs.moko.resources)
-                          api(libs.moko.resources.compose)*/
 
                 @OptIn(org.jetbrains.compose.ExperimentalComposeLibrary::class)
                 implementation(compose.components.resources)
@@ -86,9 +77,31 @@ kotlin {
 
                 implementation(libs.material3.window.size.multiplatform)
                 implementation(libs.kotlinx.collections.immutable)
+
+                // Navigation
+                implementation(libs.voyager.koin)
+                implementation(libs.voyager.navigator)
+
+                implementation(libs.urikmp)
+                implementation(libs.kamelimage)
             }
         }
 
+        val androidUnitTest by getting {
+            dependencies {
+                // Tests
+                /*                testImplementation(libs.test.junit)
+                                androidTestImplementation(libs.test.ext.junit)
+                                androidTestImplementation(libs.test.espresso.core)
+
+                                // UI Tests
+                                androidTestImplementation(libs.androidx.compose.ui.test.junit4)
+                                debugImplementation(libs.androidx.compose.ui.test.manifest)
+
+                                // Android Studio Preview support
+                                debugImplementation(libs.androidx.compose.ui.tooling)*/
+            }
+        }
         val androidMain by getting {
             dependencies {
 
@@ -100,13 +113,27 @@ kotlin {
 
                 implementation(libs.ktor.client.android)
 
+                // DI
+                implementation(libs.koin.android.compose)
+
                 implementation(libs.accompanist.systemuicontroller)
                 implementation(libs.accompanist.adaptive)
 
-                /*
-                    implementation(libs.androidx.compose.lifecycle.viewmodel)
-                    implementation(libs.core)
-                             */
+                // Misc
+                implementation(libs.kotlinx.collections.immutable)
+
+                implementation(libs.androidx.compose.ui.tooling.preview)
+
+                implementation(libs.androidx.compose.lifecycle.runtime)
+
+                // Exoplayer
+                implementation(libs.media3.exoplayer)
+                implementation(libs.media3.ui)
+                implementation(libs.media3.exoplayer.hls)
+
+                // Image processing
+                implementation(libs.coil)
+                implementation(libs.coil.compose)
             }
         }
 
@@ -117,24 +144,11 @@ kotlin {
                 // implementation(libs.ktor.client.okhttp)
                 implementation(libs.ktor.client.java)
                 implementation(libs.sqldelight.driver.jvm)
-                /*
-
-
-                                // Toaster for Windows
-                                implementation(libs.toast4j)
-                */
+                implementation(libs.calf.filepicker)
             }
         }
     }
 }
-
-/*libres {
-    generatedClassName = "LibMainRes" // "Res" by default
-}
-
-multiplatformResources {
-    multiplatformResourcesPackage = "com.mvproject.tinyiptv.common"
-}*/
 
 sqldelight {
     databases {

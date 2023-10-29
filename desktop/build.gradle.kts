@@ -12,6 +12,7 @@ plugins {
 
 dependencies {
     implementation(project(":common"))
+    implementation(libs.koin.core)
     implementation(compose.desktop.currentOs)
 }
 

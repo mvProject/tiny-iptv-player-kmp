@@ -1,7 +1,7 @@
 /*
  *  Created by Medvediev Viktor [mvproject]
  *  Copyright © 2023
- *  last modified : 04.05.23, 10:59
+ *  last modified : 26.10.23, 15:44
  *
  */
 
@@ -10,17 +10,14 @@ package com.mvproject.tinyiptv.data.mappers
 import androidx.media3.common.MediaItem
 import androidx.media3.common.MediaMetadata
 import com.mvproject.tinyiptv.data.model.channels.TvPlaylistChannel
-import com.mvproject.tinyiptv.data.model.epg.EpgProgram
-import com.mvproject.tinyiptv.utils.TimeUtils.actualDate
 
-object ListMappers {
+object AndroidListMappers {
     fun List<TvPlaylistChannel>.createMediaItems(): List<MediaItem> {
         return buildList {
             this@createMediaItems.forEach { video ->
                 add(
                     MediaItem.Builder()
                         .setUri(video.channelUrl)
-                        //   .setMimeType(MimeTypes.APPLICATION_M3U8)
                         .setMediaMetadata(
                             MediaMetadata.Builder()
                                 .setDisplayTitle(video.channelName)
@@ -28,17 +25,6 @@ object ListMappers {
                         ).build()
                 )
             }
-        }
-    }
-
-    fun List<EpgProgram>.toActual(): List<EpgProgram> {
-        return this.filter { it.stop > actualDate }
-    }
-
-    fun List<TvPlaylistChannel>.withRefreshedEpg(): List<TvPlaylistChannel> {
-        return this.map {
-            val epg = it.channelEpg.toActual()
-            it.copy(channelEpg = epg)
         }
     }
 }

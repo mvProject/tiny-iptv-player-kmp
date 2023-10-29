@@ -98,76 +98,10 @@ dependencies {
     implementation(fileTree(mapOf("dir" to "libs", "include" to listOf("*.aar"))))
 
     implementation(project(":common"))
-    // DataStore
-    // implementation(libs.datastore.preferences)
 
-    // DateTime
-    implementation(libs.kotlinx.dateTime)
-
-    //Logging
-    implementation(libs.napier)
-
-    // Integration with activity and viewmodels
     implementation(libs.androidx.compose.activity)
-    implementation(libs.androidx.compose.lifecycle.viewmodel)
-
-    // Compose Bom
-    val composeBom = platform(libs.androidx.compose.bom)
-    implementation(composeBom)
-    androidTestImplementation(composeBom)
-    // Compose UI
-
-    implementation(compose.ui)
-    implementation(compose.material3)
-    implementation(compose.materialIconsExtended)
-
-    implementation(libs.material3.window.size.multiplatform)
-
-    // DI
-    implementation(libs.koin.android.compose)
-
-    // Navigation
-    implementation(libs.voyager.koin)
-    implementation(libs.voyager.navigator)
-
-    // Image processing
-    implementation(libs.coil)
-    implementation(libs.coil.compose)
-
-    // Exoplayer
-    implementation(libs.media3.exoplayer)
-    implementation(libs.media3.ui)
-    implementation(libs.media3.exoplayer.hls)
-
-    // Ktor
-    implementation(libs.ktor.client.android)
-    implementation(libs.ktor.client.core)
-    implementation(libs.ktor.client.logging)
-    implementation(libs.ktor.client.content.negotiation)
-    implementation(libs.ktor.serialization.kotlinx.json)
-
-    // SQL Delight
-    //implementation(libs.sqldelight.driver.android)
-    //implementation(libs.sqldelight.coroutines.extensions)
-
-    // Misc
-    implementation(libs.kotlinx.collections.immutable)
-
-    implementation(libs.accompanist.systemuicontroller)
-    implementation(libs.accompanist.adaptive)
-
-    // Tests
-    testImplementation(libs.test.junit)
-    androidTestImplementation(libs.test.ext.junit)
-    androidTestImplementation(libs.test.espresso.core)
-
-    // UI Tests
-    androidTestImplementation(libs.androidx.compose.ui.test.junit4)
-    debugImplementation(libs.androidx.compose.ui.test.manifest)
-
-    // Android Studio Preview support
-    debugImplementation(libs.androidx.compose.ui.tooling)
-    implementation(libs.androidx.compose.ui.tooling.preview)
+    implementation(libs.napier)
+    implementation(libs.koin.android)
 }
 
 
