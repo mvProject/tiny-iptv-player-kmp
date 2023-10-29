@@ -11,6 +11,8 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.text.font.Font
 import androidx.compose.ui.text.font.FontStyle
 import androidx.compose.ui.text.font.FontWeight
+import com.mvproject.tinyiptv.ui.screens.player.VideoViewViewModel
+import com.mvproject.tinyiptv.ui.screens.playlist.action.PlaylistAction
 import io.github.aakira.napier.Napier
 import io.ktor.client.HttpClient
 import io.ktor.client.plugins.HttpTimeout
@@ -29,6 +31,24 @@ internal const val dataStoreFileName = "tiny_iptv.preferences_pb"
 expect fun font(name: String, res: String, weight: FontWeight, style: FontStyle): Font
 
 expect fun createPlatformHttpClient(): HttpClient
+
+expect fun isMediaPlayable(errorCode: Int?): Boolean
+
+@Composable
+expect fun PlayerScreenRouteContent(
+    viewModel: VideoViewViewModel,
+    channelUrl: String,
+    channelGroup: String
+)
+
+@Composable
+expect fun LocalFileSelectButton(onPlaylistAction: (PlaylistAction) -> Unit)
+
+@Composable
+expect fun ImageLogo(source: String)
+
+@Composable
+expect fun ExecuteOnResume(action: () -> Unit)
 
 internal fun createHttpClient(): HttpClient {
     return createPlatformHttpClient().config {
