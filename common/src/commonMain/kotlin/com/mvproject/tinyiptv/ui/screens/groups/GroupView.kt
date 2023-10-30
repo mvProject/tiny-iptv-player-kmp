@@ -127,9 +127,9 @@ fun GroupView(
                 }
             }
 
-            if (dataState.isLoading) {
-                LoadingView()
-            }
+            LoadingView(
+                isVisible = dataState.isLoading,
+            )
 
             if (dataState.dataIsEmpty) {
                 // todo fix hardcoded string resources

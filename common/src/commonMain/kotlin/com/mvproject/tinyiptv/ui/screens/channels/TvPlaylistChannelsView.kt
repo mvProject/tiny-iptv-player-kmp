@@ -7,9 +7,6 @@
 
 package com.mvproject.tinyiptv.ui.screens.channels
 
-import androidx.compose.animation.AnimatedVisibility
-import androidx.compose.animation.fadeIn
-import androidx.compose.animation.fadeOut
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.PaddingValues
@@ -72,8 +69,6 @@ fun TvPlaylistChannelsView(
         modifier = Modifier
             .fillMaxSize()
             .windowInsetsPadding(WindowInsets.ime),
-        // todo fix imePadding
-        //.imePadding(),
         topBar = {
             AppBarWithSearch(
                 appBarTitle = viewState.currentGroup,
@@ -119,7 +114,7 @@ fun TvPlaylistChannelsView(
                 }
 
                 else -> {
-                    GridCells.Adaptive(190.dp)
+                    GridCells.Adaptive(180.dp)
                 }
             }
 
@@ -127,9 +122,12 @@ fun TvPlaylistChannelsView(
                 modifier = Modifier.fillMaxHeight(),
                 columns = columns,
                 state = rememberLazyGridState(),
-                verticalArrangement = Arrangement.spacedBy(MaterialTheme.dimens.size4),
-                horizontalArrangement = Arrangement.spacedBy(MaterialTheme.dimens.size2),
-                contentPadding = PaddingValues(MaterialTheme.dimens.size2),
+                verticalArrangement = Arrangement.spacedBy(MaterialTheme.dimens.size8),
+                horizontalArrangement = Arrangement.spacedBy(MaterialTheme.dimens.size6),
+                contentPadding = PaddingValues(
+                    horizontal = MaterialTheme.dimens.size2,
+                    vertical = MaterialTheme.dimens.size6
+                ),
                 content = {
                     items(
                         items = channelsList,
@@ -150,9 +148,10 @@ fun TvPlaylistChannelsView(
                     }
                 }
             )
-            if (viewState.isLoading) {
-                LoadingView()
-            }
+
+            LoadingView(
+                isVisible = viewState.isLoading,
+            )
 
             ChannelOptionsDialog(
                 isDialogOpen = isChannelOptionOpen,
@@ -174,20 +173,16 @@ fun TvPlaylistChannelsView(
                 }
             )
 
-            AnimatedVisibility(
-                visible = viewState.isEpgVisible,
-                enter = fadeIn(),
-                exit = fadeOut()
+            OverlayContent(
+                isVisible = viewState.isEpgVisible,
+                onViewTap = { onAction(TvPlaylistChannelAction.ToggleEpgVisibility) }
             ) {
-                OverlayContent(
-                    onViewTap = { onAction(TvPlaylistChannelAction.ToggleEpgVisibility) }
-                ) {
-                    OverlayEpg(
-                        isFullScreen = false,
-                        currentChannel = selected
-                    )
-                }
+                OverlayEpg(
+                    isFullScreen = false,
+                    currentChannel = selected
+                )
             }
+
         }
     }
 }

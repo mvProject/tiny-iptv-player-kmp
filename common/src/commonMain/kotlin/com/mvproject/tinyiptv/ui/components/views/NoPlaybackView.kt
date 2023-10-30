@@ -9,10 +9,15 @@ package com.mvproject.tinyiptv.ui.components.views
 
 import androidx.annotation.DrawableRes
 import androidx.annotation.StringRes
+import androidx.compose.animation.AnimatedVisibility
+import androidx.compose.animation.fadeIn
+import androidx.compose.animation.fadeOut
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.height
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
@@ -23,42 +28,53 @@ import com.mvproject.tinyiptv.ui.theme.dimens
 
 @Composable
 fun NoPlaybackView(
-    modifier: Modifier = Modifier,
+    modifier: Modifier = Modifier.fillMaxSize(),
+    isVisible: Boolean = false,
     @StringRes textRes: Int,
     @DrawableRes iconRes: Int
 ) {
-    Column(
-        modifier = modifier
-            .background(
-                color = MaterialTheme.colorScheme.primaryContainer
-            ),
-        verticalArrangement = Arrangement.Center,
-        horizontalAlignment = Alignment.CenterHorizontally
+    AnimatedVisibility(
+        visible = isVisible,
+        enter = fadeIn(),
+        exit = fadeOut()
     ) {
-        // todo fix icon
-        /*        Icon(
-                    modifier = Modifier
-                        .size(MaterialTheme.dimens.size96)
-                        .clip(CircleShape)
-                        .background(
-                            color = MaterialTheme.colorScheme.onSurfaceVariant
-                        )
-                        .padding(MaterialTheme.dimens.size22),
-                    painter = painterResource(id = iconRes),
-                    contentDescription = stringResource(id = textRes),
-                    tint = MaterialTheme.colorScheme.primaryContainer
-                )*/
+        Box(
+            modifier = modifier,
+            contentAlignment = Alignment.Center
+        ) {
+            Column(
+                modifier = Modifier
+                    .background(
+                        color = MaterialTheme.colorScheme.primaryContainer
+                    ),
+                verticalArrangement = Arrangement.Center,
+                horizontalAlignment = Alignment.CenterHorizontally
+            ) {
+                // todo fix icon
+                /*        Icon(
+                        modifier = Modifier
+                            .size(MaterialTheme.dimens.size96)
+                            .clip(CircleShape)
+                            .background(
+                                color = MaterialTheme.colorScheme.onSurfaceVariant
+                            )
+                            .padding(MaterialTheme.dimens.size22),
+                        painter = painterResource(id = iconRes),
+                        contentDescription = stringResource(id = textRes),
+                        tint = MaterialTheme.colorScheme.primaryContainer
+                    )*/
 
-        Spacer(modifier = Modifier.height(MaterialTheme.dimens.size16))
+                Spacer(modifier = Modifier.height(MaterialTheme.dimens.size16))
 
-        Text(
-            // text = stringResource(id = textRes),
-            text = "NoPlaybackView",
-            style = MaterialTheme.typography.headlineMedium,
-            color = MaterialTheme.colorScheme.onSurfaceVariant
-        )
+                Text(
+                    // text = stringResource(id = textRes),
+                    text = "NoPlaybackView",
+                    style = MaterialTheme.typography.headlineMedium,
+                    color = MaterialTheme.colorScheme.onSurfaceVariant
+                )
+            }
+        }
     }
-    //}
 }
 
 // todo replace preview

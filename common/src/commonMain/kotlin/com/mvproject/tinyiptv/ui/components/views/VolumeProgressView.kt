@@ -7,8 +7,12 @@
 
 package com.mvproject.tinyiptv.ui.components.views
 
+import androidx.compose.animation.AnimatedVisibility
+import androidx.compose.animation.fadeIn
+import androidx.compose.animation.fadeOut
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.size
@@ -24,36 +28,49 @@ import com.mvproject.tinyiptv.utils.PlayerUtils.getProperVolumeIcon
 
 @Composable
 fun VolumeProgressView(
+    isVisible: Boolean = false,
     modifier: Modifier = Modifier,
     value: Float,
 ) {
-    val volumeDisplay = (value * 100).toInt()
-
-    Column(
-        modifier = modifier
-            .width(MaterialTheme.dimens.size78)
-            .height(MaterialTheme.dimens.size78)
-            .background(
-                MaterialTheme.colorScheme.surfaceVariant,
-                shape = MaterialTheme.shapes.small
-            ),
-        verticalArrangement = Arrangement.Center,
-        horizontalAlignment = Alignment.CenterHorizontally
+    AnimatedVisibility(
+        visible = isVisible,
+        enter = fadeIn(),
+        exit = fadeOut()
     ) {
+        Box(
+            modifier = modifier,
+            contentAlignment = Alignment.Center
+        ) {
+            val volumeDisplay = (value * 100).toInt()
 
-        Icon(
-            modifier = Modifier.size(MaterialTheme.dimens.size48),
-            imageVector = getProperVolumeIcon(volumeDisplay),
-            tint = MaterialTheme.colorScheme.onSurfaceVariant,
-            contentDescription = null
-        )
+            Column(
+                modifier = Modifier
+                    .width(MaterialTheme.dimens.size78)
+                    .height(MaterialTheme.dimens.size78)
+                    .background(
+                        MaterialTheme.colorScheme.primary,
+                        shape = MaterialTheme.shapes.small
+                    ),
+                verticalArrangement = Arrangement.Center,
+                horizontalAlignment = Alignment.CenterHorizontally
+            ) {
 
-        Text(
-            text = "$volumeDisplay %",
-            style = MaterialTheme.typography.bodyLarge,
-            color = MaterialTheme.colorScheme.onSurfaceVariant
-        )
+                Icon(
+                    modifier = Modifier.size(MaterialTheme.dimens.size48),
+                    imageVector = getProperVolumeIcon(volumeDisplay),
+                    tint = MaterialTheme.colorScheme.onSurfaceVariant,
+                    contentDescription = null
+                )
+
+                Text(
+                    text = "$volumeDisplay %",
+                    style = MaterialTheme.typography.bodyLarge,
+                    color = MaterialTheme.colorScheme.onSurfaceVariant
+                )
+            }
+        }
     }
+
 }
 
 // todo replace preview

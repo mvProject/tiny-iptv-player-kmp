@@ -226,9 +226,9 @@ fun PlaylistView(
                 )
             }
 
-            if (state.isSaving) {
-                LoadingView()
-            }
+            LoadingView(
+                isVisible = state.isSaving,
+            )
 // todo fix hardcoded string resources
 
             OptionsDialog(

@@ -116,9 +116,6 @@ kotlin {
                 // DI
                 implementation(libs.koin.android.compose)
 
-                implementation(libs.accompanist.systemuicontroller)
-                implementation(libs.accompanist.adaptive)
-
                 // Misc
                 implementation(libs.kotlinx.collections.immutable)
 

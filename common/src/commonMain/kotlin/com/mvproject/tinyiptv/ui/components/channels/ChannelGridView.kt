@@ -17,9 +17,9 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.heightIn
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
-import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.OutlinedCard
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
@@ -29,9 +29,8 @@ import com.mvproject.tinyiptv.data.mappers.ListMappers.toActual
 import com.mvproject.tinyiptv.data.model.channels.TvPlaylistChannel
 import com.mvproject.tinyiptv.ui.components.epg.ScheduleEpgItemView
 import com.mvproject.tinyiptv.ui.theme.dimens
-import org.jetbrains.compose.resources.ExperimentalResourceApi
 
-@OptIn(ExperimentalFoundationApi::class, ExperimentalResourceApi::class)
+@OptIn(ExperimentalFoundationApi::class)
 @Composable
 fun ChannelGridView(
     modifier: Modifier = Modifier,
@@ -39,7 +38,7 @@ fun ChannelGridView(
     onChannelSelect: () -> Unit = {},
     onOptionSelect: () -> Unit = {}
 ) {
-    Card(
+    OutlinedCard(
         modifier = modifier
             .heightIn(MaterialTheme.dimens.size140)
             .clip(MaterialTheme.shapes.extraSmall)
@@ -47,7 +46,7 @@ fun ChannelGridView(
                 onClick = onChannelSelect,
                 onLongClick = onOptionSelect
             ),
-        colors = CardDefaults.cardColors(
+        colors = CardDefaults.outlinedCardColors(
             containerColor = MaterialTheme.colorScheme.surface
         )
     ) {
