@@ -11,17 +11,21 @@ import com.mvproject.tinyiptv.data.enums.ResizeMode
 import com.mvproject.tinyiptv.data.model.channels.TvPlaylistChannel
 import com.mvproject.tinyiptv.utils.AppConstants
 
+// todo add videoSizeRatio types
 data class VideoViewState(
     val channelGroup: String = AppConstants.EMPTY_STRING,
     val currentChannel: TvPlaylistChannel = TvPlaylistChannel(),
+    val isRestartRequired: Boolean = false,
     val isUseSubtitle: Boolean = false,
     val isTracksAvailable: Boolean = false,
-    val isUiVisible: Boolean = false,
+    val isControlUiVisible: Boolean = false,
+    val isVolumeUiVisible: Boolean = false,
     val isEpgVisible: Boolean = false,
     val isChannelsVisible: Boolean = false,
     val isChannelInfoVisible: Boolean = false,
     val isFullscreen: Boolean = false,
     val isPlaying: Boolean = false,
+    val currentVolume: Float = 0.5f,
     val isBuffering: Boolean = false,
     val isMediaPlayable: Boolean = true,
     val isOnline: Boolean = true,

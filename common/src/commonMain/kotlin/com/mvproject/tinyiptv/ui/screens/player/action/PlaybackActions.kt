@@ -21,4 +21,5 @@ sealed class PlaybackActions {
     data object OnPreviousSelected : PlaybackActions()
     data object OnVolumeUp : PlaybackActions()
     data object OnVolumeDown : PlaybackActions()
+    data object OnRestarted : PlaybackActions()
 }

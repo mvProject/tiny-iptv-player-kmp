@@ -18,15 +18,21 @@ import com.mvproject.tinyiptv.data.usecases.ToggleFavoriteChannelUseCase
 import com.mvproject.tinyiptv.platform.isMediaPlayable
 import com.mvproject.tinyiptv.ui.screens.player.action.PlaybackActions
 import com.mvproject.tinyiptv.ui.screens.player.action.PlaybackStateActions
-import com.mvproject.tinyiptv.ui.screens.player.events.PlaybackEvents
 import com.mvproject.tinyiptv.ui.screens.player.state.VideoPlaybackState
 import com.mvproject.tinyiptv.ui.screens.player.state.VideoViewState
+import com.mvproject.tinyiptv.utils.AppConstants.DELAY_50
+import com.mvproject.tinyiptv.utils.AppConstants.FLOAT_STEP_VOLUME
+import com.mvproject.tinyiptv.utils.AppConstants.FLOAT_VALUE_1
+import com.mvproject.tinyiptv.utils.AppConstants.FLOAT_VALUE_ZERO
 import com.mvproject.tinyiptv.utils.AppConstants.INT_NO_VALUE
-import io.github.aakira.napier.Napier
-import kotlinx.coroutines.channels.Channel
+import com.mvproject.tinyiptv.utils.AppConstants.INT_VALUE_1
+import com.mvproject.tinyiptv.utils.AppConstants.INT_VALUE_ZERO
+import com.mvproject.tinyiptv.utils.AppConstants.UI_SHOW_DELAY
+import com.mvproject.tinyiptv.utils.AppConstants.VOLUME_SHOW_DELAY
+import kotlinx.coroutines.Job
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
-import kotlinx.coroutines.flow.receiveAsFlow
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 
@@ -36,14 +42,19 @@ class VideoViewViewModel(
     private val toggleFavoriteChannelUseCase: ToggleFavoriteChannelUseCase,
 ) : ScreenModel {
 
+    private var pollVideoPositionJob: Job? = null
+    private var pollVolumeJob: Job? = null
+
+    //time after which [VideoViewState.isControlUiVisible] will be set to false
+    private var hideControllerAfterMs: Long = UI_SHOW_DELAY
+
+    //time after which [VideoViewState.isVolumeUiVisible] will be set to false
+    private var hideVolumeAfterMs: Long = VOLUME_SHOW_DELAY
+
     private var _videoViewState = MutableStateFlow(VideoViewState())
     val videoViewState = _videoViewState.asStateFlow()
 
-    private val _playbackEffects: Channel<PlaybackEvents> = Channel()
-    val playbackEffects = _playbackEffects.receiveAsFlow()
-
     init {
-        Napier.i("testing VideoViewViewModel init")
         coroutineScope.launch {
             _videoViewState.update {
                 it.copy(
@@ -51,12 +62,6 @@ class VideoViewViewModel(
                     videoResizeMode = ResizeMode.entries[preferenceRepository.getDefaultResizeMode()]
                 )
             }
-        }
-    }
-
-    private fun restartPlayingIfNeeded() {
-        coroutineScope.launch {
-            _playbackEffects.send(PlaybackEvents.OnPlaybackRestart)
         }
     }
 
@@ -86,18 +91,7 @@ class VideoViewViewModel(
                 channelsRefreshed
             )
 
-            _videoViewState.update { state ->
-                state.copy(
-                    mediaPosition = newMediaPosition,
-                    currentChannel = channel,
-                    channels = channelsRefreshed,
-                    isChannelsVisible = false
-                )
-            }
-
-            coroutineScope.launch {
-                _playbackEffects.send(PlaybackEvents.OnSpecifiedSelected)
-            }
+            setCurrentChannel(currentMediaPosition = newMediaPosition)
         }
     }
 
@@ -121,59 +115,124 @@ class VideoViewViewModel(
 
 
     fun processPlaybackActions(action: PlaybackActions) {
-        val effect = when (action) {
-            PlaybackActions.OnChannelsUiToggle -> PlaybackEvents.OnChannelsUiToggle
-            PlaybackActions.OnEpgUiToggle -> PlaybackEvents.OnEpgUiToggle
-            PlaybackActions.OnFullScreenToggle -> PlaybackEvents.OnFullScreenToggle
-            PlaybackActions.OnNextSelected -> PlaybackEvents.OnNextSelected
-            PlaybackActions.OnPlaybackToggle -> PlaybackEvents.OnPlaybackToggle
-            PlaybackActions.OnPlayerUiToggle -> PlaybackEvents.OnPlayerUiToggle
-            PlaybackActions.OnPreviousSelected -> PlaybackEvents.OnPreviousSelected
-            PlaybackActions.OnVideoResizeToggle -> PlaybackEvents.OnVideoResizeToggle
-            PlaybackActions.OnVolumeDown -> PlaybackEvents.OnVolumeDown
-            PlaybackActions.OnVolumeUp -> PlaybackEvents.OnVolumeUp
-            PlaybackActions.OnChannelInfoUiToggle -> PlaybackEvents.OnChannelInfoUiToggle
-            PlaybackActions.OnFavoriteToggle -> PlaybackEvents.OnFavoriteToggle
+        when (action) {
+            PlaybackActions.OnNextSelected -> switchToNextChannel()
+            PlaybackActions.OnPreviousSelected -> switchToPreviousChannel()
+            PlaybackActions.OnChannelsUiToggle -> toggleChannelsVisibility()
+            PlaybackActions.OnEpgUiToggle -> toggleEpgVisibility()
+            PlaybackActions.OnFullScreenToggle -> toggleFullScreen()
+            PlaybackActions.OnVideoResizeToggle -> toggleVideoResizeMode()
+            PlaybackActions.OnChannelInfoUiToggle -> toggleChannelInfoVisibility()
+            PlaybackActions.OnFavoriteToggle -> toggleChannelFavorite()
+            PlaybackActions.OnPlaybackToggle -> togglePlayingState()
+            PlaybackActions.OnPlayerUiToggle -> toggleControlUiState()
+            PlaybackActions.OnVolumeDown -> decreaseVolume()
+            PlaybackActions.OnVolumeUp -> increaseVolume()
+            PlaybackActions.OnRestarted -> consumeRestart()
         }
-        coroutineScope.launch {
-            _playbackEffects.send(effect)
-        }
+    }
 
+    private fun triggerRestart() {
+        _videoViewState.update { state ->
+            state.copy(isRestartRequired = true)
+        }
+        showControlUi()
+    }
+
+    private fun consumeRestart() {
+        _videoViewState.update { state ->
+            state.copy(isRestartRequired = false)
+        }
+    }
+
+    private fun switchToNextChannel() {
+        val currentChannelsCount = videoViewState.value.channels.count()
+        val nextIndex = videoViewState.value.mediaPosition + INT_VALUE_1
+        val newMediaPosition =
+            if (nextIndex > currentChannelsCount - INT_VALUE_1) INT_VALUE_ZERO else nextIndex
+
+        setCurrentChannel(currentMediaPosition = newMediaPosition)
+    }
+
+    private fun switchToPreviousChannel() {
+        val currentChannelsCount = videoViewState.value.channels.count()
+        val nextIndex = videoViewState.value.mediaPosition - INT_VALUE_1
+        val newMediaPosition =
+            if (nextIndex < INT_VALUE_ZERO) currentChannelsCount - INT_VALUE_1 else nextIndex
+
+        setCurrentChannel(currentMediaPosition = newMediaPosition)
+    }
+
+    private fun increaseVolume() {
+        showVolumeUi()
+        coroutineScope.launch {
+            val targetVolume = videoViewState.value.currentVolume + FLOAT_STEP_VOLUME
+            val nextVolume = if (targetVolume > FLOAT_VALUE_1) FLOAT_VALUE_1 else targetVolume
+            _videoViewState.update { state ->
+                state.copy(currentVolume = nextVolume)
+            }
+            delay(DELAY_50)
+        }
+    }
+
+    private fun decreaseVolume() {
+        showVolumeUi()
+        coroutineScope.launch {
+            val targetVolume = videoViewState.value.currentVolume - FLOAT_STEP_VOLUME
+            val nextVolume = if (targetVolume < FLOAT_VALUE_ZERO) FLOAT_VALUE_ZERO else targetVolume
+            _videoViewState.update { state ->
+                state.copy(currentVolume = nextVolume)
+            }
+            delay(DELAY_50)
+        }
+    }
+
+    private fun setCurrentChannel(
+        currentMediaPosition: Int
+    ) {
+        val currentChannels = videoViewState.value.channels.withRefreshedEpg()
+        val currentChannel = currentChannels[currentMediaPosition]
+
+        _videoViewState.update { state ->
+            state.copy(
+                mediaPosition = currentMediaPosition,
+                currentChannel = currentChannel,
+                channels = currentChannels,
+                isChannelsVisible = false
+            )
+        }
     }
 
     fun processPlaybackStateActions(action: PlaybackStateActions) {
-        var isMediaPlayable = videoViewState.value.isMediaPlayable
-        var isBuffering = videoViewState.value.isBuffering
-
         when (action) {
-            is PlaybackStateActions.OnMediaItemTransition -> {
-
-                val currentMediaPosition = action.index
-                val current = videoViewState.value.channels[currentMediaPosition]
-                val channelsRefreshed = videoViewState.value.channels.withRefreshedEpg()
-                _videoViewState.update { state ->
-                    state.copy(
-                        mediaPosition = currentMediaPosition,
-                        currentChannel = current,
-                        channels = channelsRefreshed
-                    )
-                }
-
-                restartPlayingIfNeeded()
+            is PlaybackStateActions.OnVideoSizeChanged -> {
+                // Napier.w("testing onVideoSizeChanged w:${action.width}:h:${action.height}")
+                // Napier.w("testing onVideoSizeChanged videoSize:${action.videoRatio}")
             }
 
-            is PlaybackStateActions.OnPlaybackState -> {
-                isBuffering = action.state == VideoPlaybackState.VideoPlaybackBuffering
-                Napier.e("testing OnPlaybackState isBuffering:$isBuffering")
+            is PlaybackStateActions.OnIsPlayingChanged -> {
+                _videoViewState.update { state ->
+                    state.copy(isPlaying = action.state)
+                }
+            }
+
+            is PlaybackStateActions.OnMediaItemTransition -> {
+                triggerRestart()
+            }
+
+            is PlaybackStateActions.OnPlaybackStateChanged -> {
+                var isMediaPlayable = videoViewState.value.isMediaPlayable
+                val isBuffering = action.state == VideoPlaybackState.VideoPlaybackBuffering
+                // Napier.e("testing OnPlaybackState isBuffering:$isBuffering")
 
                 when (action.state) {
                     is VideoPlaybackState.VideoPlaybackIdle -> {
-                        Napier.e("testing VideoPlaybackState VideoPlaybackIdle")
+                        // Napier.e("testing VideoPlaybackState VideoPlaybackIdle")
                         isMediaPlayable = isMediaPlayable(action.state.errorCode)
                     }
 
                     VideoPlaybackState.VideoPlaybackReady -> {
-                        Napier.e("testing VideoPlaybackState VideoPlaybackReady")
+                        //  Napier.e("testing VideoPlaybackState VideoPlaybackReady")
                         isMediaPlayable = true
                     }
 
@@ -182,14 +241,13 @@ class VideoViewViewModel(
                     }
                 }
 
+                _videoViewState.update { state ->
+                    state.copy(
+                        isMediaPlayable = isMediaPlayable,
+                        isBuffering = isBuffering
+                    )
+                }
             }
-        }
-
-        _videoViewState.update { state ->
-            state.copy(
-                isMediaPlayable = isMediaPlayable,
-                isBuffering = isBuffering
-            )
         }
     }
 
@@ -199,40 +257,37 @@ class VideoViewViewModel(
         if (!currentEpgVisibleState) {
             val channelsRefreshed = videoViewState.value.channels.withRefreshedEpg()
             _videoViewState.update { state ->
-                state.copy(
-                    channels = channelsRefreshed
-                )
+                state.copy(channels = channelsRefreshed)
             }
         }
 
         _videoViewState.update { state ->
-            state.copy(
-                isEpgVisible = !currentEpgVisibleState
-            )
+            state.copy(isEpgVisible = !currentEpgVisibleState)
         }
     }
 
     fun toggleChannelsVisibility() {
         val currentChannelsVisibleState = videoViewState.value.isChannelsVisible
-
         _videoViewState.update { state ->
-            state.copy(
-                isChannelsVisible = !currentChannelsVisibleState
-            )
+            state.copy(isChannelsVisible = !currentChannelsVisibleState)
+        }
+    }
+
+    private fun toggleFullScreen() {
+        val currentFullscreenState = videoViewState.value.isFullscreen
+        _videoViewState.update { state ->
+            state.copy(isFullscreen = !currentFullscreenState)
         }
     }
 
     fun toggleChannelInfoVisibility() {
         val currentChannelInfoVisibleState = videoViewState.value.isChannelInfoVisible
-
         _videoViewState.update { state ->
-            state.copy(
-                isChannelInfoVisible = !currentChannelInfoVisibleState
-            )
+            state.copy(isChannelInfoVisible = !currentChannelInfoVisibleState)
         }
     }
 
-    fun toggleChannelFavorite() {
+    private fun toggleChannelFavorite() {
         val currentChannel = videoViewState.value.currentChannel
         val currentChannels = videoViewState.value.channels
         val currentIndex = videoViewState.value.mediaPosition
@@ -259,5 +314,65 @@ class VideoViewViewModel(
             toggleFavoriteChannelUseCase(channel = currentChannel)
         }
 
+    }
+
+    private fun toggleVideoResizeMode() {
+        val currentMode = videoViewState.value.videoResizeMode
+        val nextMode = ResizeMode.toggleResizeMode(current = currentMode)
+        _videoViewState.update { state ->
+            state.copy(videoResizeMode = nextMode)
+        }
+    }
+
+    private fun toggleControlUiState() {
+        val currentUiVisibleState = videoViewState.value.isControlUiVisible
+        _videoViewState.update { state ->
+            state.copy(isControlUiVisible = !currentUiVisibleState)
+        }
+    }
+
+    private fun togglePlayingState() {
+        val currentPlayingState = videoViewState.value.isPlaying
+        _videoViewState.update { state ->
+            state.copy(isPlaying = !currentPlayingState)
+        }
+    }
+
+    private fun showControlUi() {
+        _videoViewState.update { state ->
+            state.copy(isControlUiVisible = true)
+        }
+        pollVideoPositionJob?.cancel()
+        pollVideoPositionJob = coroutineScope.launch {
+            delay(hideControllerAfterMs)
+            hideControlUi()
+        }
+    }
+
+    private fun hideControlUi() {
+        _videoViewState.update { state ->
+            state.copy(isControlUiVisible = false)
+        }
+        pollVideoPositionJob?.cancel()
+        pollVideoPositionJob = null
+    }
+
+    private fun showVolumeUi() {
+        _videoViewState.update { state ->
+            state.copy(isVolumeUiVisible = true)
+        }
+        pollVolumeJob?.cancel()
+        pollVolumeJob = coroutineScope.launch {
+            delay(hideVolumeAfterMs)
+            hideVolumeUi()
+        }
+    }
+
+    private fun hideVolumeUi() {
+        _videoViewState.update { state ->
+            state.copy(isVolumeUiVisible = false)
+        }
+        pollVolumeJob?.cancel()
+        pollVolumeJob = null
     }
 }
