@@ -30,6 +30,10 @@ render.experimental.xml
 *.jks
 *.keystore
 
+# Storage files
+*.db
+*.preferences_pb
+
 # Google Services (e.g. APIs or Firebase)
 google-services.json
 
@@ -150,7 +154,6 @@ obj/
 .idea/gradle.xml
 .idea/jarRepositories.xml
 .idea/navEditor.xml
-.idea/modules/
 
 # Legacy Eclipse project files
 .classpath
