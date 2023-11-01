@@ -28,6 +28,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import com.mvproject.tinyiptv.ui.screens.player.action.PlaybackActions
 import com.mvproject.tinyiptv.ui.theme.dimens
 
 @Composable
@@ -36,18 +37,16 @@ fun PlayerControlView(
     isFavorite: Boolean,
     isPlaying: Boolean,
     isFullScreen: Boolean,
-    onFavoriteToggle: () -> Unit,
-    onPlaybackToggle: () -> Unit,
-    onVideoResizeToggle: () -> Unit,
-    onFullScreenToggle: () -> Unit
+    onPlaybackAction: (PlaybackActions) -> Unit = {}
 ) {
+
     Row(
         modifier = modifier,
         verticalAlignment = Alignment.CenterVertically,
         horizontalArrangement = Arrangement.Start
     ) {
         IconButton(
-            onClick = onPlaybackToggle,
+            onClick = { onPlaybackAction(PlaybackActions.OnPlaybackToggle) },
             modifier = Modifier
                 .clip(CircleShape)
                 .background(MaterialTheme.colorScheme.onSurface)
@@ -65,7 +64,7 @@ fun PlayerControlView(
             horizontalArrangement = Arrangement.End
         ) {
             IconButton(
-                onClick = onFavoriteToggle,
+                onClick = { onPlaybackAction(PlaybackActions.OnFavoriteToggle) },
                 modifier = Modifier
                     .clip(CircleShape)
                     .background(MaterialTheme.colorScheme.onSurface)
@@ -80,7 +79,7 @@ fun PlayerControlView(
             Spacer(modifier = Modifier.width(MaterialTheme.dimens.size8))
 
             IconButton(
-                onClick = onVideoResizeToggle,
+                onClick = { onPlaybackAction(PlaybackActions.OnVideoResizeToggle) },
                 modifier = Modifier
                     .clip(CircleShape)
                     .background(MaterialTheme.colorScheme.onSurface)
@@ -95,7 +94,7 @@ fun PlayerControlView(
             Spacer(modifier = Modifier.width(MaterialTheme.dimens.size8))
 
             IconButton(
-                onClick = onFullScreenToggle,
+                onClick = { onPlaybackAction(PlaybackActions.OnFullScreenToggle) },
                 modifier = Modifier
                     .clip(CircleShape)
                     .background(MaterialTheme.colorScheme.onSurface)

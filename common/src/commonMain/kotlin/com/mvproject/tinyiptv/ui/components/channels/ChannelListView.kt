@@ -14,6 +14,7 @@ import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
@@ -26,9 +27,8 @@ import com.mvproject.tinyiptv.data.mappers.ListMappers.toActual
 import com.mvproject.tinyiptv.data.model.channels.TvPlaylistChannel
 import com.mvproject.tinyiptv.ui.components.epg.ScheduleEpgItemView
 import com.mvproject.tinyiptv.ui.theme.dimens
-import org.jetbrains.compose.resources.ExperimentalResourceApi
 
-@OptIn(ExperimentalFoundationApi::class, ExperimentalResourceApi::class)
+@OptIn(ExperimentalFoundationApi::class)
 @Composable
 fun ChannelListView(
     modifier: Modifier = Modifier,
@@ -46,13 +46,17 @@ fun ChannelListView(
     ) {
         Row(
             modifier = modifier
-                .fillMaxWidth(),
+                .fillMaxWidth()
+                .padding(
+                    horizontal = MaterialTheme.dimens.size2,
+                    vertical = MaterialTheme.dimens.size4
+                ),
             verticalAlignment = Alignment.CenterVertically
         ) {
 
             ChannelImageLogo(
                 channelLogo = channel.channelLogo,
-                channelName = channel.channelName,
+                channelName = channel.channelName
             )
 
             Spacer(modifier = Modifier.width(MaterialTheme.dimens.size8))

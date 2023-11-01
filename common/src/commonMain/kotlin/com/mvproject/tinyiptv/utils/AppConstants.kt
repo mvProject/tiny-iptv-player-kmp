@@ -17,6 +17,11 @@ object AppConstants {
     const val INT_VALUE_3 = 3
     const val INT_VALUE_5 = 5
 
+    const val FLOAT_VALUE_ZERO = 0f
+    const val FLOAT_VALUE_1 = 1f
+    const val FLOAT_STEP_VOLUME = 0.05f
+    const val FLOAT_DEFAULT_VOLUME = 0.5f
+
     const val WEIGHT_1 = 1f
 
     const val ALPHA_50 = 0.5f
@@ -29,6 +34,9 @@ object AppConstants {
     const val PLAYLIST_REMOTE_TYPE = "http://"
     const val PLAYLIST_REMOTE_SEC_TYPE = "https://"
 
+    const val DELAY_50 = 50L
+    const val UI_SHOW_DELAY = 3000L
+    const val VOLUME_SHOW_DELAY = 500L
 
     const val PROGRESS_STATE_COMPLETE = 1f
     const val COUNT_ZERO_FLOAT = 0f

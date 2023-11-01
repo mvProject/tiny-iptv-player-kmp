@@ -7,32 +7,53 @@
 
 package com.mvproject.tinyiptv.ui.components.views
 
-import androidx.annotation.DrawableRes
-import androidx.annotation.StringRes
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.fadeIn
 import androidx.compose.animation.fadeOut
+import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
+import androidx.compose.ui.text.style.TextAlign
 import com.mvproject.tinyiptv.ui.theme.dimens
+import com.mvproject.tinyiptv.utils.AppConstants.WEIGHT_50
+import com.mvproject.tinyiptv.utils.AppConstants.WEIGHT_80
+import org.jetbrains.compose.resources.ExperimentalResourceApi
+import org.jetbrains.compose.resources.painterResource
 
+@OptIn(ExperimentalResourceApi::class)
 @Composable
 fun NoPlaybackView(
     modifier: Modifier = Modifier.fillMaxSize(),
     isVisible: Boolean = false,
-    @StringRes textRes: Int,
-    @DrawableRes iconRes: Int
+    isFullScreen: Boolean = false,
+    text: String = "NoPlaybackView",
+    logo: String = "drawable/no_network.png",
 ) {
+    val fraction = remember(isFullScreen) {
+        if (isFullScreen) WEIGHT_80 else WEIGHT_50
+    }
+
+    val alignment = remember(isFullScreen) {
+        if (isFullScreen) Alignment.Center else Alignment.TopCenter
+    }
+
     AnimatedVisibility(
         visible = isVisible,
         enter = fadeIn(),
@@ -40,37 +61,41 @@ fun NoPlaybackView(
     ) {
         Box(
             modifier = modifier,
-            contentAlignment = Alignment.Center
+            contentAlignment = alignment
         ) {
             Column(
                 modifier = Modifier
+                    .fillMaxHeight(fraction)
+                    .fillMaxWidth()
                     .background(
-                        color = MaterialTheme.colorScheme.primaryContainer
+                        color = MaterialTheme.colorScheme.inverseSurface.copy(
+                            alpha = MaterialTheme.dimens.alpha70
+                        ),
+                        shape = MaterialTheme.shapes.small
                     ),
                 verticalArrangement = Arrangement.Center,
                 horizontalAlignment = Alignment.CenterHorizontally
             ) {
-                // todo fix icon
-                /*        Icon(
-                        modifier = Modifier
-                            .size(MaterialTheme.dimens.size96)
-                            .clip(CircleShape)
-                            .background(
-                                color = MaterialTheme.colorScheme.onSurfaceVariant
-                            )
-                            .padding(MaterialTheme.dimens.size22),
-                        painter = painterResource(id = iconRes),
-                        contentDescription = stringResource(id = textRes),
-                        tint = MaterialTheme.colorScheme.primaryContainer
-                    )*/
+
+                Image(
+                    painterResource(logo),
+                    modifier = Modifier
+                        .size(MaterialTheme.dimens.size96)
+                        .clip(CircleShape)
+                        .background(
+                            color = MaterialTheme.colorScheme.onSurfaceVariant
+                        )
+                        .padding(MaterialTheme.dimens.size12),
+                    contentDescription = text
+                )
 
                 Spacer(modifier = Modifier.height(MaterialTheme.dimens.size16))
 
                 Text(
-                    // text = stringResource(id = textRes),
-                    text = "NoPlaybackView",
+                    text = text,
                     style = MaterialTheme.typography.headlineMedium,
-                    color = MaterialTheme.colorScheme.onSurfaceVariant
+                    color = MaterialTheme.colorScheme.onSurfaceVariant,
+                    textAlign = TextAlign.Center
                 )
             }
         }

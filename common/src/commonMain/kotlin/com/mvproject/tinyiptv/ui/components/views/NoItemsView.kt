@@ -69,7 +69,7 @@ fun NoItemsView(
                         .clickable { onNavigateClick() },
                     text = navigateTitle,
                     style = MaterialTheme.typography.displaySmall,
-                    color = MaterialTheme.colorScheme.onPrimaryContainer
+                    color = MaterialTheme.colorScheme.onSurface
                 )
             }
         }

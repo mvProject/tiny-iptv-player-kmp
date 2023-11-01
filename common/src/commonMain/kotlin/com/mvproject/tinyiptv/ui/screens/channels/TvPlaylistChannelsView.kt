@@ -95,13 +95,15 @@ fun TvPlaylistChannelsView(
 
         val channelsList by remember {
             derivedStateOf {
-                if (viewState.searchString.length > 1)
+                if (viewState.searchString.length > INT_VALUE_1)
                     viewModel.channels.filter {
                         it.channelName.contains(viewState.searchString, true)
                     }
                 else viewModel.channels
             }
         }
+
+        // todo adaptive size depend on windowSizeClass
 
         Box(
             modifier = Modifier
@@ -123,10 +125,9 @@ fun TvPlaylistChannelsView(
                 columns = columns,
                 state = rememberLazyGridState(),
                 verticalArrangement = Arrangement.spacedBy(MaterialTheme.dimens.size8),
-                horizontalArrangement = Arrangement.spacedBy(MaterialTheme.dimens.size6),
+                horizontalArrangement = Arrangement.spacedBy(MaterialTheme.dimens.size8),
                 contentPadding = PaddingValues(
-                    horizontal = MaterialTheme.dimens.size2,
-                    vertical = MaterialTheme.dimens.size6
+                    vertical = MaterialTheme.dimens.size4
                 ),
                 content = {
                     items(

@@ -24,9 +24,12 @@ import org.jetbrains.compose.resources.painterResource
 @OptIn(ExperimentalResourceApi::class)
 @Composable
 fun ChannelImageLogo(
+    modifier: Modifier = Modifier,
+    isLarge: Boolean = false,
     channelLogo: String,
     channelName: String
 ) {
+    val imageSize = if (isLarge) MaterialTheme.dimens.size64 else MaterialTheme.dimens.size42
     when (val painterResource = asyncPainterResource(data = channelLogo)) {
         is Resource.Loading -> {
             CircularProgressIndicator()
@@ -37,8 +40,8 @@ fun ChannelImageLogo(
             Image(
                 painter,
                 contentDescription = channelName,
-                modifier = Modifier
-                    .size(MaterialTheme.dimens.size42)
+                modifier = modifier
+                    .size(imageSize)
                     .clip(MaterialTheme.shapes.small)
             )
         }
@@ -47,8 +50,8 @@ fun ChannelImageLogo(
             Image(
                 painterResource("drawable/no_channel_logo.png"),
                 contentDescription = channelName,
-                modifier = Modifier
-                    .size(MaterialTheme.dimens.size42)
+                modifier = modifier
+                    .size(imageSize)
                     .clip(MaterialTheme.shapes.small)
             )
         }

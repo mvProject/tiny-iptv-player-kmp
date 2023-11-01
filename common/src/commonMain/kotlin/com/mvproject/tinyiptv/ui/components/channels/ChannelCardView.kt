@@ -10,14 +10,15 @@ package com.mvproject.tinyiptv.ui.components.channels
 import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.combinedClickable
 import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
-import androidx.compose.foundation.layout.heightIn
-import androidx.compose.material3.CardDefaults
+import androidx.compose.foundation.layout.padding
+import androidx.compose.material3.ElevatedCard
 import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.OutlinedCard
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
@@ -35,42 +36,47 @@ fun ChannelCardView(
     onChannelSelect: () -> Unit = {},
     onOptionSelect: () -> Unit = {}
 ) {
-    OutlinedCard(
+    ElevatedCard(
         modifier = modifier
-            .heightIn(MaterialTheme.dimens.size200)
+            .height(MaterialTheme.dimens.size200)
             .clip(MaterialTheme.shapes.extraSmall)
             .combinedClickable(
                 onClick = onChannelSelect,
                 onLongClick = onOptionSelect
-            ),
-
-        colors = CardDefaults.outlinedCardColors(
-            containerColor = MaterialTheme.colorScheme.surface
-        )
+            )
     ) {
         Column(
+            modifier = Modifier.fillMaxSize(),
             horizontalAlignment = Alignment.CenterHorizontally,
-            verticalArrangement = Arrangement.SpaceAround
+            verticalArrangement = Arrangement.Top
         ) {
 
             ChannelImageLogo(
+                modifier = Modifier.padding(top = MaterialTheme.dimens.size12),
                 channelLogo = channel.channelLogo,
                 channelName = channel.channelName,
+                isLarge = true
             )
 
-            Spacer(modifier = Modifier.height(MaterialTheme.dimens.size12))
+            Spacer(modifier = Modifier.height(MaterialTheme.dimens.size8))
 
-            Text(
-                text = channel.channelName,
-                style = MaterialTheme.typography.headlineMedium,
-                color = if (channel.isInFavorites)
-                    MaterialTheme.colorScheme.onSurfaceVariant
-                else
-                    MaterialTheme.colorScheme.onPrimary,
-                textAlign = TextAlign.Center,
+            Box(
                 modifier = Modifier
-                    .fillMaxWidth()
-            )
+                    .fillMaxSize()
+                    .padding(horizontal = MaterialTheme.dimens.size8),
+                contentAlignment = Alignment.Center
+            ) {
+                Text(
+                    text = channel.channelName,
+                    style = MaterialTheme.typography.headlineMedium,
+                    color = if (channel.isInFavorites)
+                        MaterialTheme.colorScheme.onSurfaceVariant
+                    else
+                        MaterialTheme.colorScheme.onPrimary,
+                    textAlign = TextAlign.Center,
+                    modifier = Modifier.fillMaxWidth()
+                )
+            }
         }
     }
 }
