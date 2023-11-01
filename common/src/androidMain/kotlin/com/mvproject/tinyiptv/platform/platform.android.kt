@@ -29,8 +29,10 @@ import androidx.media3.common.PlaybackException
 import coil.compose.AsyncImage
 import coil.request.ImageRequest
 import com.mvproject.tinyiptv.common.R
-import com.mvproject.tinyiptv.ui.screens.player.VideoView
-import com.mvproject.tinyiptv.ui.screens.player.VideoViewViewModel
+import com.mvproject.tinyiptv.ui.PlayerView
+import com.mvproject.tinyiptv.ui.screens.player.action.PlaybackActions
+import com.mvproject.tinyiptv.ui.screens.player.action.PlaybackStateActions
+import com.mvproject.tinyiptv.ui.screens.player.state.VideoViewState
 import com.mvproject.tinyiptv.ui.screens.playlist.action.PlaylistAction
 import com.mvproject.tinyiptv.ui.theme.dimens
 import com.mvproject.tinyiptv.utils.AppConstants
@@ -48,6 +50,23 @@ actual fun font(name: String, res: String, weight: FontWeight, style: FontStyle)
 
 actual fun createPlatformHttpClient(): HttpClient {
     return HttpClient(Android)
+}
+
+@Composable
+actual fun PlayerViewContainer(
+    modifier: Modifier,
+    videoViewState: VideoViewState,
+    onPlaybackAction: (PlaybackActions) -> Unit,
+    onPlaybackStateAction: (PlaybackStateActions) -> Unit,
+    controls: @Composable () -> Unit
+) {
+    PlayerView(
+        modifier = modifier,
+        videoViewState = videoViewState,
+        onPlaybackAction = onPlaybackAction,
+        onPlaybackStateAction = onPlaybackStateAction,
+        controls = controls
+    )
 }
 
 @Composable
@@ -76,6 +95,11 @@ actual fun LocalFileSelectButton(onPlaylistAction: (PlaylistAction) -> Unit) {
 }
 
 @Composable
+actual fun ClosePlayer(modifier: Modifier, action: () -> Unit) {
+    // todo no need yet
+}
+
+@Composable
 actual fun ImageLogo(source: String) {
     AsyncImage(
         model = ImageRequest.Builder(LocalContext.current)
@@ -94,10 +118,10 @@ actual fun ImageLogo(source: String) {
 @Composable
 actual fun ExecuteOnResume(action: () -> Unit) {
     LifecycleResumeEffect(Unit) {
-        Napier.w("testing LifecycleResumeEffect launched")
         action()
+
         onPauseOrDispose {
-            Napier.w("testing LifecycleResumeEffect onPauseOrDispose")
+
         }
     }
 }
@@ -111,17 +135,4 @@ actual fun isMediaPlayable(errorCode: Int?): Boolean {
     }
     Napier.e("testing errorCode:$errorCode, isMediaPlayable:$isMediaPlayable")
     return isMediaPlayable
-}
-
-@Composable
-actual fun PlayerScreenRouteContent(
-    viewModel: VideoViewViewModel,
-    channelUrl: String,
-    channelGroup: String
-) {
-    VideoView(
-        viewModel = viewModel,
-        channelUrl = channelUrl,
-        channelGroup = channelGroup
-    )
 }

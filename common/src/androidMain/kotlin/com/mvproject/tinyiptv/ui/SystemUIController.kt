@@ -1,11 +1,11 @@
 /*
  *  Created by Medvediev Viktor [mvproject]
  *  Copyright © 2023
- *  last modified : 30.10.23, 11:48
+ *  last modified : 01.11.23, 12:44
  *
  */
 
-package com.mvproject.tinyiptv.ui.screens.player
+package com.mvproject.tinyiptv.ui
 
 import android.app.Activity
 import android.content.Context
@@ -23,11 +23,11 @@ import androidx.core.view.WindowInsetsCompat
 import androidx.core.view.WindowInsetsControllerCompat
 
 @Composable
-fun rememberSysController(
+internal fun rememberSystemUIController(
     window: Window? = findWindow(),
-): SysUIController {
+): SystemUIController {
     val view = LocalView.current
-    return remember(view, window) { AndroidSysUIController(view, window) }
+    return remember(view, window) { AndroidSystemUIController(view, window) }
 }
 
 @Composable
@@ -46,12 +46,12 @@ private tailrec fun Context.findWindow(): Window? =
  * A helper class for setting the navigation and status bar colors for a [View], gracefully
  * degrading behavior based upon API level.
  *
- * Typically you would use [rememberSysController] to remember an instance of this.
+ * Typically you would use [rememberSystemUIController] to remember an instance of this.
  */
-internal class AndroidSysUIController(
+internal class AndroidSystemUIController(
     private val view: View,
     private val window: Window?
-) : SysUIController {
+) : SystemUIController {
     private val windowInsetsController = window?.let {
         WindowCompat.getInsetsController(it, view)
     }
@@ -89,7 +89,7 @@ internal class AndroidSysUIController(
 }
 
 @Stable
-interface SysUIController {
+interface SystemUIController {
 
     /**
      * Control for the behavior of the system bars. This value should be one of the

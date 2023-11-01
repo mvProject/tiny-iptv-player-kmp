@@ -1,11 +1,11 @@
 /*
  *  Created by Medvediev Viktor [mvproject]
  *  Copyright © 2023
- *  last modified : 28.10.23, 15:16
+ *  last modified : 28.10.23, 15:39
  *
  */
 
-package com.mvproject.tinyiptv.ui.components
+package com.mvproject.tinyiptv.network
 
 import android.content.Context
 import android.net.ConnectivityManager
@@ -21,7 +21,7 @@ import kotlinx.coroutines.flow.distinctUntilChanged
 import kotlinx.coroutines.launch
 
 @Composable
-fun networkConnectionState(
+internal fun networkConnectionState(
     context: Context = LocalContext.current,
 ): State<ConnectionState> {
     val connectivityManager =
