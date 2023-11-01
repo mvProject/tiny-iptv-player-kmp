@@ -8,10 +8,13 @@
 package com.mvproject.tinyiptv.platform
 
 import androidx.compose.runtime.Composable
+import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.font.Font
 import androidx.compose.ui.text.font.FontStyle
 import androidx.compose.ui.text.font.FontWeight
-import com.mvproject.tinyiptv.ui.screens.player.VideoViewViewModel
+import com.mvproject.tinyiptv.ui.screens.player.action.PlaybackActions
+import com.mvproject.tinyiptv.ui.screens.player.action.PlaybackStateActions
+import com.mvproject.tinyiptv.ui.screens.player.state.VideoViewState
 import com.mvproject.tinyiptv.ui.screens.playlist.action.PlaylistAction
 import io.github.aakira.napier.Napier
 import io.ktor.client.HttpClient
@@ -35,14 +38,19 @@ expect fun createPlatformHttpClient(): HttpClient
 expect fun isMediaPlayable(errorCode: Int?): Boolean
 
 @Composable
-expect fun PlayerScreenRouteContent(
-    viewModel: VideoViewViewModel,
-    channelUrl: String,
-    channelGroup: String
+expect fun PlayerViewContainer(
+    modifier: Modifier = Modifier,
+    videoViewState: VideoViewState,
+    onPlaybackAction: (PlaybackActions) -> Unit = {},
+    onPlaybackStateAction: (PlaybackStateActions) -> Unit = {},
+    controls: @Composable () -> Unit
 )
 
 @Composable
 expect fun LocalFileSelectButton(onPlaylistAction: (PlaylistAction) -> Unit)
+
+@Composable
+expect fun ClosePlayer(modifier: Modifier, action: () -> Unit)
 
 @Composable
 expect fun ImageLogo(source: String)

@@ -7,13 +7,25 @@
 
 package com.mvproject.tinyiptv.platform
 
+import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
+import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.shape.CircleShape
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.rounded.Close
 import androidx.compose.material3.ButtonDefaults
+import androidx.compose.material3.Icon
+import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedButton
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.font.Font
 import androidx.compose.ui.text.font.FontStyle
 import androidx.compose.ui.text.font.FontWeight
@@ -21,8 +33,11 @@ import androidx.compose.ui.text.platform.Font
 import com.mohamedrejeb.calf.picker.FilePickerFileType
 import com.mohamedrejeb.calf.picker.FilePickerSelectionMode
 import com.mohamedrejeb.calf.picker.rememberFilePickerLauncher
-import com.mvproject.tinyiptv.ui.screens.player.VideoViewViewModel
+import com.mvproject.tinyiptv.ui.screens.player.action.PlaybackActions
+import com.mvproject.tinyiptv.ui.screens.player.action.PlaybackStateActions
+import com.mvproject.tinyiptv.ui.screens.player.state.VideoViewState
 import com.mvproject.tinyiptv.ui.screens.playlist.action.PlaylistAction
+import com.mvproject.tinyiptv.ui.theme.dimens
 import com.mvproject.tinyiptv.utils.AppConstants
 import io.github.aakira.napier.Napier
 import io.ktor.client.HttpClient
@@ -40,6 +55,29 @@ actual fun font(
 actual fun createPlatformHttpClient(): HttpClient {
     // return HttpClient(OkHttp)
     return HttpClient(Java)
+}
+
+
+@Composable
+actual fun PlayerViewContainer(
+    modifier: Modifier,
+    videoViewState: VideoViewState,
+    onPlaybackAction: (PlaybackActions) -> Unit,
+    onPlaybackStateAction: (PlaybackStateActions) -> Unit,
+    controls: @Composable () -> Unit
+) {
+    // todo video player content
+
+    Box(
+        modifier = modifier
+            .fillMaxSize()
+            .clickable {
+                onPlaybackAction(PlaybackActions.OnPlayerUiToggle)
+            }
+            .background(Color.Yellow)
+    ) {
+        controls()
+    }
 }
 
 @Composable
@@ -86,6 +124,26 @@ actual fun LocalFileSelectButton(onPlaylistAction: (PlaylistAction) -> Unit) {
 }
 
 @Composable
+actual fun ClosePlayer(
+    modifier: Modifier,
+    action: () -> Unit
+) {
+    IconButton(
+        onClick = action,
+        modifier = modifier
+            .padding(MaterialTheme.dimens.size4)
+            .clip(CircleShape)
+            .background(MaterialTheme.colorScheme.onSurface)
+    ) {
+        Icon(
+            imageVector = Icons.Rounded.Close,
+            contentDescription = "PLAYBACK_CLOSE",
+            tint = MaterialTheme.colorScheme.primary
+        )
+    }
+}
+
+@Composable
 actual fun ImageLogo(source: String) {
     // todo show image
 }
@@ -99,13 +157,4 @@ actual fun ExecuteOnResume(action: () -> Unit) {
 actual fun isMediaPlayable(errorCode: Int?): Boolean {
     // todo check media playable
     return true
-}
-
-@Composable
-actual fun PlayerScreenRouteContent(
-    viewModel: VideoViewViewModel,
-    channelUrl: String,
-    channelGroup: String
-) {
-    // todo video player content
 }

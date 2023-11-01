@@ -60,7 +60,7 @@ object TimeUtils {
 
     fun calculateProgramProgress(startTime: Long, endTime: Long): Float {
         var progressValue = 0f
-        val currTime = System.currentTimeMillis()
+        val currTime = Clock.System.now().toEpochMilliseconds()
         if (currTime > startTime) {
             val endValue = (endTime - startTime).toInt()
             val spendValue = (currTime - startTime).toDouble()
