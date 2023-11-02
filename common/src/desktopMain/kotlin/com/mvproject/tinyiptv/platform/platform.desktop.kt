@@ -8,9 +8,6 @@
 package com.mvproject.tinyiptv.platform
 
 import androidx.compose.foundation.background
-import androidx.compose.foundation.clickable
-import androidx.compose.foundation.layout.Box
-import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.shape.CircleShape
@@ -25,7 +22,6 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.font.Font
 import androidx.compose.ui.text.font.FontStyle
 import androidx.compose.ui.text.font.FontWeight
@@ -33,6 +29,7 @@ import androidx.compose.ui.text.platform.Font
 import com.mohamedrejeb.calf.picker.FilePickerFileType
 import com.mohamedrejeb.calf.picker.FilePickerSelectionMode
 import com.mohamedrejeb.calf.picker.rememberFilePickerLauncher
+import com.mvproject.tinyiptv.ui.PlayerView
 import com.mvproject.tinyiptv.ui.screens.player.action.PlaybackActions
 import com.mvproject.tinyiptv.ui.screens.player.action.PlaybackStateActions
 import com.mvproject.tinyiptv.ui.screens.player.state.VideoViewState
@@ -66,18 +63,13 @@ actual fun PlayerViewContainer(
     onPlaybackStateAction: (PlaybackStateActions) -> Unit,
     controls: @Composable () -> Unit
 ) {
-    // todo video player content
-
-    Box(
-        modifier = modifier
-            .fillMaxSize()
-            .clickable {
-                onPlaybackAction(PlaybackActions.OnPlayerUiToggle)
-            }
-            .background(Color.Yellow)
-    ) {
-        controls()
-    }
+    PlayerView(
+        modifier = modifier,
+        videoViewState = videoViewState,
+        onPlaybackAction = onPlaybackAction,
+        onPlaybackStateAction = onPlaybackStateAction,
+        controls = controls
+    )
 }
 
 @Composable
@@ -143,10 +135,12 @@ actual fun ClosePlayer(
     }
 }
 
+/*
 @Composable
 actual fun ImageLogo(source: String) {
     // todo show image
 }
+*/
 
 @Composable
 actual fun ExecuteOnResume(action: () -> Unit) {

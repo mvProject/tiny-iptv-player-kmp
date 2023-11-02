@@ -52,8 +52,10 @@ expect fun LocalFileSelectButton(onPlaylistAction: (PlaylistAction) -> Unit)
 @Composable
 expect fun ClosePlayer(modifier: Modifier, action: () -> Unit)
 
+/*
 @Composable
 expect fun ImageLogo(source: String)
+*/
 
 @Composable
 expect fun ExecuteOnResume(action: () -> Unit)

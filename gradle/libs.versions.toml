@@ -1,8 +1,8 @@
 [versions]
 
-kotlin = "1.9.10"
+kotlin = "1.9.20"
 gradle = "8.1.2"
-compose = "1.5.10-beta01"
+compose = "1.5.10"
 
 ktor = "2.3.0"
 
@@ -23,7 +23,7 @@ kotlinxCoroutinesSwing = "1.7.3"
 kotlinxCoroutinesCore = "1.7.3"
 
 material3WindowSizeClassMultiplatform = "0.3.1"
-componentsResources = "1.5.3"
+componentsResources = "1.5.10"
 annotation = "1.7.0"
 
 coil = "2.4.0"

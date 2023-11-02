@@ -14,11 +14,11 @@ plugins {
 }
 
 android {
-    namespace = "com.mvproject.tinyiptv.common"
+    namespace = "com.mvproject.tinyiptv"
 
     sourceSets["main"].manifest.srcFile("src/androidMain/AndroidManifest.xml")
+    //  sourceSets["main"].resources.srcDirs("src/commonMain/resources")
     sourceSets["main"].res.srcDirs("src/androidMain/res")
-    sourceSets["main"].resources.srcDirs("src/commonMain/resources")
 
     compileSdk = 34
     defaultConfig {
@@ -26,20 +26,24 @@ android {
     }
 
     compileOptions {
-        sourceCompatibility = JavaVersion.VERSION_11
-        targetCompatibility = JavaVersion.VERSION_11
+        sourceCompatibility = JavaVersion.VERSION_17
+        targetCompatibility = JavaVersion.VERSION_17
     }
     kotlin {
-        jvmToolchain(11)
+        jvmToolchain(17)
     }
 }
 
 kotlin {
     androidTarget {
-
+        compilations.all {
+            kotlinOptions {
+                jvmTarget = JavaVersion.VERSION_17.toString()
+            }
+        }
     }
     jvm("desktop") {
-        jvmToolchain(11)
+        jvmToolchain(17)
     }
 
     sourceSets {
@@ -98,8 +102,7 @@ kotlin {
                                 androidTestImplementation(libs.androidx.compose.ui.test.junit4)
                                 debugImplementation(libs.androidx.compose.ui.test.manifest)
 
-                                // Android Studio Preview support
-                                debugImplementation(libs.androidx.compose.ui.tooling)*/
+                               */
             }
         }
         val androidMain by getting {
@@ -131,6 +134,9 @@ kotlin {
                 // Image processing
                 implementation(libs.coil)
                 implementation(libs.coil.compose)
+
+                // Android Studio Preview support
+                //debugImplementation(libs.androidx.compose.ui.tooling)
             }
         }
 

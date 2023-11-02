@@ -11,14 +11,12 @@ import android.annotation.SuppressLint
 import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.size
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedButton
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.draw.clip
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.Font
@@ -26,15 +24,12 @@ import androidx.compose.ui.text.font.FontStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.lifecycle.compose.LifecycleResumeEffect
 import androidx.media3.common.PlaybackException
-import coil.compose.AsyncImage
-import coil.request.ImageRequest
-import com.mvproject.tinyiptv.common.R
+import com.mvproject.tinyiptv.R
 import com.mvproject.tinyiptv.ui.PlayerView
 import com.mvproject.tinyiptv.ui.screens.player.action.PlaybackActions
 import com.mvproject.tinyiptv.ui.screens.player.action.PlaybackStateActions
 import com.mvproject.tinyiptv.ui.screens.player.state.VideoViewState
 import com.mvproject.tinyiptv.ui.screens.playlist.action.PlaylistAction
-import com.mvproject.tinyiptv.ui.theme.dimens
 import com.mvproject.tinyiptv.utils.AppConstants
 import io.github.aakira.napier.Napier
 import io.ktor.client.HttpClient
@@ -99,7 +94,7 @@ actual fun ClosePlayer(modifier: Modifier, action: () -> Unit) {
     // todo no need yet
 }
 
-@Composable
+/*@Composable
 actual fun ImageLogo(source: String) {
     AsyncImage(
         model = ImageRequest.Builder(LocalContext.current)
@@ -113,7 +108,7 @@ actual fun ImageLogo(source: String) {
             .size(MaterialTheme.dimens.size42)
             .clip(MaterialTheme.shapes.small)
     )
-}
+}*/
 
 @Composable
 actual fun ExecuteOnResume(action: () -> Unit) {
