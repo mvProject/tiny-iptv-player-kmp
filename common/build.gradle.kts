@@ -148,6 +148,9 @@ kotlin {
                 implementation(libs.ktor.client.java)
                 implementation(libs.sqldelight.driver.jvm)
                 implementation(libs.calf.filepicker)
+                implementation("uk.co.caprica:vlcj:4.8.1")
+                implementation("org.videolan.android:libvlc-all:3.4.4")
+                implementation("com.squareup.okio:okio:3.6.0")
             }
         }
     }
