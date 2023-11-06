@@ -26,6 +26,7 @@ object PlayerUtils {
 
         var width = maxWidth
         var height = maxHeight
+
         val constraintAspectRatio: Float = (width / height).toFloat()
         val difference = aspectRatio / constraintAspectRatio - 1
 

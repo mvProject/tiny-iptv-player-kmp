@@ -85,7 +85,7 @@ internal fun PlayerView(
         AndroidView(
             modifier = Modifier
                 .adaptiveLayout(
-                    aspectRatio = videoViewState.videoSizeRatio,
+                    aspectRatio = videoViewState.videoRatio,
                     resizeMode = videoViewState.videoResizeMode
                 ),
             factory = { context ->

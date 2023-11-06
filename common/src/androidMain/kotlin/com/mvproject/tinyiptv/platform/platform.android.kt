@@ -90,7 +90,11 @@ actual fun LocalFileSelectButton(onPlaylistAction: (PlaylistAction) -> Unit) {
 }
 
 @Composable
-actual fun ClosePlayer(modifier: Modifier, action: () -> Unit) {
+actual fun ClosePlayer(
+    modifier: Modifier,
+    action: () -> Unit,
+    onPlaybackAction: (PlaybackActions) -> Unit
+) {
     // todo no need yet
 }
 

@@ -10,10 +10,11 @@ package com.mvproject.tinyiptv.ui.components.modifiers
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.layout.layout
 import com.mvproject.tinyiptv.data.enums.ResizeMode
+import com.mvproject.tinyiptv.utils.AppConstants.FLOAT_VALUE_1
 import com.mvproject.tinyiptv.utils.PlayerUtils.resizeForVideo
 
 fun Modifier.adaptiveLayout(
-    aspectRatio: Float,
+    aspectRatio: Float = FLOAT_VALUE_1,
     resizeMode: ResizeMode = ResizeMode.Fit
 ) = layout { measurable, constraints ->
     val resizedConstraint = constraints.resizeForVideo(resizeMode, aspectRatio)

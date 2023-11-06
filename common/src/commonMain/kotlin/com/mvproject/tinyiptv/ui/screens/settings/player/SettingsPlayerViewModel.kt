@@ -30,7 +30,8 @@ class SettingsPlayerViewModel(
             _settingsPlayerState.update {
                 it.copy(
                     isFullscreenEnabled = preferenceRepository.getDefaultFullscreenMode(),
-                    resizeMode = preferenceRepository.getDefaultResizeMode()
+                    resizeMode = preferenceRepository.getDefaultResizeMode(),
+                    ratioMode = preferenceRepository.getDefaultRatioMode()
                 )
             }
         }
@@ -57,6 +58,17 @@ class SettingsPlayerViewModel(
                         it.copy(resizeMode = resizeMode)
                     }
                     preferenceRepository.setDefaultResizeMode(mode = resizeMode)
+                }
+            }
+
+            is SettingsPlayerAction.SetRatioMode -> {
+                val ratioMode = action.mode
+                Napier.w("testing ratioMode:$ratioMode")
+                coroutineScope.launch {
+                    _settingsPlayerState.update {
+                        it.copy(ratioMode = ratioMode)
+                    }
+                    preferenceRepository.setDefaultRatioMode(mode = ratioMode)
                 }
             }
         }

@@ -22,8 +22,8 @@ fun main() {
         icon = BitmapPainter(useResource("drawable/no_channel_logo.png", ::loadImageBitmap)),
         state = WindowState(
             position = WindowPosition.Aligned(Alignment.Center),
-            width = 1200.dp,
-            height = 700.dp
+            width = 1400.dp,
+            height = 900.dp
         )
     ) {
         Box(modifier = Modifier.fillMaxSize(), contentAlignment = Alignment.Center) {

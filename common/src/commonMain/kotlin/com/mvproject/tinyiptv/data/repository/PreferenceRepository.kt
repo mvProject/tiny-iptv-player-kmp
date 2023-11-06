@@ -14,6 +14,7 @@ import androidx.datastore.preferences.core.edit
 import androidx.datastore.preferences.core.intPreferencesKey
 import androidx.datastore.preferences.core.longPreferencesKey
 import androidx.datastore.preferences.core.stringPreferencesKey
+import com.mvproject.tinyiptv.utils.AppConstants.INT_VALUE_1
 import com.mvproject.tinyiptv.utils.AppConstants.INT_VALUE_5
 import com.mvproject.tinyiptv.utils.AppConstants.INT_VALUE_ZERO
 import com.mvproject.tinyiptv.utils.AppConstants.LONG_NO_VALUE
@@ -82,6 +83,16 @@ class PreferenceRepository(
 
     suspend fun getDefaultResizeMode() = dataStore.data.map { preferences ->
         preferences[DEFAULT_RESIZE_MODE] ?: INT_VALUE_ZERO
+    }.first()
+
+    suspend fun setDefaultRatioMode(mode: Int) {
+        dataStore.edit { settings ->
+            settings[DEFAULT_RATIO_MODE] = mode
+        }
+    }
+
+    suspend fun getDefaultRatioMode() = dataStore.data.map { preferences ->
+        preferences[DEFAULT_RATIO_MODE] ?: INT_VALUE_1
     }.first()
 
 
@@ -171,6 +182,7 @@ class PreferenceRepository(
         val EPG_MAIN_LAST_UPDATE_PERIOD = intPreferencesKey("EpgMainLastUpdatePeriod")
 
         val DEFAULT_RESIZE_MODE = intPreferencesKey("DefaultResizeMode")
+        val DEFAULT_RATIO_MODE = intPreferencesKey("DefaultRatioMode")
         val DEFAULT_FULLSCREEN_MODE = booleanPreferencesKey("DefaultFullscreenMode")
 
         val EPG_INFO_DATA_IS_EXIST = booleanPreferencesKey("EpgInfoDataIsExist")

@@ -9,6 +9,7 @@ package com.mvproject.tinyiptv.ui.screens.player
 
 import cafe.adriel.voyager.core.model.ScreenModel
 import cafe.adriel.voyager.core.model.coroutineScope
+import com.mvproject.tinyiptv.data.enums.RatioMode
 import com.mvproject.tinyiptv.data.enums.ResizeMode
 import com.mvproject.tinyiptv.data.mappers.ListMappers.withRefreshedEpg
 import com.mvproject.tinyiptv.data.model.channels.TvPlaylistChannel
@@ -54,12 +55,18 @@ class VideoViewViewModel(
     private var _videoViewState = MutableStateFlow(VideoViewState())
     val videoViewState = _videoViewState.asStateFlow()
 
+    private var _videoRatio = FLOAT_VALUE_1
+
     init {
         coroutineScope.launch {
             _videoViewState.update {
+                val ratioMode = RatioMode.entries[preferenceRepository.getDefaultRatioMode()]
+
                 it.copy(
                     isFullscreen = preferenceRepository.getDefaultFullscreenMode(),
-                    videoResizeMode = ResizeMode.entries[preferenceRepository.getDefaultResizeMode()]
+                    videoResizeMode = ResizeMode.entries[preferenceRepository.getDefaultResizeMode()],
+                    videoRatioMode = ratioMode,
+                    videoRatio = ratioMode.ratio
                 )
             }
         }
@@ -122,6 +129,7 @@ class VideoViewViewModel(
             PlaybackActions.OnEpgUiToggle -> toggleEpgVisibility()
             PlaybackActions.OnFullScreenToggle -> toggleFullScreen()
             PlaybackActions.OnVideoResizeToggle -> toggleVideoResizeMode()
+            PlaybackActions.OnVideoRatioToggle -> toggleVideoRatioMode()
             PlaybackActions.OnChannelInfoUiToggle -> toggleChannelInfoVisibility()
             PlaybackActions.OnFavoriteToggle -> toggleChannelFavorite()
             PlaybackActions.OnPlaybackToggle -> togglePlayingState()
@@ -206,8 +214,16 @@ class VideoViewViewModel(
     fun processPlaybackStateActions(action: PlaybackStateActions) {
         when (action) {
             is PlaybackStateActions.OnVideoSizeChanged -> {
-                // Napier.w("testing onVideoSizeChanged w:${action.width}:h:${action.height}")
-                // Napier.w("testing onVideoSizeChanged videoSize:${action.videoRatio}")
+                _videoRatio = action.videoRatio
+
+                val ratio = if (videoViewState.value.videoRatioMode == RatioMode.Original) {
+                    _videoRatio
+                } else
+                    videoViewState.value.videoRatioMode.ratio
+
+                _videoViewState.update { state ->
+                    state.copy(videoRatio = ratio)
+                }
             }
 
             is PlaybackStateActions.OnIsPlayingChanged -> {
@@ -321,6 +337,22 @@ class VideoViewViewModel(
         val nextMode = ResizeMode.toggleResizeMode(current = currentMode)
         _videoViewState.update { state ->
             state.copy(videoResizeMode = nextMode)
+        }
+    }
+
+    private fun toggleVideoRatioMode() {
+        val currentMode = videoViewState.value.videoRatioMode
+        val nextMode = RatioMode.toggleRatioMode(current = currentMode)
+
+        val nextRatio = if (nextMode == RatioMode.Original)
+            _videoRatio
+        else nextMode.ratio
+
+        _videoViewState.update { state ->
+            state.copy(
+                videoRatioMode = nextMode,
+                videoRatio = nextRatio
+            )
         }
     }
 

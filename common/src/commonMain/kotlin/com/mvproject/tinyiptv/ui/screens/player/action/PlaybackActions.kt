@@ -11,6 +11,7 @@ sealed class PlaybackActions {
 
     data object OnPlaybackToggle : PlaybackActions()
     data object OnVideoResizeToggle : PlaybackActions()
+    data object OnVideoRatioToggle : PlaybackActions()
     data object OnFullScreenToggle : PlaybackActions()
     data object OnFavoriteToggle : PlaybackActions()
     data object OnPlayerUiToggle : PlaybackActions()
