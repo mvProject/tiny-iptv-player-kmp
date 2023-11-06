@@ -46,14 +46,14 @@ fun TwoPaneContainer(
             Row(modifier = Modifier.fillMaxSize()) {
                 Column(
                     modifier = Modifier
-                        .weight(1f)
+                        .weight(5f)
                         .fillMaxHeight()
                 ) {
                     mainContent()
                 }
                 Column(
                     modifier = Modifier
-                        .weight(1f)
+                        .weight(2f)
                         .fillMaxHeight()
                 ) {
                     addonContent()

@@ -79,7 +79,7 @@ fun GroupView(
                     OptionSelector(
                         modifier = Modifier.fillMaxWidth(),
                         // title = stringResource(id = R.string.pl_hint_current_playlist),
-                        title = "pl_hint_current_playlist",
+                        title = "current playlist",
                         selectedItem = dataState.playlistNames[selectedIndex],
                         isExpanded = isSelectPlaylistOpen.value,
                         onClick = {
@@ -91,7 +91,7 @@ fun GroupView(
                     OptionsDialog(
                         isDialogOpen = isSelectPlaylistOpen,
                         //   title = stringResource(id = R.string.pl_hint_current_playlist),
-                        title = "pl_hint_current_playlist",
+                        title = "Select playlist",
                         selectedIndex = selectedIndex,
                         items = dataState.playlistNames,
                         onItemSelected = { index ->

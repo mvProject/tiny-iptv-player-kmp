@@ -50,7 +50,11 @@ expect fun PlayerViewContainer(
 expect fun LocalFileSelectButton(onPlaylistAction: (PlaylistAction) -> Unit)
 
 @Composable
-expect fun ClosePlayer(modifier: Modifier, action: () -> Unit)
+expect fun AdditionalPlayerControls(
+    modifier: Modifier,
+    action: () -> Unit,
+    onPlaybackAction: (PlaybackActions) -> Unit
+)
 
 /*
 @Composable

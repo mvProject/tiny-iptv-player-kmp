@@ -29,7 +29,6 @@ import androidx.compose.ui.draw.alpha
 import androidx.compose.ui.text.style.TextAlign
 import com.mvproject.tinyiptv.data.mappers.ListMappers.toActual
 import com.mvproject.tinyiptv.data.model.channels.TvPlaylistChannel
-import com.mvproject.tinyiptv.platform.ClosePlayer
 import com.mvproject.tinyiptv.ui.components.epg.PlayerChannelEpgItem
 import com.mvproject.tinyiptv.ui.screens.player.action.PlaybackActions
 import com.mvproject.tinyiptv.ui.theme.dimens
@@ -95,15 +94,10 @@ fun PlayerChannelView(
                     isFavorite = currentChannel.isInFavorites,
                     isPlaying = isPlaying,
                     isFullScreen = isFullScreen,
-                    onPlaybackAction = onPlaybackAction
+                    onPlaybackAction = onPlaybackAction,
+                    onPlaybackClose = onPlaybackClose
                 )
             }
-
-            ClosePlayer(
-                modifier = Modifier
-                    .align(Alignment.TopStart),
-                action = onPlaybackClose
-            )
         }
     }
 }
