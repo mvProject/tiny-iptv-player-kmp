@@ -61,7 +61,6 @@ object PlayerUtils {
 
             ResizeMode.Fill -> Unit
         }
-
         return this.copy(maxWidth = width, maxHeight = height)
     }
 

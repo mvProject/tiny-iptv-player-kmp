@@ -8,16 +8,21 @@
 plugins {
     alias(libs.plugins.multiplatform)
     alias(libs.plugins.android.library)
-    alias(libs.plugins.kotlinX.serialization.plugin)
+    alias(libs.plugins.kotlinx.serialization.plugin)
     alias(libs.plugins.sqlDelight.plugin)
     alias(libs.plugins.compose.multiplatform)
+    alias(libs.plugins.libres.plugin)
+}
+
+libres {
+    generatedClassName = "MainRes" // "Res" by default
 }
 
 android {
     namespace = "com.mvproject.tinyiptv"
 
     sourceSets["main"].manifest.srcFile("src/androidMain/AndroidManifest.xml")
-    //  sourceSets["main"].resources.srcDirs("src/commonMain/resources")
+    // sourceSets["main"].resources.srcDirs("src/commonMain/resources")
     sourceSets["main"].res.srcDirs("src/androidMain/res")
 
     compileSdk = 34
@@ -29,6 +34,7 @@ android {
         sourceCompatibility = JavaVersion.VERSION_17
         targetCompatibility = JavaVersion.VERSION_17
     }
+
     kotlin {
         jvmToolchain(17)
     }
@@ -49,45 +55,55 @@ kotlin {
     sourceSets {
         val commonMain by getting {
             dependencies {
+                // Core
+                implementation(libs.androidx.annotation)
+
+                // Compose
                 implementation(compose.runtime)
                 implementation(compose.foundation)
                 implementation(compose.ui)
                 implementation(compose.material3)
                 implementation(compose.materialIconsExtended)
 
-                implementation(libs.datastore.preferences.core)
+                // Coroutines
                 implementation(libs.kotlinx.coroutines.core)
 
-                @OptIn(org.jetbrains.compose.ExperimentalComposeLibrary::class)
-                implementation(compose.components.resources)
-
-                implementation(libs.kotlinx.dateTime)
-
+                // DI
                 implementation(libs.koin.core)
                 implementation(libs.koin.compose)
 
+                // Storage
+                implementation(libs.datastore.preferences.core)
                 implementation(libs.sqldelight.runtime)
                 implementation(libs.sqldelight.coroutines.extensions)
 
+                // Network
                 implementation(libs.ktor.client.core)
                 implementation(libs.ktor.client.content.negotiation)
                 implementation(libs.ktor.client.logging)
                 implementation(libs.ktor.serialization.kotlinx.json)
 
-                implementation(libs.androidx.annotation)
-
+                // Logging
                 implementation(libs.napier)
                 implementation(libs.kermit)
-
-                implementation(libs.material3.window.size.multiplatform)
-                implementation(libs.kotlinx.collections.immutable)
 
                 // Navigation
                 implementation(libs.voyager.koin)
                 implementation(libs.voyager.navigator)
 
+                // Misc
+                implementation(libs.kotlinx.dateTime)
+                implementation(libs.material3.window.size.multiplatform)
+                implementation(libs.kotlinx.collections.immutable)
                 implementation(libs.urikmp)
+
+                // Image
                 implementation(libs.kamelimage)
+
+                // Resources
+                @OptIn(org.jetbrains.compose.ExperimentalComposeLibrary::class)
+                implementation(compose.components.resources)
+                implementation(libs.libres.compose)
             }
         }
 
@@ -107,24 +123,23 @@ kotlin {
         }
         val androidMain by getting {
             dependencies {
-
+                // Core
                 implementation(libs.androidx.compose.activity)
+                implementation(libs.androidx.compose.lifecycle.runtime)
 
+                // Storage
                 implementation(libs.sqldelight.driver.android)
 
-                implementation(libs.koin.android)
-
+                // Network
                 implementation(libs.ktor.client.android)
 
                 // DI
                 implementation(libs.koin.android.compose)
+                implementation(libs.koin.android)
 
                 // Misc
                 implementation(libs.kotlinx.collections.immutable)
-
                 implementation(libs.androidx.compose.ui.tooling.preview)
-
-                implementation(libs.androidx.compose.lifecycle.runtime)
 
                 // Exoplayer
                 implementation(libs.media3.exoplayer)
@@ -142,15 +157,24 @@ kotlin {
 
         val desktopMain by getting {
             dependencies {
+                // Core
                 implementation(compose.desktop.common)
+
+                // Coroutines
                 implementation(libs.kotlinx.coroutines.swing)
+
+                // Network
                 // implementation(libs.ktor.client.okhttp)
                 implementation(libs.ktor.client.java)
+
+                // Storage
                 implementation(libs.sqldelight.driver.jvm)
+
+                // FilePicker
                 implementation(libs.calf.filepicker)
-                implementation("uk.co.caprica:vlcj:4.8.1")
-                implementation("org.videolan.android:libvlc-all:3.4.4")
-                implementation("com.squareup.okio:okio:3.6.0")
+
+                // Vlc player
+                implementation(libs.caprica.vlcj)
             }
         }
     }

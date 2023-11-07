@@ -13,7 +13,8 @@ plugins {
     alias(libs.plugins.jvm) apply false
     alias(libs.plugins.compose.multiplatform)
     alias(libs.plugins.sqlDelight.plugin) apply false
-    alias(libs.plugins.kotlinX.serialization.plugin) apply false
+    alias(libs.plugins.kotlinx.serialization.plugin) apply false
+    alias(libs.plugins.libres.plugin) apply false
 }
 
 tasks.register("clean", Delete::class) {

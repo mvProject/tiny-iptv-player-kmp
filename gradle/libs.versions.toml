@@ -40,7 +40,8 @@ kermit = "2.0.2"
 
 preferences = "1.1.0-alpha05"
 sqldelight = "2.0.0"
-
+libres = "1.2.0"
+vlcjVersion = "4.8.1"
 
 junit = "4.13.2"
 ext-junit = "1.1.5"
@@ -54,8 +55,9 @@ android-kotlin = { id = "org.jetbrains.kotlin.android", version.ref = "kotlin" }
 android-library = { id = "com.android.library", version.ref = "gradle" }
 android-application = { id = "com.android.application", version.ref = "gradle" }
 
-kotlinX-serialization-plugin = { id = "org.jetbrains.kotlin.plugin.serialization", version.ref = "kotlin" }
+kotlinx-serialization-plugin = { id = "org.jetbrains.kotlin.plugin.serialization", version.ref = "kotlin" }
 sqlDelight-plugin = { id = "app.cash.sqldelight", version.ref = "sqldelight" }
+libres-plugin = { id = "io.github.skeptick.libres", version.ref = "libres" }
 
 jvm = { id = "org.jetbrains.kotlin.jvm", version.ref = "kotlin" }
 
@@ -93,6 +95,9 @@ datastore-preferences-core = { module = "androidx.datastore:datastore-preference
 
 coil = { module = "io.coil-kt:coil", version.ref = "coil" }
 coil-compose = { module = "io.coil-kt:coil-compose", version.ref = "coil" }
+
+libres-compose = { module = "io.github.skeptick.libres:libres-compose", version.ref = "libres" }
+caprica-vlcj = { module = "uk.co.caprica:vlcj", version.ref = "vlcjVersion" }
 
 napier = { module = "io.github.aakira:napier", version.ref = "napier" }
 kermit = { module = "co.touchlab:kermit", version.ref = "kermit" }
