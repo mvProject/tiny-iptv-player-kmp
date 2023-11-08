@@ -34,6 +34,7 @@ import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import com.mvproject.tinyiptv.MainRes
 import com.mvproject.tinyiptv.data.enums.UpdatePeriod
 import com.mvproject.tinyiptv.platform.LocalFileSelectButton
 import com.mvproject.tinyiptv.ui.components.dialogs.OptionsDialog
@@ -44,7 +45,6 @@ import com.mvproject.tinyiptv.ui.screens.playlist.action.PlaylistAction
 import com.mvproject.tinyiptv.ui.screens.playlist.state.PlaylistState
 import com.mvproject.tinyiptv.ui.theme.dimens
 import com.mvproject.tinyiptv.utils.AppConstants.WEIGHT_1
-import io.github.aakira.napier.Napier
 
 @Composable
 fun PlaylistView(
@@ -65,10 +65,8 @@ fun PlaylistView(
             .fillMaxSize()
             .windowInsetsPadding(WindowInsets.navigationBars),
         topBar = {
-            // todo fix hardcoded string resources
             AppBarWithBackNav(
-                //appBarTitle = stringResource(id = R.string.pl_msg_playlist_details),
-                appBarTitle = "Playlist details",
+                appBarTitle = MainRes.string.pl_msg_playlist_details,
                 onBackClick = onNavigateBack,
             )
         },
@@ -90,13 +88,10 @@ fun PlaylistView(
                 ),
                 shape = MaterialTheme.shapes.small
             ) {
-                // todo fix hardcoded string resources
                 val text = if (state.isEdit) {
-                    // stringResource(R.string.pl_btn_update)
-                    "Update playlist"
+                    MainRes.string.pl_btn_update
                 } else {
-                    // stringResource(R.string.pl_btn_save)
-                    "Save playlist"
+                    MainRes.string.pl_btn_save
                 }
 
                 Text(
@@ -126,11 +121,9 @@ fun PlaylistView(
                     onValueChange = {
                         onPlaylistAction(PlaylistAction.SetTitle(it))
                     },
-                    // todo fix hardcoded string resources
                     placeholder = {
                         Text(
-                            //   text = stringResource(id = R.string.pl_hint_name),
-                            text = "Title",
+                            text = MainRes.string.pl_hint_name,
                             style = MaterialTheme.typography.labelSmall,
                             color = MaterialTheme.colorScheme.outline
                         )
@@ -147,7 +140,6 @@ fun PlaylistView(
 
                 Spacer(modifier = Modifier.height(MaterialTheme.dimens.size8))
 
-// todo fix hardcoded string resources
                 TextField(
                     modifier = Modifier.fillMaxWidth(),
                     enabled = !state.isLocal,
@@ -157,8 +149,7 @@ fun PlaylistView(
                     },
                     placeholder = {
                         Text(
-                            //  text = stringResource(id = R.string.pl_hint_address),
-                            text = "Url",
+                            text = MainRes.string.pl_hint_address,
                             style = MaterialTheme.typography.labelSmall,
                             color = MaterialTheme.colorScheme.outline
                         )
@@ -175,17 +166,12 @@ fun PlaylistView(
                 )
 
                 Spacer(modifier = Modifier.height(MaterialTheme.dimens.size8))
-// todo fix hardcoded string resources
+
                 OptionSelector(
                     modifier = Modifier.fillMaxWidth(),
-                    //  title = stringResource(id = R.string.pl_hint_update_period),
-                    title = "Update period",
+                    title = MainRes.string.pl_hint_update_period,
                     enabled = !state.isLocal,
                     selectedItem = UpdatePeriod.entries[state.updatePeriod].title,
-                    // todo fix string resources
-                    //selectedItem = stringResource(
-                    //    id = UpdatePeriod.entries[state.updatePeriod].title
-                    //),
                     isExpanded = isUpdateOptionOpen.value,
                     onClick = {
                         isUpdateOptionOpen.value = true
@@ -205,10 +191,9 @@ fun PlaylistView(
                         modifier = Modifier.weight(WEIGHT_1),
                         color = MaterialTheme.colorScheme.onPrimary
                     )
-// todo fix hardcoded string resources
+
                     Text(
-                        //   text = stringResource(id = R.string.pl_title_or),
-                        text = "or",
+                        text = MainRes.string.pl_title_or,
                         style = MaterialTheme.typography.bodyMedium,
                         color = MaterialTheme.colorScheme.onSurface
                     )
@@ -229,24 +214,15 @@ fun PlaylistView(
             LoadingView(
                 isVisible = state.isSaving,
             )
-// todo fix hardcoded string resources
 
             OptionsDialog(
                 isDialogOpen = isUpdateOptionOpen,
-                //  title = stringResource(id = R.string.pl_hint_update_period),
-                title = "Update period",
+                title = MainRes.string.pl_hint_update_period,
                 selectedIndex = state.updatePeriod,
-                // todo fix string resources
-                /*      items = UpdatePeriod.entries.map {
-                          stringResource(id = it.title)
-                      },*/
                 items = UpdatePeriod.entries.map {
                     it.title
                 },
                 onItemSelected = { index ->
-                    val sel = UpdatePeriod.entries[index]
-                    Napier.w("testing selected $index")
-                    Napier.w("testing selected $sel")
                     onPlaylistAction(PlaylistAction.SetUpdatePeriod(index))
                     isUpdateOptionOpen.value = false
                 }

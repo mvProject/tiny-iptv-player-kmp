@@ -30,6 +30,7 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import com.mvproject.tinyiptv.MainRes
 import com.mvproject.tinyiptv.ui.components.dialogs.OptionsDialog
 import com.mvproject.tinyiptv.ui.components.playlist.PlaylistGroupItemView
 import com.mvproject.tinyiptv.ui.components.selectors.OptionSelector
@@ -75,11 +76,9 @@ fun GroupView(
                         mutableIntStateOf(dataState.playlistSelectedIndex)
                     }
 
-                    // todo fix hardcoded string resources
                     OptionSelector(
                         modifier = Modifier.fillMaxWidth(),
-                        // title = stringResource(id = R.string.pl_hint_current_playlist),
-                        title = "current playlist",
+                        title = MainRes.string.pl_hint_current_playlist,
                         selectedItem = dataState.playlistNames[selectedIndex],
                         isExpanded = isSelectPlaylistOpen.value,
                         onClick = {
@@ -87,11 +86,9 @@ fun GroupView(
                         }
                     )
 
-                    // todo fix hardcoded string resources
                     OptionsDialog(
                         isDialogOpen = isSelectPlaylistOpen,
-                        //   title = stringResource(id = R.string.pl_hint_current_playlist),
-                        title = "Select playlist",
+                        title = MainRes.string.pl_hint_current_playlist,
                         selectedIndex = selectedIndex,
                         items = dataState.playlistNames,
                         onItemSelected = { index ->
@@ -132,13 +129,10 @@ fun GroupView(
             )
 
             if (dataState.dataIsEmpty) {
-                // todo fix hardcoded string resources
                 NoItemsView(
                     modifier = Modifier.fillMaxSize(),
-                    // title = stringResource(id = R.string.msg_no_items_found),
-                    title = "Items not found",
-                    // navigateTitle = stringResource(id = R.string.pl_btn_add_first_playlist),
-                    navigateTitle = "Press to add playlist",
+                    title = MainRes.string.msg_no_items_found,
+                    navigateTitle = MainRes.string.pl_btn_add_first_playlist,
                     onNavigateClick = onNavigateToSettings
                 )
             }

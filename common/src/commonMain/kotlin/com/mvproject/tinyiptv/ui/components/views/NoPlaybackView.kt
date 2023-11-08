@@ -30,21 +30,19 @@ import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.graphics.painter.Painter
 import androidx.compose.ui.text.style.TextAlign
 import com.mvproject.tinyiptv.ui.theme.dimens
 import com.mvproject.tinyiptv.utils.AppConstants.WEIGHT_50
 import com.mvproject.tinyiptv.utils.AppConstants.WEIGHT_80
-import org.jetbrains.compose.resources.ExperimentalResourceApi
-import org.jetbrains.compose.resources.painterResource
 
-@OptIn(ExperimentalResourceApi::class)
 @Composable
 fun NoPlaybackView(
     modifier: Modifier = Modifier.fillMaxSize(),
     isVisible: Boolean = false,
     isFullScreen: Boolean = false,
     text: String = "NoPlaybackView",
-    logo: String = "drawable/no_network.png",
+    logo: Painter,
 ) {
     val fraction = remember(isFullScreen) {
         if (isFullScreen) WEIGHT_80 else WEIGHT_50
@@ -78,7 +76,7 @@ fun NoPlaybackView(
             ) {
 
                 Image(
-                    painterResource(logo),
+                    painter = logo,
                     modifier = Modifier
                         .size(MaterialTheme.dimens.size96)
                         .clip(CircleShape)

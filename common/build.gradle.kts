@@ -139,7 +139,6 @@ kotlin {
 
                 // Misc
                 implementation(libs.kotlinx.collections.immutable)
-                implementation(libs.androidx.compose.ui.tooling.preview)
 
                 // Exoplayer
                 implementation(libs.media3.exoplayer)
@@ -149,9 +148,6 @@ kotlin {
                 // Image processing
                 implementation(libs.coil)
                 implementation(libs.coil.compose)
-
-                // Android Studio Preview support
-                //debugImplementation(libs.androidx.compose.ui.tooling)
             }
         }
 

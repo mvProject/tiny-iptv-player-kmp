@@ -138,6 +138,5 @@ calf-filepicker = { module = "com.mohamedrejeb.calf:calf-file-picker", version.r
 test-junit = { module = "junit:junit", version.ref = "junit" }
 test-ext-junit = { module = "androidx.test.ext:junit", version.ref = "ext-junit" }
 test-espresso-core = { module = "androidx.test.espresso:espresso-core", version.ref = "espresso-core" }
-androidx-ui-tooling-preview-android = { group = "androidx.compose.ui", name = "ui-tooling-preview-android", version = "1.5.4" }
 
 [bundles]

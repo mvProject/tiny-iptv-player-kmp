@@ -22,6 +22,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.style.TextAlign
+import com.mvproject.tinyiptv.MainRes
 import com.mvproject.tinyiptv.data.model.epg.EpgProgram
 import com.mvproject.tinyiptv.ui.theme.dimens
 
@@ -34,13 +35,11 @@ fun PlayerEpgContent(
         modifier = modifier.fillMaxSize()
     ) {
         if (epgList.isEmpty()) {
-            // todo fix hardcoded string resources
             Text(
                 modifier = Modifier
                     .fillMaxWidth()
                     .align(Alignment.Center),
-                // text = stringResource(id = R.string.msg_no_epg_found),
-                text = "epg not found",
+                text = MainRes.string.msg_no_epg_found,
                 style = MaterialTheme.typography.titleLarge,
                 color = MaterialTheme.colorScheme.onSurface,
                 textAlign = TextAlign.Center

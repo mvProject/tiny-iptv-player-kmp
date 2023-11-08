@@ -41,6 +41,7 @@ import androidx.compose.ui.text.platform.Font
 import com.mohamedrejeb.calf.picker.FilePickerFileType
 import com.mohamedrejeb.calf.picker.FilePickerSelectionMode
 import com.mohamedrejeb.calf.picker.rememberFilePickerLauncher
+import com.mvproject.tinyiptv.MainRes
 import com.mvproject.tinyiptv.ui.PlayerViewSwing
 import com.mvproject.tinyiptv.ui.screens.player.action.PlaybackActions
 import com.mvproject.tinyiptv.ui.screens.player.action.PlaybackStateActions
@@ -93,17 +94,19 @@ actual fun LocalFileSelectButton(onPlaylistAction: (PlaylistAction) -> Unit) {
         ),
         selectionMode = FilePickerSelectionMode.Single,
         onResult = { files ->
-            try {
-                val content = files.firstOrNull()?.readText()
-                Napier.w("testing FileSelectButton readText content $content")
-            } catch (ex: Exception) {
-                Napier.e("testing FileSelectButton readText ${ex.message}")
-            }
-            try {
-                val content = files.firstOrNull()?.readLines()
-                Napier.w("testing FileSelectButton readLines content $content")
-            } catch (ex: Exception) {
-                Napier.e("testing FileSelectButton readText ${ex.message}")
+            files.firstOrNull()?.let { file ->
+                try {
+                    val content = file.readText()
+                    Napier.w("testing FileSelectButton readText content $content")
+                } catch (ex: Exception) {
+                    Napier.e("testing FileSelectButton readText ${ex.message}")
+                }
+                try {
+                    val content = file.readLines()
+                    Napier.w("testing FileSelectButton readLines content $content")
+                } catch (ex: Exception) {
+                    Napier.e("testing FileSelectButton readText ${ex.message}")
+                }
             }
         }
     )
@@ -119,7 +122,7 @@ actual fun LocalFileSelectButton(onPlaylistAction: (PlaylistAction) -> Unit) {
         shape = MaterialTheme.shapes.small
     ) {
         Text(
-            text = "Add local playlist",
+            text = MainRes.string.pl_btn_add_local,
             color = MaterialTheme.colorScheme.onSurface,
             style = MaterialTheme.typography.bodyLarge
         )
@@ -260,16 +263,8 @@ actual fun AdditionalPlayerControls(
 
 }
 
-/*
-@Composable
-actual fun ImageLogo(source: String) {
-    // todo show image
-}
-*/
-
 @Composable
 actual fun ExecuteOnResume(action: () -> Unit) {
-    // todo implement
     action()
 }
 

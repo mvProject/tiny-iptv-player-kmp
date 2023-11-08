@@ -17,6 +17,7 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.Composable
+import com.mvproject.tinyiptv.MainRes
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -25,10 +26,8 @@ fun AppBarWithSettings(
 ) {
     CenterAlignedTopAppBar(
         title = {
-            // todo fix hardcoded string resources
             Text(
-                //text = stringResource(id = R.string.app_name),
-                text = "Tiny Iptv Player",
+                text = MainRes.string.app_name,
                 style = MaterialTheme.typography.titleLarge,
                 color = MaterialTheme.colorScheme.onPrimary
             )

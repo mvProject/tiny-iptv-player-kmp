@@ -18,6 +18,7 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.style.TextAlign
+import com.mvproject.tinyiptv.MainRes
 import com.mvproject.tinyiptv.data.mappers.ListMappers.toActual
 import com.mvproject.tinyiptv.data.model.channels.TvPlaylistChannel
 import com.mvproject.tinyiptv.ui.theme.dimens
@@ -62,7 +63,6 @@ fun OverlayChannelInfo(
         val description =
             currentChannel.channelEpg.toActual().firstOrNull()?.description ?: EMPTY_STRING
         if (description.isEmpty()) {
-            // todo fix hardcoded string resources
             Text(
                 modifier = Modifier
                     .fillMaxWidth()
@@ -70,8 +70,7 @@ fun OverlayChannelInfo(
                         horizontal = MaterialTheme.dimens.size18,
                         vertical = MaterialTheme.dimens.size48
                     ),
-                //   text = stringResource(id = R.string.msg_no_epg_found),
-                text = "epg not found",
+                text = MainRes.string.msg_no_epg_found,
                 style = MaterialTheme.typography.titleLarge,
                 color = MaterialTheme.colorScheme.onSurfaceVariant,
                 textAlign = TextAlign.Center

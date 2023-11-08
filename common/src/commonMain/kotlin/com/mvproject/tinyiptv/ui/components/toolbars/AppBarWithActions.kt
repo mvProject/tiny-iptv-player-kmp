@@ -33,6 +33,7 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
+import com.mvproject.tinyiptv.MainRes
 import com.mvproject.tinyiptv.data.enums.ChannelsViewType
 import com.mvproject.tinyiptv.ui.theme.dimens
 
@@ -100,10 +101,8 @@ fun AppBarWithActions(
             ) {
                 DropdownMenuItem(
                     text = {
-                        // todo fix hardcoded string resources
                         Text(
-                            //  text = stringResource(id = R.string.menu_view_type_list),
-                            text = "List",
+                            text = MainRes.string.menu_view_type_list,
                             style = MaterialTheme.typography.titleSmall,
                         )
                     },
@@ -123,10 +122,8 @@ fun AppBarWithActions(
                 )
                 DropdownMenuItem(
                     text = {
-                        // todo fix hardcoded string resources
                         Text(
-                            //  text = stringResource(id = R.string.menu_view_type_grid),
-                            text = "Grid",
+                            text = MainRes.string.menu_view_type_grid,
                             style = MaterialTheme.typography.titleSmall,
                         )
                     },
@@ -146,10 +143,8 @@ fun AppBarWithActions(
                 )
                 DropdownMenuItem(
                     text = {
-                        // todo fix hardcoded string resources
                         Text(
-                            //text = stringResource(id = R.string.menu_view_type_card),
-                            text = "Card",
+                            text = MainRes.string.menu_view_type_card,
                             style = MaterialTheme.typography.titleSmall,
                         )
                     },

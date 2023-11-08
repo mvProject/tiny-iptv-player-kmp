@@ -52,13 +52,6 @@ fun TvPlaylistChannelsView(
     onAction: (TvPlaylistChannelAction) -> Unit,
     groupSelected: String
 ) {
-
-    // todo fix lifecycleEvent
-
-    /*    LaunchedEffect(key1 = groupSelected) {
-            viewModel.loadChannelsByGroups(groupSelected)
-        }*/
-
     ExecuteOnResume() {
         viewModel.loadChannelsByGroups(groupSelected)
     }

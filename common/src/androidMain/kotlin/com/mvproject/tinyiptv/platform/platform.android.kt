@@ -18,13 +18,12 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
-import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.Font
 import androidx.compose.ui.text.font.FontStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.lifecycle.compose.LifecycleResumeEffect
 import androidx.media3.common.PlaybackException
-import com.mvproject.tinyiptv.R
+import com.mvproject.tinyiptv.MainRes
 import com.mvproject.tinyiptv.ui.PlayerView
 import com.mvproject.tinyiptv.ui.screens.player.action.PlaybackActions
 import com.mvproject.tinyiptv.ui.screens.player.action.PlaybackStateActions
@@ -82,7 +81,7 @@ actual fun LocalFileSelectButton(onPlaylistAction: (PlaylistAction) -> Unit) {
         shape = MaterialTheme.shapes.small
     ) {
         Text(
-            text = stringResource(id = R.string.pl_btn_add_local),
+            text = MainRes.string.pl_btn_add_local,
             color = MaterialTheme.colorScheme.onSurface,
             style = MaterialTheme.typography.bodyLarge
         )
@@ -95,24 +94,8 @@ actual fun AdditionalPlayerControls(
     action: () -> Unit,
     onPlaybackAction: (PlaybackActions) -> Unit
 ) {
-    // todo no need yet
+    // no need yet
 }
-
-/*@Composable
-actual fun ImageLogo(source: String) {
-    AsyncImage(
-        model = ImageRequest.Builder(LocalContext.current)
-            .data(source)
-            .crossfade(true)
-            .placeholder(R.drawable.no_channel_logo)
-            .error(R.drawable.no_channel_logo)
-            .build(),
-        contentDescription = "channel.channelName",
-        modifier = Modifier
-            .size(MaterialTheme.dimens.size42)
-            .clip(MaterialTheme.shapes.small)
-    )
-}*/
 
 @Composable
 actual fun ExecuteOnResume(action: () -> Unit) {

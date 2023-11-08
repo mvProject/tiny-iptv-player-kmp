@@ -26,6 +26,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.text.style.TextAlign
+import com.mvproject.tinyiptv.MainRes
 import com.mvproject.tinyiptv.data.mappers.ListMappers.toActual
 import com.mvproject.tinyiptv.data.model.channels.TvPlaylistChannel
 import com.mvproject.tinyiptv.ui.components.epg.ScheduleEpgItemView
@@ -84,14 +85,12 @@ fun ChannelGridView(
             Spacer(modifier = Modifier.height(MaterialTheme.dimens.size10))
 
             if (channel.channelEpg.isEmpty()) {
-                // todo fix hardcoded string resources
                 Box(
                     modifier = Modifier.fillMaxSize(),
                     contentAlignment = Alignment.Center
                 ) {
                     Text(
-                        // text = stringResource(id = R.string.msg_no_epg_found),
-                        text = "epg not found",
+                        text = MainRes.string.msg_no_epg_found,
                         style = MaterialTheme.typography.labelMedium,
                         color = MaterialTheme.colorScheme.onSurface,
                         modifier = Modifier

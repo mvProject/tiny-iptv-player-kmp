@@ -30,6 +30,7 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import com.mvproject.tinyiptv.MainRes
 import com.mvproject.tinyiptv.data.enums.UpdatePeriod
 import com.mvproject.tinyiptv.ui.components.dialogs.OptionsDialog
 import com.mvproject.tinyiptv.ui.components.selectors.OptionSelector
@@ -52,10 +53,8 @@ fun SettingsView(
         modifier = Modifier
             .fillMaxSize(),
         topBar = {
-// todo fix hardcoded string resources
             AppBarWithBackNav(
-                //   appBarTitle = stringResource(id = R.string.scr_settings_title),
-                appBarTitle = "Settings",
+                appBarTitle = MainRes.string.scr_settings_title,
                 onBackClick = onNavigateBack,
             )
         }
@@ -75,13 +74,13 @@ fun SettingsView(
                 onClick = onNavigatePlaylistSettings,
                 modifier = Modifier.fillMaxWidth()
             ) {
+
                 Text(
-// todo fix hardcoded string resources
-                    // text = stringResource(id = R.string.scr_playlist_settings_title),
-                    text = "Playlists Settings",
+                    text = MainRes.string.scr_playlist_settings_title,
                     color = MaterialTheme.colorScheme.onPrimary,
                     style = MaterialTheme.typography.titleMedium
                 )
+
                 Spacer(modifier = Modifier.weight(WEIGHT_1))
 
                 FilledIconButton(
@@ -93,7 +92,7 @@ fun SettingsView(
                 ) {
                     Icon(
                         imageVector = Icons.Filled.ArrowRight,
-                        contentDescription = "Playlists Settings"
+                        contentDescription = MainRes.string.scr_playlist_settings_title
                     )
                 }
             }
@@ -110,13 +109,13 @@ fun SettingsView(
                 onClick = onNavigatePlayerSettings,
                 modifier = Modifier.fillMaxWidth()
             ) {
-// todo fix hardcoded string resources
+
                 Text(
-                    //  text = stringResource(id = R.string.scr_player_settings_title),
-                    text = "Player Settings",
+                    text = MainRes.string.scr_player_settings_title,
                     color = MaterialTheme.colorScheme.onPrimary,
                     style = MaterialTheme.typography.titleMedium
                 )
+
                 Spacer(modifier = Modifier.weight(WEIGHT_1))
 
                 FilledIconButton(
@@ -128,7 +127,7 @@ fun SettingsView(
                 ) {
                     Icon(
                         imageVector = Icons.Filled.ArrowRight,
-                        contentDescription = "Player Settings"
+                        contentDescription = MainRes.string.scr_player_settings_title
                     )
                 }
             }
@@ -155,10 +154,9 @@ fun SettingsView(
                     modifier = Modifier.weight(WEIGHT_1),
                     color = MaterialTheme.colorScheme.onPrimary
                 )
-// todo fix hardcoded string resources
+
                 Text(
-                    // text = stringResource(id = R.string.option_update_title),
-                    text = "Update",
+                    text = MainRes.string.option_update_title,
                     style = MaterialTheme.typography.bodyMedium,
                     color = MaterialTheme.colorScheme.onSurface
                 )
@@ -172,17 +170,12 @@ fun SettingsView(
             Spacer(
                 modifier = Modifier.height(MaterialTheme.dimens.size12)
             )
-// todo fix hardcoded string resources
+
             OptionSelector(
                 modifier = Modifier
                     .fillMaxWidth()
                     .padding(horizontal = MaterialTheme.dimens.size8),
-                //title = stringResource(id = R.string.option_update_epg_info),
-                title = "Epg info period",
-                // todo fix string resources
-                /*      selectedItem = stringResource(
-                          id = UpdatePeriod.entries[state.infoUpdatePeriod].title
-                      ),*/
+                title = MainRes.string.option_update_epg_info,
                 selectedItem = UpdatePeriod.entries[state.infoUpdatePeriod].title,
                 isExpanded = isSelectInfoUpdateOpen.value,
                 onClick = {
@@ -193,17 +186,12 @@ fun SettingsView(
             Spacer(
                 modifier = Modifier.height(MaterialTheme.dimens.size12)
             )
-// todo fix hardcoded string resources
+
             OptionSelector(
                 modifier = Modifier
                     .fillMaxWidth()
                     .padding(horizontal = MaterialTheme.dimens.size8),
-                // title = stringResource(id = R.string.option_update_epg_data),
-                title = "Epg data period",
-                // todo fix string resources
-                /*   selectedItem = stringResource(
-                       id = UpdatePeriod.entries[state.epgUpdatePeriod].title
-                   ),*/
+                title = MainRes.string.option_update_epg_data,
                 selectedItem = UpdatePeriod.entries[state.epgUpdatePeriod].title,
                 isExpanded = isSelectEpgUpdateOpen.value,
                 onClick = {
@@ -211,16 +199,11 @@ fun SettingsView(
                 }
             )
         }
-// todo fix hardcoded string resources
+
         OptionsDialog(
             isDialogOpen = isSelectInfoUpdateOpen,
-            //   title = stringResource(id = R.string.pl_hint_update_period),
-            title = "Update period",
+            title = MainRes.string.pl_hint_update_period,
             selectedIndex = state.infoUpdatePeriod,
-            // todo fix string resources
-            /*       items = UpdatePeriod.entries.map {
-                       stringResource(id = it.title)
-                   },*/
             items = UpdatePeriod.entries.map {
                 it.title
             },
@@ -229,16 +212,11 @@ fun SettingsView(
                 isSelectInfoUpdateOpen.value = false
             }
         )
-// todo fix hardcoded string resources
+
         OptionsDialog(
             isDialogOpen = isSelectEpgUpdateOpen,
-            // title = stringResource(id = R.string.pl_hint_update_period),
-            title = "Update period",
+            title = MainRes.string.pl_hint_update_period,
             selectedIndex = state.epgUpdatePeriod,
-            // todo fix string resources
-            /*    items = UpdatePeriod.entries.map {
-                    stringResource(id = it.title)
-                },*/
             items = UpdatePeriod.entries.map {
                 it.title
             },

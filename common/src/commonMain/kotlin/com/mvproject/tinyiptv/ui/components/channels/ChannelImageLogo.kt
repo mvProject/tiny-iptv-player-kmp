@@ -15,11 +15,12 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.painter.Painter
+import com.mvproject.tinyiptv.MainRes
 import com.mvproject.tinyiptv.ui.theme.dimens
+import io.github.skeptick.libres.compose.painterResource
 import io.kamel.core.Resource
 import io.kamel.image.asyncPainterResource
 import org.jetbrains.compose.resources.ExperimentalResourceApi
-import org.jetbrains.compose.resources.painterResource
 
 @OptIn(ExperimentalResourceApi::class)
 @Composable
@@ -48,7 +49,7 @@ fun ChannelImageLogo(
 
         is Resource.Failure -> {
             Image(
-                painterResource("drawable/no_channel_logo.png"),
+                painter = MainRes.image.no_channel_logo.painterResource(),
                 contentDescription = channelName,
                 modifier = modifier
                     .size(imageSize)

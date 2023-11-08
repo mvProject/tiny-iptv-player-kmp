@@ -24,6 +24,7 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import com.mvproject.tinyiptv.MainRes
 import com.mvproject.tinyiptv.platform.PlayerViewContainer
 import com.mvproject.tinyiptv.ui.components.epg.PlayerEpgContent
 import com.mvproject.tinyiptv.ui.components.modifiers.defaultPlayerHorizontalGestures
@@ -39,6 +40,7 @@ import com.mvproject.tinyiptv.ui.components.views.NoPlaybackView
 import com.mvproject.tinyiptv.ui.components.views.TwoPaneContainer
 import com.mvproject.tinyiptv.ui.components.views.VolumeProgressView
 import com.mvproject.tinyiptv.ui.theme.dimens
+import io.github.skeptick.libres.compose.painterResource
 
 @OptIn(ExperimentalMaterial3WindowSizeClassApi::class)
 @Composable
@@ -139,22 +141,20 @@ fun VideoViewContainer(
             )
         }
 
-        // todo fix hardcoded string resources
         NoPlaybackView(
             modifier = Modifier.fillMaxSize(fraction),
             isVisible = !videoViewState.isOnline,
             isFullScreen = videoViewState.isFullscreen,
-            text = "No Internet Connection",
-            logo = "drawable/no_network.png"
+            text = MainRes.string.msg_no_internet_found,
+            logo = MainRes.image.no_network.painterResource()
         )
 
-        // todo fix hardcoded string resources
         NoPlaybackView(
             modifier = Modifier.fillMaxSize(),
             isVisible = !videoViewState.isMediaPlayable,
             isFullScreen = videoViewState.isFullscreen,
-            text = "Can\'t play this media",
-            logo = "drawable/sad_face.png"
+            text = MainRes.string.msg_no_playable_media_found,
+            logo = MainRes.image.sad_face.painterResource()
         )
 
         LoadingView(

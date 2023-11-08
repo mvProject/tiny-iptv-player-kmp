@@ -56,11 +56,6 @@ expect fun AdditionalPlayerControls(
     onPlaybackAction: (PlaybackActions) -> Unit
 )
 
-/*
-@Composable
-expect fun ImageLogo(source: String)
-*/
-
 @Composable
 expect fun ExecuteOnResume(action: () -> Unit)
 

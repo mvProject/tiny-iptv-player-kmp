@@ -27,6 +27,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.input.KeyboardType
+import com.mvproject.tinyiptv.MainRes
 import com.mvproject.tinyiptv.ui.theme.dimens
 import com.mvproject.tinyiptv.utils.AppConstants.EMPTY_STRING
 
@@ -47,10 +48,8 @@ fun SearchAppBar(
                     onTextChange(it)
                 },
                 placeholder = {
-                    // todo fix hardcoded string resources
                     Text(
-                        // text = stringResource(id = R.string.hint_msg_search),
-                        text = "type here…",
+                        text = MainRes.string.hint_msg_search,
                         style = MaterialTheme.typography.labelSmall,
                         color = MaterialTheme.colorScheme.onPrimary
                     )

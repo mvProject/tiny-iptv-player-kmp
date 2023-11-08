@@ -26,6 +26,7 @@ import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
+import com.mvproject.tinyiptv.MainRes
 import com.mvproject.tinyiptv.ui.components.playlist.PlaylistItemView
 import com.mvproject.tinyiptv.ui.components.toolbars.AppBarWithBackNav
 import com.mvproject.tinyiptv.ui.components.views.NoItemsView
@@ -45,13 +46,9 @@ fun SettingsPlaylistView(
         modifier = Modifier
             .fillMaxSize()
             .windowInsetsPadding(WindowInsets.navigationBars),
-        // todo fix navigationBarsPadding
-        //.navigationBarsPadding(),
         topBar = {
-            // todo fix hardcoded string resources
             AppBarWithBackNav(
-                // appBarTitle = stringResource(id = R.string.scr_playlist_settings_title),
-                appBarTitle = "Playlists Settings",
+                appBarTitle = MainRes.string.scr_playlist_settings_title,
                 onBackClick = onNavigateBack,
             )
         },
@@ -68,10 +65,8 @@ fun SettingsPlaylistView(
                 ),
                 shape = MaterialTheme.shapes.small
             ) {
-                // todo fix hardcoded string resources
                 Text(
-                    // text = stringResource(id = R.string.pl_btn_add_new),
-                    text = "New playlist",
+                    text = MainRes.string.pl_btn_add_new,
                     color = MaterialTheme.colorScheme.primary,
                     style = MaterialTheme.typography.titleMedium
                 )
@@ -108,13 +103,10 @@ fun SettingsPlaylistView(
             }
 
             if (dataState.dataIsEmpty) {
-                // todo fix hardcoded string resources
                 NoItemsView(
                     modifier = Modifier.fillMaxSize(),
-                    //  title = stringResource(id = R.string.msg_no_items_found),
-                    title = "Items not found",
-                    //  navigateTitle = stringResource(id = R.string.pl_msg_no_playlist)
-                    navigateTitle = "No playlists found"
+                    title = MainRes.string.msg_no_items_found,
+                    navigateTitle = MainRes.string.pl_msg_no_playlist
                 )
             }
         }
