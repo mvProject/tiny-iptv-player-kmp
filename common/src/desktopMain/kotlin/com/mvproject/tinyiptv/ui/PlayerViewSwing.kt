@@ -7,10 +7,9 @@
 
 package com.mvproject.tinyiptv.ui
 
-import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.padding
-import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.DisposableEffect
 import androidx.compose.runtime.LaunchedEffect
@@ -18,12 +17,12 @@ import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.awt.SwingPanel
 import androidx.compose.ui.graphics.Color
+import co.touchlab.kermit.Logger.Companion.w
 import com.mvproject.tinyiptv.ui.components.modifiers.adaptiveLayout
 import com.mvproject.tinyiptv.ui.screens.player.action.PlaybackActions
 import com.mvproject.tinyiptv.ui.screens.player.action.PlaybackStateActions
 import com.mvproject.tinyiptv.ui.screens.player.state.VideoPlaybackState
 import com.mvproject.tinyiptv.ui.screens.player.state.VideoViewState
-import com.mvproject.tinyiptv.ui.theme.dimens
 import com.mvproject.tinyiptv.utils.AppConstants
 import uk.co.caprica.vlcj.factory.discovery.NativeDiscovery
 import uk.co.caprica.vlcj.media.MediaRef
@@ -42,7 +41,6 @@ internal fun PlayerViewSwing(
 ) {
     // todo network Available check
 
-    // todo implement some player state Available check
     val playerState = rememberPlayerStateSwing(
         onPlaybackStateAction = onPlaybackStateAction
     )
@@ -60,13 +58,11 @@ internal fun PlayerViewSwing(
     }
 
     LaunchedEffect(videoViewState.currentVolume) {
-        // todo player setVolume
         playerState.setVolume(videoViewState.currentVolume)
     }
 
     LaunchedEffect(videoViewState.mediaPosition) {
         if (videoViewState.mediaPosition > AppConstants.INT_NO_VALUE) {
-            // todo player setPlayerChannel
             playerState.setPlayerChannel(
                 channelName = videoViewState.currentChannel.channelName,
                 channelUrl = videoViewState.currentChannel.channelUrl
@@ -75,46 +71,44 @@ internal fun PlayerViewSwing(
     }
 
     LaunchedEffect(videoViewState.isPlaying) {
-        // todo player setPlayingState
         playerState.setPlayingState(videoViewState.isPlaying)
+        w {
+            "testing isPlaying:${videoViewState.isPlaying}"
+        }
     }
 
-    Box(
-        modifier = modifier.fillMaxSize(),
+    //NativeLibrary.addSearchPath(
+    //    RuntimeUtil.getLibVlcLibraryName(),
+    //    "C:/Program Files/VideoLAN/VLC"
+    //)
+    //Native.loadLibrary(RuntimeUtil.getLibVlcLibraryName(), LibVlc::class.java)
+
+    NativeDiscovery().discover()
+
+    Column(
+        modifier = modifier.fillMaxSize()
     ) {
 
-        //NativeLibrary.addSearchPath(
-        //    RuntimeUtil.getLibVlcLibraryName(),
-        //    "C:/Program Files/VideoLAN/VLC"
-        //)
-        //Native.loadLibrary(RuntimeUtil.getLibVlcLibraryName(), LibVlc::class.java)
+        Row(modifier = Modifier.weight(10f)) {
+            SwingPanel(
+                factory = { playerState.playerComponent },
+                background = Color.Transparent,
+                modifier = Modifier
+                    .adaptiveLayout(
+                        aspectRatio = videoViewState.videoRatio,
+                        resizeMode = videoViewState.videoResizeMode
+                    )
+            )
+        }
 
-        NativeDiscovery().discover()
-
-        SwingPanel(
-            factory = { playerState.playerComponent },
-            background = Color.Transparent,
-            modifier = Modifier
-                .padding(vertical = MaterialTheme.dimens.size78)
-                .adaptiveLayout(
-                    aspectRatio = videoViewState.videoSizeRatio,
-                    resizeMode = videoViewState.videoResizeMode
-                )
-        )
-        controls()
-    }
-
-    DisposableEffect(Unit) {
-        onDispose {
-            println("DisposableEffect Unit")
-            playerState.playerComponent.mediaPlayer()::release
+        Row(modifier = Modifier.weight(2f)) {
+            controls()
         }
     }
 
     DisposableEffect(playerState) {
         onDispose {
-            println("DisposableEffect playerState")
-            //playerState.playerComponent.mediaPlayer()::release
+            playerState.closePlayer()
         }
     }
 }
@@ -123,7 +117,6 @@ internal fun PlayerViewSwing(
 internal fun rememberPlayerStateSwing(
     onPlaybackStateAction: (PlaybackStateActions) -> Unit = {}
 ) = remember {
-    println("rememberPlayerState")
     PlayerStateSwingImpl(
         playerComponent = CallbackMediaPlayerComponent(),
         onPlaybackStateAction = onPlaybackStateAction
@@ -158,7 +151,6 @@ class PlayerStateSwingImpl(
 
     override fun pause() {
         playerComponent.mediaPlayer().controls().pause()
-
     }
 
     override fun restartPlayer() {
@@ -168,7 +160,6 @@ class PlayerStateSwingImpl(
                         playWhenReady = true
                     }
                 }*/
-
     }
 
     override fun setPlayerChannel(
@@ -180,34 +171,25 @@ class PlayerStateSwingImpl(
 
     override fun closePlayer(
     ) {
-        // playerComponent.mediaPlayer().events().removeMediaPlayerEventListener(this)
+        playerComponent.mediaPlayer().controls().stop()
+        playerComponent.mediaPlayer().events().removeMediaPlayerEventListener(this)
         playerComponent.mediaPlayer()::release
-    }
-
-    override fun volumeChanged(mediaPlayer: MediaPlayer?, volume: Float) {
-        println("volumeChanged $volume")
     }
 
     override fun error(mediaPlayer: MediaPlayer?) {}
     override fun mediaPlayerReady(mediaPlayer: MediaPlayer?) {
-        println("mediaPlayerReady")
+        onPlaybackStateAction(
+            PlaybackStateActions.OnPlaybackStateChanged(VideoPlaybackState.VideoPlaybackReady)
+        )
+    }
+
+    override fun mediaChanged(mediaPlayer: MediaPlayer?, media: MediaRef?) {
         onPlaybackStateAction(
             PlaybackStateActions.OnMediaItemTransition(
                 mediaTitle = "",
                 index = 1
             )
         )
-    }
-
-    override fun mediaChanged(mediaPlayer: MediaPlayer?, media: MediaRef?) {
-        println("mediaChanged")
-        onPlaybackStateAction(
-            PlaybackStateActions.OnPlaybackStateChanged(VideoPlaybackState.VideoPlaybackReady)
-        )
-    }
-
-    override fun opening(mediaPlayer: MediaPlayer?) {
-        println("opening")
     }
 
     override fun buffering(mediaPlayer: MediaPlayer?, newCache: Float) {
@@ -221,30 +203,23 @@ class PlayerStateSwingImpl(
     }
 
     override fun playing(mediaPlayer: MediaPlayer?) {
-        val isPlaying = mediaPlayer?.status()?.isPlaying
-        println("playing $isPlaying")
-        onPlaybackStateAction(
-            PlaybackStateActions.OnIsPlayingChanged(true)
-        )
+        mediaPlayer?.status()?.isPlaying?.let { isPlaying ->
+            onPlaybackStateAction(
+                PlaybackStateActions.OnIsPlayingChanged(isPlaying)
+            )
+        }
     }
 
     override fun paused(mediaPlayer: MediaPlayer?) {
-        val isPlaying = mediaPlayer?.status()?.isPlaying
-        println("paused $isPlaying")
-        onPlaybackStateAction(
-            PlaybackStateActions.OnIsPlayingChanged(false)
-        )
+        mediaPlayer?.status()?.isPlaying?.let { isPlaying ->
+            onPlaybackStateAction(
+                PlaybackStateActions.OnIsPlayingChanged(isPlaying)
+            )
+        }
     }
 
     override fun stopped(mediaPlayer: MediaPlayer?) {
         println("stopped")
-        onPlaybackStateAction(
-            PlaybackStateActions.OnPlaybackStateChanged(VideoPlaybackState.VideoPlaybackIdle(0))
-        )
-    }
-
-    override fun finished(mediaPlayer: MediaPlayer?) {
-        println("finished")
         onPlaybackStateAction(
             PlaybackStateActions.OnPlaybackStateChanged(VideoPlaybackState.VideoPlaybackEnded)
         )
