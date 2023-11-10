@@ -15,6 +15,9 @@ import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedButton
 import androidx.compose.material3.Text
+import androidx.compose.material3.windowsizeclass.ExperimentalMaterial3WindowSizeClassApi
+import androidx.compose.material3.windowsizeclass.WindowWidthSizeClass
+import androidx.compose.material3.windowsizeclass.calculateWindowSizeClass
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
@@ -23,12 +26,18 @@ import androidx.compose.ui.text.font.FontStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.lifecycle.compose.LifecycleResumeEffect
 import androidx.media3.common.PlaybackException
+import com.google.accompanist.adaptive.HorizontalTwoPaneStrategy
+import com.google.accompanist.adaptive.TwoPane
+import com.google.accompanist.adaptive.VerticalTwoPaneStrategy
+import com.google.accompanist.adaptive.calculateDisplayFeatures
 import com.mvproject.tinyiptv.MainRes
 import com.mvproject.tinyiptv.ui.PlayerView
+import com.mvproject.tinyiptv.ui.findActivity
 import com.mvproject.tinyiptv.ui.screens.player.action.PlaybackActions
 import com.mvproject.tinyiptv.ui.screens.player.action.PlaybackStateActions
 import com.mvproject.tinyiptv.ui.screens.player.state.VideoViewState
 import com.mvproject.tinyiptv.ui.screens.playlist.action.PlaylistAction
+import com.mvproject.tinyiptv.ui.theme.dimens
 import com.mvproject.tinyiptv.utils.AppConstants
 import io.github.aakira.napier.Napier
 import io.ktor.client.HttpClient
@@ -117,4 +126,31 @@ actual fun isMediaPlayable(errorCode: Int?): Boolean {
     }
     Napier.e("testing errorCode:$errorCode, isMediaPlayable:$isMediaPlayable")
     return isMediaPlayable
+}
+
+@OptIn(ExperimentalMaterial3WindowSizeClassApi::class)
+@Composable
+actual fun TwoPaneContainer(
+    first: @Composable () -> Unit,
+    second: @Composable () -> Unit
+) {
+    val context = LocalContext.current
+    val activity = context.findActivity()
+    val windowSizeClass = calculateWindowSizeClass()
+    val displayFeatures = calculateDisplayFeatures(activity)
+
+    TwoPane(
+        first = {
+            first()
+        },
+        second = {
+            second()
+        },
+        strategy = when (windowSizeClass.widthSizeClass) {
+            WindowWidthSizeClass.Compact -> VerticalTwoPaneStrategy(MaterialTheme.dimens.fraction50)
+            WindowWidthSizeClass.Medium -> HorizontalTwoPaneStrategy(MaterialTheme.dimens.fraction60)
+            else -> HorizontalTwoPaneStrategy(MaterialTheme.dimens.fraction70)
+        },
+        displayFeatures = displayFeatures
+    )
 }

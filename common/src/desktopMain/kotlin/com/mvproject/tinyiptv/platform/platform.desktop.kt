@@ -10,8 +10,11 @@ package com.mvproject.tinyiptv.platform
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.fillMaxHeight
+import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
@@ -271,4 +274,27 @@ actual fun ExecuteOnResume(action: () -> Unit) {
 actual fun isMediaPlayable(errorCode: Int?): Boolean {
     // todo check media playable
     return true
+}
+
+@Composable
+actual fun TwoPaneContainer(
+    first: @Composable () -> Unit,
+    second: @Composable () -> Unit
+) {
+    Row(modifier = Modifier.fillMaxSize()) {
+        Column(
+            modifier = Modifier
+                .weight(6f)
+                .fillMaxHeight()
+        ) {
+            first()
+        }
+        Column(
+            modifier = Modifier
+                .weight(2f)
+                .fillMaxHeight()
+        ) {
+            second()
+        }
+    }
 }

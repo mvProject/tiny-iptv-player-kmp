@@ -47,6 +47,8 @@ junit = "4.13.2"
 ext-junit = "1.1.5"
 espresso-core = "3.5.1"
 
+accompanist = "0.31.2-alpha"
+
 [plugins]
 
 compose-multiplatform = { id = "org.jetbrains.compose", version.ref = "compose" }
@@ -87,6 +89,8 @@ androidx-compose-ui-tooling-preview = { group = "androidx.compose.ui", name = "u
 androidx-compose-activity = { module = "androidx.activity:activity-compose", version.ref = "compose-activity" }
 androidx-compose-lifecycle-viewmodel = { module = "androidx.lifecycle:lifecycle-viewmodel-compose", version.ref = "compose-lifecycle-viewmodel" }
 androidx-compose-lifecycle-runtime = { module = "androidx.lifecycle:lifecycle-runtime-compose", version.ref = "compose-lifecycle-runtime" }
+
+accompanist-adaptive = { module = "com.google.accompanist:accompanist-adaptive", version.ref = "accompanist" }
 
 material3-window-size-multiplatform = { module = "dev.chrisbanes.material3:material3-window-size-class-multiplatform", version.ref = "material3WindowSizeClassMultiplatform" }
 

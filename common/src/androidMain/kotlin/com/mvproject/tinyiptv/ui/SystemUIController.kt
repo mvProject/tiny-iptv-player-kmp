@@ -42,6 +42,15 @@ private tailrec fun Context.findWindow(): Window? =
         else -> null
     }
 
+fun Context.findActivity(): Activity {
+    var ctx = this
+    while (ctx is ContextWrapper) {
+        if (ctx is Activity) return ctx
+        ctx = ctx.baseContext
+    }
+    throw IllegalStateException("no activity")
+}
+
 /**
  * A helper class for setting the navigation and status bar colors for a [View], gracefully
  * degrading behavior based upon API level.

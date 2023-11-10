@@ -14,9 +14,6 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.systemBars
 import androidx.compose.foundation.layout.windowInsetsPadding
 import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.windowsizeclass.ExperimentalMaterial3WindowSizeClassApi
-import androidx.compose.material3.windowsizeclass.WindowWidthSizeClass.Companion.Compact
-import androidx.compose.material3.windowsizeclass.calculateWindowSizeClass
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.DisposableEffect
 import androidx.compose.runtime.collectAsState
@@ -26,6 +23,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import com.mvproject.tinyiptv.MainRes
 import com.mvproject.tinyiptv.platform.PlayerViewContainer
+import com.mvproject.tinyiptv.platform.TwoPaneContainer
 import com.mvproject.tinyiptv.ui.components.epg.PlayerEpgContent
 import com.mvproject.tinyiptv.ui.components.modifiers.defaultPlayerHorizontalGestures
 import com.mvproject.tinyiptv.ui.components.modifiers.defaultPlayerTapGesturesState
@@ -37,12 +35,10 @@ import com.mvproject.tinyiptv.ui.components.overlay.OverlayEpg
 import com.mvproject.tinyiptv.ui.components.player.PlayerChannelView
 import com.mvproject.tinyiptv.ui.components.views.LoadingView
 import com.mvproject.tinyiptv.ui.components.views.NoPlaybackView
-import com.mvproject.tinyiptv.ui.components.views.TwoPaneContainer
 import com.mvproject.tinyiptv.ui.components.views.VolumeProgressView
 import com.mvproject.tinyiptv.ui.theme.dimens
 import io.github.skeptick.libres.compose.painterResource
 
-@OptIn(ExperimentalMaterial3WindowSizeClassApi::class)
 @Composable
 fun VideoViewContainer(
     viewModel: VideoViewViewModel,
@@ -50,8 +46,6 @@ fun VideoViewContainer(
     channelGroup: String,
     onNavigateBack: () -> Unit = {}
 ) {
-    val windowSizeClass = calculateWindowSizeClass()
-
     val videoViewState by viewModel.videoViewState.collectAsState()
 
     val fraction = remember(videoViewState.isFullscreen) {
@@ -64,42 +58,59 @@ fun VideoViewContainer(
             .background(MaterialTheme.colorScheme.scrim),
         contentAlignment = Alignment.TopCenter
     ) {
-        TwoPaneContainer(
-            isFullScreen = videoViewState.isFullscreen,
-            isCompact = when (windowSizeClass.widthSizeClass) {
-                Compact -> true
-                else -> false
-            },
-            mainContent = {
-                PlayerViewContainer(
-                    modifier = Modifier
-                        .defaultPlayerHorizontalGestures(onAction = viewModel::processPlaybackActions)
-                        .defaultPlayerVerticalGestures(onAction = viewModel::processPlaybackActions)
-                        .defaultPlayerTapGesturesState(onAction = viewModel::processPlaybackActions),
-                    videoViewState = videoViewState,
+        if (videoViewState.isFullscreen) {
+            PlayerViewContainer(
+                modifier = Modifier
+                    .defaultPlayerHorizontalGestures(onAction = viewModel::processPlaybackActions)
+                    .defaultPlayerVerticalGestures(onAction = viewModel::processPlaybackActions)
+                    .defaultPlayerTapGesturesState(onAction = viewModel::processPlaybackActions),
+                videoViewState = videoViewState,
+                onPlaybackAction = viewModel::processPlaybackActions,
+                onPlaybackStateAction = viewModel::processPlaybackStateActions
+            ) {
+                PlayerChannelView(
+                    modifier = Modifier.fillMaxSize(),
+                    isVisible = videoViewState.isControlUiVisible,
+                    currentChannel = videoViewState.currentChannel,
+                    isPlaying = videoViewState.isPlaying,
+                    isFullScreen = true,
                     onPlaybackAction = viewModel::processPlaybackActions,
-                    onPlaybackStateAction = viewModel::processPlaybackStateActions
-                ) {
-                    PlayerChannelView(
-                        modifier = Modifier.fillMaxSize(),
-                        isVisible = videoViewState.isControlUiVisible,
-                        currentChannel = videoViewState.currentChannel,
-                        isPlaying = videoViewState.isPlaying,
-                        isFullScreen = videoViewState.isFullscreen,
-                        onPlaybackAction = viewModel::processPlaybackActions,
-                        onPlaybackClose = onNavigateBack
-                    )
-                }
-            },
-            addonContent = {
-                PlayerEpgContent(
-                    modifier = Modifier.background(
-                        color = MaterialTheme.colorScheme.primary
-                    ),
-                    epgList = videoViewState.currentChannel.channelEpg
+                    onPlaybackClose = onNavigateBack
                 )
             }
-        )
+        } else {
+            TwoPaneContainer(
+                first = {
+                    PlayerViewContainer(
+                        modifier = Modifier
+                            .defaultPlayerHorizontalGestures(onAction = viewModel::processPlaybackActions)
+                            .defaultPlayerVerticalGestures(onAction = viewModel::processPlaybackActions)
+                            .defaultPlayerTapGesturesState(onAction = viewModel::processPlaybackActions),
+                        videoViewState = videoViewState,
+                        onPlaybackAction = viewModel::processPlaybackActions,
+                        onPlaybackStateAction = viewModel::processPlaybackStateActions
+                    ) {
+                        PlayerChannelView(
+                            modifier = Modifier.fillMaxSize(),
+                            isVisible = videoViewState.isControlUiVisible,
+                            currentChannel = videoViewState.currentChannel,
+                            isPlaying = videoViewState.isPlaying,
+                            isFullScreen = false,
+                            onPlaybackAction = viewModel::processPlaybackActions,
+                            onPlaybackClose = onNavigateBack
+                        )
+                    }
+                },
+                second = {
+                    PlayerEpgContent(
+                        modifier = Modifier.background(
+                            color = MaterialTheme.colorScheme.primary
+                        ),
+                        epgList = videoViewState.currentChannel.channelEpg
+                    )
+                }
+            )
+        }
 
         VolumeProgressView(
             modifier = Modifier.fillMaxSize(fraction),

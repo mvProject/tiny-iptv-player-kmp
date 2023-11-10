@@ -85,3 +85,9 @@ internal fun createHttpClient(): HttpClient {
         install(HttpTimeout)
     }
 }
+
+@Composable
+expect fun TwoPaneContainer(
+    first: @Composable () -> Unit,
+    second: @Composable () -> Unit
+)

@@ -148,6 +148,8 @@ kotlin {
                 // Image processing
                 implementation(libs.coil)
                 implementation(libs.coil.compose)
+
+                implementation(libs.accompanist.adaptive)
             }
         }
 
