@@ -39,7 +39,7 @@ import com.mvproject.tinyiptv.ui.screens.player.state.VideoViewState
 import com.mvproject.tinyiptv.ui.screens.playlist.action.PlaylistAction
 import com.mvproject.tinyiptv.ui.theme.dimens
 import com.mvproject.tinyiptv.utils.AppConstants
-import io.github.aakira.napier.Napier
+import com.mvproject.tinyiptv.utils.KLog
 import io.ktor.client.HttpClient
 import io.ktor.client.engine.android.Android
 
@@ -124,7 +124,7 @@ actual fun isMediaPlayable(errorCode: Int?): Boolean {
         PlaybackException.ERROR_CODE_PARSING_MANIFEST_MALFORMED -> false
         else -> true
     }
-    Napier.e("testing errorCode:$errorCode, isMediaPlayable:$isMediaPlayable")
+    KLog.e("testing errorCode:$errorCode, isMediaPlayable:$isMediaPlayable")
     return isMediaPlayable
 }
 

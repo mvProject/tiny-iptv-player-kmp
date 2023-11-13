@@ -19,8 +19,8 @@ import com.mvproject.tinyiptv.data.usecases.UpdateRemotePlaylistChannelsUseCase
 import com.mvproject.tinyiptv.navigation.PlaylistDataRoute
 import com.mvproject.tinyiptv.ui.theme.VideoAppTheme
 import com.mvproject.tinyiptv.utils.AppConstants
+import com.mvproject.tinyiptv.utils.KLog
 import com.mvproject.tinyiptv.utils.TimeUtils
-import io.github.aakira.napier.Napier
 import kotlinx.coroutines.launch
 import org.koin.compose.rememberKoinInject
 
@@ -69,7 +69,7 @@ fun TinyIptvApp() {
                     TimeUtils.actualDate - playlist.lastUpdateDate > updateDuration
                 val isUpdateAllowed = isUpdateSet && isRequiredUpdate
 
-                Napier.w("testing remotePlaylists ${playlist.playlistTitle} isUpdateAllowed $isUpdateAllowed")
+                KLog.w("testing remotePlaylists ${playlist.playlistTitle} isUpdateAllowed $isUpdateAllowed")
                 if (isUpdateAllowed) {
                     updateRemotePlaylistChannelsUseCase(playlist = playlist)
                 }

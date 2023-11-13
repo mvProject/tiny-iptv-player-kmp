@@ -12,7 +12,7 @@ import com.mvproject.tinyiptv.data.mappers.EntityMapper.toEpgInfo
 import com.mvproject.tinyiptv.data.mappers.ParseMappers.toEpgInfoEntity
 import com.mvproject.tinyiptv.data.model.epg.EpgInfo
 import com.mvproject.tinyiptv.data.model.response.EpgInfoResponse
-import io.github.aakira.napier.Napier
+import com.mvproject.tinyiptv.utils.KLog
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 
@@ -30,7 +30,7 @@ class EpgInfoRepository(
     }
 
     suspend fun addEpgInfoData(infoData: List<EpgInfoResponse>) {
-        Napier.w("testing addEpgInfoData")
+        KLog.w("testing addEpgInfoData")
         withContext(Dispatchers.IO) {
             epgInfoQueries.transaction {
                 infoData.forEach { item ->
@@ -39,8 +39,8 @@ class EpgInfoRepository(
                             item.toEpgInfoEntity()
                         )
                     } catch (ex: Exception) {
-                        Napier.e("testing addEpgInfoData Exception ${ex.localizedMessage}")
-                        Napier.e("testing addEpgInfoData Exception id:${item.channelId}, name:${item.channelNames}")
+                        KLog.e("testing addEpgInfoData Exception ${ex.localizedMessage}")
+                        KLog.e("testing addEpgInfoData Exception id:${item.channelId}, name:${item.channelNames}")
                     }
                 }
             }
@@ -48,7 +48,7 @@ class EpgInfoRepository(
     }
 
     suspend fun updateEpgInfoData(infoData: List<EpgInfoResponse>) {
-        Napier.w("testing updateEpgInfoData")
+        KLog.w("testing updateEpgInfoData")
         withContext(Dispatchers.IO) {
             epgInfoQueries.transaction {
                 infoData.forEach { item ->
@@ -59,8 +59,8 @@ class EpgInfoRepository(
                             channelLogo = item.channelIcon,
                         )
                     } catch (ex: Exception) {
-                        Napier.e("testing updateEpgInfoData Exception ${ex.localizedMessage}")
-                        Napier.e("testing updateEpgInfoData Exception id:${item.channelId}, name:${item.channelNames}")
+                        KLog.e("testing updateEpgInfoData Exception ${ex.localizedMessage}")
+                        KLog.e("testing updateEpgInfoData Exception id:${item.channelId}, name:${item.channelNames}")
                     }
                 }
             }

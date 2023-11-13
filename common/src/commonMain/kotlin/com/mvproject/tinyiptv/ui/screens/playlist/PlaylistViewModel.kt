@@ -16,8 +16,8 @@ import com.mvproject.tinyiptv.data.usecases.UpdatePlaylistUseCase
 import com.mvproject.tinyiptv.ui.screens.playlist.action.PlaylistAction
 import com.mvproject.tinyiptv.ui.screens.playlist.state.PlaylistState
 import com.mvproject.tinyiptv.utils.AppConstants.LONG_VALUE_ZERO
-import com.mvproject.tinyiptv.utils.PlayerUtils.getNameFromStringUri
-import io.github.aakira.napier.Napier
+import com.mvproject.tinyiptv.utils.CommonUtils.getNameFromStringUri
+import com.mvproject.tinyiptv.utils.KLog
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.update
@@ -119,7 +119,7 @@ class PlaylistViewModel(
                     source = state.value.uri
                 )
             }.onFailure {
-                Napier.e("testing saveLocalPlayList failure ${it.localizedMessage}")
+                KLog.e("testing saveLocalPlayList failure ${it.localizedMessage}")
             }
 
             _state.update { current ->
@@ -138,7 +138,7 @@ class PlaylistViewModel(
                     playlist = state.value.toPlaylist()
                 )
             }.onFailure {
-                Napier.e("testing saveRemotePlayList failure ${it.localizedMessage}")
+                KLog.e("testing saveRemotePlayList failure ${it.localizedMessage}")
             }
 
             _state.update { current ->
@@ -157,7 +157,7 @@ class PlaylistViewModel(
                     playlist = state.value.toPlaylist()
                 )
             }.onFailure {
-                Napier.e("testing updatePlayList failure ${it.localizedMessage}")
+                KLog.e("testing updatePlayList failure ${it.localizedMessage}")
             }
 
             _state.update { current ->

@@ -10,8 +10,8 @@ package com.mvproject.tinyiptv.data.datasource
 import com.mvproject.tinyiptv.data.mappers.ParseMappers.asProgramEntities
 import com.mvproject.tinyiptv.data.model.epg.EpgProgram
 import com.mvproject.tinyiptv.data.network.NetworkRepository
+import com.mvproject.tinyiptv.utils.KLog
 import com.mvproject.tinyiptv.utils.TimeUtils.actualDate
-import io.github.aakira.napier.Napier
 
 class EpgDataSource(
     private val networkRepository: NetworkRepository
@@ -20,7 +20,7 @@ class EpgDataSource(
         val programs = try {
             networkRepository.getEpgProgramsForChannel(channelId = channelsId).chPrograms
         } catch (exc: Exception) {
-            Napier.e("error ${exc.localizedMessage}")
+            KLog.e("error ${exc.localizedMessage}")
             emptyList()
         }
         val result = if (programs.isNotEmpty()) {

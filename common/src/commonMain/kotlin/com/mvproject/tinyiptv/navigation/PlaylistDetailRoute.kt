@@ -18,7 +18,7 @@ import cafe.adriel.voyager.navigator.currentOrThrow
 import com.mvproject.tinyiptv.ui.screens.playlist.PlaylistView
 import com.mvproject.tinyiptv.ui.screens.playlist.PlaylistViewModel
 import com.mvproject.tinyiptv.utils.AppConstants
-import io.github.aakira.napier.Napier
+import com.mvproject.tinyiptv.utils.KLog
 
 data class PlaylistDetailRoute(
     val id: String = AppConstants.EMPTY_STRING
@@ -30,7 +30,7 @@ data class PlaylistDetailRoute(
         val navigator = LocalNavigator.currentOrThrow
 
         LaunchedEffect(key1 = id) {
-            Napier.w("testing PlaylistDetailRoute playlistId:$id")
+            KLog.w("testing PlaylistDetailRoute playlistId:$id")
             playlistViewModel.setPlaylistMode(id)
         }
 

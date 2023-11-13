@@ -13,8 +13,8 @@ import com.mvproject.tinyiptv.data.repository.FavoriteChannelsRepository
 import com.mvproject.tinyiptv.data.repository.PlaylistChannelsRepository
 import com.mvproject.tinyiptv.data.repository.PlaylistsRepository
 import com.mvproject.tinyiptv.data.repository.PreferenceRepository
+import com.mvproject.tinyiptv.utils.KLog
 import com.mvproject.tinyiptv.utils.TimeUtils
-import io.github.aakira.napier.Napier
 
 class UpdateRemotePlaylistChannelsUseCase(
     private val preferenceRepository: PreferenceRepository,
@@ -26,7 +26,7 @@ class UpdateRemotePlaylistChannelsUseCase(
     suspend operator fun invoke(
         playlist: Playlist
     ) {
-        Napier.w("testing update channels for playlist:${playlist.playlistTitle}")
+        KLog.w("testing update channels for playlist:${playlist.playlistTitle}")
 
         val channels = remotePlaylistDataSource.getFromRemotePlaylist(
             playlistId = playlist.id,
@@ -39,7 +39,7 @@ class UpdateRemotePlaylistChannelsUseCase(
 
         channels.forEach { channel ->
             if (channel.channelUrl in favorites) {
-                Napier.w("testing update in favorite ${channel.channelName}")
+                KLog.w("testing update in favorite ${channel.channelName}")
                 favoriteChannelsRepository.updatePlaylistFavoriteChannels(channel = channel)
             }
         }
@@ -50,6 +50,6 @@ class UpdateRemotePlaylistChannelsUseCase(
 
         preferenceRepository.setChannelsEpgInfoUpdateRequired(state = true)
 
-        Napier.w("testing update channels finished")
+        KLog.w("testing update channels finished")
     }
 }

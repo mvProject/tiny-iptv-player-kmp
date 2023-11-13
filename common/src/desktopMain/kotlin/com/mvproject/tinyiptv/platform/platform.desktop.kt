@@ -52,7 +52,7 @@ import com.mvproject.tinyiptv.ui.screens.player.state.VideoViewState
 import com.mvproject.tinyiptv.ui.screens.playlist.action.PlaylistAction
 import com.mvproject.tinyiptv.ui.theme.dimens
 import com.mvproject.tinyiptv.utils.AppConstants
-import io.github.aakira.napier.Napier
+import com.mvproject.tinyiptv.utils.KLog
 import io.ktor.client.HttpClient
 import io.ktor.client.engine.java.Java
 
@@ -100,15 +100,15 @@ actual fun LocalFileSelectButton(onPlaylistAction: (PlaylistAction) -> Unit) {
             files.firstOrNull()?.let { file ->
                 try {
                     val content = file.readText()
-                    Napier.w("testing FileSelectButton readText content $content")
+                    KLog.w("testing FileSelectButton readText content $content")
                 } catch (ex: Exception) {
-                    Napier.e("testing FileSelectButton readText ${ex.message}")
+                    KLog.e("testing FileSelectButton readText ${ex.message}")
                 }
                 try {
                     val content = file.readLines()
-                    Napier.w("testing FileSelectButton readLines content $content")
+                    KLog.w("testing FileSelectButton readLines content $content")
                 } catch (ex: Exception) {
-                    Napier.e("testing FileSelectButton readText ${ex.message}")
+                    KLog.e("testing FileSelectButton readText ${ex.message}")
                 }
             }
         }

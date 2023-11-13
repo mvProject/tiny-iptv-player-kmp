@@ -14,7 +14,7 @@ import com.mvproject.tinyiptv.data.repository.PlaylistChannelsRepository
 import com.mvproject.tinyiptv.data.repository.PlaylistsRepository
 import com.mvproject.tinyiptv.data.repository.PreferenceRepository
 import com.mvproject.tinyiptv.utils.AppConstants
-import io.github.aakira.napier.Napier
+import com.mvproject.tinyiptv.utils.KLog
 
 class AddLocalPlaylistUseCase(
     private val localPlaylistDataSource: LocalPlaylistDataSource,
@@ -37,7 +37,7 @@ class AddLocalPlaylistUseCase(
         playlistsRepository.addPlaylist(playlist = playlist)
 
         if (playlistsRepository.playlistCount == AppConstants.INT_VALUE_1) {
-            Napier.w("testing need set as current")
+            KLog.w("testing need set as current")
             preferenceRepository.setCurrentPlaylistId(playlistId = playlist.id)
         }
 

@@ -40,7 +40,7 @@ import com.mvproject.tinyiptv.ui.components.views.NoItemsView
 import com.mvproject.tinyiptv.ui.screens.groups.action.GroupAction
 import com.mvproject.tinyiptv.ui.screens.groups.state.GroupState
 import com.mvproject.tinyiptv.ui.theme.dimens
-import io.github.aakira.napier.Napier
+import com.mvproject.tinyiptv.utils.KLog
 
 @Composable
 fun GroupView(
@@ -92,7 +92,7 @@ fun GroupView(
                         selectedIndex = selectedIndex,
                         items = dataState.playlistNames,
                         onItemSelected = { index ->
-                            Napier.w("testing selected $index")
+                            KLog.w("testing selected $index")
                             selectedIndex = index
                             isSelectPlaylistOpen.value = false
                             onPlaylistAction(GroupAction.SelectPlaylist(index))

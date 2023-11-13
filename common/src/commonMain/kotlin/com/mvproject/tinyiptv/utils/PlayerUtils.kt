@@ -12,7 +12,6 @@ import androidx.compose.material.icons.rounded.VolumeDown
 import androidx.compose.material.icons.rounded.VolumeMute
 import androidx.compose.material.icons.rounded.VolumeUp
 import androidx.compose.ui.unit.Constraints
-import com.eygraber.uri.Uri
 import com.mvproject.tinyiptv.data.enums.ResizeMode
 
 private const val MAX_ASPECT_RATIO_DIFFERENCE_FRACTION = 0.01f
@@ -69,8 +68,4 @@ object PlayerUtils {
         value > 65 -> Icons.Rounded.VolumeUp
         else -> Icons.Rounded.VolumeDown
     }
-
-    // todo uri fix
-    fun String.getNameFromStringUri() =
-        Uri.parse(this).path?.split("/")?.last() ?: AppConstants.EMPTY_STRING
 }

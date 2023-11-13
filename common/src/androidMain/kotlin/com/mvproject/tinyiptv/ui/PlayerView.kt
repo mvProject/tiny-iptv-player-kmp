@@ -24,7 +24,7 @@ import com.mvproject.tinyiptv.ui.screens.player.action.PlaybackActions
 import com.mvproject.tinyiptv.ui.screens.player.action.PlaybackStateActions
 import com.mvproject.tinyiptv.ui.screens.player.state.VideoViewState
 import com.mvproject.tinyiptv.utils.AppConstants
-import io.github.aakira.napier.Napier
+import com.mvproject.tinyiptv.utils.KLog
 
 @Composable
 internal fun PlayerView(
@@ -38,8 +38,8 @@ internal fun PlayerView(
     val connection by networkConnectionState()
 
     when (connection) {
-        ConnectionState.Available -> Napier.i("testing connectivity is available")
-        ConnectionState.Unavailable -> Napier.e("testing connectivity is unavailable")
+        ConnectionState.Available -> KLog.i("testing connectivity is available")
+        ConnectionState.Unavailable -> KLog.e("testing connectivity is unavailable")
     }
 
     val systemUIController = rememberSystemUIController()

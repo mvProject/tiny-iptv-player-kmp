@@ -16,7 +16,7 @@ import com.mvproject.tinyiptv.ui.screens.player.action.PlaybackActions
 import com.mvproject.tinyiptv.ui.screens.player.action.PlaybackStateActions
 import com.mvproject.tinyiptv.ui.screens.player.state.VideoViewState
 import com.mvproject.tinyiptv.ui.screens.playlist.action.PlaylistAction
-import io.github.aakira.napier.Napier
+import com.mvproject.tinyiptv.utils.KLog
 import io.ktor.client.HttpClient
 import io.ktor.client.plugins.HttpTimeout
 import io.ktor.client.plugins.contentnegotiation.ContentNegotiation
@@ -64,8 +64,7 @@ internal fun createHttpClient(): HttpClient {
         install(Logging) {
             logger = object : Logger {
                 override fun log(message: String) {
-                    Napier.d(message, tag = "Ktor napier log:")
-                    co.touchlab.kermit.Logger.w("Ktor kermit log:") { message }
+                    KLog.w("Ktor kermit log:") { message }
                 }
             }
             level = LogLevel.ALL

@@ -11,7 +11,7 @@ import com.mvproject.tinyiptv.data.repository.EpgInfoRepository
 import com.mvproject.tinyiptv.data.repository.FavoriteChannelsRepository
 import com.mvproject.tinyiptv.data.repository.PlaylistChannelsRepository
 import com.mvproject.tinyiptv.data.repository.PreferenceRepository
-import io.github.aakira.napier.Napier
+import com.mvproject.tinyiptv.utils.KLog
 import kotlin.time.measureTime
 
 class UpdateChannelsEpgInfoUseCase(
@@ -22,7 +22,7 @@ class UpdateChannelsEpgInfoUseCase(
 ) {
     suspend operator fun invoke() {
         if (preferenceRepository.isEpgInfoDataExist()) {
-            Napier.i("testing start UpdateChannelsEpgInfoUseCase")
+            KLog.i("testing start UpdateChannelsEpgInfoUseCase")
 
             val epgInfos = epgInfoRepository.loadEpgInfoData().asSequence()
             val channels = playlistChannelsRepository.loadChannels().asSequence()
@@ -50,13 +50,13 @@ class UpdateChannelsEpgInfoUseCase(
                     }
                 }
 
-                Napier.w("testing mappedChannels count:${mappedChannels.count()}")
+                KLog.w("testing mappedChannels count:${mappedChannels.count()}")
 
                 playlistChannelsRepository.updatePlaylistChannels(mappedChannels.toList())
 
                 mappedChannels.forEach { channel ->
                     if (channel.channelUrl in favorites) {
-                        Napier.w("testing update in favorite ${channel.channelName}")
+                        KLog.w("testing update in favorite ${channel.channelName}")
                         favoriteChannelsRepository.updatePlaylistFavoriteChannels(channel = channel)
                     }
                 }
@@ -64,9 +64,9 @@ class UpdateChannelsEpgInfoUseCase(
                 preferenceRepository.setChannelsEpgInfoUpdateRequired(state = false)
             }
 
-            Napier.e("testing duration2 in seconds ${duration}}")
+            KLog.e("testing duration2 in seconds ${duration}}")
         } else {
-            Napier.e("testing UpdateChannelsEpgInfoUseCase EpgInfo not exist")
+            KLog.e("testing UpdateChannelsEpgInfoUseCase EpgInfo not exist")
         }
     }
 }

@@ -13,7 +13,7 @@ koinAndroidCompose = "3.5.0"
 
 compose-activity = "1.8.0"
 compose-lifecycle-viewmodel = "2.6.2"
-compose-lifecycle-runtime = "2.7.0-alpha02"
+compose-lifecycle-runtime = "2.7.0-beta01"
 androidxComposeBom = "2023.08.00"
 
 kotlinxSerializationJson = "1.6.0"
@@ -33,12 +33,11 @@ calfFilePickerVersion = "0.2.0"
 uriKmpVersion = "0.0.15"
 
 voyager = "1.0.0-rc07"
-media3 = "1.2.0-beta01"
+media3 = "1.2.0-rc01"
 
-napier = "2.6.1"
 kermit = "2.0.2"
 
-preferences = "1.1.0-alpha05"
+preferences = "1.1.0-alpha06"
 sqldelight = "2.0.0"
 libres = "1.2.0"
 vlcjVersion = "4.8.1"
@@ -103,12 +102,10 @@ coil-compose = { module = "io.coil-kt:coil-compose", version.ref = "coil" }
 libres-compose = { module = "io.github.skeptick.libres:libres-compose", version.ref = "libres" }
 caprica-vlcj = { module = "uk.co.caprica:vlcj", version.ref = "vlcjVersion" }
 
-napier = { module = "io.github.aakira:napier", version.ref = "napier" }
 kermit = { module = "co.touchlab:kermit", version.ref = "kermit" }
 
 components-resources = { module = "org.jetbrains.compose.components:components-resources", version.ref = "componentsResources" }
 
-# voyager-androidx = { module = "cafe.adriel.voyager:voyager-androidx", version.ref = "voyager" }
 voyager-koin = { module = "cafe.adriel.voyager:voyager-koin", version.ref = "voyager" }
 voyager-navigator = { module = "cafe.adriel.voyager:voyager-navigator", version.ref = "voyager" }
 

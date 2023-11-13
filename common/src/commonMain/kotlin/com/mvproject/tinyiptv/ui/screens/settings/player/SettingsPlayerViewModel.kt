@@ -12,7 +12,7 @@ import cafe.adriel.voyager.core.model.coroutineScope
 import com.mvproject.tinyiptv.data.repository.PreferenceRepository
 import com.mvproject.tinyiptv.ui.screens.settings.player.action.SettingsPlayerAction
 import com.mvproject.tinyiptv.ui.screens.settings.player.state.SettingsPlayerState
-import io.github.aakira.napier.Napier
+import com.mvproject.tinyiptv.utils.KLog
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.update
@@ -41,7 +41,7 @@ class SettingsPlayerViewModel(
         when (action) {
             is SettingsPlayerAction.SetFullScreenMode -> {
                 val fullScreenState = action.state
-                Napier.w("testing fullScreenState:$fullScreenState")
+                KLog.w("testing fullScreenState:$fullScreenState")
                 coroutineScope.launch {
                     _settingsPlayerState.update {
                         it.copy(isFullscreenEnabled = fullScreenState)
@@ -52,7 +52,7 @@ class SettingsPlayerViewModel(
 
             is SettingsPlayerAction.SetResizeMode -> {
                 val resizeMode = action.mode
-                Napier.w("testing resizeMode:$resizeMode")
+                KLog.w("testing resizeMode:$resizeMode")
                 coroutineScope.launch {
                     _settingsPlayerState.update {
                         it.copy(resizeMode = resizeMode)
@@ -63,7 +63,7 @@ class SettingsPlayerViewModel(
 
             is SettingsPlayerAction.SetRatioMode -> {
                 val ratioMode = action.mode
-                Napier.w("testing ratioMode:$ratioMode")
+                KLog.w("testing ratioMode:$ratioMode")
                 coroutineScope.launch {
                     _settingsPlayerState.update {
                         it.copy(ratioMode = ratioMode)

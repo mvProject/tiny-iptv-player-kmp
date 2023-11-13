@@ -100,7 +100,6 @@ dependencies {
     implementation(project(":common"))
 
     implementation(libs.androidx.compose.activity)
-    implementation(libs.napier)
     implementation(libs.koin.android)
 }
 

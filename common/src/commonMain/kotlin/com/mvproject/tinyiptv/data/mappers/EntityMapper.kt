@@ -13,9 +13,9 @@ import com.mvproject.tinyiptv.data.model.epg.EpgInfo
 import com.mvproject.tinyiptv.data.model.epg.EpgProgram
 import com.mvproject.tinyiptv.data.model.epg.SelectedEpg
 import com.mvproject.tinyiptv.data.model.playlist.Playlist
+import com.mvproject.tinyiptv.utils.CommonUtils.toBoolean
+import com.mvproject.tinyiptv.utils.CommonUtils.toLong
 import com.mvproject.tinyiptv.utils.TimeUtils.correctTimeZone
-import com.mvproject.tinyiptv.utils.TimeUtils.toBoolean
-import com.mvproject.tinyiptv.utils.TimeUtils.toLong
 import tinyiptvdb.EpgInfoEntity
 import tinyiptvdb.EpgProgramEntity
 import tinyiptvdb.PlaylistChannelEntity
