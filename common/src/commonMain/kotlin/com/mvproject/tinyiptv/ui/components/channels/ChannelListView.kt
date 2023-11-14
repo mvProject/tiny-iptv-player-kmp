@@ -85,7 +85,7 @@ fun ChannelListView(
                     Text(
                         text = MainRes.string.msg_no_epg_found,
                         style = MaterialTheme.typography.labelMedium,
-                        color = MaterialTheme.colorScheme.onSurface,
+                        color = MaterialTheme.colorScheme.outline,
                     )
                 }
             }

@@ -30,6 +30,7 @@ import com.mvproject.tinyiptv.utils.AppConstants.INT_VALUE_1
 import com.mvproject.tinyiptv.utils.AppConstants.INT_VALUE_ZERO
 import com.mvproject.tinyiptv.utils.AppConstants.UI_SHOW_DELAY
 import com.mvproject.tinyiptv.utils.AppConstants.VOLUME_SHOW_DELAY
+import com.mvproject.tinyiptv.utils.CommonUtils.isWindowsDesktop
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -382,8 +383,10 @@ class VideoViewViewModel(
     }
 
     private fun hideControlUi() {
+        // todo temporally always show ui for desktop
         _videoViewState.update { state ->
-            state.copy(isControlUiVisible = false)
+            //        state.copy(isControlUiVisible = false)
+            state.copy(isControlUiVisible = isWindowsDesktop)
         }
         pollVideoPositionJob?.cancel()
         pollVideoPositionJob = null
