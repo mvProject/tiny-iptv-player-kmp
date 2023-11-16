@@ -39,16 +39,16 @@ class DeletePlaylistUseCase(
             )
         }
 
-        playlistsRepository.deletePlaylistById(
-            id = playlist.id
+        favoriteChannelsRepository.deletePlaylistFavoriteChannels(
+            listId = playlist.id
         )
 
         playlistChannelsRepository.deletePlaylistChannels(
             listId = playlist.id
         )
 
-        favoriteChannelsRepository.deletePlaylistFavoriteChannels(
-            listId = playlist.id
+        playlistsRepository.deletePlaylistById(
+            id = playlist.id
         )
     }
 }

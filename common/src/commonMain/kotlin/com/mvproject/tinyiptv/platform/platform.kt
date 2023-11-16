@@ -64,7 +64,7 @@ internal fun createHttpClient(): HttpClient {
         install(Logging) {
             logger = object : Logger {
                 override fun log(message: String) {
-                    KLog.w("Ktor kermit log:") { message }
+                    KLog.w("Ktor log:") { message }
                 }
             }
             level = LogLevel.ALL

@@ -26,7 +26,7 @@ actual fun platformDataStoreModule(): Module = module {
             ),
             scope = CoroutineScope(Dispatchers.IO + SupervisorJob()),
             produceFile = {
-                "./$dataStoreFileName".toPath()
+                "./settings/$dataStoreFileName".toPath()
             }
         )
     }

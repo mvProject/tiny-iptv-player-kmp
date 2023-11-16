@@ -27,32 +27,20 @@ class RemotePlaylistDataSource(
             .toInputStream()
 
         return buildList {
-            BufferedReader(
-                InputStreamReader(resultStream)
-            ).use { reader ->
-                reader.readText().also { content ->
-                    /*                val parsed = M3UParser.parsePlaylist(content)
-                                    val filtered = parsed.filter {
-                                        it.mChannel.isNotEmpty() && it.mStreamURL.isNotEmpty()
-                                    }
-                                    val channels = filtered.map { model ->
-                                        PlaylistChannel(
-                                            channelName = model.mChannel,
-                                            channelLogo = model.mLogoURL,
-                                            channelUrl = model.mStreamURL,
-                                            channelGroup = model.mGroupTitle,
-                                            parentListId = playlistId
-                                        )
-                                    }*/
+            InputStreamReader(resultStream, Charsets.UTF_8).use { inputStreamReader ->
+                BufferedReader(inputStreamReader).use { bufferedReader ->
+                    bufferedReader.readText().also { content ->
 
-                    val channels = ParseMappers.parseStringToChannels(
-                        playlistId = playlistId,
-                        source = content
-                    )
+                        val channels = ParseMappers.parseStringToChannels(
+                            playlistId = playlistId,
+                            source = content
+                        )
 
-                    addAll(channels)
+                        addAll(channels)
+                    }
                 }
             }
+
         }
     }
 }

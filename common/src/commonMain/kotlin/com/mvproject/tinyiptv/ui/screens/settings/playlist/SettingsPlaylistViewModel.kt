@@ -29,10 +29,10 @@ class SettingsPlaylistViewModel(
 
     init {
         coroutineScope.launch(Dispatchers.IO) {
-            playlistHelper.allPlaylistsFlow.collect {
+            playlistHelper.allPlaylistsFlow.collect { lists ->
                 _playlistDataState.update { state ->
                     state.copy(
-                        playlists = playlistHelper.loadPlaylists(),
+                        playlists = lists,
                         isLoading = false
                     )
                 }
