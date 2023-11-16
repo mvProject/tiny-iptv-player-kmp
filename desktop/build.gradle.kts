@@ -20,11 +20,20 @@ compose.desktop {
     application {
         mainClass = "DesktopAppKt"
         nativeDistributions {
+            packageName = "Tiny Iptv"
+            packageVersion = "1.0.0"
+            description = "Iptv player multiplatform App"
+            copyright = "©2023 MvProject. All rights reserved."
             targetFormats(
                 org.jetbrains.compose.desktop.application.dsl.TargetFormat.Msi
             )
-            packageName = "tinyiptv"
-            packageName = "1.0.0"
+
+            //  modules("java.base", "java.instrument", "java.management", "java.net.http", "java.sql", "jdk.unsupported", "jdk.xml.dom")
+            includeAllModules = true
+
+            windows {
+                iconFile.set(project.file("tiny_iptv_kmp.ico"))
+            }
         }
     }
 }
