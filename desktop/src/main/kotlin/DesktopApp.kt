@@ -20,14 +20,17 @@ fun main() {
     return singleWindowApplication(
         exitProcessOnExit = true,
         title = MainRes.string.app_name,
-        icon = BitmapPainter(useResource("drawable/no_channel_logo.png", ::loadImageBitmap)),
+        icon = BitmapPainter(useResource("drawable/tiny_iptv_logo.png", ::loadImageBitmap)),
         state = WindowState(
             position = WindowPosition.Aligned(Alignment.Center),
             width = 1400.dp,
             height = 900.dp
         )
     ) {
-        Box(modifier = Modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
+        Box(
+            modifier = Modifier.fillMaxSize(),
+            contentAlignment = Alignment.Center
+        ) {
             TinyIptvApp()
         }
     }
