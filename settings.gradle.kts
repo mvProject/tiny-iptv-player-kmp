@@ -21,7 +21,7 @@ dependencyResolutionManagement {
         maven("https://maven.pkg.jetbrains.space/public/p/compose/dev")
     }
 }
-rootProject.name = "Tiny Iptv"
+rootProject.name = "Tiny Iptv Kmp"
 include(":android")
 include(":common")
 include(":desktop")

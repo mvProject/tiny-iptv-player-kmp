@@ -8,7 +8,6 @@
 package com.mvproject.tinyiptv.ui.screens.player
 
 import cafe.adriel.voyager.core.model.ScreenModel
-import cafe.adriel.voyager.core.model.coroutineScope
 import cafe.adriel.voyager.core.model.screenModelScope
 import com.mvproject.tinyiptv.data.enums.RatioMode
 import com.mvproject.tinyiptv.data.enums.ResizeMode
@@ -377,7 +376,7 @@ class VideoViewViewModel(
             state.copy(isControlUiVisible = true)
         }
         pollVideoPositionJob?.cancel()
-        pollVideoPositionJob = coroutineScope.launch {
+        pollVideoPositionJob = screenModelScope.launch {
             delay(hideControllerAfterMs)
             hideControlUi()
         }
@@ -398,7 +397,7 @@ class VideoViewViewModel(
             state.copy(isVolumeUiVisible = true)
         }
         pollVolumeJob?.cancel()
-        pollVolumeJob = coroutineScope.launch {
+        pollVolumeJob = screenModelScope.launch {
             delay(hideVolumeAfterMs)
             hideVolumeUi()
         }
