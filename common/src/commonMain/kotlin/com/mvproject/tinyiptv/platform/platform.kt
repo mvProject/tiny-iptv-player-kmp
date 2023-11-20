@@ -12,6 +12,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.font.Font
 import androidx.compose.ui.text.font.FontStyle
 import androidx.compose.ui.text.font.FontWeight
+import com.mvproject.tinyiptv.data.model.channels.PlaylistChannel
 import com.mvproject.tinyiptv.ui.screens.player.action.PlaybackActions
 import com.mvproject.tinyiptv.ui.screens.player.action.PlaybackStateActions
 import com.mvproject.tinyiptv.ui.screens.player.state.VideoViewState
@@ -90,3 +91,10 @@ expect fun TwoPaneContainer(
     first: @Composable () -> Unit,
     second: @Composable () -> Unit
 )
+
+expect class LocalPlaylistDataSource {
+    fun getLocalPlaylistData(
+        playlistId: Long,
+        uri: String
+    ): List<PlaylistChannel>
+}

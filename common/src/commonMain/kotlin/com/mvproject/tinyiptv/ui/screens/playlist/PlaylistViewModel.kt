@@ -8,7 +8,7 @@
 package com.mvproject.tinyiptv.ui.screens.playlist
 
 import cafe.adriel.voyager.core.model.ScreenModel
-import cafe.adriel.voyager.core.model.coroutineScope
+import cafe.adriel.voyager.core.model.screenModelScope
 import com.mvproject.tinyiptv.data.usecases.AddLocalPlaylistUseCase
 import com.mvproject.tinyiptv.data.usecases.AddRemotePlaylistUseCase
 import com.mvproject.tinyiptv.data.usecases.GetPlaylistUseCase
@@ -16,7 +16,6 @@ import com.mvproject.tinyiptv.data.usecases.UpdatePlaylistUseCase
 import com.mvproject.tinyiptv.ui.screens.playlist.action.PlaylistAction
 import com.mvproject.tinyiptv.ui.screens.playlist.state.PlaylistState
 import com.mvproject.tinyiptv.utils.AppConstants.LONG_VALUE_ZERO
-import com.mvproject.tinyiptv.utils.CommonUtils.getNameFromStringUri
 import com.mvproject.tinyiptv.utils.KLog
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
@@ -35,7 +34,7 @@ class PlaylistViewModel(
     val state = _state.asStateFlow()
 
     fun setPlaylistMode(playlistId: String) {
-        coroutineScope.launch {
+        screenModelScope.launch {
             val playlist = getPlaylistUseCase(playlistId = playlistId)
             _state.update { current ->
                 current.copy(
@@ -98,12 +97,13 @@ class PlaylistViewModel(
 
             // todo uri fix name
             is PlaylistAction.SetLocalUri -> {
+                KLog.w("testing SetLocalUri name:${action.name}, uri:${action.uri}")
                 _state.update { current ->
                     current.copy(
                         isComplete = false,
                         uri = action.uri,
-                        listName = action.uri.getNameFromStringUri(),
-                        localName = action.uri.getNameFromStringUri(),
+                        listName = action.name,
+                        localName = action.name,
                         isLocal = true,
                     )
                 }
@@ -112,7 +112,7 @@ class PlaylistViewModel(
     }
 
     private fun saveLocalPlayList() {
-        coroutineScope.launch {
+        screenModelScope.launch {
             val result = runCatching {
                 addLocalPlaylistUseCase(
                     playlist = state.value.toPlaylist(),
@@ -132,7 +132,7 @@ class PlaylistViewModel(
     }
 
     private fun saveRemotePlayList() {
-        coroutineScope.launch {
+        screenModelScope.launch {
             val result = runCatching {
                 addRemotePlaylistUseCase(
                     playlist = state.value.toPlaylist()
@@ -151,7 +151,7 @@ class PlaylistViewModel(
     }
 
     private fun updatePlayList() {
-        coroutineScope.launch {
+        screenModelScope.launch {
             val result = runCatching {
                 updatePlaylistUseCase(
                     playlist = state.value.toPlaylist()
@@ -166,6 +166,13 @@ class PlaylistViewModel(
                     isSaving = false
                 )
             }
+        }
+    }
+
+    override fun onDispose() {
+        super.onDispose()
+        _state.update { current ->
+            current.copy(isComplete = false)
         }
     }
 }

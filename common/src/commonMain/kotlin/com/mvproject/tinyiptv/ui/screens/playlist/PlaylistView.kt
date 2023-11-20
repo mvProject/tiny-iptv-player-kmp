@@ -53,7 +53,6 @@ fun PlaylistView(
     onPlaylistAction: (PlaylistAction) -> Unit = {}
 ) {
 
-
     LaunchedEffect(state.isComplete) {
         if (state.isComplete) {
             onNavigateBack()

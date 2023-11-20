@@ -8,7 +8,7 @@
 package com.mvproject.tinyiptv.ui.screens.groups
 
 import cafe.adriel.voyager.core.model.ScreenModel
-import cafe.adriel.voyager.core.model.coroutineScope
+import cafe.adriel.voyager.core.model.screenModelScope
 import com.mvproject.tinyiptv.data.helpers.PlaylistHelper
 import com.mvproject.tinyiptv.data.usecases.GetPlaylistGroupUseCase
 import com.mvproject.tinyiptv.ui.screens.groups.action.GroupAction
@@ -57,7 +57,7 @@ class GroupViewModel(
                     isLoading = false
                 )
             }
-        }.launchIn(coroutineScope)
+        }.launchIn(screenModelScope)
     }
 
     fun processAction(action: GroupAction) {
@@ -66,7 +66,7 @@ class GroupViewModel(
                 val playlistIndex = action.id
                 val current = playlistDataState.value.playlistSelectedIndex
                 if (current != playlistIndex) {
-                    coroutineScope.launch(Dispatchers.IO) {
+                    screenModelScope.launch(Dispatchers.IO) {
                         val selected = playlistDataState.value.playlists[playlistIndex]
                         playlistHelper.setCurrentPlaylist(playlistId = selected.id)
                     }

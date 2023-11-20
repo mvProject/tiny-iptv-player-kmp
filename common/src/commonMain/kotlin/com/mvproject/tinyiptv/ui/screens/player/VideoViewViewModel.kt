@@ -9,6 +9,7 @@ package com.mvproject.tinyiptv.ui.screens.player
 
 import cafe.adriel.voyager.core.model.ScreenModel
 import cafe.adriel.voyager.core.model.coroutineScope
+import cafe.adriel.voyager.core.model.screenModelScope
 import com.mvproject.tinyiptv.data.enums.RatioMode
 import com.mvproject.tinyiptv.data.enums.ResizeMode
 import com.mvproject.tinyiptv.data.mappers.ListMappers.withRefreshedEpg
@@ -59,7 +60,7 @@ class VideoViewViewModel(
     private var _videoRatio = FLOAT_VALUE_1
 
     init {
-        coroutineScope.launch {
+        screenModelScope.launch {
             _videoViewState.update {
                 val ratioMode = RatioMode.entries[preferenceRepository.getDefaultRatioMode()]
 
@@ -74,7 +75,7 @@ class VideoViewViewModel(
     }
 
     fun initPlayBack(channelUrl: String, channelGroup: String) {
-        coroutineScope.launch {
+        screenModelScope.launch {
             val channelList = getGroupChannelsUseCase(channelGroup)
             val currentItemPosition = getCurrentMediaPosition(channelUrl, channelList)
             val currentChannel = channelList[currentItemPosition]
@@ -91,7 +92,7 @@ class VideoViewViewModel(
     }
 
     fun switchToChannel(channel: TvPlaylistChannel) {
-        coroutineScope.launch {
+        screenModelScope.launch {
             val channelsRefreshed = videoViewState.value.channels.withRefreshedEpg()
 
             val newMediaPosition = getCurrentMediaPosition(
@@ -174,7 +175,7 @@ class VideoViewViewModel(
 
     private fun increaseVolume() {
         showVolumeUi()
-        coroutineScope.launch {
+        screenModelScope.launch {
             val targetVolume = videoViewState.value.currentVolume + FLOAT_STEP_VOLUME
             val nextVolume = if (targetVolume > FLOAT_VALUE_1) FLOAT_VALUE_1 else targetVolume
             _videoViewState.update { state ->
@@ -186,7 +187,7 @@ class VideoViewViewModel(
 
     private fun decreaseVolume() {
         showVolumeUi()
-        coroutineScope.launch {
+        screenModelScope.launch {
             val targetVolume = videoViewState.value.currentVolume - FLOAT_STEP_VOLUME
             val nextVolume = if (targetVolume < FLOAT_VALUE_ZERO) FLOAT_VALUE_ZERO else targetVolume
             _videoViewState.update { state ->
@@ -320,7 +321,7 @@ class VideoViewViewModel(
                 channel
         }
 
-        coroutineScope.launch {
+        screenModelScope.launch {
             _videoViewState.update { state ->
                 state.copy(
                     currentChannel = currentChannelFavoriteChanged,

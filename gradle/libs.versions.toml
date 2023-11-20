@@ -32,7 +32,7 @@ kamelVersion = "0.8.2"
 calfFilePickerVersion = "0.2.0"
 uriKmpVersion = "0.0.15"
 
-voyager = "1.0.0-rc07"
+voyager = "1.0.0-rc10"
 media3 = "1.2.0-rc01"
 
 kermit = "2.0.2"

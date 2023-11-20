@@ -8,7 +8,7 @@
 package com.mvproject.tinyiptv.ui.screens.settings.player
 
 import cafe.adriel.voyager.core.model.ScreenModel
-import cafe.adriel.voyager.core.model.coroutineScope
+import cafe.adriel.voyager.core.model.screenModelScope
 import com.mvproject.tinyiptv.data.repository.PreferenceRepository
 import com.mvproject.tinyiptv.ui.screens.settings.player.action.SettingsPlayerAction
 import com.mvproject.tinyiptv.ui.screens.settings.player.state.SettingsPlayerState
@@ -26,7 +26,7 @@ class SettingsPlayerViewModel(
     val settingsPlayerState = _settingsPlayerState.asStateFlow()
 
     init {
-        coroutineScope.launch {
+        screenModelScope.launch {
             _settingsPlayerState.update {
                 it.copy(
                     isFullscreenEnabled = preferenceRepository.getDefaultFullscreenMode(),
@@ -42,7 +42,7 @@ class SettingsPlayerViewModel(
             is SettingsPlayerAction.SetFullScreenMode -> {
                 val fullScreenState = action.state
                 KLog.w("testing fullScreenState:$fullScreenState")
-                coroutineScope.launch {
+                screenModelScope.launch {
                     _settingsPlayerState.update {
                         it.copy(isFullscreenEnabled = fullScreenState)
                     }
@@ -53,7 +53,7 @@ class SettingsPlayerViewModel(
             is SettingsPlayerAction.SetResizeMode -> {
                 val resizeMode = action.mode
                 KLog.w("testing resizeMode:$resizeMode")
-                coroutineScope.launch {
+                screenModelScope.launch {
                     _settingsPlayerState.update {
                         it.copy(resizeMode = resizeMode)
                     }
@@ -64,7 +64,7 @@ class SettingsPlayerViewModel(
             is SettingsPlayerAction.SetRatioMode -> {
                 val ratioMode = action.mode
                 KLog.w("testing ratioMode:$ratioMode")
-                coroutineScope.launch {
+                screenModelScope.launch {
                     _settingsPlayerState.update {
                         it.copy(ratioMode = ratioMode)
                     }

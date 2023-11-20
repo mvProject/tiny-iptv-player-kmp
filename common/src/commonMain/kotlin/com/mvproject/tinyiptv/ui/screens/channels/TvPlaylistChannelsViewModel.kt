@@ -9,7 +9,7 @@ package com.mvproject.tinyiptv.ui.screens.channels
 
 import androidx.compose.runtime.mutableStateListOf
 import cafe.adriel.voyager.core.model.ScreenModel
-import cafe.adriel.voyager.core.model.coroutineScope
+import cafe.adriel.voyager.core.model.screenModelScope
 import com.mvproject.tinyiptv.data.enums.ChannelsViewType
 import com.mvproject.tinyiptv.data.helpers.ViewTypeHelper
 import com.mvproject.tinyiptv.data.model.channels.TvPlaylistChannel
@@ -40,7 +40,7 @@ class TvPlaylistChannelsViewModel(
     private val _searchText = MutableStateFlow(EMPTY_STRING)
 
     init {
-        coroutineScope.launch {
+        screenModelScope.launch {
             _viewState.update {
                 it.copy(
                     viewType = viewTypeHelper.getChannelsViewType()
@@ -53,7 +53,7 @@ class TvPlaylistChannelsViewModel(
         _viewState.update {
             it.copy(currentGroup = group, isLoading = true)
         }
-        coroutineScope.launch(Dispatchers.IO) {
+        screenModelScope.launch(Dispatchers.IO) {
             val groupChannels = getGroupChannelsUseCase(group)
             channels.apply {
                 clear()
@@ -103,7 +103,7 @@ class TvPlaylistChannelsViewModel(
 
     private fun viewTypeChange(type: ChannelsViewType) {
         if (viewState.value.viewType != type) {
-            coroutineScope.launch {
+            screenModelScope.launch {
                 _viewState.update {
                     it.copy(viewType = type)
                 }
@@ -121,7 +121,7 @@ class TvPlaylistChannelsViewModel(
 
     private fun toggleFavorites(channel: TvPlaylistChannel) {
         val isFavorite = channel.isInFavorites
-        coroutineScope.launch {
+        screenModelScope.launch {
 
             channels.set(
                 index = channels.indexOf(channel),
@@ -135,7 +135,7 @@ class TvPlaylistChannelsViewModel(
 
     private fun toggleEpgState(channel: TvPlaylistChannel) {
         val isEpgUsing = channel.isEpgUsing
-        coroutineScope.launch {
+        screenModelScope.launch {
 
             channels.set(
                 index = channels.indexOf(channel),

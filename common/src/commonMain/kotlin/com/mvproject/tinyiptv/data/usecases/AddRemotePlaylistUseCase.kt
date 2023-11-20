@@ -29,15 +29,20 @@ class AddRemotePlaylistUseCase(
             playlistId = playlist.id,
             url = playlist.playlistUrl
         )
-        playlistChannelsRepository.addPlaylistChannels(channels = channels)
 
+        if (channels.isEmpty()) {
+            KLog.e("AddLocalPlaylistUseCase channels is empty")
+            return
+        }
+
+        playlistChannelsRepository.addPlaylistChannels(channels = channels)
 
         playlistsRepository.addPlaylist(
             playlist = playlist.copy(lastUpdateDate = actualDate)
         )
 
         if (playlistsRepository.playlistCount == AppConstants.INT_VALUE_1) {
-            KLog.w("testing need set as current")
+            KLog.w("playlist ${playlist.playlistTitle} need set as current")
             preferenceRepository.setCurrentPlaylistId(playlistId = playlist.id)
         }
 

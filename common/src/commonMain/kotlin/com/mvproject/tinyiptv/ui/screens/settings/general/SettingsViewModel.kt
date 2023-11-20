@@ -8,7 +8,7 @@
 package com.mvproject.tinyiptv.ui.screens.settings.general
 
 import cafe.adriel.voyager.core.model.ScreenModel
-import cafe.adriel.voyager.core.model.coroutineScope
+import cafe.adriel.voyager.core.model.screenModelScope
 import com.mvproject.tinyiptv.data.repository.PreferenceRepository
 import com.mvproject.tinyiptv.ui.screens.settings.general.action.SettingsAction
 import com.mvproject.tinyiptv.ui.screens.settings.general.state.SettingsState
@@ -25,7 +25,7 @@ class SettingsViewModel(
     val state = _state.asStateFlow()
 
     init {
-        coroutineScope.launch {
+        screenModelScope.launch {
             _state.update {
                 it.copy(
                     infoUpdatePeriod = preferenceRepository.getEpgInfoUpdatePeriod(),
@@ -39,7 +39,7 @@ class SettingsViewModel(
         when (action) {
             is SettingsAction.SetInfoUpdatePeriod -> {
                 val newType = action.type
-                coroutineScope.launch {
+                screenModelScope.launch {
                     _state.update {
                         it.copy(infoUpdatePeriod = newType)
                     }
@@ -49,7 +49,7 @@ class SettingsViewModel(
 
             is SettingsAction.SetEpgUpdatePeriod -> {
                 val newType = action.type
-                coroutineScope.launch {
+                screenModelScope.launch {
                     _state.update {
                         it.copy(epgUpdatePeriod = newType)
                     }

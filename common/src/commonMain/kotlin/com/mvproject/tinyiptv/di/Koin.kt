@@ -8,6 +8,7 @@
 package com.mvproject.tinyiptv.di
 
 import com.mvproject.tinyiptv.di.database.platformDatabaseModule
+import com.mvproject.tinyiptv.di.datasource.platformDataSourceModule
 import com.mvproject.tinyiptv.di.datastore.platformDataStoreModule
 import com.mvproject.tinyiptv.di.modules.dataSourceModule
 import com.mvproject.tinyiptv.di.modules.helperModule
@@ -29,6 +30,7 @@ fun initKoin(appDeclaration: KoinAppDeclaration = {}) =
             useCaseModule,
             viewModelsModule,
             platformDatabaseModule(),
-            platformDataStoreModule()
+            platformDataStoreModule(),
+            platformDataSourceModule()
         )
     }

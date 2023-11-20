@@ -8,6 +8,8 @@
 package com.mvproject.tinyiptv.platform
 
 import android.annotation.SuppressLint
+import android.content.Context
+import android.net.Uri
 import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -31,6 +33,8 @@ import com.google.accompanist.adaptive.TwoPane
 import com.google.accompanist.adaptive.VerticalTwoPaneStrategy
 import com.google.accompanist.adaptive.calculateDisplayFeatures
 import com.mvproject.tinyiptv.MainRes
+import com.mvproject.tinyiptv.data.mappers.ParseMappers
+import com.mvproject.tinyiptv.data.model.channels.PlaylistChannel
 import com.mvproject.tinyiptv.ui.PlayerView
 import com.mvproject.tinyiptv.ui.findActivity
 import com.mvproject.tinyiptv.ui.screens.player.action.PlaybackActions
@@ -39,9 +43,13 @@ import com.mvproject.tinyiptv.ui.screens.player.state.VideoViewState
 import com.mvproject.tinyiptv.ui.screens.playlist.action.PlaylistAction
 import com.mvproject.tinyiptv.ui.theme.dimens
 import com.mvproject.tinyiptv.utils.AppConstants
+import com.mvproject.tinyiptv.utils.CommonUtils.getNameFromStringUri
 import com.mvproject.tinyiptv.utils.KLog
 import io.ktor.client.HttpClient
 import io.ktor.client.engine.android.Android
+import java.io.BufferedReader
+import java.io.FileInputStream
+import java.io.InputStreamReader
 
 @SuppressLint("DiscouragedApi")
 @Composable
@@ -77,7 +85,12 @@ actual fun LocalFileSelectButton(onPlaylistAction: (PlaylistAction) -> Unit) {
     val fileSelectLauncher = rememberLauncherForActivityResult(
         contract = ActivityResultContracts.OpenDocument(),
         onResult = { uri ->
-            onPlaylistAction(PlaylistAction.SetLocalUri(uri.toString()))
+            onPlaylistAction(
+                PlaylistAction.SetLocalUri(
+                    name = uri.toString().getNameFromStringUri(),
+                    uri = uri.toString(),
+                )
+            )
         }
     )
 
@@ -153,4 +166,37 @@ actual fun TwoPaneContainer(
         },
         displayFeatures = displayFeatures
     )
+}
+
+actual class LocalPlaylistDataSource(private val context: Context) {
+
+    @SuppressLint("Recycle")
+    actual fun getLocalPlaylistData(
+        playlistId: Long,
+        uri: String
+    ): List<PlaylistChannel> {
+        val file = context.contentResolver
+            .openFileDescriptor(Uri.parse(uri), MODE_READ_ONLY)
+            ?.fileDescriptor
+
+        return buildList {
+            InputStreamReader(FileInputStream(file), Charsets.UTF_8).use { inputStreamReader ->
+                BufferedReader(inputStreamReader).use { bufferedReader ->
+                    bufferedReader.readText().also { content ->
+
+                        val channels = ParseMappers.parseStringToChannels(
+                            playlistId = playlistId,
+                            source = content
+                        )
+
+                        addAll(channels)
+                    }
+                }
+            }
+        }
+    }
+
+    private companion object {
+        const val MODE_READ_ONLY = "r"
+    }
 }

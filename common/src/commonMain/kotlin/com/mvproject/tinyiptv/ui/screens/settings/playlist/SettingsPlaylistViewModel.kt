@@ -8,7 +8,7 @@
 package com.mvproject.tinyiptv.ui.screens.settings.playlist
 
 import cafe.adriel.voyager.core.model.ScreenModel
-import cafe.adriel.voyager.core.model.coroutineScope
+import cafe.adriel.voyager.core.model.screenModelScope
 import com.mvproject.tinyiptv.data.helpers.PlaylistHelper
 import com.mvproject.tinyiptv.data.usecases.DeletePlaylistUseCase
 import com.mvproject.tinyiptv.ui.screens.settings.playlist.action.SettingsPlaylistAction
@@ -28,7 +28,7 @@ class SettingsPlaylistViewModel(
     val playlistDataState = _playlistDataState.asStateFlow()
 
     init {
-        coroutineScope.launch(Dispatchers.IO) {
+        screenModelScope.launch(Dispatchers.IO) {
             playlistHelper.allPlaylistsFlow.collect { lists ->
                 _playlistDataState.update { state ->
                     state.copy(
@@ -43,7 +43,7 @@ class SettingsPlaylistViewModel(
     fun processAction(action: SettingsPlaylistAction) {
         when (action) {
             is SettingsPlaylistAction.DeletePlaylist -> {
-                coroutineScope.launch {
+                screenModelScope.launch {
                     deletePlaylistUseCase(playlist = action.playlist)
                 }
             }

@@ -45,6 +45,8 @@ import com.mohamedrejeb.calf.picker.FilePickerFileType
 import com.mohamedrejeb.calf.picker.FilePickerSelectionMode
 import com.mohamedrejeb.calf.picker.rememberFilePickerLauncher
 import com.mvproject.tinyiptv.MainRes
+import com.mvproject.tinyiptv.data.mappers.ParseMappers
+import com.mvproject.tinyiptv.data.model.channels.PlaylistChannel
 import com.mvproject.tinyiptv.ui.PlayerViewSwing
 import com.mvproject.tinyiptv.ui.screens.player.action.PlaybackActions
 import com.mvproject.tinyiptv.ui.screens.player.action.PlaybackStateActions
@@ -52,9 +54,13 @@ import com.mvproject.tinyiptv.ui.screens.player.state.VideoViewState
 import com.mvproject.tinyiptv.ui.screens.playlist.action.PlaylistAction
 import com.mvproject.tinyiptv.ui.theme.dimens
 import com.mvproject.tinyiptv.utils.AppConstants
-import com.mvproject.tinyiptv.utils.KLog
 import io.ktor.client.HttpClient
 import io.ktor.client.engine.java.Java
+import okio.use
+import java.io.BufferedReader
+import java.io.File
+import java.io.FileInputStream
+import java.io.InputStreamReader
 
 @Composable
 actual fun font(
@@ -98,18 +104,12 @@ actual fun LocalFileSelectButton(onPlaylistAction: (PlaylistAction) -> Unit) {
         selectionMode = FilePickerSelectionMode.Single,
         onResult = { files ->
             files.firstOrNull()?.let { file ->
-                try {
-                    val content = file.readText()
-                    KLog.w("testing FileSelectButton readText content $content")
-                } catch (ex: Exception) {
-                    KLog.e("testing FileSelectButton readText ${ex.message}")
-                }
-                try {
-                    val content = file.readLines()
-                    KLog.w("testing FileSelectButton readLines content $content")
-                } catch (ex: Exception) {
-                    KLog.e("testing FileSelectButton readText ${ex.message}")
-                }
+                onPlaylistAction(
+                    PlaylistAction.SetLocalUri(
+                        name = file.name,
+                        uri = file.absolutePath
+                    )
+                )
             }
         }
     )
@@ -295,6 +295,32 @@ actual fun TwoPaneContainer(
                 .fillMaxHeight()
         ) {
             second()
+        }
+    }
+}
+
+actual class LocalPlaylistDataSource {
+    actual fun getLocalPlaylistData(
+        playlistId: Long,
+        uri: String
+    ): List<PlaylistChannel> {
+
+        val file = File(uri)
+
+        return buildList {
+            InputStreamReader(FileInputStream(file), Charsets.UTF_8).use { inputStreamReader ->
+                BufferedReader(inputStreamReader).use { bufferedReader ->
+                    bufferedReader.readText().also { content ->
+
+                        val channels = ParseMappers.parseStringToChannels(
+                            playlistId = playlistId,
+                            source = content
+                        )
+
+                        addAll(channels)
+                    }
+                }
+            }
         }
     }
 }
