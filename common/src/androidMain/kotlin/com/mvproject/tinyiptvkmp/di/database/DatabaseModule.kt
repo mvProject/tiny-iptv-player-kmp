@@ -20,7 +20,7 @@ actual fun platformDatabaseModule(): Module = module {
         AndroidSqliteDriver(
             schema = TinyIptvKmpDatabase.Schema,
             context = androidContext(),
-            name = "tinyiptv.db",
+            name = "tinyiptvkmp.db",
             callback = object : AndroidSqliteDriver.Callback(TinyIptvKmpDatabase.Schema) {
                 override fun onConfigure(db: SupportSQLiteDatabase) {
                     super.onConfigure(db)
