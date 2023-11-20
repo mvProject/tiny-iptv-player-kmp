@@ -9,9 +9,9 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.window.WindowPosition
 import androidx.compose.ui.window.WindowState
 import androidx.compose.ui.window.singleWindowApplication
-import com.mvproject.tinyiptv.MainRes
-import com.mvproject.tinyiptv.TinyIptvApp
-import com.mvproject.tinyiptv.di.initKoin
+import com.mvproject.tinyiptvkmp.MainRes
+import com.mvproject.tinyiptvkmp.TinyIptvApp
+import com.mvproject.tinyiptvkmp.di.initKoin
 
 fun main() {
 

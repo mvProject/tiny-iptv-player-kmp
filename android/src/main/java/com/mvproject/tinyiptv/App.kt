@@ -8,8 +8,8 @@
 package com.mvproject.tinyiptv
 
 import android.app.Application
-import com.mvproject.tinyiptv.di.initKoin
-import com.mvproject.tinyiptv.di.modules.imageModule
+import com.mvproject.tinyiptvkmp.di.initKoin
+import com.mvproject.tinyiptvkmp.di.modules.imageModule
 import org.koin.android.ext.koin.androidContext
 import org.koin.android.ext.koin.androidLogger
 

@@ -19,7 +19,7 @@ libres {
 }
 
 android {
-    namespace = "com.mvproject.tinyiptv"
+    namespace = "com.mvproject.tinyiptvkmp"
 
     sourceSets["main"].manifest.srcFile("src/androidMain/AndroidManifest.xml")
     // sourceSets["main"].resources.srcDirs("src/commonMain/resources")
@@ -180,8 +180,8 @@ kotlin {
 
 sqldelight {
     databases {
-        create("TinyIptvDatabase") {
-            packageName.set("com.mvproject.tinyiptv")
+        create("TinyIptvKmpDatabase") {
+            packageName.set("com.mvproject.tinyiptvkmp")
         }
     }
 }

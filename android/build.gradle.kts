@@ -15,7 +15,7 @@ plugins {
 }
 
 android {
-    namespace = "com.mvproject.tinyiptv"
+    namespace = "com.mvproject.tinyiptvkmp"
     compileSdk = 34
 
     defaultConfig {
