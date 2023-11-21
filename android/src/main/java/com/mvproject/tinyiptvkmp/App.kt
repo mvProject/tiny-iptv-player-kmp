@@ -5,7 +5,7 @@
  *
  */
 
-package com.mvproject.tinyiptv
+package com.mvproject.tinyiptvkmp
 
 import android.app.Application
 import com.mvproject.tinyiptvkmp.di.initKoin

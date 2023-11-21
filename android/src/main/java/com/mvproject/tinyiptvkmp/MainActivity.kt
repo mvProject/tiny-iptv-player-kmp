@@ -5,7 +5,7 @@
  *
  */
 
-package com.mvproject.tinyiptv
+package com.mvproject.tinyiptvkmp
 
 import android.graphics.Color
 import android.os.Bundle
@@ -14,7 +14,6 @@ import androidx.activity.SystemBarStyle
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
 import androidx.core.view.WindowInsetsControllerCompat
-import com.mvproject.tinyiptvkmp.TinyIptvApp
 
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
