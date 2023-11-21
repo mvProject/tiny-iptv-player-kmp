@@ -40,7 +40,6 @@ import com.mvproject.tinyiptvkmp.ui.components.views.NoItemsView
 import com.mvproject.tinyiptvkmp.ui.screens.groups.action.GroupAction
 import com.mvproject.tinyiptvkmp.ui.screens.groups.state.GroupState
 import com.mvproject.tinyiptvkmp.ui.theme.dimens
-import com.mvproject.tinyiptvkmp.utils.KLog
 
 @Composable
 fun GroupView(
@@ -78,7 +77,7 @@ fun GroupView(
 
                     OptionSelector(
                         modifier = Modifier.fillMaxWidth(),
-                        title = MainRes.string.pl_hint_current_playlist,
+                        title = MainRes.string.hint_current_playlist,
                         selectedItem = dataState.playlistNames[selectedIndex],
                         isExpanded = isSelectPlaylistOpen.value,
                         onClick = {
@@ -88,11 +87,10 @@ fun GroupView(
 
                     OptionsDialog(
                         isDialogOpen = isSelectPlaylistOpen,
-                        title = MainRes.string.pl_hint_current_playlist,
+                        title = MainRes.string.hint_current_playlist,
                         selectedIndex = selectedIndex,
                         items = dataState.playlistNames,
                         onItemSelected = { index ->
-                            KLog.w("testing selected $index")
                             selectedIndex = index
                             isSelectPlaylistOpen.value = false
                             onPlaylistAction(GroupAction.SelectPlaylist(index))
@@ -132,7 +130,7 @@ fun GroupView(
                 NoItemsView(
                     modifier = Modifier.fillMaxSize(),
                     title = MainRes.string.msg_no_items_found,
-                    navigateTitle = MainRes.string.pl_btn_add_first_playlist,
+                    navigateTitle = MainRes.string.btn_add_first_playlist,
                     onNavigateClick = onNavigateToSettings
                 )
             }

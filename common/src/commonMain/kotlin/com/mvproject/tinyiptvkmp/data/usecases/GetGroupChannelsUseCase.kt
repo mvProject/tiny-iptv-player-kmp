@@ -7,6 +7,7 @@
 
 package com.mvproject.tinyiptvkmp.data.usecases
 
+import com.mvproject.tinyiptvkmp.MainRes
 import com.mvproject.tinyiptvkmp.data.mappers.EntityMapper.toTvPlaylistChannel
 import com.mvproject.tinyiptvkmp.data.model.channels.TvPlaylistChannel
 import com.mvproject.tinyiptvkmp.data.repository.EpgProgramRepository
@@ -14,7 +15,6 @@ import com.mvproject.tinyiptvkmp.data.repository.FavoriteChannelsRepository
 import com.mvproject.tinyiptvkmp.data.repository.PlaylistChannelsRepository
 import com.mvproject.tinyiptvkmp.data.repository.PreferenceRepository
 import com.mvproject.tinyiptvkmp.data.repository.SelectedEpgRepository
-import com.mvproject.tinyiptvkmp.utils.AppConstants
 import com.mvproject.tinyiptvkmp.utils.TimeUtils.actualDate
 
 class GetGroupChannelsUseCase(
@@ -46,17 +46,14 @@ class GetGroupChannelsUseCase(
             it.channelId
         }
 
-        // todo without android context
-        // AppConstants.FOLDER_CHANNELS_ALL
-        // AppConstants.FOLDER_CHANNELS_FAVORITE
         val channels = when (group) {
-            AppConstants.FOLDER_CHANNELS_ALL -> {
+            MainRes.string.channel_folder_all -> {
                 playlistChannelsRepository.loadPlaylistChannels(
                     listId = currentPlaylistId
                 )
             }
 
-            AppConstants.FOLDER_CHANNELS_FAVORITE -> {
+            MainRes.string.channel_folder_favorite -> {
                 playlistChannelsRepository.loadPlaylistChannelsByUrls(
                     listId = currentPlaylistId,
                     urls = favorites

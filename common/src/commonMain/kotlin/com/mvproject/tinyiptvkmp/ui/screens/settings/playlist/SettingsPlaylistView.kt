@@ -66,7 +66,7 @@ fun SettingsPlaylistView(
                 shape = MaterialTheme.shapes.small
             ) {
                 Text(
-                    text = MainRes.string.pl_btn_add_new,
+                    text = MainRes.string.btn_add_new,
                     color = MaterialTheme.colorScheme.primary,
                     style = MaterialTheme.typography.titleMedium
                 )
@@ -106,7 +106,7 @@ fun SettingsPlaylistView(
                 NoItemsView(
                     modifier = Modifier.fillMaxSize(),
                     title = MainRes.string.msg_no_items_found,
-                    navigateTitle = MainRes.string.pl_msg_no_playlist
+                    navigateTitle = MainRes.string.msg_no_playlist
                 )
             }
         }

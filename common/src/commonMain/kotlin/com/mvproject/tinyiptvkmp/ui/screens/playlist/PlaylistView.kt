@@ -65,7 +65,7 @@ fun PlaylistView(
             .windowInsetsPadding(WindowInsets.navigationBars),
         topBar = {
             AppBarWithBackNav(
-                appBarTitle = MainRes.string.pl_msg_playlist_details,
+                appBarTitle = MainRes.string.msg_playlist_details,
                 onBackClick = onNavigateBack,
             )
         },
@@ -88,9 +88,9 @@ fun PlaylistView(
                 shape = MaterialTheme.shapes.small
             ) {
                 val text = if (state.isEdit) {
-                    MainRes.string.pl_btn_update
+                    MainRes.string.btn_update
                 } else {
-                    MainRes.string.pl_btn_save
+                    MainRes.string.btn_save
                 }
 
                 Text(
@@ -122,7 +122,7 @@ fun PlaylistView(
                     },
                     placeholder = {
                         Text(
-                            text = MainRes.string.pl_hint_name,
+                            text = MainRes.string.hint_name,
                             style = MaterialTheme.typography.labelSmall,
                             color = MaterialTheme.colorScheme.outline
                         )
@@ -148,7 +148,7 @@ fun PlaylistView(
                     },
                     placeholder = {
                         Text(
-                            text = MainRes.string.pl_hint_address,
+                            text = MainRes.string.hint_address,
                             style = MaterialTheme.typography.labelSmall,
                             color = MaterialTheme.colorScheme.outline
                         )
@@ -168,7 +168,7 @@ fun PlaylistView(
 
                 OptionSelector(
                     modifier = Modifier.fillMaxWidth(),
-                    title = MainRes.string.pl_hint_update_period,
+                    title = MainRes.string.hint_update_period,
                     enabled = !state.isLocal,
                     selectedItem = UpdatePeriod.entries[state.updatePeriod].title,
                     isExpanded = isUpdateOptionOpen.value,
@@ -192,7 +192,7 @@ fun PlaylistView(
                     )
 
                     Text(
-                        text = MainRes.string.pl_title_or,
+                        text = MainRes.string.label_or,
                         style = MaterialTheme.typography.bodyMedium,
                         color = MaterialTheme.colorScheme.onSurface
                     )
@@ -216,7 +216,7 @@ fun PlaylistView(
 
             OptionsDialog(
                 isDialogOpen = isUpdateOptionOpen,
-                title = MainRes.string.pl_hint_update_period,
+                title = MainRes.string.hint_update_period,
                 selectedIndex = state.updatePeriod,
                 items = UpdatePeriod.entries.map {
                     it.title

@@ -45,6 +45,6 @@ object AppConstants {
 
     const val PLAYLIST_ID = "PLAYLIST_ID"
 
-    const val FOLDER_CHANNELS_ALL = "All Channels"
-    const val FOLDER_CHANNELS_FAVORITE = "Favorites"
+    // const val FOLDER_CHANNELS_ALL = "All Channels"
+    //const val FOLDER_CHANNELS_FAVORITE = "Favorites"
 }

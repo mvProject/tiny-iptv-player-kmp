@@ -103,7 +103,7 @@ actual fun LocalFileSelectButton(onPlaylistAction: (PlaylistAction) -> Unit) {
         shape = MaterialTheme.shapes.small
     ) {
         Text(
-            text = MainRes.string.pl_btn_add_local,
+            text = MainRes.string.btn_add_local,
             color = MaterialTheme.colorScheme.onSurface,
             style = MaterialTheme.typography.bodyLarge
         )

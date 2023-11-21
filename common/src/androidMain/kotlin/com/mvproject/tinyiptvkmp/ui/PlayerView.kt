@@ -98,15 +98,6 @@ internal fun PlayerView(
                 }.also { view ->
                     playerState.player.setVideoSurfaceView(view)
                 }
-            },
-            update = { view ->
-                //  Napier.e("testing PlayerView update")
-            },
-            onReset = { view ->
-                //   Napier.e("testing PlayerView onReset")
-            },
-            onRelease = { view ->
-                //  Napier.e("testing PlayerView onRelease")
             }
         )
 

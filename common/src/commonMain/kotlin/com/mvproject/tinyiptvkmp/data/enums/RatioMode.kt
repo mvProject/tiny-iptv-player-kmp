@@ -7,14 +7,14 @@
 
 package com.mvproject.tinyiptvkmp.data.enums
 
-// todo fix string resources
+import com.mvproject.tinyiptvkmp.MainRes
 
 enum class RatioMode(val value: Int, val title: String, val ratio: Float) {
-    Original(0, "Video", 1f),
-    WideScreen(1, "16:9", 1.777f),
-    FullScreen(2, "4:3", 1.333f),
-    Cinematic(3, "21:9", 2.333f),
-    Square(4, "1:1", 1f);
+    Original(0, MainRes.string.video_ratio_mode_original, 1f),
+    WideScreen(1, MainRes.string.video_ratio_mode_wideScreen, 1.777f),
+    FullScreen(2, MainRes.string.video_ratio_mode_fullScreen, 1.333f),
+    Cinematic(3, MainRes.string.video_ratio_mode_cinematic, 2.333f),
+    Square(4, MainRes.string.video_ratio_mode_square, 1f);
 
     companion object {
         fun toggleRatioMode(current: RatioMode) =

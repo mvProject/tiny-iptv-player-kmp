@@ -7,10 +7,10 @@
 
 package com.mvproject.tinyiptvkmp.data.usecases
 
+import com.mvproject.tinyiptvkmp.MainRes
 import com.mvproject.tinyiptvkmp.data.model.channels.ChannelsGroup
 import com.mvproject.tinyiptvkmp.data.repository.PlaylistChannelsRepository
 import com.mvproject.tinyiptvkmp.data.repository.PreferenceRepository
-import com.mvproject.tinyiptvkmp.utils.AppConstants
 
 class GetPlaylistGroupUseCase(
     private val preferenceRepository: PreferenceRepository,
@@ -26,21 +26,17 @@ class GetPlaylistGroupUseCase(
             listId = currentPlaylistId
         )
 
-        // todo without android context
-        // AppConstants.FOLDER_CHANNELS_ALL
-        // AppConstants.FOLDER_CHANNELS_FAVORITE
-
         return buildList {
             add(
                 ChannelsGroup(
-                    groupName = AppConstants.FOLDER_CHANNELS_ALL,
+                    groupName = MainRes.string.channel_folder_all,
                     groupContentCount = allChannelsCount
                 )
             )
 
             add(
                 ChannelsGroup(
-                    groupName = AppConstants.FOLDER_CHANNELS_FAVORITE
+                    groupName = MainRes.string.channel_folder_favorite
                 )
             )
 

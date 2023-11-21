@@ -202,7 +202,7 @@ fun SettingsView(
 
         OptionsDialog(
             isDialogOpen = isSelectInfoUpdateOpen,
-            title = MainRes.string.pl_hint_update_period,
+            title = MainRes.string.hint_update_period,
             selectedIndex = state.infoUpdatePeriod,
             items = UpdatePeriod.entries.map {
                 it.title
@@ -215,7 +215,7 @@ fun SettingsView(
 
         OptionsDialog(
             isDialogOpen = isSelectEpgUpdateOpen,
-            title = MainRes.string.pl_hint_update_period,
+            title = MainRes.string.hint_update_period,
             selectedIndex = state.epgUpdatePeriod,
             items = UpdatePeriod.entries.map {
                 it.title
