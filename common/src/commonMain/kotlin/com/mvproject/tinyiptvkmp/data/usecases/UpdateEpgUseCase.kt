@@ -31,7 +31,7 @@ class UpdateEpgUseCase(
             updateEpgIds.forEach { id ->
                 val programs = epgDataSource.getRemoteEpg(channelsId = id)
 
-                KLog.w("testing UpdateEpgUseCase programs channel:${id}, count:${programs.count()}")
+                KLog.w("UpdateEpgUseCase programs channel:${id}, count:${programs.count()}")
 
                 epgProgramRepository.insertEpgPrograms(
                     channelId = id,

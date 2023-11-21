@@ -28,6 +28,7 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import com.mvproject.tinyiptvkmp.MainRes
 import com.mvproject.tinyiptvkmp.data.enums.RatioMode
 import com.mvproject.tinyiptvkmp.data.enums.ResizeMode
 import com.mvproject.tinyiptvkmp.ui.components.dialogs.OptionsDialog
@@ -48,10 +49,8 @@ fun SettingsPlayerView(
             .fillMaxSize()
             .windowInsetsPadding(WindowInsets.navigationBars),
         topBar = {
-            // todo fix hardcoded string resources
             AppBarWithBackNav(
-                //appBarTitle = stringResource(id = R.string.scr_player_settings_title),
-                appBarTitle = "Player Settings",
+                appBarTitle = MainRes.string.scr_player_settings_title,
                 onBackClick = onNavigateBack,
             )
         }

@@ -15,7 +15,6 @@ import com.mvproject.tinyiptvkmp.ui.screens.groups.action.GroupAction
 import com.mvproject.tinyiptvkmp.ui.screens.groups.state.GroupState
 import com.mvproject.tinyiptvkmp.utils.AppConstants.INT_VALUE_1
 import com.mvproject.tinyiptvkmp.utils.AppConstants.LONG_NO_VALUE
-import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.combine
@@ -66,7 +65,7 @@ class GroupViewModel(
                 val playlistIndex = action.id
                 val current = playlistDataState.value.playlistSelectedIndex
                 if (current != playlistIndex) {
-                    screenModelScope.launch(Dispatchers.IO) {
+                    screenModelScope.launch {
                         val selected = playlistDataState.value.playlists[playlistIndex]
                         playlistHelper.setCurrentPlaylist(playlistId = selected.id)
                     }

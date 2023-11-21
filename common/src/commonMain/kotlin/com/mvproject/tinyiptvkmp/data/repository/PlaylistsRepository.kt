@@ -32,7 +32,6 @@ class PlaylistsRepository(private val db: TinyIptvKmpDatabase) {
         return queries.getAllPlaylistEntities()
             .asFlow()
             .mapToList(Dispatchers.IO)
-            //  .distinctUntilChanged()
             .map { list ->
                 list.map { item ->
                     item.toPlaylist()
@@ -57,14 +56,6 @@ class PlaylistsRepository(private val db: TinyIptvKmpDatabase) {
     suspend fun deletePlaylistById(id: Long) {
         withContext(Dispatchers.IO) {
             queries.deletePlaylistEntityById(id = id)
-        }
-    }
-
-    suspend fun insertPlaylist(playlist: Playlist) {
-        withContext(Dispatchers.IO) {
-            queries.insertPlaylistEntity(
-                playlist.toPlaylistEntity()
-            )
         }
     }
 

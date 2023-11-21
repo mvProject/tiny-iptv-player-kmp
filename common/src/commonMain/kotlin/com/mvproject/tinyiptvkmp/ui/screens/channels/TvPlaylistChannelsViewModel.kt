@@ -19,7 +19,6 @@ import com.mvproject.tinyiptvkmp.data.usecases.ToggleFavoriteChannelUseCase
 import com.mvproject.tinyiptvkmp.ui.screens.channels.action.TvPlaylistChannelAction
 import com.mvproject.tinyiptvkmp.ui.screens.channels.state.TvPlaylistChannelState
 import com.mvproject.tinyiptvkmp.utils.AppConstants.EMPTY_STRING
-import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.update
@@ -53,13 +52,12 @@ class TvPlaylistChannelsViewModel(
         _viewState.update {
             it.copy(currentGroup = group, isLoading = true)
         }
-        screenModelScope.launch(Dispatchers.IO) {
+        screenModelScope.launch {
             val groupChannels = getGroupChannelsUseCase(group)
             channels.apply {
                 clear()
                 addAll(groupChannels)
             }
-
             _viewState.update {
                 it.copy(isLoading = false)
             }
@@ -122,28 +120,22 @@ class TvPlaylistChannelsViewModel(
     private fun toggleFavorites(channel: TvPlaylistChannel) {
         val isFavorite = channel.isInFavorites
         screenModelScope.launch {
-
             channels.set(
                 index = channels.indexOf(channel),
                 element = channel.copy(isInFavorites = !isFavorite)
             )
-
             toggleFavoriteChannelUseCase(channel = channel)
-
         }
     }
 
     private fun toggleEpgState(channel: TvPlaylistChannel) {
         val isEpgUsing = channel.isEpgUsing
         screenModelScope.launch {
-
             channels.set(
                 index = channels.indexOf(channel),
                 element = channel.copy(isEpgUsing = !isEpgUsing)
             )
-
             toggleChannelEpgUseCase(channel = channel)
-
         }
     }
 

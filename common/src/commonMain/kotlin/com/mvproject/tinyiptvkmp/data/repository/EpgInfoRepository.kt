@@ -30,7 +30,7 @@ class EpgInfoRepository(
     }
 
     suspend fun addEpgInfoData(infoData: List<EpgInfoResponse>) {
-        KLog.w("testing addEpgInfoData")
+        KLog.i("addEpgInfoData")
         withContext(Dispatchers.IO) {
             epgInfoQueries.transaction {
                 infoData.forEach { item ->
@@ -39,8 +39,8 @@ class EpgInfoRepository(
                             item.toEpgInfoEntity()
                         )
                     } catch (ex: Exception) {
-                        KLog.e("testing addEpgInfoData Exception ${ex.localizedMessage}")
-                        KLog.e("testing addEpgInfoData Exception id:${item.channelId}, name:${item.channelNames}")
+                        KLog.e("addEpgInfoData Exception ${ex.localizedMessage}")
+                        KLog.e("addEpgInfoData Exception id:${item.channelId}, name:${item.channelNames}")
                     }
                 }
             }
@@ -48,7 +48,7 @@ class EpgInfoRepository(
     }
 
     suspend fun updateEpgInfoData(infoData: List<EpgInfoResponse>) {
-        KLog.w("testing updateEpgInfoData")
+        KLog.i("updateEpgInfoData")
         withContext(Dispatchers.IO) {
             epgInfoQueries.transaction {
                 infoData.forEach { item ->
@@ -59,8 +59,8 @@ class EpgInfoRepository(
                             channelLogo = item.channelIcon,
                         )
                     } catch (ex: Exception) {
-                        KLog.e("testing updateEpgInfoData Exception ${ex.localizedMessage}")
-                        KLog.e("testing updateEpgInfoData Exception id:${item.channelId}, name:${item.channelNames}")
+                        KLog.e("updateEpgInfoData Exception ${ex.localizedMessage}")
+                        KLog.e("updateEpgInfoData Exception id:${item.channelId}, name:${item.channelNames}")
                     }
                 }
             }

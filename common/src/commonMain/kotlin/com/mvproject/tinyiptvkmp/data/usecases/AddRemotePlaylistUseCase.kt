@@ -31,7 +31,7 @@ class AddRemotePlaylistUseCase(
         )
 
         if (channels.isEmpty()) {
-            KLog.e("AddLocalPlaylistUseCase channels is empty")
+            KLog.e("AddRemotePlaylistUseCase channels is empty")
             return
         }
 

@@ -8,6 +8,7 @@
 package com.mvproject.tinyiptvkmp.navigation
 
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import cafe.adriel.voyager.core.screen.Screen
@@ -24,6 +25,10 @@ object SettingsPlaylistRoute : Screen {
         val settingsPlaylistViewModel: SettingsPlaylistViewModel = getScreenModel()
         val playlistDataState by settingsPlaylistViewModel.playlistDataState.collectAsState()
         val navigator = LocalNavigator.currentOrThrow
+
+        LaunchedEffect(settingsPlaylistViewModel) {
+            settingsPlaylistViewModel.observeLists()
+        }
 
         SettingsPlaylistView(
             dataState = playlistDataState,

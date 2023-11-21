@@ -18,66 +18,12 @@ class EpgProgramRepository(private val db: TinyIptvKmpDatabase) {
 
     private val epgProgramQueries = db.epgProgramEntityQueries
 
-    fun getEpgProgramsById(channelId: String, time: Long): List<EpgProgram> {
-        return epgProgramQueries.getEpgProgramsById(id = channelId, time = time)
-            .executeAsList()
-            .map { entity ->
-                entity.toEpgProgram()
-            }
-    }
-
-    fun getEpgProgramsByIdWithLimit(channelId: String, limit: Long, time: Long): List<EpgProgram> {
-        return epgProgramQueries.getEpgProgramsByIdWithLimit(
-            id = channelId,
-            time = time,
-            limit = limit
-        ).executeAsList()
-            .map { entity ->
-                entity.toEpgProgram()
-            }
-    }
-
     fun getEpgProgramsByIds(channelIds: List<String>, time: Long): List<EpgProgram> {
         return epgProgramQueries.getEpgProgramsByIds(ids = channelIds, time = time)
             .executeAsList()
             .map { entity ->
                 entity.toEpgProgram()
             }
-    }
-
-    // fun getEpgPrograms(): List<EpgProgram> {
-    //     return queries.getEpgPrograms().executeAsList().map {
-    //         it.toEpgProgram()
-    //     }
-    // }
-
-
-    suspend fun deleteEpgProgramsByIdTime(id: String, time: Long) {
-        withContext(Dispatchers.IO) {
-            epgProgramQueries.transaction {
-                epgProgramQueries.deleteEpgProgramsByIdTime(
-                    id = id,
-                    time = time
-                )
-            }
-        }
-    }
-
-    suspend fun insertEpgProgram(channel: EpgProgram) {
-        withContext(Dispatchers.IO) {
-            epgProgramQueries.insertEpgProgram(
-                channel.toEpgProgramEntity()
-            )
-        }
-    }
-
-    fun insertEpgProgram2(channel: EpgProgram) {
-        epgProgramQueries.transaction {
-            epgProgramQueries.deleteEpgProgramsForChannel(id = channel.channelId)
-            epgProgramQueries.insertEpgProgram(
-                channel.toEpgProgramEntity()
-            )
-        }
     }
 
     suspend fun insertEpgPrograms(

@@ -43,11 +43,5 @@ class SelectedEpgRepository(private val db: TinyIptvKmpDatabase) {
                 entity.toSelectedEpg()
             }
     }
-
-    fun getSelectedEpg(channel: String): SelectedEpg {
-        return selectedEpgQueries.getSelectedEpgEntity(name = channel)
-            .executeAsOne()
-            .toSelectedEpg()
-    }
 }
 

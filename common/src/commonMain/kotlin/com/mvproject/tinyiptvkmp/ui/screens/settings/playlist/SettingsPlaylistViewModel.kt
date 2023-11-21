@@ -13,7 +13,6 @@ import com.mvproject.tinyiptvkmp.data.helpers.PlaylistHelper
 import com.mvproject.tinyiptvkmp.data.usecases.DeletePlaylistUseCase
 import com.mvproject.tinyiptvkmp.ui.screens.settings.playlist.action.SettingsPlaylistAction
 import com.mvproject.tinyiptvkmp.ui.screens.settings.playlist.state.SettingsPlaylistState
-import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.update
@@ -27,8 +26,8 @@ class SettingsPlaylistViewModel(
     private val _playlistDataState = MutableStateFlow(SettingsPlaylistState())
     val playlistDataState = _playlistDataState.asStateFlow()
 
-    init {
-        screenModelScope.launch(Dispatchers.IO) {
+    fun observeLists() {
+        screenModelScope.launch {
             playlistHelper.allPlaylistsFlow.collect { lists ->
                 _playlistDataState.update { state ->
                     state.copy(

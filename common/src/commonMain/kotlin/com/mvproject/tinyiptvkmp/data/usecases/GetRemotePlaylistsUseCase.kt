@@ -14,12 +14,12 @@ import com.mvproject.tinyiptvkmp.utils.KLog
 class GetRemotePlaylistsUseCase(
     private val playlistsRepository: PlaylistsRepository
 ) {
-    suspend operator fun invoke(): List<Playlist> {
+    operator fun invoke(): List<Playlist> {
         val remotePlaylists = playlistsRepository.getAllPlaylists()
             .filter { playlist ->
                 !playlist.isLocalSource
             }
-        KLog.w("testing remotePlaylists count:${remotePlaylists.count()}")
+        KLog.w("remotePlaylists count:${remotePlaylists.count()}")
         return remotePlaylists
     }
 }
