@@ -33,11 +33,13 @@ Tiny Iptv Player use for requests for playlist and epg data and parse responses
 ### Navigation
 
 #### [Voyager](https://voyager.adriel.cafe/)
+
 A multiplatform navigation library built for Compose
 
 ### Database
 
 #### [SQLDelight](https://cashapp.github.io/sqldelight/2.0.0/)
+
 SQLDelight generates typesafe kotlin APIs from your SQL statements. It verifies your schema,
 statements, and migrations at compile-time and provides IDE features like autocomplete and
 refactoring which make writing and maintaining SQL simple.
@@ -47,6 +49,19 @@ refactoring which make writing and maintaining SQL simple.
 #### [Koin](https://insert-koin.io/)
 
 The pragmatic Kotlin & Kotlin Multiplatform Dependency Injection framework
+
+### Image
+
+#### [Kamel](https://github.com/Kamel-Media/Kamel)
+
+Asynchronous media loading library, it provides a simple, customizable and efficient way to load,
+cache, decode and display images in your application
+
+### Resources
+
+#### [Libres](https://github.com/Skeptick/libres)
+
+Resources generation in Kotlin Multiplatform
 
 ### Theming
 
@@ -75,9 +90,31 @@ enabled (it can handle even special formats like AC3, EAC3, DTS, DTS HD, TrueHD 
 
 Player based on [Vlc](https://github.com/caprica/vlcj)
 port for java
-as it
-use [SwingPanel](https://github.com/JetBrains/compose-multiplatform/tree/master/tutorials/Swing_Integration)
-for display, so some features currently not work proper, such as overlay, swipes
+
+Using [SwingPanel](https://github.com/JetBrains/compose-multiplatform/tree/master/tutorials/Swing_Integration)
+for display
+
+using [Calf File Picker](https://github.com/MohamedRejeb/Calf)
+for local file selection
+
+Because of:
+The Swing component is placed on top of the Compose layer (that means that Compose content can't
+overlap or clip it).
+This can be changed in the future, when the better interop with Swing will be implemented.
+See related issues:
+https://github.com/JetBrains/compose-jb/issues/1521
+https://github.com/JetBrains/compose-jb/issues/1202
+https://github.com/JetBrains/compose-jb/issues/1449,
+
+some features currently not work proper:
+
+- [ ] Horizontal swipe to change current playing channels
+- [ ] Vertical swipe to change volume
+- [ ] Resize (Fit, Fill, Crop)
+- [ ] Ratio (WideScreen, FullScreen, Cinematic)
+- [ ] Overlay for channel selection
+- [ ] Overlay for epg for channel
+- [ ] Overlay for current program info
 
 <img src="screenshots/tiny_iptv_player_desktop_1.png" height="680" width="940">
 <img src="screenshots/tiny_iptv_player_desktop_2.png" height="680" width="940">
