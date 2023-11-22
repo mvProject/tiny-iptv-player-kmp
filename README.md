@@ -1,41 +1,42 @@
 # Tiny Iptv Player
 
-The Android Iptv video player, supporting m3u/m3u8 playlists, providing epg info for available iptv
+The Iptv multiplatform video player, supporting m3u/m3u8 playlists, providing epg info for available
+iptv
 channels, support gestures for switching volume/channels, scheduling updates period
-based on [Media3](https://github.com/androidx/media)
-
-It uses ExoPlayer's ``ffmpeg`` extension
-with [all its audio formats](https://exoplayer.dev/supported-formats.html#ffmpeg-extension)
-enabled (it can handle even special formats like AC3, EAC3, DTS, DTS HD, TrueHD etc.).
+available on Android and Windows Desktop
 
 ## Features
 
 * Support m3u/m3u8 playlists local and remote
 * Epg provider
 * Horizontal swipe to change current playing channels
-* Vertical swipe to change brightness (left) / volume (right)
-* Resize (fit/crop)
+* Vertical swipe to change volume
+* Resize (Fit, Fill, Crop)
+* Ratio (WideScreen, FullScreen, Cinematic)
 * Scheduling updates for channels and epg
+* Overlay for channel selection, epg and program info
 
-## UI
+## Common
+
+### UI
 
 #### [Jetpack Compose](https://developer.android.com/jetpack/compose)
 
 Tiny Iptv Player is fully written with Compose, using AndroidView in some cases
 
-## Networking
+### Networking
 
 #### [Ktor](https://ktor.io/)
 
 Tiny Iptv Player use for requests for playlist and epg data and parse responses
 
-## Navigation
+### Navigation
 
 #### [Voyager](https://voyager.adriel.cafe/)
 
 A multiplatform navigation library built for Compose
 
-## Database
+### Database
 
 #### [SQLDelight](https://cashapp.github.io/sqldelight/2.0.0/)
 
@@ -43,20 +44,39 @@ SQLDelight generates typesafe kotlin APIs from your SQL statements. It verifies 
 statements, and migrations at compile-time and provides IDE features like autocomplete and
 refactoring which make writing and maintaining SQL simple.
 
-## DI
+### DI
 
 #### [Koin](https://insert-koin.io/)
 
 The pragmatic Kotlin & Kotlin Multiplatform Dependency Injection framework
 
-## Theming
+### Image
+
+#### [Kamel](https://github.com/Kamel-Media/Kamel)
+
+Asynchronous media loading library, it provides a simple, customizable and efficient way to load,
+cache, decode and display images in your application
+
+### Resources
+
+#### [Libres](https://github.com/Skeptick/libres)
+
+Resources generation in Kotlin Multiplatform
+
+### Theming
 
 #### [Material 3 Theming](https://m3.material.io/develop/android/mdc-android)
 
-Tiny Iptv Player is using brand new Material 3. It also supports both light and dark mode depending
-on system settings.
+Tiny Iptv Kmp is using brand new Material 3.
 [Material Theme builder](https://material-foundation.github.io/material-theme-builder/#/custom) is
 used to create material 3 theme and directly export it for Compose.
+
+## Android
+
+Player based on [Media3](https://github.com/androidx/media)
+It uses ExoPlayer's ``ffmpeg`` extension
+with [all its audio formats](https://exoplayer.dev/supported-formats.html#ffmpeg-extension)
+enabled (it can handle even special formats like AC3, EAC3, DTS, DTS HD, TrueHD etc.).
 
 ## Screenshots
 
@@ -65,6 +85,45 @@ used to create material 3 theme and directly export it for Compose.
 <img src="screenshots/tiny_iptv_player_3.png" height="680" width="340">
 <img src="screenshots/tiny_iptv_player_4.png" height="680" width="340">
 <img src="screenshots/tiny_iptv_player_5.png" height="680" width="340">
+
+## Desktop (Windows)
+
+Player based on [Vlc](https://github.com/caprica/vlcj)
+port for java
+
+Using [SwingPanel](https://github.com/JetBrains/compose-multiplatform/tree/master/tutorials/Swing_Integration)
+for display
+
+using [Calf File Picker](https://github.com/MohamedRejeb/Calf)
+for local file selection
+
+Because of:
+The Swing component is placed on top of the Compose layer (that means that Compose content can't
+overlap or clip it).
+This can be changed in the future, when the better interop with Swing will be implemented.
+See related issues:
+https://github.com/JetBrains/compose-jb/issues/1521
+https://github.com/JetBrains/compose-jb/issues/1202
+https://github.com/JetBrains/compose-jb/issues/1449,
+
+some features currently not work proper:
+
+- [ ] Horizontal swipe to change current playing channels
+- [ ] Vertical swipe to change volume
+- [ ] Resize (Fit, Fill, Crop)
+- [ ] Ratio (WideScreen, FullScreen, Cinematic)
+- [ ] Overlay for channel selection
+- [ ] Overlay for epg for channel
+- [ ] Overlay for current program info
+
+<img src="screenshots/tiny_iptv_player_desktop_1.png" height="680" width="940">
+<img src="screenshots/tiny_iptv_player_desktop_2.png" height="680" width="940">
+<img src="screenshots/tiny_iptv_player_desktop_3.png" height="680" width="940">
+<img src="screenshots/tiny_iptv_player_desktop_4.png" height="680" width="940">
+
+
+
+
 
 
 

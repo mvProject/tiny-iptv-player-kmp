@@ -1,0 +1,71 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<resources>
+    <string name="app_name">Tiny Iptv Player</string>
+
+    <string name="playlist_update_6_hours">6 uur</string>
+    <string name="playlist_update_12_hours">12 uren</string>
+    <string name="playlist_update_24_hours">24 uur</string>
+    <string name="playlist_update_2_days">2 dagen</string>
+    <string name="playlist_update_1_week">1 week</string>
+    <string name="playlist_update_never">Nooit</string>
+
+    <string name="video_resize_mode_fill">Vullen</string>
+    <string name="video_resize_mode_fixed_width">Vaste breedte</string>
+    <string name="video_resize_mode_fixed_height">Vaste Hoogte</string>
+    <string name="video_resize_mode_fit">Fit</string>
+    <string name="video_resize_mode_zoom">Zoom</string>
+
+    <string name="video_ratio_mode_original">Origineel</string>
+    <string name="video_ratio_mode_wideScreen">Breedbeeld (16:9)</string>
+    <string name="video_ratio_mode_fullScreen">Volledig scherm (4:3)</string>
+    <string name="video_ratio_mode_cinematic">Filmisch (21:9)</string>
+    <string name="video_ratio_mode_square">Vierkant (1:1)</string>
+
+    <string name="channel_folder_all">Alle kanalen</string>
+    <string name="channel_folder_favorite">Favorieten</string>
+
+    <string name="msg_no_epg_found">epg niet gevonden</string>
+    <string name="msg_no_items_found">Artikelen niet gevonden</string>
+    <string name="msg_no_internet_found">Geen internet verbinding</string>
+    <string name="msg_no_playable_media_found">Kan deze media niet afspelen</string>
+    <string name="msg_no_playlist">Geen afspeellijsten gevonden</string>
+    <string name="msg_playlist_details">Details van afspeellijst</string>
+
+    <string name="hint_msg_search">typ hier…</string>
+    <string name="hint_update_period">Updateperiode</string>
+    <string name="hint_current_playlist">Huidige afspeellijst</string>
+    <string name="hint_name">Titel</string>
+    <string name="hint_address">URL</string>
+
+    <string name="btn_save">Afspeellijst opslaan</string>
+    <string name="btn_update">Update afspeellijst</string>
+    <string name="btn_close">Dichtbij</string>
+    <string name="btn_add_first_playlist">Druk hierop om een afspeellijst toe te voegen</string>
+    <string name="btn_add_local">Voeg lokale afspeellijst toe</string>
+    <string name="btn_add_new">Nieuwe afspeellijst</string>
+    <string name="btn_delete_current">Speellijst verwijderen</string>
+    <string name="btn_playlists_update">afspeellijsten worden bijgewerkt</string>
+
+    <string name="label_or">of</string>
+
+    <string name="scr_settings_title">Instellingen</string>
+    <string name="scr_playlist_settings_title">Afspeellijsten Instellingen</string>
+    <string name="scr_player_settings_title">Spelerinstellingen</string>
+
+    <string name="option_update_title">Update</string>
+    <string name="option_update_epg_info">Epg-info</string>
+    <string name="option_update_epg_data">Epg-gegevens</string>
+    <string name="option_default_resize_mode">Standaard formaatwijzigingsmodus</string>
+    <string name="option_default_ratio_mode">Standaard beeldverhoudingmodus</string>
+    <string name="option_default_fullscreen_mode">Gebruik standaard volledig scherm</string>
+
+    <string name="menu_view_type_list">Lijst</string>
+    <string name="menu_view_type_grid">Rooster</string>
+    <string name="menu_view_type_card">Kaart</string>
+
+    <string name="menu_channel_option_epg_enable">Schakel Epg in</string>
+    <string name="menu_channel_option_epg_disable">Epg uitschakelen</string>
+    <string name="menu_channel_option_epg_show">Toon Epg</string>
+    <string name="menu_channel_option_add_favorite">Toevoegen aan favorieten</string>
+    <string name="menu_channel_option_remove_favorite">Verwijderen uit favoriet</string>
+</resources>
