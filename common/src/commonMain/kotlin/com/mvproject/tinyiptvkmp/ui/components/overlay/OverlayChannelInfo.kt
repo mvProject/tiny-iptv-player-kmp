@@ -62,6 +62,7 @@ fun OverlayChannelInfo(
 
         val description =
             currentChannel.channelEpg.toActual().firstOrNull()?.description ?: EMPTY_STRING
+
         if (description.isEmpty()) {
             Text(
                 modifier = Modifier

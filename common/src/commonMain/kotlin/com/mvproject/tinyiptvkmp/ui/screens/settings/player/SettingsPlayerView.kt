@@ -1,7 +1,7 @@
 /*
  *  Created by Medvediev Viktor [mvproject]
  *  Copyright © 2023
- *  last modified : 20.11.23, 20:27
+ *  last modified : 22.11.23, 09:20
  *
  */
 
@@ -68,13 +68,11 @@ fun SettingsPlayerView(
             Row(
                 modifier = Modifier
                     .fillMaxWidth(),
-                horizontalArrangement = Arrangement.SpaceBetween,
+                horizontalArrangement = Arrangement.spacedBy(MaterialTheme.dimens.size8),
                 verticalAlignment = Alignment.CenterVertically
             ) {
-                // todo fix hardcoded string resources
                 Text(
-                    // text = stringResource(id = R.string.option_default_fullscreen_mode),
-                    text = "Use fullscreen by default",
+                    text = MainRes.string.option_default_fullscreen_mode,
                     style = MaterialTheme.typography.bodyMedium,
                     color = MaterialTheme.colorScheme.onPrimary
                 )
@@ -95,15 +93,10 @@ fun SettingsPlayerView(
             }
 
             Spacer(modifier = Modifier.height(MaterialTheme.dimens.size12))
-// todo fix hardcoded string resources
+
             OptionSelector(
                 modifier = Modifier.fillMaxWidth(),
-                // title = stringResource(id = R.string.option_default_resize_mode),
-                title = "Default resize mode",
-                // todo fix string resources
-                /*        selectedItem = stringResource(
-                            id = ResizeMode.entries[state.resizeMode].title
-                        ),*/
+                title = MainRes.string.option_default_resize_mode,
                 selectedItem = ResizeMode.entries[state.resizeMode].title,
                 isExpanded = isSelectResizeModeOpen.value,
                 onClick = {
@@ -112,15 +105,10 @@ fun SettingsPlayerView(
             )
 
             Spacer(modifier = Modifier.height(MaterialTheme.dimens.size12))
-            // todo fix hardcoded string resources
+
             OptionSelector(
                 modifier = Modifier.fillMaxWidth(),
-                // title = stringResource(id = R.string.option_default_resize_mode),
-                title = "Default ratio mode",
-                // todo fix string resources
-                /*        selectedItem = stringResource(
-                            id = ResizeMode.entries[state.resizeMode].title
-                        ),*/
+                title = MainRes.string.option_default_ratio_mode,
                 selectedItem = RatioMode.entries[state.ratioMode].title,
                 isExpanded = isSelectRatioModeOpen.value,
                 onClick = {
@@ -129,16 +117,11 @@ fun SettingsPlayerView(
             )
 
         }
-// todo fix hardcoded string resources
+
         OptionsDialog(
             isDialogOpen = isSelectResizeModeOpen,
-            // title = stringResource(id = R.string.option_default_resize_mode),
-            title = "Default resize mode",
+            title = MainRes.string.option_default_resize_mode,
             selectedIndex = state.resizeMode,
-            // todo fix string resources
-            /*    items = ResizeMode.values().map {
-                    stringResource(id = it.title)
-                },*/
             items = ResizeMode.values().map {
                 it.title
             },
@@ -148,16 +131,10 @@ fun SettingsPlayerView(
             }
         )
 
-        // todo fix hardcoded string resources
         OptionsDialog(
             isDialogOpen = isSelectRatioModeOpen,
-            // title = stringResource(id = R.string.option_default_resize_mode),
-            title = "Default ratio mode",
+            title = MainRes.string.option_default_ratio_mode,
             selectedIndex = state.ratioMode,
-            // todo fix string resources
-            /*    items = ResizeMode.values().map {
-                    stringResource(id = it.title)
-                },*/
             items = RatioMode.values().map {
                 it.title
             },

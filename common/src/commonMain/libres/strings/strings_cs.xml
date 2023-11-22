@@ -1,0 +1,78 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?><!--
+  ~  Created by Medvediev Viktor [mvproject]
+  ~  Copyright © 2023
+  ~  last modified : 22.11.23, 14:13
+  ~
+  -->
+
+<resources>
+    <string name="app_name">Tiny Iptv Player</string>
+
+    <string name="playlist_update_6_hours">6 hodin</string>
+    <string name="playlist_update_12_hours">12 hodin</string>
+    <string name="playlist_update_24_hours">24 hodin</string>
+    <string name="playlist_update_2_days">2 dny</string>
+    <string name="playlist_update_1_week">1 týden</string>
+    <string name="playlist_update_never">Nikdy</string>
+
+    <string name="video_resize_mode_fill">Vyplnit</string>
+    <string name="video_resize_mode_fixed_width">Pevná šířka</string>
+    <string name="video_resize_mode_fixed_height">FixedHeight</string>
+    <string name="video_resize_mode_fit">Vejít se</string>
+    <string name="video_resize_mode_zoom">Zvětšení</string>
+
+    <string name="video_ratio_mode_original">Originál</string>
+    <string name="video_ratio_mode_wideScreen">Širokoúhlý (16:9)</string>
+    <string name="video_ratio_mode_fullScreen">Celá obrazovka (4:3)</string>
+    <string name="video_ratio_mode_cinematic">Filmový (21:9)</string>
+    <string name="video_ratio_mode_square">Čtverec (1:1)</string>
+
+    <string name="channel_folder_all">Všechny kanály</string>
+    <string name="channel_folder_favorite">Oblíbené</string>
+
+    <string name="msg_no_epg_found">epg nenalezeno</string>
+    <string name="msg_no_items_found">Položky nenalezeny</string>
+    <string name="msg_no_internet_found">Žádné internetové připojení</string>
+    <string name="msg_no_playable_media_found">Toto médium nelze přehrát</string>
+    <string name="msg_no_playlist">Nebyly nalezeny žádné seznamy skladeb</string>
+    <string name="msg_playlist_details">Podrobnosti seznamu skladeb</string>
+
+    <string name="hint_msg_search">napište sem…</string>
+    <string name="hint_update_period">Období aktualizace</string>
+    <string name="hint_current_playlist">Aktuální seznam skladeb</string>
+    <string name="hint_name">Titul</string>
+    <string name="hint_address">URL</string>
+
+    <string name="btn_save">Uložit seznam skladeb</string>
+    <string name="btn_update">Aktualizovat seznam skladeb</string>
+    <string name="btn_close">Zavřít</string>
+    <string name="btn_add_first_playlist">Stisknutím přidáte seznam skladeb</string>
+    <string name="btn_add_local">Přidat místní seznam skladeb</string>
+    <string name="btn_add_new">Nový seznam skladeb</string>
+    <string name="btn_delete_current">Smazat seznam skladeb</string>
+    <string name="btn_playlists_update">aktualizace seznamů skladeb</string>
+
+    <string name="label_or">nebo</string>
+
+    <string name="scr_settings_title">Nastavení</string>
+    <string name="scr_playlist_settings_title">Nastavení seznamů skladeb</string>
+    <string name="scr_player_settings_title">Nastavení přehrávače</string>
+
+    <string name="option_update_title">Aktualizace</string>
+    <string name="option_update_epg_info">Informace o epg</string>
+    <string name="option_update_epg_data">Epg data</string>
+    <string name="option_default_resize_mode">Výchozí režim změny velikosti</string>
+    <string name="option_default_ratio_mode">Výchozí režim poměru stran</string>
+    <string name="option_default_fullscreen_mode">Ve výchozím nastavení používat celou obrazovku
+
+    </string>
+    <string name="menu_view_type_list">Seznam</string>
+    <string name="menu_view_type_grid">Mřížka</string>
+    <string name="menu_view_type_card">Kartu</string>
+
+    <string name="menu_channel_option_epg_enable">Povolit Epg</string>
+    <string name="menu_channel_option_epg_disable">Zakázat Epg</string>
+    <string name="menu_channel_option_epg_show">Zobrazit Epg</string>
+    <string name="menu_channel_option_add_favorite">Přidat do oblíbených</string>
+    <string name="menu_channel_option_remove_favorite">Odebrat z oblíbených</string>
+</resources>
