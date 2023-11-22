@@ -38,19 +38,35 @@ fun OptionSelector(
     isExpanded: Boolean = false,
     onClick: () -> Unit = {}
 ) {
+    val titleTextColor = if (enabled)
+        MaterialTheme.colorScheme.onPrimary
+    else
+        MaterialTheme.colorScheme.outline
+
+    val selectionTextColor = if (enabled)
+        MaterialTheme.colorScheme.onSurfaceVariant
+    else
+        MaterialTheme.colorScheme.outline
+
+    val borderColor = if (enabled)
+        MaterialTheme.colorScheme.onSurface
+    else
+        MaterialTheme.colorScheme.outline
+
     OutlinedButton(
         modifier = modifier,
         shape = MaterialTheme.shapes.extraSmall,
         enabled = enabled,
         border = BorderStroke(
             width = MaterialTheme.dimens.size1,
-            color = MaterialTheme.colorScheme.onSurface
+            color = borderColor
         ),
         contentPadding = PaddingValues(
             start = MaterialTheme.dimens.size12
         ),
         onClick = onClick
     ) {
+
         Column(
             verticalArrangement = Arrangement.Center
         ) {
@@ -58,7 +74,7 @@ fun OptionSelector(
                 Text(
                     text = title,
                     style = MaterialTheme.typography.labelSmall,
-                    color = MaterialTheme.colorScheme.onPrimary,
+                    color = titleTextColor,
                     fontSize = MaterialTheme.dimens.font10
                 )
 
@@ -68,7 +84,7 @@ fun OptionSelector(
             Text(
                 text = selectedItem,
                 style = MaterialTheme.typography.titleSmall,
-                color = MaterialTheme.colorScheme.onSurfaceVariant
+                color = selectionTextColor
             )
         }
 

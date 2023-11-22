@@ -38,6 +38,7 @@ fun PlayerEpgContent(
             Text(
                 modifier = Modifier
                     .fillMaxWidth()
+                    .padding(horizontal = MaterialTheme.dimens.size12)
                     .align(Alignment.Center),
                 text = MainRes.string.msg_no_epg_found,
                 style = MaterialTheme.typography.titleLarge,

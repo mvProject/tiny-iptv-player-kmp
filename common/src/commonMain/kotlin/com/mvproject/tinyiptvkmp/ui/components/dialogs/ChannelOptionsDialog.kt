@@ -25,6 +25,7 @@ import androidx.compose.runtime.MutableState
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.window.Dialog
+import com.mvproject.tinyiptvkmp.MainRes
 import com.mvproject.tinyiptvkmp.ui.theme.dimens
 
 @Composable
@@ -48,6 +49,16 @@ fun ChannelOptionsDialog(
                 shape = MaterialTheme.shapes.medium,
                 shadowElevation = MaterialTheme.dimens.size8
             ) {
+                val epgUsingTextColor = if (isEpgUsing)
+                    MaterialTheme.colorScheme.onPrimary
+                else
+                    MaterialTheme.colorScheme.outline
+
+                val epgUsingText = if (isEpgEnabled)
+                    MainRes.string.menu_channel_option_epg_disable
+                else
+                    MainRes.string.menu_channel_option_epg_enable
+
                 Column(
                     modifier = Modifier
                         .padding(MaterialTheme.dimens.size24),
@@ -66,13 +77,18 @@ fun ChannelOptionsDialog(
                         onClick = onToggleEpgState
                     ) {
                         Text(
-                            text = if (isEpgEnabled) "Disable Epg" else "Enable Epg",
+                            text = epgUsingText,
                             style = MaterialTheme.typography.titleSmall,
-                            color = MaterialTheme.colorScheme.outline,
+                            color = epgUsingTextColor,
                         )
                     }
 
                     Spacer(modifier = Modifier.height(MaterialTheme.dimens.size8))
+
+                    val epgVisibleTextColor = if (isEpgEnabled)
+                        MaterialTheme.colorScheme.onPrimary
+                    else
+                        MaterialTheme.colorScheme.outline
 
                     OutlinedButton(
                         modifier = Modifier.fillMaxWidth(),
@@ -86,13 +102,23 @@ fun ChannelOptionsDialog(
                         onClick = onShowEpg
                     ) {
                         Text(
-                            text = "Show Epg",
+                            text = MainRes.string.menu_channel_option_epg_show,
                             style = MaterialTheme.typography.titleSmall,
-                            color = MaterialTheme.colorScheme.outline,
+                            color = epgVisibleTextColor,
                         )
                     }
 
                     Spacer(modifier = Modifier.height(MaterialTheme.dimens.size8))
+
+                    val favoriteTextColor = if (isInFavorite)
+                        MaterialTheme.colorScheme.onSurface
+                    else
+                        MaterialTheme.colorScheme.onPrimary
+
+                    val favoriteText = if (isInFavorite)
+                        MainRes.string.menu_channel_option_remove_favorite
+                    else
+                        MainRes.string.menu_channel_option_add_favorite
 
                     OutlinedButton(
                         modifier = Modifier.fillMaxWidth(),
@@ -105,9 +131,9 @@ fun ChannelOptionsDialog(
                         onClick = onToggleFavorite
                     ) {
                         Text(
-                            text = if (isInFavorite) "Remove from Fav" else "Add to Fav",
+                            text = favoriteText,
                             style = MaterialTheme.typography.titleSmall,
-                            color = MaterialTheme.colorScheme.outline,
+                            color = favoriteTextColor,
                         )
                     }
                 }

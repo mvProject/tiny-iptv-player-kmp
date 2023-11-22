@@ -84,7 +84,6 @@ kotlin {
                 implementation(libs.ktor.serialization.kotlinx.json)
 
                 // Logging
-                //   implementation(libs.napier)
                 implementation(libs.kermit)
 
                 // Navigation
