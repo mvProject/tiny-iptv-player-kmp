@@ -136,7 +136,7 @@ fun TvPlaylistChannelsView(
                                 isChannelOptionOpen.value = true
                             },
                             onChannelSelect = {
-                                onNavigateSelected(item.channelUrl)
+                                onNavigateSelected(item.channelName)
                             }
                         )
                     }

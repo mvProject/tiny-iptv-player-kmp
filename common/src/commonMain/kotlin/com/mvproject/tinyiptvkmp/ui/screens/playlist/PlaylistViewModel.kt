@@ -7,8 +7,6 @@
 
 package com.mvproject.tinyiptvkmp.ui.screens.playlist
 
-import cafe.adriel.voyager.core.model.ScreenModel
-import cafe.adriel.voyager.core.model.screenModelScope
 import com.mvproject.tinyiptvkmp.data.usecases.AddLocalPlaylistUseCase
 import com.mvproject.tinyiptvkmp.data.usecases.AddRemotePlaylistUseCase
 import com.mvproject.tinyiptvkmp.data.usecases.GetPlaylistUseCase
@@ -21,6 +19,8 @@ import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
+import moe.tlaster.precompose.viewmodel.ViewModel
+import moe.tlaster.precompose.viewmodel.viewModelScope
 import kotlin.random.Random
 
 class PlaylistViewModel(
@@ -28,13 +28,14 @@ class PlaylistViewModel(
     private val addRemotePlaylistUseCase: AddRemotePlaylistUseCase,
     private val addLocalPlaylistUseCase: AddLocalPlaylistUseCase,
     private val getPlaylistUseCase: GetPlaylistUseCase,
-) : ScreenModel {
+) : ViewModel() {
 
     private val _state = MutableStateFlow(PlaylistState())
     val state = _state.asStateFlow()
 
     fun setPlaylistMode(playlistId: String) {
-        screenModelScope.launch {
+        KLog.w("testing PlaylistViewModel playlistId:$playlistId")
+        viewModelScope.launch {
             val playlist = getPlaylistUseCase(playlistId = playlistId)
             _state.update { current ->
                 current.copy(
@@ -45,7 +46,7 @@ class PlaylistViewModel(
                     isLocal = playlist.isLocalSource,
                     url = playlist.playlistUrl,
                     lastUpdateDate = playlist.lastUpdateDate,
-                    updatePeriod = playlist.updatePeriod.toInt(),
+                    updatePeriod = playlist.updatePeriod.toInt()
                 )
             }
         }
@@ -55,10 +56,7 @@ class PlaylistViewModel(
         when (action) {
             PlaylistAction.SavePlaylist -> {
                 _state.update { current ->
-                    current.copy(
-                        selectedId = Random.nextLong(),
-                        isSaving = true
-                    )
+                    current.copy(selectedId = Random.nextLong(), isSaving = true)
                 }
                 if (state.value.isLocal) {
                     saveLocalPlayList()
@@ -88,16 +86,11 @@ class PlaylistViewModel(
 
             is PlaylistAction.SetRemoteUrl -> {
                 _state.update { current ->
-                    current.copy(
-                        isComplete = false,
-                        url = action.url,
-                    )
+                    current.copy(isComplete = false, url = action.url)
                 }
             }
 
-            // todo uri fix name
             is PlaylistAction.SetLocalUri -> {
-                KLog.w("testing SetLocalUri name:${action.name}, uri:${action.uri}")
                 _state.update { current ->
                     current.copy(
                         isComplete = false,
@@ -112,67 +105,47 @@ class PlaylistViewModel(
     }
 
     private fun saveLocalPlayList() {
-        screenModelScope.launch {
+        viewModelScope.launch {
             val result = runCatching {
                 addLocalPlaylistUseCase(
                     playlist = state.value.toPlaylist(),
                     source = state.value.uri
                 )
             }.onFailure {
-                KLog.e("testing saveLocalPlayList failure ${it.localizedMessage}")
+                KLog.e("saveLocalPlayList failure ${it.localizedMessage}")
             }
 
             _state.update { current ->
-                current.copy(
-                    isComplete = result.isSuccess,
-                    isSaving = false
-                )
+                current.copy(isComplete = result.isSuccess, isSaving = false)
             }
         }
     }
 
     private fun saveRemotePlayList() {
-        screenModelScope.launch {
+        viewModelScope.launch {
             val result = runCatching {
-                addRemotePlaylistUseCase(
-                    playlist = state.value.toPlaylist()
-                )
+                addRemotePlaylistUseCase(playlist = state.value.toPlaylist())
             }.onFailure {
-                KLog.e("testing saveRemotePlayList failure ${it.localizedMessage}")
+                KLog.e("saveRemotePlayList failure ${it.localizedMessage}")
             }
 
             _state.update { current ->
-                current.copy(
-                    isComplete = result.isSuccess,
-                    isSaving = false
-                )
+                current.copy(isComplete = result.isSuccess, isSaving = false)
             }
         }
     }
 
     private fun updatePlayList() {
-        screenModelScope.launch {
+        viewModelScope.launch {
             val result = runCatching {
-                updatePlaylistUseCase(
-                    playlist = state.value.toPlaylist()
-                )
+                updatePlaylistUseCase(playlist = state.value.toPlaylist())
             }.onFailure {
-                KLog.e("testing updatePlayList failure ${it.localizedMessage}")
+                KLog.e("updatePlayList failure ${it.localizedMessage}")
             }
 
             _state.update { current ->
-                current.copy(
-                    isComplete = result.isSuccess,
-                    isSaving = false
-                )
+                current.copy(isComplete = result.isSuccess, isSaving = false)
             }
-        }
-    }
-
-    override fun onDispose() {
-        super.onDispose()
-        _state.update { current ->
-            current.copy(isComplete = false)
         }
     }
 }

@@ -22,7 +22,6 @@ android {
     namespace = "com.mvproject.tinyiptvkmp"
 
     sourceSets["main"].manifest.srcFile("src/androidMain/AndroidManifest.xml")
-    // sourceSets["main"].resources.srcDirs("src/commonMain/resources")
     sourceSets["main"].res.srcDirs("src/androidMain/res")
 
     compileSdk = 34
@@ -55,9 +54,6 @@ kotlin {
     sourceSets {
         val commonMain by getting {
             dependencies {
-                // Core
-                implementation(libs.androidx.annotation)
-
                 // Compose
                 implementation(compose.runtime)
                 implementation(compose.foundation)
@@ -69,34 +65,29 @@ kotlin {
                 implementation(libs.kotlinx.coroutines.core)
 
                 // DI
-                implementation(libs.koin.core)
-                implementation(libs.koin.compose)
+                implementation(libs.bundles.koin)
 
                 // Storage
                 implementation(libs.datastore.preferences.core)
-                implementation(libs.sqldelight.runtime)
-                implementation(libs.sqldelight.coroutines.extensions)
+                implementation(libs.bundles.sqldelight)
 
                 // Network
-                implementation(libs.ktor.client.core)
-                implementation(libs.ktor.client.content.negotiation)
-                implementation(libs.ktor.client.logging)
-                implementation(libs.ktor.serialization.kotlinx.json)
+                implementation(libs.bundles.ktor)
 
                 // Logging
                 implementation(libs.kermit)
 
                 // Navigation
-                implementation(libs.voyager.koin)
-                implementation(libs.voyager.navigator)
+                implementation(libs.bundles.precompose)
 
                 // Misc
+                implementation(libs.androidx.annotation)
                 implementation(libs.kotlinx.dateTime)
                 implementation(libs.material3.window.size.multiplatform)
                 implementation(libs.kotlinx.collections.immutable)
                 implementation(libs.urikmp)
 
-                // Image
+                // Image processing
                 implementation(libs.kamelimage)
 
                 // Resources
@@ -133,21 +124,16 @@ kotlin {
                 implementation(libs.ktor.client.android)
 
                 // DI
-                implementation(libs.koin.android.compose)
-                implementation(libs.koin.android)
+                implementation(libs.bundles.koinAndroid)
+
+                // Exoplayer
+                implementation(libs.bundles.media3)
+
+                // Image processing
+                implementation(libs.bundles.coil)
 
                 // Misc
                 implementation(libs.kotlinx.collections.immutable)
-
-                // Exoplayer
-                implementation(libs.media3.exoplayer)
-                implementation(libs.media3.ui)
-                implementation(libs.media3.exoplayer.hls)
-
-                // Image processing
-                implementation(libs.coil)
-                implementation(libs.coil.compose)
-
                 implementation(libs.accompanist.adaptive)
             }
         }
@@ -161,8 +147,8 @@ kotlin {
                 implementation(libs.kotlinx.coroutines.swing)
 
                 // Network
-                // implementation(libs.ktor.client.okhttp)
                 implementation(libs.ktor.client.java)
+                // implementation(libs.ktor.client.okhttp)
 
                 // Storage
                 implementation(libs.sqldelight.driver.jvm)

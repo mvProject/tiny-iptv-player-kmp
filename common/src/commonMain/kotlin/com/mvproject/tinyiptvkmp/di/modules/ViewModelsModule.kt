@@ -14,15 +14,15 @@ import com.mvproject.tinyiptvkmp.ui.screens.playlist.PlaylistViewModel
 import com.mvproject.tinyiptvkmp.ui.screens.settings.general.SettingsViewModel
 import com.mvproject.tinyiptvkmp.ui.screens.settings.player.SettingsPlayerViewModel
 import com.mvproject.tinyiptvkmp.ui.screens.settings.playlist.SettingsPlaylistViewModel
-import org.koin.core.module.dsl.singleOf
+import org.koin.core.module.dsl.factoryOf
 import org.koin.dsl.module
 
 val viewModelsModule = module {
-    singleOf(::TvPlaylistChannelsViewModel)
-    singleOf(::GroupViewModel)
-    singleOf(::SettingsPlayerViewModel)
-    singleOf(::SettingsViewModel)
-    singleOf(::SettingsPlaylistViewModel)
-    singleOf(::VideoViewViewModel)
-    singleOf(::PlaylistViewModel)
+    factoryOf(::TvPlaylistChannelsViewModel)
+    factoryOf(::GroupViewModel)
+    factoryOf(::SettingsPlayerViewModel)
+    factoryOf(::SettingsViewModel)
+    factoryOf(::SettingsPlaylistViewModel)
+    factoryOf(::VideoViewViewModel)
+    factoryOf(::PlaylistViewModel)
 }

@@ -7,8 +7,6 @@
 
 package com.mvproject.tinyiptvkmp.ui.screens.settings.playlist
 
-import cafe.adriel.voyager.core.model.ScreenModel
-import cafe.adriel.voyager.core.model.screenModelScope
 import com.mvproject.tinyiptvkmp.data.helpers.PlaylistHelper
 import com.mvproject.tinyiptvkmp.data.usecases.DeletePlaylistUseCase
 import com.mvproject.tinyiptvkmp.ui.screens.settings.playlist.action.SettingsPlaylistAction
@@ -17,20 +15,22 @@ import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
+import moe.tlaster.precompose.viewmodel.ViewModel
+import moe.tlaster.precompose.viewmodel.viewModelScope
 
 class SettingsPlaylistViewModel(
     private val playlistHelper: PlaylistHelper,
     private val deletePlaylistUseCase: DeletePlaylistUseCase,
-) : ScreenModel {
+) : ViewModel() {
 
     private val _playlistDataState = MutableStateFlow(SettingsPlaylistState())
     val playlistDataState = _playlistDataState.asStateFlow()
 
-    fun observeLists() {
-        screenModelScope.launch {
+    init {
+        viewModelScope.launch {
             playlistHelper.allPlaylistsFlow.collect { lists ->
-                _playlistDataState.update { state ->
-                    state.copy(
+                _playlistDataState.update { current ->
+                    current.copy(
                         playlists = lists,
                         isLoading = false
                     )
@@ -42,7 +42,7 @@ class SettingsPlaylistViewModel(
     fun processAction(action: SettingsPlaylistAction) {
         when (action) {
             is SettingsPlaylistAction.DeletePlaylist -> {
-                screenModelScope.launch {
+                viewModelScope.launch {
                     deletePlaylistUseCase(playlist = action.playlist)
                 }
             }

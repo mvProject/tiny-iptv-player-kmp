@@ -33,7 +33,8 @@ calfFilePickerVersion = "0.2.0"
 uriKmpVersion = "0.0.15"
 
 voyager = "1.0.0-rc10"
-media3 = "1.2.0-rc01"
+precompose = "1.5.7"
+media3 = "1.2.0"
 
 kermit = "2.0.2"
 
@@ -66,14 +67,13 @@ jvm = { id = "org.jetbrains.kotlin.jvm", version.ref = "kotlin" }
 
 kotlinx-coroutines-swing = { module = "org.jetbrains.kotlinx:kotlinx-coroutines-swing", version.ref = "kotlinxCoroutinesSwing" }
 kotlinx-coroutines-core = { module = "org.jetbrains.kotlinx:kotlinx-coroutines-core", version.ref = "kotlinxCoroutinesCore" }
-
 kotlinx-serializationJson = { module = "org.jetbrains.kotlinx:kotlinx-serialization-core", version.ref = "kotlinxSerializationJson" }
-
 kotlinx-collections-immutable = { module = "org.jetbrains.kotlinx:kotlinx-collections-immutable", version.ref = "kotlinx-collections" }
-
 kotlinx-dateTime = { module = "org.jetbrains.kotlinx:kotlinx-datetime", version.ref = "kotlinxDateTime" }
 
 androidx-annotation = { module = "androidx.annotation:annotation", version.ref = "annotation" }
+
+material3-window-size-multiplatform = { module = "dev.chrisbanes.material3:material3-window-size-class-multiplatform", version.ref = "material3WindowSizeClassMultiplatform" }
 
 androidx-compose-bom = { group = "androidx.compose", name = "compose-bom", version.ref = "androidxComposeBom" }
 androidx-compose-ui-ui = { group = "androidx.compose.ui", name = "ui" }
@@ -89,29 +89,22 @@ androidx-compose-activity = { module = "androidx.activity:activity-compose", ver
 androidx-compose-lifecycle-viewmodel = { module = "androidx.lifecycle:lifecycle-viewmodel-compose", version.ref = "compose-lifecycle-viewmodel" }
 androidx-compose-lifecycle-runtime = { module = "androidx.lifecycle:lifecycle-runtime-compose", version.ref = "compose-lifecycle-runtime" }
 
-accompanist-adaptive = { module = "com.google.accompanist:accompanist-adaptive", version.ref = "accompanist" }
-
-material3-window-size-multiplatform = { module = "dev.chrisbanes.material3:material3-window-size-class-multiplatform", version.ref = "material3WindowSizeClassMultiplatform" }
-
-datastore-preferences = { module = "androidx.datastore:datastore-preferences", version.ref = "preferences" }
-datastore-preferences-core = { module = "androidx.datastore:datastore-preferences-core", version.ref = "preferences" }
-
 coil = { module = "io.coil-kt:coil", version.ref = "coil" }
 coil-compose = { module = "io.coil-kt:coil-compose", version.ref = "coil" }
-
-libres-compose = { module = "io.github.skeptick.libres:libres-compose", version.ref = "libres" }
-caprica-vlcj = { module = "uk.co.caprica:vlcj", version.ref = "vlcjVersion" }
-
-kermit = { module = "co.touchlab:kermit", version.ref = "kermit" }
+kamelimage = { module = "media.kamel:kamel-image", version.ref = "kamelVersion" }
 
 components-resources = { module = "org.jetbrains.compose.components:components-resources", version.ref = "componentsResources" }
+libres-compose = { module = "io.github.skeptick.libres:libres-compose", version.ref = "libres" }
 
-voyager-koin = { module = "cafe.adriel.voyager:voyager-koin", version.ref = "voyager" }
-voyager-navigator = { module = "cafe.adriel.voyager:voyager-navigator", version.ref = "voyager" }
+precompose = { module = "moe.tlaster:precompose", version.ref = "precompose" }
+precompose-viewmodel = { module = "moe.tlaster:precompose-viewmodel", version.ref = "precompose" }
+precompose-koin = { module = "moe.tlaster:precompose-koin", version.ref = "precompose" }
 
 media3-exoplayer = { module = "androidx.media3:media3-exoplayer", version.ref = "media3" }
 media3-ui = { module = "androidx.media3:media3-ui", version.ref = "media3" }
 media3-exoplayer-hls = { module = "androidx.media3:media3-exoplayer-hls", version.ref = "media3" }
+
+caprica-vlcj = { module = "uk.co.caprica:vlcj", version.ref = "vlcjVersion" }
 
 ktor-client-core = { module = "io.ktor:ktor-client-core", version.ref = "ktor" }
 ktor-client-android = { module = "io.ktor:ktor-client-android", version.ref = "ktor" }
@@ -120,6 +113,9 @@ ktor-client-java = { module = "io.ktor:ktor-client-java", version.ref = "ktor" }
 ktor-client-logging = { module = "io.ktor:ktor-client-logging", version.ref = "ktor" }
 ktor-client-content-negotiation = { module = "io.ktor:ktor-client-content-negotiation", version.ref = "ktor" }
 ktor-serialization-kotlinx-json = { module = "io.ktor:ktor-serialization-kotlinx-json", version.ref = "ktor" }
+
+datastore-preferences = { module = "androidx.datastore:datastore-preferences", version.ref = "preferences" }
+datastore-preferences-core = { module = "androidx.datastore:datastore-preferences-core", version.ref = "preferences" }
 
 sqldelight-runtime = { module = "app.cash.sqldelight:runtime", version.ref = "sqldelight" }
 sqldelight-driver-android = { module = "app.cash.sqldelight:android-driver", version.ref = "sqldelight" }
@@ -132,12 +128,53 @@ koin-compose = { module = "io.insert-koin:koin-compose", version.ref = "koinComp
 koin-android = { module = "io.insert-koin:koin-android", version.ref = "koinAndroid" }
 koin-android-compose = { module = "io.insert-koin:koin-androidx-compose", version.ref = "koinAndroidCompose" }
 
+kermit = { module = "co.touchlab:kermit", version.ref = "kermit" }
+
 urikmp = { module = "com.eygraber:uri-kmp", version.ref = "uriKmpVersion" }
-kamelimage = { module = "media.kamel:kamel-image", version.ref = "kamelVersion" }
 calf-filepicker = { module = "com.mohamedrejeb.calf:calf-file-picker", version.ref = "calfFilePickerVersion" }
+accompanist-adaptive = { module = "com.google.accompanist:accompanist-adaptive", version.ref = "accompanist" }
 
 test-junit = { module = "junit:junit", version.ref = "junit" }
 test-ext-junit = { module = "androidx.test.ext:junit", version.ref = "ext-junit" }
 test-espresso-core = { module = "androidx.test.espresso:espresso-core", version.ref = "espresso-core" }
 
 [bundles]
+
+sqldelight = [
+    "sqldelight-runtime",
+    "sqldelight-coroutines-extensions"
+]
+
+ktor = [
+    "ktor-client-core",
+    "ktor-client-logging",
+    "ktor-client-content-negotiation",
+    "ktor-serialization-kotlinx-json"
+]
+
+precompose = [
+    "precompose",
+    "precompose-viewmodel",
+    "precompose-koin"
+]
+
+coil = [
+    "coil",
+    "coil-compose"
+]
+
+media3 = [
+    "media3-exoplayer",
+    "media3-ui",
+    "media3-exoplayer-hls"
+]
+
+koin = [
+    "koin-core",
+    "koin-compose"
+]
+
+koinAndroid = [
+    "koin-android",
+    "koin-android-compose"
+]
