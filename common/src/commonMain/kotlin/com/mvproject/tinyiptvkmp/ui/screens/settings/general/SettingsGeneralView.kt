@@ -41,7 +41,7 @@ import com.mvproject.tinyiptvkmp.ui.theme.dimens
 import com.mvproject.tinyiptvkmp.utils.AppConstants.WEIGHT_1
 
 @Composable
-fun SettingsView(
+fun SettingsGeneralView(
     state: SettingsState,
     onSettingsAction: (SettingsAction) -> Unit = {},
     onNavigateBack: () -> Unit = {},

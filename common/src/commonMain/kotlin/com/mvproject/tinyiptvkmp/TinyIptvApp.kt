@@ -9,25 +9,34 @@ package com.mvproject.tinyiptvkmp
 
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.rememberCoroutineScope
-import cafe.adriel.voyager.navigator.Navigator
 import com.mvproject.tinyiptvkmp.data.repository.PreferenceRepository
 import com.mvproject.tinyiptvkmp.data.usecases.EpgInfoUpdateUseCase
 import com.mvproject.tinyiptvkmp.data.usecases.GetRemotePlaylistsUseCase
 import com.mvproject.tinyiptvkmp.data.usecases.UpdateChannelsEpgInfoUseCase
 import com.mvproject.tinyiptvkmp.data.usecases.UpdateEpgUseCase
 import com.mvproject.tinyiptvkmp.data.usecases.UpdateRemotePlaylistChannelsUseCase
-import com.mvproject.tinyiptvkmp.navigation.PlaylistDataRoute
+import com.mvproject.tinyiptvkmp.navigation.AppRoutes
+import com.mvproject.tinyiptvkmp.navigation.NavigationHost
 import com.mvproject.tinyiptvkmp.ui.theme.VideoAppTheme
 import com.mvproject.tinyiptvkmp.utils.AppConstants
 import com.mvproject.tinyiptvkmp.utils.KLog
 import com.mvproject.tinyiptvkmp.utils.TimeUtils
 import kotlinx.coroutines.launch
+import moe.tlaster.precompose.PreComposeApp
+import org.koin.compose.KoinContext
 import org.koin.compose.rememberKoinInject
 
 @Composable
 fun TinyIptvApp() {
-    val scope = rememberCoroutineScope()
+    KoinContext {
+        PreComposeApp {
+            TinyIptvAppContent()
+        }
+    }
+}
 
+@Composable
+private fun TinyIptvAppContent() {
     val preferenceRepository = rememberKoinInject<PreferenceRepository>()
     val updateChannelsEpgInfoUseCase = rememberKoinInject<UpdateChannelsEpgInfoUseCase>()
     val getRemotePlaylistsUseCase = rememberKoinInject<GetRemotePlaylistsUseCase>()
@@ -35,6 +44,9 @@ fun TinyIptvApp() {
     val updateEpgUseCase = rememberKoinInject<UpdateEpgUseCase>()
     val updateRemotePlaylistChannelsUseCase =
         rememberKoinInject<UpdateRemotePlaylistChannelsUseCase>()
+
+    val scope = rememberCoroutineScope()
+
     scope.apply {
         launch {
             preferenceRepository.isChannelsEpgInfoUpdateRequired()
@@ -77,10 +89,9 @@ fun TinyIptvApp() {
         }
     }
 
-
     VideoAppTheme {
-        Navigator(
-            screen = PlaylistDataRoute
+        NavigationHost(
+            startDestination = AppRoutes.PlaylistGroup.route
         )
     }
 

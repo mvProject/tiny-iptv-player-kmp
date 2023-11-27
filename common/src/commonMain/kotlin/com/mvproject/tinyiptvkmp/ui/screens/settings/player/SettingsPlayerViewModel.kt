@@ -7,28 +7,27 @@
 
 package com.mvproject.tinyiptvkmp.ui.screens.settings.player
 
-import cafe.adriel.voyager.core.model.ScreenModel
-import cafe.adriel.voyager.core.model.screenModelScope
 import com.mvproject.tinyiptvkmp.data.repository.PreferenceRepository
 import com.mvproject.tinyiptvkmp.ui.screens.settings.player.action.SettingsPlayerAction
 import com.mvproject.tinyiptvkmp.ui.screens.settings.player.state.SettingsPlayerState
-import com.mvproject.tinyiptvkmp.utils.KLog
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
+import moe.tlaster.precompose.viewmodel.ViewModel
+import moe.tlaster.precompose.viewmodel.viewModelScope
 
 class SettingsPlayerViewModel(
     private val preferenceRepository: PreferenceRepository
-) : ScreenModel {
+) : ViewModel() {
 
     private val _settingsPlayerState = MutableStateFlow(SettingsPlayerState())
     val settingsPlayerState = _settingsPlayerState.asStateFlow()
 
     init {
-        screenModelScope.launch {
-            _settingsPlayerState.update {
-                it.copy(
+        viewModelScope.launch {
+            _settingsPlayerState.update { current ->
+                current.copy(
                     isFullscreenEnabled = preferenceRepository.getDefaultFullscreenMode(),
                     resizeMode = preferenceRepository.getDefaultResizeMode(),
                     ratioMode = preferenceRepository.getDefaultRatioMode()
@@ -41,10 +40,9 @@ class SettingsPlayerViewModel(
         when (action) {
             is SettingsPlayerAction.SetFullScreenMode -> {
                 val fullScreenState = action.state
-                KLog.w("testing fullScreenState:$fullScreenState")
-                screenModelScope.launch {
-                    _settingsPlayerState.update {
-                        it.copy(isFullscreenEnabled = fullScreenState)
+                viewModelScope.launch {
+                    _settingsPlayerState.update { current ->
+                        current.copy(isFullscreenEnabled = fullScreenState)
                     }
                     preferenceRepository.setDefaultFullscreenMode(state = fullScreenState)
                 }
@@ -52,10 +50,9 @@ class SettingsPlayerViewModel(
 
             is SettingsPlayerAction.SetResizeMode -> {
                 val resizeMode = action.mode
-                KLog.w("testing resizeMode:$resizeMode")
-                screenModelScope.launch {
-                    _settingsPlayerState.update {
-                        it.copy(resizeMode = resizeMode)
+                viewModelScope.launch {
+                    _settingsPlayerState.update { current ->
+                        current.copy(resizeMode = resizeMode)
                     }
                     preferenceRepository.setDefaultResizeMode(mode = resizeMode)
                 }
@@ -63,10 +60,9 @@ class SettingsPlayerViewModel(
 
             is SettingsPlayerAction.SetRatioMode -> {
                 val ratioMode = action.mode
-                KLog.w("testing ratioMode:$ratioMode")
-                screenModelScope.launch {
-                    _settingsPlayerState.update {
-                        it.copy(ratioMode = ratioMode)
+                viewModelScope.launch {
+                    _settingsPlayerState.update { current ->
+                        current.copy(ratioMode = ratioMode)
                     }
                     preferenceRepository.setDefaultRatioMode(mode = ratioMode)
                 }

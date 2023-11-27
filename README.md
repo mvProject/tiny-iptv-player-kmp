@@ -1,4 +1,4 @@
-# Tiny Iptv Player
+# Tiny Iptv Player KMP
 
 The Iptv multiplatform video player, supporting m3u/m3u8 playlists, providing epg info for available
 iptv
@@ -32,7 +32,7 @@ Tiny Iptv Player use for requests for playlist and epg data and parse responses
 
 ### Navigation
 
-#### [Voyager](https://voyager.adriel.cafe/)
+#### [PreCompose](https://github.com/Tlaster/PreCompose)
 
 A multiplatform navigation library built for Compose
 

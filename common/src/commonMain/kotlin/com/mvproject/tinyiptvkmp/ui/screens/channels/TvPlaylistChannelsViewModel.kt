@@ -8,8 +8,6 @@
 package com.mvproject.tinyiptvkmp.ui.screens.channels
 
 import androidx.compose.runtime.mutableStateListOf
-import cafe.adriel.voyager.core.model.ScreenModel
-import cafe.adriel.voyager.core.model.screenModelScope
 import com.mvproject.tinyiptvkmp.data.enums.ChannelsViewType
 import com.mvproject.tinyiptvkmp.data.helpers.ViewTypeHelper
 import com.mvproject.tinyiptvkmp.data.model.channels.TvPlaylistChannel
@@ -23,6 +21,8 @@ import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
+import moe.tlaster.precompose.viewmodel.ViewModel
+import moe.tlaster.precompose.viewmodel.viewModelScope
 
 class TvPlaylistChannelsViewModel(
     private val viewTypeHelper: ViewTypeHelper,
@@ -30,7 +30,7 @@ class TvPlaylistChannelsViewModel(
     private val toggleFavoriteChannelUseCase: ToggleFavoriteChannelUseCase,
     private val toggleChannelEpgUseCase: ToggleChannelEpgUseCase
 
-) : ScreenModel {
+) : ViewModel() {
     private val _viewState = MutableStateFlow(TvPlaylistChannelState())
     val viewState = _viewState.asStateFlow()
 
@@ -39,9 +39,9 @@ class TvPlaylistChannelsViewModel(
     private val _searchText = MutableStateFlow(EMPTY_STRING)
 
     init {
-        screenModelScope.launch {
-            _viewState.update {
-                it.copy(
+        viewModelScope.launch {
+            _viewState.update { current ->
+                current.copy(
                     viewType = viewTypeHelper.getChannelsViewType()
                 )
             }
@@ -49,17 +49,17 @@ class TvPlaylistChannelsViewModel(
     }
 
     fun loadChannelsByGroups(group: String) {
-        _viewState.update {
-            it.copy(currentGroup = group, isLoading = true)
+        _viewState.update { current ->
+            current.copy(currentGroup = group, isLoading = true)
         }
-        screenModelScope.launch {
+        viewModelScope.launch {
             val groupChannels = getGroupChannelsUseCase(group)
             channels.apply {
                 clear()
                 addAll(groupChannels)
             }
-            _viewState.update {
-                it.copy(isLoading = false)
+            _viewState.update { current ->
+                current.copy(isLoading = false)
             }
         }
     }
@@ -94,16 +94,16 @@ class TvPlaylistChannelsViewModel(
 
     private fun searchTextChange(text: String) {
         _searchText.value = text
-        _viewState.update {
-            it.copy(searchString = text)
+        _viewState.update { current ->
+            current.copy(searchString = text)
         }
     }
 
     private fun viewTypeChange(type: ChannelsViewType) {
         if (viewState.value.viewType != type) {
-            screenModelScope.launch {
-                _viewState.update {
-                    it.copy(viewType = type)
+            viewModelScope.launch {
+                _viewState.update { current ->
+                    current.copy(viewType = type)
                 }
                 viewTypeHelper.setChannelsViewType(type)
             }
@@ -112,14 +112,14 @@ class TvPlaylistChannelsViewModel(
 
     private fun searchTriggered() {
         val searchState = viewState.value.isSearching
-        _viewState.update {
-            it.copy(isSearching = !searchState)
+        _viewState.update { current ->
+            current.copy(isSearching = !searchState)
         }
     }
 
     private fun toggleFavorites(channel: TvPlaylistChannel) {
         val isFavorite = channel.isInFavorites
-        screenModelScope.launch {
+        viewModelScope.launch {
             channels.set(
                 index = channels.indexOf(channel),
                 element = channel.copy(isInFavorites = !isFavorite)
@@ -130,7 +130,7 @@ class TvPlaylistChannelsViewModel(
 
     private fun toggleEpgState(channel: TvPlaylistChannel) {
         val isEpgUsing = channel.isEpgUsing
-        screenModelScope.launch {
+        viewModelScope.launch {
             channels.set(
                 index = channels.indexOf(channel),
                 element = channel.copy(isEpgUsing = !isEpgUsing)
@@ -141,8 +141,8 @@ class TvPlaylistChannelsViewModel(
 
     private fun toggleEpgVisibility() {
         val epgCurrentState = viewState.value.isEpgVisible
-        _viewState.update {
-            it.copy(isEpgVisible = !epgCurrentState)
+        _viewState.update { current ->
+            current.copy(isEpgVisible = !epgCurrentState)
         }
     }
 }
