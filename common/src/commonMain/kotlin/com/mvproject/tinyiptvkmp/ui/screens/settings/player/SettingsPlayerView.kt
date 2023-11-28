@@ -31,7 +31,8 @@ import androidx.compose.ui.Modifier
 import com.mvproject.tinyiptvkmp.MainRes
 import com.mvproject.tinyiptvkmp.data.enums.RatioMode
 import com.mvproject.tinyiptvkmp.data.enums.ResizeMode
-import com.mvproject.tinyiptvkmp.ui.components.dialogs.OptionsDialog
+import com.mvproject.tinyiptvkmp.ui.components.overlay.OverlayContent
+import com.mvproject.tinyiptvkmp.ui.components.overlay.OverlayOptionsMenu
 import com.mvproject.tinyiptvkmp.ui.components.selectors.OptionSelector
 import com.mvproject.tinyiptvkmp.ui.components.toolbars.AppBarWithBackNav
 import com.mvproject.tinyiptvkmp.ui.screens.settings.player.action.SettingsPlayerAction
@@ -118,31 +119,41 @@ fun SettingsPlayerView(
 
         }
 
-        OptionsDialog(
-            isDialogOpen = isSelectResizeModeOpen,
-            title = MainRes.string.option_default_resize_mode,
-            selectedIndex = state.resizeMode,
-            items = ResizeMode.values().map {
-                it.title
-            },
-            onItemSelected = { index ->
-                onSettingsPlayerAction(SettingsPlayerAction.SetResizeMode(index))
-                isSelectResizeModeOpen.value = false
-            }
-        )
+        OverlayContent(
+            isVisible = isSelectResizeModeOpen.value,
+            contentAlpha = MaterialTheme.dimens.alpha90,
+            onViewTap = { isSelectResizeModeOpen.value = false }
+        ) {
+            OverlayOptionsMenu(
+                title = MainRes.string.option_default_resize_mode,
+                selectedIndex = state.resizeMode,
+                items = ResizeMode.values().map {
+                    it.title
+                },
+                onItemSelected = { index ->
+                    onSettingsPlayerAction(SettingsPlayerAction.SetResizeMode(index))
+                    isSelectResizeModeOpen.value = false
+                }
+            )
+        }
 
-        OptionsDialog(
-            isDialogOpen = isSelectRatioModeOpen,
-            title = MainRes.string.option_default_ratio_mode,
-            selectedIndex = state.ratioMode,
-            items = RatioMode.values().map {
-                it.title
-            },
-            onItemSelected = { index ->
-                onSettingsPlayerAction(SettingsPlayerAction.SetRatioMode(index))
-                isSelectRatioModeOpen.value = false
-            }
-        )
+        OverlayContent(
+            isVisible = isSelectRatioModeOpen.value,
+            contentAlpha = MaterialTheme.dimens.alpha90,
+            onViewTap = { isSelectRatioModeOpen.value = false }
+        ) {
+            OverlayOptionsMenu(
+                title = MainRes.string.option_default_ratio_mode,
+                selectedIndex = state.ratioMode,
+                items = RatioMode.values().map {
+                    it.title
+                },
+                onItemSelected = { index ->
+                    onSettingsPlayerAction(SettingsPlayerAction.SetRatioMode(index))
+                    isSelectRatioModeOpen.value = false
+                }
+            )
+        }
     }
 }
 

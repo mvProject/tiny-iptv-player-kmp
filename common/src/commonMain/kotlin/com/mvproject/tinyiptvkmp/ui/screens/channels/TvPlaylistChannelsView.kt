@@ -35,7 +35,7 @@ import com.mvproject.tinyiptvkmp.data.enums.ChannelsViewType
 import com.mvproject.tinyiptvkmp.data.model.channels.TvPlaylistChannel
 import com.mvproject.tinyiptvkmp.platform.ExecuteOnResume
 import com.mvproject.tinyiptvkmp.ui.components.channels.ChannelView
-import com.mvproject.tinyiptvkmp.ui.components.dialogs.ChannelOptionsDialog
+import com.mvproject.tinyiptvkmp.ui.components.overlay.OverlayChannelOptions
 import com.mvproject.tinyiptvkmp.ui.components.overlay.OverlayContent
 import com.mvproject.tinyiptvkmp.ui.components.overlay.OverlayEpg
 import com.mvproject.tinyiptvkmp.ui.components.toolbars.AppBarWithSearch
@@ -147,25 +147,30 @@ fun TvPlaylistChannelsView(
                 isVisible = viewState.isLoading,
             )
 
-            ChannelOptionsDialog(
-                isDialogOpen = isChannelOptionOpen,
-                isInFavorite = selected.isInFavorites,
-                isEpgEnabled = selected.isEpgUsing,
-                isEpgUsing = selected.epgId.isNotEmpty(),
-                onToggleFavorite = {
-                    onAction(TvPlaylistChannelAction.ToggleFavourites(selected))
-                    isChannelOptionOpen.value = false
-                },
-                onToggleEpgState = {
-                    onAction(TvPlaylistChannelAction.ToggleEpgState(selected))
-                    isChannelOptionOpen.value = false
+            OverlayContent(
+                isVisible = isChannelOptionOpen.value,
+                contentAlpha = MaterialTheme.dimens.alpha90,
+                onViewTap = { isChannelOptionOpen.value = false }
+            ) {
+                OverlayChannelOptions(
+                    isInFavorite = selected.isInFavorites,
+                    isEpgEnabled = selected.isEpgUsing,
+                    isEpgUsing = selected.epgId.isNotEmpty(),
+                    onToggleFavorite = {
+                        onAction(TvPlaylistChannelAction.ToggleFavourites(selected))
+                        isChannelOptionOpen.value = false
+                    },
+                    onToggleEpgState = {
+                        onAction(TvPlaylistChannelAction.ToggleEpgState(selected))
+                        isChannelOptionOpen.value = false
 
-                },
-                onShowEpg = {
-                    onAction(TvPlaylistChannelAction.ToggleEpgVisibility)
-                    isChannelOptionOpen.value = false
-                }
-            )
+                    },
+                    onShowEpg = {
+                        onAction(TvPlaylistChannelAction.ToggleEpgVisibility)
+                        isChannelOptionOpen.value = false
+                    }
+                )
+            }
 
             OverlayContent(
                 isVisible = viewState.isEpgVisible,
