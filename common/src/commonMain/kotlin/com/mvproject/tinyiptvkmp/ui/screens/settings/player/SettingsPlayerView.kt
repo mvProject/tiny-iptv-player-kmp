@@ -17,6 +17,7 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.navigationBars
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.layout.windowInsetsPadding
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
@@ -67,23 +68,26 @@ fun SettingsPlayerView(
                 .padding(MaterialTheme.dimens.size12)
         ) {
             Row(
-                modifier = Modifier
-                    .fillMaxWidth(),
-                horizontalArrangement = Arrangement.spacedBy(MaterialTheme.dimens.size8),
-                verticalAlignment = Alignment.CenterVertically
+                modifier = Modifier.fillMaxWidth(),
+                verticalAlignment = Alignment.CenterVertically,
+                horizontalArrangement = Arrangement.SpaceBetween
             ) {
                 Text(
+                    modifier = Modifier
+                        .weight(MaterialTheme.dimens.weight6)
+                        .padding(horizontal = MaterialTheme.dimens.size8),
                     text = MainRes.string.option_default_fullscreen_mode,
                     style = MaterialTheme.typography.bodyMedium,
                     color = MaterialTheme.colorScheme.onPrimary
                 )
+
                 Switch(
+                    modifier = Modifier.width(MaterialTheme.dimens.size82),
                     checked = state.isFullscreenEnabled,
                     colors = SwitchDefaults.colors(
                         checkedThumbColor = MaterialTheme.colorScheme.primary,
-                        uncheckedThumbColor = MaterialTheme.colorScheme.primary.copy(
-                            alpha = MaterialTheme.dimens.alpha50
-                        ),
+                        uncheckedThumbColor = MaterialTheme.colorScheme.primary
+                            .copy(alpha = MaterialTheme.dimens.alpha50),
                         checkedTrackColor = MaterialTheme.colorScheme.onSurfaceVariant,
                         uncheckedTrackColor = MaterialTheme.colorScheme.onSurface
                     ),
@@ -127,9 +131,7 @@ fun SettingsPlayerView(
             OverlayOptionsMenu(
                 title = MainRes.string.option_default_resize_mode,
                 selectedIndex = state.resizeMode,
-                items = ResizeMode.values().map {
-                    it.title
-                },
+                items = ResizeMode.values().map { it.title },
                 onItemSelected = { index ->
                     onSettingsPlayerAction(SettingsPlayerAction.SetResizeMode(index))
                     isSelectResizeModeOpen.value = false
@@ -145,9 +147,7 @@ fun SettingsPlayerView(
             OverlayOptionsMenu(
                 title = MainRes.string.option_default_ratio_mode,
                 selectedIndex = state.ratioMode,
-                items = RatioMode.values().map {
-                    it.title
-                },
+                items = RatioMode.values().map { it.title },
                 onItemSelected = { index ->
                     onSettingsPlayerAction(SettingsPlayerAction.SetRatioMode(index))
                     isSelectRatioModeOpen.value = false
