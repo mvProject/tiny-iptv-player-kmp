@@ -1,7 +1,7 @@
 /*
  *  Created by Medvediev Viktor [mvproject]
  *  Copyright © 2023
- *  last modified : 20.11.23, 20:27
+ *  last modified : 30.11.23, 17:38
  *
  */
 
@@ -47,7 +47,7 @@ import com.mohamedrejeb.calf.picker.rememberFilePickerLauncher
 import com.mvproject.tinyiptvkmp.MainRes
 import com.mvproject.tinyiptvkmp.data.mappers.ParseMappers
 import com.mvproject.tinyiptvkmp.data.model.channels.PlaylistChannel
-import com.mvproject.tinyiptvkmp.ui.PlayerViewSwing
+import com.mvproject.tinyiptvkmp.ui.PlayerView
 import com.mvproject.tinyiptvkmp.ui.screens.player.action.PlaybackActions
 import com.mvproject.tinyiptvkmp.ui.screens.player.action.PlaybackStateActions
 import com.mvproject.tinyiptvkmp.ui.screens.player.state.VideoViewState
@@ -85,7 +85,7 @@ actual fun PlayerViewContainer(
     onPlaybackStateAction: (PlaybackStateActions) -> Unit,
     controls: @Composable () -> Unit
 ) {
-    PlayerViewSwing(
+    PlayerView(
         modifier = modifier,
         videoViewState = videoViewState,
         onPlaybackAction = onPlaybackAction,
