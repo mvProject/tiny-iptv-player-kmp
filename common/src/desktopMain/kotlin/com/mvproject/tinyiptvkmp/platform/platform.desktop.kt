@@ -1,7 +1,7 @@
 /*
  *  Created by Medvediev Viktor [mvproject]
  *  Copyright © 2023
- *  last modified : 30.11.23, 17:38
+ *  last modified : 30.11.23, 18:46
  *
  */
 
@@ -42,6 +42,7 @@ import com.mvproject.tinyiptvkmp.MainRes
 import com.mvproject.tinyiptvkmp.data.mappers.ParseMappers
 import com.mvproject.tinyiptvkmp.data.model.channels.PlaylistChannel
 import com.mvproject.tinyiptvkmp.ui.PlayerView
+import com.mvproject.tinyiptvkmp.ui.components.views.PlaybackControl
 import com.mvproject.tinyiptvkmp.ui.screens.player.action.PlaybackActions
 import com.mvproject.tinyiptvkmp.ui.screens.player.action.PlaybackStateActions
 import com.mvproject.tinyiptvkmp.ui.screens.player.state.VideoViewState
