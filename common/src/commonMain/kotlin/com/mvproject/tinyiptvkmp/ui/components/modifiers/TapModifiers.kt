@@ -1,7 +1,7 @@
 /*
  *  Created by Medvediev Viktor [mvproject]
  *  Copyright © 2023
- *  last modified : 20.11.23, 20:27
+ *  last modified : 29.11.23, 15:05
  *
  */
 
@@ -14,7 +14,7 @@ import com.mvproject.tinyiptvkmp.ui.screens.player.action.PlaybackActions
 
 fun Modifier.defaultPlayerTapGesturesState(
     onAction: (PlaybackActions) -> Unit
-) = pointerInput(Unit) {
+) = this then pointerInput(Unit) {
     detectTapGestures(
         onDoubleTap = {
             onAction(PlaybackActions.OnFullScreenToggle)

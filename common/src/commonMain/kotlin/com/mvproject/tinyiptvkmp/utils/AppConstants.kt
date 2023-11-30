@@ -45,6 +45,11 @@ object AppConstants {
 
     const val PLAYLIST_ID = "PLAYLIST_ID"
 
-    // const val FOLDER_CHANNELS_ALL = "All Channels"
-    //const val FOLDER_CHANNELS_FAVORITE = "Favorites"
+    const val DRAG_THRESHOLD = 5
+    const val MOVEMENT_THRESHOLD = 10
+
+    const val SCREEN_PERCENTAGE_25 = 0.25
+    const val SCREEN_PERCENTAGE_30 = 0.3
+    const val SCREEN_PERCENTAGE_70 = 0.7
+    const val SCREEN_PERCENTAGE_40 = 0.4
 }

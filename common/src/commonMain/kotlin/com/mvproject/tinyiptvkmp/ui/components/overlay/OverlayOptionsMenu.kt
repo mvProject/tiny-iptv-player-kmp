@@ -1,7 +1,7 @@
 /*
  *  Created by Medvediev Viktor [mvproject]
  *  Copyright © 2023
- *  last modified : 27.11.23, 17:59
+ *  last modified : 29.11.23, 16:08
  *
  */
 
@@ -26,6 +26,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.text.style.TextAlign
 import com.mvproject.tinyiptvkmp.ui.theme.dimens
 import com.mvproject.tinyiptvkmp.utils.AppConstants
 
@@ -67,10 +68,11 @@ fun OverlayOptionsMenu(
                             .padding(MaterialTheme.dimens.size12)
                     ) {
                         Text(
+                            modifier = Modifier.align(Alignment.Center),
                             text = text,
                             style = MaterialTheme.typography.titleMedium,
                             color = MaterialTheme.colorScheme.primary,
-                            modifier = Modifier.align(Alignment.Center)
+                            textAlign = TextAlign.Center
                         )
                     }
                 }
