@@ -1,7 +1,7 @@
 /*
  *  Created by Medvediev Viktor [mvproject]
  *  Copyright © 2023
- *  last modified : 30.11.23, 14:29
+ *  last modified : 01.12.23, 10:19
  *
  */
 
@@ -12,6 +12,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.painter.BitmapPainter
 import androidx.compose.ui.res.loadImageBitmap
 import androidx.compose.ui.res.useResource
+import androidx.compose.ui.unit.dp
 import androidx.compose.ui.window.WindowPlacement
 import androidx.compose.ui.window.WindowState
 import androidx.compose.ui.window.singleWindowApplication
@@ -28,7 +29,9 @@ fun main() {
         title = MainRes.string.app_name,
         icon = BitmapPainter(useResource("drawable/tiny_iptv_logo.png", ::loadImageBitmap)),
         state = WindowState(
-            placement = WindowPlacement.Maximized
+            placement = WindowPlacement.Maximized,
+            height = 900.dp,
+            width = 1400.dp
         )
     ) {
         Box(

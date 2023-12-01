@@ -1,7 +1,7 @@
 /*
  *  Created by Medvediev Viktor [mvproject]
  *  Copyright © 2023
- *  last modified : 30.11.23, 18:44
+ *  last modified : 01.12.23, 11:25
  *
  */
 
@@ -20,15 +20,22 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.runtime.withFrameMillis
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.geometry.Offset
+import androidx.compose.ui.graphics.FilterQuality
 import androidx.compose.ui.graphics.ImageBitmap
 import androidx.compose.ui.graphics.asComposeImageBitmap
-import androidx.compose.ui.graphics.drawscope.scale
+import androidx.compose.ui.unit.IntOffset
+import androidx.compose.ui.unit.IntSize
 import com.mvproject.tinyiptvkmp.ui.screens.player.action.PlaybackActions
 import com.mvproject.tinyiptvkmp.ui.screens.player.action.PlaybackStateActions
 import com.mvproject.tinyiptvkmp.ui.screens.player.state.VideoPlaybackState
 import com.mvproject.tinyiptvkmp.ui.screens.player.state.VideoViewState
 import com.mvproject.tinyiptvkmp.utils.AppConstants
+import com.mvproject.tinyiptvkmp.utils.AppConstants.FLOAT_VALUE_1
+import com.mvproject.tinyiptvkmp.utils.AppConstants.INT_NO_VALUE
+import com.mvproject.tinyiptvkmp.utils.AppConstants.INT_VALUE_2
+import com.mvproject.tinyiptvkmp.utils.AppConstants.INT_VALUE_4
+import com.mvproject.tinyiptvkmp.utils.AppConstants.INT_VALUE_ZERO
+import com.mvproject.tinyiptvkmp.utils.AppConstants.LONG_VALUE_ZERO
 import com.mvproject.tinyiptvkmp.utils.KLog
 import org.jetbrains.skia.Bitmap
 import uk.co.caprica.vlcj.factory.discovery.NativeDiscovery
@@ -41,7 +48,6 @@ import uk.co.caprica.vlcj.player.embedded.videosurface.callback.BufferFormatCall
 import uk.co.caprica.vlcj.player.embedded.videosurface.callback.RenderCallback
 import uk.co.caprica.vlcj.player.embedded.videosurface.callback.format.RV32BufferFormat
 import java.nio.ByteBuffer
-import kotlin.math.min
 
 
 @Composable
@@ -179,7 +185,10 @@ fun VideoPlayerDirect(
             }
 
             override fun mediaPlayerReady(mediaPlayer: MediaPlayer) {
-                KLog.i("testing audioTracks Playing: ${mediaPlayer.media().info().audioTracks()}")
+                mediaPlayer.media().info().audioTracks().forEach { info ->
+                    KLog.i("testing audioTrack info: $info")
+                }
+
                 onPlaybackStateAction(
                     PlaybackStateActions.OnPlaybackStateChanged(VideoPlaybackState.VideoPlaybackReady)
                 )
@@ -225,44 +234,53 @@ fun VideoPlayerDirect(
                 )
             }
         }
+
         state.mediaPlayer.events().addMediaPlayerEventListener(eventListener)
+
         onDispose {
             state.mediaPlayer.events().removeMediaPlayerEventListener(eventListener)
             state.mediaPlayer.release()
         }
     }
-    var frameTime: Long by remember { mutableStateOf(0L) }
+
+    var frameTime: Long by remember { mutableStateOf(LONG_VALUE_ZERO) }
+
     LaunchedEffect(url) {
         KLog.w("testing LaunchedEffect started")
         state.mediaPlayer.media()?.start(url)
-        state.mediaPlayer.subpictures().setTrack(-1)
+        state.mediaPlayer.subpictures().setTrack(INT_NO_VALUE)
         while (true) {
-            withFrameMillis {
-                frameTime = it
+            withFrameMillis { time ->
+                frameTime = time
             }
         }
     }
     return Canvas(modifier) {
         state.internalState.updateComposeImage(frameTime)?.let { image ->
-            val scaleW = size.width / image.width.toFloat()
-            val scaleH = size.height / image.height.toFloat()
-            scale(
-                scale = min(scaleH, scaleW),
-                pivot = Offset.Zero
-            ) {
-                drawImage(image)
-            }
+            val offsetY = ((size.height - image.height) / INT_VALUE_4)
+                .toInt()
+                .coerceAtLeast(INT_VALUE_ZERO)
+
+            val imageHeight = size.height.toInt() - offsetY * INT_VALUE_2
+            val imageWidth = size.width.toInt()
+
+            drawImage(
+                image = image,
+                dstSize = IntSize(imageWidth, imageHeight),
+                dstOffset = IntOffset(INT_VALUE_ZERO, offsetY),
+                filterQuality = FilterQuality.Medium
+            )
         }
     }
 }
 
 internal class RenderState {
-    var aspectRatio: Float by mutableStateOf(1f)
+    var aspectRatio: Float by mutableStateOf(FLOAT_VALUE_1)
         private set
 
     var currentBuffer: ByteBuffer? = null
 
-    private var buffer: ByteArray = ByteArray(0)
+    private var buffer: ByteArray = ByteArray(INT_VALUE_ZERO)
     private var bufferBitmap: Bitmap = Bitmap()
     private var composeImage: ImageBitmap? = null
 
@@ -272,9 +290,9 @@ internal class RenderState {
 
     fun updateComposeImage(frameTime: Long): ImageBitmap? {
         try {
-            currentBuffer?.let {
-                it.get(buffer)
-                it.rewind()
+            currentBuffer?.let { byteBuffer ->
+                byteBuffer.get(buffer)
+                byteBuffer.rewind()
                 bufferBitmap.installPixels(buffer)
                 return composeImage
             }
@@ -287,17 +305,22 @@ internal class RenderState {
 
     private val bufferFormatCallback = object : BufferFormatCallback {
         override fun getBufferFormat(sourceWidth: Int, sourceHeight: Int): BufferFormat {
+
             bufferBitmap = Bitmap().also {
                 it.allocN32Pixels(sourceWidth, sourceHeight, true)
             }
+
             composeImage = bufferBitmap.asComposeImageBitmap()
-            buffer = ByteArray(sourceWidth * sourceHeight * 4)
+
+            buffer = ByteArray(sourceWidth * sourceHeight * INT_VALUE_4)
+
             with(bufferBitmap) {
-                aspectRatio = if (width <= 0 || height <= 0)
-                    1f
+                aspectRatio = if (width <= INT_VALUE_ZERO || height <= INT_VALUE_ZERO)
+                    FLOAT_VALUE_1
                 else
                     width.toFloat() / height.toFloat()
             }
+
             return RV32BufferFormat(sourceWidth, sourceHeight)
         }
 

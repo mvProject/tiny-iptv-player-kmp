@@ -91,20 +91,8 @@ enabled (it can handle even special formats like AC3, EAC3, DTS, DTS HD, TrueHD 
 Player based on [Vlc](https://github.com/caprica/vlcj)
 port for java
 
-Using [SwingPanel](https://github.com/JetBrains/compose-multiplatform/tree/master/tutorials/Swing_Integration)
-for display
-
 using [Calf File Picker](https://github.com/MohamedRejeb/Calf)
 for local file selection
-
-Because of:
-The Swing component is placed on top of the Compose layer (that means that Compose content can't
-overlap or clip it).
-This can be changed in the future, when the better interop with Swing will be implemented.
-See related issues:
-https://github.com/JetBrains/compose-jb/issues/1521
-https://github.com/JetBrains/compose-jb/issues/1202
-https://github.com/JetBrains/compose-jb/issues/1449,
 
 some features currently not work proper:
 

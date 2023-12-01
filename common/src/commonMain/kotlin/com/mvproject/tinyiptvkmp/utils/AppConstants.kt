@@ -1,7 +1,7 @@
 /*
  *  Created by Medvediev Viktor [mvproject]
  *  Copyright © 2023
- *  last modified : 04.05.23, 14:27
+ *  last modified : 01.12.23, 11:04
  *
  */
 
@@ -15,6 +15,7 @@ object AppConstants {
     const val INT_VALUE_1 = 1
     const val INT_VALUE_2 = 2
     const val INT_VALUE_3 = 3
+    const val INT_VALUE_4 = 4
     const val INT_VALUE_5 = 5
 
     const val FLOAT_VALUE_ZERO = 0f
