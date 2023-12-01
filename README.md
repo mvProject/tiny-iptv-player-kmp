@@ -108,13 +108,13 @@ https://github.com/JetBrains/compose-jb/issues/1449,
 
 some features currently not work proper:
 
-- [ ] Horizontal swipe to change current playing channels
-- [ ] Vertical swipe to change volume
+- [X] Horizontal swipe to change current playing channels
+- [X] Vertical swipe to change volume
 - [ ] Resize (Fit, Fill, Crop)
 - [ ] Ratio (WideScreen, FullScreen, Cinematic)
-- [ ] Overlay for channel selection
-- [ ] Overlay for epg for channel
-- [ ] Overlay for current program info
+- [X] Overlay for channel selection
+- [X] Overlay for epg for channel
+- [X] Overlay for current program info
 
 <img src="screenshots/tiny_iptv_player_desktop_1.png" height="680" width="940">
 <img src="screenshots/tiny_iptv_player_desktop_2.png" height="680" width="940">
