@@ -33,9 +33,11 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.text.style.TextOverflow
 import com.mvproject.tinyiptvkmp.MainRes
 import com.mvproject.tinyiptvkmp.data.enums.ChannelsViewType
 import com.mvproject.tinyiptvkmp.ui.theme.dimens
+import com.mvproject.tinyiptvkmp.utils.AppConstants.INT_VALUE_1
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -52,7 +54,9 @@ fun AppBarWithActions(
             Text(
                 text = appBarTitle,
                 style = MaterialTheme.typography.titleLarge,
-                color = MaterialTheme.colorScheme.onPrimary
+                color = MaterialTheme.colorScheme.onPrimary,
+                maxLines = INT_VALUE_1,
+                overflow = TextOverflow.Ellipsis
             )
         },
         navigationIcon = {

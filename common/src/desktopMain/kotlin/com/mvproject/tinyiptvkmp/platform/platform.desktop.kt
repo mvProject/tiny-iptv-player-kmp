@@ -1,14 +1,12 @@
 /*
  *  Created by Medvediev Viktor [mvproject]
  *  Copyright © 2023
- *  last modified : 20.11.23, 20:27
+ *  last modified : 29.11.23, 17:16
  *
  */
 
 package com.mvproject.tinyiptvkmp.platform
 
-import androidx.compose.foundation.background
-import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -16,9 +14,7 @@ import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
-import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.rounded.Close
 import androidx.compose.material.icons.rounded.FeaturedPlayList
@@ -29,14 +25,12 @@ import androidx.compose.material.icons.rounded.ViewList
 import androidx.compose.material.icons.rounded.VolumeDown
 import androidx.compose.material.icons.rounded.VolumeUp
 import androidx.compose.material3.ButtonDefaults
-import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedButton
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.draw.clip
 import androidx.compose.ui.text.font.Font
 import androidx.compose.ui.text.font.FontStyle
 import androidx.compose.ui.text.font.FontWeight
@@ -48,6 +42,7 @@ import com.mvproject.tinyiptvkmp.MainRes
 import com.mvproject.tinyiptvkmp.data.mappers.ParseMappers
 import com.mvproject.tinyiptvkmp.data.model.channels.PlaylistChannel
 import com.mvproject.tinyiptvkmp.ui.PlayerViewSwing
+import com.mvproject.tinyiptvkmp.ui.components.views.PlaybackControl
 import com.mvproject.tinyiptvkmp.ui.screens.player.action.PlaybackActions
 import com.mvproject.tinyiptvkmp.ui.screens.player.action.PlaybackStateActions
 import com.mvproject.tinyiptvkmp.ui.screens.player.state.VideoViewState
@@ -143,122 +138,59 @@ actual fun AdditionalPlayerControls(
         verticalAlignment = Alignment.CenterVertically,
         horizontalArrangement = Arrangement.Start
     ) {
-        Icon(
-            modifier = Modifier
-                .clickable {
-                    action()
-                }
-                .clip(CircleShape)
-                .background(MaterialTheme.colorScheme.onSurface)
-                .padding(MaterialTheme.dimens.size8),
+
+        PlaybackControl(
             imageVector = Icons.Rounded.Close,
-            contentDescription = "PLAYBACK_CLOSE",
-            tint = MaterialTheme.colorScheme.primary
+            action = action
         )
 
         Spacer(modifier = Modifier.width(MaterialTheme.dimens.size32))
 
-        Icon(
-            modifier = Modifier
-                .clickable {
-                    onPlaybackAction(PlaybackActions.OnVolumeDown)
-                }
-                .clip(CircleShape)
-                .background(MaterialTheme.colorScheme.onSurface)
-                .padding(MaterialTheme.dimens.size8),
+        PlaybackControl(
             imageVector = Icons.Rounded.VolumeDown,
-            contentDescription = "VOLUME_DOWN",
-            tint = MaterialTheme.colorScheme.primary
+            action = { onPlaybackAction(PlaybackActions.OnVolumeDown) }
         )
 
         Spacer(modifier = Modifier.width(MaterialTheme.dimens.size8))
 
-        Icon(
-            modifier = Modifier
-                .clickable {
-                    onPlaybackAction(PlaybackActions.OnVolumeUp)
-                }
-                .clip(CircleShape)
-                .background(MaterialTheme.colorScheme.onSurface)
-                .padding(MaterialTheme.dimens.size8),
+        PlaybackControl(
             imageVector = Icons.Rounded.VolumeUp,
-            contentDescription = "VOLUME_UP",
-            tint = MaterialTheme.colorScheme.primary
+            action = { onPlaybackAction(PlaybackActions.OnVolumeUp) }
         )
 
         Spacer(modifier = Modifier.width(MaterialTheme.dimens.size24))
 
-        Icon(
-            modifier = Modifier
-                .clickable {
-                    onPlaybackAction(PlaybackActions.OnPreviousSelected)
-                }
-                .clip(CircleShape)
-                .background(MaterialTheme.colorScheme.onSurface)
-                .padding(MaterialTheme.dimens.size8),
+        PlaybackControl(
             imageVector = Icons.Rounded.SkipPrevious,
-            contentDescription = "PreviousSelected",
-            tint = MaterialTheme.colorScheme.primary
+            action = { onPlaybackAction(PlaybackActions.OnPreviousSelected) }
         )
 
         Spacer(modifier = Modifier.width(MaterialTheme.dimens.size8))
 
-        Icon(
-            modifier = Modifier
-                .clickable {
-                    onPlaybackAction(PlaybackActions.OnNextSelected)
-                }
-                .clip(CircleShape)
-                .background(MaterialTheme.colorScheme.onSurface)
-                .padding(MaterialTheme.dimens.size8),
+        PlaybackControl(
             imageVector = Icons.Rounded.SkipNext,
-            contentDescription = "NextSelected",
-            tint = MaterialTheme.colorScheme.primary
+            action = { onPlaybackAction(PlaybackActions.OnNextSelected) }
         )
 
         Spacer(modifier = Modifier.width(MaterialTheme.dimens.size24))
 
-        Icon(
-            modifier = Modifier
-                .clickable {
-                    onPlaybackAction(PlaybackActions.OnEpgUiToggle)
-                }
-                .clip(CircleShape)
-                .background(MaterialTheme.colorScheme.onSurface)
-                .padding(MaterialTheme.dimens.size8),
+        PlaybackControl(
             imageVector = Icons.Rounded.ViewList,
-            contentDescription = "Show epg",
-            tint = MaterialTheme.colorScheme.primary
+            action = { onPlaybackAction(PlaybackActions.OnEpgUiToggle) }
         )
 
         Spacer(modifier = Modifier.width(MaterialTheme.dimens.size8))
 
-        Icon(
-            modifier = Modifier
-                .clickable {
-                    onPlaybackAction(PlaybackActions.OnChannelsUiToggle)
-                }
-                .clip(CircleShape)
-                .background(MaterialTheme.colorScheme.onSurface)
-                .padding(MaterialTheme.dimens.size8),
+        PlaybackControl(
             imageVector = Icons.Rounded.FeaturedPlayList,
-            contentDescription = "Show channels",
-            tint = MaterialTheme.colorScheme.primary
+            action = { onPlaybackAction(PlaybackActions.OnChannelsUiToggle) }
         )
 
         Spacer(modifier = Modifier.width(MaterialTheme.dimens.size8))
 
-        Icon(
-            modifier = Modifier
-                .clickable {
-                    onPlaybackAction(PlaybackActions.OnChannelInfoUiToggle)
-                }
-                .clip(CircleShape)
-                .background(MaterialTheme.colorScheme.onSurface)
-                .padding(MaterialTheme.dimens.size8),
+        PlaybackControl(
             imageVector = Icons.Rounded.Info,
-            contentDescription = "Show channel info",
-            tint = MaterialTheme.colorScheme.primary
+            action = { onPlaybackAction(PlaybackActions.OnChannelInfoUiToggle) }
         )
 
         Spacer(modifier = Modifier.width(MaterialTheme.dimens.size24))
@@ -284,14 +216,14 @@ actual fun TwoPaneContainer(
     Row(modifier = Modifier.fillMaxSize()) {
         Column(
             modifier = Modifier
-                .weight(6f)
+                .weight(MaterialTheme.dimens.weight6)
                 .fillMaxHeight()
         ) {
             first()
         }
         Column(
             modifier = Modifier
-                .weight(2f)
+                .weight(MaterialTheme.dimens.weight2)
                 .fillMaxHeight()
         ) {
             second()

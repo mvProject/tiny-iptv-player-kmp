@@ -10,6 +10,8 @@ package com.mvproject.tinyiptvkmp.ui.components.overlay
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.fadeIn
 import androidx.compose.animation.fadeOut
+import androidx.compose.animation.scaleIn
+import androidx.compose.animation.scaleOut
 import androidx.compose.foundation.gestures.detectTapGestures
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.BoxScope
@@ -32,8 +34,8 @@ fun OverlayContent(
 
     AnimatedVisibility(
         visible = isVisible,
-        enter = fadeIn(),
-        exit = fadeOut()
+        enter = scaleIn() + fadeIn(),
+        exit = scaleOut() + fadeOut()
     ) {
         Box(
             modifier = Modifier

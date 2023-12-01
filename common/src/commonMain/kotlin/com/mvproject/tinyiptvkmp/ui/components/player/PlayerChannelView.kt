@@ -1,7 +1,7 @@
 /*
  *  Created by Medvediev Viktor [mvproject]
  *  Copyright © 2023
- *  last modified : 20.11.23, 20:27
+ *  last modified : 29.11.23, 18:02
  *
  */
 
@@ -10,16 +10,15 @@ package com.mvproject.tinyiptvkmp.ui.components.player
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.fadeIn
 import androidx.compose.animation.fadeOut
-import androidx.compose.foundation.background
+import androidx.compose.animation.scaleIn
+import androidx.compose.animation.scaleOut
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
-import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.wrapContentHeight
-import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -30,6 +29,7 @@ import androidx.compose.ui.text.style.TextAlign
 import com.mvproject.tinyiptvkmp.data.mappers.ListMappers.toActual
 import com.mvproject.tinyiptvkmp.data.model.channels.TvPlaylistChannel
 import com.mvproject.tinyiptvkmp.ui.components.epg.PlayerChannelEpgItem
+import com.mvproject.tinyiptvkmp.ui.components.modifiers.roundedHeader
 import com.mvproject.tinyiptvkmp.ui.screens.player.action.PlaybackActions
 import com.mvproject.tinyiptvkmp.ui.theme.dimens
 import com.mvproject.tinyiptvkmp.utils.AppConstants
@@ -47,8 +47,8 @@ fun PlayerChannelView(
 ) {
     AnimatedVisibility(
         visible = isVisible,
-        enter = fadeIn(),
-        exit = fadeOut()
+        enter = scaleIn() + fadeIn(),
+        exit = scaleOut() + fadeOut()
     ) {
         Box(
             modifier = modifier
@@ -58,15 +58,10 @@ fun PlayerChannelView(
                 modifier = Modifier
                     .fillMaxWidth()
                     .wrapContentHeight()
-                    .background(
-                        color = MaterialTheme.colorScheme.primary,
-                        shape = RoundedCornerShape(
-                            topStart = MaterialTheme.dimens.size16,
-                            topEnd = MaterialTheme.dimens.size16
-                        )
+                    .roundedHeader(
+                        color = MaterialTheme.colorScheme.primary
                     )
-                    .align(Alignment.BottomCenter)
-                    .padding(MaterialTheme.dimens.size4),
+                    .align(Alignment.BottomCenter),
                 verticalArrangement = Arrangement.Center
             ) {
                 Text(

@@ -10,9 +10,9 @@ package com.mvproject.tinyiptvkmp.ui.components.playlist
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
-import androidx.compose.foundation.layout.wrapContentSize
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Folder
 import androidx.compose.material3.Icon
@@ -33,7 +33,7 @@ fun PlaylistGroupItemView(
     group: ChannelsGroup
 ) {
     Row(
-        modifier = modifier.wrapContentSize(),
+        modifier = modifier.fillMaxWidth(),
         horizontalArrangement = Arrangement.SpaceBetween,
         verticalAlignment = Alignment.CenterVertically
     ) {
@@ -49,7 +49,7 @@ fun PlaylistGroupItemView(
         Spacer(modifier = Modifier.width(MaterialTheme.dimens.size8))
 
         Text(
-            modifier = Modifier.weight(MaterialTheme.dimens.weight5),
+            modifier = Modifier.weight(MaterialTheme.dimens.weight6),
             text = group.groupName,
             style = MaterialTheme.typography.bodyMedium,
             color = MaterialTheme.colorScheme.onPrimary,
@@ -57,7 +57,7 @@ fun PlaylistGroupItemView(
 
         if (group.groupContentCount > AppConstants.INT_VALUE_ZERO) {
             Text(
-                modifier = Modifier.weight(MaterialTheme.dimens.weight1),
+                modifier = Modifier.width(MaterialTheme.dimens.size78),
                 text = group.groupContentCount.toString(),
                 style = MaterialTheme.typography.titleMedium,
                 color = MaterialTheme.colorScheme.onPrimary,
