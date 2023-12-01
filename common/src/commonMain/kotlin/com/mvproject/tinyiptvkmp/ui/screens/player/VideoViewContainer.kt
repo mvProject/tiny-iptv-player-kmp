@@ -42,7 +42,7 @@ import io.github.skeptick.libres.compose.painterResource
 @Composable
 fun VideoViewContainer(
     viewModel: VideoViewViewModel,
-    channelUrl: String,
+    channelName: String,
     channelGroup: String,
     onNavigateBack: () -> Unit = {}
 ) {
@@ -176,7 +176,7 @@ fun VideoViewContainer(
 
     DisposableEffect(viewModel) {
         viewModel.initPlayBack(
-            channelUrl = channelUrl,
+            channelName = channelName,
             channelGroup = channelGroup
         )
 

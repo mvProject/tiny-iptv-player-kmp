@@ -7,8 +7,6 @@
 
 package com.mvproject.tinyiptvkmp.ui.screens.settings.general
 
-import cafe.adriel.voyager.core.model.ScreenModel
-import cafe.adriel.voyager.core.model.screenModelScope
 import com.mvproject.tinyiptvkmp.data.repository.PreferenceRepository
 import com.mvproject.tinyiptvkmp.ui.screens.settings.general.action.SettingsAction
 import com.mvproject.tinyiptvkmp.ui.screens.settings.general.state.SettingsState
@@ -16,20 +14,22 @@ import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
+import moe.tlaster.precompose.viewmodel.ViewModel
+import moe.tlaster.precompose.viewmodel.viewModelScope
 
 class SettingsViewModel(
     private val preferenceRepository: PreferenceRepository
-) : ScreenModel {
+) : ViewModel() {
 
     private val _state = MutableStateFlow(SettingsState())
     val state = _state.asStateFlow()
 
     init {
-        screenModelScope.launch {
+        viewModelScope.launch {
             _state.update {
                 it.copy(
                     infoUpdatePeriod = preferenceRepository.getEpgInfoUpdatePeriod(),
-                    epgUpdatePeriod = preferenceRepository.getMainEpgUpdatePeriod(),
+                    epgUpdatePeriod = preferenceRepository.getMainEpgUpdatePeriod()
                 )
             }
         }
@@ -39,9 +39,9 @@ class SettingsViewModel(
         when (action) {
             is SettingsAction.SetInfoUpdatePeriod -> {
                 val newType = action.type
-                screenModelScope.launch {
-                    _state.update {
-                        it.copy(infoUpdatePeriod = newType)
+                viewModelScope.launch {
+                    _state.update { current ->
+                        current.copy(infoUpdatePeriod = newType)
                     }
                     preferenceRepository.setEpgInfoUpdatePeriod(type = newType)
                 }
@@ -49,9 +49,9 @@ class SettingsViewModel(
 
             is SettingsAction.SetEpgUpdatePeriod -> {
                 val newType = action.type
-                screenModelScope.launch {
-                    _state.update {
-                        it.copy(epgUpdatePeriod = newType)
+                viewModelScope.launch {
+                    _state.update { current ->
+                        current.copy(epgUpdatePeriod = newType)
                     }
                     preferenceRepository.setMainEpgUpdatePeriod(type = newType)
                 }
