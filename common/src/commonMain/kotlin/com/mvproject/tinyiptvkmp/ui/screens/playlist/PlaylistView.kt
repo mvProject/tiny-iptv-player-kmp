@@ -37,7 +37,8 @@ import androidx.compose.ui.graphics.Color
 import com.mvproject.tinyiptvkmp.MainRes
 import com.mvproject.tinyiptvkmp.data.enums.UpdatePeriod
 import com.mvproject.tinyiptvkmp.platform.LocalFileSelectButton
-import com.mvproject.tinyiptvkmp.ui.components.dialogs.OptionsDialog
+import com.mvproject.tinyiptvkmp.ui.components.overlay.OverlayContent
+import com.mvproject.tinyiptvkmp.ui.components.overlay.OverlayOptionsMenu
 import com.mvproject.tinyiptvkmp.ui.components.selectors.OptionSelector
 import com.mvproject.tinyiptvkmp.ui.components.toolbars.AppBarWithBackNav
 import com.mvproject.tinyiptvkmp.ui.components.views.LoadingView
@@ -214,18 +215,23 @@ fun PlaylistView(
                 isVisible = state.isSaving,
             )
 
-            OptionsDialog(
-                isDialogOpen = isUpdateOptionOpen,
-                title = MainRes.string.hint_update_period,
-                selectedIndex = state.updatePeriod,
-                items = UpdatePeriod.entries.map {
-                    it.title
-                },
-                onItemSelected = { index ->
-                    onPlaylistAction(PlaylistAction.SetUpdatePeriod(index))
-                    isUpdateOptionOpen.value = false
-                }
-            )
+            OverlayContent(
+                isVisible = isUpdateOptionOpen.value,
+                contentAlpha = MaterialTheme.dimens.alpha90,
+                onViewTap = { isUpdateOptionOpen.value = false }
+            ) {
+                OverlayOptionsMenu(
+                    title = MainRes.string.hint_update_period,
+                    selectedIndex = state.updatePeriod,
+                    items = UpdatePeriod.entries.map {
+                        it.title
+                    },
+                    onItemSelected = { index ->
+                        onPlaylistAction(PlaylistAction.SetUpdatePeriod(index))
+                        isUpdateOptionOpen.value = false
+                    }
+                )
+            }
         }
     }
 }

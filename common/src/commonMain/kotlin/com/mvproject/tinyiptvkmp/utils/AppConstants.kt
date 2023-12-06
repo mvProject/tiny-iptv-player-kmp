@@ -1,7 +1,7 @@
 /*
  *  Created by Medvediev Viktor [mvproject]
  *  Copyright © 2023
- *  last modified : 04.05.23, 14:27
+ *  last modified : 01.12.23, 11:04
  *
  */
 
@@ -15,6 +15,7 @@ object AppConstants {
     const val INT_VALUE_1 = 1
     const val INT_VALUE_2 = 2
     const val INT_VALUE_3 = 3
+    const val INT_VALUE_4 = 4
     const val INT_VALUE_5 = 5
 
     const val FLOAT_VALUE_ZERO = 0f
@@ -45,6 +46,11 @@ object AppConstants {
 
     const val PLAYLIST_ID = "PLAYLIST_ID"
 
-    // const val FOLDER_CHANNELS_ALL = "All Channels"
-    //const val FOLDER_CHANNELS_FAVORITE = "Favorites"
+    const val DRAG_THRESHOLD = 5
+    const val MOVEMENT_THRESHOLD = 10
+
+    const val SCREEN_PERCENTAGE_25 = 0.25
+    const val SCREEN_PERCENTAGE_30 = 0.3
+    const val SCREEN_PERCENTAGE_70 = 0.7
+    const val SCREEN_PERCENTAGE_40 = 0.4
 }

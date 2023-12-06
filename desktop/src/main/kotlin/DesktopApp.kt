@@ -1,3 +1,10 @@
+/*
+ *  Created by Medvediev Viktor [mvproject]
+ *  Copyright © 2023
+ *  last modified : 01.12.23, 10:19
+ *
+ */
+
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.ui.Alignment
@@ -6,7 +13,7 @@ import androidx.compose.ui.graphics.painter.BitmapPainter
 import androidx.compose.ui.res.loadImageBitmap
 import androidx.compose.ui.res.useResource
 import androidx.compose.ui.unit.dp
-import androidx.compose.ui.window.WindowPosition
+import androidx.compose.ui.window.WindowPlacement
 import androidx.compose.ui.window.WindowState
 import androidx.compose.ui.window.singleWindowApplication
 import com.mvproject.tinyiptvkmp.MainRes
@@ -22,9 +29,9 @@ fun main() {
         title = MainRes.string.app_name,
         icon = BitmapPainter(useResource("drawable/tiny_iptv_logo.png", ::loadImageBitmap)),
         state = WindowState(
-            position = WindowPosition.Aligned(Alignment.Center),
-            width = 1400.dp,
-            height = 900.dp
+            placement = WindowPlacement.Maximized,
+            height = 900.dp,
+            width = 1400.dp
         )
     ) {
         Box(
