@@ -1,7 +1,7 @@
 /*
  *  Created by Medvediev Viktor [mvproject]
- *  Copyright © 2023
- *  last modified : 20.11.23, 20:27
+ *  Copyright © 2024
+ *  last modified : 30.01.24, 14:57
  *
  */
 
@@ -27,11 +27,13 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.input.KeyboardType
-import com.mvproject.tinyiptvkmp.MainRes
 import com.mvproject.tinyiptvkmp.ui.theme.dimens
 import com.mvproject.tinyiptvkmp.utils.AppConstants.EMPTY_STRING
+import org.jetbrains.compose.resources.ExperimentalResourceApi
+import org.jetbrains.compose.resources.stringResource
+import tinyiptvkmp.common.generated.resources.Res
 
-@OptIn(ExperimentalMaterial3Api::class)
+@OptIn(ExperimentalMaterial3Api::class, ExperimentalResourceApi::class)
 @Composable
 fun SearchAppBar(
     text: String,
@@ -49,7 +51,7 @@ fun SearchAppBar(
                 },
                 placeholder = {
                     Text(
-                        text = MainRes.string.hint_msg_search,
+                        text = stringResource(Res.string.hint_msg_search),
                         style = MaterialTheme.typography.labelSmall,
                         color = MaterialTheme.colorScheme.onPrimary
                     )

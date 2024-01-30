@@ -1,7 +1,7 @@
 /*
  *  Created by Medvediev Viktor [mvproject]
- *  Copyright © 2023
- *  last modified : 20.11.23, 20:27
+ *  Copyright © 2024
+ *  last modified : 30.01.24, 14:57
  *
  */
 
@@ -22,10 +22,13 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.style.TextAlign
-import com.mvproject.tinyiptvkmp.MainRes
 import com.mvproject.tinyiptvkmp.data.model.epg.EpgProgram
 import com.mvproject.tinyiptvkmp.ui.theme.dimens
+import org.jetbrains.compose.resources.ExperimentalResourceApi
+import org.jetbrains.compose.resources.stringResource
+import tinyiptvkmp.common.generated.resources.Res
 
+@OptIn(ExperimentalResourceApi::class)
 @Composable
 fun PlayerEpgContent(
     modifier: Modifier = Modifier,
@@ -40,7 +43,7 @@ fun PlayerEpgContent(
                     .fillMaxWidth()
                     .padding(horizontal = MaterialTheme.dimens.size12)
                     .align(Alignment.Center),
-                text = MainRes.string.msg_no_epg_found,
+                text = stringResource(Res.string.msg_no_epg_found),
                 style = MaterialTheme.typography.titleLarge,
                 color = MaterialTheme.colorScheme.onSurface,
                 textAlign = TextAlign.Center

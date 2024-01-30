@@ -1,7 +1,7 @@
 /*
  *  Created by Medvediev Viktor [mvproject]
- *  Copyright © 2023
- *  last modified : 20.11.23, 20:27
+ *  Copyright © 2024
+ *  last modified : 30.01.24, 14:57
  *
  */
 
@@ -34,12 +34,14 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.style.TextOverflow
-import com.mvproject.tinyiptvkmp.MainRes
 import com.mvproject.tinyiptvkmp.data.enums.ChannelsViewType
 import com.mvproject.tinyiptvkmp.ui.theme.dimens
 import com.mvproject.tinyiptvkmp.utils.AppConstants.INT_VALUE_1
+import org.jetbrains.compose.resources.ExperimentalResourceApi
+import org.jetbrains.compose.resources.stringResource
+import tinyiptvkmp.common.generated.resources.Res
 
-@OptIn(ExperimentalMaterial3Api::class)
+@OptIn(ExperimentalMaterial3Api::class, ExperimentalResourceApi::class)
 @Composable
 fun AppBarWithActions(
     appBarTitle: String,
@@ -106,7 +108,7 @@ fun AppBarWithActions(
                 DropdownMenuItem(
                     text = {
                         Text(
-                            text = MainRes.string.menu_view_type_list,
+                            text = stringResource(Res.string.menu_view_type_list),
                             style = MaterialTheme.typography.titleSmall,
                         )
                     },
@@ -127,7 +129,7 @@ fun AppBarWithActions(
                 DropdownMenuItem(
                     text = {
                         Text(
-                            text = MainRes.string.menu_view_type_grid,
+                            text = stringResource(Res.string.menu_view_type_grid),
                             style = MaterialTheme.typography.titleSmall,
                         )
                     },
@@ -148,7 +150,7 @@ fun AppBarWithActions(
                 DropdownMenuItem(
                     text = {
                         Text(
-                            text = MainRes.string.menu_view_type_card,
+                            text = stringResource(Res.string.menu_view_type_card),
                             style = MaterialTheme.typography.titleSmall,
                         )
                     },

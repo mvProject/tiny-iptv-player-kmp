@@ -1,20 +1,24 @@
 /*
  *  Created by Medvediev Viktor [mvproject]
- *  Copyright © 2023
- *  last modified : 27.10.23, 13:32
+ *  Copyright © 2024
+ *  last modified : 30.01.24, 13:56
  *
  */
 
+@file:OptIn(ExperimentalResourceApi::class)
+
 package com.mvproject.tinyiptvkmp.data.enums
 
-import com.mvproject.tinyiptvkmp.MainRes
+import org.jetbrains.compose.resources.ExperimentalResourceApi
+import org.jetbrains.compose.resources.StringResource
+import tinyiptvkmp.common.generated.resources.Res
 
-enum class RatioMode(val value: Int, val title: String, val ratio: Float) {
-    Original(0, MainRes.string.video_ratio_mode_original, 1f),
-    WideScreen(1, MainRes.string.video_ratio_mode_wideScreen, 1.777f),
-    FullScreen(2, MainRes.string.video_ratio_mode_fullScreen, 1.333f),
-    Cinematic(3, MainRes.string.video_ratio_mode_cinematic, 2.333f),
-    Square(4, MainRes.string.video_ratio_mode_square, 1f);
+enum class RatioMode(val value: Int, val title: StringResource, val ratio: Float) {
+    Original(0, Res.string.video_ratio_mode_original, 1f),
+    WideScreen(1, Res.string.video_ratio_mode_widescreen, 1.777f),
+    FullScreen(2, Res.string.video_ratio_mode_fullscreen, 1.333f),
+    Cinematic(3, Res.string.video_ratio_mode_cinematic, 2.333f),
+    Square(4, Res.string.video_ratio_mode_square, 1f);
 
     companion object {
         fun toggleRatioMode(current: RatioMode) =

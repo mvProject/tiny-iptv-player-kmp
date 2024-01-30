@@ -1,20 +1,24 @@
 /*
  *  Created by Medvediev Viktor [mvproject]
- *  Copyright © 2023
- *  last modified : 27.10.23, 13:32
+ *  Copyright © 2024
+ *  last modified : 30.01.24, 13:56
  *
  */
 
+@file:OptIn(ExperimentalResourceApi::class)
+
 package com.mvproject.tinyiptvkmp.data.enums
 
-import com.mvproject.tinyiptvkmp.MainRes
+import org.jetbrains.compose.resources.ExperimentalResourceApi
+import org.jetbrains.compose.resources.StringResource
+import tinyiptvkmp.common.generated.resources.Res
 
-enum class ResizeMode(val value: Int, val title: String) {
-    Fit(0, MainRes.string.video_resize_mode_fit),
-    FixedWidth(1, MainRes.string.video_resize_mode_fixed_width),
-    FixedHeight(2, MainRes.string.video_resize_mode_fixed_height),
-    Fill(3, MainRes.string.video_resize_mode_fill),
-    Zoom(4, MainRes.string.video_resize_mode_zoom);
+enum class ResizeMode(val value: Int, val title: StringResource) {
+    Fit(0, Res.string.video_resize_mode_fit),
+    FixedWidth(1, Res.string.video_resize_mode_fixed_width),
+    FixedHeight(2, Res.string.video_resize_mode_fixed_height),
+    Fill(3, Res.string.video_resize_mode_fill),
+    Zoom(4, Res.string.video_resize_mode_zoom);
 
     companion object {
         fun toggleResizeMode(current: ResizeMode) =

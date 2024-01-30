@@ -1,7 +1,7 @@
 /*
  *  Created by Medvediev Viktor [mvproject]
- *  Copyright © 2023
- *  last modified : 20.11.23, 20:27
+ *  Copyright © 2024
+ *  last modified : 30.01.24, 14:57
  *
  */
 
@@ -30,7 +30,6 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import com.mvproject.tinyiptvkmp.MainRes
 import com.mvproject.tinyiptvkmp.data.enums.UpdatePeriod
 import com.mvproject.tinyiptvkmp.ui.components.overlay.OverlayContent
 import com.mvproject.tinyiptvkmp.ui.components.overlay.OverlayOptionsMenu
@@ -40,7 +39,11 @@ import com.mvproject.tinyiptvkmp.ui.screens.settings.general.action.SettingsActi
 import com.mvproject.tinyiptvkmp.ui.screens.settings.general.state.SettingsState
 import com.mvproject.tinyiptvkmp.ui.theme.dimens
 import com.mvproject.tinyiptvkmp.utils.AppConstants.WEIGHT_1
+import org.jetbrains.compose.resources.ExperimentalResourceApi
+import org.jetbrains.compose.resources.stringResource
+import tinyiptvkmp.common.generated.resources.Res
 
+@OptIn(ExperimentalResourceApi::class)
 @Composable
 fun SettingsGeneralView(
     state: SettingsState,
@@ -55,7 +58,7 @@ fun SettingsGeneralView(
             .fillMaxSize(),
         topBar = {
             AppBarWithBackNav(
-                appBarTitle = MainRes.string.scr_settings_title,
+                appBarTitle = stringResource(Res.string.scr_settings_title),
                 onBackClick = onNavigateBack,
             )
         }
@@ -77,7 +80,7 @@ fun SettingsGeneralView(
             ) {
 
                 Text(
-                    text = MainRes.string.scr_playlist_settings_title,
+                    text = stringResource(Res.string.scr_playlist_settings_title),
                     color = MaterialTheme.colorScheme.onPrimary,
                     style = MaterialTheme.typography.titleMedium
                 )
@@ -93,7 +96,7 @@ fun SettingsGeneralView(
                 ) {
                     Icon(
                         imageVector = Icons.Filled.ArrowRight,
-                        contentDescription = MainRes.string.scr_playlist_settings_title
+                        contentDescription = stringResource(Res.string.scr_playlist_settings_title)
                     )
                 }
             }
@@ -112,7 +115,7 @@ fun SettingsGeneralView(
             ) {
 
                 Text(
-                    text = MainRes.string.scr_player_settings_title,
+                    text = stringResource(Res.string.scr_player_settings_title),
                     color = MaterialTheme.colorScheme.onPrimary,
                     style = MaterialTheme.typography.titleMedium
                 )
@@ -128,7 +131,7 @@ fun SettingsGeneralView(
                 ) {
                     Icon(
                         imageVector = Icons.Filled.ArrowRight,
-                        contentDescription = MainRes.string.scr_player_settings_title
+                        contentDescription = stringResource(Res.string.scr_player_settings_title)
                     )
                 }
             }
@@ -157,7 +160,7 @@ fun SettingsGeneralView(
                 )
 
                 Text(
-                    text = MainRes.string.option_update_title,
+                    text = stringResource(Res.string.option_update_title),
                     style = MaterialTheme.typography.bodyMedium,
                     color = MaterialTheme.colorScheme.onSurface
                 )
@@ -176,8 +179,8 @@ fun SettingsGeneralView(
                 modifier = Modifier
                     .fillMaxWidth()
                     .padding(horizontal = MaterialTheme.dimens.size8),
-                title = MainRes.string.option_update_epg_info,
-                selectedItem = UpdatePeriod.entries[state.infoUpdatePeriod].title,
+                title = stringResource(Res.string.option_update_epg_info),
+                selectedItem = stringResource(UpdatePeriod.entries[state.infoUpdatePeriod].title),
                 isExpanded = isSelectInfoUpdateOpen.value,
                 onClick = {
                     isSelectInfoUpdateOpen.value = true
@@ -192,8 +195,8 @@ fun SettingsGeneralView(
                 modifier = Modifier
                     .fillMaxWidth()
                     .padding(horizontal = MaterialTheme.dimens.size8),
-                title = MainRes.string.option_update_epg_data,
-                selectedItem = UpdatePeriod.entries[state.epgUpdatePeriod].title,
+                title = stringResource(Res.string.option_update_epg_data),
+                selectedItem = stringResource(UpdatePeriod.entries[state.epgUpdatePeriod].title),
                 isExpanded = isSelectEpgUpdateOpen.value,
                 onClick = {
                     isSelectEpgUpdateOpen.value = true
@@ -207,10 +210,10 @@ fun SettingsGeneralView(
             onViewTap = { isSelectInfoUpdateOpen.value = false }
         ) {
             OverlayOptionsMenu(
-                title = MainRes.string.hint_update_period,
+                title = stringResource(Res.string.hint_update_period),
                 selectedIndex = state.infoUpdatePeriod,
                 items = UpdatePeriod.entries.map {
-                    it.title
+                    stringResource(it.title)
                 },
                 onItemSelected = { index ->
                     onSettingsAction(SettingsAction.SetInfoUpdatePeriod(index))
@@ -225,10 +228,10 @@ fun SettingsGeneralView(
             onViewTap = { isSelectEpgUpdateOpen.value = false }
         ) {
             OverlayOptionsMenu(
-                title = MainRes.string.hint_update_period,
+                title = stringResource(Res.string.hint_update_period),
                 selectedIndex = state.epgUpdatePeriod,
                 items = UpdatePeriod.entries.map {
-                    it.title
+                    stringResource(it.title)
                 },
                 onItemSelected = { index ->
                     onSettingsAction(SettingsAction.SetEpgUpdatePeriod(index))
