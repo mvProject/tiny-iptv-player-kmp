@@ -1,7 +1,7 @@
 /*
  *  Created by Medvediev Viktor [mvproject]
- *  Copyright © 2023
- *  last modified : 20.11.23, 20:27
+ *  Copyright © 2024
+ *  last modified : 30.01.24, 12:27
  *
  */
 
@@ -14,41 +14,19 @@ import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.text.font.FontStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.sp
-import com.mvproject.tinyiptvkmp.platform.font
+import org.jetbrains.compose.resources.ExperimentalResourceApi
+import org.jetbrains.compose.resources.Font
+import tinyiptvkmp.common.generated.resources.Res
 
+@OptIn(ExperimentalResourceApi::class)
 @Composable
 fun getTypography(): Typography {
     val fonts = FontFamily(
-        font(
-            "Montserrat",
-            "montserrat_regular",
-            FontWeight.Normal,
-            FontStyle.Normal
-        ),
-        font(
-            "Montserrat",
-            "montserrat_medium",
-            FontWeight.Medium,
-            FontStyle.Normal
-        ),
-        font(
-            "Montserrat",
-            "montserrat_semibold",
-            FontWeight.SemiBold,
-            FontStyle.Normal
-        ),
-        font(
-            "Montserrat",
-            "montserrat_bold",
-            FontWeight.Bold,
-            FontStyle.Normal
-        ),
-        font(
-            "Montserrat",
-            "montserrat_extrabold",
-            FontWeight.ExtraBold,
-            FontStyle.Normal
-        )
+        Font(Res.font.montserrat_regular, FontWeight.Normal, FontStyle.Normal),
+        Font(Res.font.montserrat_medium, FontWeight.Medium, FontStyle.Normal),
+        Font(Res.font.montserrat_semibold, FontWeight.SemiBold, FontStyle.Normal),
+        Font(Res.font.montserrat_bold, FontWeight.Bold, FontStyle.Normal),
+        Font(Res.font.montserrat_extrabold, FontWeight.ExtraBold, FontStyle.Normal),
     )
 
     return Typography(

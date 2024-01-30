@@ -1,7 +1,7 @@
 /*
  *  Created by Medvediev Viktor [mvproject]
- *  Copyright © 2023
- *  last modified : 30.11.23, 18:46
+ *  Copyright © 2024
+ *  last modified : 30.01.24, 14:57
  *
  */
 
@@ -31,14 +31,9 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.text.font.Font
-import androidx.compose.ui.text.font.FontStyle
-import androidx.compose.ui.text.font.FontWeight
-import androidx.compose.ui.text.platform.Font
 import com.mohamedrejeb.calf.picker.FilePickerFileType
 import com.mohamedrejeb.calf.picker.FilePickerSelectionMode
 import com.mohamedrejeb.calf.picker.rememberFilePickerLauncher
-import com.mvproject.tinyiptvkmp.MainRes
 import com.mvproject.tinyiptvkmp.data.mappers.ParseMappers
 import com.mvproject.tinyiptvkmp.data.model.channels.PlaylistChannel
 import com.mvproject.tinyiptvkmp.ui.PlayerView
@@ -52,19 +47,13 @@ import com.mvproject.tinyiptvkmp.utils.AppConstants
 import io.ktor.client.HttpClient
 import io.ktor.client.engine.java.Java
 import okio.use
+import org.jetbrains.compose.resources.ExperimentalResourceApi
+import org.jetbrains.compose.resources.stringResource
+import tinyiptvkmp.common.generated.resources.Res
 import java.io.BufferedReader
 import java.io.File
 import java.io.FileInputStream
 import java.io.InputStreamReader
-
-@Composable
-actual fun font(
-    name: String,
-    res: String,
-    weight: FontWeight,
-    style: FontStyle
-): Font = Font("font/$res.ttf", weight, style)
-
 
 actual fun createPlatformHttpClient(): HttpClient {
     // return HttpClient(OkHttp)
@@ -89,6 +78,7 @@ actual fun PlayerViewContainer(
     )
 }
 
+@OptIn(ExperimentalResourceApi::class)
 @Composable
 actual fun LocalFileSelectButton(onPlaylistAction: (PlaylistAction) -> Unit) {
 
@@ -120,7 +110,7 @@ actual fun LocalFileSelectButton(onPlaylistAction: (PlaylistAction) -> Unit) {
         shape = MaterialTheme.shapes.small
     ) {
         Text(
-            text = MainRes.string.btn_add_local,
+            text = stringResource(Res.string.btn_add_local),
             color = MaterialTheme.colorScheme.onSurface,
             style = MaterialTheme.typography.bodyLarge
         )

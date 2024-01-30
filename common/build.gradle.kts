@@ -1,7 +1,7 @@
 /*
  *  Created by Medvediev Viktor [mvproject]
- *  Copyright © 2023
- *  last modified : 25.10.23, 10:49
+ *  Copyright © 2024
+ *  last modified : 30.01.24, 16:36
  *
  */
 @Suppress("DSL_SCOPE_VIOLATION")
@@ -11,18 +11,13 @@ plugins {
     alias(libs.plugins.kotlinx.serialization.plugin)
     alias(libs.plugins.sqlDelight.plugin)
     alias(libs.plugins.compose.multiplatform)
-    alias(libs.plugins.libres.plugin)
-}
-
-libres {
-    generatedClassName = "MainRes" // "Res" by default
 }
 
 android {
     namespace = "com.mvproject.tinyiptvkmp"
 
     sourceSets["main"].manifest.srcFile("src/androidMain/AndroidManifest.xml")
-    sourceSets["main"].res.srcDirs("src/androidMain/res")
+   // sourceSets["main"].res.srcDirs("src/androidMain/res")
 
     compileSdk = 34
     defaultConfig {
@@ -52,90 +47,88 @@ kotlin {
     }
 
     sourceSets {
-        val commonMain by getting {
-            dependencies {
-                // Compose
-                implementation(compose.runtime)
-                implementation(compose.foundation)
-                implementation(compose.ui)
-                implementation(compose.material3)
-                implementation(compose.materialIconsExtended)
+        commonMain.dependencies {
+            implementation(compose.runtime)
+            implementation(compose.foundation)
+            implementation(compose.ui)
+            implementation(compose.material3)
+            implementation(compose.materialIconsExtended)
 
-                // Coroutines
-                implementation(libs.kotlinx.coroutines.core)
+            // Coroutines
+            implementation(libs.kotlinx.coroutines.core)
 
-                // DI
-                implementation(libs.bundles.koin)
+            // DI
+            implementation(libs.bundles.koin)
 
-                // Storage
-                implementation(libs.datastore.preferences.core)
-                implementation(libs.bundles.sqldelight)
+            // Storage
+            implementation(libs.datastore.preferences.core)
+            implementation(libs.bundles.sqldelight)
 
-                // Network
-                implementation(libs.bundles.ktor)
+            // Network
+            implementation(libs.bundles.ktor)
 
-                // Logging
-                implementation(libs.kermit)
+            // Logging
+            implementation(libs.kermit)
 
-                // Navigation
-                implementation(libs.bundles.precompose)
+            // Navigation
+            implementation(libs.bundles.precompose)
 
-                // Misc
-                implementation(libs.androidx.annotation)
-                implementation(libs.kotlinx.dateTime)
-                implementation(libs.material3.window.size.multiplatform)
-                implementation(libs.kotlinx.collections.immutable)
-                implementation(libs.urikmp)
+            // Misc
+            implementation(libs.androidx.annotation)
+            implementation(libs.kotlinx.dateTime)
+            implementation(libs.material3.window.size.multiplatform)
+            implementation(libs.kotlinx.collections.immutable)
+            implementation(libs.urikmp)
 
-                // Image processing
-                implementation(libs.kamelimage)
+            // Image processing
+            implementation(libs.kamelimage)
 
-                // Resources
-                @OptIn(org.jetbrains.compose.ExperimentalComposeLibrary::class)
-                implementation(compose.components.resources)
-                implementation(libs.libres.compose)
-            }
+            // Resources
+            @OptIn(org.jetbrains.compose.ExperimentalComposeLibrary::class)
+            implementation(compose.components.resources)
         }
 
-        val androidUnitTest by getting {
-            dependencies {
-                // Tests
-                /*                testImplementation(libs.test.junit)
-                                androidTestImplementation(libs.test.ext.junit)
-                                androidTestImplementation(libs.test.espresso.core)
-
-                                // UI Tests
-                                androidTestImplementation(libs.androidx.compose.ui.test.junit4)
-                                debugImplementation(libs.androidx.compose.ui.test.manifest)
-
-                               */
-            }
+        commonTest.dependencies {
+            implementation(kotlin("test"))
         }
-        val androidMain by getting {
-            dependencies {
-                // Core
-                implementation(libs.androidx.compose.activity)
-                implementation(libs.androidx.compose.lifecycle.runtime)
 
-                // Storage
-                implementation(libs.sqldelight.driver.android)
+        androidMain.dependencies {
+            // Core
+            implementation(libs.androidx.compose.activity)
+            implementation(libs.androidx.compose.lifecycle.runtime)
 
-                // Network
-                implementation(libs.ktor.client.android)
+            // Storage
+            implementation(libs.sqldelight.driver.android)
 
-                // DI
-                implementation(libs.bundles.koinAndroid)
+            // Network
+            implementation(libs.ktor.client.android)
 
-                // Exoplayer
-                implementation(libs.bundles.media3)
+            // DI
+            implementation(libs.bundles.koinAndroid)
 
-                // Image processing
-                implementation(libs.bundles.coil)
+            // Exoplayer
+            implementation(libs.bundles.media3)
 
-                // Misc
-                implementation(libs.kotlinx.collections.immutable)
-                implementation(libs.accompanist.adaptive)
-            }
+            // Image processing
+            implementation(libs.bundles.coil)
+
+            // Misc
+            implementation(libs.kotlinx.collections.immutable)
+            implementation(libs.accompanist.adaptive)
+        }
+
+        androidNativeTest.dependencies {
+            // implementation(libs.junit)
+            // Tests
+            /*                testImplementation(libs.test.junit)
+                            androidTestImplementation(libs.test.ext.junit)
+                            androidTestImplementation(libs.test.espresso.core)
+
+                            // UI Tests
+                            androidTestImplementation(libs.androidx.compose.ui.test.junit4)
+                            debugImplementation(libs.androidx.compose.ui.test.manifest)
+
+                           */
         }
 
         val desktopMain by getting {

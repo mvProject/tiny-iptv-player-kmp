@@ -1,7 +1,7 @@
 /*
  *  Created by Medvediev Viktor [mvproject]
- *  Copyright © 2023
- *  last modified : 20.11.23, 20:20
+ *  Copyright © 2024
+ *  last modified : 30.01.24, 14:57
  *
  */
 
@@ -23,16 +23,12 @@ import androidx.compose.material3.windowsizeclass.calculateWindowSizeClass
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
-import androidx.compose.ui.text.font.Font
-import androidx.compose.ui.text.font.FontStyle
-import androidx.compose.ui.text.font.FontWeight
 import androidx.lifecycle.compose.LifecycleResumeEffect
 import androidx.media3.common.PlaybackException
 import com.google.accompanist.adaptive.HorizontalTwoPaneStrategy
 import com.google.accompanist.adaptive.TwoPane
 import com.google.accompanist.adaptive.VerticalTwoPaneStrategy
 import com.google.accompanist.adaptive.calculateDisplayFeatures
-import com.mvproject.tinyiptvkmp.MainRes
 import com.mvproject.tinyiptvkmp.data.mappers.ParseMappers
 import com.mvproject.tinyiptvkmp.data.model.channels.PlaylistChannel
 import com.mvproject.tinyiptvkmp.ui.PlayerView
@@ -47,17 +43,11 @@ import com.mvproject.tinyiptvkmp.utils.CommonUtils.getNameFromStringUri
 import com.mvproject.tinyiptvkmp.utils.KLog
 import io.ktor.client.HttpClient
 import io.ktor.client.engine.android.Android
+import org.jetbrains.compose.resources.*
+import tinyiptvkmp.common.generated.resources.Res
 import java.io.BufferedReader
 import java.io.FileInputStream
 import java.io.InputStreamReader
-
-@SuppressLint("DiscouragedApi")
-@Composable
-actual fun font(name: String, res: String, weight: FontWeight, style: FontStyle): Font {
-    val context = LocalContext.current
-    val id = context.resources.getIdentifier(res, "font", context.packageName)
-    return Font(id, weight, style)
-}
 
 actual fun createPlatformHttpClient(): HttpClient {
     return HttpClient(Android)
@@ -80,6 +70,7 @@ actual fun PlayerViewContainer(
     )
 }
 
+@OptIn(ExperimentalResourceApi::class)
 @Composable
 actual fun LocalFileSelectButton(onPlaylistAction: (PlaylistAction) -> Unit) {
     val fileSelectLauncher = rememberLauncherForActivityResult(
@@ -103,7 +94,7 @@ actual fun LocalFileSelectButton(onPlaylistAction: (PlaylistAction) -> Unit) {
         shape = MaterialTheme.shapes.small
     ) {
         Text(
-            text = MainRes.string.btn_add_local,
+            text = stringResource(Res.string.btn_add_local),
             color = MaterialTheme.colorScheme.onSurface,
             style = MaterialTheme.typography.bodyLarge
         )
