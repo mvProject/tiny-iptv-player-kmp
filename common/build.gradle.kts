@@ -1,7 +1,7 @@
 /*
  *  Created by Medvediev Viktor [mvproject]
  *  Copyright © 2024
- *  last modified : 30.01.24, 16:36
+ *  last modified : 30.01.24, 18:17
  *
  */
 @Suppress("DSL_SCOPE_VIOLATION")
@@ -42,7 +42,7 @@ kotlin {
             }
         }
     }
-    jvm("desktop") {
+    jvm() {
         jvmToolchain(17)
     }
 
@@ -131,28 +131,32 @@ kotlin {
                            */
         }
 
-        val desktopMain by getting {
-            dependencies {
-                // Core
-                implementation(compose.desktop.common)
+        jvmMain.dependencies {
+            // Core
+            implementation(compose.desktop.common)
 
-                // Coroutines
-                implementation(libs.kotlinx.coroutines.swing)
+            // Coroutines
+            implementation(libs.kotlinx.coroutines.swing)
 
-                // Network
-                implementation(libs.ktor.client.java)
-                // implementation(libs.ktor.client.okhttp)
+            // Network
+            implementation(libs.ktor.client.java)
+            // implementation(libs.ktor.client.okhttp)
 
-                // Storage
-                implementation(libs.sqldelight.driver.jvm)
+            // Storage
+            implementation(libs.sqldelight.driver.jvm)
 
-                // FilePicker
-                implementation(libs.calf.filepicker)
+            // FilePicker
+            implementation(libs.calf.filepicker)
 
-                // Vlc player
-                implementation(libs.caprica.vlcj)
-            }
+            // Vlc player
+            implementation(libs.caprica.vlcj)
         }
+
+        /*       val desktopMain by getting {
+                   dependencies {
+
+                   }
+               }*/
     }
 }
 

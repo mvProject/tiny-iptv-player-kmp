@@ -1,7 +1,7 @@
 /*
  *  Created by Medvediev Viktor [mvproject]
- *  Copyright © 2023
- *  last modified : 01.12.23, 11:25
+ *  Copyright © 2024
+ *  last modified : 06.12.23, 12:45
  *
  */
 
