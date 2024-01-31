@@ -59,9 +59,7 @@ cache, decode and display images in your application
 
 ### Resources
 
-#### [Libres](https://github.com/Skeptick/libres)
-
-Resources generation in Kotlin Multiplatform
+Using composeResources for Kotlin Multiplatform
 
 ### Theming
 

@@ -1,7 +1,7 @@
 /*
  *  Created by Medvediev Viktor [mvproject]
  *  Copyright © 2024
- *  last modified : 30.01.24, 18:17
+ *  last modified : 31.01.24, 08:26
  *
  */
 @Suppress("DSL_SCOPE_VIOLATION")
@@ -17,7 +17,6 @@ android {
     namespace = "com.mvproject.tinyiptvkmp"
 
     sourceSets["main"].manifest.srcFile("src/androidMain/AndroidManifest.xml")
-   // sourceSets["main"].res.srcDirs("src/androidMain/res")
 
     compileSdk = 34
     defaultConfig {
@@ -109,9 +108,6 @@ kotlin {
             // Exoplayer
             implementation(libs.bundles.media3)
 
-            // Image processing
-            implementation(libs.bundles.coil)
-
             // Misc
             implementation(libs.kotlinx.collections.immutable)
             implementation(libs.accompanist.adaptive)
@@ -151,12 +147,6 @@ kotlin {
             // Vlc player
             implementation(libs.caprica.vlcj)
         }
-
-        /*       val desktopMain by getting {
-                   dependencies {
-
-                   }
-               }*/
     }
 }
 

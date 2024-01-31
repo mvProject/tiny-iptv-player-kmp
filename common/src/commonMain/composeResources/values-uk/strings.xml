@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?><!--
   ~  Created by Medvediev Viktor [mvproject]
   ~  Copyright © 2024
-  ~  last modified : 22.11.23, 18:54
+  ~  last modified : 31.01.24, 09:07
   ~
   -->
 
@@ -31,7 +31,7 @@
     <string name="channel_folder_favorite">Вибране</string>
 
     <string name="msg_no_epg_found">телепрограму не знайдено</string>
-    <string name="msg_no_items_found">Предмети не знайдено</string>
+    <string name="msg_no_items_found">Даних не знайдено</string>
     <string name="msg_no_internet_found">Немає підключення до Інтернету</string>
     <string name="msg_no_playable_media_found">Не вдається відтворити цей медіафайл</string>
     <string name="msg_no_playlist">Плейлистів не знайдено</string>

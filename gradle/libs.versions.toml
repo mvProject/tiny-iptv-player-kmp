@@ -26,7 +26,6 @@ material3WindowSizeClassMultiplatform = "0.3.1"
 componentsResources = "1.5.10"
 annotation = "1.7.1"
 
-coil = "2.5.0"
 kamelVersion = "0.8.2"
 
 calfFilePickerVersion = "0.2.0"
@@ -87,8 +86,6 @@ androidx-compose-activity = { module = "androidx.activity:activity-compose", ver
 androidx-compose-lifecycle-viewmodel = { module = "androidx.lifecycle:lifecycle-viewmodel-compose", version.ref = "compose-lifecycle-viewmodel" }
 androidx-compose-lifecycle-runtime = { module = "androidx.lifecycle:lifecycle-runtime-compose", version.ref = "compose-lifecycle-runtime" }
 
-coil = { module = "io.coil-kt:coil", version.ref = "coil" }
-coil-compose = { module = "io.coil-kt:coil-compose", version.ref = "coil" }
 kamelimage = { module = "media.kamel:kamel-image", version.ref = "kamelVersion" }
 
 components-resources = { module = "org.jetbrains.compose.components:components-resources", version.ref = "componentsResources" }
@@ -153,11 +150,6 @@ precompose = [
     "precompose",
     "precompose-viewmodel",
     "precompose-koin"
-]
-
-coil = [
-    "coil",
-    "coil-compose"
 ]
 
 media3 = [
