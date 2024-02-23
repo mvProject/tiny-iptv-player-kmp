@@ -1,7 +1,7 @@
 /*
  *  Created by Medvediev Viktor [mvproject]
  *  Copyright © 2024
- *  last modified : 30.01.24, 14:57
+ *  last modified : 23.02.24, 11:07
  *
  */
 
@@ -16,9 +16,9 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.ArrowRight
-import androidx.compose.material3.Divider
+import androidx.compose.material.icons.automirrored.filled.ArrowRight
 import androidx.compose.material3.FilledIconButton
+import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButtonDefaults
 import androidx.compose.material3.MaterialTheme
@@ -95,13 +95,13 @@ fun SettingsGeneralView(
                     )
                 ) {
                     Icon(
-                        imageVector = Icons.Filled.ArrowRight,
+                        imageVector = Icons.AutoMirrored.Filled.ArrowRight,
                         contentDescription = stringResource(Res.string.scr_playlist_settings_title)
                     )
                 }
             }
 
-            Divider(
+            HorizontalDivider(
                 modifier = Modifier
                     .fillMaxWidth()
                     .padding(horizontal = MaterialTheme.dimens.size8),
@@ -130,13 +130,13 @@ fun SettingsGeneralView(
                     )
                 ) {
                     Icon(
-                        imageVector = Icons.Filled.ArrowRight,
+                        imageVector = Icons.AutoMirrored.Filled.ArrowRight,
                         contentDescription = stringResource(Res.string.scr_player_settings_title)
                     )
                 }
             }
 
-            Divider(
+            HorizontalDivider(
                 modifier = Modifier
                     .fillMaxWidth()
                     .padding(horizontal = MaterialTheme.dimens.size8),
@@ -154,7 +154,7 @@ fun SettingsGeneralView(
                 ),
                 verticalAlignment = Alignment.CenterVertically
             ) {
-                Divider(
+                HorizontalDivider(
                     modifier = Modifier.weight(WEIGHT_1),
                     color = MaterialTheme.colorScheme.onPrimary
                 )
@@ -165,7 +165,7 @@ fun SettingsGeneralView(
                     color = MaterialTheme.colorScheme.onSurface
                 )
 
-                Divider(
+                HorizontalDivider(
                     modifier = Modifier.weight(WEIGHT_1),
                     color = MaterialTheme.colorScheme.onPrimary
                 )

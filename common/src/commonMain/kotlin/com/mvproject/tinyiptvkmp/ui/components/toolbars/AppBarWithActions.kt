@@ -1,7 +1,7 @@
 /*
  *  Created by Medvediev Viktor [mvproject]
  *  Copyright © 2024
- *  last modified : 30.01.24, 14:57
+ *  last modified : 23.02.24, 11:07
  *
  */
 
@@ -11,15 +11,15 @@ import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.NavigateBefore
+import androidx.compose.material.icons.automirrored.filled.NavigateBefore
+import androidx.compose.material.icons.automirrored.outlined.ViewList
 import androidx.compose.material.icons.outlined.Search
-import androidx.compose.material.icons.outlined.ViewList
 import androidx.compose.material3.CenterAlignedTopAppBar
-import androidx.compose.material3.Divider
 import androidx.compose.material3.DropdownMenu
 import androidx.compose.material3.DropdownMenuItem
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.FilledIconButton
+import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.IconButtonDefaults
@@ -71,7 +71,7 @@ fun AppBarWithActions(
                 )
             ) {
                 Icon(
-                    imageVector = Icons.Default.NavigateBefore,
+                    imageVector = Icons.AutoMirrored.Filled.NavigateBefore,
                     contentDescription = "Back",
                 )
             }
@@ -91,7 +91,7 @@ fun AppBarWithActions(
                 onClick = { isMenuOpen = !isMenuOpen }
             ) {
                 Icon(
-                    imageVector = Icons.Outlined.ViewList,
+                    imageVector = Icons.AutoMirrored.Outlined.ViewList,
                     contentDescription = "Change Grid",
                     tint = MaterialTheme.colorScheme.onPrimary
                 )
@@ -120,7 +120,7 @@ fun AppBarWithActions(
                         textColor = MaterialTheme.colorScheme.onSurface
                     )
                 )
-                Divider(
+                HorizontalDivider(
                     modifier = Modifier
                         .fillMaxWidth()
                         .padding(horizontal = MaterialTheme.dimens.size8),
@@ -141,7 +141,7 @@ fun AppBarWithActions(
                         textColor = MaterialTheme.colorScheme.onSurface
                     )
                 )
-                Divider(
+                HorizontalDivider(
                     modifier = Modifier
                         .fillMaxWidth()
                         .padding(horizontal = MaterialTheme.dimens.size8),

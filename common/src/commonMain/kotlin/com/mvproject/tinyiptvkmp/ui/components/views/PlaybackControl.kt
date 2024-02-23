@@ -1,7 +1,7 @@
 /*
  *  Created by Medvediev Viktor [mvproject]
- *  Copyright © 2023
- *  last modified : 29.11.23, 15:48
+ *  Copyright © 2024
+ *  last modified : 23.02.24, 11:07
  *
  */
 
@@ -12,7 +12,7 @@ import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.rounded.ViewList
+import androidx.compose.material.icons.automirrored.rounded.ViewList
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
@@ -24,7 +24,7 @@ import com.mvproject.tinyiptvkmp.ui.theme.dimens
 @Composable
 fun PlaybackControl(
     modifier: Modifier = Modifier,
-    imageVector: ImageVector = Icons.Rounded.ViewList,
+    imageVector: ImageVector = Icons.AutoMirrored.Rounded.ViewList,
     action: () -> Unit
 ) {
     Icon(

@@ -1,7 +1,7 @@
 /*
  *  Created by Medvediev Viktor [mvproject]
  *  Copyright © 2024
- *  last modified : 30.01.24, 14:57
+ *  last modified : 23.02.24, 11:07
  *
  */
 
@@ -20,8 +20,8 @@ import androidx.compose.foundation.layout.navigationBars
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.windowInsetsPadding
 import androidx.compose.material3.ButtonDefaults
-import androidx.compose.material3.Divider
 import androidx.compose.material3.ElevatedButton
+import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
@@ -190,7 +190,7 @@ fun PlaylistView(
                     ),
                     verticalAlignment = Alignment.CenterVertically
                 ) {
-                    Divider(
+                    HorizontalDivider(
                         modifier = Modifier.weight(WEIGHT_1),
                         color = MaterialTheme.colorScheme.onPrimary
                     )
@@ -201,7 +201,7 @@ fun PlaylistView(
                         color = MaterialTheme.colorScheme.onSurface
                     )
 
-                    Divider(
+                    HorizontalDivider(
                         modifier = Modifier.weight(WEIGHT_1),
                         color = MaterialTheme.colorScheme.onPrimary
                     )

@@ -1,7 +1,7 @@
 /*
  *  Created by Medvediev Viktor [mvproject]
  *  Copyright © 2024
- *  last modified : 31.01.24, 09:20
+ *  last modified : 23.02.24, 11:07
  *
  */
 
@@ -66,7 +66,7 @@ fun ThreeBounceAnimation(
         verticalAlignment = Alignment.CenterVertically,
         horizontalArrangement = Arrangement.Center
     ) {
-        dys.forEachIndexed { index, dy ->
+        dys.forEachIndexed { _, dy ->
             Box(
                 Modifier
                     .size(circleSize)

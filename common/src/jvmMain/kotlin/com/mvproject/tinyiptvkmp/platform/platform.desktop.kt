@@ -1,7 +1,7 @@
 /*
  *  Created by Medvediev Viktor [mvproject]
  *  Copyright © 2024
- *  last modified : 30.01.24, 16:36
+ *  last modified : 23.02.24, 11:07
  *
  */
 
@@ -16,14 +16,14 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.width
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.automirrored.rounded.FeaturedPlayList
+import androidx.compose.material.icons.automirrored.rounded.ViewList
+import androidx.compose.material.icons.automirrored.rounded.VolumeDown
+import androidx.compose.material.icons.automirrored.rounded.VolumeUp
 import androidx.compose.material.icons.rounded.Close
-import androidx.compose.material.icons.rounded.FeaturedPlayList
 import androidx.compose.material.icons.rounded.Info
 import androidx.compose.material.icons.rounded.SkipNext
 import androidx.compose.material.icons.rounded.SkipPrevious
-import androidx.compose.material.icons.rounded.ViewList
-import androidx.compose.material.icons.rounded.VolumeDown
-import androidx.compose.material.icons.rounded.VolumeUp
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedButton
@@ -137,14 +137,14 @@ actual fun AdditionalPlayerControls(
         Spacer(modifier = Modifier.width(MaterialTheme.dimens.size32))
 
         PlaybackControl(
-            imageVector = Icons.Rounded.VolumeDown,
+            imageVector = Icons.AutoMirrored.Rounded.VolumeDown,
             action = { onPlaybackAction(PlaybackActions.OnVolumeDown) }
         )
 
         Spacer(modifier = Modifier.width(MaterialTheme.dimens.size8))
 
         PlaybackControl(
-            imageVector = Icons.Rounded.VolumeUp,
+            imageVector = Icons.AutoMirrored.Rounded.VolumeUp,
             action = { onPlaybackAction(PlaybackActions.OnVolumeUp) }
         )
 
@@ -165,14 +165,14 @@ actual fun AdditionalPlayerControls(
         Spacer(modifier = Modifier.width(MaterialTheme.dimens.size24))
 
         PlaybackControl(
-            imageVector = Icons.Rounded.ViewList,
+            imageVector = Icons.AutoMirrored.Rounded.ViewList,
             action = { onPlaybackAction(PlaybackActions.OnEpgUiToggle) }
         )
 
         Spacer(modifier = Modifier.width(MaterialTheme.dimens.size8))
 
         PlaybackControl(
-            imageVector = Icons.Rounded.FeaturedPlayList,
+            imageVector = Icons.AutoMirrored.Rounded.FeaturedPlayList,
             action = { onPlaybackAction(PlaybackActions.OnChannelsUiToggle) }
         )
 

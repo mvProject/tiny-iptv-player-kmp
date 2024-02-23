@@ -1,7 +1,7 @@
 /*
  *  Created by Medvediev Viktor [mvproject]
  *  Copyright © 2024
- *  last modified : 31.01.24, 09:26
+ *  last modified : 23.02.24, 11:07
  *
  */
 
@@ -25,13 +25,13 @@ fun DurationProgressView(
     durationColor: Color = MaterialTheme.colorScheme.onSurfaceVariant,
 ) {
     LinearProgressIndicator(
-        progress = progress,
+        progress = { progress },
         modifier = modifier
             .fillMaxWidth()
             .height(MaterialTheme.dimens.size2),
-        trackColor = trackColor,
         color = durationColor,
-        strokeCap = StrokeCap.Round
+        trackColor = trackColor,
+        strokeCap = StrokeCap.Round,
     )
 }
 
