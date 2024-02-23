@@ -1,7 +1,7 @@
 /*
  *  Created by Medvediev Viktor [mvproject]
- *  Copyright © 2023
- *  last modified : 27.11.23, 17:40
+ *  Copyright © 2024
+ *  last modified : 30.01.24, 16:37
  *
  */
 
@@ -24,9 +24,12 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import com.mvproject.tinyiptvkmp.MainRes
 import com.mvproject.tinyiptvkmp.ui.theme.dimens
+import org.jetbrains.compose.resources.ExperimentalResourceApi
+import org.jetbrains.compose.resources.stringResource
+import tinyiptvkmp.common.generated.resources.Res
 
+@OptIn(ExperimentalResourceApi::class)
 @Composable
 fun OverlayChannelOptions(
     modifier: Modifier = Modifier,
@@ -51,9 +54,9 @@ fun OverlayChannelOptions(
             MaterialTheme.colorScheme.outline
 
         val epgUsingText = if (isEpgEnabled)
-            MainRes.string.menu_channel_option_epg_disable
+            Res.string.menu_channel_option_epg_disable
         else
-            MainRes.string.menu_channel_option_epg_enable
+            Res.string.menu_channel_option_epg_enable
 
         Column(
             modifier = Modifier
@@ -73,7 +76,7 @@ fun OverlayChannelOptions(
                 onClick = onToggleEpgState
             ) {
                 Text(
-                    text = epgUsingText,
+                    text = stringResource(epgUsingText),
                     style = MaterialTheme.typography.titleSmall,
                     color = epgUsingTextColor,
                 )
@@ -98,7 +101,7 @@ fun OverlayChannelOptions(
                 onClick = onShowEpg
             ) {
                 Text(
-                    text = MainRes.string.menu_channel_option_epg_show,
+                    text = stringResource(Res.string.menu_channel_option_epg_show),
                     style = MaterialTheme.typography.titleSmall,
                     color = epgVisibleTextColor,
                 )
@@ -112,9 +115,9 @@ fun OverlayChannelOptions(
                 MaterialTheme.colorScheme.onPrimary
 
             val favoriteText = if (isInFavorite)
-                MainRes.string.menu_channel_option_remove_favorite
+                Res.string.menu_channel_option_remove_favorite
             else
-                MainRes.string.menu_channel_option_add_favorite
+                Res.string.menu_channel_option_add_favorite
 
             OutlinedButton(
                 modifier = Modifier.fillMaxWidth(),
@@ -127,7 +130,7 @@ fun OverlayChannelOptions(
                 onClick = onToggleFavorite
             ) {
                 Text(
-                    text = favoriteText,
+                    text = stringResource(favoriteText),
                     style = MaterialTheme.typography.titleSmall,
                     color = favoriteTextColor,
                 )

@@ -1,7 +1,7 @@
 /*
  *  Created by Medvediev Viktor [mvproject]
- *  Copyright © 2023
- *  last modified : 20.11.23, 20:27
+ *  Copyright © 2024
+ *  last modified : 23.02.24, 11:07
  *
  */
 
@@ -11,15 +11,15 @@ import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.NavigateBefore
+import androidx.compose.material.icons.automirrored.filled.NavigateBefore
+import androidx.compose.material.icons.automirrored.outlined.ViewList
 import androidx.compose.material.icons.outlined.Search
-import androidx.compose.material.icons.outlined.ViewList
 import androidx.compose.material3.CenterAlignedTopAppBar
-import androidx.compose.material3.Divider
 import androidx.compose.material3.DropdownMenu
 import androidx.compose.material3.DropdownMenuItem
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.FilledIconButton
+import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.IconButtonDefaults
@@ -34,12 +34,14 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.style.TextOverflow
-import com.mvproject.tinyiptvkmp.MainRes
 import com.mvproject.tinyiptvkmp.data.enums.ChannelsViewType
 import com.mvproject.tinyiptvkmp.ui.theme.dimens
 import com.mvproject.tinyiptvkmp.utils.AppConstants.INT_VALUE_1
+import org.jetbrains.compose.resources.ExperimentalResourceApi
+import org.jetbrains.compose.resources.stringResource
+import tinyiptvkmp.common.generated.resources.Res
 
-@OptIn(ExperimentalMaterial3Api::class)
+@OptIn(ExperimentalMaterial3Api::class, ExperimentalResourceApi::class)
 @Composable
 fun AppBarWithActions(
     appBarTitle: String,
@@ -69,7 +71,7 @@ fun AppBarWithActions(
                 )
             ) {
                 Icon(
-                    imageVector = Icons.Default.NavigateBefore,
+                    imageVector = Icons.AutoMirrored.Filled.NavigateBefore,
                     contentDescription = "Back",
                 )
             }
@@ -89,7 +91,7 @@ fun AppBarWithActions(
                 onClick = { isMenuOpen = !isMenuOpen }
             ) {
                 Icon(
-                    imageVector = Icons.Outlined.ViewList,
+                    imageVector = Icons.AutoMirrored.Outlined.ViewList,
                     contentDescription = "Change Grid",
                     tint = MaterialTheme.colorScheme.onPrimary
                 )
@@ -106,7 +108,7 @@ fun AppBarWithActions(
                 DropdownMenuItem(
                     text = {
                         Text(
-                            text = MainRes.string.menu_view_type_list,
+                            text = stringResource(Res.string.menu_view_type_list),
                             style = MaterialTheme.typography.titleSmall,
                         )
                     },
@@ -118,7 +120,7 @@ fun AppBarWithActions(
                         textColor = MaterialTheme.colorScheme.onSurface
                     )
                 )
-                Divider(
+                HorizontalDivider(
                     modifier = Modifier
                         .fillMaxWidth()
                         .padding(horizontal = MaterialTheme.dimens.size8),
@@ -127,7 +129,7 @@ fun AppBarWithActions(
                 DropdownMenuItem(
                     text = {
                         Text(
-                            text = MainRes.string.menu_view_type_grid,
+                            text = stringResource(Res.string.menu_view_type_grid),
                             style = MaterialTheme.typography.titleSmall,
                         )
                     },
@@ -139,7 +141,7 @@ fun AppBarWithActions(
                         textColor = MaterialTheme.colorScheme.onSurface
                     )
                 )
-                Divider(
+                HorizontalDivider(
                     modifier = Modifier
                         .fillMaxWidth()
                         .padding(horizontal = MaterialTheme.dimens.size8),
@@ -148,7 +150,7 @@ fun AppBarWithActions(
                 DropdownMenuItem(
                     text = {
                         Text(
-                            text = MainRes.string.menu_view_type_card,
+                            text = stringResource(Res.string.menu_view_type_card),
                             style = MaterialTheme.typography.titleSmall,
                         )
                     },

@@ -1,7 +1,7 @@
 /*
  *  Created by Medvediev Viktor [mvproject]
- *  Copyright © 2023
- *  last modified : 20.11.23, 20:27
+ *  Copyright © 2024
+ *  last modified : 30.01.24, 16:36
  *
  */
 
@@ -9,9 +9,6 @@ package com.mvproject.tinyiptvkmp.platform
 
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.text.font.Font
-import androidx.compose.ui.text.font.FontStyle
-import androidx.compose.ui.text.font.FontWeight
 import com.mvproject.tinyiptvkmp.data.model.channels.PlaylistChannel
 import com.mvproject.tinyiptvkmp.ui.screens.player.action.PlaybackActions
 import com.mvproject.tinyiptvkmp.ui.screens.player.action.PlaybackStateActions
@@ -30,9 +27,6 @@ import io.ktor.util.GZip
 import kotlinx.serialization.json.Json
 
 internal const val dataStoreFileName = "tiny_iptv.preferences_pb"
-
-@Composable
-expect fun font(name: String, res: String, weight: FontWeight, style: FontStyle): Font
 
 expect fun createPlatformHttpClient(): HttpClient
 
@@ -61,7 +55,7 @@ expect fun AdditionalPlayerControls(
 expect fun ExecuteOnResume(action: () -> Unit)
 
 internal fun createHttpClient(): HttpClient {
-    return com.mvproject.tinyiptvkmp.platform.createPlatformHttpClient().config {
+    return createPlatformHttpClient().config {
         install(Logging) {
             logger = object : Logger {
                 override fun log(message: String) {

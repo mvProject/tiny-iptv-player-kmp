@@ -1,0 +1,79 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+  ~  Created by Medvediev Viktor [mvproject]
+  ~  Copyright © 2024
+  ~  last modified : 22.11.23, 18:54
+  ~
+  -->
+
+<resources>
+    <string name="app_name">Tiny Iptv Player</string>
+
+    <string name="playlist_update_6_hours">6 stundas</string>
+    <string name="playlist_update_12_hours">12 stundas</string>
+    <string name="playlist_update_24_hours">24 stundas</string>
+    <string name="playlist_update_2_days">2 dienas</string>
+    <string name="playlist_update_1_week">1 nedēļa</string>
+    <string name="playlist_update_never">Nekad</string>
+
+    <string name="video_resize_mode_fill">Aizpildiet</string>
+    <string name="video_resize_mode_fixed_width">Fiksēts platums</string>
+    <string name="video_resize_mode_fixed_height">Fiksēts augstums</string>
+    <string name="video_resize_mode_fit">Fit</string>
+    <string name="video_resize_mode_zoom">Tālummaiņa</string>
+
+    <string name="video_ratio_mode_original">Oriģināls</string>
+    <string name="video_ratio_mode_wideScreen">Platekrāna (16:9)</string>
+    <string name="video_ratio_mode_fullScreen">Pilnekrāna režīms (4:3)</string>
+    <string name="video_ratio_mode_cinematic">Kino (21:9)</string>
+    <string name="video_ratio_mode_square">Kvadrāts (1:1)</string>
+
+    <string name="channel_folder_all">Visi kanāli</string>
+    <string name="channel_folder_favorite">Izlase</string>
+
+    <string name="msg_no_epg_found">epg nav atrasts</string>
+    <string name="msg_no_items_found">Vienumi nav atrasti</string>
+    <string name="msg_no_internet_found">Nav interneta savienojuma</string>
+    <string name="msg_no_playable_media_found">Nevar atskaņot šo multividi</string>
+    <string name="msg_no_playlist">Nav atrasts neviens atskaņošanas saraksts</string>
+    <string name="msg_playlist_details">Atskaņošanas saraksta informācija</string>
+
+    <string name="hint_msg_search">raksti šeit…</string>
+    <string name="hint_update_period">Atjaunināšanas periods</string>
+    <string name="hint_current_playlist">Pašreizējais atskaņošanas saraksts</string>
+    <string name="hint_name">Nosaukums</string>
+    <string name="hint_address">URL</string>
+
+    <string name="btn_save">Saglabāt atskaņošanas sarakstu</string>
+    <string name="btn_update">Atjaunināt atskaņošanas sarakstu</string>
+    <string name="btn_close">Aizvērt</string>
+    <string name="btn_add_first_playlist">Nospiediet, lai pievienotu atskaņošanas sarakstu</string>
+    <string name="btn_add_local">Pievienojiet vietējo atskaņošanas sarakstu</string>
+    <string name="btn_add_new">Jauns atskaņošanas saraksts</string>
+    <string name="btn_delete_current">Dzēst atskaņošanas sarakstu</string>
+    <string name="btn_playlists_update">atskaņošanas sarakstu atjaunināšana</string>
+
+    <string name="label_or">vai</string>
+
+    <string name="scr_settings_title">Iestatījumi</string>
+    <string name="scr_playlist_settings_title">Atskaņošanas sarakstu iestatījumi</string>
+    <string name="scr_player_settings_title">Atskaņotāja iestatījumi</string>
+
+    <string name="option_update_title">Atjaunināt</string>
+    <string name="option_update_epg_info">Epg informācija</string>
+    <string name="option_update_epg_data">Epg dati</string>
+    <string name="option_default_resize_mode">Noklusējuma lieluma maiņas režīms</string>
+    <string name="option_default_ratio_mode">Noklusējuma proporcijas režīms</string>
+    <string name="option_default_fullscreen_mode">Pēc noklusējuma izmantot pilnekrāna režīmu
+    </string>
+
+    <string name="menu_view_type_list">Saraksts</string>
+    <string name="menu_view_type_grid">Režģis</string>
+    <string name="menu_view_type_card">Kart</string>
+
+    <string name="menu_channel_option_epg_enable">Iespējot Epg</string>
+    <string name="menu_channel_option_epg_disable">Atspējot Epg</string>
+    <string name="menu_channel_option_epg_show">Rādīt Epg</string>
+    <string name="menu_channel_option_add_favorite">Pievienot izlasei</string>
+    <string name="menu_channel_option_remove_favorite">Noņemt no izlases</string>
+</resources>

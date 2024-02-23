@@ -1,7 +1,7 @@
 /*
  *  Created by Medvediev Viktor [mvproject]
- *  Copyright © 2023
- *  last modified : 09.05.23, 12:09
+ *  Copyright © 2024
+ *  last modified : 30.01.24, 14:48
  *
  */
 @Suppress("DSL_SCOPE_VIOLATION")
@@ -14,7 +14,6 @@ plugins {
     alias(libs.plugins.compose.multiplatform)
     alias(libs.plugins.sqlDelight.plugin) apply false
     alias(libs.plugins.kotlinx.serialization.plugin) apply false
-    alias(libs.plugins.libres.plugin) apply false
 }
 
 tasks.register("clean", Delete::class) {

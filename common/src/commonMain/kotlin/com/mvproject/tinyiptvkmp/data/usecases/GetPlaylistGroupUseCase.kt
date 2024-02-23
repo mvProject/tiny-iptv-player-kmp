@@ -1,17 +1,20 @@
 /*
  *  Created by Medvediev Viktor [mvproject]
- *  Copyright © 2023
- *  last modified : 20.11.23, 20:27
+ *  Copyright © 2024
+ *  last modified : 30.01.24, 14:57
  *
  */
 
 package com.mvproject.tinyiptvkmp.data.usecases
 
-import com.mvproject.tinyiptvkmp.MainRes
 import com.mvproject.tinyiptvkmp.data.model.channels.ChannelsGroup
 import com.mvproject.tinyiptvkmp.data.repository.PlaylistChannelsRepository
 import com.mvproject.tinyiptvkmp.data.repository.PreferenceRepository
+import org.jetbrains.compose.resources.ExperimentalResourceApi
+import org.jetbrains.compose.resources.getString
+import tinyiptvkmp.common.generated.resources.Res
 
+@OptIn(ExperimentalResourceApi::class)
 class GetPlaylistGroupUseCase(
     private val preferenceRepository: PreferenceRepository,
     private val playlistChannelsRepository: PlaylistChannelsRepository
@@ -29,14 +32,14 @@ class GetPlaylistGroupUseCase(
         return buildList {
             add(
                 ChannelsGroup(
-                    groupName = MainRes.string.channel_folder_all,
+                    groupName = getString(Res.string.channel_folder_all),
                     groupContentCount = allChannelsCount
                 )
             )
 
             add(
                 ChannelsGroup(
-                    groupName = MainRes.string.channel_folder_favorite
+                    groupName = getString(Res.string.channel_folder_favorite)
                 )
             )
 

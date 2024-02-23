@@ -1,7 +1,7 @@
 /*
  *  Created by Medvediev Viktor [mvproject]
- *  Copyright © 2023
- *  last modified : 04.05.23, 10:59
+ *  Copyright © 2024
+ *  last modified : 30.01.24, 12:10
  *
  */
 
@@ -21,7 +21,7 @@ dependencyResolutionManagement {
         maven("https://maven.pkg.jetbrains.space/public/p/compose/dev")
     }
 }
-rootProject.name = "Tiny Iptv Kmp"
+rootProject.name = "TinyIptvKmp"
 include(":android")
 include(":common")
 include(":desktop")

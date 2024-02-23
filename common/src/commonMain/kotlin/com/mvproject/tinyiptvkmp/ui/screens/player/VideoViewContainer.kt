@@ -1,7 +1,7 @@
 /*
  *  Created by Medvediev Viktor [mvproject]
- *  Copyright © 2023
- *  last modified : 20.11.23, 20:27
+ *  Copyright © 2024
+ *  last modified : 30.01.24, 14:42
  *
  */
 
@@ -21,7 +21,6 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import com.mvproject.tinyiptvkmp.MainRes
 import com.mvproject.tinyiptvkmp.platform.PlayerViewContainer
 import com.mvproject.tinyiptvkmp.platform.TwoPaneContainer
 import com.mvproject.tinyiptvkmp.ui.components.epg.PlayerEpgContent
@@ -37,8 +36,12 @@ import com.mvproject.tinyiptvkmp.ui.components.views.LoadingView
 import com.mvproject.tinyiptvkmp.ui.components.views.NoPlaybackView
 import com.mvproject.tinyiptvkmp.ui.components.views.VolumeProgressView
 import com.mvproject.tinyiptvkmp.ui.theme.dimens
-import io.github.skeptick.libres.compose.painterResource
+import org.jetbrains.compose.resources.ExperimentalResourceApi
+import org.jetbrains.compose.resources.painterResource
+import org.jetbrains.compose.resources.stringResource
+import tinyiptvkmp.common.generated.resources.Res
 
+@OptIn(ExperimentalResourceApi::class)
 @Composable
 fun VideoViewContainer(
     viewModel: VideoViewViewModel,
@@ -156,16 +159,16 @@ fun VideoViewContainer(
             modifier = Modifier.fillMaxSize(fraction),
             isVisible = !videoViewState.isOnline,
             isFullScreen = videoViewState.isFullscreen,
-            text = MainRes.string.msg_no_internet_found,
-            logo = MainRes.image.no_network.painterResource()
+            text = stringResource(Res.string.msg_no_internet_found),
+            logo = painterResource(Res.drawable.no_network)
         )
 
         NoPlaybackView(
             modifier = Modifier.fillMaxSize(),
             isVisible = !videoViewState.isMediaPlayable,
             isFullScreen = videoViewState.isFullscreen,
-            text = MainRes.string.msg_no_playable_media_found,
-            logo = MainRes.image.sad_face.painterResource()
+            text = stringResource(Res.string.msg_no_playable_media_found),
+            logo = painterResource(Res.drawable.sad_face)
         )
 
         LoadingView(

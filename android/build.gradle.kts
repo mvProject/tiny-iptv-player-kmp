@@ -1,7 +1,7 @@
 /*
  *  Created by Medvediev Viktor [mvproject]
- *  Copyright © 2023
- *  last modified : 10.05.23, 10:34
+ *  Copyright © 2024
+ *  last modified : 23.02.24, 09:34
  *
  */
 
@@ -73,7 +73,7 @@ android {
         compose = true
     }
     composeOptions {
-        kotlinCompilerExtensionVersion = "1.5.4"
+        kotlinCompilerExtensionVersion = "1.5.10"
     }
     packaging {
         resources {
@@ -96,7 +96,6 @@ fun readProperties(propertiesFile: File) = Properties().apply {
 
 dependencies {
     implementation(fileTree(mapOf("dir" to "libs", "include" to listOf("*.aar"))))
-
     implementation(project(":common"))
 
     implementation(libs.androidx.compose.activity)

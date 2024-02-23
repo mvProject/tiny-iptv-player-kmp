@@ -1,7 +1,7 @@
 /*
  *  Created by Medvediev Viktor [mvproject]
- *  Copyright © 2023
- *  last modified : 20.11.23, 21:02
+ *  Copyright © 2024
+ *  last modified : 31.01.24, 09:07
  *
  */
 
@@ -11,6 +11,7 @@ import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.material.icons.Icons
@@ -22,6 +23,7 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.text.style.TextAlign
 import com.mvproject.tinyiptvkmp.ui.theme.dimens
 import com.mvproject.tinyiptvkmp.utils.AppConstants.EMPTY_STRING
 
@@ -50,18 +52,21 @@ fun NoItemsView(
 
             Text(
                 modifier = Modifier
+                    .fillMaxWidth()
                     .padding(
                         top = MaterialTheme.dimens.size16,
                         bottom = MaterialTheme.dimens.size24
                     ),
                 text = title,
                 style = MaterialTheme.typography.headlineLarge,
-                color = MaterialTheme.colorScheme.onSurfaceVariant
+                color = MaterialTheme.colorScheme.onSurfaceVariant,
+                textAlign = TextAlign.Center
             )
 
             if (navigateTitle.isNotEmpty()) {
                 Text(
                     modifier = Modifier
+                        .fillMaxWidth()
                         .padding(
                             top = MaterialTheme.dimens.size16,
                             bottom = MaterialTheme.dimens.size24
@@ -69,7 +74,8 @@ fun NoItemsView(
                         .clickable { onNavigateClick() },
                     text = navigateTitle,
                     style = MaterialTheme.typography.displaySmall,
-                    color = MaterialTheme.colorScheme.onSurface
+                    color = MaterialTheme.colorScheme.onSurface,
+                    textAlign = TextAlign.Center
                 )
             }
         }

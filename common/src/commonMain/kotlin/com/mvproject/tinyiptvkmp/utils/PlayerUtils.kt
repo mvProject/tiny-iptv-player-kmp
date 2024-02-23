@@ -1,16 +1,16 @@
 /*
  *  Created by Medvediev Viktor [mvproject]
- *  Copyright © 2023
- *  last modified : 20.11.23, 20:27
+ *  Copyright © 2024
+ *  last modified : 23.02.24, 11:07
  *
  */
 
 package com.mvproject.tinyiptvkmp.utils
 
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.rounded.VolumeDown
-import androidx.compose.material.icons.rounded.VolumeMute
-import androidx.compose.material.icons.rounded.VolumeUp
+import androidx.compose.material.icons.automirrored.rounded.VolumeDown
+import androidx.compose.material.icons.automirrored.rounded.VolumeMute
+import androidx.compose.material.icons.automirrored.rounded.VolumeUp
 import androidx.compose.ui.unit.Constraints
 import com.mvproject.tinyiptvkmp.data.enums.ResizeMode
 
@@ -64,8 +64,8 @@ object PlayerUtils {
     }
 
     internal fun getProperVolumeIcon(value: Int) = when {
-        value < 35 -> Icons.Rounded.VolumeMute
-        value > 65 -> Icons.Rounded.VolumeUp
-        else -> Icons.Rounded.VolumeDown
+        value < 35 -> Icons.AutoMirrored.Rounded.VolumeMute
+        value > 65 -> Icons.AutoMirrored.Rounded.VolumeUp
+        else -> Icons.AutoMirrored.Rounded.VolumeDown
     }
 }

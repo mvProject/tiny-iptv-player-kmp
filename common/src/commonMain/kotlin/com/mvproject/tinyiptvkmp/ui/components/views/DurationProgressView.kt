@@ -1,7 +1,7 @@
 /*
  *  Created by Medvediev Viktor [mvproject]
- *  Copyright © 2023
- *  last modified : 20.11.23, 20:27
+ *  Copyright © 2024
+ *  last modified : 23.02.24, 11:07
  *
  */
 
@@ -22,16 +22,16 @@ fun DurationProgressView(
     modifier: Modifier = Modifier,
     progress: Float,
     trackColor: Color = MaterialTheme.colorScheme.primary,
-    backColor: Color = MaterialTheme.colorScheme.onSurfaceVariant,
+    durationColor: Color = MaterialTheme.colorScheme.onSurfaceVariant,
 ) {
     LinearProgressIndicator(
-        progress = progress,
+        progress = { progress },
         modifier = modifier
             .fillMaxWidth()
             .height(MaterialTheme.dimens.size2),
+        color = durationColor,
         trackColor = trackColor,
-        color = backColor,
-        strokeCap = StrokeCap.Round
+        strokeCap = StrokeCap.Round,
     )
 }
 

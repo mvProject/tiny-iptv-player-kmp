@@ -1,7 +1,7 @@
 /*
  *  Created by Medvediev Viktor [mvproject]
- *  Copyright © 2023
- *  last modified : 22.11.23, 09:20
+ *  Copyright © 2024
+ *  last modified : 30.01.24, 14:57
  *
  */
 
@@ -29,7 +29,6 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import com.mvproject.tinyiptvkmp.MainRes
 import com.mvproject.tinyiptvkmp.data.enums.RatioMode
 import com.mvproject.tinyiptvkmp.data.enums.ResizeMode
 import com.mvproject.tinyiptvkmp.ui.components.overlay.OverlayContent
@@ -39,7 +38,11 @@ import com.mvproject.tinyiptvkmp.ui.components.toolbars.AppBarWithBackNav
 import com.mvproject.tinyiptvkmp.ui.screens.settings.player.action.SettingsPlayerAction
 import com.mvproject.tinyiptvkmp.ui.screens.settings.player.state.SettingsPlayerState
 import com.mvproject.tinyiptvkmp.ui.theme.dimens
+import org.jetbrains.compose.resources.ExperimentalResourceApi
+import org.jetbrains.compose.resources.stringResource
+import tinyiptvkmp.common.generated.resources.Res
 
+@OptIn(ExperimentalResourceApi::class)
 @Composable
 fun SettingsPlayerView(
     state: SettingsPlayerState,
@@ -52,7 +55,7 @@ fun SettingsPlayerView(
             .windowInsetsPadding(WindowInsets.navigationBars),
         topBar = {
             AppBarWithBackNav(
-                appBarTitle = MainRes.string.scr_player_settings_title,
+                appBarTitle = stringResource(Res.string.scr_player_settings_title),
                 onBackClick = onNavigateBack,
             )
         }
@@ -76,7 +79,7 @@ fun SettingsPlayerView(
                     modifier = Modifier
                         .weight(MaterialTheme.dimens.weight6)
                         .padding(horizontal = MaterialTheme.dimens.size8),
-                    text = MainRes.string.option_default_fullscreen_mode,
+                    text = stringResource(Res.string.option_default_fullscreen_mode),
                     style = MaterialTheme.typography.bodyMedium,
                     color = MaterialTheme.colorScheme.onPrimary
                 )
@@ -101,8 +104,8 @@ fun SettingsPlayerView(
 
             OptionSelector(
                 modifier = Modifier.fillMaxWidth(),
-                title = MainRes.string.option_default_resize_mode,
-                selectedItem = ResizeMode.entries[state.resizeMode].title,
+                title = stringResource(Res.string.option_default_resize_mode),
+                selectedItem = stringResource(ResizeMode.entries[state.resizeMode].title),
                 isExpanded = isSelectResizeModeOpen.value,
                 onClick = {
                     isSelectResizeModeOpen.value = true
@@ -113,8 +116,8 @@ fun SettingsPlayerView(
 
             OptionSelector(
                 modifier = Modifier.fillMaxWidth(),
-                title = MainRes.string.option_default_ratio_mode,
-                selectedItem = RatioMode.entries[state.ratioMode].title,
+                title = stringResource(Res.string.option_default_ratio_mode),
+                selectedItem = stringResource(RatioMode.entries[state.ratioMode].title),
                 isExpanded = isSelectRatioModeOpen.value,
                 onClick = {
                     isSelectRatioModeOpen.value = true
@@ -129,9 +132,9 @@ fun SettingsPlayerView(
             onViewTap = { isSelectResizeModeOpen.value = false }
         ) {
             OverlayOptionsMenu(
-                title = MainRes.string.option_default_resize_mode,
+                title = stringResource(Res.string.option_default_resize_mode),
                 selectedIndex = state.resizeMode,
-                items = ResizeMode.values().map { it.title },
+                items = ResizeMode.entries.map { stringResource(it.title) },
                 onItemSelected = { index ->
                     onSettingsPlayerAction(SettingsPlayerAction.SetResizeMode(index))
                     isSelectResizeModeOpen.value = false
@@ -145,9 +148,9 @@ fun SettingsPlayerView(
             onViewTap = { isSelectRatioModeOpen.value = false }
         ) {
             OverlayOptionsMenu(
-                title = MainRes.string.option_default_ratio_mode,
+                title = stringResource(Res.string.option_default_ratio_mode),
                 selectedIndex = state.ratioMode,
-                items = RatioMode.values().map { it.title },
+                items = RatioMode.entries.map { stringResource(it.title) },
                 onItemSelected = { index ->
                     onSettingsPlayerAction(SettingsPlayerAction.SetRatioMode(index))
                     isSelectRatioModeOpen.value = false

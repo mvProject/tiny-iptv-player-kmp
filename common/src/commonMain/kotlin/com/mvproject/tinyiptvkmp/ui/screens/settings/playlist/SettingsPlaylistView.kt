@@ -1,7 +1,7 @@
 /*
  *  Created by Medvediev Viktor [mvproject]
- *  Copyright © 2023
- *  last modified : 20.11.23, 20:27
+ *  Copyright © 2024
+ *  last modified : 30.01.24, 14:57
  *
  */
 
@@ -26,7 +26,6 @@ import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
-import com.mvproject.tinyiptvkmp.MainRes
 import com.mvproject.tinyiptvkmp.ui.components.playlist.PlaylistItemView
 import com.mvproject.tinyiptvkmp.ui.components.toolbars.AppBarWithBackNav
 import com.mvproject.tinyiptvkmp.ui.components.views.NoItemsView
@@ -34,7 +33,11 @@ import com.mvproject.tinyiptvkmp.ui.screens.settings.playlist.action.SettingsPla
 import com.mvproject.tinyiptvkmp.ui.screens.settings.playlist.state.SettingsPlaylistState
 import com.mvproject.tinyiptvkmp.ui.theme.dimens
 import com.mvproject.tinyiptvkmp.utils.AppConstants
+import org.jetbrains.compose.resources.ExperimentalResourceApi
+import org.jetbrains.compose.resources.stringResource
+import tinyiptvkmp.common.generated.resources.Res
 
+@OptIn(ExperimentalResourceApi::class)
 @Composable
 fun SettingsPlaylistView(
     dataState: SettingsPlaylistState,
@@ -48,7 +51,7 @@ fun SettingsPlaylistView(
             .windowInsetsPadding(WindowInsets.navigationBars),
         topBar = {
             AppBarWithBackNav(
-                appBarTitle = MainRes.string.scr_playlist_settings_title,
+                appBarTitle = stringResource(Res.string.scr_playlist_settings_title),
                 onBackClick = onNavigateBack,
             )
         },
@@ -66,7 +69,7 @@ fun SettingsPlaylistView(
                 shape = MaterialTheme.shapes.small
             ) {
                 Text(
-                    text = MainRes.string.btn_add_new,
+                    text = stringResource(Res.string.btn_add_new),
                     color = MaterialTheme.colorScheme.primary,
                     style = MaterialTheme.typography.titleMedium
                 )
@@ -105,8 +108,8 @@ fun SettingsPlaylistView(
             if (dataState.dataIsEmpty) {
                 NoItemsView(
                     modifier = Modifier.fillMaxSize(),
-                    title = MainRes.string.msg_no_items_found,
-                    navigateTitle = MainRes.string.msg_no_playlist
+                    title = stringResource(Res.string.msg_no_items_found),
+                    navigateTitle = stringResource(Res.string.msg_no_playlist)
                 )
             }
         }

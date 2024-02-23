@@ -1,32 +1,31 @@
 [versions]
 
-kotlin = "1.9.20"
+kotlin = "1.9.22"
 gradle = "8.1.2"
-compose = "1.5.10"
+compose = "1.6.0-rc01"
 
-ktor = "2.3.0"
+ktor = "2.3.7"
 
 koinCore = "3.5.0"
 koinCompose = "1.1.0"
 koinAndroid = "3.5.0"
 koinAndroidCompose = "3.5.0"
 
-compose-activity = "1.8.0"
-compose-lifecycle-viewmodel = "2.6.2"
-compose-lifecycle-runtime = "2.7.0-beta01"
-androidxComposeBom = "2023.08.00"
+compose-activity = "1.8.2"
+compose-lifecycle-viewmodel = "2.7.0"
+compose-lifecycle-runtime = "2.7.0"
+androidxComposeBom = "2024.02.01"
 
-kotlinxSerializationJson = "1.6.0"
+kotlinxSerializationJson = "1.6.2"
 kotlinx-collections = "0.3.5"
-kotlinxDateTime = "0.4.1"
+kotlinxDateTime = "0.5.0"
 kotlinxCoroutinesSwing = "1.7.3"
 kotlinxCoroutinesCore = "1.7.3"
 
 material3WindowSizeClassMultiplatform = "0.3.1"
 componentsResources = "1.5.10"
-annotation = "1.7.0"
+annotation = "1.7.1"
 
-coil = "2.4.0"
 kamelVersion = "0.8.2"
 
 calfFilePickerVersion = "0.2.0"
@@ -34,13 +33,12 @@ uriKmpVersion = "0.0.15"
 
 voyager = "1.0.0-rc10"
 precompose = "1.5.7"
-media3 = "1.2.0"
+media3 = "1.2.1"
 
 kermit = "2.0.2"
 
-preferences = "1.1.0-alpha06"
+preferences = "1.1.0-beta01"
 sqldelight = "2.0.0"
-libres = "1.2.0"
 vlcjVersion = "4.8.1"
 
 junit = "4.13.2"
@@ -59,7 +57,6 @@ android-application = { id = "com.android.application", version.ref = "gradle" }
 
 kotlinx-serialization-plugin = { id = "org.jetbrains.kotlin.plugin.serialization", version.ref = "kotlin" }
 sqlDelight-plugin = { id = "app.cash.sqldelight", version.ref = "sqldelight" }
-libres-plugin = { id = "io.github.skeptick.libres", version.ref = "libres" }
 
 jvm = { id = "org.jetbrains.kotlin.jvm", version.ref = "kotlin" }
 
@@ -89,12 +86,9 @@ androidx-compose-activity = { module = "androidx.activity:activity-compose", ver
 androidx-compose-lifecycle-viewmodel = { module = "androidx.lifecycle:lifecycle-viewmodel-compose", version.ref = "compose-lifecycle-viewmodel" }
 androidx-compose-lifecycle-runtime = { module = "androidx.lifecycle:lifecycle-runtime-compose", version.ref = "compose-lifecycle-runtime" }
 
-coil = { module = "io.coil-kt:coil", version.ref = "coil" }
-coil-compose = { module = "io.coil-kt:coil-compose", version.ref = "coil" }
 kamelimage = { module = "media.kamel:kamel-image", version.ref = "kamelVersion" }
 
 components-resources = { module = "org.jetbrains.compose.components:components-resources", version.ref = "componentsResources" }
-libres-compose = { module = "io.github.skeptick.libres:libres-compose", version.ref = "libres" }
 
 precompose = { module = "moe.tlaster:precompose", version.ref = "precompose" }
 precompose-viewmodel = { module = "moe.tlaster:precompose-viewmodel", version.ref = "precompose" }
@@ -156,11 +150,6 @@ precompose = [
     "precompose",
     "precompose-viewmodel",
     "precompose-koin"
-]
-
-coil = [
-    "coil",
-    "coil-compose"
 ]
 
 media3 = [

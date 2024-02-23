@@ -1,0 +1,77 @@
+<?xml version="1.0" encoding="UTF-8"?><!--
+  ~  Created by Medvediev Viktor [mvproject]
+  ~  Copyright © 2024
+  ~  last modified : 31.01.24, 09:07
+  ~
+  -->
+
+<resources>
+    <string name="app_name">Tiny Iptv Player</string>
+
+    <string name="playlist_update_6_hours">6 годин</string>
+    <string name="playlist_update_12_hours">12 годин</string>
+    <string name="playlist_update_24_hours">24 години</string>
+    <string name="playlist_update_2_days">2 дні</string>
+    <string name="playlist_update_1_week">1 тиждень</string>
+    <string name="playlist_update_never">Ніколи</string>
+
+    <string name="video_resize_mode_fill">Заповнити</string>
+    <string name="video_resize_mode_fixed_width">Фіксована широта</string>
+    <string name="video_resize_mode_fixed_height">Фіксована висота</string>
+    <string name="video_resize_mode_fit">Умістити</string>
+    <string name="video_resize_mode_zoom">Збільшити</string>
+
+    <string name="video_ratio_mode_original">Оригінал</string>
+    <string name="video_ratio_mode_wideScreen">Широкий екран (16:9)</string>
+    <string name="video_ratio_mode_fullScreen">Повний екран (4:3)</string>
+    <string name="video_ratio_mode_cinematic">Кінематографічний (21:9)</string>
+    <string name="video_ratio_mode_square">Квадрат (1:1)</string>
+
+    <string name="channel_folder_all">Усі канали</string>
+    <string name="channel_folder_favorite">Вибране</string>
+
+    <string name="msg_no_epg_found">телепрограму не знайдено</string>
+    <string name="msg_no_items_found">Даних не знайдено</string>
+    <string name="msg_no_internet_found">Немає підключення до Інтернету</string>
+    <string name="msg_no_playable_media_found">Не вдається відтворити цей медіафайл</string>
+    <string name="msg_no_playlist">Плейлистів не знайдено</string>
+    <string name="msg_playlist_details">Деталі плейлиста</string>
+
+    <string name="hint_msg_search">друкуйте тут…</string>
+    <string name="hint_update_period">Період оновлення</string>
+    <string name="hint_current_playlist">Поточний плейлист</string>
+    <string name="hint_name">Назва</string>
+    <string name="hint_address">Url-адреса</string>
+
+    <string name="btn_save">Зберегти плейлист</string>
+    <string name="btn_update">Оновити плейлист</string>
+    <string name="btn_close">Закрити</string>
+    <string name="btn_add_first_playlist">Натисніть, щоб додати плейлист</string>
+    <string name="btn_add_local">Додати локальний плейлист</string>
+    <string name="btn_add_new">Новий плейлист</string>
+    <string name="btn_delete_current">Видалити плейлист</string>
+    <string name="btn_playlists_update">Оновлення плейлистів</string>
+
+    <string name="label_or">або</string>
+
+    <string name="scr_settings_title">Налаштування</string>
+    <string name="scr_playlist_settings_title">Налаштування плейлистів</string>
+    <string name="scr_player_settings_title">Налаштування плеєра</string>
+
+    <string name="option_update_title">Оновлення</string>
+    <string name="option_update_epg_info">Дані каналів</string>
+    <string name="option_update_epg_data">Дані телепрограми</string>
+    <string name="option_default_resize_mode">Режим зміни розміру за замовчуванням</string>
+    <string name="option_default_ratio_mode">Режим співвідношення сторін за замовчуванням</string>
+    <string name="option_default_fullscreen_mode">Повноекранний режим за замовчуванням</string>
+
+    <string name="menu_view_type_list">Список</string>
+    <string name="menu_view_type_grid">Сітка</string>
+    <string name="menu_view_type_card">Картка</string>
+
+    <string name="menu_channel_option_epg_enable">Увімкнути телепрограмму</string>
+    <string name="menu_channel_option_epg_disable">Вимкнути телепрограмму</string>
+    <string name="menu_channel_option_epg_show">Показати телепрограмму</string>
+    <string name="menu_channel_option_add_favorite">Додати до вибраного</string>
+    <string name="menu_channel_option_remove_favorite">Видалити з вибраного</string>
+</resources>

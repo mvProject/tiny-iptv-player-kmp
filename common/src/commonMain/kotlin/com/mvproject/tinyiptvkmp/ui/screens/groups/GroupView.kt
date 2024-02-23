@@ -1,7 +1,7 @@
 /*
  *  Created by Medvediev Viktor [mvproject]
- *  Copyright © 2023
- *  last modified : 20.11.23, 20:27
+ *  Copyright © 2024
+ *  last modified : 30.01.24, 14:57
  *
  */
 
@@ -30,7 +30,6 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import com.mvproject.tinyiptvkmp.MainRes
 import com.mvproject.tinyiptvkmp.ui.components.dialogs.OptionsDialog
 import com.mvproject.tinyiptvkmp.ui.components.playlist.PlaylistGroupItemView
 import com.mvproject.tinyiptvkmp.ui.components.selectors.OptionSelector
@@ -40,7 +39,11 @@ import com.mvproject.tinyiptvkmp.ui.components.views.NoItemsView
 import com.mvproject.tinyiptvkmp.ui.screens.groups.action.GroupAction
 import com.mvproject.tinyiptvkmp.ui.screens.groups.state.GroupState
 import com.mvproject.tinyiptvkmp.ui.theme.dimens
+import org.jetbrains.compose.resources.ExperimentalResourceApi
+import org.jetbrains.compose.resources.stringResource
+import tinyiptvkmp.common.generated.resources.Res
 
+@OptIn(ExperimentalResourceApi::class)
 @Composable
 fun GroupView(
     dataState: GroupState,
@@ -77,7 +80,7 @@ fun GroupView(
 
                     OptionSelector(
                         modifier = Modifier.fillMaxWidth(),
-                        title = MainRes.string.hint_current_playlist,
+                        title = stringResource(Res.string.hint_current_playlist),
                         selectedItem = dataState.playlistNames[selectedIndex],
                         isExpanded = isSelectPlaylistOpen.value,
                         onClick = {
@@ -87,7 +90,7 @@ fun GroupView(
 
                     OptionsDialog(
                         isDialogOpen = isSelectPlaylistOpen,
-                        title = MainRes.string.hint_current_playlist,
+                        title = stringResource(Res.string.hint_current_playlist),
                         selectedIndex = selectedIndex,
                         items = dataState.playlistNames,
                         onItemSelected = { index ->
@@ -129,8 +132,8 @@ fun GroupView(
             if (dataState.dataIsEmpty) {
                 NoItemsView(
                     modifier = Modifier.fillMaxSize(),
-                    title = MainRes.string.msg_no_items_found,
-                    navigateTitle = MainRes.string.btn_add_first_playlist,
+                    title = stringResource(Res.string.msg_no_items_found),
+                    navigateTitle = stringResource(Res.string.btn_add_first_playlist),
                     onNavigateClick = onNavigateToSettings
                 )
             }
