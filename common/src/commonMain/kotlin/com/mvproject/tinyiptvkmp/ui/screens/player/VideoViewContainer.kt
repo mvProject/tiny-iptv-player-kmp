@@ -1,7 +1,7 @@
 /*
  *  Created by Medvediev Viktor [mvproject]
  *  Copyright © 2024
- *  last modified : 30.01.24, 14:42
+ *  last modified : 24.03.24, 10:49
  *
  */
 
@@ -40,6 +40,10 @@ import org.jetbrains.compose.resources.ExperimentalResourceApi
 import org.jetbrains.compose.resources.painterResource
 import org.jetbrains.compose.resources.stringResource
 import tinyiptvkmp.common.generated.resources.Res
+import tinyiptvkmp.common.generated.resources.msg_no_internet_found
+import tinyiptvkmp.common.generated.resources.msg_no_playable_media_found
+import tinyiptvkmp.common.generated.resources.no_network
+import tinyiptvkmp.common.generated.resources.sad_face
 
 @OptIn(ExperimentalResourceApi::class)
 @Composable
@@ -47,29 +51,32 @@ fun VideoViewContainer(
     viewModel: VideoViewViewModel,
     channelName: String,
     channelGroup: String,
-    onNavigateBack: () -> Unit = {}
+    onNavigateBack: () -> Unit = {},
 ) {
     val videoViewState by viewModel.videoViewState.collectAsState()
 
-    val fraction = remember(videoViewState.isFullscreen) {
-        if (videoViewState.isFullscreen) 1f else 0.5f
-    }
+    val fraction =
+        remember(videoViewState.isFullscreen) {
+            if (videoViewState.isFullscreen) 1f else 0.5f
+        }
     Box(
-        modifier = Modifier
-            .windowInsetsPadding(WindowInsets.systemBars)
-            .fillMaxSize()
-            .background(MaterialTheme.colorScheme.scrim),
-        contentAlignment = Alignment.TopCenter
+        modifier =
+            Modifier
+                .windowInsetsPadding(WindowInsets.systemBars)
+                .fillMaxSize()
+                .background(MaterialTheme.colorScheme.scrim),
+        contentAlignment = Alignment.TopCenter,
     ) {
         if (videoViewState.isFullscreen) {
             PlayerViewContainer(
-                modifier = Modifier
-                    .defaultPlayerHorizontalGestures(onAction = viewModel::processPlaybackActions)
-                    .defaultPlayerVerticalGestures(onAction = viewModel::processPlaybackActions)
-                    .defaultPlayerTapGesturesState(onAction = viewModel::processPlaybackActions),
+                modifier =
+                    Modifier
+                        .defaultPlayerHorizontalGestures(onAction = viewModel::processPlaybackActions)
+                        .defaultPlayerVerticalGestures(onAction = viewModel::processPlaybackActions)
+                        .defaultPlayerTapGesturesState(onAction = viewModel::processPlaybackActions),
                 videoViewState = videoViewState,
                 onPlaybackAction = viewModel::processPlaybackActions,
-                onPlaybackStateAction = viewModel::processPlaybackStateActions
+                onPlaybackStateAction = viewModel::processPlaybackStateActions,
             ) {
                 PlayerChannelView(
                     modifier = Modifier.fillMaxSize(),
@@ -78,20 +85,21 @@ fun VideoViewContainer(
                     isPlaying = videoViewState.isPlaying,
                     isFullScreen = true,
                     onPlaybackAction = viewModel::processPlaybackActions,
-                    onPlaybackClose = onNavigateBack
+                    onPlaybackClose = onNavigateBack,
                 )
             }
         } else {
             TwoPaneContainer(
                 first = {
                     PlayerViewContainer(
-                        modifier = Modifier
-                            .defaultPlayerHorizontalGestures(onAction = viewModel::processPlaybackActions)
-                            .defaultPlayerVerticalGestures(onAction = viewModel::processPlaybackActions)
-                            .defaultPlayerTapGesturesState(onAction = viewModel::processPlaybackActions),
+                        modifier =
+                            Modifier
+                                .defaultPlayerHorizontalGestures(onAction = viewModel::processPlaybackActions)
+                                .defaultPlayerVerticalGestures(onAction = viewModel::processPlaybackActions)
+                                .defaultPlayerTapGesturesState(onAction = viewModel::processPlaybackActions),
                         videoViewState = videoViewState,
                         onPlaybackAction = viewModel::processPlaybackActions,
-                        onPlaybackStateAction = viewModel::processPlaybackStateActions
+                        onPlaybackStateAction = viewModel::processPlaybackStateActions,
                     ) {
                         PlayerChannelView(
                             modifier = Modifier.fillMaxSize(),
@@ -100,58 +108,59 @@ fun VideoViewContainer(
                             isPlaying = videoViewState.isPlaying,
                             isFullScreen = false,
                             onPlaybackAction = viewModel::processPlaybackActions,
-                            onPlaybackClose = onNavigateBack
+                            onPlaybackClose = onNavigateBack,
                         )
                     }
                 },
                 second = {
                     PlayerEpgContent(
-                        modifier = Modifier.background(
-                            color = MaterialTheme.colorScheme.primary
-                        ),
-                        epgList = videoViewState.currentChannel.channelEpg
+                        modifier =
+                            Modifier.background(
+                                color = MaterialTheme.colorScheme.primary,
+                            ),
+                        epgList = videoViewState.currentChannel.channelEpg,
                     )
-                }
+                },
             )
         }
 
         VolumeProgressView(
             modifier = Modifier.fillMaxSize(fraction),
             isVisible = videoViewState.isVolumeUiVisible,
-            value = videoViewState.currentVolume
+            value = videoViewState.currentVolume,
         )
 
         OverlayContent(
             isVisible = videoViewState.isEpgVisible,
-            onViewTap = viewModel::toggleEpgVisibility
+            onViewTap = viewModel::toggleEpgVisibility,
         ) {
             OverlayEpg(
                 isFullScreen = videoViewState.isFullscreen,
-                currentChannel = videoViewState.currentChannel
+                currentChannel = videoViewState.currentChannel,
             )
         }
 
         OverlayContent(
             isVisible = videoViewState.isChannelsVisible,
             onViewTap = viewModel::toggleChannelsVisibility,
-            contentAlpha = MaterialTheme.dimens.alpha90
+            contentAlpha = MaterialTheme.dimens.alpha90,
         ) {
             OverlayChannels(
                 isFullScreen = videoViewState.isFullscreen,
                 channels = videoViewState.channels,
                 current = videoViewState.mediaPosition,
                 group = videoViewState.channelGroup,
-                onChannelSelect = viewModel::switchToChannel
+                onChannelSelect = viewModel::switchToChannel,
             )
         }
 
         OverlayContent(
             isVisible = videoViewState.isChannelInfoVisible,
-            onViewTap = viewModel::toggleChannelInfoVisibility
+            onViewTap = viewModel::toggleChannelInfoVisibility,
         ) {
             OverlayChannelInfo(
                 isFullScreen = videoViewState.isFullscreen,
-                currentChannel = videoViewState.currentChannel
+                currentChannel = videoViewState.currentChannel,
             )
         }
 
@@ -160,7 +169,7 @@ fun VideoViewContainer(
             isVisible = !videoViewState.isOnline,
             isFullScreen = videoViewState.isFullscreen,
             text = stringResource(Res.string.msg_no_internet_found),
-            logo = painterResource(Res.drawable.no_network)
+            logo = painterResource(Res.drawable.no_network),
         )
 
         NoPlaybackView(
@@ -168,19 +177,19 @@ fun VideoViewContainer(
             isVisible = !videoViewState.isMediaPlayable,
             isFullScreen = videoViewState.isFullscreen,
             text = stringResource(Res.string.msg_no_playable_media_found),
-            logo = painterResource(Res.drawable.sad_face)
+            logo = painterResource(Res.drawable.sad_face),
         )
 
         LoadingView(
             modifier = Modifier.fillMaxSize(fraction),
-            isVisible = videoViewState.isBuffering
+            isVisible = videoViewState.isBuffering,
         )
     }
 
     DisposableEffect(viewModel) {
         viewModel.initPlayBack(
             channelName = channelName,
-            channelGroup = channelGroup
+            channelGroup = channelGroup,
         )
 
         onDispose {}

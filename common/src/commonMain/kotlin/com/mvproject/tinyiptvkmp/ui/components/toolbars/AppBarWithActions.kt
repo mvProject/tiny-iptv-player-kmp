@@ -1,7 +1,7 @@
 /*
  *  Created by Medvediev Viktor [mvproject]
  *  Copyright © 2024
- *  last modified : 23.02.24, 11:07
+ *  last modified : 24.03.24, 10:49
  *
  */
 
@@ -40,6 +40,9 @@ import com.mvproject.tinyiptvkmp.utils.AppConstants.INT_VALUE_1
 import org.jetbrains.compose.resources.ExperimentalResourceApi
 import org.jetbrains.compose.resources.stringResource
 import tinyiptvkmp.common.generated.resources.Res
+import tinyiptvkmp.common.generated.resources.menu_view_type_card
+import tinyiptvkmp.common.generated.resources.menu_view_type_grid
+import tinyiptvkmp.common.generated.resources.menu_view_type_list
 
 @OptIn(ExperimentalMaterial3Api::class, ExperimentalResourceApi::class)
 @Composable
@@ -47,7 +50,7 @@ fun AppBarWithActions(
     appBarTitle: String,
     onBackClick: () -> Unit = {},
     onSearchClicked: () -> Unit = {},
-    onViewTypeChange: (ChannelsViewType) -> Unit = {}
+    onViewTypeChange: (ChannelsViewType) -> Unit = {},
 ) {
     var isMenuOpen by remember { mutableStateOf(false) }
 
@@ -58,17 +61,18 @@ fun AppBarWithActions(
                 style = MaterialTheme.typography.titleLarge,
                 color = MaterialTheme.colorScheme.onPrimary,
                 maxLines = INT_VALUE_1,
-                overflow = TextOverflow.Ellipsis
+                overflow = TextOverflow.Ellipsis,
             )
         },
         navigationIcon = {
             FilledIconButton(
                 onClick = onBackClick,
                 modifier = Modifier.padding(MaterialTheme.dimens.size8),
-                colors = IconButtonDefaults.filledIconButtonColors(
-                    containerColor = MaterialTheme.colorScheme.onPrimary,
-                    contentColor = MaterialTheme.colorScheme.primary
-                )
+                colors =
+                    IconButtonDefaults.filledIconButtonColors(
+                        containerColor = MaterialTheme.colorScheme.onPrimary,
+                        contentColor = MaterialTheme.colorScheme.primary,
+                    ),
             ) {
                 Icon(
                     imageVector = Icons.AutoMirrored.Filled.NavigateBefore,
@@ -78,32 +82,33 @@ fun AppBarWithActions(
         },
         actions = {
             IconButton(
-                onClick = { onSearchClicked() }
+                onClick = { onSearchClicked() },
             ) {
                 Icon(
                     imageVector = Icons.Outlined.Search,
                     contentDescription = "Search Icon",
-                    tint = MaterialTheme.colorScheme.onPrimary
+                    tint = MaterialTheme.colorScheme.onPrimary,
                 )
             }
 
             IconButton(
-                onClick = { isMenuOpen = !isMenuOpen }
+                onClick = { isMenuOpen = !isMenuOpen },
             ) {
                 Icon(
                     imageVector = Icons.AutoMirrored.Outlined.ViewList,
                     contentDescription = "Change Grid",
-                    tint = MaterialTheme.colorScheme.onPrimary
+                    tint = MaterialTheme.colorScheme.onPrimary,
                 )
             }
 
             DropdownMenu(
-                modifier = Modifier
-                    .background(
-                        color = MaterialTheme.colorScheme.primary
-                    ),
+                modifier =
+                    Modifier
+                        .background(
+                            color = MaterialTheme.colorScheme.primary,
+                        ),
                 expanded = isMenuOpen,
-                onDismissRequest = { isMenuOpen = false }
+                onDismissRequest = { isMenuOpen = false },
             ) {
                 DropdownMenuItem(
                     text = {
@@ -116,15 +121,17 @@ fun AppBarWithActions(
                         onViewTypeChange(ChannelsViewType.LIST)
                         isMenuOpen = !isMenuOpen
                     },
-                    colors = MenuDefaults.itemColors(
-                        textColor = MaterialTheme.colorScheme.onSurface
-                    )
+                    colors =
+                        MenuDefaults.itemColors(
+                            textColor = MaterialTheme.colorScheme.onSurface,
+                        ),
                 )
                 HorizontalDivider(
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .padding(horizontal = MaterialTheme.dimens.size8),
-                    color = MaterialTheme.colorScheme.onSurfaceVariant
+                    modifier =
+                        Modifier
+                            .fillMaxWidth()
+                            .padding(horizontal = MaterialTheme.dimens.size8),
+                    color = MaterialTheme.colorScheme.onSurfaceVariant,
                 )
                 DropdownMenuItem(
                     text = {
@@ -137,15 +144,17 @@ fun AppBarWithActions(
                         onViewTypeChange(ChannelsViewType.GRID)
                         isMenuOpen = !isMenuOpen
                     },
-                    colors = MenuDefaults.itemColors(
-                        textColor = MaterialTheme.colorScheme.onSurface
-                    )
+                    colors =
+                        MenuDefaults.itemColors(
+                            textColor = MaterialTheme.colorScheme.onSurface,
+                        ),
                 )
                 HorizontalDivider(
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .padding(horizontal = MaterialTheme.dimens.size8),
-                    color = MaterialTheme.colorScheme.onSurfaceVariant
+                    modifier =
+                        Modifier
+                            .fillMaxWidth()
+                            .padding(horizontal = MaterialTheme.dimens.size8),
+                    color = MaterialTheme.colorScheme.onSurfaceVariant,
                 )
                 DropdownMenuItem(
                     text = {
@@ -158,15 +167,17 @@ fun AppBarWithActions(
                         onViewTypeChange(ChannelsViewType.CARD)
                         isMenuOpen = !isMenuOpen
                     },
-                    colors = MenuDefaults.itemColors(
-                        textColor = MaterialTheme.colorScheme.onSurface
-                    )
+                    colors =
+                        MenuDefaults.itemColors(
+                            textColor = MaterialTheme.colorScheme.onSurface,
+                        ),
                 )
             }
         },
-        colors = TopAppBarDefaults.centerAlignedTopAppBarColors(
-            containerColor = MaterialTheme.colorScheme.primary
-        )
+        colors =
+            TopAppBarDefaults.centerAlignedTopAppBarColors(
+                containerColor = MaterialTheme.colorScheme.primary,
+            ),
     )
 }
 

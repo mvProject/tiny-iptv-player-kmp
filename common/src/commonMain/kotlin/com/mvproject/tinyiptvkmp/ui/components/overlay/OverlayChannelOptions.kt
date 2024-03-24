@@ -1,7 +1,7 @@
 /*
  *  Created by Medvediev Viktor [mvproject]
  *  Copyright © 2024
- *  last modified : 30.01.24, 16:37
+ *  last modified : 24.03.24, 10:49
  *
  */
 
@@ -28,6 +28,11 @@ import com.mvproject.tinyiptvkmp.ui.theme.dimens
 import org.jetbrains.compose.resources.ExperimentalResourceApi
 import org.jetbrains.compose.resources.stringResource
 import tinyiptvkmp.common.generated.resources.Res
+import tinyiptvkmp.common.generated.resources.menu_channel_option_add_favorite
+import tinyiptvkmp.common.generated.resources.menu_channel_option_epg_disable
+import tinyiptvkmp.common.generated.resources.menu_channel_option_epg_enable
+import tinyiptvkmp.common.generated.resources.menu_channel_option_epg_show
+import tinyiptvkmp.common.generated.resources.menu_channel_option_remove_favorite
 
 @OptIn(ExperimentalResourceApi::class)
 @Composable
@@ -38,42 +43,49 @@ fun OverlayChannelOptions(
     isInFavorite: Boolean = false,
     onToggleFavorite: () -> Unit = {},
     onShowEpg: () -> Unit = {},
-    onToggleEpgState: () -> Unit = {}
+    onToggleEpgState: () -> Unit = {},
 ) {
     Surface(
-        modifier = modifier
-            .wrapContentHeight()
-            .width(MaterialTheme.dimens.size310)
-            .padding(MaterialTheme.dimens.size8),
+        modifier =
+            modifier
+                .wrapContentHeight()
+                .width(MaterialTheme.dimens.size310)
+                .padding(MaterialTheme.dimens.size8),
         shape = MaterialTheme.shapes.medium,
-        shadowElevation = MaterialTheme.dimens.size8
+        shadowElevation = MaterialTheme.dimens.size8,
     ) {
-        val epgUsingTextColor = if (isEpgUsing)
-            MaterialTheme.colorScheme.onPrimary
-        else
-            MaterialTheme.colorScheme.outline
+        val epgUsingTextColor =
+            if (isEpgUsing) {
+                MaterialTheme.colorScheme.onPrimary
+            } else {
+                MaterialTheme.colorScheme.outline
+            }
 
-        val epgUsingText = if (isEpgEnabled)
-            Res.string.menu_channel_option_epg_disable
-        else
-            Res.string.menu_channel_option_epg_enable
+        val epgUsingText =
+            if (isEpgEnabled) {
+                Res.string.menu_channel_option_epg_disable
+            } else {
+                Res.string.menu_channel_option_epg_enable
+            }
 
         Column(
-            modifier = Modifier
-                .padding(MaterialTheme.dimens.size24),
+            modifier =
+                Modifier
+                    .padding(MaterialTheme.dimens.size24),
             horizontalAlignment = Alignment.CenterHorizontally,
-            verticalArrangement = Arrangement.Center
+            verticalArrangement = Arrangement.Center,
         ) {
             OutlinedButton(
                 modifier = Modifier.fillMaxWidth(),
                 shape = MaterialTheme.shapes.small,
                 enabled = isEpgUsing,
-                border = BorderStroke(
-                    width = MaterialTheme.dimens.size1,
-                    color = MaterialTheme.colorScheme.outline
-                ),
+                border =
+                    BorderStroke(
+                        width = MaterialTheme.dimens.size1,
+                        color = MaterialTheme.colorScheme.outline,
+                    ),
                 contentPadding = PaddingValues(),
-                onClick = onToggleEpgState
+                onClick = onToggleEpgState,
             ) {
                 Text(
                     text = stringResource(epgUsingText),
@@ -84,21 +96,24 @@ fun OverlayChannelOptions(
 
             Spacer(modifier = Modifier.height(MaterialTheme.dimens.size8))
 
-            val epgVisibleTextColor = if (isEpgEnabled)
-                MaterialTheme.colorScheme.onPrimary
-            else
-                MaterialTheme.colorScheme.outline
+            val epgVisibleTextColor =
+                if (isEpgEnabled) {
+                    MaterialTheme.colorScheme.onPrimary
+                } else {
+                    MaterialTheme.colorScheme.outline
+                }
 
             OutlinedButton(
                 modifier = Modifier.fillMaxWidth(),
                 enabled = isEpgEnabled,
                 shape = MaterialTheme.shapes.small,
-                border = BorderStroke(
-                    width = MaterialTheme.dimens.size1,
-                    color = MaterialTheme.colorScheme.outline
-                ),
+                border =
+                    BorderStroke(
+                        width = MaterialTheme.dimens.size1,
+                        color = MaterialTheme.colorScheme.outline,
+                    ),
                 contentPadding = PaddingValues(),
-                onClick = onShowEpg
+                onClick = onShowEpg,
             ) {
                 Text(
                     text = stringResource(Res.string.menu_channel_option_epg_show),
@@ -109,25 +124,30 @@ fun OverlayChannelOptions(
 
             Spacer(modifier = Modifier.height(MaterialTheme.dimens.size8))
 
-            val favoriteTextColor = if (isInFavorite)
-                MaterialTheme.colorScheme.onSurface
-            else
-                MaterialTheme.colorScheme.onPrimary
+            val favoriteTextColor =
+                if (isInFavorite) {
+                    MaterialTheme.colorScheme.onSurface
+                } else {
+                    MaterialTheme.colorScheme.onPrimary
+                }
 
-            val favoriteText = if (isInFavorite)
-                Res.string.menu_channel_option_remove_favorite
-            else
-                Res.string.menu_channel_option_add_favorite
+            val favoriteText =
+                if (isInFavorite) {
+                    Res.string.menu_channel_option_remove_favorite
+                } else {
+                    Res.string.menu_channel_option_add_favorite
+                }
 
             OutlinedButton(
                 modifier = Modifier.fillMaxWidth(),
                 shape = MaterialTheme.shapes.small,
-                border = BorderStroke(
-                    width = MaterialTheme.dimens.size1,
-                    color = MaterialTheme.colorScheme.outline
-                ),
+                border =
+                    BorderStroke(
+                        width = MaterialTheme.dimens.size1,
+                        color = MaterialTheme.colorScheme.outline,
+                    ),
                 contentPadding = PaddingValues(),
-                onClick = onToggleFavorite
+                onClick = onToggleFavorite,
             ) {
                 Text(
                     text = stringResource(favoriteText),

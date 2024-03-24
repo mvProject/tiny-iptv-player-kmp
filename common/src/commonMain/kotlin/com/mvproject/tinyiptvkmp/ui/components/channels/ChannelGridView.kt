@@ -1,7 +1,7 @@
 /*
  *  Created by Medvediev Viktor [mvproject]
  *  Copyright © 2024
- *  last modified : 30.01.24, 14:57
+ *  last modified : 24.03.24, 10:49
  *
  */
 
@@ -33,6 +33,7 @@ import com.mvproject.tinyiptvkmp.ui.theme.dimens
 import org.jetbrains.compose.resources.ExperimentalResourceApi
 import org.jetbrains.compose.resources.stringResource
 import tinyiptvkmp.common.generated.resources.Res
+import tinyiptvkmp.common.generated.resources.msg_no_epg_found
 
 @OptIn(ExperimentalFoundationApi::class, ExperimentalResourceApi::class)
 @Composable
@@ -40,34 +41,35 @@ fun ChannelGridView(
     modifier: Modifier = Modifier,
     channel: TvPlaylistChannel,
     onChannelSelect: () -> Unit = {},
-    onOptionSelect: () -> Unit = {}
+    onOptionSelect: () -> Unit = {},
 ) {
     ElevatedCard(
-        modifier = modifier
-            .height(MaterialTheme.dimens.size140)
-            .clip(MaterialTheme.shapes.extraSmall)
-            .combinedClickable(
-                onClick = onChannelSelect,
-                onLongClick = onOptionSelect
-            )
+        modifier =
+            modifier
+                .height(MaterialTheme.dimens.size140)
+                .clip(MaterialTheme.shapes.extraSmall)
+                .combinedClickable(
+                    onClick = onChannelSelect,
+                    onLongClick = onOptionSelect,
+                ),
     ) {
         Column(
             modifier = Modifier.fillMaxSize(),
             horizontalAlignment = Alignment.Start,
-            verticalArrangement = Arrangement.Top
+            verticalArrangement = Arrangement.Top,
         ) {
             Row(
-                modifier = Modifier
-                    .padding(
-                        horizontal = MaterialTheme.dimens.size8,
-                        vertical = MaterialTheme.dimens.size4
-                    ),
+                modifier =
+                    Modifier
+                        .padding(
+                            horizontal = MaterialTheme.dimens.size8,
+                            vertical = MaterialTheme.dimens.size4,
+                        ),
                 verticalAlignment = Alignment.CenterVertically,
             ) {
-
                 ChannelImageLogo(
                     channelLogo = channel.channelLogo,
-                    channelName = channel.channelName
+                    channelName = channel.channelName,
                 )
 
                 Spacer(modifier = Modifier.width(MaterialTheme.dimens.size8))
@@ -75,12 +77,15 @@ fun ChannelGridView(
                 Text(
                     text = channel.channelName,
                     style = MaterialTheme.typography.bodyLarge,
-                    color = if (channel.isInFavorites)
-                        MaterialTheme.colorScheme.onSurfaceVariant
-                    else
-                        MaterialTheme.colorScheme.onPrimary,
-                    modifier = Modifier
-                        .weight(MaterialTheme.dimens.weight5)
+                    color =
+                        if (channel.isInFavorites) {
+                            MaterialTheme.colorScheme.onSurfaceVariant
+                        } else {
+                            MaterialTheme.colorScheme.onPrimary
+                        },
+                    modifier =
+                        Modifier
+                            .weight(MaterialTheme.dimens.weight5),
                 )
             }
 
@@ -89,28 +94,28 @@ fun ChannelGridView(
             if (channel.channelEpg.isEmpty()) {
                 Box(
                     modifier = Modifier.fillMaxSize(),
-                    contentAlignment = Alignment.Center
+                    contentAlignment = Alignment.Center,
                 ) {
                     Text(
                         text = stringResource(Res.string.msg_no_epg_found),
                         style = MaterialTheme.typography.labelMedium,
                         color = MaterialTheme.colorScheme.outline,
-                        modifier = Modifier
-                            .padding(MaterialTheme.dimens.size8),
-                        textAlign = TextAlign.Center
+                        modifier =
+                            Modifier
+                                .padding(MaterialTheme.dimens.size8),
+                        textAlign = TextAlign.Center,
                     )
                 }
-
             } else {
                 // todo epg count view
                 channel.channelEpg.toActual().take(1).forEach {
                     ScheduleEpgItemView(
-                        modifier = Modifier
-                            .padding(horizontal = MaterialTheme.dimens.size4),
-                        program = it
+                        modifier =
+                            Modifier
+                                .padding(horizontal = MaterialTheme.dimens.size4),
+                        program = it,
                     )
                 }
-
             }
         }
     }

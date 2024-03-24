@@ -1,7 +1,7 @@
 /*
  *  Created by Medvediev Viktor [mvproject]
  *  Copyright © 2024
- *  last modified : 30.01.24, 14:57
+ *  last modified : 24.03.24, 10:49
  *
  */
 
@@ -42,6 +42,9 @@ import com.mvproject.tinyiptvkmp.ui.theme.dimens
 import org.jetbrains.compose.resources.ExperimentalResourceApi
 import org.jetbrains.compose.resources.stringResource
 import tinyiptvkmp.common.generated.resources.Res
+import tinyiptvkmp.common.generated.resources.btn_add_first_playlist
+import tinyiptvkmp.common.generated.resources.hint_current_playlist
+import tinyiptvkmp.common.generated.resources.msg_no_items_found
 
 @OptIn(ExperimentalResourceApi::class)
 @Composable
@@ -49,27 +52,29 @@ fun GroupView(
     dataState: GroupState,
     onNavigateToSettings: () -> Unit = {},
     onNavigateToGroup: (String) -> Unit = {},
-    onPlaylistAction: (GroupAction) -> Unit = {}
+    onPlaylistAction: (GroupAction) -> Unit = {},
 ) {
     Scaffold(
         modifier = Modifier.fillMaxSize(),
         topBar = {
             AppBarWithSettings(
-                onSettingsClicked = onNavigateToSettings
+                onSettingsClicked = onNavigateToSettings,
             )
-        }
+        },
     ) { paddingValues ->
         Box(
-            modifier = Modifier
-                .padding(paddingValues)
-                .fillMaxSize()
+            modifier =
+                Modifier
+                    .padding(paddingValues)
+                    .fillMaxSize(),
         ) {
             Column(
-                modifier = Modifier
-                    .fillMaxSize()
-                    .padding(MaterialTheme.dimens.size8),
+                modifier =
+                    Modifier
+                        .fillMaxSize()
+                        .padding(MaterialTheme.dimens.size8),
                 horizontalAlignment = Alignment.CenterHorizontally,
-                verticalArrangement = Arrangement.Center
+                verticalArrangement = Arrangement.Center,
             ) {
                 if (dataState.isPlaylistSelectorVisible) {
                     val isSelectPlaylistOpen = remember { mutableStateOf(false) }
@@ -85,7 +90,7 @@ fun GroupView(
                         isExpanded = isSelectPlaylistOpen.value,
                         onClick = {
                             isSelectPlaylistOpen.value = true
-                        }
+                        },
                     )
 
                     OptionsDialog(
@@ -97,7 +102,7 @@ fun GroupView(
                             selectedIndex = index
                             isSelectPlaylistOpen.value = false
                             onPlaylistAction(GroupAction.SelectPlaylist(index))
-                        }
+                        },
                     )
 
                     Spacer(modifier = Modifier.height(MaterialTheme.dimens.size8))
@@ -106,20 +111,20 @@ fun GroupView(
                 LazyColumn(
                     modifier = Modifier.fillMaxHeight(),
                     state = rememberLazyListState(),
-                    verticalArrangement = Arrangement.spacedBy(MaterialTheme.dimens.size4)
-
+                    verticalArrangement = Arrangement.spacedBy(MaterialTheme.dimens.size4),
                 ) {
                     items(
                         dataState.groups,
-                        key = { it.groupName }
+                        key = { it.groupName },
                     ) { item ->
                         PlaylistGroupItemView(
-                            modifier = Modifier
-                                .fillMaxWidth()
-                                .clickable {
-                                    onNavigateToGroup(item.groupName)
-                                },
-                            group = item
+                            modifier =
+                                Modifier
+                                    .fillMaxWidth()
+                                    .clickable {
+                                        onNavigateToGroup(item.groupName)
+                                    },
+                            group = item,
                         )
                     }
                 }
@@ -134,7 +139,7 @@ fun GroupView(
                     modifier = Modifier.fillMaxSize(),
                     title = stringResource(Res.string.msg_no_items_found),
                     navigateTitle = stringResource(Res.string.btn_add_first_playlist),
-                    onNavigateClick = onNavigateToSettings
+                    onNavigateClick = onNavigateToSettings,
                 )
             }
         }

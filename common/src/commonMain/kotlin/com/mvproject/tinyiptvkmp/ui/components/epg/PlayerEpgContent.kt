@@ -1,7 +1,7 @@
 /*
  *  Created by Medvediev Viktor [mvproject]
  *  Copyright © 2024
- *  last modified : 30.01.24, 14:57
+ *  last modified : 24.03.24, 10:49
  *
  */
 
@@ -27,6 +27,7 @@ import com.mvproject.tinyiptvkmp.ui.theme.dimens
 import org.jetbrains.compose.resources.ExperimentalResourceApi
 import org.jetbrains.compose.resources.stringResource
 import tinyiptvkmp.common.generated.resources.Res
+import tinyiptvkmp.common.generated.resources.msg_no_epg_found
 
 @OptIn(ExperimentalResourceApi::class)
 @Composable
@@ -35,18 +36,19 @@ fun PlayerEpgContent(
     epgList: List<EpgProgram>,
 ) {
     Box(
-        modifier = modifier.fillMaxSize()
+        modifier = modifier.fillMaxSize(),
     ) {
         if (epgList.isEmpty()) {
             Text(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .padding(horizontal = MaterialTheme.dimens.size12)
-                    .align(Alignment.Center),
+                modifier =
+                    Modifier
+                        .fillMaxWidth()
+                        .padding(horizontal = MaterialTheme.dimens.size12)
+                        .align(Alignment.Center),
                 text = stringResource(Res.string.msg_no_epg_found),
                 style = MaterialTheme.typography.titleLarge,
                 color = MaterialTheme.colorScheme.onSurface,
-                textAlign = TextAlign.Center
+                textAlign = TextAlign.Center,
             )
         }
 
@@ -54,22 +56,24 @@ fun PlayerEpgContent(
             modifier = Modifier.fillMaxSize(),
             state = rememberLazyListState(),
             verticalArrangement = Arrangement.spacedBy(MaterialTheme.dimens.size10),
-            contentPadding = PaddingValues(
-                vertical = MaterialTheme.dimens.size4,
-                horizontal = MaterialTheme.dimens.size2
-            ),
+            contentPadding =
+                PaddingValues(
+                    vertical = MaterialTheme.dimens.size4,
+                    horizontal = MaterialTheme.dimens.size2,
+                ),
             content = {
                 items(
                     items = epgList,
-                    key = { (it.start.toString() + it.title) }
+                    key = { (it.start.toString() + it.title) },
                 ) { epg ->
                     PlayerEpgItem(
-                        modifier = Modifier
-                            .padding(start = MaterialTheme.dimens.size4),
+                        modifier =
+                            Modifier
+                                .padding(start = MaterialTheme.dimens.size4),
                         program = epg,
                     )
                 }
-            }
+            },
         )
     }
 }

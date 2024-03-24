@@ -1,7 +1,7 @@
 /*
  *  Created by Medvediev Viktor [mvproject]
  *  Copyright © 2024
- *  last modified : 30.01.24, 14:57
+ *  last modified : 24.03.24, 10:49
  *
  */
 
@@ -32,19 +32,21 @@ import com.mvproject.tinyiptvkmp.utils.AppConstants.EMPTY_STRING
 import org.jetbrains.compose.resources.ExperimentalResourceApi
 import org.jetbrains.compose.resources.stringResource
 import tinyiptvkmp.common.generated.resources.Res
+import tinyiptvkmp.common.generated.resources.hint_msg_search
 
 @OptIn(ExperimentalMaterial3Api::class, ExperimentalResourceApi::class)
 @Composable
 fun SearchAppBar(
     text: String,
     onTextChange: (String) -> Unit = {},
-    onCloseClicked: () -> Unit = {}
+    onCloseClicked: () -> Unit = {},
 ) {
     CenterAlignedTopAppBar(
         title = {
             TextField(
-                modifier = Modifier
-                    .fillMaxWidth(),
+                modifier =
+                    Modifier
+                        .fillMaxWidth(),
                 value = text,
                 onValueChange = {
                     onTextChange(it)
@@ -53,7 +55,7 @@ fun SearchAppBar(
                     Text(
                         text = stringResource(Res.string.hint_msg_search),
                         style = MaterialTheme.typography.labelSmall,
-                        color = MaterialTheme.colorScheme.onPrimary
+                        color = MaterialTheme.colorScheme.onPrimary,
                     )
                 },
                 textStyle = MaterialTheme.typography.labelMedium,
@@ -62,7 +64,7 @@ fun SearchAppBar(
                     Icon(
                         imageVector = Icons.Outlined.Search,
                         contentDescription = "Search Icon",
-                        tint = MaterialTheme.colorScheme.onPrimary
+                        tint = MaterialTheme.colorScheme.onPrimary,
                     )
                 },
                 trailingIcon = {
@@ -75,10 +77,11 @@ fun SearchAppBar(
                             }
                         },
                         modifier = Modifier.padding(MaterialTheme.dimens.size8),
-                        colors = IconButtonDefaults.filledIconButtonColors(
-                            containerColor = MaterialTheme.colorScheme.onPrimary,
-                            contentColor = MaterialTheme.colorScheme.primary
-                        )
+                        colors =
+                            IconButtonDefaults.filledIconButtonColors(
+                                containerColor = MaterialTheme.colorScheme.onPrimary,
+                                contentColor = MaterialTheme.colorScheme.primary,
+                            ),
                     ) {
                         Icon(
                             imageVector = Icons.Default.Close,
@@ -86,21 +89,24 @@ fun SearchAppBar(
                         )
                     }
                 },
-                keyboardOptions = KeyboardOptions(
-                    keyboardType = KeyboardType.Text
-                ),
-                colors = TextFieldDefaults.colors(
-                    focusedTextColor = MaterialTheme.colorScheme.onSurface,
-                    focusedContainerColor = Color.Transparent,
-                    unfocusedContainerColor = Color.Transparent,
-                    cursorColor = MaterialTheme.colorScheme.onSurfaceVariant,
-                    focusedIndicatorColor = MaterialTheme.colorScheme.onSurfaceVariant
-                )
+                keyboardOptions =
+                    KeyboardOptions(
+                        keyboardType = KeyboardType.Text,
+                    ),
+                colors =
+                    TextFieldDefaults.colors(
+                        focusedTextColor = MaterialTheme.colorScheme.onSurface,
+                        focusedContainerColor = Color.Transparent,
+                        unfocusedContainerColor = Color.Transparent,
+                        cursorColor = MaterialTheme.colorScheme.onSurfaceVariant,
+                        focusedIndicatorColor = MaterialTheme.colorScheme.onSurfaceVariant,
+                    ),
             )
         },
-        colors = TopAppBarDefaults.centerAlignedTopAppBarColors(
-            containerColor = MaterialTheme.colorScheme.primary
-        )
+        colors =
+            TopAppBarDefaults.centerAlignedTopAppBarColors(
+                containerColor = MaterialTheme.colorScheme.primary,
+            ),
     )
 }
 

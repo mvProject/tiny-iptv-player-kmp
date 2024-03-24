@@ -1,7 +1,7 @@
 /*
  *  Created by Medvediev Viktor [mvproject]
  *  Copyright © 2024
- *  last modified : 31.01.24, 10:00
+ *  last modified : 24.03.24, 10:49
  *
  */
 
@@ -21,6 +21,7 @@ import io.kamel.image.asyncPainterResource
 import org.jetbrains.compose.resources.ExperimentalResourceApi
 import org.jetbrains.compose.resources.painterResource
 import tinyiptvkmp.common.generated.resources.Res
+import tinyiptvkmp.common.generated.resources.no_channel_logo
 
 @OptIn(ExperimentalResourceApi::class)
 @Composable
@@ -28,12 +29,14 @@ fun ChannelImageLogo(
     modifier: Modifier = Modifier,
     isLarge: Boolean = false,
     channelLogo: String,
-    channelName: String
+    channelName: String,
 ) {
-    val imageSize = if (isLarge)
-        MaterialTheme.dimens.size64
-    else
-        MaterialTheme.dimens.size42
+    val imageSize =
+        if (isLarge) {
+            MaterialTheme.dimens.size64
+        } else {
+            MaterialTheme.dimens.size42
+        }
 
     when (val painterResource = asyncPainterResource(data = channelLogo)) {
         is Resource.Loading -> {
@@ -45,9 +48,10 @@ fun ChannelImageLogo(
             Image(
                 painter,
                 contentDescription = channelName,
-                modifier = modifier
-                    .size(imageSize)
-                    .clip(MaterialTheme.shapes.small)
+                modifier =
+                    modifier
+                        .size(imageSize)
+                        .clip(MaterialTheme.shapes.small),
             )
         }
 
@@ -55,9 +59,10 @@ fun ChannelImageLogo(
             Image(
                 painter = painterResource(Res.drawable.no_channel_logo),
                 contentDescription = channelName,
-                modifier = modifier
-                    .size(imageSize)
-                    .clip(MaterialTheme.shapes.small)
+                modifier =
+                    modifier
+                        .size(imageSize)
+                        .clip(MaterialTheme.shapes.small),
             )
         }
     }

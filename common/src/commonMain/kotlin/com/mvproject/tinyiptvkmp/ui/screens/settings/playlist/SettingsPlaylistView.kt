@@ -1,7 +1,7 @@
 /*
  *  Created by Medvediev Viktor [mvproject]
  *  Copyright © 2024
- *  last modified : 30.01.24, 14:57
+ *  last modified : 24.03.24, 10:49
  *
  */
 
@@ -36,6 +36,10 @@ import com.mvproject.tinyiptvkmp.utils.AppConstants
 import org.jetbrains.compose.resources.ExperimentalResourceApi
 import org.jetbrains.compose.resources.stringResource
 import tinyiptvkmp.common.generated.resources.Res
+import tinyiptvkmp.common.generated.resources.btn_add_new
+import tinyiptvkmp.common.generated.resources.msg_no_items_found
+import tinyiptvkmp.common.generated.resources.msg_no_playlist
+import tinyiptvkmp.common.generated.resources.scr_playlist_settings_title
 
 @OptIn(ExperimentalResourceApi::class)
 @Composable
@@ -43,12 +47,13 @@ fun SettingsPlaylistView(
     dataState: SettingsPlaylistState,
     onNavigateBack: () -> Unit = {},
     onNavigatePlaylist: (String) -> Unit = {},
-    onPlaylistAction: (SettingsPlaylistAction) -> Unit = {}
+    onPlaylistAction: (SettingsPlaylistAction) -> Unit = {},
 ) {
     Scaffold(
-        modifier = Modifier
-            .fillMaxSize()
-            .windowInsetsPadding(WindowInsets.navigationBars),
+        modifier =
+            Modifier
+                .fillMaxSize()
+                .windowInsetsPadding(WindowInsets.navigationBars),
         topBar = {
             AppBarWithBackNav(
                 appBarTitle = stringResource(Res.string.scr_playlist_settings_title),
@@ -60,37 +65,41 @@ fun SettingsPlaylistView(
                 onClick = {
                     onNavigatePlaylist(AppConstants.EMPTY_STRING)
                 },
-                modifier = Modifier
-                    .padding(MaterialTheme.dimens.size8)
-                    .fillMaxWidth(),
-                colors = ButtonDefaults.buttonColors(
-                    containerColor = MaterialTheme.colorScheme.onSurface
-                ),
-                shape = MaterialTheme.shapes.small
+                modifier =
+                    Modifier
+                        .padding(MaterialTheme.dimens.size8)
+                        .fillMaxWidth(),
+                colors =
+                    ButtonDefaults.buttonColors(
+                        containerColor = MaterialTheme.colorScheme.onSurface,
+                    ),
+                shape = MaterialTheme.shapes.small,
             ) {
                 Text(
                     text = stringResource(Res.string.btn_add_new),
                     color = MaterialTheme.colorScheme.primary,
-                    style = MaterialTheme.typography.titleMedium
+                    style = MaterialTheme.typography.titleMedium,
                 )
             }
-        }
+        },
     ) { paddingValues ->
         Box(
-            modifier = Modifier
-                .padding(paddingValues)
-                .fillMaxSize()
+            modifier =
+                Modifier
+                    .padding(paddingValues)
+                    .fillMaxSize(),
         ) {
             LazyColumn(
-                modifier = Modifier
-                    .fillMaxSize(),
+                modifier =
+                    Modifier
+                        .fillMaxSize(),
                 state = rememberLazyListState(),
                 verticalArrangement = Arrangement.spacedBy(MaterialTheme.dimens.size4),
-                contentPadding = PaddingValues(MaterialTheme.dimens.size8)
+                contentPadding = PaddingValues(MaterialTheme.dimens.size8),
             ) {
                 items(
                     dataState.playlists,
-                    key = { it.id }
+                    key = { it.id },
                 ) { item ->
                     PlaylistItemView(
                         modifier = Modifier.fillMaxSize(),
@@ -100,7 +109,7 @@ fun SettingsPlaylistView(
                         },
                         onDelete = {
                             onPlaylistAction(SettingsPlaylistAction.DeletePlaylist(item))
-                        }
+                        },
                     )
                 }
             }
@@ -109,7 +118,7 @@ fun SettingsPlaylistView(
                 NoItemsView(
                     modifier = Modifier.fillMaxSize(),
                     title = stringResource(Res.string.msg_no_items_found),
-                    navigateTitle = stringResource(Res.string.msg_no_playlist)
+                    navigateTitle = stringResource(Res.string.msg_no_playlist),
                 )
             }
         }

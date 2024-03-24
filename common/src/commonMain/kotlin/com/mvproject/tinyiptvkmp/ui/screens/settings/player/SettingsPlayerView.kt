@@ -1,7 +1,7 @@
 /*
  *  Created by Medvediev Viktor [mvproject]
  *  Copyright © 2024
- *  last modified : 30.01.24, 14:57
+ *  last modified : 24.03.24, 10:49
  *
  */
 
@@ -41,62 +41,71 @@ import com.mvproject.tinyiptvkmp.ui.theme.dimens
 import org.jetbrains.compose.resources.ExperimentalResourceApi
 import org.jetbrains.compose.resources.stringResource
 import tinyiptvkmp.common.generated.resources.Res
+import tinyiptvkmp.common.generated.resources.option_default_fullscreen_mode
+import tinyiptvkmp.common.generated.resources.option_default_ratio_mode
+import tinyiptvkmp.common.generated.resources.option_default_resize_mode
+import tinyiptvkmp.common.generated.resources.scr_player_settings_title
 
 @OptIn(ExperimentalResourceApi::class)
 @Composable
 fun SettingsPlayerView(
     state: SettingsPlayerState,
     onNavigateBack: () -> Unit = {},
-    onSettingsPlayerAction: (SettingsPlayerAction) -> Unit = {}
+    onSettingsPlayerAction: (SettingsPlayerAction) -> Unit = {},
 ) {
     Scaffold(
-        modifier = Modifier
-            .fillMaxSize()
-            .windowInsetsPadding(WindowInsets.navigationBars),
+        modifier =
+            Modifier
+                .fillMaxSize()
+                .windowInsetsPadding(WindowInsets.navigationBars),
         topBar = {
             AppBarWithBackNav(
                 appBarTitle = stringResource(Res.string.scr_player_settings_title),
                 onBackClick = onNavigateBack,
             )
-        }
+        },
     ) { paddingValues ->
 
         val isSelectResizeModeOpen = remember { mutableStateOf(false) }
         val isSelectRatioModeOpen = remember { mutableStateOf(false) }
 
         Column(
-            modifier = Modifier
-                .padding(paddingValues)
-                .fillMaxSize()
-                .padding(MaterialTheme.dimens.size12)
+            modifier =
+                Modifier
+                    .padding(paddingValues)
+                    .fillMaxSize()
+                    .padding(MaterialTheme.dimens.size12),
         ) {
             Row(
                 modifier = Modifier.fillMaxWidth(),
                 verticalAlignment = Alignment.CenterVertically,
-                horizontalArrangement = Arrangement.SpaceBetween
+                horizontalArrangement = Arrangement.SpaceBetween,
             ) {
                 Text(
-                    modifier = Modifier
-                        .weight(MaterialTheme.dimens.weight6)
-                        .padding(horizontal = MaterialTheme.dimens.size8),
+                    modifier =
+                        Modifier
+                            .weight(MaterialTheme.dimens.weight6)
+                            .padding(horizontal = MaterialTheme.dimens.size8),
                     text = stringResource(Res.string.option_default_fullscreen_mode),
                     style = MaterialTheme.typography.bodyMedium,
-                    color = MaterialTheme.colorScheme.onPrimary
+                    color = MaterialTheme.colorScheme.onPrimary,
                 )
 
                 Switch(
                     modifier = Modifier.width(MaterialTheme.dimens.size82),
                     checked = state.isFullscreenEnabled,
-                    colors = SwitchDefaults.colors(
-                        checkedThumbColor = MaterialTheme.colorScheme.primary,
-                        uncheckedThumbColor = MaterialTheme.colorScheme.primary
-                            .copy(alpha = MaterialTheme.dimens.alpha50),
-                        checkedTrackColor = MaterialTheme.colorScheme.onSurfaceVariant,
-                        uncheckedTrackColor = MaterialTheme.colorScheme.onSurface
-                    ),
+                    colors =
+                        SwitchDefaults.colors(
+                            checkedThumbColor = MaterialTheme.colorScheme.primary,
+                            uncheckedThumbColor =
+                                MaterialTheme.colorScheme.primary
+                                    .copy(alpha = MaterialTheme.dimens.alpha50),
+                            checkedTrackColor = MaterialTheme.colorScheme.onSurfaceVariant,
+                            uncheckedTrackColor = MaterialTheme.colorScheme.onSurface,
+                        ),
                     onCheckedChange = { state ->
                         onSettingsPlayerAction(SettingsPlayerAction.SetFullScreenMode(state))
-                    }
+                    },
                 )
             }
 
@@ -109,7 +118,7 @@ fun SettingsPlayerView(
                 isExpanded = isSelectResizeModeOpen.value,
                 onClick = {
                     isSelectResizeModeOpen.value = true
-                }
+                },
             )
 
             Spacer(modifier = Modifier.height(MaterialTheme.dimens.size12))
@@ -121,15 +130,14 @@ fun SettingsPlayerView(
                 isExpanded = isSelectRatioModeOpen.value,
                 onClick = {
                     isSelectRatioModeOpen.value = true
-                }
+                },
             )
-
         }
 
         OverlayContent(
             isVisible = isSelectResizeModeOpen.value,
             contentAlpha = MaterialTheme.dimens.alpha90,
-            onViewTap = { isSelectResizeModeOpen.value = false }
+            onViewTap = { isSelectResizeModeOpen.value = false },
         ) {
             OverlayOptionsMenu(
                 title = stringResource(Res.string.option_default_resize_mode),
@@ -138,14 +146,14 @@ fun SettingsPlayerView(
                 onItemSelected = { index ->
                     onSettingsPlayerAction(SettingsPlayerAction.SetResizeMode(index))
                     isSelectResizeModeOpen.value = false
-                }
+                },
             )
         }
 
         OverlayContent(
             isVisible = isSelectRatioModeOpen.value,
             contentAlpha = MaterialTheme.dimens.alpha90,
-            onViewTap = { isSelectRatioModeOpen.value = false }
+            onViewTap = { isSelectRatioModeOpen.value = false },
         ) {
             OverlayOptionsMenu(
                 title = stringResource(Res.string.option_default_ratio_mode),
@@ -154,7 +162,7 @@ fun SettingsPlayerView(
                 onItemSelected = { index ->
                     onSettingsPlayerAction(SettingsPlayerAction.SetRatioMode(index))
                     isSelectRatioModeOpen.value = false
-                }
+                },
             )
         }
     }

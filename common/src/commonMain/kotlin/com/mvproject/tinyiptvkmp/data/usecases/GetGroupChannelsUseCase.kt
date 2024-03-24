@@ -1,7 +1,7 @@
 /*
  *  Created by Medvediev Viktor [mvproject]
  *  Copyright © 2024
- *  last modified : 30.01.24, 14:57
+ *  last modified : 24.03.24, 10:49
  *
  */
 
@@ -18,6 +18,8 @@ import com.mvproject.tinyiptvkmp.utils.TimeUtils.actualDate
 import org.jetbrains.compose.resources.ExperimentalResourceApi
 import org.jetbrains.compose.resources.getString
 import tinyiptvkmp.common.generated.resources.Res
+import tinyiptvkmp.common.generated.resources.channel_folder_all
+import tinyiptvkmp.common.generated.resources.channel_folder_favorite
 
 @OptIn(ExperimentalResourceApi::class)
 class GetGroupChannelsUseCase(
@@ -25,64 +27,70 @@ class GetGroupChannelsUseCase(
     private val playlistChannelsRepository: PlaylistChannelsRepository,
     private val favoriteChannelsRepository: FavoriteChannelsRepository,
     private val epgProgramRepository: EpgProgramRepository,
-    private val selectedEpgRepository: SelectedEpgRepository
+    private val selectedEpgRepository: SelectedEpgRepository,
 ) {
-    suspend operator fun invoke(
-        group: String
-    ): List<TvPlaylistChannel> {
+    suspend operator fun invoke(group: String): List<TvPlaylistChannel> {
         val currentPlaylistId = preferenceRepository.loadCurrentPlaylistId()
 
-        val favorites = favoriteChannelsRepository
-            .loadPlaylistFavoriteChannelUrls(listId = currentPlaylistId)
+        val favorites =
+            favoriteChannelsRepository
+                .loadPlaylistFavoriteChannelUrls(listId = currentPlaylistId)
 
-        val selectedEpgIds = selectedEpgRepository.getAllSelectedEpg()
-            .map {
-                it.channelEpgId
+        val selectedEpgIds =
+            selectedEpgRepository.getAllSelectedEpg()
+                .map {
+                    it.channelEpgId
+                }
+
+        val epgs =
+            epgProgramRepository.getEpgProgramsByIds(
+                channelIds = selectedEpgIds,
+                time = actualDate,
+            ).asSequence()
+
+        val groupedEpgs =
+            epgs.groupBy {
+                it.channelId
             }
 
-        val epgs = epgProgramRepository.getEpgProgramsByIds(
-            channelIds = selectedEpgIds,
-            time = actualDate
-        ).asSequence()
+        val channels =
+            when (group) {
+                getString(Res.string.channel_folder_all) -> {
+                    playlistChannelsRepository.loadPlaylistChannels(
+                        listId = currentPlaylistId,
+                    )
+                }
 
-        val groupedEpgs = epgs.groupBy {
-            it.channelId
-        }
+                getString(Res.string.channel_folder_favorite) -> {
+                    playlistChannelsRepository.loadPlaylistChannelsByUrls(
+                        listId = currentPlaylistId,
+                        urls = favorites,
+                    )
+                }
 
-        val channels = when (group) {
-            getString(Res.string.channel_folder_all) -> {
-                playlistChannelsRepository.loadPlaylistChannels(
-                    listId = currentPlaylistId
-                )
+                else -> {
+                    playlistChannelsRepository.loadPlaylistGroupChannels(
+                        listId = currentPlaylistId,
+                        group = group,
+                    )
+                }
             }
-
-            getString(Res.string.channel_folder_favorite) -> {
-                playlistChannelsRepository.loadPlaylistChannelsByUrls(
-                    listId = currentPlaylistId,
-                    urls = favorites
-                )
-            }
-
-            else -> {
-                playlistChannelsRepository.loadPlaylistGroupChannels(
-                    listId = currentPlaylistId,
-                    group = group
-                )
-            }
-        }
 
         return channels.asSequence()
             .map { channel ->
                 val isEpgRequired = channel.epgId in selectedEpgIds
 
-                val epgList = if (isEpgRequired) {
-                    groupedEpgs[channel.epgId] ?: emptyList()
-                } else emptyList()
+                val epgList =
+                    if (isEpgRequired) {
+                        groupedEpgs[channel.epgId] ?: emptyList()
+                    } else {
+                        emptyList()
+                    }
 
                 channel.toTvPlaylistChannel(
                     isFavorite = channel.channelUrl in favorites,
                     isEpgUsing = isEpgRequired,
-                    epgContent = epgList
+                    epgContent = epgList,
                 )
             }.toList()
     }

@@ -1,7 +1,7 @@
 /*
  *  Created by Medvediev Viktor [mvproject]
  *  Copyright © 2024
- *  last modified : 23.02.24, 11:07
+ *  last modified : 24.03.24, 10:49
  *
  */
 
@@ -42,6 +42,13 @@ import com.mvproject.tinyiptvkmp.utils.AppConstants.WEIGHT_1
 import org.jetbrains.compose.resources.ExperimentalResourceApi
 import org.jetbrains.compose.resources.stringResource
 import tinyiptvkmp.common.generated.resources.Res
+import tinyiptvkmp.common.generated.resources.hint_update_period
+import tinyiptvkmp.common.generated.resources.option_update_epg_data
+import tinyiptvkmp.common.generated.resources.option_update_epg_info
+import tinyiptvkmp.common.generated.resources.option_update_title
+import tinyiptvkmp.common.generated.resources.scr_player_settings_title
+import tinyiptvkmp.common.generated.resources.scr_playlist_settings_title
+import tinyiptvkmp.common.generated.resources.scr_settings_title
 
 @OptIn(ExperimentalResourceApi::class)
 @Composable
@@ -51,192 +58,200 @@ fun SettingsGeneralView(
     onNavigateBack: () -> Unit = {},
     onNavigatePlaylistSettings: () -> Unit = {},
     onNavigatePlayerSettings: () -> Unit = {},
-
-    ) {
+) {
     Scaffold(
-        modifier = Modifier
-            .fillMaxSize(),
+        modifier =
+            Modifier
+                .fillMaxSize(),
         topBar = {
             AppBarWithBackNav(
                 appBarTitle = stringResource(Res.string.scr_settings_title),
                 onBackClick = onNavigateBack,
             )
-        }
+        },
     ) { paddingValues ->
 
         val isSelectInfoUpdateOpen = remember { mutableStateOf(false) }
         val isSelectEpgUpdateOpen = remember { mutableStateOf(false) }
 
         Column(
-            modifier = Modifier
-                .padding(paddingValues)
-                .fillMaxSize()
-                .padding(MaterialTheme.dimens.size8),
+            modifier =
+                Modifier
+                    .padding(paddingValues)
+                    .fillMaxSize()
+                    .padding(MaterialTheme.dimens.size8),
         ) {
-
             TextButton(
                 onClick = onNavigatePlaylistSettings,
-                modifier = Modifier.fillMaxWidth()
+                modifier = Modifier.fillMaxWidth(),
             ) {
-
                 Text(
                     text = stringResource(Res.string.scr_playlist_settings_title),
                     color = MaterialTheme.colorScheme.onPrimary,
-                    style = MaterialTheme.typography.titleMedium
+                    style = MaterialTheme.typography.titleMedium,
                 )
 
                 Spacer(modifier = Modifier.weight(WEIGHT_1))
 
                 FilledIconButton(
                     onClick = onNavigatePlaylistSettings,
-                    colors = IconButtonDefaults.filledIconButtonColors(
-                        containerColor = MaterialTheme.colorScheme.onPrimary,
-                        contentColor = MaterialTheme.colorScheme.primary
-                    )
+                    colors =
+                        IconButtonDefaults.filledIconButtonColors(
+                            containerColor = MaterialTheme.colorScheme.onPrimary,
+                            contentColor = MaterialTheme.colorScheme.primary,
+                        ),
                 ) {
                     Icon(
                         imageVector = Icons.AutoMirrored.Filled.ArrowRight,
-                        contentDescription = stringResource(Res.string.scr_playlist_settings_title)
+                        contentDescription = stringResource(Res.string.scr_playlist_settings_title),
                     )
                 }
             }
 
             HorizontalDivider(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .padding(horizontal = MaterialTheme.dimens.size8),
-                color = MaterialTheme.colorScheme.onPrimary
+                modifier =
+                    Modifier
+                        .fillMaxWidth()
+                        .padding(horizontal = MaterialTheme.dimens.size8),
+                color = MaterialTheme.colorScheme.onPrimary,
             )
             Spacer(modifier = Modifier.height(MaterialTheme.dimens.size12))
 
             TextButton(
                 onClick = onNavigatePlayerSettings,
-                modifier = Modifier.fillMaxWidth()
+                modifier = Modifier.fillMaxWidth(),
             ) {
-
                 Text(
                     text = stringResource(Res.string.scr_player_settings_title),
                     color = MaterialTheme.colorScheme.onPrimary,
-                    style = MaterialTheme.typography.titleMedium
+                    style = MaterialTheme.typography.titleMedium,
                 )
 
                 Spacer(modifier = Modifier.weight(WEIGHT_1))
 
                 FilledIconButton(
                     onClick = onNavigatePlayerSettings,
-                    colors = IconButtonDefaults.filledIconButtonColors(
-                        containerColor = MaterialTheme.colorScheme.onPrimary,
-                        contentColor = MaterialTheme.colorScheme.primary
-                    )
+                    colors =
+                        IconButtonDefaults.filledIconButtonColors(
+                            containerColor = MaterialTheme.colorScheme.onPrimary,
+                            contentColor = MaterialTheme.colorScheme.primary,
+                        ),
                 ) {
                     Icon(
                         imageVector = Icons.AutoMirrored.Filled.ArrowRight,
-                        contentDescription = stringResource(Res.string.scr_player_settings_title)
+                        contentDescription = stringResource(Res.string.scr_player_settings_title),
                     )
                 }
             }
 
             HorizontalDivider(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .padding(horizontal = MaterialTheme.dimens.size8),
-                color = MaterialTheme.colorScheme.onPrimary
+                modifier =
+                    Modifier
+                        .fillMaxWidth()
+                        .padding(horizontal = MaterialTheme.dimens.size8),
+                color = MaterialTheme.colorScheme.onPrimary,
             )
 
             Spacer(modifier = Modifier.height(MaterialTheme.dimens.size12))
 
             Row(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .padding(horizontal = MaterialTheme.dimens.size8),
-                horizontalArrangement = Arrangement.spacedBy(
-                    space = MaterialTheme.dimens.size8
-                ),
-                verticalAlignment = Alignment.CenterVertically
+                modifier =
+                    Modifier
+                        .fillMaxWidth()
+                        .padding(horizontal = MaterialTheme.dimens.size8),
+                horizontalArrangement =
+                    Arrangement.spacedBy(
+                        space = MaterialTheme.dimens.size8,
+                    ),
+                verticalAlignment = Alignment.CenterVertically,
             ) {
                 HorizontalDivider(
                     modifier = Modifier.weight(WEIGHT_1),
-                    color = MaterialTheme.colorScheme.onPrimary
+                    color = MaterialTheme.colorScheme.onPrimary,
                 )
 
                 Text(
                     text = stringResource(Res.string.option_update_title),
                     style = MaterialTheme.typography.bodyMedium,
-                    color = MaterialTheme.colorScheme.onSurface
+                    color = MaterialTheme.colorScheme.onSurface,
                 )
 
                 HorizontalDivider(
                     modifier = Modifier.weight(WEIGHT_1),
-                    color = MaterialTheme.colorScheme.onPrimary
+                    color = MaterialTheme.colorScheme.onPrimary,
                 )
             }
 
             Spacer(
-                modifier = Modifier.height(MaterialTheme.dimens.size12)
+                modifier = Modifier.height(MaterialTheme.dimens.size12),
             )
 
             OptionSelector(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .padding(horizontal = MaterialTheme.dimens.size8),
+                modifier =
+                    Modifier
+                        .fillMaxWidth()
+                        .padding(horizontal = MaterialTheme.dimens.size8),
                 title = stringResource(Res.string.option_update_epg_info),
                 selectedItem = stringResource(UpdatePeriod.entries[state.infoUpdatePeriod].title),
                 isExpanded = isSelectInfoUpdateOpen.value,
                 onClick = {
                     isSelectInfoUpdateOpen.value = true
-                }
+                },
             )
 
             Spacer(
-                modifier = Modifier.height(MaterialTheme.dimens.size12)
+                modifier = Modifier.height(MaterialTheme.dimens.size12),
             )
 
             OptionSelector(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .padding(horizontal = MaterialTheme.dimens.size8),
+                modifier =
+                    Modifier
+                        .fillMaxWidth()
+                        .padding(horizontal = MaterialTheme.dimens.size8),
                 title = stringResource(Res.string.option_update_epg_data),
                 selectedItem = stringResource(UpdatePeriod.entries[state.epgUpdatePeriod].title),
                 isExpanded = isSelectEpgUpdateOpen.value,
                 onClick = {
                     isSelectEpgUpdateOpen.value = true
-                }
+                },
             )
         }
 
         OverlayContent(
             isVisible = isSelectInfoUpdateOpen.value,
             contentAlpha = MaterialTheme.dimens.alpha90,
-            onViewTap = { isSelectInfoUpdateOpen.value = false }
+            onViewTap = { isSelectInfoUpdateOpen.value = false },
         ) {
             OverlayOptionsMenu(
                 title = stringResource(Res.string.hint_update_period),
                 selectedIndex = state.infoUpdatePeriod,
-                items = UpdatePeriod.entries.map {
-                    stringResource(it.title)
-                },
+                items =
+                    UpdatePeriod.entries.map {
+                        stringResource(it.title)
+                    },
                 onItemSelected = { index ->
                     onSettingsAction(SettingsAction.SetInfoUpdatePeriod(index))
                     isSelectInfoUpdateOpen.value = false
-                }
+                },
             )
         }
 
         OverlayContent(
             isVisible = isSelectEpgUpdateOpen.value,
             contentAlpha = MaterialTheme.dimens.alpha90,
-            onViewTap = { isSelectEpgUpdateOpen.value = false }
+            onViewTap = { isSelectEpgUpdateOpen.value = false },
         ) {
             OverlayOptionsMenu(
                 title = stringResource(Res.string.hint_update_period),
                 selectedIndex = state.epgUpdatePeriod,
-                items = UpdatePeriod.entries.map {
-                    stringResource(it.title)
-                },
+                items =
+                    UpdatePeriod.entries.map {
+                        stringResource(it.title)
+                    },
                 onItemSelected = { index ->
                     onSettingsAction(SettingsAction.SetEpgUpdatePeriod(index))
                     isSelectEpgUpdateOpen.value = false
-                }
+                },
             )
         }
     }

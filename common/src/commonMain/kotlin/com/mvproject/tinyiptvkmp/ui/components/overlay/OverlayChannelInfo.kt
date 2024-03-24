@@ -1,7 +1,7 @@
 /*
  *  Created by Medvediev Viktor [mvproject]
  *  Copyright © 2024
- *  last modified : 30.01.24, 14:57
+ *  last modified : 24.03.24, 10:49
  *
  */
 
@@ -26,30 +26,33 @@ import com.mvproject.tinyiptvkmp.utils.AppConstants.EMPTY_STRING
 import org.jetbrains.compose.resources.ExperimentalResourceApi
 import org.jetbrains.compose.resources.stringResource
 import tinyiptvkmp.common.generated.resources.Res
+import tinyiptvkmp.common.generated.resources.msg_no_epg_found
 
 @OptIn(ExperimentalResourceApi::class)
 @Composable
 fun OverlayChannelInfo(
     isFullScreen: Boolean = false,
-    currentChannel: TvPlaylistChannel
+    currentChannel: TvPlaylistChannel,
 ) {
     Column(
-        modifier = Modifier
-            .wrapContentHeight()
-            .fullScreenWidth(enabled = isFullScreen)
-            .background(
-                color = MaterialTheme.colorScheme.primary,
-                shape = MaterialTheme.shapes.small
-            )
+        modifier =
+            Modifier
+                .wrapContentHeight()
+                .fullScreenWidth(enabled = isFullScreen)
+                .background(
+                    color = MaterialTheme.colorScheme.primary,
+                    shape = MaterialTheme.shapes.small,
+                ),
     ) {
         Text(
-            modifier = Modifier
-                .fillMaxWidth()
-                .roundedHeader(),
+            modifier =
+                Modifier
+                    .fillMaxWidth()
+                    .roundedHeader(),
             text = currentChannel.channelName,
             style = MaterialTheme.typography.titleMedium,
             color = MaterialTheme.colorScheme.primary,
-            textAlign = TextAlign.Center
+            textAlign = TextAlign.Center,
         )
 
         val description =
@@ -57,25 +60,27 @@ fun OverlayChannelInfo(
 
         if (description.isEmpty()) {
             Text(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .padding(
-                        horizontal = MaterialTheme.dimens.size18,
-                        vertical = MaterialTheme.dimens.size48
-                    ),
+                modifier =
+                    Modifier
+                        .fillMaxWidth()
+                        .padding(
+                            horizontal = MaterialTheme.dimens.size18,
+                            vertical = MaterialTheme.dimens.size48,
+                        ),
                 text = stringResource(Res.string.msg_no_epg_found),
                 style = MaterialTheme.typography.titleLarge,
                 color = MaterialTheme.colorScheme.onSurfaceVariant,
-                textAlign = TextAlign.Center
+                textAlign = TextAlign.Center,
             )
         } else {
             Text(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .padding(all = MaterialTheme.dimens.size8),
+                modifier =
+                    Modifier
+                        .fillMaxWidth()
+                        .padding(all = MaterialTheme.dimens.size8),
                 text = description,
                 style = MaterialTheme.typography.labelMedium,
-                color = MaterialTheme.colorScheme.onSurface
+                color = MaterialTheme.colorScheme.onSurface,
             )
         }
     }

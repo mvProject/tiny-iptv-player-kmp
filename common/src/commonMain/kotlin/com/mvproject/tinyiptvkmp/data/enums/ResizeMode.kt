@@ -1,7 +1,7 @@
 /*
  *  Created by Medvediev Viktor [mvproject]
  *  Copyright © 2024
- *  last modified : 30.01.24, 13:56
+ *  last modified : 24.03.24, 10:49
  *
  */
 
@@ -12,13 +12,19 @@ package com.mvproject.tinyiptvkmp.data.enums
 import org.jetbrains.compose.resources.ExperimentalResourceApi
 import org.jetbrains.compose.resources.StringResource
 import tinyiptvkmp.common.generated.resources.Res
+import tinyiptvkmp.common.generated.resources.video_resize_mode_fill
+import tinyiptvkmp.common.generated.resources.video_resize_mode_fit
+import tinyiptvkmp.common.generated.resources.video_resize_mode_fixed_height
+import tinyiptvkmp.common.generated.resources.video_resize_mode_fixed_width
+import tinyiptvkmp.common.generated.resources.video_resize_mode_zoom
 
 enum class ResizeMode(val value: Int, val title: StringResource) {
     Fit(0, Res.string.video_resize_mode_fit),
     FixedWidth(1, Res.string.video_resize_mode_fixed_width),
     FixedHeight(2, Res.string.video_resize_mode_fixed_height),
     Fill(3, Res.string.video_resize_mode_fill),
-    Zoom(4, Res.string.video_resize_mode_zoom);
+    Zoom(4, Res.string.video_resize_mode_zoom),
+    ;
 
     companion object {
         fun toggleResizeMode(current: ResizeMode) =

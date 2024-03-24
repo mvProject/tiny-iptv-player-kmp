@@ -1,7 +1,7 @@
 /*
  *  Created by Medvediev Viktor [mvproject]
  *  Copyright © 2024
- *  last modified : 23.02.24, 11:07
+ *  last modified : 24.03.24, 10:57
  *
  */
 
@@ -50,6 +50,7 @@ import okio.use
 import org.jetbrains.compose.resources.ExperimentalResourceApi
 import org.jetbrains.compose.resources.stringResource
 import tinyiptvkmp.common.generated.resources.Res
+import tinyiptvkmp.common.generated.resources.btn_add_local
 import java.io.BufferedReader
 import java.io.File
 import java.io.FileInputStream
@@ -60,59 +61,60 @@ actual fun createPlatformHttpClient(): HttpClient {
     return HttpClient(Java)
 }
 
-
 @Composable
 actual fun PlayerViewContainer(
     modifier: Modifier,
     videoViewState: VideoViewState,
     onPlaybackAction: (PlaybackActions) -> Unit,
     onPlaybackStateAction: (PlaybackStateActions) -> Unit,
-    controls: @Composable () -> Unit
+    controls: @Composable () -> Unit,
 ) {
     PlayerView(
         modifier = modifier,
         videoViewState = videoViewState,
         onPlaybackAction = onPlaybackAction,
         onPlaybackStateAction = onPlaybackStateAction,
-        controls = controls
+        controls = controls,
     )
 }
 
 @OptIn(ExperimentalResourceApi::class)
 @Composable
 actual fun LocalFileSelectButton(onPlaylistAction: (PlaylistAction) -> Unit) {
-
-    val fileSelectLauncher = rememberFilePickerLauncher(
-        type = FilePickerFileType.Custom(
-            listOf(AppConstants.PLAYLIST_MIME_TYPE)
-        ),
-        selectionMode = FilePickerSelectionMode.Single,
-        onResult = { files ->
-            files.firstOrNull()?.let { file ->
-                onPlaylistAction(
-                    PlaylistAction.SetLocalUri(
-                        name = file.name,
-                        uri = file.absolutePath
+    val fileSelectLauncher =
+        rememberFilePickerLauncher(
+            type =
+                FilePickerFileType.Custom(
+                    listOf(AppConstants.PLAYLIST_MIME_TYPE),
+                ),
+            selectionMode = FilePickerSelectionMode.Single,
+            onResult = { files ->
+                files.firstOrNull()?.let { file ->
+                    onPlaylistAction(
+                        PlaylistAction.SetLocalUri(
+                            name = file.name,
+                            uri = file.absolutePath,
+                        ),
                     )
-                )
-            }
-        }
-    )
+                }
+            },
+        )
 
     OutlinedButton(
         onClick = {
             fileSelectLauncher.launch()
         },
         modifier = Modifier.fillMaxWidth(),
-        colors = ButtonDefaults.buttonColors(
-            containerColor = MaterialTheme.colorScheme.primary
-        ),
-        shape = MaterialTheme.shapes.small
+        colors =
+            ButtonDefaults.buttonColors(
+                containerColor = MaterialTheme.colorScheme.primary,
+            ),
+        shape = MaterialTheme.shapes.small,
     ) {
         Text(
             text = stringResource(Res.string.btn_add_local),
             color = MaterialTheme.colorScheme.onSurface,
-            style = MaterialTheme.typography.bodyLarge
+            style = MaterialTheme.typography.bodyLarge,
         )
     }
 }
@@ -126,66 +128,64 @@ actual fun AdditionalPlayerControls(
     Row(
         modifier = modifier,
         verticalAlignment = Alignment.CenterVertically,
-        horizontalArrangement = Arrangement.Start
+        horizontalArrangement = Arrangement.Start,
     ) {
-
         PlaybackControl(
             imageVector = Icons.Rounded.Close,
-            action = action
+            action = action,
         )
 
         Spacer(modifier = Modifier.width(MaterialTheme.dimens.size32))
 
         PlaybackControl(
             imageVector = Icons.AutoMirrored.Rounded.VolumeDown,
-            action = { onPlaybackAction(PlaybackActions.OnVolumeDown) }
+            action = { onPlaybackAction(PlaybackActions.OnVolumeDown) },
         )
 
         Spacer(modifier = Modifier.width(MaterialTheme.dimens.size8))
 
         PlaybackControl(
             imageVector = Icons.AutoMirrored.Rounded.VolumeUp,
-            action = { onPlaybackAction(PlaybackActions.OnVolumeUp) }
+            action = { onPlaybackAction(PlaybackActions.OnVolumeUp) },
         )
 
         Spacer(modifier = Modifier.width(MaterialTheme.dimens.size24))
 
         PlaybackControl(
             imageVector = Icons.Rounded.SkipPrevious,
-            action = { onPlaybackAction(PlaybackActions.OnPreviousSelected) }
+            action = { onPlaybackAction(PlaybackActions.OnPreviousSelected) },
         )
 
         Spacer(modifier = Modifier.width(MaterialTheme.dimens.size8))
 
         PlaybackControl(
             imageVector = Icons.Rounded.SkipNext,
-            action = { onPlaybackAction(PlaybackActions.OnNextSelected) }
+            action = { onPlaybackAction(PlaybackActions.OnNextSelected) },
         )
 
         Spacer(modifier = Modifier.width(MaterialTheme.dimens.size24))
 
         PlaybackControl(
             imageVector = Icons.AutoMirrored.Rounded.ViewList,
-            action = { onPlaybackAction(PlaybackActions.OnEpgUiToggle) }
+            action = { onPlaybackAction(PlaybackActions.OnEpgUiToggle) },
         )
 
         Spacer(modifier = Modifier.width(MaterialTheme.dimens.size8))
 
         PlaybackControl(
             imageVector = Icons.AutoMirrored.Rounded.FeaturedPlayList,
-            action = { onPlaybackAction(PlaybackActions.OnChannelsUiToggle) }
+            action = { onPlaybackAction(PlaybackActions.OnChannelsUiToggle) },
         )
 
         Spacer(modifier = Modifier.width(MaterialTheme.dimens.size8))
 
         PlaybackControl(
             imageVector = Icons.Rounded.Info,
-            action = { onPlaybackAction(PlaybackActions.OnChannelInfoUiToggle) }
+            action = { onPlaybackAction(PlaybackActions.OnChannelInfoUiToggle) },
         )
 
         Spacer(modifier = Modifier.width(MaterialTheme.dimens.size24))
     }
-
 }
 
 @Composable
@@ -201,20 +201,22 @@ actual fun isMediaPlayable(errorCode: Int?): Boolean {
 @Composable
 actual fun TwoPaneContainer(
     first: @Composable () -> Unit,
-    second: @Composable () -> Unit
+    second: @Composable () -> Unit,
 ) {
     Row(modifier = Modifier.fillMaxSize()) {
         Column(
-            modifier = Modifier
-                .weight(MaterialTheme.dimens.weight6)
-                .fillMaxHeight()
+            modifier =
+                Modifier
+                    .weight(MaterialTheme.dimens.weight6)
+                    .fillMaxHeight(),
         ) {
             first()
         }
         Column(
-            modifier = Modifier
-                .weight(MaterialTheme.dimens.weight2)
-                .fillMaxHeight()
+            modifier =
+                Modifier
+                    .weight(MaterialTheme.dimens.weight2)
+                    .fillMaxHeight(),
         ) {
             second()
         }
@@ -224,9 +226,8 @@ actual fun TwoPaneContainer(
 actual class LocalPlaylistDataSource {
     actual fun getLocalPlaylistData(
         playlistId: Long,
-        uri: String
+        uri: String,
     ): List<PlaylistChannel> {
-
         val file = File(uri)
 
         return buildList {
@@ -234,10 +235,11 @@ actual class LocalPlaylistDataSource {
                 BufferedReader(inputStreamReader).use { bufferedReader ->
                     bufferedReader.readText().also { content ->
 
-                        val channels = ParseMappers.parseStringToChannels(
-                            playlistId = playlistId,
-                            source = content
-                        )
+                        val channels =
+                            ParseMappers.parseStringToChannels(
+                                playlistId = playlistId,
+                                source = content,
+                            )
 
                         addAll(channels)
                     }

@@ -1,7 +1,7 @@
 /*
  *  Created by Medvediev Viktor [mvproject]
  *  Copyright © 2024
- *  last modified : 31.01.24, 08:26
+ *  last modified : 24.03.24, 14:09
  *
  */
 @Suppress("DSL_SCOPE_VIOLATION")
@@ -41,7 +41,7 @@ kotlin {
             }
         }
     }
-    jvm() {
+    jvm {
         jvmToolchain(17)
     }
 
@@ -124,7 +124,7 @@ kotlin {
                             androidTestImplementation(libs.androidx.compose.ui.test.junit4)
                             debugImplementation(libs.androidx.compose.ui.test.manifest)
 
-                           */
+             */
         }
 
         jvmMain.dependencies {
@@ -148,6 +148,8 @@ kotlin {
             implementation(libs.caprica.vlcj)
         }
     }
+
+    task("testClasses")
 }
 
 sqldelight {

@@ -1,7 +1,7 @@
 /*
  *  Created by Medvediev Viktor [mvproject]
  *  Copyright © 2024
- *  last modified : 30.01.24, 14:57
+ *  last modified : 24.03.24, 14:58
  *
  */
 
@@ -43,8 +43,10 @@ import com.mvproject.tinyiptvkmp.utils.CommonUtils.getNameFromStringUri
 import com.mvproject.tinyiptvkmp.utils.KLog
 import io.ktor.client.HttpClient
 import io.ktor.client.engine.android.Android
-import org.jetbrains.compose.resources.*
+import org.jetbrains.compose.resources.ExperimentalResourceApi
+import org.jetbrains.compose.resources.stringResource
 import tinyiptvkmp.common.generated.resources.Res
+import tinyiptvkmp.common.generated.resources.btn_add_local
 import java.io.BufferedReader
 import java.io.FileInputStream
 import java.io.InputStreamReader
@@ -59,44 +61,46 @@ actual fun PlayerViewContainer(
     videoViewState: VideoViewState,
     onPlaybackAction: (PlaybackActions) -> Unit,
     onPlaybackStateAction: (PlaybackStateActions) -> Unit,
-    controls: @Composable () -> Unit
+    controls: @Composable () -> Unit,
 ) {
     PlayerView(
         modifier = modifier,
         videoViewState = videoViewState,
         onPlaybackAction = onPlaybackAction,
         onPlaybackStateAction = onPlaybackStateAction,
-        controls = controls
+        controls = controls,
     )
 }
 
 @OptIn(ExperimentalResourceApi::class)
 @Composable
 actual fun LocalFileSelectButton(onPlaylistAction: (PlaylistAction) -> Unit) {
-    val fileSelectLauncher = rememberLauncherForActivityResult(
-        contract = ActivityResultContracts.OpenDocument(),
-        onResult = { uri ->
-            onPlaylistAction(
-                PlaylistAction.SetLocalUri(
-                    name = uri.toString().getNameFromStringUri(),
-                    uri = uri.toString(),
+    val fileSelectLauncher =
+        rememberLauncherForActivityResult(
+            contract = ActivityResultContracts.OpenDocument(),
+            onResult = { uri ->
+                onPlaylistAction(
+                    PlaylistAction.SetLocalUri(
+                        name = uri.toString().getNameFromStringUri(),
+                        uri = uri.toString(),
+                    ),
                 )
-            )
-        }
-    )
+            },
+        )
 
     OutlinedButton(
         onClick = { fileSelectLauncher.launch(arrayOf(AppConstants.PLAYLIST_MIME_TYPE)) },
         modifier = Modifier.fillMaxWidth(),
-        colors = ButtonDefaults.buttonColors(
-            containerColor = MaterialTheme.colorScheme.primary
-        ),
-        shape = MaterialTheme.shapes.small
+        colors =
+            ButtonDefaults.buttonColors(
+                containerColor = MaterialTheme.colorScheme.primary,
+            ),
+        shape = MaterialTheme.shapes.small,
     ) {
         Text(
             text = stringResource(Res.string.btn_add_local),
             color = MaterialTheme.colorScheme.onSurface,
-            style = MaterialTheme.typography.bodyLarge
+            style = MaterialTheme.typography.bodyLarge,
         )
     }
 }
@@ -105,7 +109,7 @@ actual fun LocalFileSelectButton(onPlaylistAction: (PlaylistAction) -> Unit) {
 actual fun AdditionalPlayerControls(
     modifier: Modifier,
     action: () -> Unit,
-    onPlaybackAction: (PlaybackActions) -> Unit
+    onPlaybackAction: (PlaybackActions) -> Unit,
 ) {
     // no need yet
 }
@@ -116,18 +120,18 @@ actual fun ExecuteOnResume(action: () -> Unit) {
         action()
 
         onPauseOrDispose {
-
         }
     }
 }
 
 actual fun isMediaPlayable(errorCode: Int?): Boolean {
-    val isMediaPlayable = when (errorCode) {
-        PlaybackException.ERROR_CODE_IO_NETWORK_CONNECTION_FAILED -> false
-        PlaybackException.ERROR_CODE_IO_BAD_HTTP_STATUS -> false
-        PlaybackException.ERROR_CODE_PARSING_MANIFEST_MALFORMED -> false
-        else -> true
-    }
+    val isMediaPlayable =
+        when (errorCode) {
+            PlaybackException.ERROR_CODE_IO_NETWORK_CONNECTION_FAILED -> false
+            PlaybackException.ERROR_CODE_IO_BAD_HTTP_STATUS -> false
+            PlaybackException.ERROR_CODE_PARSING_MANIFEST_MALFORMED -> false
+            else -> true
+        }
     KLog.e("testing errorCode:$errorCode, isMediaPlayable:$isMediaPlayable")
     return isMediaPlayable
 }
@@ -136,7 +140,7 @@ actual fun isMediaPlayable(errorCode: Int?): Boolean {
 @Composable
 actual fun TwoPaneContainer(
     first: @Composable () -> Unit,
-    second: @Composable () -> Unit
+    second: @Composable () -> Unit,
 ) {
     val context = LocalContext.current
     val activity = context.findActivity()
@@ -150,35 +154,37 @@ actual fun TwoPaneContainer(
         second = {
             second()
         },
-        strategy = when (windowSizeClass.widthSizeClass) {
-            WindowWidthSizeClass.Compact -> VerticalTwoPaneStrategy(MaterialTheme.dimens.fraction50)
-            WindowWidthSizeClass.Medium -> HorizontalTwoPaneStrategy(MaterialTheme.dimens.fraction60)
-            else -> HorizontalTwoPaneStrategy(MaterialTheme.dimens.fraction70)
-        },
-        displayFeatures = displayFeatures
+        strategy =
+            when (windowSizeClass.widthSizeClass) {
+                WindowWidthSizeClass.Compact -> VerticalTwoPaneStrategy(MaterialTheme.dimens.fraction50)
+                WindowWidthSizeClass.Medium -> HorizontalTwoPaneStrategy(MaterialTheme.dimens.fraction60)
+                else -> HorizontalTwoPaneStrategy(MaterialTheme.dimens.fraction70)
+            },
+        displayFeatures = displayFeatures,
     )
 }
 
 actual class LocalPlaylistDataSource(private val context: Context) {
-
     @SuppressLint("Recycle")
     actual fun getLocalPlaylistData(
         playlistId: Long,
-        uri: String
+        uri: String,
     ): List<PlaylistChannel> {
-        val file = context.contentResolver
-            .openFileDescriptor(Uri.parse(uri), MODE_READ_ONLY)
-            ?.fileDescriptor
+        val file =
+            context.contentResolver
+                .openFileDescriptor(Uri.parse(uri), MODE_READ_ONLY)
+                ?.fileDescriptor
 
         return buildList {
             InputStreamReader(FileInputStream(file), Charsets.UTF_8).use { inputStreamReader ->
                 BufferedReader(inputStreamReader).use { bufferedReader ->
                     bufferedReader.readText().also { content ->
 
-                        val channels = ParseMappers.parseStringToChannels(
-                            playlistId = playlistId,
-                            source = content
-                        )
+                        val channels =
+                            ParseMappers.parseStringToChannels(
+                                playlistId = playlistId,
+                                source = content,
+                            )
 
                         addAll(channels)
                     }
