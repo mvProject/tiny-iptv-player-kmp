@@ -1,12 +1,14 @@
 /*
  *  Created by Medvediev Viktor [mvproject]
- *  Copyright © 2023
- *  last modified : 20.11.23, 17:18
+ *  Copyright © 2024
+ *  last modified : 07.04.24, 18:13
  *
  */
 
 package com.mvproject.tinyiptvkmp.ui
 
+import android.app.Activity
+import android.content.pm.ActivityInfo
 import android.view.SurfaceView
 import android.view.ViewGroup
 import androidx.compose.foundation.layout.Box
@@ -15,6 +17,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.viewinterop.AndroidView
 import androidx.lifecycle.compose.LifecycleStartEffect
 import com.mvproject.tinyiptvkmp.network.ConnectionState
@@ -32,10 +35,12 @@ internal fun PlayerView(
     videoViewState: VideoViewState,
     onPlaybackAction: (PlaybackActions) -> Unit = {},
     onPlaybackStateAction: (PlaybackStateActions) -> Unit = {},
-    controls: @Composable () -> Unit
+    controls: @Composable () -> Unit,
 ) {
     // todo network Available check
     val connection by networkConnectionState()
+
+    val activity = LocalContext.current as Activity
 
     when (connection) {
         ConnectionState.Available -> KLog.i("testing connectivity is available")
@@ -44,9 +49,10 @@ internal fun PlayerView(
 
     val systemUIController = rememberSystemUIController()
 
-    val playerState = rememberPlayerState(
-        onPlaybackStateAction = onPlaybackStateAction
-    )
+    val playerState =
+        rememberPlayerState(
+            onPlaybackStateAction = onPlaybackStateAction,
+        )
 
     LaunchedEffect(videoViewState.isRestartRequired) {
         if (videoViewState.isRestartRequired) {
@@ -57,6 +63,12 @@ internal fun PlayerView(
 
     LaunchedEffect(videoViewState.isFullscreen) {
         systemUIController.isSystemBarsVisible = !videoViewState.isFullscreen
+
+        if (videoViewState.isFullscreen) {
+            activity.requestedOrientation = ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE
+        } else {
+            activity.requestedOrientation = ActivityInfo.SCREEN_ORIENTATION_PORTRAIT
+        }
     }
 
     LaunchedEffect(videoViewState.currentVolume) {
@@ -67,7 +79,7 @@ internal fun PlayerView(
         if (videoViewState.mediaPosition > AppConstants.INT_NO_VALUE) {
             playerState.setPlayerChannel(
                 channelName = videoViewState.currentChannel.channelName,
-                channelUrl = videoViewState.currentChannel.channelUrl
+                channelUrl = videoViewState.currentChannel.channelUrl,
             )
         }
     }
@@ -79,30 +91,32 @@ internal fun PlayerView(
     }
 
     Box(
-        modifier = modifier
-            .fillMaxSize(),
+        modifier =
+            modifier
+                .fillMaxSize(),
     ) {
         AndroidView(
-            modifier = Modifier
-                .adaptiveLayout(
-                    aspectRatio = videoViewState.videoRatio,
-                    resizeMode = videoViewState.videoResizeMode
-                ),
+            modifier =
+                Modifier
+                    .adaptiveLayout(
+                        aspectRatio = videoViewState.videoRatio,
+                        resizeMode = videoViewState.videoResizeMode,
+                    ),
             factory = { context ->
                 SurfaceView(context).apply {
-                    layoutParams = ViewGroup.LayoutParams(
-                        ViewGroup.LayoutParams.MATCH_PARENT,
-                        ViewGroup.LayoutParams.MATCH_PARENT
-                    )
+                    layoutParams =
+                        ViewGroup.LayoutParams(
+                            ViewGroup.LayoutParams.MATCH_PARENT,
+                            ViewGroup.LayoutParams.MATCH_PARENT,
+                        )
                     keepScreenOn = true
                 }.also { view ->
                     playerState.player.setVideoSurfaceView(view)
                 }
-            }
+            },
         )
 
         controls()
-
     }
 
     LifecycleStartEffect(playerState) {

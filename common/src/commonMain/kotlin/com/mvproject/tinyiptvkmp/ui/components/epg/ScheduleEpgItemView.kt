@@ -1,7 +1,7 @@
 /*
  *  Created by Medvediev Viktor [mvproject]
- *  Copyright © 2023
- *  last modified : 20.11.23, 20:27
+ *  Copyright © 2024
+ *  last modified : 07.04.24, 17:39
  *
  */
 
@@ -31,7 +31,6 @@ fun ScheduleEpgItemView(
     modifier: Modifier = Modifier,
     program: EpgProgram,
 ) {
-
     val isProgramEnded by remember {
         derivedStateOf {
             program.programProgress > PROGRESS_STATE_COMPLETE
@@ -45,25 +44,29 @@ fun ScheduleEpgItemView(
     }
 
     val cardAlpha =
-        if (isProgramEnded)
+        if (isProgramEnded) {
             MaterialTheme.dimens.alpha50
-        else MaterialTheme.dimens.alphaDefault
+        } else {
+            MaterialTheme.dimens.alphaDefault
+        }
 
     Column(
-        modifier = modifier
-            .fillMaxWidth()
-            .alpha(cardAlpha)
+        modifier =
+            modifier
+                .fillMaxWidth()
+                .alpha(cardAlpha),
     ) {
         if (isProgramProgressShow) {
             DurationProgressView(progress = program.programProgress)
             Spacer(modifier = Modifier.height(MaterialTheme.dimens.size2))
         }
 
-        val text = StringBuilder().apply {
-            append(program.start.convertTimeToReadableFormat())
-            append(" - ")
-            append(program.title)
-        }
+        val text =
+            StringBuilder().apply {
+                append(program.start.convertTimeToReadableFormat())
+                append(" - ")
+                append(program.title)
+            }
         Text(
             modifier = Modifier.fillMaxWidth(),
             text = text.toString(),

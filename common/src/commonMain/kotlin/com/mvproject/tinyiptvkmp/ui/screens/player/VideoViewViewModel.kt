@@ -1,7 +1,7 @@
 /*
  *  Created by Medvediev Viktor [mvproject]
- *  Copyright © 2023
- *  last modified : 20.11.23, 20:27
+ *  Copyright © 2024
+ *  last modified : 07.04.24, 18:36
  *
  */
 
@@ -42,14 +42,13 @@ class VideoViewViewModel(
     private val getGroupChannelsUseCase: GetGroupChannelsUseCase,
     private val toggleFavoriteChannelUseCase: ToggleFavoriteChannelUseCase,
 ) : ViewModel() {
-
     private var pollVideoPositionJob: Job? = null
     private var pollVolumeJob: Job? = null
 
-    //time after which [VideoViewState.isControlUiVisible] will be set to false
+    // time after which [VideoViewState.isControlUiVisible] will be set to false
     private var hideControllerAfterMs: Long = UI_SHOW_DELAY
 
-    //time after which [VideoViewState.isVolumeUiVisible] will be set to false
+    // time after which [VideoViewState.isVolumeUiVisible] will be set to false
     private var hideVolumeAfterMs: Long = VOLUME_SHOW_DELAY
 
     private var _videoViewState = MutableStateFlow(VideoViewState())
@@ -66,19 +65,27 @@ class VideoViewViewModel(
                     isFullscreen = preferenceRepository.getDefaultFullscreenMode(),
                     videoResizeMode = ResizeMode.entries[preferenceRepository.getDefaultResizeMode()],
                     videoRatioMode = ratioMode,
-                    videoRatio = ratioMode.ratio
+                    videoRatio = ratioMode.ratio,
                 )
             }
         }
     }
 
-    fun initPlayBack(channelName: String, channelGroup: String) {
+    fun initPlayBack(
+        channelName: String,
+        channelGroup: String,
+    ) {
         viewModelScope.launch {
             val channelList = getGroupChannelsUseCase(channelGroup)
-            val currentItemPosition = getCurrentMediaPosition(
-                channelName = channelName,
-                channels = channelList
-            )
+            val currentPlaying = videoViewState.value.currentChannel.channelName
+
+            val name = currentPlaying.ifBlank { channelName }
+
+            val currentItemPosition =
+                getCurrentMediaPosition(
+                    channelName = name,
+                    channels = channelList,
+                )
             val currentChannel = channelList[currentItemPosition]
 
             _videoViewState.update { current ->
@@ -86,7 +93,7 @@ class VideoViewViewModel(
                     channelGroup = channelGroup,
                     mediaPosition = currentItemPosition,
                     channels = channelList,
-                    currentChannel = currentChannel
+                    currentChannel = currentChannel,
                 )
             }
         }
@@ -96,10 +103,11 @@ class VideoViewViewModel(
         viewModelScope.launch {
             val channelsRefreshed = videoViewState.value.channels.withRefreshedEpg()
 
-            val newMediaPosition = getCurrentMediaPosition(
-                channelName = channel.channelName,
-                channels = channelsRefreshed
-            )
+            val newMediaPosition =
+                getCurrentMediaPosition(
+                    channelName = channel.channelName,
+                    channels = channelsRefreshed,
+                )
 
             setCurrentChannel(currentMediaPosition = newMediaPosition)
         }
@@ -107,22 +115,23 @@ class VideoViewViewModel(
 
     private fun getCurrentMediaPosition(
         channelName: String,
-        channels: List<TvPlaylistChannel>
+        channels: List<TvPlaylistChannel>,
     ): Int {
         val currentPos = videoViewState.value.mediaPosition
 
-        val targetPos = channels
-            .indexOfFirst { it.channelName == channelName }
+        val targetPos =
+            channels
+                .indexOfFirst { it.channelName == channelName }
 
-        val mediaPosition = if (targetPos > INT_NO_VALUE) {
-            targetPos
-        } else {
-            currentPos
-        }
+        val mediaPosition =
+            if (targetPos > INT_NO_VALUE) {
+                targetPos
+            } else {
+                currentPos
+            }
 
         return mediaPosition
     }
-
 
     fun processPlaybackActions(action: PlaybackActions) {
         when (action) {
@@ -198,9 +207,7 @@ class VideoViewViewModel(
         }
     }
 
-    private fun setCurrentChannel(
-        currentMediaPosition: Int
-    ) {
+    private fun setCurrentChannel(currentMediaPosition: Int) {
         val currentChannels = videoViewState.value.channels.withRefreshedEpg()
         val currentChannel = currentChannels[currentMediaPosition]
 
@@ -209,7 +216,7 @@ class VideoViewViewModel(
                 mediaPosition = currentMediaPosition,
                 currentChannel = currentChannel,
                 channels = currentChannels,
-                isChannelsVisible = false
+                isChannelsVisible = false,
             )
         }
     }
@@ -219,10 +226,12 @@ class VideoViewViewModel(
             is PlaybackStateActions.OnVideoSizeChanged -> {
                 _videoRatio = action.videoRatio
 
-                val ratio = if (videoViewState.value.videoRatioMode == RatioMode.Original) {
-                    _videoRatio
-                } else
-                    videoViewState.value.videoRatioMode.ratio
+                val ratio =
+                    if (videoViewState.value.videoRatioMode == RatioMode.Original) {
+                        _videoRatio
+                    } else {
+                        videoViewState.value.videoRatioMode.ratio
+                    }
 
                 _videoViewState.update { current ->
                     current.copy(videoRatio = ratio)
@@ -254,14 +263,13 @@ class VideoViewViewModel(
                     }
 
                     else -> {
-
                     }
                 }
 
                 _videoViewState.update { current ->
                     current.copy(
                         isMediaPlayable = isMediaPlayable,
-                        isBuffering = isBuffering
+                        isBuffering = isBuffering,
                     )
                 }
             }
@@ -309,28 +317,30 @@ class VideoViewViewModel(
         val currentChannels = videoViewState.value.channels
         val currentIndex = videoViewState.value.mediaPosition
 
-        val currentChannelFavoriteChanged = currentChannel.copy(
-            isInFavorites = !currentChannel.isInFavorites
-        )
+        val currentChannelFavoriteChanged =
+            currentChannel.copy(
+                isInFavorites = !currentChannel.isInFavorites,
+            )
 
-        val updatedFavoriteChangedChannels = currentChannels.mapIndexed { index, channel ->
-            if (index == currentIndex) {
-                currentChannelFavoriteChanged
-            } else
-                channel
-        }
+        val updatedFavoriteChangedChannels =
+            currentChannels.mapIndexed { index, channel ->
+                if (index == currentIndex) {
+                    currentChannelFavoriteChanged
+                } else {
+                    channel
+                }
+            }
 
         viewModelScope.launch {
             _videoViewState.update { current ->
                 current.copy(
                     currentChannel = currentChannelFavoriteChanged,
-                    channels = updatedFavoriteChangedChannels
+                    channels = updatedFavoriteChangedChannels,
                 )
             }
 
             toggleFavoriteChannelUseCase(channel = currentChannel)
         }
-
     }
 
     private fun toggleVideoResizeMode() {
@@ -345,14 +355,17 @@ class VideoViewViewModel(
         val currentMode = videoViewState.value.videoRatioMode
         val nextMode = RatioMode.toggleRatioMode(current = currentMode)
 
-        val nextRatio = if (nextMode == RatioMode.Original)
-            _videoRatio
-        else nextMode.ratio
+        val nextRatio =
+            if (nextMode == RatioMode.Original) {
+                _videoRatio
+            } else {
+                nextMode.ratio
+            }
 
         _videoViewState.update { current ->
             current.copy(
                 videoRatioMode = nextMode,
-                videoRatio = nextRatio
+                videoRatio = nextRatio,
             )
         }
     }
@@ -376,10 +389,11 @@ class VideoViewViewModel(
             current.copy(isControlUiVisible = true)
         }
         pollVideoPositionJob?.cancel()
-        pollVideoPositionJob = viewModelScope.launch {
-            delay(hideControllerAfterMs)
-            hideControlUi()
-        }
+        pollVideoPositionJob =
+            viewModelScope.launch {
+                delay(hideControllerAfterMs)
+                hideControlUi()
+            }
     }
 
     private fun hideControlUi() {
@@ -397,10 +411,11 @@ class VideoViewViewModel(
             current.copy(isVolumeUiVisible = true)
         }
         pollVolumeJob?.cancel()
-        pollVolumeJob = viewModelScope.launch {
-            delay(hideVolumeAfterMs)
-            hideVolumeUi()
-        }
+        pollVolumeJob =
+            viewModelScope.launch {
+                delay(hideVolumeAfterMs)
+                hideVolumeUi()
+            }
     }
 
     private fun hideVolumeUi() {

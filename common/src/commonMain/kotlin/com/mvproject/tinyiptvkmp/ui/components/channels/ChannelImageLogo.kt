@@ -1,13 +1,14 @@
 /*
  *  Created by Medvediev Viktor [mvproject]
  *  Copyright © 2024
- *  last modified : 24.03.24, 10:49
+ *  last modified : 07.04.24, 16:37
  *
  */
 
 package com.mvproject.tinyiptvkmp.ui.components.channels
 
 import androidx.compose.foundation.Image
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.size
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
@@ -40,7 +41,9 @@ fun ChannelImageLogo(
 
     when (val painterResource = asyncPainterResource(data = channelLogo)) {
         is Resource.Loading -> {
-            ThreeBounceAnimation()
+            Box(modifier = modifier.size(imageSize)) {
+                ThreeBounceAnimation()
+            }
         }
 
         is Resource.Success -> {

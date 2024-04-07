@@ -1,7 +1,7 @@
 /*
  *  Created by Medvediev Viktor [mvproject]
  *  Copyright © 2024
- *  last modified : 24.03.24, 10:49
+ *  last modified : 07.04.24, 17:27
  *
  */
 
@@ -115,7 +115,7 @@ fun GroupView(
                 ) {
                     items(
                         dataState.groups,
-                        key = { it.groupName },
+                        key = { grp -> grp.groupName },
                     ) { item ->
                         PlaylistGroupItemView(
                             modifier =

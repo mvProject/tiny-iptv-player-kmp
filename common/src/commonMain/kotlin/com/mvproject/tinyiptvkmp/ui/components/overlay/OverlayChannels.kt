@@ -1,7 +1,7 @@
 /*
  *  Created by Medvediev Viktor [mvproject]
- *  Copyright © 2023
- *  last modified : 29.11.23, 16:03
+ *  Copyright © 2024
+ *  last modified : 07.04.24, 17:27
  *
  */
 
@@ -42,43 +42,46 @@ fun OverlayChannels(
         listState.animateScrollToItem(current)
     }
     Column(
-        modifier = Modifier
-            .fillMaxHeight(MaterialTheme.dimens.fraction90)
-            .fullScreenWidth(enabled = isFullScreen)
-            .background(
-                color = MaterialTheme.colorScheme.primary,
-                shape = MaterialTheme.shapes.small
-            )
+        modifier =
+            Modifier
+                .fillMaxHeight(MaterialTheme.dimens.fraction90)
+                .fullScreenWidth(enabled = isFullScreen)
+                .background(
+                    color = MaterialTheme.colorScheme.primary,
+                    shape = MaterialTheme.shapes.small,
+                ),
     ) {
         Text(
-            modifier = Modifier
-                .fillMaxWidth()
-                .roundedHeader(),
+            modifier =
+                Modifier
+                    .fillMaxWidth()
+                    .roundedHeader(),
             text = group,
             style = MaterialTheme.typography.titleMedium,
             color = MaterialTheme.colorScheme.primary,
-            textAlign = TextAlign.Center
+            textAlign = TextAlign.Center,
         )
 
         LazyColumn(
             modifier = Modifier.fillMaxSize(),
             state = listState,
             verticalArrangement = Arrangement.spacedBy(MaterialTheme.dimens.size8),
-            contentPadding = PaddingValues(
-                vertical = MaterialTheme.dimens.size4,
-                horizontal = MaterialTheme.dimens.size2
-            ),
+            contentPadding =
+                PaddingValues(
+                    vertical = MaterialTheme.dimens.size4,
+                    horizontal = MaterialTheme.dimens.size2,
+                ),
             content = {
                 items(
                     items = channels,
-                    key = { it.channelUrl }
+                    key = { chn -> chn.hashCode() },
                 ) { chn ->
                     ChannelListView(
                         channel = chn,
-                        onChannelSelect = { onChannelSelect(chn) }
+                        onChannelSelect = { onChannelSelect(chn) },
                     )
                 }
-            }
+            },
         )
     }
 }

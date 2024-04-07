@@ -1,7 +1,7 @@
 /*
  *  Created by Medvediev Viktor [mvproject]
- *  Copyright © 2023
- *  last modified : 20.11.23, 20:27
+ *  Copyright © 2024
+ *  last modified : 07.04.24, 17:27
  *
  */
 
@@ -50,18 +50,19 @@ fun TvPlaylistChannelsView(
     onNavigateSelected: (String) -> Unit,
     onNavigateBack: () -> Unit,
     onAction: (TvPlaylistChannelAction) -> Unit,
-    groupSelected: String
+    groupSelected: String,
 ) {
-    ExecuteOnResume() {
+    ExecuteOnResume {
         viewModel.loadChannelsByGroups(groupSelected)
     }
 
     val viewState by viewModel.viewState.collectAsState()
 
     Scaffold(
-        modifier = Modifier
-            .fillMaxSize()
-            .windowInsetsPadding(WindowInsets.ime),
+        modifier =
+            Modifier
+                .fillMaxSize()
+                .windowInsetsPadding(WindowInsets.ime),
         topBar = {
             AppBarWithSearch(
                 appBarTitle = viewState.currentGroup,
@@ -76,9 +77,9 @@ fun TvPlaylistChannelsView(
                 },
                 onTextChange = { text ->
                     onAction(TvPlaylistChannelAction.SearchTextChange(text))
-                }
+                },
             )
-        }
+        },
     ) { paddingValues ->
 
         val isChannelOptionOpen = remember { mutableStateOf(false) }
@@ -88,30 +89,34 @@ fun TvPlaylistChannelsView(
 
         val channelsList by remember {
             derivedStateOf {
-                if (viewState.searchString.length > INT_VALUE_1)
+                if (viewState.searchString.length > INT_VALUE_1) {
                     viewModel.channels.filter {
                         it.channelName.contains(viewState.searchString, true)
                     }
-                else viewModel.channels
+                } else {
+                    viewModel.channels
+                }
             }
         }
 
         // todo adaptive size depend on windowSizeClass
 
         Box(
-            modifier = Modifier
-                .fillMaxSize()
-                .padding(paddingValues)
+            modifier =
+                Modifier
+                    .fillMaxSize()
+                    .padding(paddingValues),
         ) {
-            val columns = when (viewState.viewType) {
-                ChannelsViewType.LIST -> {
-                    GridCells.Fixed(INT_VALUE_1)
-                }
+            val columns =
+                when (viewState.viewType) {
+                    ChannelsViewType.LIST -> {
+                        GridCells.Fixed(INT_VALUE_1)
+                    }
 
-                else -> {
-                    GridCells.Adaptive(180.dp)
+                    else -> {
+                        GridCells.Adaptive(180.dp)
+                    }
                 }
-            }
 
             LazyVerticalGrid(
                 modifier = Modifier.fillMaxHeight(),
@@ -119,13 +124,14 @@ fun TvPlaylistChannelsView(
                 state = rememberLazyGridState(),
                 verticalArrangement = Arrangement.spacedBy(MaterialTheme.dimens.size8),
                 horizontalArrangement = Arrangement.spacedBy(MaterialTheme.dimens.size8),
-                contentPadding = PaddingValues(
-                    vertical = MaterialTheme.dimens.size4
-                ),
+                contentPadding =
+                    PaddingValues(
+                        vertical = MaterialTheme.dimens.size4,
+                    ),
                 content = {
                     items(
                         items = channelsList,
-                        key = { it.channelUrl }
+                        key = { chn -> chn.hashCode() },
                     ) { item ->
                         ChannelView(
                             modifier = Modifier.fillMaxSize(),
@@ -137,10 +143,10 @@ fun TvPlaylistChannelsView(
                             },
                             onChannelSelect = {
                                 onNavigateSelected(item.channelName)
-                            }
+                            },
                         )
                     }
-                }
+                },
             )
 
             LoadingView(
@@ -150,7 +156,7 @@ fun TvPlaylistChannelsView(
             OverlayContent(
                 isVisible = isChannelOptionOpen.value,
                 contentAlpha = MaterialTheme.dimens.alpha90,
-                onViewTap = { isChannelOptionOpen.value = false }
+                onViewTap = { isChannelOptionOpen.value = false },
             ) {
                 OverlayChannelOptions(
                     isInFavorite = selected.isInFavorites,
@@ -163,25 +169,23 @@ fun TvPlaylistChannelsView(
                     onToggleEpgState = {
                         onAction(TvPlaylistChannelAction.ToggleEpgState(selected))
                         isChannelOptionOpen.value = false
-
                     },
                     onShowEpg = {
                         onAction(TvPlaylistChannelAction.ToggleEpgVisibility)
                         isChannelOptionOpen.value = false
-                    }
+                    },
                 )
             }
 
             OverlayContent(
                 isVisible = viewState.isEpgVisible,
-                onViewTap = { onAction(TvPlaylistChannelAction.ToggleEpgVisibility) }
+                onViewTap = { onAction(TvPlaylistChannelAction.ToggleEpgVisibility) },
             ) {
                 OverlayEpg(
                     isFullScreen = false,
-                    currentChannel = selected
+                    currentChannel = selected,
                 )
             }
-
         }
     }
 }
