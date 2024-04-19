@@ -1,7 +1,7 @@
 /*
  *  Created by Medvediev Viktor [mvproject]
- *  Copyright © 2023
- *  last modified : 29.11.23, 18:02
+ *  Copyright © 2024
+ *  last modified : 07.04.24, 17:53
  *
  */
 
@@ -43,34 +43,37 @@ fun PlayerChannelView(
     isPlaying: Boolean = false,
     isFullScreen: Boolean = false,
     onPlaybackClose: () -> Unit = {},
-    onPlaybackAction: (PlaybackActions) -> Unit = {}
+    onPlaybackAction: (PlaybackActions) -> Unit = {},
 ) {
     AnimatedVisibility(
         visible = isVisible,
         enter = scaleIn() + fadeIn(),
-        exit = scaleOut() + fadeOut()
+        exit = scaleOut() + fadeOut(),
     ) {
         Box(
-            modifier = modifier
-                .alpha(MaterialTheme.dimens.alpha80)
+            modifier =
+                modifier
+                    .alpha(MaterialTheme.dimens.alpha80),
         ) {
             Column(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .wrapContentHeight()
-                    .roundedHeader(
-                        color = MaterialTheme.colorScheme.primary
-                    )
-                    .align(Alignment.BottomCenter),
-                verticalArrangement = Arrangement.Center
+                modifier =
+                    Modifier
+                        .fillMaxWidth()
+                        .wrapContentHeight()
+                        .roundedHeader(
+                            color = MaterialTheme.colorScheme.primary,
+                        )
+                        .align(Alignment.BottomCenter),
+                verticalArrangement = Arrangement.Center,
             ) {
                 Text(
-                    modifier = Modifier
-                        .fillMaxWidth(),
+                    modifier =
+                        Modifier
+                            .fillMaxWidth(),
                     text = currentChannel.channelName,
                     style = MaterialTheme.typography.titleLarge,
                     color = MaterialTheme.colorScheme.onPrimary,
-                    textAlign = TextAlign.Center
+                    textAlign = TextAlign.Center,
                 )
 
                 Spacer(modifier = Modifier.height(MaterialTheme.dimens.size2))
@@ -83,14 +86,15 @@ fun PlayerChannelView(
                 }
 
                 PlayerControlView(
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .alpha(MaterialTheme.dimens.alpha70),
+                    modifier =
+                        Modifier
+                            .fillMaxWidth()
+                            .alpha(MaterialTheme.dimens.alpha70),
                     isFavorite = currentChannel.isInFavorites,
                     isPlaying = isPlaying,
                     isFullScreen = isFullScreen,
                     onPlaybackAction = onPlaybackAction,
-                    onPlaybackClose = onPlaybackClose
+                    onPlaybackClose = onPlaybackClose,
                 )
             }
         }

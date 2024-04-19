@@ -1,7 +1,7 @@
 /*
  *  Created by Medvediev Viktor [mvproject]
  *  Copyright © 2024
- *  last modified : 24.03.24, 10:49
+ *  last modified : 07.04.24, 17:16
  *
  */
 
@@ -64,7 +64,7 @@ fun PlayerEpgContent(
             content = {
                 items(
                     items = epgList,
-                    key = { (it.start.toString() + it.title) },
+                    key = { epg -> epg.hashCode() },
                 ) { epg ->
                     PlayerEpgItem(
                         modifier =

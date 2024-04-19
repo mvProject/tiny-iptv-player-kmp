@@ -1,7 +1,7 @@
 /*
  *  Created by Medvediev Viktor [mvproject]
- *  Copyright © 2023
- *  last modified : 20.11.23, 20:27
+ *  Copyright © 2024
+ *  last modified : 07.04.24, 17:23
  *
  */
 
@@ -32,16 +32,14 @@ import com.mvproject.tinyiptvkmp.utils.AppConstants.PROGRESS_STATE_COMPLETE
 import com.mvproject.tinyiptvkmp.utils.TimeUtils.convertTimeToReadableFormat
 
 @Composable
-fun PlayerChannelEpgItem(
-    epgProgram: EpgProgram
-) {
+fun PlayerChannelEpgItem(epgProgram: EpgProgram) {
     Column(
-        modifier = Modifier
-            .fillMaxWidth()
-            .wrapContentHeight(),
-        verticalArrangement = Arrangement.Center
+        modifier =
+            Modifier
+                .fillMaxWidth()
+                .wrapContentHeight(),
+        verticalArrangement = Arrangement.Center,
     ) {
-
         Text(
             modifier = Modifier.fillMaxWidth(),
             text = epgProgram.title,
@@ -60,22 +58,23 @@ fun PlayerChannelEpgItem(
         if (isProgramProgressShow) {
             Row(
                 modifier = Modifier.fillMaxWidth(),
-                horizontalArrangement = Arrangement.spacedBy(
-                    MaterialTheme.dimens.size4
-                ),
-                verticalAlignment = Alignment.CenterVertically
+                horizontalArrangement =
+                    Arrangement.spacedBy(
+                        MaterialTheme.dimens.size4,
+                    ),
+                verticalAlignment = Alignment.CenterVertically,
             ) {
                 Text(
                     modifier = Modifier.wrapContentWidth(),
                     text = epgProgram.start.convertTimeToReadableFormat(),
                     style = MaterialTheme.typography.bodySmall,
                     color = MaterialTheme.colorScheme.onSurfaceVariant,
-                    textAlign = TextAlign.Center
+                    textAlign = TextAlign.Center,
                 )
 
                 DurationProgressView(
                     modifier = Modifier.weight(6f),
-                    progress = epgProgram.programProgress
+                    progress = epgProgram.programProgress,
                 )
 
                 Text(
@@ -83,7 +82,7 @@ fun PlayerChannelEpgItem(
                     text = epgProgram.stop.convertTimeToReadableFormat(),
                     style = MaterialTheme.typography.bodySmall,
                     color = MaterialTheme.colorScheme.onSurfaceVariant,
-                    textAlign = TextAlign.Center
+                    textAlign = TextAlign.Center,
                 )
             }
         }

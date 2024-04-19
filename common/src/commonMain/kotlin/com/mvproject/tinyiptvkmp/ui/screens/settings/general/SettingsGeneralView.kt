@@ -1,19 +1,18 @@
 /*
  *  Created by Medvediev Viktor [mvproject]
  *  Copyright © 2024
- *  last modified : 24.03.24, 10:49
+ *  last modified : 07.04.24, 17:09
  *
  */
 
 package com.mvproject.tinyiptvkmp.ui.screens.settings.general
 
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.ArrowRight
@@ -21,15 +20,17 @@ import androidx.compose.material3.FilledIconButton
 import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButtonDefaults
+import androidx.compose.material3.ListItem
+import androidx.compose.material3.ListItemDefaults
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
-import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
 import com.mvproject.tinyiptvkmp.data.enums.UpdatePeriod
 import com.mvproject.tinyiptvkmp.ui.components.overlay.OverlayContent
 import com.mvproject.tinyiptvkmp.ui.components.overlay.OverlayOptionsMenu
@@ -80,79 +81,90 @@ fun SettingsGeneralView(
                     .padding(paddingValues)
                     .fillMaxSize()
                     .padding(MaterialTheme.dimens.size8),
+            verticalArrangement = Arrangement.spacedBy(MaterialTheme.dimens.size12),
         ) {
-            TextButton(
-                onClick = onNavigatePlaylistSettings,
-                modifier = Modifier.fillMaxWidth(),
-            ) {
-                Text(
-                    text = stringResource(Res.string.scr_playlist_settings_title),
-                    color = MaterialTheme.colorScheme.onPrimary,
-                    style = MaterialTheme.typography.titleMedium,
-                )
-
-                Spacer(modifier = Modifier.weight(WEIGHT_1))
-
-                FilledIconButton(
-                    onClick = onNavigatePlaylistSettings,
+            Column {
+                ListItem(
+                    modifier =
+                        Modifier
+                            .clickable(onClick = onNavigatePlaylistSettings)
+                            .clip(MaterialTheme.shapes.extraSmall),
                     colors =
-                        IconButtonDefaults.filledIconButtonColors(
-                            containerColor = MaterialTheme.colorScheme.onPrimary,
-                            contentColor = MaterialTheme.colorScheme.primary,
+                        ListItemDefaults.colors(
+                            containerColor = MaterialTheme.colorScheme.background,
                         ),
-                ) {
-                    Icon(
-                        imageVector = Icons.AutoMirrored.Filled.ArrowRight,
-                        contentDescription = stringResource(Res.string.scr_playlist_settings_title),
-                    )
-                }
+                    headlineContent = {
+                        Text(
+                            text = stringResource(Res.string.scr_playlist_settings_title),
+                            color = MaterialTheme.colorScheme.onPrimary,
+                            style = MaterialTheme.typography.titleMedium,
+                        )
+                    },
+                    trailingContent = {
+                        FilledIconButton(
+                            onClick = onNavigatePlaylistSettings,
+                            colors =
+                                IconButtonDefaults.filledIconButtonColors(
+                                    containerColor = MaterialTheme.colorScheme.onPrimary,
+                                    contentColor = MaterialTheme.colorScheme.primary,
+                                ),
+                        ) {
+                            Icon(
+                                imageVector = Icons.AutoMirrored.Filled.ArrowRight,
+                                contentDescription = stringResource(Res.string.scr_playlist_settings_title),
+                            )
+                        }
+                    },
+                )
+                HorizontalDivider(
+                    modifier =
+                        Modifier
+                            .padding(horizontal = MaterialTheme.dimens.size8),
+                    color = MaterialTheme.colorScheme.onPrimary,
+                )
             }
 
-            HorizontalDivider(
-                modifier =
-                    Modifier
-                        .fillMaxWidth()
-                        .padding(horizontal = MaterialTheme.dimens.size8),
-                color = MaterialTheme.colorScheme.onPrimary,
-            )
-            Spacer(modifier = Modifier.height(MaterialTheme.dimens.size12))
-
-            TextButton(
-                onClick = onNavigatePlayerSettings,
-                modifier = Modifier.fillMaxWidth(),
-            ) {
-                Text(
-                    text = stringResource(Res.string.scr_player_settings_title),
-                    color = MaterialTheme.colorScheme.onPrimary,
-                    style = MaterialTheme.typography.titleMedium,
+            Column {
+                ListItem(
+                    modifier =
+                        Modifier
+                            .clickable(onClick = onNavigatePlayerSettings)
+                            .clip(MaterialTheme.shapes.extraSmall),
+                    colors =
+                        ListItemDefaults.colors(
+                            containerColor = MaterialTheme.colorScheme.background,
+                        ),
+                    headlineContent = {
+                        Text(
+                            text = stringResource(Res.string.scr_player_settings_title),
+                            color = MaterialTheme.colorScheme.onPrimary,
+                            style = MaterialTheme.typography.titleMedium,
+                        )
+                    },
+                    trailingContent = {
+                        FilledIconButton(
+                            onClick = onNavigatePlaylistSettings,
+                            colors =
+                                IconButtonDefaults.filledIconButtonColors(
+                                    containerColor = MaterialTheme.colorScheme.onPrimary,
+                                    contentColor = MaterialTheme.colorScheme.primary,
+                                ),
+                        ) {
+                            Icon(
+                                imageVector = Icons.AutoMirrored.Filled.ArrowRight,
+                                contentDescription = stringResource(Res.string.scr_playlist_settings_title),
+                            )
+                        }
+                    },
                 )
 
-                Spacer(modifier = Modifier.weight(WEIGHT_1))
-
-                FilledIconButton(
-                    onClick = onNavigatePlayerSettings,
-                    colors =
-                        IconButtonDefaults.filledIconButtonColors(
-                            containerColor = MaterialTheme.colorScheme.onPrimary,
-                            contentColor = MaterialTheme.colorScheme.primary,
-                        ),
-                ) {
-                    Icon(
-                        imageVector = Icons.AutoMirrored.Filled.ArrowRight,
-                        contentDescription = stringResource(Res.string.scr_player_settings_title),
-                    )
-                }
+                HorizontalDivider(
+                    modifier =
+                        Modifier
+                            .padding(horizontal = MaterialTheme.dimens.size8),
+                    color = MaterialTheme.colorScheme.onPrimary,
+                )
             }
-
-            HorizontalDivider(
-                modifier =
-                    Modifier
-                        .fillMaxWidth()
-                        .padding(horizontal = MaterialTheme.dimens.size8),
-                color = MaterialTheme.colorScheme.onPrimary,
-            )
-
-            Spacer(modifier = Modifier.height(MaterialTheme.dimens.size12))
 
             Row(
                 modifier =
@@ -182,10 +194,6 @@ fun SettingsGeneralView(
                 )
             }
 
-            Spacer(
-                modifier = Modifier.height(MaterialTheme.dimens.size12),
-            )
-
             OptionSelector(
                 modifier =
                     Modifier
@@ -197,10 +205,6 @@ fun SettingsGeneralView(
                 onClick = {
                     isSelectInfoUpdateOpen.value = true
                 },
-            )
-
-            Spacer(
-                modifier = Modifier.height(MaterialTheme.dimens.size12),
             )
 
             OptionSelector(

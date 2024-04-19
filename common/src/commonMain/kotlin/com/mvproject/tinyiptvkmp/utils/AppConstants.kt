@@ -1,7 +1,7 @@
 /*
  *  Created by Medvediev Viktor [mvproject]
- *  Copyright © 2023
- *  last modified : 01.12.23, 11:04
+ *  Copyright © 2024
+ *  last modified : 07.04.24, 17:30
  *
  */
 
@@ -53,4 +53,7 @@ object AppConstants {
     const val SCREEN_PERCENTAGE_30 = 0.3
     const val SCREEN_PERCENTAGE_70 = 0.7
     const val SCREEN_PERCENTAGE_40 = 0.4
+
+    const val PROGRAM_TIME_MEASURE_DELIMITER = ":"
+    const val PROGRAM_TIME_MEASURE_COUNT = 2
 }
