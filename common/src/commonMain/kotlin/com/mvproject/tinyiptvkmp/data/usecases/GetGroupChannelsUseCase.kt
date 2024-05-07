@@ -1,7 +1,7 @@
 /*
  *  Created by Medvediev Viktor [mvproject]
  *  Copyright © 2024
- *  last modified : 24.03.24, 10:49
+ *  last modified : 07.05.24, 10:03
  *
  */
 
@@ -14,6 +14,7 @@ import com.mvproject.tinyiptvkmp.data.repository.FavoriteChannelsRepository
 import com.mvproject.tinyiptvkmp.data.repository.PlaylistChannelsRepository
 import com.mvproject.tinyiptvkmp.data.repository.PreferenceRepository
 import com.mvproject.tinyiptvkmp.data.repository.SelectedEpgRepository
+import com.mvproject.tinyiptvkmp.ui.screens.channels.data.TvPlaylistChannelEpg
 import com.mvproject.tinyiptvkmp.utils.TimeUtils.actualDate
 import org.jetbrains.compose.resources.ExperimentalResourceApi
 import org.jetbrains.compose.resources.getString
@@ -36,11 +37,13 @@ class GetGroupChannelsUseCase(
             favoriteChannelsRepository
                 .loadPlaylistFavoriteChannelUrls(listId = currentPlaylistId)
 
-        val selectedEpgIds =
-            selectedEpgRepository.getAllSelectedEpg()
-                .map {
-                    it.channelEpgId
-                }
+        // todo
+
+        val selectedEpgIds = emptyList<String>()
+        // selectedEpgRepository.getAllSelectedEpg()
+        //     .map {
+        //         it.channelEpgId
+        //     }
 
         val epgs =
             epgProgramRepository.getEpgProgramsByIds(
@@ -56,7 +59,7 @@ class GetGroupChannelsUseCase(
         val channels =
             when (group) {
                 getString(Res.string.channel_folder_all) -> {
-                    playlistChannelsRepository.loadPlaylistChannels(
+                    playlistChannelsRepository.loadChannelsById(
                         listId = currentPlaylistId,
                     )
                 }
@@ -90,7 +93,7 @@ class GetGroupChannelsUseCase(
                 channel.toTvPlaylistChannel(
                     isFavorite = channel.channelUrl in favorites,
                     isEpgUsing = isEpgRequired,
-                    epgContent = epgList,
+                    epgContent = TvPlaylistChannelEpg(items = epgList),
                 )
             }.toList()
     }
