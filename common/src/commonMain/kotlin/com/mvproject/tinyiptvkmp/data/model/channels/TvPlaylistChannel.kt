@@ -1,13 +1,13 @@
 /*
  *  Created by Medvediev Viktor [mvproject]
- *  Copyright © 2023
- *  last modified : 20.11.23, 20:27
+ *  Copyright © 2024
+ *  last modified : 06.05.24, 11:33
  *
  */
 
 package com.mvproject.tinyiptvkmp.data.model.channels
 
-import com.mvproject.tinyiptvkmp.data.model.epg.EpgProgram
+import com.mvproject.tinyiptvkmp.ui.screens.channels.data.TvPlaylistChannelEpg
 import com.mvproject.tinyiptvkmp.utils.AppConstants.EMPTY_STRING
 
 data class TvPlaylistChannel(
@@ -17,7 +17,7 @@ data class TvPlaylistChannel(
     val epgId: String = EMPTY_STRING,
     val isInFavorites: Boolean = false,
     val isEpgUsing: Boolean = false,
-    val channelEpg: List<EpgProgram> = emptyList()
+    val channelEpg: TvPlaylistChannelEpg = TvPlaylistChannelEpg(),
 ) {
     override fun toString() =
         StringBuilder()
@@ -27,6 +27,6 @@ data class TvPlaylistChannel(
             .append("\n")
             .append("channelLogo: $channelLogo")
             .append("\n")
-            .append("channelEpgCount: ${channelEpg.count()}")
+            .append("channelEpgCount: ${channelEpg.items.count()}")
             .toString()
 }

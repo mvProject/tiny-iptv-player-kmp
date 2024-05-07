@@ -1,7 +1,7 @@
 /*
  *  Created by Medvediev Viktor [mvproject]
  *  Copyright © 2024
- *  last modified : 07.04.24, 17:27
+ *  last modified : 07.05.24, 17:31
  *
  */
 
@@ -27,13 +27,14 @@ import com.mvproject.tinyiptvkmp.data.model.channels.TvPlaylistChannel
 import com.mvproject.tinyiptvkmp.ui.components.channels.ChannelListView
 import com.mvproject.tinyiptvkmp.ui.components.modifiers.fullScreenWidth
 import com.mvproject.tinyiptvkmp.ui.components.modifiers.roundedHeader
+import com.mvproject.tinyiptvkmp.ui.data.TvPlaylistChannels
 import com.mvproject.tinyiptvkmp.ui.theme.dimens
 
 @Composable
 fun OverlayChannels(
     isFullScreen: Boolean = false,
     group: String,
-    channels: List<TvPlaylistChannel>,
+    channels: TvPlaylistChannels,
     current: Int = 0,
     onChannelSelect: (TvPlaylistChannel) -> Unit = {},
 ) {
@@ -73,7 +74,7 @@ fun OverlayChannels(
                 ),
             content = {
                 items(
-                    items = channels,
+                    items = channels.items,
                     key = { chn -> chn.hashCode() },
                 ) { chn ->
                     ChannelListView(

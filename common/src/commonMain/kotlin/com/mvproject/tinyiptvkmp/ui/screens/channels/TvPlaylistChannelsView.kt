@@ -1,7 +1,7 @@
 /*
  *  Created by Medvediev Viktor [mvproject]
  *  Copyright © 2024
- *  last modified : 07.04.24, 17:27
+ *  last modified : 07.05.24, 18:08
  *
  */
 
@@ -43,6 +43,7 @@ import com.mvproject.tinyiptvkmp.ui.components.views.LoadingView
 import com.mvproject.tinyiptvkmp.ui.screens.channels.action.TvPlaylistChannelAction
 import com.mvproject.tinyiptvkmp.ui.theme.dimens
 import com.mvproject.tinyiptvkmp.utils.AppConstants.INT_VALUE_1
+import com.mvproject.tinyiptvkmp.utils.CommonUtils.empty
 
 @Composable
 fun TvPlaylistChannelsView(
@@ -57,6 +58,11 @@ fun TvPlaylistChannelsView(
     }
 
     val viewState by viewModel.viewState.collectAsState()
+    val channelsState by viewModel.channelsState.collectAsState()
+
+    var searchString by remember {
+        mutableStateOf(String.empty)
+    }
 
     Scaffold(
         modifier =
@@ -66,7 +72,8 @@ fun TvPlaylistChannelsView(
         topBar = {
             AppBarWithSearch(
                 appBarTitle = viewState.currentGroup,
-                searchTextState = viewState.searchString,
+                //   searchTextState = viewState.searchString,
+                searchTextState = searchString,
                 searchWidgetState = viewState.isSearching,
                 onBackClick = onNavigateBack,
                 onSearchTriggered = {
@@ -76,7 +83,8 @@ fun TvPlaylistChannelsView(
                     onAction(TvPlaylistChannelAction.ViewTypeChange(type))
                 },
                 onTextChange = { text ->
-                    onAction(TvPlaylistChannelAction.SearchTextChange(text))
+                    //     onAction(TvPlaylistChannelAction.SearchTextChange(text))
+                    searchString = text
                 },
             )
         },
@@ -87,17 +95,29 @@ fun TvPlaylistChannelsView(
             mutableStateOf(TvPlaylistChannel())
         }
 
-        val channelsList by remember {
+        val channelsList by remember(searchString) {
             derivedStateOf {
-                if (viewState.searchString.length > INT_VALUE_1) {
-                    viewModel.channels.filter {
-                        it.channelName.contains(viewState.searchString, true)
+                if (searchString.length > INT_VALUE_1) {
+                    channelsState.items.filter {
+                        it.channelName.contains(searchString, true)
                     }
                 } else {
-                    viewModel.channels
+                    channelsState.items
                 }
             }
         }
+
+        /*        val channelsList by remember {
+                    derivedStateOf {
+                        if (viewState.searchString.length > INT_VALUE_1) {
+                            viewModel.channels.filter {
+                                it.channelName.contains(viewState.searchString, true)
+                            }
+                        } else {
+                            viewModel.channels
+                        }
+                    }
+                }*/
 
         // todo adaptive size depend on windowSizeClass
 

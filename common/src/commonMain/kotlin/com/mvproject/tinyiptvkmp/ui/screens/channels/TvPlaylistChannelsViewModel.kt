@@ -1,7 +1,7 @@
 /*
  *  Created by Medvediev Viktor [mvproject]
- *  Copyright © 2023
- *  last modified : 20.11.23, 20:27
+ *  Copyright © 2024
+ *  last modified : 06.05.24, 11:33
  *
  */
 
@@ -15,6 +15,7 @@ import com.mvproject.tinyiptvkmp.data.usecases.GetGroupChannelsUseCase
 import com.mvproject.tinyiptvkmp.data.usecases.ToggleChannelEpgUseCase
 import com.mvproject.tinyiptvkmp.data.usecases.ToggleFavoriteChannelUseCase
 import com.mvproject.tinyiptvkmp.ui.screens.channels.action.TvPlaylistChannelAction
+import com.mvproject.tinyiptvkmp.ui.screens.channels.data.TvPlaylistChannelGroup
 import com.mvproject.tinyiptvkmp.ui.screens.channels.state.TvPlaylistChannelState
 import com.mvproject.tinyiptvkmp.utils.AppConstants.EMPTY_STRING
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -28,13 +29,15 @@ class TvPlaylistChannelsViewModel(
     private val viewTypeHelper: ViewTypeHelper,
     private val getGroupChannelsUseCase: GetGroupChannelsUseCase,
     private val toggleFavoriteChannelUseCase: ToggleFavoriteChannelUseCase,
-    private val toggleChannelEpgUseCase: ToggleChannelEpgUseCase
-
+    private val toggleChannelEpgUseCase: ToggleChannelEpgUseCase,
 ) : ViewModel() {
     private val _viewState = MutableStateFlow(TvPlaylistChannelState())
     val viewState = _viewState.asStateFlow()
 
     val channels = mutableStateListOf<TvPlaylistChannel>()
+
+    private val _channelsState = MutableStateFlow(TvPlaylistChannelGroup())
+    val channelsState = _channelsState.asStateFlow()
 
     private val _searchText = MutableStateFlow(EMPTY_STRING)
 
@@ -42,7 +45,7 @@ class TvPlaylistChannelsViewModel(
         viewModelScope.launch {
             _viewState.update { current ->
                 current.copy(
-                    viewType = viewTypeHelper.getChannelsViewType()
+                    viewType = viewTypeHelper.getChannelsViewType(),
                 )
             }
         }
@@ -58,6 +61,8 @@ class TvPlaylistChannelsViewModel(
                 clear()
                 addAll(groupChannels)
             }
+            _channelsState.value = TvPlaylistChannelGroup(items = groupChannels)
+
             _viewState.update { current ->
                 current.copy(isLoading = false)
             }
@@ -122,7 +127,7 @@ class TvPlaylistChannelsViewModel(
         viewModelScope.launch {
             channels.set(
                 index = channels.indexOf(channel),
-                element = channel.copy(isInFavorites = !isFavorite)
+                element = channel.copy(isInFavorites = !isFavorite),
             )
             toggleFavoriteChannelUseCase(channel = channel)
         }
@@ -133,7 +138,7 @@ class TvPlaylistChannelsViewModel(
         viewModelScope.launch {
             channels.set(
                 index = channels.indexOf(channel),
-                element = channel.copy(isEpgUsing = !isEpgUsing)
+                element = channel.copy(isEpgUsing = !isEpgUsing),
             )
             toggleChannelEpgUseCase(channel = channel)
         }

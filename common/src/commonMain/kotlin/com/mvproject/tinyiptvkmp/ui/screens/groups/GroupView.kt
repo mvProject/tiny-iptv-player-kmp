@@ -1,7 +1,7 @@
 /*
  *  Created by Medvediev Viktor [mvproject]
  *  Copyright © 2024
- *  last modified : 07.04.24, 17:27
+ *  last modified : 07.05.24, 17:22
  *
  */
 
@@ -86,7 +86,7 @@ fun GroupView(
                     OptionSelector(
                         modifier = Modifier.fillMaxWidth(),
                         title = stringResource(Res.string.hint_current_playlist),
-                        selectedItem = dataState.playlistNames[selectedIndex],
+                        selectedItem = dataState.playlistNames.items[selectedIndex],
                         isExpanded = isSelectPlaylistOpen.value,
                         onClick = {
                             isSelectPlaylistOpen.value = true
@@ -97,7 +97,7 @@ fun GroupView(
                         isDialogOpen = isSelectPlaylistOpen,
                         title = stringResource(Res.string.hint_current_playlist),
                         selectedIndex = selectedIndex,
-                        items = dataState.playlistNames,
+                        items = dataState.playlistNames.items,
                         onItemSelected = { index ->
                             selectedIndex = index
                             isSelectPlaylistOpen.value = false
@@ -114,7 +114,7 @@ fun GroupView(
                     verticalArrangement = Arrangement.spacedBy(MaterialTheme.dimens.size4),
                 ) {
                     items(
-                        dataState.groups,
+                        dataState.groups.items,
                         key = { grp -> grp.groupName },
                     ) { item ->
                         PlaylistGroupItemView(

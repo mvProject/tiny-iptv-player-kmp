@@ -1,7 +1,7 @@
 /*
  *  Created by Medvediev Viktor [mvproject]
  *  Copyright © 2024
- *  last modified : 07.04.24, 17:09
+ *  last modified : 07.05.24, 17:36
  *
  */
 
@@ -36,6 +36,7 @@ import com.mvproject.tinyiptvkmp.ui.components.overlay.OverlayContent
 import com.mvproject.tinyiptvkmp.ui.components.overlay.OverlayOptionsMenu
 import com.mvproject.tinyiptvkmp.ui.components.selectors.OptionSelector
 import com.mvproject.tinyiptvkmp.ui.components.toolbars.AppBarWithBackNav
+import com.mvproject.tinyiptvkmp.ui.data.Options
 import com.mvproject.tinyiptvkmp.ui.screens.settings.general.action.SettingsAction
 import com.mvproject.tinyiptvkmp.ui.screens.settings.general.state.SettingsState
 import com.mvproject.tinyiptvkmp.ui.theme.dimens
@@ -229,10 +230,13 @@ fun SettingsGeneralView(
             OverlayOptionsMenu(
                 title = stringResource(Res.string.hint_update_period),
                 selectedIndex = state.infoUpdatePeriod,
-                items =
-                    UpdatePeriod.entries.map {
-                        stringResource(it.title)
-                    },
+                options =
+                    Options(
+                        items =
+                            UpdatePeriod.entries.map {
+                                stringResource(it.title)
+                            },
+                    ),
                 onItemSelected = { index ->
                     onSettingsAction(SettingsAction.SetInfoUpdatePeriod(index))
                     isSelectInfoUpdateOpen.value = false
@@ -248,10 +252,13 @@ fun SettingsGeneralView(
             OverlayOptionsMenu(
                 title = stringResource(Res.string.hint_update_period),
                 selectedIndex = state.epgUpdatePeriod,
-                items =
-                    UpdatePeriod.entries.map {
-                        stringResource(it.title)
-                    },
+                options =
+                    Options(
+                        items =
+                            UpdatePeriod.entries.map {
+                                stringResource(it.title)
+                            },
+                    ),
                 onItemSelected = { index ->
                     onSettingsAction(SettingsAction.SetEpgUpdatePeriod(index))
                     isSelectEpgUpdateOpen.value = false

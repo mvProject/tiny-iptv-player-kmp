@@ -1,7 +1,7 @@
 /*
  *  Created by Medvediev Viktor [mvproject]
  *  Copyright © 2024
- *  last modified : 07.04.24, 17:53
+ *  last modified : 06.05.24, 11:36
  *
  */
 
@@ -78,8 +78,8 @@ fun PlayerChannelView(
 
                 Spacer(modifier = Modifier.height(MaterialTheme.dimens.size2))
 
-                if (currentChannel.channelEpg.isNotEmpty()) {
-                    currentChannel.channelEpg.toActual().take(programCount).forEach { epg ->
+                if (currentChannel.channelEpg.items.isNotEmpty()) {
+                    currentChannel.channelEpg.items.toActual().take(programCount).forEach { epg ->
                         PlayerChannelEpgItem(epgProgram = epg)
                     }
                     Spacer(modifier = Modifier.height(MaterialTheme.dimens.size2))

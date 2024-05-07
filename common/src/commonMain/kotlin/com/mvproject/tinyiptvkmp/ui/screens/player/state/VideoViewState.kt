@@ -1,7 +1,7 @@
 /*
  *  Created by Medvediev Viktor [mvproject]
- *  Copyright © 2023
- *  last modified : 20.11.23, 20:27
+ *  Copyright © 2024
+ *  last modified : 07.05.24, 17:29
  *
  */
 
@@ -10,6 +10,7 @@ package com.mvproject.tinyiptvkmp.ui.screens.player.state
 import com.mvproject.tinyiptvkmp.data.enums.RatioMode
 import com.mvproject.tinyiptvkmp.data.enums.ResizeMode
 import com.mvproject.tinyiptvkmp.data.model.channels.TvPlaylistChannel
+import com.mvproject.tinyiptvkmp.ui.data.TvPlaylistChannels
 import com.mvproject.tinyiptvkmp.utils.AppConstants
 
 data class VideoViewState(
@@ -33,5 +34,5 @@ data class VideoViewState(
     val videoRatio: Float = RatioMode.WideScreen.ratio,
     val videoResizeMode: ResizeMode = ResizeMode.Fit,
     val mediaPosition: Int = AppConstants.INT_NO_VALUE,
-    val channels: List<TvPlaylistChannel> = emptyList()
+    val channels: TvPlaylistChannels = TvPlaylistChannels(),
 )

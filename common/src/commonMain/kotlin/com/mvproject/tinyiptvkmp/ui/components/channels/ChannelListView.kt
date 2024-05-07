@@ -1,7 +1,7 @@
 /*
  *  Created by Medvediev Viktor [mvproject]
  *  Copyright © 2024
- *  last modified : 24.03.24, 14:57
+ *  last modified : 06.05.24, 11:36
  *
  */
 
@@ -64,11 +64,11 @@ fun ChannelListView(
         },
         supportingContent = {
             // todo epg count view
-            channel.channelEpg.toActual().take(1).forEach {
+            channel.channelEpg.items.toActual().take(1).forEach {
                 ScheduleEpgItemView(program = it)
             }
 
-            if (channel.channelEpg.isEmpty()) {
+            if (channel.channelEpg.items.isEmpty()) {
                 Text(
                     text = stringResource(Res.string.msg_no_epg_found),
                     style = MaterialTheme.typography.labelMedium,

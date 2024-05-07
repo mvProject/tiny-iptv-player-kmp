@@ -1,7 +1,7 @@
 /*
  *  Created by Medvediev Viktor [mvproject]
  *  Copyright © 2024
- *  last modified : 07.04.24, 18:36
+ *  last modified : 07.05.24, 17:31
  *
  */
 
@@ -14,6 +14,7 @@ import com.mvproject.tinyiptvkmp.data.model.channels.TvPlaylistChannel
 import com.mvproject.tinyiptvkmp.data.repository.PreferenceRepository
 import com.mvproject.tinyiptvkmp.data.usecases.GetGroupChannelsUseCase
 import com.mvproject.tinyiptvkmp.data.usecases.ToggleFavoriteChannelUseCase
+import com.mvproject.tinyiptvkmp.ui.data.TvPlaylistChannels
 import com.mvproject.tinyiptvkmp.ui.screens.player.action.PlaybackActions
 import com.mvproject.tinyiptvkmp.ui.screens.player.action.PlaybackStateActions
 import com.mvproject.tinyiptvkmp.ui.screens.player.state.VideoPlaybackState
@@ -92,7 +93,7 @@ class VideoViewViewModel(
                 current.copy(
                     channelGroup = channelGroup,
                     mediaPosition = currentItemPosition,
-                    channels = channelList,
+                    channels = TvPlaylistChannels(items = channelList),
                     currentChannel = currentChannel,
                 )
             }
@@ -101,7 +102,7 @@ class VideoViewViewModel(
 
     fun switchToChannel(channel: TvPlaylistChannel) {
         viewModelScope.launch {
-            val channelsRefreshed = videoViewState.value.channels.withRefreshedEpg()
+            val channelsRefreshed = videoViewState.value.channels.items.withRefreshedEpg()
 
             val newMediaPosition =
                 getCurrentMediaPosition(
@@ -166,7 +167,7 @@ class VideoViewViewModel(
     }
 
     private fun switchToNextChannel() {
-        val currentChannelsCount = videoViewState.value.channels.count()
+        val currentChannelsCount = videoViewState.value.channels.items.count()
         val nextIndex = videoViewState.value.mediaPosition + INT_VALUE_1
         val newMediaPosition =
             if (nextIndex > currentChannelsCount - INT_VALUE_1) INT_VALUE_ZERO else nextIndex
@@ -175,7 +176,7 @@ class VideoViewViewModel(
     }
 
     private fun switchToPreviousChannel() {
-        val currentChannelsCount = videoViewState.value.channels.count()
+        val currentChannelsCount = videoViewState.value.channels.items.count()
         val nextIndex = videoViewState.value.mediaPosition - INT_VALUE_1
         val newMediaPosition =
             if (nextIndex < INT_VALUE_ZERO) currentChannelsCount - INT_VALUE_1 else nextIndex
@@ -208,14 +209,14 @@ class VideoViewViewModel(
     }
 
     private fun setCurrentChannel(currentMediaPosition: Int) {
-        val currentChannels = videoViewState.value.channels.withRefreshedEpg()
+        val currentChannels = videoViewState.value.channels.items.withRefreshedEpg()
         val currentChannel = currentChannels[currentMediaPosition]
 
         _videoViewState.update { current ->
             current.copy(
                 mediaPosition = currentMediaPosition,
                 currentChannel = currentChannel,
-                channels = currentChannels,
+                channels = TvPlaylistChannels(items = currentChannels),
                 isChannelsVisible = false,
             )
         }
@@ -280,9 +281,9 @@ class VideoViewViewModel(
         val currentEpgVisibleState = videoViewState.value.isEpgVisible
 
         if (!currentEpgVisibleState) {
-            val channelsRefreshed = videoViewState.value.channels.withRefreshedEpg()
+            val channelsRefreshed = videoViewState.value.channels.items.withRefreshedEpg()
             _videoViewState.update { current ->
-                current.copy(channels = channelsRefreshed)
+                current.copy(channels = TvPlaylistChannels(items = channelsRefreshed))
             }
         }
 
@@ -323,7 +324,7 @@ class VideoViewViewModel(
             )
 
         val updatedFavoriteChangedChannels =
-            currentChannels.mapIndexed { index, channel ->
+            currentChannels.items.mapIndexed { index, channel ->
                 if (index == currentIndex) {
                     currentChannelFavoriteChanged
                 } else {
@@ -335,7 +336,7 @@ class VideoViewViewModel(
             _videoViewState.update { current ->
                 current.copy(
                     currentChannel = currentChannelFavoriteChanged,
-                    channels = updatedFavoriteChangedChannels,
+                    channels = TvPlaylistChannels(items = updatedFavoriteChangedChannels),
                 )
             }
 

@@ -1,7 +1,7 @@
 /*
  *  Created by Medvediev Viktor [mvproject]
- *  Copyright © 2023
- *  last modified : 20.11.23, 20:27
+ *  Copyright © 2024
+ *  last modified : 07.05.24, 10:11
  *
  */
 
@@ -21,6 +21,8 @@ import com.mvproject.tinyiptvkmp.ui.theme.VideoAppTheme
 import com.mvproject.tinyiptvkmp.utils.AppConstants
 import com.mvproject.tinyiptvkmp.utils.KLog
 import com.mvproject.tinyiptvkmp.utils.TimeUtils
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import moe.tlaster.precompose.PreComposeApp
 import org.koin.compose.KoinContext
@@ -48,30 +50,40 @@ private fun TinyIptvAppContent() {
     val scope = rememberCoroutineScope()
 
     scope.apply {
-        launch {
+        launch(Dispatchers.IO) {
+            delay(2000L)
             preferenceRepository.isChannelsEpgInfoUpdateRequired()
                 .collect { isRequired ->
+                    KLog.d("testing isChannelsEpgInfoUpdateRequired $isRequired")
                     if (isRequired) {
                         updateChannelsEpgInfoUseCase()
                     }
                 }
         }
-        launch {
-            preferenceRepository.isEpgUpdateRequired()
+
+        launch(Dispatchers.IO) {
+            delay(1000L)
+            // updateEpgUseCase()
+            preferenceRepository.isEpgUpdateRequired2()
                 .collect { isRequired ->
+                    KLog.d("testing isEpgUpdateRequired2 $isRequired")
                     if (isRequired) {
-                        updateEpgUseCase()
+                        // updateEpgUseCase()
                     }
                 }
         }
-        launch {
+
+        launch(Dispatchers.IO) {
             val isEpgInfoDataUpdateRequired = preferenceRepository.isEpgInfoDataUpdateRequired()
+            KLog.e("testing isEpgInfoDataUpdateRequired $isEpgInfoDataUpdateRequired")
             if (isEpgInfoDataUpdateRequired) {
                 epgInfoUpdateUseCase()
             }
         }
 
-        launch {
+        launch(Dispatchers.IO) {
+            delay(4000L)
+
             val remotePlaylists = getRemotePlaylistsUseCase()
 
             remotePlaylists.forEach { playlist ->
@@ -91,8 +103,7 @@ private fun TinyIptvAppContent() {
 
     VideoAppTheme {
         NavigationHost(
-            startDestination = AppRoutes.PlaylistGroup.route
+            startDestination = AppRoutes.PlaylistGroup.route,
         )
     }
-
 }
