@@ -12,6 +12,10 @@ keystore.properties
 # Log/OS Files
 *.log
 
+# Storage files
+*.db
+*.preferences_pb
+
 # Android Studio generated files and folders
 captures/
 .externalNativeBuild/
