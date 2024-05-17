@@ -1,7 +1,7 @@
 /*
  *  Created by Medvediev Viktor [mvproject]
  *  Copyright © 2024
- *  last modified : 07.05.24, 18:08
+ *  last modified : 17.05.24, 18:12
  *
  */
 
@@ -23,6 +23,7 @@ import androidx.compose.foundation.lazy.grid.rememberLazyGridState
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.derivedStateOf
 import androidx.compose.runtime.getValue
@@ -53,6 +54,8 @@ fun TvPlaylistChannelsView(
     onAction: (TvPlaylistChannelAction) -> Unit,
     groupSelected: String,
 ) {
+    LaunchedEffect(viewModel) {
+    }
     ExecuteOnResume {
         viewModel.loadChannelsByGroups(groupSelected)
     }
@@ -180,14 +183,9 @@ fun TvPlaylistChannelsView(
             ) {
                 OverlayChannelOptions(
                     isInFavorite = selected.isInFavorites,
-                    isEpgEnabled = selected.isEpgUsing,
-                    isEpgUsing = selected.epgId.isNotEmpty(),
+                    isEpgEnabled = selected.epgId.isNotEmpty(),
                     onToggleFavorite = {
                         onAction(TvPlaylistChannelAction.ToggleFavourites(selected))
-                        isChannelOptionOpen.value = false
-                    },
-                    onToggleEpgState = {
-                        onAction(TvPlaylistChannelAction.ToggleEpgState(selected))
                         isChannelOptionOpen.value = false
                     },
                     onShowEpg = {

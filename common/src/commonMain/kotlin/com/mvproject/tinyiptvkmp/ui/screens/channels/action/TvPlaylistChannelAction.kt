@@ -1,7 +1,7 @@
 /*
  *  Created by Medvediev Viktor [mvproject]
- *  Copyright © 2023
- *  last modified : 20.11.23, 20:27
+ *  Copyright © 2024
+ *  last modified : 17.05.24, 18:12
  *
  */
 
@@ -12,10 +12,12 @@ import com.mvproject.tinyiptvkmp.data.model.channels.TvPlaylistChannel
 
 sealed class TvPlaylistChannelAction {
     data class ToggleFavourites(val channel: TvPlaylistChannel) : TvPlaylistChannelAction()
+
     data class SearchTextChange(val text: String) : TvPlaylistChannelAction()
+
     data class ViewTypeChange(val type: ChannelsViewType) : TvPlaylistChannelAction()
+
     data object SearchTriggered : TvPlaylistChannelAction()
-    data class ToggleEpgState(val channel: TvPlaylistChannel) : TvPlaylistChannelAction()
+
     data object ToggleEpgVisibility : TvPlaylistChannelAction()
 }
-

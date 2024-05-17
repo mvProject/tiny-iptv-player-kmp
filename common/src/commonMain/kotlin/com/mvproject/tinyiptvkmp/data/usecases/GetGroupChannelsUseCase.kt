@@ -1,7 +1,7 @@
 /*
  *  Created by Medvediev Viktor [mvproject]
  *  Copyright © 2024
- *  last modified : 07.05.24, 10:03
+ *  last modified : 07.05.24, 18:31
  *
  */
 
@@ -9,13 +9,9 @@ package com.mvproject.tinyiptvkmp.data.usecases
 
 import com.mvproject.tinyiptvkmp.data.mappers.EntityMapper.toTvPlaylistChannel
 import com.mvproject.tinyiptvkmp.data.model.channels.TvPlaylistChannel
-import com.mvproject.tinyiptvkmp.data.repository.EpgProgramRepository
 import com.mvproject.tinyiptvkmp.data.repository.FavoriteChannelsRepository
 import com.mvproject.tinyiptvkmp.data.repository.PlaylistChannelsRepository
 import com.mvproject.tinyiptvkmp.data.repository.PreferenceRepository
-import com.mvproject.tinyiptvkmp.data.repository.SelectedEpgRepository
-import com.mvproject.tinyiptvkmp.ui.screens.channels.data.TvPlaylistChannelEpg
-import com.mvproject.tinyiptvkmp.utils.TimeUtils.actualDate
 import org.jetbrains.compose.resources.ExperimentalResourceApi
 import org.jetbrains.compose.resources.getString
 import tinyiptvkmp.common.generated.resources.Res
@@ -27,8 +23,6 @@ class GetGroupChannelsUseCase(
     private val preferenceRepository: PreferenceRepository,
     private val playlistChannelsRepository: PlaylistChannelsRepository,
     private val favoriteChannelsRepository: FavoriteChannelsRepository,
-    private val epgProgramRepository: EpgProgramRepository,
-    private val selectedEpgRepository: SelectedEpgRepository,
 ) {
     suspend operator fun invoke(group: String): List<TvPlaylistChannel> {
         val currentPlaylistId = preferenceRepository.loadCurrentPlaylistId()
@@ -36,25 +30,6 @@ class GetGroupChannelsUseCase(
         val favorites =
             favoriteChannelsRepository
                 .loadPlaylistFavoriteChannelUrls(listId = currentPlaylistId)
-
-        // todo
-
-        val selectedEpgIds = emptyList<String>()
-        // selectedEpgRepository.getAllSelectedEpg()
-        //     .map {
-        //         it.channelEpgId
-        //     }
-
-        val epgs =
-            epgProgramRepository.getEpgProgramsByIds(
-                channelIds = selectedEpgIds,
-                time = actualDate,
-            ).asSequence()
-
-        val groupedEpgs =
-            epgs.groupBy {
-                it.channelId
-            }
 
         val channels =
             when (group) {
@@ -81,19 +56,8 @@ class GetGroupChannelsUseCase(
 
         return channels.asSequence()
             .map { channel ->
-                val isEpgRequired = channel.epgId in selectedEpgIds
-
-                val epgList =
-                    if (isEpgRequired) {
-                        groupedEpgs[channel.epgId] ?: emptyList()
-                    } else {
-                        emptyList()
-                    }
-
                 channel.toTvPlaylistChannel(
                     isFavorite = channel.channelUrl in favorites,
-                    isEpgUsing = isEpgRequired,
-                    epgContent = TvPlaylistChannelEpg(items = epgList),
                 )
             }.toList()
     }

@@ -1,7 +1,7 @@
 /*
  *  Created by Medvediev Viktor [mvproject]
  *  Copyright © 2024
- *  last modified : 07.05.24, 10:06
+ *  last modified : 08.05.24, 20:00
  *
  */
 
@@ -22,6 +22,12 @@ interface EpgProgramDao {
     @Query("SELECT * FROM EpgProgramEntity WHERE EpgProgramEntity.channelId IN (:ids) AND programEnd > :time")
     suspend fun getPrograms(
         ids: List<String>,
+        time: Long,
+    ): List<EpgProgramEntity>
+
+    @Query("SELECT * FROM EpgProgramEntity WHERE EpgProgramEntity.channelId = :id AND programEnd > :time")
+    suspend fun getProgram(
+        id: String,
         time: Long,
     ): List<EpgProgramEntity>
 

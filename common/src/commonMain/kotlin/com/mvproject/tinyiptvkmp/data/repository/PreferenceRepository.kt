@@ -1,7 +1,7 @@
 /*
  *  Created by Medvediev Viktor [mvproject]
  *  Copyright © 2024
- *  last modified : 07.05.24, 10:29
+ *  last modified : 09.05.24, 21:02
  *
  */
 
@@ -21,8 +21,6 @@ import com.mvproject.tinyiptvkmp.utils.AppConstants.LONG_NO_VALUE
 import com.mvproject.tinyiptvkmp.utils.AppConstants.LONG_VALUE_ZERO
 import com.mvproject.tinyiptvkmp.utils.KLog
 import com.mvproject.tinyiptvkmp.utils.TimeUtils.actualDate
-import com.mvproject.tinyiptvkmp.utils.TimeUtils.typeToDuration
-import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.map
 import kotlin.time.Duration.Companion.days
@@ -119,15 +117,15 @@ class PreferenceRepository(
         }
     }
 
-    suspend fun isEpgInfoDataExist() =
+    fun isEpgInfoDataExist() =
         dataStore.data.map { preferences ->
             preferences[EPG_INFO_DATA_IS_EXIST] ?: false
-        }.first()
+        }
 
     suspend fun isEpgInfoDataExist2() =
         dataStore.data.map { preferences ->
             preferences[EPG_INFO_DATA_IS_EXIST] ?: false
-        }
+        }.first()
 
     suspend fun setEpgInfoDataLastUpdate(timestamp: Long) {
         dataStore.edit { settings ->
@@ -155,63 +153,21 @@ class PreferenceRepository(
             if (selectedId != LONG_NO_VALUE) isUpdateRequired else false
         }
 
-    suspend fun setEpgUnplannedUpdateRequired(state: Boolean) {
-        dataStore.edit { settings ->
-            settings[EPG_UNPLANNED_UPDATE_REQUIRED] = state
-        }
-    }
-
-    private fun isEpgUnplannedUpdateRequired() =
-        dataStore.data.map { preferences ->
-            preferences[EPG_UNPLANNED_UPDATE_REQUIRED] ?: false
-        }
-
     suspend fun setEpgLastUpdate(timestamp: Long) {
+        KLog.d("testing setEpgLastUpdate timestamp $timestamp")
         dataStore.edit { settings ->
             settings[EPG_DATA_LAST_UPDATE] = timestamp
         }
     }
 
-    private fun lastUpdate() =
+    fun lastEpgUpdate() =
         dataStore.data.map { preferences ->
             preferences[EPG_DATA_LAST_UPDATE] ?: LONG_NO_VALUE
         }
 
-    fun isEpgPlannedUpdateRequired() =
+    fun epgUpdatePeriod() =
         dataStore.data.map { preferences ->
-            val updatePeriod = preferences[EPG_MAIN_LAST_UPDATE_PERIOD] ?: INT_VALUE_5
-            // val lastUpdate = preferences[EPG_DATA_LAST_UPDATE] ?: LONG_NO_VALUE
-            val updateElapsed = actualDate - lastUpdate().first()
-            KLog.d("testing isEpgPlannedUpdateRequired updatePeriod $updatePeriod")
-            KLog.d("testing isEpgPlannedUpdateRequired lastUpdate ${lastUpdate().first()}")
-            KLog.w(
-                "testing isEpgPlannedUpdateRequired typeToDuration(updatePeriod) ${
-                    typeToDuration(
-                        updatePeriod,
-                    )
-                }",
-            )
-            KLog.w("testing isEpgPlannedUpdateRequired actualDate - lastUpdate $updateElapsed")
-            updateElapsed > typeToDuration(updatePeriod)
-        }
-
-    suspend fun isEpgUpdateRequired() =
-        combine(
-            isEpgUnplannedUpdateRequired(),
-            isEpgPlannedUpdateRequired(),
-        ) { unplanned, planned ->
-            KLog.d("testing isEpgUpdateRequired unplanned $unplanned, planned $planned")
-            return@combine unplanned || planned
-        }
-
-    suspend fun isEpgUpdateRequired2() =
-        combine(
-            isEpgInfoDataExist2(),
-            lastUpdate(),
-            isEpgPlannedUpdateRequired(),
-        ) { isExist, last, planned ->
-            KLog.e("testing isEpgUpdateRequired2 isExist $isExist, last $last, planned $planned")
-            return@combine isExist && planned
+            preferences[EPG_MAIN_LAST_UPDATE_PERIOD] ?: INT_VALUE_5
         }
 
     private companion object {
@@ -231,7 +187,5 @@ class PreferenceRepository(
         val EPG_INFO_DATA_LAST_UPDATE = longPreferencesKey("EpgInfoDataIsLastUpdate")
         val CHANNELS_EPG_INFO_UPDATE_REQUIRED =
             booleanPreferencesKey("ChannelsEpgInfoUpdateRequired")
-        val EPG_UNPLANNED_UPDATE_REQUIRED =
-            booleanPreferencesKey("EpgUnplannedUpdateRequired")
     }
 }

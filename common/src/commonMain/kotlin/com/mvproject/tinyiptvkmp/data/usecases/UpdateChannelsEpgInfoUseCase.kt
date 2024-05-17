@@ -1,7 +1,7 @@
 /*
  *  Created by Medvediev Viktor [mvproject]
  *  Copyright © 2024
- *  last modified : 07.05.24, 10:29
+ *  last modified : 09.05.24, 21:17
  *
  */
 
@@ -22,67 +22,47 @@ class UpdateChannelsEpgInfoUseCase(
     private val epgInfoRepository: EpgInfoRepository,
 ) {
     suspend operator fun invoke() {
-        if (preferenceRepository.isEpgInfoDataExist()) {
-            val epgInfos = epgInfoRepository.loadEpgInfoData().asSequence()
-            val channels = playlistChannelsRepository.loadChannels().asSequence()
-            val favorites = favoriteChannelsRepository.loadFavoriteChannelUrls()
+        val epgInfos = epgInfoRepository.loadEpgInfoData().asSequence()
+        val channels = playlistChannelsRepository.loadChannels().asSequence()
+        val favorites = favoriteChannelsRepository.loadFavoriteChannelUrls()
 
-            epgInfos.forEach { epg ->
-                val epgName = epg.channelName.trim().replace(String.space, String.empty).lowercase()
-                val epgNameHd = epgName + "hd"
-                if (epgName.contains("кино", ignoreCase = true)) {
-                    KLog.w("testing UpdateChannelsEpgInfoUseCase epg $epgName")
-                }
-            }
+        val mappedChannels =
+            channels.map { channel ->
+                val channelName =
+                    channel.channelName.trim().replace(String.space, String.empty).lowercase()
+                val channelNameHD = channelName + "hd"
+                KLog.d("testing UpdateChannelsEpgInfoUseCase channelName $channelName")
+                val epgInfo =
+                    epgInfos.find { epg ->
+                        val epgName =
+                            epg.channelName.trim().replace(String.space, String.empty)
+                                .lowercase()
+                        val epgNameHd = epgName + "hd"
 
-            val mappedChannels =
-                channels.map { channel ->
-                    val channelName =
-                        channel.channelName.trim().replace(String.space, String.empty).lowercase()
-                    val channelNameHD = channelName + "hd"
-                    KLog.d("testing UpdateChannelsEpgInfoUseCase channelName $channelName")
-                    val epgInfo =
-                        epgInfos.find { epg ->
-                            val epgName =
-                                epg.channelName.trim().replace(String.space, String.empty)
-                                    .lowercase()
-                            val epgNameHd = epgName + "hd"
-
-                            channelName == epgName || channelName == epgNameHd || channelNameHD == epgName
-
-                            // epg.channelName.equals(channel.channelName, ignoreCase = true) ||
-                            //    channel.channelName.equals(
-                            //        epg.channelName + " HD",
-                            //        ignoreCase = true,
-                            //    ) // ||
-
-                            // channel.channelName.startsWith(epg.channelName, ignoreCase = true)
-                        }
-
-                    if (epgInfo != null) {
-                        channel.copy(
-                            channelLogo = epgInfo.channelLogo,
-                            epgId = epgInfo.channelId,
-                        )
-                    } else {
-                        channel // If no match is found, keep the original Class1 object
+                        channelName == epgName || channelName == epgNameHd || channelNameHD == epgName
                     }
-                }
 
-            KLog.w("mappedChannels count:${mappedChannels.count()}")
-
-            playlistChannelsRepository.updatePlaylistChannels(mappedChannels.toList())
-
-            mappedChannels.forEach { channel ->
-                if (channel.channelUrl in favorites) {
-                    KLog.w("update in favorite ${channel.channelName}")
-                    favoriteChannelsRepository.updatePlaylistFavoriteChannels(channel = channel)
+                if (epgInfo != null) {
+                    channel.copy(
+                        channelLogo = epgInfo.channelLogo,
+                        epgId = epgInfo.channelId,
+                    )
+                } else {
+                    channel // If no match is found, keep the original Class1 object
                 }
             }
 
-            preferenceRepository.setChannelsEpgInfoUpdateRequired(state = false)
-        } else {
-            KLog.e("UpdateChannelsEpgInfoUseCase EpgInfo not exist")
+        KLog.w("mappedChannels count:${mappedChannels.count()}")
+
+        playlistChannelsRepository.updatePlaylistChannels(mappedChannels.toList())
+
+        mappedChannels.forEach { channel ->
+            if (channel.channelUrl in favorites) {
+                KLog.w("update in favorite ${channel.channelName}")
+                favoriteChannelsRepository.updatePlaylistFavoriteChannels(channel = channel)
+            }
         }
+
+        preferenceRepository.setChannelsEpgInfoUpdateRequired(state = false)
     }
 }

@@ -1,7 +1,7 @@
 /*
  *  Created by Medvediev Viktor [mvproject]
  *  Copyright © 2024
- *  last modified : 06.05.24, 12:48
+ *  last modified : 17.05.24, 18:16
  *
  */
 
@@ -20,17 +20,11 @@ class EpgInfoUpdateUseCase(
     suspend operator fun invoke() {
         val epgInfo = epgInfoDataSource.getEpgInfo().distinctBy { it.channelNames }
 
-        if (preferenceRepository.isEpgInfoDataExist()) {
-            // epgInfoRepository.updateEpgInfoData(epgInfo)
-            epgInfoRepository.saveEpgInfoDataRoom(epgInfo)
-        } else {
-            //  epgInfoRepository.addEpgInfoData(epgInfo)
-            epgInfoRepository.saveEpgInfoDataRoom(epgInfo)
-            preferenceRepository.setEpgInfoDataExist(state = true)
-        }
+        epgInfoRepository.saveEpgInfoDataRoom(epgInfo)
 
         preferenceRepository.apply {
             setEpgInfoDataLastUpdate(timestamp = TimeUtils.actualDate)
+            setEpgInfoDataExist(state = true)
             setChannelsEpgInfoUpdateRequired(state = true)
         }
     }

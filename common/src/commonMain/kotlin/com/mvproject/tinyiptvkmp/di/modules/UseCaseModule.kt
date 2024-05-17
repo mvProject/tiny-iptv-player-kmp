@@ -1,7 +1,7 @@
 /*
  *  Created by Medvediev Viktor [mvproject]
  *  Copyright © 2024
- *  last modified : 06.05.24, 15:20
+ *  last modified : 17.05.24, 18:12
  *
  */
 
@@ -11,14 +11,13 @@ import com.mvproject.tinyiptvkmp.data.usecases.AddLocalPlaylistUseCase
 import com.mvproject.tinyiptvkmp.data.usecases.AddRemotePlaylistUseCase
 import com.mvproject.tinyiptvkmp.data.usecases.DeletePlaylistUseCase
 import com.mvproject.tinyiptvkmp.data.usecases.EpgInfoUpdateUseCase
+import com.mvproject.tinyiptvkmp.data.usecases.GetChannelsEpg
 import com.mvproject.tinyiptvkmp.data.usecases.GetDefaultPlaylistUseCase
+import com.mvproject.tinyiptvkmp.data.usecases.GetGroupChannelsEpg
 import com.mvproject.tinyiptvkmp.data.usecases.GetGroupChannelsUseCase
 import com.mvproject.tinyiptvkmp.data.usecases.GetPlaylistGroupUseCase
 import com.mvproject.tinyiptvkmp.data.usecases.GetPlaylistUseCase
 import com.mvproject.tinyiptvkmp.data.usecases.GetRemotePlaylistsUseCase
-import com.mvproject.tinyiptvkmp.data.usecases.SaveLocalPlaylistChannels
-import com.mvproject.tinyiptvkmp.data.usecases.SaveRemotePlaylistChannels
-import com.mvproject.tinyiptvkmp.data.usecases.ToggleChannelEpgUseCase
 import com.mvproject.tinyiptvkmp.data.usecases.ToggleFavoriteChannelUseCase
 import com.mvproject.tinyiptvkmp.data.usecases.UpdateChannelsEpgInfoUseCase
 import com.mvproject.tinyiptvkmp.data.usecases.UpdateEpgUseCase
@@ -45,10 +44,9 @@ val useCaseModule =
         singleOf(::GetGroupChannelsUseCase)
 
         singleOf(::ToggleFavoriteChannelUseCase)
-        singleOf(::ToggleChannelEpgUseCase)
         singleOf(::EpgInfoUpdateUseCase)
         singleOf(::UpdateEpgUseCase)
 
-        singleOf(::SaveLocalPlaylistChannels)
-        singleOf(::SaveRemotePlaylistChannels)
+        singleOf(::GetGroupChannelsEpg)
+        singleOf(::GetChannelsEpg)
     }

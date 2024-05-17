@@ -1,7 +1,7 @@
 /*
  *  Created by Medvediev Viktor [mvproject]
  *  Copyright © 2024
- *  last modified : 07.05.24, 10:29
+ *  last modified : 17.05.24, 18:15
  *
  */
 
@@ -16,34 +16,9 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 
 class FavoriteChannelsRepository(
-    //  private val db: TinyIptvKmpDatabase,
     private val appDatabase: AppDatabase,
 ) {
-    //  private val favoriteChannelQueries = db.favoriteChannelEntityQueries
     private val favoriteChannelDao = appDatabase.favoriteChannelDao()
-
-    /*    suspend fun addChannelToFavorite(
-            channel: TvPlaylistChannel,
-            listId: Long,
-        ) {
-            withContext(Dispatchers.IO) {
-                val favoriteCount =
-                    favoriteChannelQueries.getPlaylistFavoriteChannelCount(id = listId)
-                        .executeAsOne()
-                        .toInt()
-
-                val order = (favoriteCount + INT_VALUE_1).toLong()
-
-                favoriteChannelQueries.addFavoriteChannelEntity(
-                    FavoriteChannelEntity(
-                        channelName = channel.channelName,
-                        channelUrl = channel.channelUrl,
-                        channelOrder = order,
-                        parentListId = listId,
-                    ),
-                )
-            }
-        }*/
 
     suspend fun addChannelToFavorite(
         channel: TvPlaylistChannel,
@@ -66,17 +41,6 @@ class FavoriteChannelsRepository(
         }
     }
 
-    /*
-        suspend fun updatePlaylistFavoriteChannels(channel: PlaylistChannel) {
-            withContext(Dispatchers.IO) {
-                favoriteChannelQueries.updateFavoriteChannelEntity(
-                    channelName = channel.channelName,
-                    channelUrl = channel.channelUrl,
-                )
-            }
-        }
-     */
-
     suspend fun updatePlaylistFavoriteChannels(channel: PlaylistChannel) {
         withContext(Dispatchers.IO) {
             favoriteChannelDao.updateFavoriteChannels(
@@ -85,18 +49,6 @@ class FavoriteChannelsRepository(
             )
         }
     }
-
-    /*    suspend fun deleteChannelFromFavorite(
-            channelUrl: String,
-            listId: Long,
-        ) {
-            withContext(Dispatchers.IO) {
-                favoriteChannelQueries.deleteChannelFromFavorite(
-                    id = listId,
-                    channelUrl = channelUrl,
-                )
-            }
-        }*/
 
     suspend fun deleteChannelFromFavorite(
         channelUrl: String,
@@ -108,31 +60,13 @@ class FavoriteChannelsRepository(
         )
     }
 
-    /*    fun loadPlaylistFavoriteChannelUrls(listId: Long): List<String> {
-            return favoriteChannelQueries.getPlaylistFavoriteChannelUrls(id = listId)
-                .executeAsList()
-        }*/
-
     suspend fun loadPlaylistFavoriteChannelUrls(listId: Long): List<String> {
         return favoriteChannelDao.getPlaylistFavoriteChannelUrls(id = listId)
     }
 
-    /*
-        fun loadFavoriteChannelUrls(): List<String> {
-            return favoriteChannelQueries.getFavoriteChannelUrls()
-                .executeAsList()
-        }
-     */
-
     suspend fun loadFavoriteChannelUrls(): List<String> {
         return favoriteChannelDao.getFavoriteChannelUrls()
     }
-
-    /*    suspend fun deletePlaylistFavoriteChannels(listId: Long) {
-            withContext(Dispatchers.IO) {
-                favoriteChannelQueries.deletePlaylistFavoriteChannelEntities(id = listId)
-            }
-        }*/
 
     suspend fun deletePlaylistFavoriteChannels(listId: Long) {
         favoriteChannelDao.deletePlaylistFavoriteChannelEntities(id = listId)

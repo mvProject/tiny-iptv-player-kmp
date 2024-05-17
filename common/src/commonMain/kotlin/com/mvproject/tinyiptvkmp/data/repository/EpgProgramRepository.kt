@@ -1,7 +1,7 @@
 /*
  *  Created by Medvediev Viktor [mvproject]
  *  Copyright © 2024
- *  last modified : 07.05.24, 10:29
+ *  last modified : 17.05.24, 18:15
  *
  */
 
@@ -14,22 +14,9 @@ import com.mvproject.tinyiptvkmp.data.model.epg.EpgProgram
 import com.mvproject.tinyiptvkmp.database.AppDatabase
 
 class EpgProgramRepository(
-    // private val db: TinyIptvKmpDatabase,
     private val appDatabase: AppDatabase,
 ) {
-    //  private val epgProgramQueries = db.epgProgramEntityQueries
     private val epgProgramDao = appDatabase.epgProgramDao()
-
-    /*    fun getEpgProgramsByIds(
-            channelIds: List<String>,
-            time: Long,
-        ): List<EpgProgram> {
-            return epgProgramQueries.getEpgProgramsByIds(ids = channelIds, time = time)
-                .executeAsList()
-                .map { entity ->
-                    entity.toEpgProgram()
-                }
-        }*/
 
     suspend fun getEpgProgramsByIds(
         channelIds: List<String>,
@@ -41,22 +28,15 @@ class EpgProgramRepository(
             }
     }
 
-    /*    suspend fun insertEpgPrograms(
-            channelId: String,
-            channelEpgPrograms: List<EpgProgram>,
-        ) {
-            withContext(Dispatchers.IO) {
-                epgProgramQueries.transaction {
-                    epgProgramQueries.deleteEpgProgramsForChannel(id = channelId)
-
-                    channelEpgPrograms.forEach { prg ->
-                        epgProgramQueries.insertEpgProgram(
-                            prg.toEpgProgramEntity(),
-                        )
-                    }
-                }
+    suspend fun getEpgProgramsById(
+        channelId: String,
+        time: Long,
+    ): List<EpgProgram> {
+        return epgProgramDao.getProgram(id = channelId, time = time)
+            .map {
+                it.toEpgProgram()
             }
-        }*/
+    }
 
     @Transaction
     suspend fun insertEpgPrograms(
