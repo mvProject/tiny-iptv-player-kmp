@@ -1,7 +1,7 @@
 /*
  *  Created by Medvediev Viktor [mvproject]
  *  Copyright © 2024
- *  last modified : 07.05.24, 10:19
+ *  last modified : 09.05.24, 21:17
  *
  */
 
@@ -16,6 +16,7 @@ import com.mvproject.tinyiptvkmp.database.dbFileName
 import kotlinx.coroutines.Dispatchers
 import org.koin.core.module.Module
 import org.koin.dsl.module
+import java.util.concurrent.TimeUnit
 
 actual fun platformDatabaseModule(): Module =
     module {
@@ -27,10 +28,10 @@ fun createRoomDatabase(ctx: Context): AppDatabase {
     val dbFile = ctx.getDatabasePath(dbFileName)
     return Room.databaseBuilder<AppDatabase>(ctx, dbFile.absolutePath)
         .setDriver(BundledSQLiteDriver())
-        // .setAutoCloseTimeout(
-        //     autoCloseTimeout = 5,
-        //     autoCloseTimeUnit = TimeUnit.MINUTES,
-        // )
+        .setAutoCloseTimeout(
+            autoCloseTimeout = 3600,
+            autoCloseTimeUnit = TimeUnit.SECONDS,
+        )
         .setQueryCoroutineContext(Dispatchers.IO)
         .build()
 }

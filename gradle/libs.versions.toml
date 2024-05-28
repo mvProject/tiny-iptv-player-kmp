@@ -1,8 +1,8 @@
 [versions]
 
-kotlin = "1.9.23"
+kotlin = "1.9.24"
 gradle = "8.1.4"
-compose = "1.6.2"
+compose = "1.6.10"
 
 ktor = "2.3.7"
 
@@ -45,10 +45,10 @@ espresso-core = "3.5.1"
 
 accompanist = "0.31.2-alpha"
 
-androidx-room = "2.7.0-alpha01"
+androidx-room = "2.7.0-alpha02"
 
 sqlite = "2.5.0-SNAPSHOT"
-ksp = "1.9.23-1.0.20"
+ksp = "1.9.24-1.0.20"
 
 [plugins]
 

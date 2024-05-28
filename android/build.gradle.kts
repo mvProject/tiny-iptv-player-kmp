@@ -1,7 +1,7 @@
 /*
  *  Created by Medvediev Viktor [mvproject]
  *  Copyright © 2024
- *  last modified : 23.02.24, 09:34
+ *  last modified : 28.05.24, 15:23
  *
  */
 
@@ -42,7 +42,7 @@ android {
         debug {
             setProperty(
                 "archivesBaseName",
-                "${rootProject.name}_${project.android.defaultConfig.versionName}"
+                "${rootProject.name}_${project.android.defaultConfig.versionName}",
             )
         }
 
@@ -52,11 +52,11 @@ android {
             signingConfig = signingConfigs.getByName("configRelease")
             proguardFiles(
                 getDefaultProguardFile("proguard-android-optimize.txt"),
-                "proguard-rules.pro"
+                "proguard-rules.pro",
             )
             setProperty(
                 "archivesBaseName",
-                "${rootProject.name}_${project.android.defaultConfig.versionName}"
+                "${rootProject.name}_${project.android.defaultConfig.versionName}",
             )
         }
     }
@@ -73,7 +73,7 @@ android {
         compose = true
     }
     composeOptions {
-        kotlinCompilerExtensionVersion = "1.5.10"
+        kotlinCompilerExtensionVersion = "1.5.14"
     }
     packaging {
         resources {
@@ -88,11 +88,12 @@ android {
     }
 }
 
-fun readProperties(propertiesFile: File) = Properties().apply {
-    propertiesFile.inputStream().use { fis ->
-        load(fis)
+fun readProperties(propertiesFile: File) =
+    Properties().apply {
+        propertiesFile.inputStream().use { fis ->
+            load(fis)
+        }
     }
-}
 
 dependencies {
     implementation(fileTree(mapOf("dir" to "libs", "include" to listOf("*.aar"))))
@@ -101,5 +102,3 @@ dependencies {
     implementation(libs.androidx.compose.activity)
     implementation(libs.koin.android)
 }
-
-

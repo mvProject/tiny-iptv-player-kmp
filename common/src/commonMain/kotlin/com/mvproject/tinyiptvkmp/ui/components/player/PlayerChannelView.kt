@@ -1,7 +1,7 @@
 /*
  *  Created by Medvediev Viktor [mvproject]
  *  Copyright © 2024
- *  last modified : 06.05.24, 11:36
+ *  last modified : 28.05.24, 15:41
  *
  */
 
@@ -60,16 +60,12 @@ fun PlayerChannelView(
                     Modifier
                         .fillMaxWidth()
                         .wrapContentHeight()
-                        .roundedHeader(
-                            color = MaterialTheme.colorScheme.primary,
-                        )
+                        .roundedHeader(color = MaterialTheme.colorScheme.primary)
                         .align(Alignment.BottomCenter),
                 verticalArrangement = Arrangement.Center,
             ) {
                 Text(
-                    modifier =
-                        Modifier
-                            .fillMaxWidth(),
+                    modifier = Modifier.fillMaxWidth(),
                     text = currentChannel.channelName,
                     style = MaterialTheme.typography.titleLarge,
                     color = MaterialTheme.colorScheme.onPrimary,

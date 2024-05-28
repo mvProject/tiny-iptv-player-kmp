@@ -1,7 +1,7 @@
 /*
  *  Created by Medvediev Viktor [mvproject]
  *  Copyright © 2024
- *  last modified : 09.05.24, 21:17
+ *  last modified : 28.05.24, 15:43
  *
  */
 
@@ -36,7 +36,7 @@ class UpdateEpgUseCase(
             KLog.e("testing UpdateEpgUseCase start:${start.convertTimeToReadableFormat()}")
             epgIdsChunked.forEachIndexed { index, part ->
                 delay(500)
-                part.take(1).forEach { id ->
+                part.forEach { id ->
                     val programs = epgDataSource.getRemoteEpg(channelsId = id)
                     epgProgramRepository.insertEpgPrograms(
                         channelId = id,

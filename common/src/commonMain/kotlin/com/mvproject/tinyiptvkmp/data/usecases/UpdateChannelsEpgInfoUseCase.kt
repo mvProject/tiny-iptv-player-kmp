@@ -1,7 +1,7 @@
 /*
  *  Created by Medvediev Viktor [mvproject]
  *  Copyright © 2024
- *  last modified : 09.05.24, 21:17
+ *  last modified : 28.05.24, 15:47
  *
  */
 
@@ -31,7 +31,7 @@ class UpdateChannelsEpgInfoUseCase(
                 val channelName =
                     channel.channelName.trim().replace(String.space, String.empty).lowercase()
                 val channelNameHD = channelName + "hd"
-                KLog.d("testing UpdateChannelsEpgInfoUseCase channelName $channelName")
+
                 val epgInfo =
                     epgInfos.find { epg ->
                         val epgName =
@@ -51,8 +51,6 @@ class UpdateChannelsEpgInfoUseCase(
                     channel // If no match is found, keep the original Class1 object
                 }
             }
-
-        KLog.w("mappedChannels count:${mappedChannels.count()}")
 
         playlistChannelsRepository.updatePlaylistChannels(mappedChannels.toList())
 

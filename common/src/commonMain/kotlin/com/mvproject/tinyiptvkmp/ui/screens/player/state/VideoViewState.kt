@@ -1,7 +1,7 @@
 /*
  *  Created by Medvediev Viktor [mvproject]
  *  Copyright © 2024
- *  last modified : 07.05.24, 17:29
+ *  last modified : 08.05.24, 19:17
  *
  */
 
@@ -34,5 +34,8 @@ data class VideoViewState(
     val videoRatio: Float = RatioMode.WideScreen.ratio,
     val videoResizeMode: ResizeMode = ResizeMode.Fit,
     val mediaPosition: Int = AppConstants.INT_NO_VALUE,
+)
+
+data class VideoViewChannelsState(
     val channels: TvPlaylistChannels = TvPlaylistChannels(),
 )
