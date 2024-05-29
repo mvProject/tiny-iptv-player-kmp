@@ -1,45 +1,53 @@
 /*
  *  Created by Medvediev Viktor [mvproject]
- *  Copyright © 2023
- *  last modified : 10.05.23, 20:15
+ *  Copyright © 2024
+ *  last modified : 17.05.24, 18:15
  *
  */
 
 package com.mvproject.tinyiptvkmp.data.repository
 
-import com.mvproject.tinyiptvkmp.TinyIptvKmpDatabase
+import androidx.room.Transaction
 import com.mvproject.tinyiptvkmp.data.mappers.EntityMapper.toEpgProgram
 import com.mvproject.tinyiptvkmp.data.mappers.EntityMapper.toEpgProgramEntity
 import com.mvproject.tinyiptvkmp.data.model.epg.EpgProgram
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.withContext
+import com.mvproject.tinyiptvkmp.database.AppDatabase
 
-class EpgProgramRepository(private val db: TinyIptvKmpDatabase) {
+class EpgProgramRepository(
+    private val appDatabase: AppDatabase,
+) {
+    private val epgProgramDao = appDatabase.epgProgramDao()
 
-    private val epgProgramQueries = db.epgProgramEntityQueries
-
-    fun getEpgProgramsByIds(channelIds: List<String>, time: Long): List<EpgProgram> {
-        return epgProgramQueries.getEpgProgramsByIds(ids = channelIds, time = time)
-            .executeAsList()
-            .map { entity ->
-                entity.toEpgProgram()
+    suspend fun getEpgProgramsByIds(
+        channelIds: List<String>,
+        time: Long,
+    ): List<EpgProgram> {
+        return epgProgramDao.getPrograms(ids = channelIds, time = time)
+            .map {
+                it.toEpgProgram()
             }
     }
 
+    suspend fun getEpgProgramsById(
+        channelId: String,
+        time: Long,
+    ): List<EpgProgram> {
+        return epgProgramDao.getProgram(id = channelId, time = time)
+            .map {
+                it.toEpgProgram()
+            }
+    }
+
+    @Transaction
     suspend fun insertEpgPrograms(
         channelId: String,
-        channelEpgPrograms: List<EpgProgram>
+        channelEpgPrograms: List<EpgProgram>,
     ) {
-        withContext(Dispatchers.IO) {
-            epgProgramQueries.transaction {
-                epgProgramQueries.deleteEpgProgramsForChannel(id = channelId)
-
-                channelEpgPrograms.forEach { prg ->
-                    epgProgramQueries.insertEpgProgram(
-                        prg.toEpgProgramEntity()
-                    )
-                }
+        epgProgramDao.deleteProgram(id = channelId)
+        val programs =
+            channelEpgPrograms.map {
+                it.toEpgProgramEntity()
             }
-        }
+        epgProgramDao.insertPrograms(data = programs)
     }
 }

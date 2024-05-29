@@ -1,7 +1,7 @@
 /*
  *  Created by Medvediev Viktor [mvproject]
  *  Copyright © 2024
- *  last modified : 30.01.24, 14:48
+ *  last modified : 07.05.24, 10:17
  *
  */
 @Suppress("DSL_SCOPE_VIOLATION")
@@ -12,7 +12,6 @@ plugins {
     alias(libs.plugins.multiplatform) apply false
     alias(libs.plugins.jvm) apply false
     alias(libs.plugins.compose.multiplatform)
-    alias(libs.plugins.sqlDelight.plugin) apply false
     alias(libs.plugins.kotlinx.serialization.plugin) apply false
 }
 

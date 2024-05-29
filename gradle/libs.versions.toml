@@ -1,8 +1,8 @@
 [versions]
 
-kotlin = "1.9.22"
-gradle = "8.1.2"
-compose = "1.6.1"
+kotlin = "1.9.24"
+gradle = "8.1.4"
+compose = "1.6.10"
 
 ktor = "2.3.7"
 
@@ -11,12 +11,12 @@ koinCompose = "1.1.0"
 koinAndroid = "3.5.0"
 koinAndroidCompose = "3.5.0"
 
-compose-activity = "1.8.2"
+compose-activity = "1.9.0"
 compose-lifecycle-viewmodel = "2.7.0"
 compose-lifecycle-runtime = "2.7.0"
-androidxComposeBom = "2024.04.00"
+androidxComposeBom = "2024.05.00"
 
-kotlinxSerializationJson = "1.6.2"
+kotlinxSerializationJson = "1.6.3"
 kotlinx-collections = "0.3.5"
 kotlinxDateTime = "0.5.0"
 kotlinxCoroutinesSwing = "1.8.0"
@@ -31,14 +31,12 @@ kamelVersion = "0.8.2"
 calfFilePickerVersion = "0.2.0"
 uriKmpVersion = "0.0.15"
 
-voyager = "1.0.0-rc10"
 precompose = "1.5.7"
-media3 = "1.3.0"
+media3 = "1.3.1"
 
 kermit = "2.0.2"
 
-preferences = "1.1.0-rc01"
-sqldelight = "2.0.0"
+preferences = "1.1.1"
 vlcjVersion = "4.8.1"
 
 junit = "4.13.2"
@@ -46,6 +44,11 @@ ext-junit = "1.1.5"
 espresso-core = "3.5.1"
 
 accompanist = "0.31.2-alpha"
+
+androidx-room = "2.7.0-alpha02"
+
+sqlite = "2.5.0-SNAPSHOT"
+ksp = "1.9.24-1.0.20"
 
 [plugins]
 
@@ -56,9 +59,11 @@ android-library = { id = "com.android.library", version.ref = "gradle" }
 android-application = { id = "com.android.application", version.ref = "gradle" }
 
 kotlinx-serialization-plugin = { id = "org.jetbrains.kotlin.plugin.serialization", version.ref = "kotlin" }
-sqlDelight-plugin = { id = "app.cash.sqldelight", version.ref = "sqldelight" }
 
 jvm = { id = "org.jetbrains.kotlin.jvm", version.ref = "kotlin" }
+
+ksp = { id = "com.google.devtools.ksp", version.ref = "ksp" }
+room = { id = "androidx.room", version.ref = "androidx-room" }
 
 [libraries]
 
@@ -111,12 +116,6 @@ ktor-serialization-kotlinx-json = { module = "io.ktor:ktor-serialization-kotlinx
 datastore-preferences = { module = "androidx.datastore:datastore-preferences", version.ref = "preferences" }
 datastore-preferences-core = { module = "androidx.datastore:datastore-preferences-core", version.ref = "preferences" }
 
-sqldelight-runtime = { module = "app.cash.sqldelight:runtime", version.ref = "sqldelight" }
-sqldelight-driver-android = { module = "app.cash.sqldelight:android-driver", version.ref = "sqldelight" }
-sqldelight-driver-native = { module = "app.cash.sqldelight:native-driver", version.ref = "sqldelight" }
-sqldelight-driver-jvm = { module = "app.cash.sqldelight:sqlite-driver", version.ref = "sqldelight" }
-sqldelight-coroutines-extensions = { module = "app.cash.sqldelight:coroutines-extensions", version.ref = "sqldelight" }
-
 koin-core = { module = "io.insert-koin:koin-core", version.ref = "koinCore" }
 koin-compose = { module = "io.insert-koin:koin-compose", version.ref = "koinCompose" }
 koin-android = { module = "io.insert-koin:koin-android", version.ref = "koinAndroid" }
@@ -132,12 +131,12 @@ test-junit = { module = "junit:junit", version.ref = "junit" }
 test-ext-junit = { module = "androidx.test.ext:junit", version.ref = "ext-junit" }
 test-espresso-core = { module = "androidx.test.espresso:espresso-core", version.ref = "espresso-core" }
 
-[bundles]
+androidx-room-compiler = { group = "androidx.room", name = "room-compiler", version.ref = "androidx-room" }
+androidx-room-ktx = { group = "androidx.room", name = "room-ktx", version.ref = "androidx-room" }
+androidx-room-runtime = { group = "androidx.room", name = "room-runtime", version.ref = "androidx-room" }
+sqlite-bundled = { module = "androidx.sqlite:sqlite-bundled", version.ref = "sqlite" }
 
-sqldelight = [
-    "sqldelight-runtime",
-    "sqldelight-coroutines-extensions"
-]
+[bundles]
 
 ktor = [
     "ktor-client-core",
@@ -156,6 +155,12 @@ media3 = [
     "media3-exoplayer",
     "media3-ui",
     "media3-exoplayer-hls"
+]
+
+room = [
+    "androidx-room-runtime",
+    "androidx-room-ktx",
+    "sqlite-bundled"
 ]
 
 koin = [

@@ -1,73 +1,74 @@
 /*
  *  Created by Medvediev Viktor [mvproject]
- *  Copyright © 2023
- *  last modified : 20.11.23, 20:27
+ *  Copyright © 2024
+ *  last modified : 17.05.24, 18:15
  *
  */
 
 package com.mvproject.tinyiptvkmp.data.repository
 
-import com.mvproject.tinyiptvkmp.TinyIptvKmpDatabase
 import com.mvproject.tinyiptvkmp.data.model.channels.PlaylistChannel
 import com.mvproject.tinyiptvkmp.data.model.channels.TvPlaylistChannel
+import com.mvproject.tinyiptvkmp.database.AppDatabase
+import com.mvproject.tinyiptvkmp.database.entity.FavoriteChannelEntity
 import com.mvproject.tinyiptvkmp.utils.AppConstants.INT_VALUE_1
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
-import tinyiptvkmpdb.FavoriteChannelEntity
 
-class FavoriteChannelsRepository(private val db: TinyIptvKmpDatabase) {
-    private val favoriteChannelQueries = db.favoriteChannelEntityQueries
+class FavoriteChannelsRepository(
+    private val appDatabase: AppDatabase,
+) {
+    private val favoriteChannelDao = appDatabase.favoriteChannelDao()
 
-    suspend fun addChannelToFavorite(channel: TvPlaylistChannel, listId: Long) {
+    suspend fun addChannelToFavorite(
+        channel: TvPlaylistChannel,
+        listId: Long,
+    ) {
         withContext(Dispatchers.IO) {
-            val favoriteCount = favoriteChannelQueries.getPlaylistFavoriteChannelCount(id = listId)
-                .executeAsOne()
-                .toInt()
+            val favoriteCount =
+                favoriteChannelDao.getFavoriteChannelCount(id = listId)
 
             val order = (favoriteCount + INT_VALUE_1).toLong()
 
-            favoriteChannelQueries.addFavoriteChannelEntity(
+            favoriteChannelDao.insertFavoriteChannel(
                 FavoriteChannelEntity(
                     channelName = channel.channelName,
                     channelUrl = channel.channelUrl,
                     channelOrder = order,
-                    parentListId = listId
-                )
+                    parentListId = listId,
+                ),
             )
         }
     }
 
     suspend fun updatePlaylistFavoriteChannels(channel: PlaylistChannel) {
         withContext(Dispatchers.IO) {
-            favoriteChannelQueries.updateFavoriteChannelEntity(
+            favoriteChannelDao.updateFavoriteChannels(
                 channelName = channel.channelName,
-                channelUrl = channel.channelUrl
+                channelUrl = channel.channelUrl,
             )
         }
     }
 
-    suspend fun deleteChannelFromFavorite(channelUrl: String, listId: Long) {
-        withContext(Dispatchers.IO) {
-            favoriteChannelQueries.deleteChannelFromFavorite(
-                id = listId,
-                channelUrl = channelUrl
-            )
-        }
+    suspend fun deleteChannelFromFavorite(
+        channelUrl: String,
+        listId: Long,
+    ) {
+        favoriteChannelDao.deleteChannelFromFavorite(
+            id = listId,
+            channelUrl = channelUrl,
+        )
     }
 
-    fun loadPlaylistFavoriteChannelUrls(listId: Long): List<String> {
-        return favoriteChannelQueries.getPlaylistFavoriteChannelUrls(id = listId)
-            .executeAsList()
+    suspend fun loadPlaylistFavoriteChannelUrls(listId: Long): List<String> {
+        return favoriteChannelDao.getPlaylistFavoriteChannelUrls(id = listId)
     }
 
-    fun loadFavoriteChannelUrls(): List<String> {
-        return favoriteChannelQueries.getFavoriteChannelUrls()
-            .executeAsList()
+    suspend fun loadFavoriteChannelUrls(): List<String> {
+        return favoriteChannelDao.getFavoriteChannelUrls()
     }
 
     suspend fun deletePlaylistFavoriteChannels(listId: Long) {
-        withContext(Dispatchers.IO) {
-            favoriteChannelQueries.deletePlaylistFavoriteChannelEntities(id = listId)
-        }
+        favoriteChannelDao.deletePlaylistFavoriteChannelEntities(id = listId)
     }
 }

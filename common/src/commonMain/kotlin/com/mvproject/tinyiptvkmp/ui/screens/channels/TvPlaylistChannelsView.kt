@@ -1,7 +1,7 @@
 /*
  *  Created by Medvediev Viktor [mvproject]
  *  Copyright © 2024
- *  last modified : 07.04.24, 17:27
+ *  last modified : 17.05.24, 18:12
  *
  */
 
@@ -23,6 +23,7 @@ import androidx.compose.foundation.lazy.grid.rememberLazyGridState
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.derivedStateOf
 import androidx.compose.runtime.getValue
@@ -43,6 +44,7 @@ import com.mvproject.tinyiptvkmp.ui.components.views.LoadingView
 import com.mvproject.tinyiptvkmp.ui.screens.channels.action.TvPlaylistChannelAction
 import com.mvproject.tinyiptvkmp.ui.theme.dimens
 import com.mvproject.tinyiptvkmp.utils.AppConstants.INT_VALUE_1
+import com.mvproject.tinyiptvkmp.utils.CommonUtils.empty
 
 @Composable
 fun TvPlaylistChannelsView(
@@ -52,11 +54,18 @@ fun TvPlaylistChannelsView(
     onAction: (TvPlaylistChannelAction) -> Unit,
     groupSelected: String,
 ) {
+    LaunchedEffect(viewModel) {
+    }
     ExecuteOnResume {
         viewModel.loadChannelsByGroups(groupSelected)
     }
 
     val viewState by viewModel.viewState.collectAsState()
+    val channelsState by viewModel.channelsState.collectAsState()
+
+    var searchString by remember {
+        mutableStateOf(String.empty)
+    }
 
     Scaffold(
         modifier =
@@ -66,7 +75,8 @@ fun TvPlaylistChannelsView(
         topBar = {
             AppBarWithSearch(
                 appBarTitle = viewState.currentGroup,
-                searchTextState = viewState.searchString,
+                //   searchTextState = viewState.searchString,
+                searchTextState = searchString,
                 searchWidgetState = viewState.isSearching,
                 onBackClick = onNavigateBack,
                 onSearchTriggered = {
@@ -76,7 +86,8 @@ fun TvPlaylistChannelsView(
                     onAction(TvPlaylistChannelAction.ViewTypeChange(type))
                 },
                 onTextChange = { text ->
-                    onAction(TvPlaylistChannelAction.SearchTextChange(text))
+                    //     onAction(TvPlaylistChannelAction.SearchTextChange(text))
+                    searchString = text
                 },
             )
         },
@@ -87,17 +98,29 @@ fun TvPlaylistChannelsView(
             mutableStateOf(TvPlaylistChannel())
         }
 
-        val channelsList by remember {
+        val channelsList by remember(searchString) {
             derivedStateOf {
-                if (viewState.searchString.length > INT_VALUE_1) {
-                    viewModel.channels.filter {
-                        it.channelName.contains(viewState.searchString, true)
+                if (searchString.length > INT_VALUE_1) {
+                    channelsState.items.filter {
+                        it.channelName.contains(searchString, true)
                     }
                 } else {
-                    viewModel.channels
+                    channelsState.items
                 }
             }
         }
+
+        /*        val channelsList by remember {
+                    derivedStateOf {
+                        if (viewState.searchString.length > INT_VALUE_1) {
+                            viewModel.channels.filter {
+                                it.channelName.contains(viewState.searchString, true)
+                            }
+                        } else {
+                            viewModel.channels
+                        }
+                    }
+                }*/
 
         // todo adaptive size depend on windowSizeClass
 
@@ -160,14 +183,9 @@ fun TvPlaylistChannelsView(
             ) {
                 OverlayChannelOptions(
                     isInFavorite = selected.isInFavorites,
-                    isEpgEnabled = selected.isEpgUsing,
-                    isEpgUsing = selected.epgId.isNotEmpty(),
+                    isEpgEnabled = selected.epgId.isNotEmpty(),
                     onToggleFavorite = {
                         onAction(TvPlaylistChannelAction.ToggleFavourites(selected))
-                        isChannelOptionOpen.value = false
-                    },
-                    onToggleEpgState = {
-                        onAction(TvPlaylistChannelAction.ToggleEpgState(selected))
                         isChannelOptionOpen.value = false
                     },
                     onShowEpg = {

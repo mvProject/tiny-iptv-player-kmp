@@ -1,7 +1,7 @@
 /*
  *  Created by Medvediev Viktor [mvproject]
  *  Copyright © 2024
- *  last modified : 24.03.24, 14:09
+ *  last modified : 07.05.24, 10:17
  *
  */
 @Suppress("DSL_SCOPE_VIOLATION")
@@ -9,8 +9,9 @@ plugins {
     alias(libs.plugins.multiplatform)
     alias(libs.plugins.android.library)
     alias(libs.plugins.kotlinx.serialization.plugin)
-    alias(libs.plugins.sqlDelight.plugin)
     alias(libs.plugins.compose.multiplatform)
+    alias(libs.plugins.ksp)
+    alias(libs.plugins.room)
 }
 
 android {
@@ -27,10 +28,6 @@ android {
         sourceCompatibility = JavaVersion.VERSION_17
         targetCompatibility = JavaVersion.VERSION_17
     }
-
-    kotlin {
-        jvmToolchain(17)
-    }
 }
 
 kotlin {
@@ -46,6 +43,7 @@ kotlin {
     }
 
     sourceSets {
+        @OptIn(org.jetbrains.compose.ExperimentalComposeLibrary::class)
         commonMain.dependencies {
             implementation(compose.runtime)
             implementation(compose.foundation)
@@ -61,7 +59,10 @@ kotlin {
 
             // Storage
             implementation(libs.datastore.preferences.core)
-            implementation(libs.bundles.sqldelight)
+
+            // Room
+            implementation(libs.androidx.room.runtime)
+            implementation(libs.sqlite.bundled)
 
             // Network
             implementation(libs.bundles.ktor)
@@ -83,21 +84,17 @@ kotlin {
             implementation(libs.kamelimage)
 
             // Resources
-            @OptIn(org.jetbrains.compose.ExperimentalComposeLibrary::class)
             implementation(compose.components.resources)
         }
 
         commonTest.dependencies {
-            implementation(kotlin("test"))
+            implementation(kotlin("test-common"))
         }
 
         androidMain.dependencies {
             // Core
             implementation(libs.androidx.compose.activity)
             implementation(libs.androidx.compose.lifecycle.runtime)
-
-            // Storage
-            implementation(libs.sqldelight.driver.android)
 
             // Network
             implementation(libs.ktor.client.android)
@@ -113,20 +110,6 @@ kotlin {
             implementation(libs.accompanist.adaptive)
         }
 
-        androidNativeTest.dependencies {
-            // implementation(libs.junit)
-            // Tests
-            /*                testImplementation(libs.test.junit)
-                            androidTestImplementation(libs.test.ext.junit)
-                            androidTestImplementation(libs.test.espresso.core)
-
-                            // UI Tests
-                            androidTestImplementation(libs.androidx.compose.ui.test.junit4)
-                            debugImplementation(libs.androidx.compose.ui.test.manifest)
-
-             */
-        }
-
         jvmMain.dependencies {
             // Core
             implementation(compose.desktop.common)
@@ -139,7 +122,7 @@ kotlin {
             // implementation(libs.ktor.client.okhttp)
 
             // Storage
-            implementation(libs.sqldelight.driver.jvm)
+            // implementation(libs.sqldelight.driver.jvm)
 
             // FilePicker
             implementation(libs.calf.filepicker)
@@ -152,10 +135,11 @@ kotlin {
     task("testClasses")
 }
 
-sqldelight {
-    databases {
-        create("TinyIptvKmpDatabase") {
-            packageName.set("com.mvproject.tinyiptvkmp")
-        }
-    }
+dependencies {
+    add("kspAndroid", libs.androidx.room.compiler)
+    add("kspJvm", libs.androidx.room.compiler)
+}
+
+room {
+    schemaDirectory("$projectDir/schemas")
 }

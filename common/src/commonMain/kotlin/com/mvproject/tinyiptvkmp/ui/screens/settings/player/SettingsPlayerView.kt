@@ -1,7 +1,7 @@
 /*
  *  Created by Medvediev Viktor [mvproject]
  *  Copyright © 2024
- *  last modified : 24.03.24, 10:49
+ *  last modified : 07.05.24, 17:36
  *
  */
 
@@ -35,6 +35,7 @@ import com.mvproject.tinyiptvkmp.ui.components.overlay.OverlayContent
 import com.mvproject.tinyiptvkmp.ui.components.overlay.OverlayOptionsMenu
 import com.mvproject.tinyiptvkmp.ui.components.selectors.OptionSelector
 import com.mvproject.tinyiptvkmp.ui.components.toolbars.AppBarWithBackNav
+import com.mvproject.tinyiptvkmp.ui.data.Options
 import com.mvproject.tinyiptvkmp.ui.screens.settings.player.action.SettingsPlayerAction
 import com.mvproject.tinyiptvkmp.ui.screens.settings.player.state.SettingsPlayerState
 import com.mvproject.tinyiptvkmp.ui.theme.dimens
@@ -142,7 +143,7 @@ fun SettingsPlayerView(
             OverlayOptionsMenu(
                 title = stringResource(Res.string.option_default_resize_mode),
                 selectedIndex = state.resizeMode,
-                items = ResizeMode.entries.map { stringResource(it.title) },
+                options = Options(items = ResizeMode.entries.map { stringResource(it.title) }),
                 onItemSelected = { index ->
                     onSettingsPlayerAction(SettingsPlayerAction.SetResizeMode(index))
                     isSelectResizeModeOpen.value = false
@@ -158,7 +159,7 @@ fun SettingsPlayerView(
             OverlayOptionsMenu(
                 title = stringResource(Res.string.option_default_ratio_mode),
                 selectedIndex = state.ratioMode,
-                items = RatioMode.entries.map { stringResource(it.title) },
+                options = Options(items = RatioMode.entries.map { stringResource(it.title) }),
                 onItemSelected = { index ->
                     onSettingsPlayerAction(SettingsPlayerAction.SetRatioMode(index))
                     isSelectRatioModeOpen.value = false

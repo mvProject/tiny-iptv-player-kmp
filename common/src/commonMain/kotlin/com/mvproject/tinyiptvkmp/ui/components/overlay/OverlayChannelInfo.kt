@@ -1,7 +1,7 @@
 /*
  *  Created by Medvediev Viktor [mvproject]
  *  Copyright © 2024
- *  last modified : 24.03.24, 10:49
+ *  last modified : 06.05.24, 11:36
  *
  */
 
@@ -56,7 +56,7 @@ fun OverlayChannelInfo(
         )
 
         val description =
-            currentChannel.channelEpg.toActual().firstOrNull()?.description ?: EMPTY_STRING
+            currentChannel.channelEpg.items.toActual().firstOrNull()?.description ?: EMPTY_STRING
 
         if (description.isEmpty()) {
             Text(

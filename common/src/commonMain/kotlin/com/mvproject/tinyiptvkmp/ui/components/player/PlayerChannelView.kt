@@ -1,7 +1,7 @@
 /*
  *  Created by Medvediev Viktor [mvproject]
  *  Copyright © 2024
- *  last modified : 07.04.24, 17:53
+ *  last modified : 28.05.24, 15:41
  *
  */
 
@@ -60,16 +60,12 @@ fun PlayerChannelView(
                     Modifier
                         .fillMaxWidth()
                         .wrapContentHeight()
-                        .roundedHeader(
-                            color = MaterialTheme.colorScheme.primary,
-                        )
+                        .roundedHeader(color = MaterialTheme.colorScheme.primary)
                         .align(Alignment.BottomCenter),
                 verticalArrangement = Arrangement.Center,
             ) {
                 Text(
-                    modifier =
-                        Modifier
-                            .fillMaxWidth(),
+                    modifier = Modifier.fillMaxWidth(),
                     text = currentChannel.channelName,
                     style = MaterialTheme.typography.titleLarge,
                     color = MaterialTheme.colorScheme.onPrimary,
@@ -78,8 +74,8 @@ fun PlayerChannelView(
 
                 Spacer(modifier = Modifier.height(MaterialTheme.dimens.size2))
 
-                if (currentChannel.channelEpg.isNotEmpty()) {
-                    currentChannel.channelEpg.toActual().take(programCount).forEach { epg ->
+                if (currentChannel.channelEpg.items.isNotEmpty()) {
+                    currentChannel.channelEpg.items.toActual().take(programCount).forEach { epg ->
                         PlayerChannelEpgItem(epgProgram = epg)
                     }
                     Spacer(modifier = Modifier.height(MaterialTheme.dimens.size2))

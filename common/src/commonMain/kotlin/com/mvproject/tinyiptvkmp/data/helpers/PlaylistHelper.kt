@@ -1,30 +1,27 @@
 /*
  *  Created by Medvediev Viktor [mvproject]
- *  Copyright © 2023
- *  last modified : 20.11.23, 20:27
+ *  Copyright © 2024
+ *  last modified : 07.05.24, 10:29
  *
  */
 
 package com.mvproject.tinyiptvkmp.data.helpers
 
-import com.mvproject.tinyiptvkmp.data.model.playlist.Playlist
 import com.mvproject.tinyiptvkmp.data.repository.PlaylistsRepository
 import com.mvproject.tinyiptvkmp.data.repository.PreferenceRepository
 
 class PlaylistHelper(
     private val preferenceRepository: PreferenceRepository,
-    private val playlistsRepository: PlaylistsRepository
+    private val playlistsRepository: PlaylistsRepository,
 ) {
-
     val currentPlaylistId
         get() = preferenceRepository.currentPlaylistId
 
-    fun loadPlaylists(): List<Playlist> {
-        return playlistsRepository.getAllPlaylists()
-    }
+    /*    fun loadPlaylists(): List<Playlist> {
+            return playlistsRepository.getAllPlaylistsRoom()
+        }*/
 
-    val allPlaylistsFlow
-        get() = playlistsRepository.allPlaylistsFlow()
+    fun allPlaylistsFlow() = playlistsRepository.allPlaylistsFlowRoom()
 
     suspend fun setCurrentPlaylist(playlistId: Long) {
         preferenceRepository.setCurrentPlaylistId(playlistId)

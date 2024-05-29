@@ -1,7 +1,7 @@
 /*
  *  Created by Medvediev Viktor [mvproject]
- *  Copyright © 2023
- *  last modified : 20.11.23, 20:27
+ *  Copyright © 2024
+ *  last modified : 06.05.24, 20:00
  *
  */
 
@@ -27,9 +27,10 @@ class PlaylistViewModel(
     private val updatePlaylistUseCase: UpdatePlaylistUseCase,
     private val addRemotePlaylistUseCase: AddRemotePlaylistUseCase,
     private val addLocalPlaylistUseCase: AddLocalPlaylistUseCase,
+    // private val saveRemotePlaylistChannels: SaveRemotePlaylistChannels,
+    // private val saveLocalPlaylistChannels: SaveLocalPlaylistChannels,
     private val getPlaylistUseCase: GetPlaylistUseCase,
 ) : ViewModel() {
-
     private val _state = MutableStateFlow(PlaylistState())
     val state = _state.asStateFlow()
 
@@ -46,7 +47,7 @@ class PlaylistViewModel(
                     isLocal = playlist.isLocalSource,
                     url = playlist.playlistUrl,
                     lastUpdateDate = playlist.lastUpdateDate,
-                    updatePeriod = playlist.updatePeriod.toInt()
+                    updatePeriod = playlist.updatePeriod.toInt(),
                 )
             }
         }
@@ -106,42 +107,67 @@ class PlaylistViewModel(
 
     private fun saveLocalPlayList() {
         viewModelScope.launch {
-            val result = runCatching {
-                addLocalPlaylistUseCase(
-                    playlist = state.value.toPlaylist(),
-                    source = state.value.uri
-                )
-            }.onFailure {
-                KLog.e("saveLocalPlayList failure ${it.localizedMessage}")
-            }
+            val playlist = state.value.toPlaylist()
+
+            val result =
+                runCatching {
+                    addLocalPlaylistUseCase(
+                        playlist = playlist,
+                        source = state.value.uri,
+                    )
+                }.onFailure {
+                    KLog.e("saveLocalPlayList failure ${it.localizedMessage}")
+                }
 
             _state.update { current ->
                 current.copy(isComplete = result.isSuccess, isSaving = false)
             }
+
+            // runCatching {
+            //    saveLocalPlaylistChannels(
+            //        playlistId = playlist.id,
+            //        source = state.value.uri,
+            //    )
+            // }.onFailure {
+            //    KLog.e("saveLocalPlayList failure ${it.localizedMessage}")
+            // }
         }
     }
 
     private fun saveRemotePlayList() {
         viewModelScope.launch {
-            val result = runCatching {
-                addRemotePlaylistUseCase(playlist = state.value.toPlaylist())
-            }.onFailure {
-                KLog.e("saveRemotePlayList failure ${it.localizedMessage}")
-            }
+            val playlist = state.value.toPlaylist()
+
+            val result =
+                runCatching {
+                    addRemotePlaylistUseCase(playlist = playlist)
+                }.onFailure {
+                    KLog.e("saveRemotePlayList failure ${it.localizedMessage}")
+                }
 
             _state.update { current ->
                 current.copy(isComplete = result.isSuccess, isSaving = false)
             }
+
+            // runCatching {
+            //     saveRemotePlaylistChannels(
+            //         playlistId = playlist.id,
+            //         playlistUrl = playlist.playlistUrl,
+            //     )
+            // }.onFailure {
+            //     KLog.e("saveLocalPlayList failure ${it.localizedMessage}")
+            // }
         }
     }
 
     private fun updatePlayList() {
         viewModelScope.launch {
-            val result = runCatching {
-                updatePlaylistUseCase(playlist = state.value.toPlaylist())
-            }.onFailure {
-                KLog.e("updatePlayList failure ${it.localizedMessage}")
-            }
+            val result =
+                runCatching {
+                    updatePlaylistUseCase(playlist = state.value.toPlaylist())
+                }.onFailure {
+                    KLog.e("updatePlayList failure ${it.localizedMessage}")
+                }
 
             _state.update { current ->
                 current.copy(isComplete = result.isSuccess, isSaving = false)

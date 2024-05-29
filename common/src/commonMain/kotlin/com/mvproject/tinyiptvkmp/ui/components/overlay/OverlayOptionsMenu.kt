@@ -1,7 +1,7 @@
 /*
  *  Created by Medvediev Viktor [mvproject]
  *  Copyright © 2024
- *  last modified : 23.02.24, 11:07
+ *  last modified : 07.05.24, 17:36
  *
  */
 
@@ -27,6 +27,7 @@ import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.style.TextAlign
+import com.mvproject.tinyiptvkmp.ui.data.Options
 import com.mvproject.tinyiptvkmp.ui.theme.dimens
 import com.mvproject.tinyiptvkmp.utils.AppConstants
 
@@ -34,17 +35,18 @@ import com.mvproject.tinyiptvkmp.utils.AppConstants
 fun OverlayOptionsMenu(
     modifier: Modifier = Modifier,
     title: String? = null,
-    items: List<String>,
+    options: Options,
     selectedIndex: Int = AppConstants.INT_NO_VALUE,
     onItemSelected: (index: Int) -> Unit = {},
 ) {
     Surface(
-        modifier = modifier
-            .wrapContentHeight()
-            .width(MaterialTheme.dimens.size310)
-            .padding(MaterialTheme.dimens.size8),
+        modifier =
+            modifier
+                .wrapContentHeight()
+                .width(MaterialTheme.dimens.size310)
+                .padding(MaterialTheme.dimens.size8),
         shape = MaterialTheme.shapes.medium,
-        shadowElevation = MaterialTheme.dimens.size8
+        shadowElevation = MaterialTheme.dimens.size8,
     ) {
         val listState = rememberLazyListState()
         if (selectedIndex > AppConstants.INT_NO_VALUE) {
@@ -55,54 +57,57 @@ fun OverlayOptionsMenu(
 
         LazyColumn(
             modifier = Modifier.fillMaxWidth(),
-            state = listState
+            state = listState,
         ) {
             title?.let { text ->
                 item {
                     Box(
-                        modifier = Modifier
-                            .fillMaxWidth()
-                            .background(
-                                color = MaterialTheme.colorScheme.onSurface
-                            )
-                            .padding(MaterialTheme.dimens.size12)
+                        modifier =
+                            Modifier
+                                .fillMaxWidth()
+                                .background(
+                                    color = MaterialTheme.colorScheme.onSurface,
+                                )
+                                .padding(MaterialTheme.dimens.size12),
                     ) {
                         Text(
                             modifier = Modifier.align(Alignment.Center),
                             text = text,
                             style = MaterialTheme.typography.titleMedium,
                             color = MaterialTheme.colorScheme.primary,
-                            textAlign = TextAlign.Center
+                            textAlign = TextAlign.Center,
                         )
                     }
                 }
             }
 
-            itemsIndexed(items) { index, item ->
+            itemsIndexed(options.items) { index, item ->
                 val selectedItem = index == selectedIndex
                 TextButton(
                     modifier = Modifier.fillMaxWidth(),
                     shape = MaterialTheme.shapes.small,
                     contentPadding = PaddingValues(),
-                    onClick = { onItemSelected(index) }
+                    onClick = { onItemSelected(index) },
                 ) {
                     Text(
                         text = item,
                         style = MaterialTheme.typography.titleSmall,
-                        color = if (selectedItem)
-                            MaterialTheme.colorScheme.onSurfaceVariant
-                        else
-                            MaterialTheme.colorScheme.onSurface,
-
-                        )
+                        color =
+                            if (selectedItem) {
+                                MaterialTheme.colorScheme.onSurfaceVariant
+                            } else {
+                                MaterialTheme.colorScheme.onSurface
+                            },
+                    )
                 }
 
-                if (index < items.lastIndex) {
+                if (index < options.items.lastIndex) {
                     HorizontalDivider(
-                        modifier = Modifier
-                            .fillMaxWidth()
-                            .padding(horizontal = MaterialTheme.dimens.size16),
-                        color = MaterialTheme.colorScheme.onSurface
+                        modifier =
+                            Modifier
+                                .fillMaxWidth()
+                                .padding(horizontal = MaterialTheme.dimens.size16),
+                        color = MaterialTheme.colorScheme.onSurface,
                     )
                 }
             }

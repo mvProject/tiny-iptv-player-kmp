@@ -1,7 +1,7 @@
 /*
  *  Created by Medvediev Viktor [mvproject]
- *  Copyright © 2023
- *  last modified : 20.11.23, 20:27
+ *  Copyright © 2024
+ *  last modified : 06.05.24, 15:54
  *
  */
 
@@ -21,34 +21,36 @@ class DeletePlaylistUseCase(
     private val playlistChannelsRepository: PlaylistChannelsRepository,
     private val favoriteChannelsRepository: FavoriteChannelsRepository,
 ) {
-    suspend operator fun invoke(
-        playlist: Playlist
-    ) {
+    suspend operator fun invoke(playlist: Playlist) {
         val currentPlaylistId = preferenceRepository.currentPlaylistId.first()
 
         if (currentPlaylistId == playlist.id) {
-            val availablePlaylistIds = playlistsRepository
-                .getAllPlaylists()
-                .map { it.id }
+            val availablePlaylistIds =
+                playlistsRepository
+                    .getAllPlaylistsRoom()
+                    .map { it.id }
 
-            val newPlaylistId = availablePlaylistIds
-                .firstOrNull { it != currentPlaylistId } ?: AppConstants.LONG_NO_VALUE
+            val newPlaylistId =
+                availablePlaylistIds
+                    .firstOrNull { it != currentPlaylistId } ?: AppConstants.LONG_NO_VALUE
 
             preferenceRepository.setCurrentPlaylistId(
-                playlistId = newPlaylistId
+                playlistId = newPlaylistId,
             )
         }
 
         favoriteChannelsRepository.deletePlaylistFavoriteChannels(
-            listId = playlist.id
+            listId = playlist.id,
         )
 
         playlistChannelsRepository.deletePlaylistChannels(
-            listId = playlist.id
+            listId = playlist.id,
         )
 
-        playlistsRepository.deletePlaylistById(
-            id = playlist.id
-        )
+        //  playlistsRepository.deletePlaylistById(
+        //      id = playlist.id,
+        //  )
+
+        playlistsRepository.deletePlaylistByIdRoom(id = playlist.id)
     }
 }

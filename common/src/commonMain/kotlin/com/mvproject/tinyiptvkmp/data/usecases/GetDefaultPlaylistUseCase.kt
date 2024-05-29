@@ -1,7 +1,7 @@
 /*
  *  Created by Medvediev Viktor [mvproject]
- *  Copyright © 2023
- *  last modified : 20.11.23, 20:27
+ *  Copyright © 2024
+ *  last modified : 06.05.24, 15:54
  *
  */
 
@@ -13,10 +13,10 @@ import com.mvproject.tinyiptvkmp.data.repository.PreferenceRepository
 
 class GetDefaultPlaylistUseCase(
     private val preferenceRepository: PreferenceRepository,
-    private val playlistsRepository: PlaylistsRepository
+    private val playlistsRepository: PlaylistsRepository,
 ) {
     suspend operator fun invoke(): Playlist {
         val currentId = preferenceRepository.loadCurrentPlaylistId()
-        return playlistsRepository.getPlaylistById(id = currentId) ?: Playlist()
+        return playlistsRepository.getPlaylistByIdRoom(id = currentId)
     }
 }

@@ -1,7 +1,7 @@
 /*
  *  Created by Medvediev Viktor [mvproject]
  *  Copyright © 2024
- *  last modified : 24.03.24, 10:49
+ *  last modified : 07.05.24, 17:25
  *
  */
 
@@ -98,7 +98,7 @@ fun SettingsPlaylistView(
                 contentPadding = PaddingValues(MaterialTheme.dimens.size8),
             ) {
                 items(
-                    dataState.playlists,
+                    dataState.playlists.items,
                     key = { it.id },
                 ) { item ->
                     PlaylistItemView(

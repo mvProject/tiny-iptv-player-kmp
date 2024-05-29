@@ -1,7 +1,7 @@
 /*
  *  Created by Medvediev Viktor [mvproject]
  *  Copyright © 2024
- *  last modified : 24.03.24, 10:49
+ *  last modified : 06.05.24, 11:36
  *
  */
 
@@ -91,7 +91,7 @@ fun ChannelGridView(
 
             Spacer(modifier = Modifier.height(MaterialTheme.dimens.size10))
 
-            if (channel.channelEpg.isEmpty()) {
+            if (channel.channelEpg.items.isEmpty()) {
                 Box(
                     modifier = Modifier.fillMaxSize(),
                     contentAlignment = Alignment.Center,
@@ -108,7 +108,7 @@ fun ChannelGridView(
                 }
             } else {
                 // todo epg count view
-                channel.channelEpg.toActual().take(1).forEach {
+                channel.channelEpg.items.toActual().take(1).forEach {
                     ScheduleEpgItemView(
                         modifier =
                             Modifier

@@ -1,7 +1,7 @@
 /*
  *  Created by Medvediev Viktor [mvproject]
- *  Copyright © 2023
- *  last modified : 20.11.23, 20:27
+ *  Copyright © 2024
+ *  last modified : 06.05.24, 15:54
  *
  */
 
@@ -12,13 +12,14 @@ import com.mvproject.tinyiptvkmp.data.repository.PlaylistsRepository
 import com.mvproject.tinyiptvkmp.utils.KLog
 
 class GetRemotePlaylistsUseCase(
-    private val playlistsRepository: PlaylistsRepository
+    private val playlistsRepository: PlaylistsRepository,
 ) {
-    operator fun invoke(): List<Playlist> {
-        val remotePlaylists = playlistsRepository.getAllPlaylists()
-            .filter { playlist ->
-                !playlist.isLocalSource
-            }
+    suspend operator fun invoke(): List<Playlist> {
+        val remotePlaylists =
+            playlistsRepository.getAllPlaylistsRoom()
+                .filter { playlist ->
+                    !playlist.isLocalSource
+                }
         KLog.w("remotePlaylists count:${remotePlaylists.count()}")
         return remotePlaylists
     }

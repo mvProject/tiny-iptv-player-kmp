@@ -1,7 +1,7 @@
 /*
  *  Created by Medvediev Viktor [mvproject]
- *  Copyright © 2023
- *  last modified : 20.11.23, 20:27
+ *  Copyright © 2024
+ *  last modified : 17.05.24, 18:16
  *
  */
 
@@ -15,22 +15,17 @@ import com.mvproject.tinyiptvkmp.utils.TimeUtils
 class EpgInfoUpdateUseCase(
     private val epgInfoDataSource: EpgInfoDataSource,
     private val preferenceRepository: PreferenceRepository,
-    private val epgInfoRepository: EpgInfoRepository
+    private val epgInfoRepository: EpgInfoRepository,
 ) {
     suspend operator fun invoke() {
         val epgInfo = epgInfoDataSource.getEpgInfo().distinctBy { it.channelNames }
 
-        if (preferenceRepository.isEpgInfoDataExist()) {
-            epgInfoRepository.updateEpgInfoData(epgInfo)
-        } else {
-            epgInfoRepository.addEpgInfoData(epgInfo)
-            preferenceRepository.setEpgInfoDataExist(state = true)
-        }
+        epgInfoRepository.saveEpgInfoDataRoom(epgInfo)
 
         preferenceRepository.apply {
             setEpgInfoDataLastUpdate(timestamp = TimeUtils.actualDate)
+            setEpgInfoDataExist(state = true)
             setChannelsEpgInfoUpdateRequired(state = true)
         }
-
     }
 }

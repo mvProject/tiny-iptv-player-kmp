@@ -1,7 +1,7 @@
 /*
  *  Created by Medvediev Viktor [mvproject]
  *  Copyright © 2024
- *  last modified : 07.04.24, 17:27
+ *  last modified : 28.05.24, 15:40
  *
  */
 
@@ -23,17 +23,19 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.style.TextAlign
+import com.mvproject.tinyiptvkmp.data.mappers.ListMappers.withRefreshedEpg
 import com.mvproject.tinyiptvkmp.data.model.channels.TvPlaylistChannel
 import com.mvproject.tinyiptvkmp.ui.components.channels.ChannelListView
 import com.mvproject.tinyiptvkmp.ui.components.modifiers.fullScreenWidth
 import com.mvproject.tinyiptvkmp.ui.components.modifiers.roundedHeader
+import com.mvproject.tinyiptvkmp.ui.data.TvPlaylistChannels
 import com.mvproject.tinyiptvkmp.ui.theme.dimens
 
 @Composable
 fun OverlayChannels(
     isFullScreen: Boolean = false,
     group: String,
-    channels: List<TvPlaylistChannel>,
+    channels: TvPlaylistChannels,
     current: Int = 0,
     onChannelSelect: (TvPlaylistChannel) -> Unit = {},
 ) {
@@ -41,6 +43,7 @@ fun OverlayChannels(
     LaunchedEffect(key1 = current) {
         listState.animateScrollToItem(current)
     }
+
     Column(
         modifier =
             Modifier
@@ -73,7 +76,7 @@ fun OverlayChannels(
                 ),
             content = {
                 items(
-                    items = channels,
+                    items = channels.items.withRefreshedEpg(),
                     key = { chn -> chn.hashCode() },
                 ) { chn ->
                     ChannelListView(

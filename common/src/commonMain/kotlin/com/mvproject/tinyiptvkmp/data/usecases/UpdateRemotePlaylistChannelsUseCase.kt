@@ -1,7 +1,7 @@
 /*
  *  Created by Medvediev Viktor [mvproject]
- *  Copyright © 2023
- *  last modified : 20.11.23, 20:27
+ *  Copyright © 2024
+ *  last modified : 06.05.24, 20:07
  *
  */
 
@@ -21,19 +21,19 @@ class UpdateRemotePlaylistChannelsUseCase(
     private val remotePlaylistDataSource: RemotePlaylistDataSource,
     private val playlistChannelsRepository: PlaylistChannelsRepository,
     private val favoriteChannelsRepository: FavoriteChannelsRepository,
-    private val playlistsRepository: PlaylistsRepository
+    private val playlistsRepository: PlaylistsRepository,
 ) {
-    suspend operator fun invoke(
-        playlist: Playlist
-    ) {
+    suspend operator fun invoke(playlist: Playlist) {
         KLog.w("update channels for playlist:${playlist.playlistTitle}")
 
-        val channels = remotePlaylistDataSource.getFromRemotePlaylist(
-            playlistId = playlist.id,
-            url = playlist.playlistUrl
-        )
-        val favorites = favoriteChannelsRepository
-            .loadPlaylistFavoriteChannelUrls(listId = playlist.id)
+        val channels =
+            remotePlaylistDataSource.getFromRemotePlaylist(
+                playlistId = playlist.id,
+                url = playlist.playlistUrl,
+            )
+        val favorites =
+            favoriteChannelsRepository
+                .loadPlaylistFavoriteChannelUrls(listId = playlist.id)
 
         playlistChannelsRepository.updatePlaylistChannels(channels)
 
@@ -45,7 +45,7 @@ class UpdateRemotePlaylistChannelsUseCase(
         }
 
         playlistsRepository.updatePlaylist(
-            playlist = playlist.copy(lastUpdateDate = TimeUtils.actualDate)
+            playlist = playlist.copy(lastUpdateDate = TimeUtils.actualDate),
         )
 
         preferenceRepository.setChannelsEpgInfoUpdateRequired(state = true)

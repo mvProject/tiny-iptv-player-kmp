@@ -1,7 +1,7 @@
 /*
  *  Created by Medvediev Viktor [mvproject]
- *  Copyright © 2023
- *  last modified : 20.11.23, 20:27
+ *  Copyright © 2024
+ *  last modified : 17.05.24, 18:12
  *
  */
 
@@ -11,12 +11,13 @@ import com.mvproject.tinyiptvkmp.data.usecases.AddLocalPlaylistUseCase
 import com.mvproject.tinyiptvkmp.data.usecases.AddRemotePlaylistUseCase
 import com.mvproject.tinyiptvkmp.data.usecases.DeletePlaylistUseCase
 import com.mvproject.tinyiptvkmp.data.usecases.EpgInfoUpdateUseCase
+import com.mvproject.tinyiptvkmp.data.usecases.GetChannelsEpg
 import com.mvproject.tinyiptvkmp.data.usecases.GetDefaultPlaylistUseCase
+import com.mvproject.tinyiptvkmp.data.usecases.GetGroupChannelsEpg
 import com.mvproject.tinyiptvkmp.data.usecases.GetGroupChannelsUseCase
 import com.mvproject.tinyiptvkmp.data.usecases.GetPlaylistGroupUseCase
 import com.mvproject.tinyiptvkmp.data.usecases.GetPlaylistUseCase
 import com.mvproject.tinyiptvkmp.data.usecases.GetRemotePlaylistsUseCase
-import com.mvproject.tinyiptvkmp.data.usecases.ToggleChannelEpgUseCase
 import com.mvproject.tinyiptvkmp.data.usecases.ToggleFavoriteChannelUseCase
 import com.mvproject.tinyiptvkmp.data.usecases.UpdateChannelsEpgInfoUseCase
 import com.mvproject.tinyiptvkmp.data.usecases.UpdateEpgUseCase
@@ -25,24 +26,27 @@ import com.mvproject.tinyiptvkmp.data.usecases.UpdateRemotePlaylistChannelsUseCa
 import org.koin.core.module.dsl.singleOf
 import org.koin.dsl.module
 
-val useCaseModule = module {
-    singleOf(::AddLocalPlaylistUseCase)
-    singleOf(::AddRemotePlaylistUseCase)
-    singleOf(::UpdatePlaylistUseCase)
-    singleOf(::DeletePlaylistUseCase)
+val useCaseModule =
+    module {
+        singleOf(::AddLocalPlaylistUseCase)
+        singleOf(::AddRemotePlaylistUseCase)
+        singleOf(::UpdatePlaylistUseCase)
+        singleOf(::DeletePlaylistUseCase)
 
-    singleOf(::GetPlaylistUseCase)
-    singleOf(::GetDefaultPlaylistUseCase)
-    singleOf(::GetRemotePlaylistsUseCase)
+        singleOf(::GetPlaylistUseCase)
+        singleOf(::GetDefaultPlaylistUseCase)
+        singleOf(::GetRemotePlaylistsUseCase)
 
-    singleOf(::UpdateRemotePlaylistChannelsUseCase)
-    singleOf(::UpdateChannelsEpgInfoUseCase)
+        singleOf(::UpdateRemotePlaylistChannelsUseCase)
+        singleOf(::UpdateChannelsEpgInfoUseCase)
 
-    singleOf(::GetPlaylistGroupUseCase)
-    singleOf(::GetGroupChannelsUseCase)
+        singleOf(::GetPlaylistGroupUseCase)
+        singleOf(::GetGroupChannelsUseCase)
 
-    singleOf(::ToggleFavoriteChannelUseCase)
-    singleOf(::ToggleChannelEpgUseCase)
-    singleOf(::EpgInfoUpdateUseCase)
-    singleOf(::UpdateEpgUseCase)
-}
+        singleOf(::ToggleFavoriteChannelUseCase)
+        singleOf(::EpgInfoUpdateUseCase)
+        singleOf(::UpdateEpgUseCase)
+
+        singleOf(::GetGroupChannelsEpg)
+        singleOf(::GetChannelsEpg)
+    }

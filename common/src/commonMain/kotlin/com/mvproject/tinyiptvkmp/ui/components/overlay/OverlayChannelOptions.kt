@@ -1,7 +1,7 @@
 /*
  *  Created by Medvediev Viktor [mvproject]
  *  Copyright © 2024
- *  last modified : 24.03.24, 10:49
+ *  last modified : 17.05.24, 18:12
  *
  */
 
@@ -29,8 +29,6 @@ import org.jetbrains.compose.resources.ExperimentalResourceApi
 import org.jetbrains.compose.resources.stringResource
 import tinyiptvkmp.common.generated.resources.Res
 import tinyiptvkmp.common.generated.resources.menu_channel_option_add_favorite
-import tinyiptvkmp.common.generated.resources.menu_channel_option_epg_disable
-import tinyiptvkmp.common.generated.resources.menu_channel_option_epg_enable
 import tinyiptvkmp.common.generated.resources.menu_channel_option_epg_show
 import tinyiptvkmp.common.generated.resources.menu_channel_option_remove_favorite
 
@@ -39,11 +37,9 @@ import tinyiptvkmp.common.generated.resources.menu_channel_option_remove_favorit
 fun OverlayChannelOptions(
     modifier: Modifier = Modifier,
     isEpgEnabled: Boolean = false,
-    isEpgUsing: Boolean = false,
     isInFavorite: Boolean = false,
     onToggleFavorite: () -> Unit = {},
     onShowEpg: () -> Unit = {},
-    onToggleEpgState: () -> Unit = {},
 ) {
     Surface(
         modifier =
@@ -54,20 +50,6 @@ fun OverlayChannelOptions(
         shape = MaterialTheme.shapes.medium,
         shadowElevation = MaterialTheme.dimens.size8,
     ) {
-        val epgUsingTextColor =
-            if (isEpgUsing) {
-                MaterialTheme.colorScheme.onPrimary
-            } else {
-                MaterialTheme.colorScheme.outline
-            }
-
-        val epgUsingText =
-            if (isEpgEnabled) {
-                Res.string.menu_channel_option_epg_disable
-            } else {
-                Res.string.menu_channel_option_epg_enable
-            }
-
         Column(
             modifier =
                 Modifier
@@ -75,25 +57,6 @@ fun OverlayChannelOptions(
             horizontalAlignment = Alignment.CenterHorizontally,
             verticalArrangement = Arrangement.Center,
         ) {
-            OutlinedButton(
-                modifier = Modifier.fillMaxWidth(),
-                shape = MaterialTheme.shapes.small,
-                enabled = isEpgUsing,
-                border =
-                    BorderStroke(
-                        width = MaterialTheme.dimens.size1,
-                        color = MaterialTheme.colorScheme.outline,
-                    ),
-                contentPadding = PaddingValues(),
-                onClick = onToggleEpgState,
-            ) {
-                Text(
-                    text = stringResource(epgUsingText),
-                    style = MaterialTheme.typography.titleSmall,
-                    color = epgUsingTextColor,
-                )
-            }
-
             Spacer(modifier = Modifier.height(MaterialTheme.dimens.size8))
 
             val epgVisibleTextColor =

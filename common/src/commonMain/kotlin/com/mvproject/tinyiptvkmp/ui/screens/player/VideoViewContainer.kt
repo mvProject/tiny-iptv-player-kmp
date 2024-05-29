@@ -1,7 +1,7 @@
 /*
  *  Created by Medvediev Viktor [mvproject]
  *  Copyright © 2024
- *  last modified : 24.03.24, 10:49
+ *  last modified : 08.05.24, 19:35
  *
  */
 
@@ -54,6 +54,7 @@ fun VideoViewContainer(
     onNavigateBack: () -> Unit = {},
 ) {
     val videoViewState by viewModel.videoViewState.collectAsState()
+    val videoViewChannelsState by viewModel.videoViewChannelsState.collectAsState()
 
     val fraction =
         remember(videoViewState.isFullscreen) {
@@ -147,7 +148,7 @@ fun VideoViewContainer(
         ) {
             OverlayChannels(
                 isFullScreen = videoViewState.isFullscreen,
-                channels = videoViewState.channels,
+                channels = videoViewChannelsState,
                 current = videoViewState.mediaPosition,
                 group = videoViewState.channelGroup,
                 onChannelSelect = viewModel::switchToChannel,

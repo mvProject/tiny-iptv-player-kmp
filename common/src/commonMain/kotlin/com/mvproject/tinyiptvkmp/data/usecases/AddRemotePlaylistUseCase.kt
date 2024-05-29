@@ -1,7 +1,7 @@
 /*
  *  Created by Medvediev Viktor [mvproject]
- *  Copyright © 2023
- *  last modified : 20.11.23, 20:27
+ *  Copyright © 2024
+ *  last modified : 07.05.24, 10:29
  *
  */
 
@@ -20,15 +20,14 @@ class AddRemotePlaylistUseCase(
     private val remotePlaylistDataSource: RemotePlaylistDataSource,
     private val playlistChannelsRepository: PlaylistChannelsRepository,
     private val preferenceRepository: PreferenceRepository,
-    private val playlistsRepository: PlaylistsRepository
+    private val playlistsRepository: PlaylistsRepository,
 ) {
-    suspend operator fun invoke(
-        playlist: Playlist
-    ) {
-        val channels = remotePlaylistDataSource.getFromRemotePlaylist(
-            playlistId = playlist.id,
-            url = playlist.playlistUrl
-        )
+    suspend operator fun invoke(playlist: Playlist) {
+        val channels =
+            remotePlaylistDataSource.getFromRemotePlaylist(
+                playlistId = playlist.id,
+                url = playlist.playlistUrl,
+            )
 
         if (channels.isEmpty()) {
             KLog.e("AddRemotePlaylistUseCase channels is empty")
@@ -36,12 +35,14 @@ class AddRemotePlaylistUseCase(
         }
 
         playlistChannelsRepository.addPlaylistChannels(channels = channels)
-
-        playlistsRepository.addPlaylist(
-            playlist = playlist.copy(lastUpdateDate = actualDate)
+        /*         playlistsRepository.addPlaylist(
+                    playlist = playlist.copy(lastUpdateDate = actualDate)
+                 )*/
+        playlistsRepository.addPlaylistRoom(
+            playlist = playlist.copy(lastUpdateDate = actualDate),
         )
 
-        if (playlistsRepository.playlistCount == AppConstants.INT_VALUE_1) {
+        if (playlistsRepository.playlistCount() == AppConstants.INT_VALUE_1) {
             KLog.w("playlist ${playlist.playlistTitle} need set as current")
             preferenceRepository.setCurrentPlaylistId(playlistId = playlist.id)
         }

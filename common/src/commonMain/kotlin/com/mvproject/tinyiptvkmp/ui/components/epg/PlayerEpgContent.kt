@@ -1,7 +1,7 @@
 /*
  *  Created by Medvediev Viktor [mvproject]
  *  Copyright © 2024
- *  last modified : 07.04.24, 17:16
+ *  last modified : 06.05.24, 11:44
  *
  */
 
@@ -22,7 +22,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.style.TextAlign
-import com.mvproject.tinyiptvkmp.data.model.epg.EpgProgram
+import com.mvproject.tinyiptvkmp.ui.screens.channels.data.TvPlaylistChannelEpg
 import com.mvproject.tinyiptvkmp.ui.theme.dimens
 import org.jetbrains.compose.resources.ExperimentalResourceApi
 import org.jetbrains.compose.resources.stringResource
@@ -33,12 +33,12 @@ import tinyiptvkmp.common.generated.resources.msg_no_epg_found
 @Composable
 fun PlayerEpgContent(
     modifier: Modifier = Modifier,
-    epgList: List<EpgProgram>,
+    epgList: TvPlaylistChannelEpg,
 ) {
     Box(
         modifier = modifier.fillMaxSize(),
     ) {
-        if (epgList.isEmpty()) {
+        if (epgList.items.isEmpty()) {
             Text(
                 modifier =
                     Modifier
@@ -63,8 +63,8 @@ fun PlayerEpgContent(
                 ),
             content = {
                 items(
-                    items = epgList,
-                    key = { epg -> epg.hashCode() },
+                    items = epgList.items,
+                    key = { epg -> epg.key },
                 ) { epg ->
                     PlayerEpgItem(
                         modifier =

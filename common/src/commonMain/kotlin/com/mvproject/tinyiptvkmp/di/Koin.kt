@@ -1,7 +1,7 @@
 /*
  *  Created by Medvediev Viktor [mvproject]
- *  Copyright © 2023
- *  last modified : 20.11.23, 20:27
+ *  Copyright © 2024
+ *  last modified : 06.05.24, 18:53
  *
  */
 
@@ -23,14 +23,14 @@ fun initKoin(appDeclaration: KoinAppDeclaration = {}) =
     startKoin {
         appDeclaration()
         modules(
+            platformDatabaseModule(),
+            platformDataStoreModule(),
+            platformDataSourceModule(),
             networkModule,
             repositoryModule,
             dataSourceModule,
             helperModule,
             useCaseModule,
             viewModelsModule,
-            platformDatabaseModule(),
-            platformDataStoreModule(),
-            platformDataSourceModule()
         )
     }
