@@ -1,11 +1,11 @@
 /*
  *  Created by Medvediev Viktor [mvproject]
  *  Copyright © 2024
- *  last modified : 06.05.24, 11:36
+ *  last modified : 29.05.24, 13:50
  *
  */
 
-package com.mvproject.tinyiptvkmp.ui.components.overlay
+package com.mvproject.tinyiptvkmp.ui.screens.player.components
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Column
@@ -23,12 +23,10 @@ import com.mvproject.tinyiptvkmp.ui.components.modifiers.fullScreenWidth
 import com.mvproject.tinyiptvkmp.ui.components.modifiers.roundedHeader
 import com.mvproject.tinyiptvkmp.ui.theme.dimens
 import com.mvproject.tinyiptvkmp.utils.AppConstants.EMPTY_STRING
-import org.jetbrains.compose.resources.ExperimentalResourceApi
 import org.jetbrains.compose.resources.stringResource
 import tinyiptvkmp.common.generated.resources.Res
 import tinyiptvkmp.common.generated.resources.msg_no_epg_found
 
-@OptIn(ExperimentalResourceApi::class)
 @Composable
 fun OverlayChannelInfo(
     isFullScreen: Boolean = false,

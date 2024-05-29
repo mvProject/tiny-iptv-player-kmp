@@ -1,11 +1,11 @@
 /*
  *  Created by Medvediev Viktor [mvproject]
- *  Copyright © 2023
- *  last modified : 20.11.23, 20:27
+ *  Copyright © 2024
+ *  last modified : 29.05.24, 13:43
  *
  */
 
-package com.mvproject.tinyiptvkmp.ui.components.channels
+package com.mvproject.tinyiptvkmp.ui.screens.channels.components
 
 import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.combinedClickable
@@ -34,47 +34,50 @@ fun ChannelCardView(
     modifier: Modifier = Modifier,
     channel: TvPlaylistChannel,
     onChannelSelect: () -> Unit = {},
-    onOptionSelect: () -> Unit = {}
+    onOptionSelect: () -> Unit = {},
 ) {
     ElevatedCard(
-        modifier = modifier
-            .height(MaterialTheme.dimens.size200)
-            .clip(MaterialTheme.shapes.extraSmall)
-            .combinedClickable(
-                onClick = onChannelSelect,
-                onLongClick = onOptionSelect
-            )
+        modifier =
+            modifier
+                .height(MaterialTheme.dimens.size200)
+                .clip(MaterialTheme.shapes.extraSmall)
+                .combinedClickable(
+                    onClick = onChannelSelect,
+                    onLongClick = onOptionSelect,
+                ),
     ) {
         Column(
             modifier = Modifier.fillMaxSize(),
             horizontalAlignment = Alignment.CenterHorizontally,
-            verticalArrangement = Arrangement.Top
+            verticalArrangement = Arrangement.Top,
         ) {
-
             ChannelImageLogo(
                 modifier = Modifier.padding(top = MaterialTheme.dimens.size12),
                 channelLogo = channel.channelLogo,
                 channelName = channel.channelName,
-                isLarge = true
+                isLarge = true,
             )
 
             Spacer(modifier = Modifier.height(MaterialTheme.dimens.size8))
 
             Box(
-                modifier = Modifier
-                    .fillMaxSize()
-                    .padding(horizontal = MaterialTheme.dimens.size8),
-                contentAlignment = Alignment.Center
+                modifier =
+                    Modifier
+                        .fillMaxSize()
+                        .padding(horizontal = MaterialTheme.dimens.size8),
+                contentAlignment = Alignment.Center,
             ) {
                 Text(
                     text = channel.channelName,
                     style = MaterialTheme.typography.headlineMedium,
-                    color = if (channel.isInFavorites)
-                        MaterialTheme.colorScheme.onSurfaceVariant
-                    else
-                        MaterialTheme.colorScheme.onPrimary,
+                    color =
+                        if (channel.isInFavorites) {
+                            MaterialTheme.colorScheme.onSurfaceVariant
+                        } else {
+                            MaterialTheme.colorScheme.onPrimary
+                        },
                     textAlign = TextAlign.Center,
-                    modifier = Modifier.fillMaxWidth()
+                    modifier = Modifier.fillMaxWidth(),
                 )
             }
         }

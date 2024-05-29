@@ -1,11 +1,11 @@
 /*
  *  Created by Medvediev Viktor [mvproject]
  *  Copyright © 2024
- *  last modified : 06.05.24, 11:36
+ *  last modified : 29.05.24, 13:50
  *
  */
 
-package com.mvproject.tinyiptvkmp.ui.components.channels
+package com.mvproject.tinyiptvkmp.ui.screens.channels.components
 
 import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.combinedClickable
@@ -18,13 +18,11 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import com.mvproject.tinyiptvkmp.data.mappers.ListMappers.toActual
 import com.mvproject.tinyiptvkmp.data.model.channels.TvPlaylistChannel
-import com.mvproject.tinyiptvkmp.ui.components.epg.ScheduleEpgItemView
-import org.jetbrains.compose.resources.ExperimentalResourceApi
 import org.jetbrains.compose.resources.stringResource
 import tinyiptvkmp.common.generated.resources.Res
 import tinyiptvkmp.common.generated.resources.msg_no_epg_found
 
-@OptIn(ExperimentalFoundationApi::class, ExperimentalResourceApi::class)
+@OptIn(ExperimentalFoundationApi::class)
 @Composable
 fun ChannelListView(
     modifier: Modifier = Modifier,

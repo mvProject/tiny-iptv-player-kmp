@@ -1,7 +1,7 @@
 /*
  *  Created by Medvediev Viktor [mvproject]
  *  Copyright © 2024
- *  last modified : 29.05.24, 12:03
+ *  last modified : 29.05.24, 13:57
  *
  */
 @Suppress("DSL_SCOPE_VIOLATION")
@@ -32,7 +32,7 @@ kotlin {
     jvm()
 
     sourceSets {
-        @OptIn(org.jetbrains.compose.ExperimentalComposeLibrary::class)
+
         commonMain.dependencies {
             implementation(compose.runtime)
             implementation(compose.foundation)

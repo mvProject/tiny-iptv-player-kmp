@@ -1,7 +1,7 @@
 /*
  *  Created by Medvediev Viktor [mvproject]
  *  Copyright © 2024
- *  last modified : 17.05.24, 18:12
+ *  last modified : 29.05.24, 13:51
  *
  */
 
@@ -35,13 +35,13 @@ import androidx.compose.ui.unit.dp
 import com.mvproject.tinyiptvkmp.data.enums.ChannelsViewType
 import com.mvproject.tinyiptvkmp.data.model.channels.TvPlaylistChannel
 import com.mvproject.tinyiptvkmp.platform.ExecuteOnResume
-import com.mvproject.tinyiptvkmp.ui.components.channels.ChannelView
-import com.mvproject.tinyiptvkmp.ui.components.overlay.OverlayChannelOptions
 import com.mvproject.tinyiptvkmp.ui.components.overlay.OverlayContent
 import com.mvproject.tinyiptvkmp.ui.components.overlay.OverlayEpg
 import com.mvproject.tinyiptvkmp.ui.components.toolbars.AppBarWithSearch
 import com.mvproject.tinyiptvkmp.ui.components.views.LoadingView
 import com.mvproject.tinyiptvkmp.ui.screens.channels.action.TvPlaylistChannelAction
+import com.mvproject.tinyiptvkmp.ui.screens.channels.components.ChannelView
+import com.mvproject.tinyiptvkmp.ui.screens.channels.components.OverlayChannelOptions
 import com.mvproject.tinyiptvkmp.ui.theme.dimens
 import com.mvproject.tinyiptvkmp.utils.AppConstants.INT_VALUE_1
 import com.mvproject.tinyiptvkmp.utils.CommonUtils.empty

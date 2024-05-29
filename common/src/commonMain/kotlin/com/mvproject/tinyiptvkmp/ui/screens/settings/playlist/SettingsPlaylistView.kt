@@ -1,7 +1,7 @@
 /*
  *  Created by Medvediev Viktor [mvproject]
  *  Copyright © 2024
- *  last modified : 07.05.24, 17:25
+ *  last modified : 29.05.24, 13:51
  *
  */
 
@@ -26,9 +26,9 @@ import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
-import com.mvproject.tinyiptvkmp.ui.components.playlist.PlaylistItemView
 import com.mvproject.tinyiptvkmp.ui.components.toolbars.AppBarWithBackNav
 import com.mvproject.tinyiptvkmp.ui.components.views.NoItemsView
+import com.mvproject.tinyiptvkmp.ui.screens.settings.components.PlaylistItemView
 import com.mvproject.tinyiptvkmp.ui.screens.settings.playlist.action.SettingsPlaylistAction
 import com.mvproject.tinyiptvkmp.ui.screens.settings.playlist.state.SettingsPlaylistState
 import com.mvproject.tinyiptvkmp.ui.theme.dimens

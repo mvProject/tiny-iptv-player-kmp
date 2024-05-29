@@ -1,11 +1,11 @@
 /*
  *  Created by Medvediev Viktor [mvproject]
  *  Copyright © 2024
- *  last modified : 23.02.24, 11:07
+ *  last modified : 29.05.24, 13:53
  *
  */
 
-package com.mvproject.tinyiptvkmp.ui.components.dialogs
+package com.mvproject.tinyiptvkmp.ui.screens.groups.components
 
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.fadeIn
@@ -47,17 +47,18 @@ fun OptionsDialog(
     AnimatedVisibility(
         visible = isDialogOpen.value,
         enter = scaleIn() + fadeIn(),
-        exit = scaleOut() + fadeOut()
+        exit = scaleOut() + fadeOut(),
     ) {
         Dialog(
-            onDismissRequest = { isDialogOpen.value = false }
+            onDismissRequest = { isDialogOpen.value = false },
         ) {
             Surface(
-                modifier = modifier
-                    .wrapContentSize()
-                    .padding(MaterialTheme.dimens.size8),
+                modifier =
+                    modifier
+                        .wrapContentSize()
+                        .padding(MaterialTheme.dimens.size8),
                 shape = MaterialTheme.shapes.medium,
-                shadowElevation = MaterialTheme.dimens.size8
+                shadowElevation = MaterialTheme.dimens.size8,
             ) {
                 val listState = rememberLazyListState()
                 if (selectedIndex > INT_NO_VALUE) {
@@ -68,23 +69,24 @@ fun OptionsDialog(
 
                 LazyColumn(
                     modifier = Modifier.fillMaxWidth(),
-                    state = listState
+                    state = listState,
                 ) {
                     title?.let { text ->
                         item {
                             Box(
-                                modifier = Modifier
-                                    .fillMaxWidth()
-                                    .background(
-                                        color = MaterialTheme.colorScheme.onSurface
-                                    )
-                                    .padding(MaterialTheme.dimens.size12)
+                                modifier =
+                                    Modifier
+                                        .fillMaxWidth()
+                                        .background(
+                                            color = MaterialTheme.colorScheme.onSurface,
+                                        )
+                                        .padding(MaterialTheme.dimens.size12),
                             ) {
                                 Text(
                                     text = text,
                                     style = MaterialTheme.typography.titleMedium,
                                     color = MaterialTheme.colorScheme.primary,
-                                    modifier = Modifier.align(Alignment.Center)
+                                    modifier = Modifier.align(Alignment.Center),
                                 )
                             }
                         }
@@ -96,25 +98,27 @@ fun OptionsDialog(
                             modifier = Modifier.fillMaxWidth(),
                             shape = MaterialTheme.shapes.small,
                             contentPadding = PaddingValues(),
-                            onClick = { onItemSelected(index) }
+                            onClick = { onItemSelected(index) },
                         ) {
                             Text(
                                 text = item,
                                 style = MaterialTheme.typography.titleSmall,
-                                color = if (selectedItem)
-                                    MaterialTheme.colorScheme.onSurfaceVariant
-                                else
-                                    MaterialTheme.colorScheme.onSurface,
-
-                                )
+                                color =
+                                    if (selectedItem) {
+                                        MaterialTheme.colorScheme.onSurfaceVariant
+                                    } else {
+                                        MaterialTheme.colorScheme.onSurface
+                                    },
+                            )
                         }
 
                         if (index < items.lastIndex) {
                             HorizontalDivider(
-                                modifier = Modifier
-                                    .fillMaxWidth()
-                                    .padding(horizontal = MaterialTheme.dimens.size16),
-                                color = MaterialTheme.colorScheme.onSurface
+                                modifier =
+                                    Modifier
+                                        .fillMaxWidth()
+                                        .padding(horizontal = MaterialTheme.dimens.size16),
+                                color = MaterialTheme.colorScheme.onSurface,
                             )
                         }
                     }

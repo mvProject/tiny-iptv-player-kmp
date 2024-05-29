@@ -1,11 +1,11 @@
 /*
  *  Created by Medvediev Viktor [mvproject]
  *  Copyright © 2024
- *  last modified : 07.04.24, 17:09
+ *  last modified : 29.05.24, 13:50
  *
  */
 
-package com.mvproject.tinyiptvkmp.ui.components.playlist
+package com.mvproject.tinyiptvkmp.ui.screens.settings.components
 
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.clickable

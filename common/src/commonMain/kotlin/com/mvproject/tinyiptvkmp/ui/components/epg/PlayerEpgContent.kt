@@ -1,7 +1,7 @@
 /*
  *  Created by Medvediev Viktor [mvproject]
  *  Copyright © 2024
- *  last modified : 06.05.24, 11:44
+ *  last modified : 29.05.24, 13:51
  *
  */
 
@@ -24,12 +24,10 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.style.TextAlign
 import com.mvproject.tinyiptvkmp.ui.screens.channels.data.TvPlaylistChannelEpg
 import com.mvproject.tinyiptvkmp.ui.theme.dimens
-import org.jetbrains.compose.resources.ExperimentalResourceApi
 import org.jetbrains.compose.resources.stringResource
 import tinyiptvkmp.common.generated.resources.Res
 import tinyiptvkmp.common.generated.resources.msg_no_epg_found
 
-@OptIn(ExperimentalResourceApi::class)
 @Composable
 fun PlayerEpgContent(
     modifier: Modifier = Modifier,

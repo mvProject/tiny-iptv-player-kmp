@@ -1,7 +1,7 @@
 /*
  *  Created by Medvediev Viktor [mvproject]
  *  Copyright © 2024
- *  last modified : 24.03.24, 14:58
+ *  last modified : 29.05.24, 12:20
  *
  */
 
@@ -116,7 +116,10 @@ actual fun AdditionalPlayerControls(
 
 @Composable
 actual fun ExecuteOnResume(action: () -> Unit) {
-    LifecycleResumeEffect(Unit) {
+    LifecycleResumeEffect(
+        key1 = Unit,
+        lifecycleOwner = androidx.compose.ui.platform.LocalLifecycleOwner.current,
+    ) {
         action()
 
         onPauseOrDispose {

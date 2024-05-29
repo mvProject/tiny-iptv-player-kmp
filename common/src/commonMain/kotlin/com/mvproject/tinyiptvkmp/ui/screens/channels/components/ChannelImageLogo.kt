@@ -1,11 +1,11 @@
 /*
  *  Created by Medvediev Viktor [mvproject]
  *  Copyright © 2024
- *  last modified : 07.04.24, 16:37
+ *  last modified : 29.05.24, 13:50
  *
  */
 
-package com.mvproject.tinyiptvkmp.ui.components.channels
+package com.mvproject.tinyiptvkmp.ui.screens.channels.components
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Box
@@ -19,12 +19,10 @@ import com.mvproject.tinyiptvkmp.ui.components.views.ThreeBounceAnimation
 import com.mvproject.tinyiptvkmp.ui.theme.dimens
 import io.kamel.core.Resource
 import io.kamel.image.asyncPainterResource
-import org.jetbrains.compose.resources.ExperimentalResourceApi
 import org.jetbrains.compose.resources.painterResource
 import tinyiptvkmp.common.generated.resources.Res
 import tinyiptvkmp.common.generated.resources.no_channel_logo
 
-@OptIn(ExperimentalResourceApi::class)
 @Composable
 fun ChannelImageLogo(
     modifier: Modifier = Modifier,

@@ -1,11 +1,11 @@
 /*
- *  Created by Medvediev Viktor [mvproject] 
- *  Copyright © 2023
- *  last modified : 29.11.23, 16:03
+ *  Created by Medvediev Viktor [mvproject]
+ *  Copyright © 2024
+ *  last modified : 29.05.24, 13:53
  *
  */
 
-package com.mvproject.tinyiptvkmp.ui.components.player
+package com.mvproject.tinyiptvkmp.ui.screens.player.components
 
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Row
@@ -38,53 +38,51 @@ fun PlayerControlView(
     onPlaybackAction: (PlaybackActions) -> Unit = {},
     onPlaybackClose: () -> Unit = {},
 ) {
-
     Row(
         modifier = modifier,
         verticalAlignment = Alignment.CenterVertically,
-        horizontalArrangement = Arrangement.Start
+        horizontalArrangement = Arrangement.Start,
     ) {
-
         AdditionalPlayerControls(
             modifier = Modifier,
             action = onPlaybackClose,
-            onPlaybackAction = onPlaybackAction
+            onPlaybackAction = onPlaybackAction,
         )
 
         PlaybackControl(
             imageVector = if (isPlaying) Icons.Rounded.Pause else Icons.Rounded.PlayArrow,
-            action = { onPlaybackAction(PlaybackActions.OnPlaybackToggle) }
+            action = { onPlaybackAction(PlaybackActions.OnPlaybackToggle) },
         )
 
         Row(
             modifier = modifier,
             verticalAlignment = Alignment.CenterVertically,
-            horizontalArrangement = Arrangement.End
+            horizontalArrangement = Arrangement.End,
         ) {
             PlaybackControl(
                 imageVector = if (isFavorite) Icons.Rounded.Favorite else Icons.Rounded.FavoriteBorder,
-                action = { onPlaybackAction(PlaybackActions.OnFavoriteToggle) }
+                action = { onPlaybackAction(PlaybackActions.OnFavoriteToggle) },
             )
 
             Spacer(modifier = Modifier.width(MaterialTheme.dimens.size8))
 
             PlaybackControl(
                 imageVector = Icons.Rounded.AspectRatio,
-                action = { onPlaybackAction(PlaybackActions.OnVideoRatioToggle) }
+                action = { onPlaybackAction(PlaybackActions.OnVideoRatioToggle) },
             )
 
             Spacer(modifier = Modifier.width(MaterialTheme.dimens.size8))
 
             PlaybackControl(
                 imageVector = Icons.Rounded.Crop,
-                action = { onPlaybackAction(PlaybackActions.OnVideoResizeToggle) }
+                action = { onPlaybackAction(PlaybackActions.OnVideoResizeToggle) },
             )
 
             Spacer(modifier = Modifier.width(MaterialTheme.dimens.size8))
 
             PlaybackControl(
                 imageVector = if (isFullScreen) Icons.Rounded.FullscreenExit else Icons.Rounded.Fullscreen,
-                action = { onPlaybackAction(PlaybackActions.OnFullScreenToggle) }
+                action = { onPlaybackAction(PlaybackActions.OnFullScreenToggle) },
             )
         }
     }

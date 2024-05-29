@@ -1,7 +1,7 @@
 /*
  *  Created by Medvediev Viktor [mvproject]
  *  Copyright © 2024
- *  last modified : 07.05.24, 17:22
+ *  last modified : 29.05.24, 13:51
  *
  */
 
@@ -30,13 +30,13 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import com.mvproject.tinyiptvkmp.ui.components.dialogs.OptionsDialog
-import com.mvproject.tinyiptvkmp.ui.components.playlist.PlaylistGroupItemView
 import com.mvproject.tinyiptvkmp.ui.components.selectors.OptionSelector
 import com.mvproject.tinyiptvkmp.ui.components.toolbars.AppBarWithSettings
 import com.mvproject.tinyiptvkmp.ui.components.views.LoadingView
 import com.mvproject.tinyiptvkmp.ui.components.views.NoItemsView
 import com.mvproject.tinyiptvkmp.ui.screens.groups.action.GroupAction
+import com.mvproject.tinyiptvkmp.ui.screens.groups.components.OptionsDialog
+import com.mvproject.tinyiptvkmp.ui.screens.groups.components.PlaylistGroupItemView
 import com.mvproject.tinyiptvkmp.ui.screens.groups.state.GroupState
 import com.mvproject.tinyiptvkmp.ui.theme.dimens
 import org.jetbrains.compose.resources.ExperimentalResourceApi

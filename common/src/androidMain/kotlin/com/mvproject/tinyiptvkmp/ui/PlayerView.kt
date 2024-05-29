@@ -1,7 +1,7 @@
 /*
  *  Created by Medvediev Viktor [mvproject]
  *  Copyright © 2024
- *  last modified : 07.04.24, 18:13
+ *  last modified : 29.05.24, 12:22
  *
  */
 
@@ -119,7 +119,10 @@ internal fun PlayerView(
         controls()
     }
 
-    LifecycleStartEffect(playerState) {
+    LifecycleStartEffect(
+        key1 = playerState,
+        lifecycleOwner = androidx.compose.ui.platform.LocalLifecycleOwner.current,
+    ) {
         onStopOrDispose {
             playerState.player.stop()
             systemUIController.isSystemBarsVisible = true

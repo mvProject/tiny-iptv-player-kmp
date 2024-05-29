@@ -1,11 +1,11 @@
 /*
  *  Created by Medvediev Viktor [mvproject]
  *  Copyright © 2024
- *  last modified : 28.05.24, 15:40
+ *  last modified : 29.05.24, 13:50
  *
  */
 
-package com.mvproject.tinyiptvkmp.ui.components.overlay
+package com.mvproject.tinyiptvkmp.ui.screens.player.components
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
@@ -25,10 +25,10 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.style.TextAlign
 import com.mvproject.tinyiptvkmp.data.mappers.ListMappers.withRefreshedEpg
 import com.mvproject.tinyiptvkmp.data.model.channels.TvPlaylistChannel
-import com.mvproject.tinyiptvkmp.ui.components.channels.ChannelListView
 import com.mvproject.tinyiptvkmp.ui.components.modifiers.fullScreenWidth
 import com.mvproject.tinyiptvkmp.ui.components.modifiers.roundedHeader
 import com.mvproject.tinyiptvkmp.ui.data.TvPlaylistChannels
+import com.mvproject.tinyiptvkmp.ui.screens.channels.components.ChannelListView
 import com.mvproject.tinyiptvkmp.ui.theme.dimens
 
 @Composable

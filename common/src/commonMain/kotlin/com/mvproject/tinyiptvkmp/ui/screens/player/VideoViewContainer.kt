@@ -1,7 +1,7 @@
 /*
  *  Created by Medvediev Viktor [mvproject]
  *  Copyright © 2024
- *  last modified : 08.05.24, 19:35
+ *  last modified : 29.05.24, 13:51
  *
  */
 
@@ -27,14 +27,14 @@ import com.mvproject.tinyiptvkmp.ui.components.epg.PlayerEpgContent
 import com.mvproject.tinyiptvkmp.ui.components.modifiers.defaultPlayerHorizontalGestures
 import com.mvproject.tinyiptvkmp.ui.components.modifiers.defaultPlayerTapGesturesState
 import com.mvproject.tinyiptvkmp.ui.components.modifiers.defaultPlayerVerticalGestures
-import com.mvproject.tinyiptvkmp.ui.components.overlay.OverlayChannelInfo
-import com.mvproject.tinyiptvkmp.ui.components.overlay.OverlayChannels
 import com.mvproject.tinyiptvkmp.ui.components.overlay.OverlayContent
 import com.mvproject.tinyiptvkmp.ui.components.overlay.OverlayEpg
-import com.mvproject.tinyiptvkmp.ui.components.player.PlayerChannelView
 import com.mvproject.tinyiptvkmp.ui.components.views.LoadingView
 import com.mvproject.tinyiptvkmp.ui.components.views.NoPlaybackView
 import com.mvproject.tinyiptvkmp.ui.components.views.VolumeProgressView
+import com.mvproject.tinyiptvkmp.ui.screens.player.components.OverlayChannelInfo
+import com.mvproject.tinyiptvkmp.ui.screens.player.components.OverlayChannels
+import com.mvproject.tinyiptvkmp.ui.screens.player.components.PlayerChannelView
 import com.mvproject.tinyiptvkmp.ui.theme.dimens
 import org.jetbrains.compose.resources.ExperimentalResourceApi
 import org.jetbrains.compose.resources.painterResource

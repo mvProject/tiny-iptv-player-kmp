@@ -1,11 +1,11 @@
 /*
  *  Created by Medvediev Viktor [mvproject]
  *  Copyright © 2024
- *  last modified : 17.05.24, 18:12
+ *  last modified : 29.05.24, 13:53
  *
  */
 
-package com.mvproject.tinyiptvkmp.ui.components.overlay
+package com.mvproject.tinyiptvkmp.ui.screens.channels.components
 
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.layout.Arrangement
@@ -25,14 +25,12 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import com.mvproject.tinyiptvkmp.ui.theme.dimens
-import org.jetbrains.compose.resources.ExperimentalResourceApi
 import org.jetbrains.compose.resources.stringResource
 import tinyiptvkmp.common.generated.resources.Res
 import tinyiptvkmp.common.generated.resources.menu_channel_option_add_favorite
 import tinyiptvkmp.common.generated.resources.menu_channel_option_epg_show
 import tinyiptvkmp.common.generated.resources.menu_channel_option_remove_favorite
 
-@OptIn(ExperimentalResourceApi::class)
 @Composable
 fun OverlayChannelOptions(
     modifier: Modifier = Modifier,

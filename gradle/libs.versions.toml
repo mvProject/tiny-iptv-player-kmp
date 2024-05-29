@@ -12,8 +12,8 @@ koinAndroid = "3.5.0"
 koinAndroidCompose = "3.5.0"
 
 compose-activity = "1.9.0"
-compose-lifecycle-viewmodel = "2.7.0"
-compose-lifecycle-runtime = "2.7.0"
+compose-lifecycle-viewmodel = "2.8.0"
+compose-lifecycle-runtime = "2.8.0"
 androidxComposeBom = "2024.05.00"
 
 kotlinxSerializationJson = "1.6.3"
@@ -23,8 +23,8 @@ kotlinxCoroutinesSwing = "1.8.0"
 kotlinxCoroutinesCore = "1.8.0"
 
 material3WindowSizeClassMultiplatform = "0.3.1"
-componentsResources = "1.6.1"
-annotation = "1.7.1"
+componentsResources = "1.6.10"
+annotation = "1.8.0"
 
 kamelVersion = "0.8.2"
 

@@ -1,11 +1,11 @@
 /*
  *  Created by Medvediev Viktor [mvproject]
- *  Copyright © 2023
- *  last modified : 20.11.23, 20:27
+ *  Copyright © 2024
+ *  last modified : 29.05.24, 13:43
  *
  */
 
-package com.mvproject.tinyiptvkmp.ui.components.channels
+package com.mvproject.tinyiptvkmp.ui.screens.channels.components
 
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
@@ -18,7 +18,7 @@ fun ChannelView(
     viewType: ChannelsViewType,
     item: TvPlaylistChannel,
     onChannelSelect: () -> Unit = {},
-    onOptionSelect: () -> Unit = {}
+    onOptionSelect: () -> Unit = {},
 ) {
     when (viewType) {
         ChannelsViewType.LIST -> {
@@ -26,7 +26,7 @@ fun ChannelView(
                 modifier = modifier,
                 channel = item,
                 onChannelSelect = onChannelSelect,
-                onOptionSelect = onOptionSelect
+                onOptionSelect = onOptionSelect,
             )
         }
 
@@ -35,7 +35,7 @@ fun ChannelView(
                 modifier = modifier,
                 channel = item,
                 onChannelSelect = onChannelSelect,
-                onOptionSelect = onOptionSelect
+                onOptionSelect = onOptionSelect,
             )
         }
 
@@ -44,7 +44,7 @@ fun ChannelView(
                 modifier = modifier,
                 channel = item,
                 onChannelSelect = onChannelSelect,
-                onOptionSelect = onOptionSelect
+                onOptionSelect = onOptionSelect,
             )
         }
     }
