@@ -1,7 +1,7 @@
 /*
  *  Created by Medvediev Viktor [mvproject]
  *  Copyright © 2024
- *  last modified : 28.05.24, 15:23
+ *  last modified : 29.05.24, 11:59
  *
  */
 
@@ -12,6 +12,7 @@ plugins {
     alias(libs.plugins.android.application)
     alias(libs.plugins.android.kotlin)
     alias(libs.plugins.compose.multiplatform)
+    alias(libs.plugins.compose.compiler)
 }
 
 android {
@@ -72,9 +73,9 @@ android {
     buildFeatures {
         compose = true
     }
-    composeOptions {
-        kotlinCompilerExtensionVersion = "1.5.14"
-    }
+    // composeOptions {
+    //     kotlinCompilerExtensionVersion = "1.5.14"
+    // }
     packaging {
         resources {
             excludes += "/META-INF/{AL2.0,LGPL2.1}"

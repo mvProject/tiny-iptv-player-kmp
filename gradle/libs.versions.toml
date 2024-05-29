@@ -1,6 +1,6 @@
 [versions]
 
-kotlin = "1.9.24"
+kotlin = "2.0.0"
 gradle = "8.1.4"
 compose = "1.6.10"
 
@@ -48,11 +48,11 @@ accompanist = "0.31.2-alpha"
 androidx-room = "2.7.0-alpha02"
 
 sqlite = "2.5.0-SNAPSHOT"
-ksp = "1.9.24-1.0.20"
+ksp = "2.0.0-1.0.21"
 
 [plugins]
-
 compose-multiplatform = { id = "org.jetbrains.compose", version.ref = "compose" }
+compose-compiler = { id = "org.jetbrains.kotlin.plugin.compose", version.ref = "kotlin" }
 multiplatform = { id = "org.jetbrains.kotlin.multiplatform", version.ref = "kotlin" }
 android-kotlin = { id = "org.jetbrains.kotlin.android", version.ref = "kotlin" }
 android-library = { id = "com.android.library", version.ref = "gradle" }

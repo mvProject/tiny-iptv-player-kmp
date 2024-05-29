@@ -1,7 +1,7 @@
 /*
  *  Created by Medvediev Viktor [mvproject]
  *  Copyright © 2024
- *  last modified : 07.05.24, 10:17
+ *  last modified : 29.05.24, 12:03
  *
  */
 @Suppress("DSL_SCOPE_VIOLATION")
@@ -12,6 +12,7 @@ plugins {
     alias(libs.plugins.compose.multiplatform)
     alias(libs.plugins.ksp)
     alias(libs.plugins.room)
+    alias(libs.plugins.compose.compiler)
 }
 
 android {
@@ -23,24 +24,12 @@ android {
     defaultConfig {
         minSdk = 26
     }
-
-    compileOptions {
-        sourceCompatibility = JavaVersion.VERSION_17
-        targetCompatibility = JavaVersion.VERSION_17
-    }
 }
 
 kotlin {
-    androidTarget {
-        compilations.all {
-            kotlinOptions {
-                jvmTarget = JavaVersion.VERSION_17.toString()
-            }
-        }
-    }
-    jvm {
-        jvmToolchain(17)
-    }
+    jvmToolchain(17)
+    androidTarget()
+    jvm()
 
     sourceSets {
         @OptIn(org.jetbrains.compose.ExperimentalComposeLibrary::class)
