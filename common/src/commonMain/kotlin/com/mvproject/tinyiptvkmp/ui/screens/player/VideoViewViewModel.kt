@@ -1,7 +1,7 @@
 /*
  *  Created by Medvediev Viktor [mvproject]
  *  Copyright © 2024
- *  last modified : 31.05.24, 15:15
+ *  last modified : 17.06.24, 11:13
  *
  */
 
@@ -178,7 +178,8 @@ class VideoViewViewModel(
                 when (action.state) {
                     is VideoPlaybackState.VideoPlaybackIdle -> {
                         isMediaPlayable =
-                            com.mvproject.tinyiptvkmp.platform.isMediaPlayable(action.state.errorCode)
+                            com.mvproject.tinyiptvkmp.platform
+                                .isMediaPlayable(action.state.errorCode)
                     }
 
                     VideoPlaybackState.VideoPlaybackReady -> {
@@ -271,7 +272,8 @@ class VideoViewViewModel(
         val current = videoViewChannelsState.value.items
 
         val updatedList =
-            current.toMutableList()
+            current
+                .toMutableList()
                 .apply {
                     set(index, channel)
                 }

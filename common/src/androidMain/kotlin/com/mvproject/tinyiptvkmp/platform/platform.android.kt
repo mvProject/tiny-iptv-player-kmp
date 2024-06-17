@@ -1,7 +1,7 @@
 /*
  *  Created by Medvediev Viktor [mvproject]
  *  Copyright © 2024
- *  last modified : 29.05.24, 15:43
+ *  last modified : 17.06.24, 11:13
  *
  */
 
@@ -50,9 +50,7 @@ import java.io.BufferedReader
 import java.io.FileInputStream
 import java.io.InputStreamReader
 
-actual fun createPlatformHttpClient(): HttpClient {
-    return HttpClient(Android)
-}
+actual fun createPlatformHttpClient(): HttpClient = HttpClient(Android)
 
 @Composable
 actual fun PlayerViewContainer(
@@ -165,7 +163,9 @@ actual fun TwoPaneContainer(
     )
 }
 
-actual class LocalPlaylistDataSource(private val context: Context) {
+actual class LocalPlaylistDataSource(
+    private val context: Context,
+) {
     @SuppressLint("Recycle")
     actual fun getLocalPlaylistData(
         playlistId: Long,

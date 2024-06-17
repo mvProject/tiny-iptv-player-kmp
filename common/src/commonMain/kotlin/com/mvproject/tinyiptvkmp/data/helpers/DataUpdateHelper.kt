@@ -1,7 +1,7 @@
 /*
  *  Created by Medvediev Viktor [mvproject]
  *  Copyright © 2024
- *  last modified : 09.06.24, 19:09
+ *  last modified : 17.06.24, 11:13
  *
  */
 
@@ -31,7 +31,8 @@ class DataUpdateHelper(
         ) { channelsInfo, infoExist, _ ->
 
             val remote =
-                playlistsRepository.getAllPlaylistsRoom()
+                playlistsRepository
+                    .getAllPlaylistsRoom()
                     .filter { playlist ->
                         !playlist.isLocalSource
                     }

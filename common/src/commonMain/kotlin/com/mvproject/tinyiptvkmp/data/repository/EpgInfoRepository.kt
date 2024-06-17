@@ -1,7 +1,7 @@
 /*
  *  Created by Medvediev Viktor [mvproject]
  *  Copyright © 2024
- *  last modified : 10.06.24, 11:38
+ *  last modified : 17.06.24, 11:13
  *
  */
 
@@ -21,11 +21,10 @@ class EpgInfoRepository(
 ) {
     private val epgInfoDao = appDatabase.epgInfoDao()
 
-    suspend fun loadEpgInfoData(): List<EpgInfo> {
-        return epgInfoDao.getEpgInfo().map {
+    suspend fun loadEpgInfoData(): List<EpgInfo> =
+        epgInfoDao.getEpgInfo().map {
             it.toEpgInfo()
         }
-    }
 
     @Transaction
     suspend fun saveEpgInfoDataRoom(infoData: List<EpgInfoResponse>) {
