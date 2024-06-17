@@ -1,13 +1,14 @@
 /*
  *  Created by Medvediev Viktor [mvproject]
  *  Copyright © 2024
- *  last modified : 09.05.24, 20:51
+ *  last modified : 10.06.24, 13:19
  *
  */
 
 package com.mvproject.tinyiptvkmp
 
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.rememberCoroutineScope
 import com.mvproject.tinyiptvkmp.data.helpers.DataUpdateHelper
 import com.mvproject.tinyiptvkmp.data.usecases.EpgInfoUpdateUseCase
@@ -44,6 +45,11 @@ private fun TinyIptvAppContent() {
         rememberKoinInject<UpdateRemotePlaylistChannelsUseCase>()
 
     val scope = rememberCoroutineScope()
+
+    LaunchedEffect(Unit) {
+        // epgInfoUpdateUseCase()
+        // updateChannelsEpgInfoUseCase()
+    }
 
     scope.launch(Dispatchers.IO) {
         delay(1000L)

@@ -1,7 +1,7 @@
 /*
  *  Created by Medvediev Viktor [mvproject]
  *  Copyright © 2024
- *  last modified : 08.05.24, 20:31
+ *  last modified : 31.05.24, 15:15
  *
  */
 
@@ -32,7 +32,6 @@ import com.mvproject.tinyiptvkmp.utils.AppConstants.INT_VALUE_1
 import com.mvproject.tinyiptvkmp.utils.AppConstants.INT_VALUE_ZERO
 import com.mvproject.tinyiptvkmp.utils.AppConstants.UI_SHOW_DELAY
 import com.mvproject.tinyiptvkmp.utils.AppConstants.VOLUME_SHOW_DELAY
-import com.mvproject.tinyiptvkmp.utils.CommonUtils.isWindowsDesktop
 import com.mvproject.tinyiptvkmp.utils.KLog
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.delay
@@ -50,11 +49,7 @@ class VideoViewViewModel(
     private val getChannelsEpg: GetChannelsEpg,
     private val getGroupChannelsEpg: GetGroupChannelsEpg,
 ) : ViewModel() {
-    private var pollVideoPositionJob: Job? = null
     private var pollVolumeJob: Job? = null
-
-    // time after which [VideoViewState.isControlUiVisible] will be set to false
-    private var hideControllerAfterMs: Long = UI_SHOW_DELAY
 
     // time after which [VideoViewState.isVolumeUiVisible] will be set to false
     private var hideVolumeAfterMs: Long = VOLUME_SHOW_DELAY
@@ -310,7 +305,7 @@ class VideoViewViewModel(
         _videoViewState.update { current ->
             current.copy(isRestartRequired = true)
         }
-        showControlUi()
+        toggleControlUiState()
     }
 
     private fun consumeRestart() {
@@ -452,9 +447,18 @@ class VideoViewViewModel(
     }
 
     private fun toggleControlUiState() {
-        _videoViewState.update { current ->
-            val currentUiVisibleState = current.isControlUiVisible
-            current.copy(isControlUiVisible = !currentUiVisibleState)
+        viewModelScope.launch {
+            if (!videoViewState.value.isControlUiVisible) {
+                _videoViewState.update { current ->
+                    current.copy(isControlUiVisible = true)
+                }
+
+                delay(UI_SHOW_DELAY)
+
+                _videoViewState.update { current ->
+                    current.copy(isControlUiVisible = false)
+                }
+            }
         }
     }
 
@@ -491,27 +495,27 @@ class VideoViewViewModel(
         }
     }
 
-    private fun showControlUi() {
-        _videoViewState.update { current ->
-            current.copy(isControlUiVisible = true)
-        }
-        pollVideoPositionJob?.cancel()
-        pollVideoPositionJob =
-            viewModelScope.launch {
-                delay(hideControllerAfterMs)
-                hideControlUi()
-            }
-    }
+    // private fun showControlUi() {
+    //     _videoViewState.update { current ->
+    //         current.copy(isControlUiVisible = true)
+    //     }
+    //     pollVideoPositionJob?.cancel()
+    //     pollVideoPositionJob =
+    //         viewModelScope.launch {
+    //             delay(hideControllerAfterMs)
+    //             hideControlUi()
+    //         }
+    // }
 
-    private fun hideControlUi() {
-        // todo temporally always show ui for desktop
-        _videoViewState.update { current ->
-            //        current.copy(isControlUiVisible = false)
-            current.copy(isControlUiVisible = isWindowsDesktop)
-        }
-        pollVideoPositionJob?.cancel()
-        pollVideoPositionJob = null
-    }
+    //  private fun hideControlUi() {
+    //      // todo temporally always show ui for desktop
+    //      _videoViewState.update { current ->
+    //          //        current.copy(isControlUiVisible = false)
+    //          current.copy(isControlUiVisible = isWindowsDesktop)
+    //      }
+    //      pollVideoPositionJob?.cancel()
+    //      pollVideoPositionJob = null
+    //  }
 
     private fun showVolumeUi() {
         _videoViewState.update { current ->

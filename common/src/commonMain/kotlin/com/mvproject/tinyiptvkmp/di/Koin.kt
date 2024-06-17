@@ -1,7 +1,7 @@
 /*
  *  Created by Medvediev Viktor [mvproject]
  *  Copyright © 2024
- *  last modified : 06.05.24, 18:53
+ *  last modified : 13.06.24, 11:04
  *
  */
 
@@ -11,6 +11,7 @@ import com.mvproject.tinyiptvkmp.di.database.platformDatabaseModule
 import com.mvproject.tinyiptvkmp.di.datasource.platformDataSourceModule
 import com.mvproject.tinyiptvkmp.di.datastore.platformDataStoreModule
 import com.mvproject.tinyiptvkmp.di.modules.dataSourceModule
+import com.mvproject.tinyiptvkmp.di.modules.databaseModule
 import com.mvproject.tinyiptvkmp.di.modules.helperModule
 import com.mvproject.tinyiptvkmp.di.modules.networkModule
 import com.mvproject.tinyiptvkmp.di.modules.repositoryModule
@@ -32,5 +33,6 @@ fun initKoin(appDeclaration: KoinAppDeclaration = {}) =
             helperModule,
             useCaseModule,
             viewModelsModule,
+            databaseModule,
         )
     }

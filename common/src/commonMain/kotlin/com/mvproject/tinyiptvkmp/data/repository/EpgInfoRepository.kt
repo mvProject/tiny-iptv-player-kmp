@@ -1,12 +1,13 @@
 /*
  *  Created by Medvediev Viktor [mvproject]
  *  Copyright © 2024
- *  last modified : 17.05.24, 18:15
+ *  last modified : 10.06.24, 11:38
  *
  */
 
 package com.mvproject.tinyiptvkmp.data.repository
 
+import androidx.room.Transaction
 import com.mvproject.tinyiptvkmp.data.mappers.EntityMapper.toEpgInfo
 import com.mvproject.tinyiptvkmp.data.mappers.ParseMappers.toEpgInfo
 import com.mvproject.tinyiptvkmp.data.model.epg.EpgInfo
@@ -26,13 +27,16 @@ class EpgInfoRepository(
         }
     }
 
+    @Transaction
     suspend fun saveEpgInfoDataRoom(infoData: List<EpgInfoResponse>) {
-        KLog.i("testing addEpgInfoData Room")
-        epgInfoDao.insertEpgInfo(data = infoData.map { it.toEpgInfo() })
+        val info = infoData.map { it.toEpgInfo() }
+        KLog.i("testing addEpgInfoData Room count ${info.count()}")
+        epgInfoDao.deleteEpgInfo()
+        epgInfoDao.insertEpgInfo(data = info)
 
         delay(500L)
 
         val list = epgInfoDao.getEpgInfo()
-        KLog.w("testing addEpgInfoData load from room $list")
+        KLog.w("testing addEpgInfoData load from room ${list.count()}")
     }
 }

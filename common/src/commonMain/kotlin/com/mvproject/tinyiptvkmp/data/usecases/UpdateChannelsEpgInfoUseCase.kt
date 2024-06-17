@@ -1,7 +1,7 @@
 /*
  *  Created by Medvediev Viktor [mvproject]
  *  Copyright © 2024
- *  last modified : 28.05.24, 15:47
+ *  last modified : 13.06.24, 09:51
  *
  */
 
@@ -29,17 +29,22 @@ class UpdateChannelsEpgInfoUseCase(
         val mappedChannels =
             channels.map { channel ->
                 val channelName =
-                    channel.channelName.trim().replace(String.space, String.empty).lowercase()
-                val channelNameHD = channelName + "hd"
+                    channel.channelName
+                        .trim()
+                        .lowercase()
+                        .replace(String.space, String.empty)
 
                 val epgInfo =
-                    epgInfos.find { epg ->
+                    epgInfos.firstOrNull { epg ->
                         val epgName =
-                            epg.channelName.trim().replace(String.space, String.empty)
+                            epg.channelName
+                                .trim()
                                 .lowercase()
+                                .replace(String.space, String.empty)
+
                         val epgNameHd = epgName + "hd"
 
-                        channelName == epgName || channelName == epgNameHd || channelNameHD == epgName
+                        channelName == epgName || channelName == epgNameHd
                     }
 
                 if (epgInfo != null) {

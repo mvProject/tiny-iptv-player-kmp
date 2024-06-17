@@ -1,7 +1,7 @@
 /*
  *  Created by Medvediev Viktor [mvproject]
  *  Copyright © 2024
- *  last modified : 29.05.24, 13:51
+ *  last modified : 29.05.24, 15:44
  *
  */
 
@@ -60,6 +60,7 @@ fun VideoViewContainer(
         remember(videoViewState.isFullscreen) {
             if (videoViewState.isFullscreen) 1f else 0.5f
         }
+
     Box(
         modifier =
             Modifier

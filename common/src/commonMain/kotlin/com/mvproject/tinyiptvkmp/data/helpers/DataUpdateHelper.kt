@@ -1,7 +1,7 @@
 /*
  *  Created by Medvediev Viktor [mvproject]
  *  Copyright © 2024
- *  last modified : 09.05.24, 21:17
+ *  last modified : 09.06.24, 19:09
  *
  */
 
@@ -60,9 +60,6 @@ class DataUpdateHelper(
             val duration = typeToDuration(epgUpdatePeriod)
 
             val isEpgRequired = updateElapsed > duration
-
-            KLog.i("testing appState infoExist $infoExist")
-            KLog.e("testing appState isEpgRequired $isEpgRequired")
 
             delay(1000)
 

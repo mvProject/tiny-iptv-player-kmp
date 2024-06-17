@@ -1,7 +1,7 @@
 /*
  *  Created by Medvediev Viktor [mvproject]
  *  Copyright © 2024
- *  last modified : 29.05.24, 12:20
+ *  last modified : 29.05.24, 15:43
  *
  */
 
@@ -43,7 +43,6 @@ import com.mvproject.tinyiptvkmp.utils.CommonUtils.getNameFromStringUri
 import com.mvproject.tinyiptvkmp.utils.KLog
 import io.ktor.client.HttpClient
 import io.ktor.client.engine.android.Android
-import org.jetbrains.compose.resources.ExperimentalResourceApi
 import org.jetbrains.compose.resources.stringResource
 import tinyiptvkmp.common.generated.resources.Res
 import tinyiptvkmp.common.generated.resources.btn_add_local
@@ -72,7 +71,6 @@ actual fun PlayerViewContainer(
     )
 }
 
-@OptIn(ExperimentalResourceApi::class)
 @Composable
 actual fun LocalFileSelectButton(onPlaylistAction: (PlaylistAction) -> Unit) {
     val fileSelectLauncher =

@@ -1,7 +1,7 @@
 /*
  *  Created by Medvediev Viktor [mvproject]
  *  Copyright © 2024
- *  last modified : 29.05.24, 13:57
+ *  last modified : 09.06.24, 19:06
  *
  */
 @Suppress("DSL_SCOPE_VIOLATION")
@@ -74,6 +74,8 @@ kotlin {
 
             // Resources
             implementation(compose.components.resources)
+
+            implementation(libs.bundles.ksoup)
         }
 
         commonTest.dependencies {

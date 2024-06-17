@@ -1,7 +1,7 @@
 /*
  *  Created by Medvediev Viktor [mvproject]
  *  Copyright © 2024
- *  last modified : 07.05.24, 10:06
+ *  last modified : 10.06.24, 11:39
  *
  */
 
@@ -20,4 +20,7 @@ interface EpgInfoDao {
 
     @Query("SELECT * FROM EpgInfoEntity")
     suspend fun getEpgInfo(): List<EpgInfoEntity>
+
+    @Query("DELETE FROM EpgInfoEntity")
+    suspend fun deleteEpgInfo()
 }

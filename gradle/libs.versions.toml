@@ -45,10 +45,12 @@ espresso-core = "3.5.1"
 
 accompanist = "0.31.2-alpha"
 
-androidx-room = "2.7.0-alpha02"
+androidx-room = "2.7.0-alpha03"
 
 sqlite = "2.5.0-SNAPSHOT"
 ksp = "2.0.0-1.0.21"
+
+ksoup = "0.1.2"
 
 [plugins]
 compose-multiplatform = { id = "org.jetbrains.compose", version.ref = "compose" }
@@ -136,6 +138,9 @@ androidx-room-ktx = { group = "androidx.room", name = "room-ktx", version.ref = 
 androidx-room-runtime = { group = "androidx.room", name = "room-runtime", version.ref = "androidx-room" }
 sqlite-bundled = { module = "androidx.sqlite:sqlite-bundled", version.ref = "sqlite" }
 
+ksoup = { module = "com.fleeksoft.ksoup:ksoup", version.ref = "ksoup" }
+ksoup-network = { module = "com.fleeksoft.ksoup:ksoup-network", version.ref = "ksoup" }
+
 [bundles]
 
 ktor = [
@@ -161,6 +166,11 @@ room = [
     "androidx-room-runtime",
     "androidx-room-ktx",
     "sqlite-bundled"
+]
+
+ksoup = [
+    "ksoup",
+    "ksoup-network"
 ]
 
 koin = [

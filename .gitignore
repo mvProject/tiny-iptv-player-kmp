@@ -5,6 +5,8 @@ build/
 release/
 debug/
 
+.kotlin
+
 # Local configuration file (sdk path, etc)
 local.properties
 keystore.properties

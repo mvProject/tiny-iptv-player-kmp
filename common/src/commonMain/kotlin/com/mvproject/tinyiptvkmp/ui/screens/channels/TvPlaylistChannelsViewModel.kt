@@ -1,7 +1,7 @@
 /*
  *  Created by Medvediev Viktor [mvproject]
  *  Copyright © 2024
- *  last modified : 17.05.24, 18:12
+ *  last modified : 13.06.24, 09:52
  *
  */
 
@@ -38,8 +38,6 @@ class TvPlaylistChannelsViewModel(
     private val _viewState = MutableStateFlow(TvPlaylistChannelState())
     val viewState = _viewState.asStateFlow()
 
-    // val channels = mutableStateListOf<TvPlaylistChannel>()
-
     private val _channelsState = MutableStateFlow(TvPlaylistChannelGroup())
     val channelsState = _channelsState.asStateFlow()
 
@@ -62,10 +60,7 @@ class TvPlaylistChannelsViewModel(
         }
         viewModelScope.launch {
             val groupChannels = getGroupChannelsUseCase(group)
-            // channels.apply {
-            //     clear()
-            //     addAll(groupChannels)
-            // }
+
             _channelsState.value = TvPlaylistChannelGroup(items = groupChannels)
 
             _viewState.update { current ->
@@ -99,7 +94,6 @@ class TvPlaylistChannelsViewModel(
     }
 
     private fun applyEpg(data: ChannelEpg) {
-        KLog.d("testing channelsEpgData id = ${data.channelEpgId}, count = ${data.programs.count()}")
         val channels = channelsState.value.items
         val channelIndex = channels.indexOfFirst { it.channelName == data.channelName }
 
@@ -132,7 +126,8 @@ class TvPlaylistChannelsViewModel(
         val current = channelsState.value.items
 
         val updatedList =
-            current.toMutableList()
+            current
+                .toMutableList()
                 .apply {
                     set(index, channel)
                 }
