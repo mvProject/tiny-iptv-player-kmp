@@ -52,7 +52,8 @@ class GetGroupChannelsUseCase(
                 }
             }
 
-        return channels.asSequence()
+        return channels
+            .asSequence()
             .map { channel ->
                 channel.toTvPlaylistChannel(
                     isFavorite = channel.channelUrl in favorites,
