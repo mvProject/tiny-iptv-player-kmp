@@ -1,7 +1,7 @@
 /*
  *  Created by Medvediev Viktor [mvproject]
  *  Copyright © 2024
- *  last modified : 10.06.24, 13:19
+ *  last modified : 24.07.24, 14:58
  *
  */
 
@@ -9,8 +9,10 @@ package com.mvproject.tinyiptvkmp
 
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
-import androidx.compose.runtime.rememberCoroutineScope
+import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.getValue
 import com.mvproject.tinyiptvkmp.data.helpers.DataUpdateHelper
+import com.mvproject.tinyiptvkmp.data.helpers.DataUpdateState
 import com.mvproject.tinyiptvkmp.data.usecases.EpgInfoUpdateUseCase
 import com.mvproject.tinyiptvkmp.data.usecases.UpdateChannelsEpgInfoUseCase
 import com.mvproject.tinyiptvkmp.data.usecases.UpdateEpgUseCase
@@ -19,9 +21,7 @@ import com.mvproject.tinyiptvkmp.navigation.AppRoutes
 import com.mvproject.tinyiptvkmp.navigation.NavigationHost
 import com.mvproject.tinyiptvkmp.ui.theme.VideoAppTheme
 import com.mvproject.tinyiptvkmp.utils.KLog
-import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.delay
-import kotlinx.coroutines.launch
 import moe.tlaster.precompose.PreComposeApp
 import org.koin.compose.KoinContext
 import org.koin.compose.rememberKoinInject
@@ -44,34 +44,35 @@ private fun TinyIptvAppContent() {
     val updateRemotePlaylistChannelsUseCase =
         rememberKoinInject<UpdateRemotePlaylistChannelsUseCase>()
 
-    val scope = rememberCoroutineScope()
+    val appState by dataUpdateHelper.appState.collectAsState(DataUpdateState())
 
-    LaunchedEffect(Unit) {
-        // epgInfoUpdateUseCase()
-        // updateChannelsEpgInfoUseCase()
+    LaunchedEffect(appState) {
+        KLog.d("testing LaunchedEffect appState $appState")
+        if (appState.isChannelsInfoRequired) {
+            delay(500)
+            updateChannelsEpgInfoUseCase()
+        }
+
+        if (appState.isEpgInfoRequired) {
+            delay(1000)
+            epgInfoUpdateUseCase()
+        }
     }
 
-    scope.launch(Dispatchers.IO) {
-        delay(1000L)
-        dataUpdateHelper.appState
-            .collect { state ->
-                KLog.d("testing state $state")
-                if (state.isChannelsInfoRequired) {
-                    updateChannelsEpgInfoUseCase()
-                }
+    LaunchedEffect(appState.playlistUpdates) {
+        KLog.d("testing LaunchedEffect appState playlistUpdates ${appState.playlistUpdates}")
+        delay(500)
+        appState.playlistUpdates.forEach { playlist ->
+            updateRemotePlaylistChannelsUseCase(playlist = playlist)
+        }
+    }
 
-                if (state.isEpgInfoRequired) {
-                    epgInfoUpdateUseCase()
-                }
-
-                if (state.isEpgRequired) {
-                    updateEpgUseCase()
-                }
-
-                state.playlistUpdates.forEach { playlist ->
-                    updateRemotePlaylistChannelsUseCase(playlist = playlist)
-                }
-            }
+    LaunchedEffect(appState.infoExist) {
+        KLog.d("testing LaunchedEffect appState infoExist ${appState.infoExist}")
+        if (appState.infoExist) {
+            delay(2000)
+            //    updateEpgUseCase()
+        }
     }
 
     VideoAppTheme {

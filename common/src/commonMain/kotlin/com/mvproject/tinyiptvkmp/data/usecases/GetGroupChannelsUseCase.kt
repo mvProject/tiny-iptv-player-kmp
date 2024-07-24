@@ -1,7 +1,7 @@
 /*
  *  Created by Medvediev Viktor [mvproject]
  *  Copyright © 2024
- *  last modified : 07.05.24, 18:31
+ *  last modified : 24.07.24, 16:02
  *
  */
 
@@ -12,13 +12,11 @@ import com.mvproject.tinyiptvkmp.data.model.channels.TvPlaylistChannel
 import com.mvproject.tinyiptvkmp.data.repository.FavoriteChannelsRepository
 import com.mvproject.tinyiptvkmp.data.repository.PlaylistChannelsRepository
 import com.mvproject.tinyiptvkmp.data.repository.PreferenceRepository
-import org.jetbrains.compose.resources.ExperimentalResourceApi
 import org.jetbrains.compose.resources.getString
 import tinyiptvkmp.common.generated.resources.Res
 import tinyiptvkmp.common.generated.resources.channel_folder_all
 import tinyiptvkmp.common.generated.resources.channel_folder_favorite
 
-@OptIn(ExperimentalResourceApi::class)
 class GetGroupChannelsUseCase(
     private val preferenceRepository: PreferenceRepository,
     private val playlistChannelsRepository: PlaylistChannelsRepository,

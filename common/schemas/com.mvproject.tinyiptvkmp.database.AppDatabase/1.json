@@ -2,11 +2,11 @@
   "formatVersion": 1,
   "database": {
     "version": 1,
-    "identityHash": "17467e1143c0a2853d078b39edc3b919",
+    "identityHash": "3049aebb7684d7722ecf76975e323f80",
     "entities": [
       {
         "tableName": "EpgInfoEntity",
-        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`channelId` TEXT NOT NULL, `channelName` TEXT NOT NULL, `channelLogo` TEXT NOT NULL, PRIMARY KEY(`channelId`, `channelName`))",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`channelId` TEXT NOT NULL, `channelName` TEXT NOT NULL, `channelLogo` TEXT NOT NULL, `lastUpdated` INTEGER NOT NULL, PRIMARY KEY(`channelId`, `channelName`))",
         "fields": [
           {
             "fieldPath": "channelId",
@@ -24,6 +24,12 @@
             "fieldPath": "channelLogo",
             "columnName": "channelLogo",
             "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "lastUpdated",
+            "columnName": "lastUpdated",
+            "affinity": "INTEGER",
             "notNull": true
           }
         ],
@@ -222,7 +228,7 @@
     ],
     "setupQueries": [
       "CREATE TABLE IF NOT EXISTS room_master_table (id INTEGER PRIMARY KEY,identity_hash TEXT)",
-      "INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, '17467e1143c0a2853d078b39edc3b919')"
+      "INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, '3049aebb7684d7722ecf76975e323f80')"
     ]
   }
 }

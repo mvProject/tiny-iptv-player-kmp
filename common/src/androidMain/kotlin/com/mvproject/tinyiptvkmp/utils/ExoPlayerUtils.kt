@@ -1,7 +1,7 @@
 /*
  *  Created by Medvediev Viktor [mvproject]
- *  Copyright © 2023
- *  last modified : 20.11.23, 17:18
+ *  Copyright © 2024
+ *  last modified : 17.06.24, 11:51
  *
  */
 
@@ -19,8 +19,9 @@ import androidx.media3.datasource.DefaultHttpDataSource
 import androidx.media3.exoplayer.DefaultRenderersFactory
 import androidx.media3.exoplayer.ExoPlayer
 import androidx.media3.exoplayer.hls.HlsMediaSource
+import androidx.media3.exoplayer.trackselection.AdaptiveTrackSelection
 import androidx.media3.exoplayer.trackselection.DefaultTrackSelector
-import com.mvproject.tinyiptvkmp.data.model.channels.TvPlaylistChannel
+import androidx.media3.exoplayer.upstream.DefaultBandwidthMeter
 import com.mvproject.tinyiptvkmp.ui.screens.player.state.VideoPlaybackState
 
 object ExoPlayerUtils {
@@ -32,12 +33,18 @@ object ExoPlayerUtils {
 
         val defaultDataSourceFactory = createDataSourceFactory()
 
-        val source = HlsMediaSource.Factory(defaultDataSourceFactory)
-            .setAllowChunklessPreparation(false)
+        val source =
+            HlsMediaSource
+                .Factory(defaultDataSourceFactory)
+                .setAllowChunklessPreparation(false)
 
         val audioAttributes = createAudioAttributes()
 
-        return ExoPlayer.Builder(context)
+        val bandwidthMeter = DefaultBandwidthMeter.Builder(context).build()
+
+        return ExoPlayer
+            .Builder(context)
+            .setBandwidthMeter(bandwidthMeter)
             .setAudioAttributes(audioAttributes, true)
             .setTrackSelector(trackSelector)
             .setRenderersFactory(renderersFactory)
@@ -46,41 +53,47 @@ object ExoPlayerUtils {
     }
 
     @OptIn(UnstableApi::class)
-    private fun createDataSourceFactory(): DefaultHttpDataSource.Factory {
-        return DefaultHttpDataSource.Factory()
+    private fun createDataSourceFactory(): DefaultHttpDataSource.Factory =
+        DefaultHttpDataSource
+            .Factory()
             .setAllowCrossProtocolRedirects(true)
             .setConnectTimeoutMs(DefaultHttpDataSource.DEFAULT_CONNECT_TIMEOUT_MILLIS)
             .setReadTimeoutMs(DefaultHttpDataSource.DEFAULT_READ_TIMEOUT_MILLIS)
 
-    }
-
     @OptIn(UnstableApi::class)
-    private fun createTrackSelector(context: Context): DefaultTrackSelector {
-        return DefaultTrackSelector(context).apply {
-            parameters = buildUponParameters()
-                //  .setAllowAudioMixedDecoderSupportAdaptiveness(true)
-                //  .setAllowAudioMixedMimeTypeAdaptiveness(true)
-                .build()
+    private fun createTrackSelector(context: Context): DefaultTrackSelector =
+        DefaultTrackSelector(
+            context,
+            AdaptiveTrackSelection.Factory(),
+        ).apply {
+            parameters =
+                buildUponParameters()
+                    .setMaxVideoSizeSd()
+                    .setAllowAudioMixedChannelCountAdaptiveness(true)
+                    .setAllowAudioMixedMimeTypeAdaptiveness(true)
+                    .setAllowAudioMixedDecoderSupportAdaptiveness(true)
+                    .build()
         }
-    }
 
     @OptIn(UnstableApi::class)
-    private fun createRenderersFactory(context: Context): DefaultRenderersFactory {
-        return DefaultRenderersFactory(context).apply {
+    private fun createRenderersFactory(context: Context): DefaultRenderersFactory =
+        DefaultRenderersFactory(context).apply {
             setExtensionRendererMode(DefaultRenderersFactory.EXTENSION_RENDERER_MODE_PREFER)
         }
-    }
 
     @OptIn(UnstableApi::class)
-    private fun createAudioAttributes(): AudioAttributes {
-        return AudioAttributes.Builder()
+    private fun createAudioAttributes(): AudioAttributes =
+        AudioAttributes
+            .Builder()
             .setUsage(C.USAGE_MEDIA)
             .setContentType(C.AUDIO_CONTENT_TYPE_MOVIE)
             .build()
-    }
 
-    fun mapToVideoPlaybackState(playbackState: Int, errorCode: Int? = null): VideoPlaybackState {
-        return when (playbackState) {
+    fun mapToVideoPlaybackState(
+        playbackState: Int,
+        errorCode: Int? = null,
+    ): VideoPlaybackState =
+        when (playbackState) {
             Player.STATE_IDLE -> {
                 VideoPlaybackState.VideoPlaybackIdle(errorCode = errorCode)
             }
@@ -89,34 +102,18 @@ object ExoPlayerUtils {
             Player.STATE_ENDED -> VideoPlaybackState.VideoPlaybackEnded
             else -> VideoPlaybackState.VideoPlaybackReady
         }
-    }
-
-    fun List<TvPlaylistChannel>.createMediaItems(): List<MediaItem> {
-        return buildList {
-            this@createMediaItems.forEach { video ->
-                add(
-                    MediaItem.Builder()
-                        .setUri(video.channelUrl)
-                        .setMediaMetadata(
-                            MediaMetadata.Builder()
-                                .setDisplayTitle(video.channelName)
-                                .build()
-                        ).build()
-                )
-            }
-        }
-    }
 
     fun createMediaItem(
         title: String,
-        url: String
-    ): MediaItem {
-        return MediaItem.Builder()
+        url: String,
+    ): MediaItem =
+        MediaItem
+            .Builder()
             .setUri(url)
             .setMediaMetadata(
-                MediaMetadata.Builder()
+                MediaMetadata
+                    .Builder()
                     .setDisplayTitle(title)
-                    .build()
+                    .build(),
             ).build()
-    }
 }

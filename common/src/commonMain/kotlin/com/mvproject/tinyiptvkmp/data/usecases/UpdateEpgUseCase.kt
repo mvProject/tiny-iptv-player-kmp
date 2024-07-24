@@ -1,7 +1,7 @@
 /*
  *  Created by Medvediev Viktor [mvproject]
  *  Copyright © 2024
- *  last modified : 28.05.24, 15:43
+ *  last modified : 24.07.24, 16:02
  *
  */
 
@@ -14,7 +14,11 @@ import com.mvproject.tinyiptvkmp.data.repository.PreferenceRepository
 import com.mvproject.tinyiptvkmp.utils.KLog
 import com.mvproject.tinyiptvkmp.utils.TimeUtils.actualDate
 import com.mvproject.tinyiptvkmp.utils.TimeUtils.convertTimeToReadableFormat
+import com.mvproject.tinyiptvkmp.utils.TimeUtils.typeToDuration
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.delay
+import kotlinx.coroutines.flow.first
+import kotlinx.coroutines.withContext
 import kotlinx.datetime.Clock
 
 class UpdateEpgUseCase(
@@ -24,24 +28,32 @@ class UpdateEpgUseCase(
     private val epgDataSource: EpgDataSource,
 ) {
     suspend operator fun invoke() {
-        val epgIds =
-            epgInfoRepository.loadEpgInfoData().map {
-                it.channelId
-            }
+        val epgUpdatePeriod = preferenceRepository.epgUpdatePeriod().first()
+        val duration = typeToDuration(epgUpdatePeriod)
 
-        val epgIdsChunked = epgIds.chunked(40)
+        val current = Clock.System.now().toEpochMilliseconds()
 
-        val start = Clock.System.now().toEpochMilliseconds()
+        val epgToUpdate =
+            epgInfoRepository.loadEpgInfoData().filter { (current - it.lastUpdate) >= duration }
+        KLog.e("testing UpdateEpgUseCase epgToUpdate count:${epgToUpdate.count()}")
+        //  val epgIds = epgToUpdate.map { it.channelId }
+
+        val epgIdsChunked = epgToUpdate.chunked(40)
+
         if (epgIdsChunked.isNotEmpty()) {
-            KLog.e("testing UpdateEpgUseCase start:${start.convertTimeToReadableFormat()}")
-            epgIdsChunked.forEachIndexed { index, part ->
-                delay(500)
-                part.forEach { id ->
-                    val programs = epgDataSource.getRemoteEpg(channelsId = id)
-                    epgProgramRepository.insertEpgPrograms(
-                        channelId = id,
-                        channelEpgPrograms = programs,
-                    )
+            KLog.e("testing UpdateEpgUseCase start:${current.convertTimeToReadableFormat()}")
+            withContext(Dispatchers.IO) {
+                epgIdsChunked.forEachIndexed { index, part ->
+                    delay(500)
+                    part.forEach { info ->
+                        val programs = epgDataSource.getRemoteEpg(channelsId = info.channelId)
+                        epgProgramRepository.insertEpgPrograms(
+                            channelId = info.channelId,
+                            channelEpgPrograms = programs,
+                        )
+                        val updatedInfo = info.copy(lastUpdate = current)
+                        epgInfoRepository.updateEpgInfoUpdate(info = updatedInfo)
+                    }
                 }
             }
         }

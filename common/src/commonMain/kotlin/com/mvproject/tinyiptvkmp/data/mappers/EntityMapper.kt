@@ -1,7 +1,7 @@
 /*
  *  Created by Medvediev Viktor [mvproject]
  *  Copyright © 2024
- *  last modified : 07.05.24, 10:06
+ *  last modified : 27.06.24, 14:40
  *
  */
 
@@ -116,6 +116,7 @@ object EntityMapper {
                 channelId = channelId,
                 channelName = channelName,
                 channelLogo = channelLogo,
+                lastUpdate = lastUpdated,
             )
         }
 }

@@ -1,13 +1,14 @@
 /*
  *  Created by Medvediev Viktor [mvproject]
  *  Copyright © 2024
- *  last modified : 07.05.24, 10:06
+ *  last modified : 27.06.24, 14:40
  *
  */
 
 package com.mvproject.tinyiptvkmp.data.mappers
 
 import com.mvproject.tinyiptvkmp.data.model.channels.PlaylistChannel
+import com.mvproject.tinyiptvkmp.data.model.epg.EpgInfo
 import com.mvproject.tinyiptvkmp.data.model.epg.EpgProgram
 import com.mvproject.tinyiptvkmp.data.model.response.EpgInfoResponse
 import com.mvproject.tinyiptvkmp.data.model.response.EpgProgramResponse
@@ -29,6 +30,16 @@ object ParseMappers {
                 channelId = channelId,
                 channelName = channelNames.trim(),
                 channelLogo = channelIcon,
+            )
+        }
+
+    fun EpgInfo.toEpgInfoEntity() =
+        with(this) {
+            EpgInfoEntity(
+                channelId = channelId,
+                channelName = channelName,
+                channelLogo = channelLogo,
+                lastUpdated = lastUpdate,
             )
         }
 
@@ -99,13 +110,12 @@ object ParseMappers {
      *
      * @return the list of long values in milliseconds
      */
-    fun List<String>.calculateEndings(): List<Long> {
-        return buildList {
+    fun List<String>.calculateEndings(): List<Long> =
+        buildList {
             this@calculateEndings.zipWithNext().forEach { timing ->
                 add(timing.second.toMillis())
             }
         }
-    }
 
     /**
      * Extension Method to non-null string variable which

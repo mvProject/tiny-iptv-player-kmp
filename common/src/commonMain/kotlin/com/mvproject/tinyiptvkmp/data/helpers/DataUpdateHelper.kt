@@ -1,7 +1,7 @@
 /*
  *  Created by Medvediev Viktor [mvproject]
  *  Copyright © 2024
- *  last modified : 17.06.24, 11:13
+ *  last modified : 27.06.24, 14:55
  *
  */
 
@@ -17,7 +17,6 @@ import com.mvproject.tinyiptvkmp.utils.TimeUtils.actualDate
 import com.mvproject.tinyiptvkmp.utils.TimeUtils.typeToDuration
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.combine
-import kotlinx.coroutines.flow.first
 
 class DataUpdateHelper(
     private val preferenceRepository: PreferenceRepository,
@@ -28,7 +27,7 @@ class DataUpdateHelper(
             preferenceRepository.isChannelsEpgInfoUpdateRequired(),
             preferenceRepository.isEpgInfoDataExist(),
             preferenceRepository.lastEpgUpdate(),
-        ) { channelsInfo, infoExist, _ ->
+        ) { isChannelsInfoRequired, infoExist, _ ->
 
             val remote =
                 playlistsRepository
@@ -55,19 +54,12 @@ class DataUpdateHelper(
 
             val isEpgInfoDataUpdateRequired = preferenceRepository.isEpgInfoDataUpdateRequired()
 
-            val epgUpdatePeriod = preferenceRepository.epgUpdatePeriod().first()
-            val lastEpgUpdate = preferenceRepository.lastEpgUpdate().first()
-            val updateElapsed = actualDate - lastEpgUpdate
-            val duration = typeToDuration(epgUpdatePeriod)
-
-            val isEpgRequired = updateElapsed > duration
-
             delay(1000)
 
             return@combine DataUpdateState(
-                isChannelsInfoRequired = infoExist && channelsInfo,
+                infoExist = infoExist,
+                isChannelsInfoRequired = infoExist && isChannelsInfoRequired,
                 isEpgInfoRequired = isEpgInfoDataUpdateRequired,
-                isEpgRequired = infoExist && isEpgRequired,
                 playlistUpdates = playlistUpdates,
             )
         }
@@ -77,6 +69,6 @@ class DataUpdateHelper(
 data class DataUpdateState(
     val isChannelsInfoRequired: Boolean = false,
     val isEpgInfoRequired: Boolean = false,
-    val isEpgRequired: Boolean = false,
+    val infoExist: Boolean = false,
     val playlistUpdates: List<Playlist> = emptyList(),
 )

@@ -1,7 +1,7 @@
 /*
  *  Created by Medvediev Viktor [mvproject]
  *  Copyright © 2024
- *  last modified : 17.06.24, 11:13
+ *  last modified : 24.07.24, 16:02
  *
  */
 
@@ -10,6 +10,7 @@ package com.mvproject.tinyiptvkmp.data.repository
 import androidx.room.Transaction
 import com.mvproject.tinyiptvkmp.data.mappers.EntityMapper.toEpgInfo
 import com.mvproject.tinyiptvkmp.data.mappers.ParseMappers.toEpgInfo
+import com.mvproject.tinyiptvkmp.data.mappers.ParseMappers.toEpgInfoEntity
 import com.mvproject.tinyiptvkmp.data.model.epg.EpgInfo
 import com.mvproject.tinyiptvkmp.data.model.response.EpgInfoResponse
 import com.mvproject.tinyiptvkmp.database.AppDatabase
@@ -37,5 +38,11 @@ class EpgInfoRepository(
 
         val list = epgInfoDao.getEpgInfo()
         KLog.w("testing addEpgInfoData load from room ${list.count()}")
+    }
+
+    suspend fun updateEpgInfoUpdate(info: EpgInfo) {
+        KLog.i("testing updateEpgInfoUpdate info $info")
+        val infoEntity = info.toEpgInfoEntity()
+        epgInfoDao.updateEpgInfo(data = infoEntity)
     }
 }

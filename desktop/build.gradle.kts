@@ -1,6 +1,15 @@
 /*
  *  Created by Medvediev Viktor [mvproject]
  *  Copyright © 2024
+ *  last modified : 12.07.24, 14:49
+ *
+ */
+
+import org.jetbrains.compose.desktop.application.dsl.TargetFormat
+
+/*
+ *  Created by Medvediev Viktor [mvproject]
+ *  Copyright © 2024
  *  last modified : 29.05.24, 11:59
  *
  */
@@ -25,9 +34,7 @@ compose.desktop {
             packageVersion = "1.0.0"
             description = "Iptv player multiplatform App"
             copyright = "©2023 MvProject. All rights reserved."
-            targetFormats(
-                org.jetbrains.compose.desktop.application.dsl.TargetFormat.Msi,
-            )
+            targetFormats(TargetFormat.Exe)
 
             //  modules("java.base", "java.instrument", "java.management", "java.net.http", "java.sql", "jdk.unsupported", "jdk.xml.dom")
             includeAllModules = true
