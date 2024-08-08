@@ -1,12 +1,13 @@
 /*
  *  Created by Medvediev Viktor [mvproject]
  *  Copyright © 2024
- *  last modified : 29.05.24, 14:32
+ *  last modified : 08.08.24, 20:26
  *
  */
 
 package com.mvproject.tinyiptvkmp.ui.screens.groups.components
 
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.material.icons.Icons
@@ -19,17 +20,33 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.text.style.TextAlign
+import com.mvproject.tinyiptvkmp.data.enums.GroupType
 import com.mvproject.tinyiptvkmp.data.model.channels.ChannelsGroup
 import com.mvproject.tinyiptvkmp.ui.theme.dimens
 import com.mvproject.tinyiptvkmp.utils.AppConstants
+import org.jetbrains.compose.resources.stringResource
+import tinyiptvkmp.common.generated.resources.Res
+import tinyiptvkmp.common.generated.resources.channel_folder_all
 
 @Composable
 fun PlaylistGroupItemView(
     modifier: Modifier = Modifier,
     group: ChannelsGroup,
+    onSelect: (String, String) -> Unit,
 ) {
+    val title =
+        when (group.groupType) {
+            GroupType.ALL -> stringResource(resource = Res.string.channel_folder_all)
+            GroupType.FAVORITE -> group.groupFavoriteType.name
+            GroupType.SPECIFIED -> group.groupName
+        }
+
     ListItem(
-        modifier = modifier,
+        modifier =
+            modifier
+                .clickable {
+                    onSelect(title, group.groupType.name)
+                },
         leadingContent = {
             Icon(
                 modifier =
@@ -43,7 +60,7 @@ fun PlaylistGroupItemView(
         },
         headlineContent = {
             Text(
-                text = group.groupName,
+                text = title,
                 style = MaterialTheme.typography.bodyMedium,
                 color = MaterialTheme.colorScheme.onPrimary,
             )

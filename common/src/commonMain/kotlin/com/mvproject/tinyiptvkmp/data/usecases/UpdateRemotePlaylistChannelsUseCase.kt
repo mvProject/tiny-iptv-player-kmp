@@ -1,7 +1,7 @@
 /*
  *  Created by Medvediev Viktor [mvproject]
  *  Copyright © 2024
- *  last modified : 06.05.24, 20:07
+ *  last modified : 24.07.24, 18:34
  *
  */
 
@@ -38,7 +38,9 @@ class UpdateRemotePlaylistChannelsUseCase(
         playlistChannelsRepository.updatePlaylistChannels(channels)
 
         channels.forEach { channel ->
-            if (channel.channelUrl in favorites) {
+            val favoritesUrls = favorites.map { it.url }
+
+            if (channel.channelUrl in favoritesUrls) {
                 KLog.w("update in favorite ${channel.channelName}")
                 favoriteChannelsRepository.updatePlaylistFavoriteChannels(channel = channel)
             }

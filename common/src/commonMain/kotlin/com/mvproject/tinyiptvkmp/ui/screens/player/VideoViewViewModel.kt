@@ -1,7 +1,7 @@
 /*
  *  Created by Medvediev Viktor [mvproject]
  *  Copyright © 2024
- *  last modified : 17.06.24, 11:13
+ *  last modified : 26.07.24, 14:06
  *
  */
 
@@ -82,7 +82,7 @@ class VideoViewViewModel(
         channelGroup: String,
     ) {
         viewModelScope.launch {
-            val channelList = getGroupChannelsUseCase(channelGroup)
+            val channelList = getGroupChannelsUseCase(channelGroup, "")
             val currentPlaying = videoViewState.value.currentChannel.channelName
 
             val name = currentPlaying.ifBlank { channelName }
@@ -391,9 +391,10 @@ class VideoViewViewModel(
         val currentChannels = videoViewChannelsState.value.items
         val currentIndex = videoViewState.value.mediaPosition
 
+        // todo
         val currentChannelFavoriteChanged =
             currentChannel.copy(
-                isInFavorites = !currentChannel.isInFavorites,
+                // isInFavorites = !currentChannel.isInFavorites,
             )
 
         val updatedFavoriteChangedChannels =

@@ -1,7 +1,7 @@
 /*
  *  Created by Medvediev Viktor [mvproject]
  *  Copyright © 2024
- *  last modified : 29.05.24, 13:43
+ *  last modified : 08.08.24, 19:45
  *
  */
 
@@ -18,7 +18,8 @@ fun ChannelView(
     viewType: ChannelsViewType,
     item: TvPlaylistChannel,
     onChannelSelect: () -> Unit = {},
-    onOptionSelect: () -> Unit = {},
+    onFavoriteClick: () -> Unit = {},
+    onShowEpgClick: () -> Unit = {},
 ) {
     when (viewType) {
         ChannelsViewType.LIST -> {
@@ -26,7 +27,8 @@ fun ChannelView(
                 modifier = modifier,
                 channel = item,
                 onChannelSelect = onChannelSelect,
-                onOptionSelect = onOptionSelect,
+                onFavoriteClick = onFavoriteClick,
+                onShowEpgClick = onShowEpgClick,
             )
         }
 
@@ -35,7 +37,8 @@ fun ChannelView(
                 modifier = modifier,
                 channel = item,
                 onChannelSelect = onChannelSelect,
-                onOptionSelect = onOptionSelect,
+                onFavoriteClick = onFavoriteClick,
+                onShowEpgClick = onShowEpgClick,
             )
         }
 
@@ -44,7 +47,8 @@ fun ChannelView(
                 modifier = modifier,
                 channel = item,
                 onChannelSelect = onChannelSelect,
-                onOptionSelect = onOptionSelect,
+                onFavoriteClick = onFavoriteClick,
+                onShowEpgClick = onShowEpgClick,
             )
         }
     }

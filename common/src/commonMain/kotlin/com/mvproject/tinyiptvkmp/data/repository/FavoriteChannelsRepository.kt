@@ -1,12 +1,13 @@
 /*
  *  Created by Medvediev Viktor [mvproject]
  *  Copyright © 2024
- *  last modified : 17.05.24, 18:15
+ *  last modified : 08.08.24, 20:26
  *
  */
 
 package com.mvproject.tinyiptvkmp.data.repository
 
+import com.mvproject.tinyiptvkmp.data.enums.FavoriteType
 import com.mvproject.tinyiptvkmp.data.model.channels.PlaylistChannel
 import com.mvproject.tinyiptvkmp.data.model.channels.TvPlaylistChannel
 import com.mvproject.tinyiptvkmp.database.AppDatabase
@@ -22,6 +23,7 @@ class FavoriteChannelsRepository(
 
     suspend fun addChannelToFavorite(
         channel: TvPlaylistChannel,
+        favoriteType: FavoriteType,
         listId: Long,
     ) {
         withContext(Dispatchers.IO) {
@@ -35,6 +37,7 @@ class FavoriteChannelsRepository(
                     channelName = channel.channelName,
                     channelUrl = channel.channelUrl,
                     channelOrder = order,
+                    favoriteType = favoriteType,
                     parentListId = listId,
                 ),
             )
@@ -60,15 +63,22 @@ class FavoriteChannelsRepository(
         )
     }
 
-    suspend fun loadPlaylistFavoriteChannelUrls(listId: Long): List<String> {
-        return favoriteChannelDao.getPlaylistFavoriteChannelUrls(id = listId)
-    }
+    suspend fun loadPlaylistFavoriteChannelUrls(listId: Long): List<FavTypes> =
+        favoriteChannelDao.getPlaylistFavoriteChannelUrls(id = listId).map { item ->
+            FavTypes(
+                url = item.channelUrl,
+                type = item.favoriteType,
+            )
+        }
 
-    suspend fun loadFavoriteChannelUrls(): List<String> {
-        return favoriteChannelDao.getFavoriteChannelUrls()
-    }
+    suspend fun loadFavoriteChannelUrls(): List<String> = favoriteChannelDao.getFavoriteChannelUrls()
 
     suspend fun deletePlaylistFavoriteChannels(listId: Long) {
         favoriteChannelDao.deletePlaylistFavoriteChannelEntities(id = listId)
     }
 }
+
+data class FavTypes(
+    val url: String,
+    val type: FavoriteType,
+)

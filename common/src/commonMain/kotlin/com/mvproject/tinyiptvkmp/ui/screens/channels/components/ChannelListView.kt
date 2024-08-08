@@ -1,7 +1,7 @@
 /*
  *  Created by Medvediev Viktor [mvproject]
  *  Copyright © 2024
- *  last modified : 29.05.24, 13:50
+ *  last modified : 08.08.24, 20:26
  *
  */
 
@@ -9,6 +9,11 @@ package com.mvproject.tinyiptvkmp.ui.screens.channels.components
 
 import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.combinedClickable
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.rounded.Favorite
+import androidx.compose.material.icons.rounded.FavoriteBorder
+import androidx.compose.material3.Icon
+import androidx.compose.material3.IconButton
 import androidx.compose.material3.ListItem
 import androidx.compose.material3.ListItemDefaults
 import androidx.compose.material3.MaterialTheme
@@ -16,6 +21,7 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import com.mvproject.tinyiptvkmp.data.enums.FavoriteType
 import com.mvproject.tinyiptvkmp.data.mappers.ListMappers.toActual
 import com.mvproject.tinyiptvkmp.data.model.channels.TvPlaylistChannel
 import org.jetbrains.compose.resources.stringResource
@@ -28,16 +34,16 @@ fun ChannelListView(
     modifier: Modifier = Modifier,
     channel: TvPlaylistChannel,
     onChannelSelect: () -> Unit = {},
-    onOptionSelect: () -> Unit = {},
+    onFavoriteClick: () -> Unit = {},
+    onShowEpgClick: () -> Unit = {},
 ) {
     ListItem(
         modifier =
             modifier
                 .combinedClickable(
                     onClick = onChannelSelect,
-                    onLongClick = onOptionSelect,
-                )
-                .clip(MaterialTheme.shapes.extraSmall),
+                    onLongClick = onShowEpgClick,
+                ).clip(MaterialTheme.shapes.extraSmall),
         colors =
             ListItemDefaults.colors(
                 containerColor = MaterialTheme.colorScheme.surface,
@@ -53,7 +59,7 @@ fun ChannelListView(
                 text = channel.channelName,
                 style = MaterialTheme.typography.bodyMedium,
                 color =
-                    if (channel.isInFavorites) {
+                    if (channel.favoriteType != FavoriteType.NONE) {
                         MaterialTheme.colorScheme.onSurfaceVariant
                     } else {
                         MaterialTheme.colorScheme.onPrimary
@@ -71,6 +77,18 @@ fun ChannelListView(
                     text = stringResource(Res.string.msg_no_epg_found),
                     style = MaterialTheme.typography.labelMedium,
                     color = MaterialTheme.colorScheme.outline,
+                )
+            }
+        },
+        trailingContent = {
+            IconButton(
+                // modifier = modifier,
+                onClick = onFavoriteClick,
+            ) {
+                Icon(
+                    imageVector = if (channel.favoriteType != FavoriteType.NONE) Icons.Rounded.Favorite else Icons.Rounded.FavoriteBorder,
+                    contentDescription = "PlaybackControl",
+                    tint = MaterialTheme.colorScheme.onSurface,
                 )
             }
         },

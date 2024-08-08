@@ -1,12 +1,13 @@
 /*
  *  Created by Medvediev Viktor [mvproject]
  *  Copyright © 2024
- *  last modified : 27.06.24, 14:40
+ *  last modified : 24.07.24, 18:24
  *
  */
 
 package com.mvproject.tinyiptvkmp.data.mappers
 
+import com.mvproject.tinyiptvkmp.data.enums.FavoriteType
 import com.mvproject.tinyiptvkmp.data.model.channels.PlaylistChannel
 import com.mvproject.tinyiptvkmp.data.model.channels.TvPlaylistChannel
 import com.mvproject.tinyiptvkmp.data.model.epg.EpgInfo
@@ -47,8 +48,8 @@ object EntityMapper {
         }
 
     fun PlaylistChannel.toTvPlaylistChannel(
-        isFavorite: Boolean = false,
         isEpgUsing: Boolean = false,
+        favoriteType: FavoriteType,
         epgContent: TvPlaylistChannelEpg = TvPlaylistChannelEpg(),
     ) = with(this) {
         TvPlaylistChannel(
@@ -56,8 +57,8 @@ object EntityMapper {
             channelLogo = channelLogo,
             channelUrl = channelUrl,
             epgId = epgId,
+            favoriteType = favoriteType,
             channelEpg = epgContent,
-            isInFavorites = isFavorite,
             isEpgUsing = isEpgUsing,
         )
     }

@@ -1,7 +1,7 @@
 /*
  *  Created by Medvediev Viktor [mvproject]
  *  Copyright © 2024
- *  last modified : 22.11.23, 18:54
+ *  last modified : 29.07.24, 14:43
  *
  */
 
@@ -18,17 +18,19 @@ import okio.Path.Companion.toPath
 import org.koin.core.module.Module
 import org.koin.dsl.module
 
-actual fun platformDataStoreModule(): Module = module {
-    single {
-        PreferenceDataStoreFactory.createWithPath(
-            corruptionHandler = ReplaceFileCorruptionHandler(
-                produceNewData = { emptyPreferences() }
-            ),
-            scope = CoroutineScope(Dispatchers.IO + SupervisorJob()),
-            produceFile = {
-                "./settings/$dataStoreFileName".toPath()
-            }
-        )
+actual fun platformDataStoreModule(): Module =
+    module {
+        single {
+            val path = System.getProperty("java.io.tmpdir")
+            PreferenceDataStoreFactory.createWithPath(
+                corruptionHandler =
+                    ReplaceFileCorruptionHandler(
+                        produceNewData = { emptyPreferences() },
+                    ),
+                scope = CoroutineScope(Dispatchers.IO + SupervisorJob()),
+                produceFile = {
+                    "$path/$dataStoreFileName".toPath()
+                },
+            )
+        }
     }
-}
-

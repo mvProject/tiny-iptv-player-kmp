@@ -1,7 +1,7 @@
 /*
  *  Created by Medvediev Viktor [mvproject]
  *  Copyright © 2024
- *  last modified : 29.05.24, 13:50
+ *  last modified : 24.07.24, 18:14
  *
  */
 
@@ -26,6 +26,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.alpha
 import androidx.compose.ui.text.style.TextAlign
+import com.mvproject.tinyiptvkmp.data.enums.FavoriteType
 import com.mvproject.tinyiptvkmp.data.mappers.ListMappers.toActual
 import com.mvproject.tinyiptvkmp.data.model.channels.TvPlaylistChannel
 import com.mvproject.tinyiptvkmp.ui.components.modifiers.roundedHeader
@@ -85,7 +86,7 @@ fun PlayerChannelView(
                         Modifier
                             .fillMaxWidth()
                             .alpha(MaterialTheme.dimens.alpha70),
-                    isFavorite = currentChannel.isInFavorites,
+                    isFavorite = currentChannel.favoriteType != FavoriteType.NONE,
                     isPlaying = isPlaying,
                     isFullScreen = isFullScreen,
                     onPlaybackAction = onPlaybackAction,

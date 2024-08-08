@@ -1,13 +1,14 @@
 /*
  *  Created by Medvediev Viktor [mvproject]
  *  Copyright © 2024
- *  last modified : 13.06.24, 09:52
+ *  last modified : 08.08.24, 20:26
  *
  */
 
 package com.mvproject.tinyiptvkmp.ui.screens.channels
 
 import com.mvproject.tinyiptvkmp.data.enums.ChannelsViewType
+import com.mvproject.tinyiptvkmp.data.enums.FavoriteType
 import com.mvproject.tinyiptvkmp.data.helpers.ViewTypeHelper
 import com.mvproject.tinyiptvkmp.data.model.channels.TvPlaylistChannel
 import com.mvproject.tinyiptvkmp.data.model.epg.EpgProgram
@@ -53,13 +54,15 @@ class TvPlaylistChannelsViewModel(
         }
     }
 
-    fun loadChannelsByGroups(group: String) {
-        KLog.d("testing refreshEpg")
+    fun loadChannelsByGroups(
+        group: String,
+        groupType: String,
+    ) {
         _viewState.update { current ->
             current.copy(currentGroup = group, isLoading = true)
         }
         viewModelScope.launch {
-            val groupChannels = getGroupChannelsUseCase(group)
+            val groupChannels = getGroupChannelsUseCase(group = group, groupType = groupType)
 
             _channelsState.value = TvPlaylistChannelGroup(items = groupChannels)
 
@@ -152,7 +155,7 @@ class TvPlaylistChannelsViewModel(
             }
 
             is TvPlaylistChannelAction.ToggleFavourites -> {
-                toggleFavorites(channel = action.channel)
+                toggleFavorites(channel = action.channel, type = action.type)
             }
 
             is TvPlaylistChannelAction.ViewTypeChange -> {
@@ -186,21 +189,32 @@ class TvPlaylistChannelsViewModel(
         }
     }
 
-    private fun toggleFavorites(channel: TvPlaylistChannel) {
+    private fun toggleFavorites(
+        channel: TvPlaylistChannel,
+        type: FavoriteType,
+    ) {
         viewModelScope.launch {
-            val isFavorite = channel.isInFavorites
+            KLog.w("testing toggleFavorites type $type")
+
             val channels = channelsState.value.items
             val channelIndex = channels.indexOfFirst { it.channelName == channel.channelName }
 
+            val favType =
+                if (channel.favoriteType == type) {
+                    FavoriteType.NONE
+                } else {
+                    type
+                }
+
             val channelWithEpg =
-                channel.copy(isInFavorites = !isFavorite)
+                channel.copy(favoriteType = favType)
 
             updateChannel(
                 index = channelIndex,
                 channel = channelWithEpg,
             )
 
-            toggleFavoriteChannelUseCase(channel = channel)
+            toggleFavoriteChannelUseCase(channel = channel, favoriteType = favType)
         }
     }
 

@@ -1,7 +1,7 @@
 /*
  *  Created by Medvediev Viktor [mvproject]
  *  Copyright © 2024
- *  last modified : 29.05.24, 13:50
+ *  last modified : 08.08.24, 20:26
  *
  */
 
@@ -18,7 +18,12 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.rounded.Favorite
+import androidx.compose.material.icons.rounded.FavoriteBorder
 import androidx.compose.material3.ElevatedCard
+import androidx.compose.material3.Icon
+import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -26,6 +31,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.text.style.TextAlign
+import com.mvproject.tinyiptvkmp.data.enums.FavoriteType
 import com.mvproject.tinyiptvkmp.data.mappers.ListMappers.toActual
 import com.mvproject.tinyiptvkmp.data.model.channels.TvPlaylistChannel
 import com.mvproject.tinyiptvkmp.ui.theme.dimens
@@ -40,7 +46,8 @@ fun ChannelGridView(
     modifier: Modifier = Modifier,
     channel: TvPlaylistChannel,
     onChannelSelect: () -> Unit = {},
-    onOptionSelect: () -> Unit = {},
+    onFavoriteClick: () -> Unit = {},
+    onShowEpgClick: () -> Unit = {},
 ) {
     ElevatedCard(
         modifier =
@@ -49,7 +56,7 @@ fun ChannelGridView(
                 .clip(MaterialTheme.shapes.extraSmall)
                 .combinedClickable(
                     onClick = onChannelSelect,
-                    onLongClick = onOptionSelect,
+                    onLongClick = onShowEpgClick,
                 ),
     ) {
         Column(
@@ -75,9 +82,9 @@ fun ChannelGridView(
 
                 Text(
                     text = channel.channelName,
-                    style = MaterialTheme.typography.bodyLarge,
+                    style = MaterialTheme.typography.bodyMedium,
                     color =
-                        if (channel.isInFavorites) {
+                        if (channel.favoriteType != FavoriteType.NONE) {
                             MaterialTheme.colorScheme.onSurfaceVariant
                         } else {
                             MaterialTheme.colorScheme.onPrimary
@@ -86,6 +93,26 @@ fun ChannelGridView(
                         Modifier
                             .weight(MaterialTheme.dimens.weight5),
                 )
+
+                Spacer(modifier = Modifier.width(MaterialTheme.dimens.size8))
+
+                IconButton(
+                    // modifier = modifier,
+                    onClick = onFavoriteClick,
+                ) {
+                    Icon(
+                        imageVector =
+                            if (channel.favoriteType !=
+                                FavoriteType.NONE
+                            ) {
+                                Icons.Rounded.Favorite
+                            } else {
+                                Icons.Rounded.FavoriteBorder
+                            },
+                        contentDescription = "PlaybackControl",
+                        tint = MaterialTheme.colorScheme.onSurface,
+                    )
+                }
             }
 
             Spacer(modifier = Modifier.height(MaterialTheme.dimens.size10))

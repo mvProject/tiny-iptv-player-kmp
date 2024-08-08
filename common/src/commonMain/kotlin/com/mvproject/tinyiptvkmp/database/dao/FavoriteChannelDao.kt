@@ -1,7 +1,7 @@
 /*
  *  Created by Medvediev Viktor [mvproject]
  *  Copyright © 2024
- *  last modified : 07.05.24, 10:06
+ *  last modified : 24.07.24, 18:38
  *
  */
 
@@ -27,8 +27,8 @@ interface FavoriteChannelDao {
     @Query("SELECT COUNT(*) FROM FavoriteChannelEntity WHERE parentListId = :id")
     suspend fun getFavoriteChannelCount(id: Long): Int
 
-    @Query("SELECT channelUrl FROM FavoriteChannelEntity WHERE parentListId = :id")
-    suspend fun getPlaylistFavoriteChannelUrls(id: Long): List<String>
+    @Query("SELECT * FROM FavoriteChannelEntity WHERE parentListId = :id")
+    suspend fun getPlaylistFavoriteChannelUrls(id: Long): List<FavoriteChannelEntity>
 
     @Query("SELECT channelUrl FROM FavoriteChannelEntity")
     suspend fun getFavoriteChannelUrls(): List<String>

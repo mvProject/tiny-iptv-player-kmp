@@ -1,12 +1,13 @@
 /*
  *  Created by Medvediev Viktor [mvproject]
  *  Copyright © 2024
- *  last modified : 06.05.24, 11:36
+ *  last modified : 26.07.24, 12:57
  *
  */
 
 package com.mvproject.tinyiptvkmp.data
 
+import com.mvproject.tinyiptvkmp.data.enums.GroupType
 import com.mvproject.tinyiptvkmp.data.model.channels.ChannelsGroup
 import com.mvproject.tinyiptvkmp.data.model.channels.TvPlaylistChannel
 import com.mvproject.tinyiptvkmp.data.model.epg.EpgProgram
@@ -80,6 +81,7 @@ object PreviewTestData {
                 add(
                     ChannelsGroup(
                         groupName = "listName $it",
+                        groupType = GroupType.SPECIFIED,
                         groupContentCount = it * (it + 1),
                     ),
                 )

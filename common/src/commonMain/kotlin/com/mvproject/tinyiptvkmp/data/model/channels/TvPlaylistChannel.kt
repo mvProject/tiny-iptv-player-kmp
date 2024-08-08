@@ -1,12 +1,13 @@
 /*
  *  Created by Medvediev Viktor [mvproject]
  *  Copyright © 2024
- *  last modified : 06.05.24, 11:33
+ *  last modified : 24.07.24, 18:08
  *
  */
 
 package com.mvproject.tinyiptvkmp.data.model.channels
 
+import com.mvproject.tinyiptvkmp.data.enums.FavoriteType
 import com.mvproject.tinyiptvkmp.ui.screens.channels.data.TvPlaylistChannelEpg
 import com.mvproject.tinyiptvkmp.utils.AppConstants.EMPTY_STRING
 
@@ -15,7 +16,7 @@ data class TvPlaylistChannel(
     val channelUrl: String = EMPTY_STRING,
     val channelLogo: String = EMPTY_STRING,
     val epgId: String = EMPTY_STRING,
-    val isInFavorites: Boolean = false,
+    val favoriteType: FavoriteType = FavoriteType.NONE,
     val isEpgUsing: Boolean = false,
     val channelEpg: TvPlaylistChannelEpg = TvPlaylistChannelEpg(),
 ) {

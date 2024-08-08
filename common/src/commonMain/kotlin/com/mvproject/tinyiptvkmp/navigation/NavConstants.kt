@@ -1,7 +1,7 @@
 /*
  *  Created by Medvediev Viktor [mvproject]
- *  Copyright © 2023
- *  last modified : 23.11.23, 14:10
+ *  Copyright © 2024
+ *  last modified : 26.07.24, 13:58
  *
  */
 
@@ -17,6 +17,7 @@ object NavConstants {
     const val ROUTE_SETTINGS_GENERAL = "/SettingsGeneral"
 
     const val ARG_TV_PLAYLIST_GROUP = "group"
+    const val ARG_TV_PLAYLIST_TYPE = "type"
     const val ARG_PLAYLIST_DETAIL = "id"
     const val ARG_PLAYLIST_DETAIL_NEW = "new"
     const val ARG_VIDEO_VIEW_NAME = "mediaName"

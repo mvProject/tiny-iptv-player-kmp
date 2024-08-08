@@ -1,22 +1,17 @@
 /*
  *  Created by Medvediev Viktor [mvproject]
  *  Copyright © 2024
- *  last modified : 24.03.24, 10:49
+ *  last modified : 26.07.24, 13:25
  *
  */
 
 package com.mvproject.tinyiptvkmp.data.usecases
 
+import com.mvproject.tinyiptvkmp.data.enums.GroupType
 import com.mvproject.tinyiptvkmp.data.model.channels.ChannelsGroup
 import com.mvproject.tinyiptvkmp.data.repository.PlaylistChannelsRepository
 import com.mvproject.tinyiptvkmp.data.repository.PreferenceRepository
-import org.jetbrains.compose.resources.ExperimentalResourceApi
-import org.jetbrains.compose.resources.getString
-import tinyiptvkmp.common.generated.resources.Res
-import tinyiptvkmp.common.generated.resources.channel_folder_all
-import tinyiptvkmp.common.generated.resources.channel_folder_favorite
 
-@OptIn(ExperimentalResourceApi::class)
 class GetPlaylistGroupUseCase(
     private val preferenceRepository: PreferenceRepository,
     private val playlistChannelsRepository: PlaylistChannelsRepository,
@@ -34,18 +29,18 @@ class GetPlaylistGroupUseCase(
             )
 
         return buildList {
-            add(
-                ChannelsGroup(
-                    groupName = getString(Res.string.channel_folder_all),
-                    groupContentCount = allChannelsCount,
-                ),
-            )
+            // add(
+            //     ChannelsGroup(
+            //         groupName = getString(Res.string.channel_folder_all),
+            //         groupContentCount = allChannelsCount,
+            //     ),
+            // )
 
-            add(
-                ChannelsGroup(
-                    groupName = getString(Res.string.channel_folder_favorite),
-                ),
-            )
+            // add(
+            //     ChannelsGroup(
+            //         groupName = getString(Res.string.channel_folder_favorite),
+            //     ),
+            // )
 
             groups.forEach { group ->
                 val count =
@@ -56,6 +51,7 @@ class GetPlaylistGroupUseCase(
                 add(
                     ChannelsGroup(
                         groupName = group,
+                        groupType = GroupType.SPECIFIED,
                         groupContentCount = count,
                     ),
                 )
