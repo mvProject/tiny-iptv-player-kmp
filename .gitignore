@@ -1,6 +1,7 @@
 ### Android ###
 # Gradle files
 .gradle/
+.fleet/
 build/
 release/
 debug/
