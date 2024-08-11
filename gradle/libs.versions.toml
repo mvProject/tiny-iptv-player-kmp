@@ -1,140 +1,121 @@
 [versions]
 
-kotlin = "1.9.24"
-gradle = "8.1.4"
-compose = "1.6.10"
+kotlin = "2.0.0"
+gradle = "8.5.2"
+compose = "1.7.0-alpha02"
+ksp = "2.0.0-1.0.22"
 
-ktor = "2.3.7"
+compose-activity = "1.9.1"
 
-koinCore = "3.5.0"
-koinCompose = "1.1.0"
-koinAndroid = "3.5.0"
-koinAndroidCompose = "3.5.0"
+androidx-navigation = "2.8.0-alpha08"
+androidx-lifecycle = "2.8.0"
+androidx-datastore = "1.1.1"
+androidx-annotation = "1.8.2"
+androidx-room = "2.7.0-alpha06"
 
-compose-activity = "1.9.0"
-compose-lifecycle-viewmodel = "2.7.0"
-compose-lifecycle-runtime = "2.7.0"
-androidxComposeBom = "2024.05.00"
-
-kotlinxSerializationJson = "1.6.3"
 kotlinx-collections = "0.3.5"
-kotlinxDateTime = "0.5.0"
-kotlinxCoroutinesSwing = "1.8.0"
-kotlinxCoroutinesCore = "1.8.0"
+kotlinx-datetime = "0.6.0"
+kotlinx-coroutines-swing = "1.8.1"
+kotlinx-coroutines-core = "1.8.1"
 
-material3WindowSizeClassMultiplatform = "0.3.1"
-componentsResources = "1.6.1"
-annotation = "1.7.1"
+material3WindowSizeClassMultiplatform = "0.5.0"
+
+ktor = "2.3.12"
+
+koin = "4.0.0-RC1"
 
 kamelVersion = "0.8.2"
 
 calfFilePickerVersion = "0.2.0"
 uriKmpVersion = "0.0.15"
 
-precompose = "1.5.7"
-media3 = "1.3.1"
+media3 = "1.4.0"
 
-kermit = "2.0.2"
+kermit = "2.0.4"
 
-preferences = "1.1.1"
 vlcjVersion = "4.8.1"
-
-junit = "4.13.2"
-ext-junit = "1.1.5"
-espresso-core = "3.5.1"
 
 accompanist = "0.31.2-alpha"
 
-androidx-room = "2.7.0-alpha02"
-
 sqlite = "2.5.0-SNAPSHOT"
-ksp = "1.9.24-1.0.20"
+
+ksoup = "0.1.2"
 
 [plugins]
-
 compose-multiplatform = { id = "org.jetbrains.compose", version.ref = "compose" }
+compose-compiler = { id = "org.jetbrains.kotlin.plugin.compose", version.ref = "kotlin" }
 multiplatform = { id = "org.jetbrains.kotlin.multiplatform", version.ref = "kotlin" }
-android-kotlin = { id = "org.jetbrains.kotlin.android", version.ref = "kotlin" }
 android-library = { id = "com.android.library", version.ref = "gradle" }
 android-application = { id = "com.android.application", version.ref = "gradle" }
 
 kotlinx-serialization-plugin = { id = "org.jetbrains.kotlin.plugin.serialization", version.ref = "kotlin" }
-
-jvm = { id = "org.jetbrains.kotlin.jvm", version.ref = "kotlin" }
 
 ksp = { id = "com.google.devtools.ksp", version.ref = "ksp" }
 room = { id = "androidx.room", version.ref = "androidx-room" }
 
 [libraries]
 
-kotlinx-coroutines-swing = { module = "org.jetbrains.kotlinx:kotlinx-coroutines-swing", version.ref = "kotlinxCoroutinesSwing" }
-kotlinx-coroutines-core = { module = "org.jetbrains.kotlinx:kotlinx-coroutines-core", version.ref = "kotlinxCoroutinesCore" }
-kotlinx-serializationJson = { module = "org.jetbrains.kotlinx:kotlinx-serialization-core", version.ref = "kotlinxSerializationJson" }
-kotlinx-collections-immutable = { module = "org.jetbrains.kotlinx:kotlinx-collections-immutable", version.ref = "kotlinx-collections" }
-kotlinx-dateTime = { module = "org.jetbrains.kotlinx:kotlinx-datetime", version.ref = "kotlinxDateTime" }
+androidx-compose-activity = { module = "androidx.activity:activity-compose", version.ref = "compose-activity" }
 
-androidx-annotation = { module = "androidx.annotation:annotation", version.ref = "annotation" }
+# Lifecycle
+androidx-lifecycle-runtime-compose = { group = "org.jetbrains.androidx.lifecycle", name = "lifecycle-runtime-compose", version.ref = "androidx-lifecycle" }
+androidx-lifecycle-viewmodel-compose = { group = "org.jetbrains.androidx.lifecycle", name = "lifecycle-viewmodel-compose", version.ref = "androidx-lifecycle" }
+androidx-lifecycle-viewmodel-savedstate = { group = "org.jetbrains.androidx.lifecycle", name = "lifecycle-viewmodel-savedstate", version.ref = "androidx-lifecycle" }
+
+# Navigation
+androidx-navigation-compose = { group = "org.jetbrains.androidx.navigation", name = "navigation-compose", version.ref = "androidx-navigation" }
+androidx-navigation-runtime = { group = "org.jetbrains.androidx.navigation", name = "navigation-runtime", version.ref = "androidx-navigation" }
+
+# Settings
+androidx-datastore-core = { module = "androidx.datastore:datastore-preferences-core", version.ref = "androidx-datastore" }
+
+androidx-annotation = { module = "androidx.annotation:annotation", version.ref = "androidx-annotation" }
+
+# Database
+androidx-room-compiler = { group = "androidx.room", name = "room-compiler", version.ref = "androidx-room" }
+androidx-room-runtime = { group = "androidx.room", name = "room-runtime", version.ref = "androidx-room" }
+sqlite-bundled = { module = "androidx.sqlite:sqlite-bundled", version.ref = "sqlite" }
+
+kotlinx-coroutines-swing = { module = "org.jetbrains.kotlinx:kotlinx-coroutines-swing", version.ref = "kotlinx-coroutines-swing" }
+kotlinx-coroutines-core = { module = "org.jetbrains.kotlinx:kotlinx-coroutines-core", version.ref = "kotlinx-coroutines-core" }
+kotlinx-collections-immutable = { module = "org.jetbrains.kotlinx:kotlinx-collections-immutable", version.ref = "kotlinx-collections" }
+kotlinx-datetime = { module = "org.jetbrains.kotlinx:kotlinx-datetime", version.ref = "kotlinx-datetime" }
 
 material3-window-size-multiplatform = { module = "dev.chrisbanes.material3:material3-window-size-class-multiplatform", version.ref = "material3WindowSizeClassMultiplatform" }
 
-androidx-compose-bom = { group = "androidx.compose", name = "compose-bom", version.ref = "androidxComposeBom" }
-androidx-compose-ui-ui = { group = "androidx.compose.ui", name = "ui" }
-androidx-compose-material-icons-core = { group = "androidx.compose.material", name = "material-icons-core" }
-androidx-compose-material-icons-extended = { group = "androidx.compose.material", name = "material-icons-extended" }
-androidx-compose-material3-material3 = { group = "androidx.compose.material3", name = "material3" }
-androidx-compose-ui-test-junit4 = { group = "androidx.compose.ui", name = "ui-test-junit4" }
-androidx-compose-ui-test-manifest = { group = "androidx.compose.ui", name = "ui-test-manifest" }
-androidx-compose-ui-tooling = { group = "androidx.compose.ui", name = "ui-tooling" }
-androidx-compose-ui-tooling-preview = { group = "androidx.compose.ui", name = "ui-tooling-preview" }
+# Parse
+ksoup = { module = "com.fleeksoft.ksoup:ksoup", version.ref = "ksoup" }
+ksoup-network = { module = "com.fleeksoft.ksoup:ksoup-network", version.ref = "ksoup" }
 
-androidx-compose-activity = { module = "androidx.activity:activity-compose", version.ref = "compose-activity" }
-androidx-compose-lifecycle-viewmodel = { module = "androidx.lifecycle:lifecycle-viewmodel-compose", version.ref = "compose-lifecycle-viewmodel" }
-androidx-compose-lifecycle-runtime = { module = "androidx.lifecycle:lifecycle-runtime-compose", version.ref = "compose-lifecycle-runtime" }
-
-kamelimage = { module = "media.kamel:kamel-image", version.ref = "kamelVersion" }
-
-components-resources = { module = "org.jetbrains.compose.components:components-resources", version.ref = "componentsResources" }
-
-precompose = { module = "moe.tlaster:precompose", version.ref = "precompose" }
-precompose-viewmodel = { module = "moe.tlaster:precompose-viewmodel", version.ref = "precompose" }
-precompose-koin = { module = "moe.tlaster:precompose-koin", version.ref = "precompose" }
-
+# Media
 media3-exoplayer = { module = "androidx.media3:media3-exoplayer", version.ref = "media3" }
 media3-ui = { module = "androidx.media3:media3-ui", version.ref = "media3" }
 media3-exoplayer-hls = { module = "androidx.media3:media3-exoplayer-hls", version.ref = "media3" }
 
 caprica-vlcj = { module = "uk.co.caprica:vlcj", version.ref = "vlcjVersion" }
 
+# Network
 ktor-client-core = { module = "io.ktor:ktor-client-core", version.ref = "ktor" }
 ktor-client-android = { module = "io.ktor:ktor-client-android", version.ref = "ktor" }
-ktor-client-okhttp = { module = "io.ktor:ktor-client-okhttp", version.ref = "ktor" }
 ktor-client-java = { module = "io.ktor:ktor-client-java", version.ref = "ktor" }
 ktor-client-logging = { module = "io.ktor:ktor-client-logging", version.ref = "ktor" }
 ktor-client-content-negotiation = { module = "io.ktor:ktor-client-content-negotiation", version.ref = "ktor" }
 ktor-serialization-kotlinx-json = { module = "io.ktor:ktor-serialization-kotlinx-json", version.ref = "ktor" }
 
-datastore-preferences = { module = "androidx.datastore:datastore-preferences", version.ref = "preferences" }
-datastore-preferences-core = { module = "androidx.datastore:datastore-preferences-core", version.ref = "preferences" }
+# DI
+koin-bom = { group = "io.insert-koin", name = "koin-bom", version.ref = "koin" }
+koin-core = { group = "io.insert-koin", name = "koin-core" }
+koin-android = { group = "io.insert-koin", name = "koin-android" }
+koin-compose = { group = "io.insert-koin", name = "koin-compose" }
+koin-compose-viewmodel = { group = "io.insert-koin", name = "koin-compose-viewmodel" }
 
-koin-core = { module = "io.insert-koin:koin-core", version.ref = "koinCore" }
-koin-compose = { module = "io.insert-koin:koin-compose", version.ref = "koinCompose" }
-koin-android = { module = "io.insert-koin:koin-android", version.ref = "koinAndroid" }
-koin-android-compose = { module = "io.insert-koin:koin-androidx-compose", version.ref = "koinAndroidCompose" }
-
+# Logging
 kermit = { module = "co.touchlab:kermit", version.ref = "kermit" }
 
 urikmp = { module = "com.eygraber:uri-kmp", version.ref = "uriKmpVersion" }
 calf-filepicker = { module = "com.mohamedrejeb.calf:calf-file-picker", version.ref = "calfFilePickerVersion" }
 accompanist-adaptive = { module = "com.google.accompanist:accompanist-adaptive", version.ref = "accompanist" }
-
-test-junit = { module = "junit:junit", version.ref = "junit" }
-test-ext-junit = { module = "androidx.test.ext:junit", version.ref = "ext-junit" }
-test-espresso-core = { module = "androidx.test.espresso:espresso-core", version.ref = "espresso-core" }
-
-androidx-room-compiler = { group = "androidx.room", name = "room-compiler", version.ref = "androidx-room" }
-androidx-room-ktx = { group = "androidx.room", name = "room-ktx", version.ref = "androidx-room" }
-androidx-room-runtime = { group = "androidx.room", name = "room-runtime", version.ref = "androidx-room" }
-sqlite-bundled = { module = "androidx.sqlite:sqlite-bundled", version.ref = "sqlite" }
+kamelimage = { module = "media.kamel:kamel-image", version.ref = "kamelVersion" }
 
 [bundles]
 
@@ -145,10 +126,15 @@ ktor = [
     "ktor-serialization-kotlinx-json"
 ]
 
-precompose = [
-    "precompose",
-    "precompose-viewmodel",
-    "precompose-koin"
+navigation = [
+    "androidx-navigation-compose",
+    "androidx-navigation-runtime"
+]
+
+lifecycle = [
+    "androidx-lifecycle-runtime-compose",
+    "androidx-lifecycle-viewmodel-compose",
+    "androidx-lifecycle-viewmodel-savedstate"
 ]
 
 media3 = [
@@ -159,16 +145,16 @@ media3 = [
 
 room = [
     "androidx-room-runtime",
-    "androidx-room-ktx",
     "sqlite-bundled"
+]
+
+ksoup = [
+    "ksoup",
+    "ksoup-network"
 ]
 
 koin = [
     "koin-core",
-    "koin-compose"
-]
-
-koinAndroid = [
-    "koin-android",
-    "koin-android-compose"
+    "koin-compose",
+    "koin-compose-viewmodel"
 ]

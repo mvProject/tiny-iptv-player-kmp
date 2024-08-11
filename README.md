@@ -30,19 +30,31 @@ Tiny Iptv Player is fully written with Compose, using AndroidView in some cases
 
 Tiny Iptv Player use for requests for playlist and epg data and parse responses
 
+### Lifecycle
+
+#### [Jetbrains Lifecycle](https://www.jetbrains.com/help/kotlin-multiplatform-dev/compose-lifecycle.html)
+
+A multiplatform lifecycle library built for Compose
+
 ### Navigation
 
-#### [PreCompose](https://github.com/Tlaster/PreCompose)
+#### [Jetbrains Navigation](https://www.jetbrains.com/help/kotlin-multiplatform-dev/compose-navigation-routing.html)
 
 A multiplatform navigation library built for Compose
 
 ### Database
 
-#### [SQLDelight](https://cashapp.github.io/sqldelight/2.0.0/)
+#### [Room](https://developer.android.com/kotlin/multiplatform/room)
 
-SQLDelight generates typesafe kotlin APIs from your SQL statements. It verifies your schema,
-statements, and migrations at compile-time and provides IDE features like autocomplete and
-refactoring which make writing and maintaining SQL simple.
+The Room persistence library provides an abstraction layer over SQLite to allow
+for more robust database access while harnessing the full power of SQLite
+
+### Settings
+
+#### [DataStore ](https://developer.android.com/kotlin/multiplatform/datastore)
+
+The Multiplatform version of DataStore library stores data asynchronously, consistently,
+and transactional, overcoming some of the drawbacks of SharedPreferences.
 
 ### DI
 
