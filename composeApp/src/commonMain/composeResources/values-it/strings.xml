@@ -1,0 +1,81 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+  ~  Created by Medvediev Viktor [mvproject]
+  ~  Copyright © 2024
+  ~  last modified : 22.11.23, 18:54
+  ~
+  -->
+
+<resources>
+    <string name="app_name">Tiny Iptv Player</string>
+
+    <string name="playlist_update_6_hours">6 ore</string>
+    <string name="playlist_update_12_hours">12 ore</string>
+    <string name="playlist_update_24_hours">24 ore</string>
+    <string name="playlist_update_2_days">2 giorni</string>
+    <string name="playlist_update_1_week">1 settimana</string>
+    <string name="playlist_update_never">Mai</string>
+
+    <string name="video_resize_mode_fill">Riempire</string>
+    <string name="video_resize_mode_fixed_width">Larghezza fissa</string>
+    <string name="video_resize_mode_fixed_height">Altezza fissa</string>
+    <string name="video_resize_mode_fit">Adatto</string>
+    <string name="video_resize_mode_zoom">Ingrandisci</string>
+
+    <string name="video_ratio_mode_original">Originale</string>
+    <string name="video_ratio_mode_wideScreen">Schermo ampio (16:9)</string>
+    <string name="video_ratio_mode_fullScreen">Schermo intero (4:3)</string>
+    <string name="video_ratio_mode_cinematic">Cinematografico (21:9)</string>
+    <string name="video_ratio_mode_square">Quadrato (1:1)</string>
+
+    <string name="channel_folder_all">Tutti i canali</string>
+    <string name="channel_folder_favorite">Preferiti</string>
+
+    <string name="msg_no_epg_found">ePG non trovato</string>
+    <string name="msg_no_items_found">Articoli non trovati</string>
+    <string name="msg_no_internet_found">Nessuna connessione internet</string>
+    <string name="msg_no_playable_media_found">Impossibile riprodurre questo contenuto
+        multimediale
+    </string>
+    <string name="msg_no_playlist">Nessuna playlist trovata</string>
+    <string name="msg_playlist_details">Dettagli della playlist</string>
+
+    <string name="hint_msg_search">digitare qui…</string>
+    <string name="hint_update_period">Periodo di aggiornamento</string>
+    <string name="hint_current_playlist">Playlist attuale</string>
+    <string name="hint_name">Titolo</string>
+    <string name="hint_address">URL</string>
+
+    <string name="btn_save">Salva playlist</string>
+    <string name="btn_update">Aggiorna playlist</string>
+    <string name="btn_close">Vicino</string>
+    <string name="btn_add_first_playlist">Premi per aggiungere una playlist</string>
+    <string name="btn_add_local">Aggiungi playlist locale</string>
+    <string name="btn_add_new">Nuova playlist</string>
+    <string name="btn_delete_current">Elimina playlist</string>
+    <string name="btn_playlists_update">aggiornamento delle playlist</string>
+
+    <string name="label_or">O</string>
+
+    <string name="scr_settings_title">Impostazioni</string>
+    <string name="scr_playlist_settings_title">Impostazioni delle playlist</string>
+    <string name="scr_player_settings_title">Impostazioni del giocatore</string>
+
+    <string name="option_update_title">Aggiornamento</string>
+    <string name="option_update_epg_info">Informazioni sull&amp;#39;EPG</string>
+    <string name="option_update_epg_data">Dati EPG</string>
+    <string name="option_default_resize_mode">Modalità di ridimensionamento predefinita</string>
+    <string name="option_default_ratio_mode">Modalità proporzioni predefinita</string>
+    <string name="option_default_fullscreen_mode">Utilizza lo schermo intero per impostazione
+        predefinita
+    </string>
+    <string name="menu_view_type_list">Elenco</string>
+    <string name="menu_view_type_grid">Griglia</string>
+    <string name="menu_view_type_card">Carta</string>
+
+    <string name="menu_channel_option_epg_enable">Abilita EPG</string>
+    <string name="menu_channel_option_epg_disable">Disabilita EPG</string>
+    <string name="menu_channel_option_epg_show">Mostra EPG</string>
+    <string name="menu_channel_option_add_favorite">Aggiungi ai favoriti</string>
+    <string name="menu_channel_option_remove_favorite">Rimuovi dai preferiti</string>
+</resources>

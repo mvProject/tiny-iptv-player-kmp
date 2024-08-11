@@ -1,0 +1,78 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+  ~  Created by Medvediev Viktor [mvproject]
+  ~  Copyright © 2024
+  ~  last modified : 22.11.23, 18:54
+  ~
+  -->
+
+<resources>
+    <string name="app_name">Tiny Iptv Player</string>
+
+    <string name="playlist_update_6_hours">6 godzin</string>
+    <string name="playlist_update_12_hours">12 godzin</string>
+    <string name="playlist_update_24_hours">24 godziny</string>
+    <string name="playlist_update_2_days">2 dni</string>
+    <string name="playlist_update_1_week">1 tydzień</string>
+    <string name="playlist_update_never">Nigdy</string>
+
+    <string name="video_resize_mode_fill">Wypełnić</string>
+    <string name="video_resize_mode_fixed_width">Stała szerokość</string>
+    <string name="video_resize_mode_fixed_height">Stała wysokość</string>
+    <string name="video_resize_mode_fit">Pasować</string>
+    <string name="video_resize_mode_zoom">Powiększenie</string>
+
+    <string name="video_ratio_mode_original">Oryginalny</string>
+    <string name="video_ratio_mode_wideScreen">Szeroki ekran (16:9)</string>
+    <string name="video_ratio_mode_fullScreen">Pełny ekran (4:3)</string>
+    <string name="video_ratio_mode_cinematic">Filmowy (21:9)</string>
+    <string name="video_ratio_mode_square">Kwadrat (1:1)</string>
+
+    <string name="channel_folder_all">Wszystkie kanały</string>
+    <string name="channel_folder_favorite">Ulubione</string>
+
+    <string name="msg_no_epg_found">Nie znaleziono epg</string>
+    <string name="msg_no_items_found">Nie znaleziono elementów</string>
+    <string name="msg_no_internet_found">Brak połączenia z internetem</string>
+    <string name="msg_no_playable_media_found">Nie można odtworzyć tego multimediów</string>
+    <string name="msg_no_playlist">Nie znaleziono playlist</string>
+    <string name="msg_playlist_details">Szczegóły playlisty</string>
+
+    <string name="hint_msg_search">Pisz tutaj…</string>
+    <string name="hint_update_period">Okres aktualizacji</string>
+    <string name="hint_current_playlist">Aktualna playlista</string>
+    <string name="hint_name">Tytuł</string>
+    <string name="hint_address">Adres URL</string>
+
+    <string name="btn_save">Zapisz listę odtwarzania</string>
+    <string name="btn_update">Zaktualizuj playlistę</string>
+    <string name="btn_close">Zamknąć</string>
+    <string name="btn_add_first_playlist">Naciśnij, aby dodać listę odtwarzania</string>
+    <string name="btn_add_local">Dodaj lokalną playlistę</string>
+    <string name="btn_add_new">Nowa playlista</string>
+    <string name="btn_delete_current">Usuń playlistę</string>
+    <string name="btn_playlists_update">aktualizacja playlist</string>
+
+    <string name="label_or">Lub</string>
+
+    <string name="scr_settings_title">Ustawienia</string>
+    <string name="scr_playlist_settings_title">Ustawienia list odtwarzania</string>
+    <string name="scr_player_settings_title">Ustawienia gracza</string>
+
+    <string name="option_update_title">Aktualizacja</string>
+    <string name="option_update_epg_info">Informacje o EPG</string>
+    <string name="option_update_epg_data">Dane EPG</string>
+    <string name="option_default_resize_mode">Domyślny tryb zmiany rozmiaru</string>
+    <string name="option_default_ratio_mode">Domyślny tryb proporcji</string>
+    <string name="option_default_fullscreen_mode">Domyślnie używaj trybu pełnoekranowego</string>
+
+    <string name="menu_view_type_list">Lista</string>
+    <string name="menu_view_type_grid">Siatka</string>
+    <string name="menu_view_type_card">Karta</string>
+
+    <string name="menu_channel_option_epg_enable">Włącz EPG</string>
+    <string name="menu_channel_option_epg_disable">Wyłącz EPG</string>
+    <string name="menu_channel_option_epg_show">Pokaż odc</string>
+    <string name="menu_channel_option_add_favorite">Dodaj do ulubionych</string>
+    <string name="menu_channel_option_remove_favorite">Usuń z ulubionych</string>
+</resources>
