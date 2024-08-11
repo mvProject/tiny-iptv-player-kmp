@@ -103,16 +103,17 @@ internal fun PlayerView(
                         resizeMode = videoViewState.videoResizeMode,
                     ),
             factory = { context ->
-                SurfaceView(context).apply {
-                    layoutParams =
-                        ViewGroup.LayoutParams(
-                            ViewGroup.LayoutParams.MATCH_PARENT,
-                            ViewGroup.LayoutParams.MATCH_PARENT,
-                        )
-                    keepScreenOn = true
-                }.also { view ->
-                    playerState.player.setVideoSurfaceView(view)
-                }
+                SurfaceView(context)
+                    .apply {
+                        layoutParams =
+                            ViewGroup.LayoutParams(
+                                ViewGroup.LayoutParams.MATCH_PARENT,
+                                ViewGroup.LayoutParams.MATCH_PARENT,
+                            )
+                        keepScreenOn = true
+                    }.also { view ->
+                        playerState.player.setVideoSurfaceView(view)
+                    }
             },
         )
 
@@ -121,7 +122,6 @@ internal fun PlayerView(
 
     LifecycleStartEffect(
         key1 = playerState,
-        lifecycleOwner = androidx.compose.ui.platform.LocalLifecycleOwner.current,
     ) {
         onStopOrDispose {
             playerState.player.stop()

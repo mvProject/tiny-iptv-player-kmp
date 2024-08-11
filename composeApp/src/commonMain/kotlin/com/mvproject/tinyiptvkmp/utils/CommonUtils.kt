@@ -14,7 +14,12 @@ typealias KLog = co.touchlab.kermit.Logger
 
 object CommonUtils {
     // todo uri fix
-    fun String.getNameFromStringUri() = Uri.parse(this).path?.split("/")?.last() ?: AppConstants.EMPTY_STRING
+    fun String.getNameFromStringUri() =
+        Uri
+            .parse(this)
+            .path
+            ?.split("/")
+            ?.last() ?: AppConstants.EMPTY_STRING
 
     fun Boolean.toLong() = if (this) 1L else 0L
 
@@ -24,7 +29,8 @@ object CommonUtils {
         get() =
             System
                 .getProperty("os.name", "generic")
-                .lowercase(Locale.ENGLISH).contains("windows", ignoreCase = true)
+                .lowercase(Locale.ENGLISH)
+                .contains("windows", ignoreCase = true)
 
     inline val String.Companion.empty get() = ""
 
