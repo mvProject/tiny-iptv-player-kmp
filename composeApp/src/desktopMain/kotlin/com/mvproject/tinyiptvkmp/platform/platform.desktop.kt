@@ -47,7 +47,6 @@ import com.mvproject.tinyiptvkmp.utils.AppConstants
 import io.ktor.client.HttpClient
 import io.ktor.client.engine.java.Java
 import okio.use
-import org.jetbrains.compose.resources.ExperimentalResourceApi
 import org.jetbrains.compose.resources.stringResource
 import tinyiptvkmp.composeapp.generated.resources.Res
 import tinyiptvkmp.composeapp.generated.resources.btn_add_local
@@ -78,7 +77,6 @@ actual fun PlayerViewContainer(
     )
 }
 
-@OptIn(ExperimentalResourceApi::class)
 @Composable
 actual fun LocalFileSelectButton(onPlaylistAction: (PlaylistAction) -> Unit) {
     val fileSelectLauncher =
@@ -186,11 +184,6 @@ actual fun AdditionalPlayerControls(
 
         Spacer(modifier = Modifier.width(MaterialTheme.dimens.size24))
     }
-}
-
-@Composable
-actual fun ExecuteOnResume(action: () -> Unit) {
-    action()
 }
 
 actual fun isMediaPlayable(errorCode: Int?): Boolean {

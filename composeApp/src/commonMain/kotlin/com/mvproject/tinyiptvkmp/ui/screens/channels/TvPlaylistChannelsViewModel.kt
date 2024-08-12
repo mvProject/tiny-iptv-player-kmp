@@ -21,10 +21,9 @@ import com.mvproject.tinyiptvkmp.data.usecases.ToggleFavoriteChannelUseCase
 import com.mvproject.tinyiptvkmp.ui.screens.channels.action.TvPlaylistChannelAction
 import com.mvproject.tinyiptvkmp.ui.screens.channels.data.ChannelEpg
 import com.mvproject.tinyiptvkmp.ui.screens.channels.data.TvPlaylistChannelEpg
-import com.mvproject.tinyiptvkmp.ui.screens.channels.data.TvPlaylistChannelGroup
+import com.mvproject.tinyiptvkmp.ui.screens.channels.data.TvPlaylistGroupChannels
 import com.mvproject.tinyiptvkmp.ui.screens.channels.navigation.TvPlaylistChannelsArgs
-import com.mvproject.tinyiptvkmp.ui.screens.channels.state.TvPlaylistChannelState
-import com.mvproject.tinyiptvkmp.ui.screens.playlist.navigation.PlaylistDetailArgs
+import com.mvproject.tinyiptvkmp.ui.screens.channels.state.TvPlaylistGroupState
 import com.mvproject.tinyiptvkmp.utils.AppConstants.EMPTY_STRING
 import com.mvproject.tinyiptvkmp.utils.KLog
 import kotlinx.coroutines.delay
@@ -40,41 +39,44 @@ class TvPlaylistChannelsViewModel(
     private val getGroupChannelsEpg: GetGroupChannelsEpg,
     private val toggleFavoriteChannelUseCase: ToggleFavoriteChannelUseCase,
 ) : ViewModel() {
-    private val _viewState = MutableStateFlow(TvPlaylistChannelState())
-    val viewState = _viewState.asStateFlow()
+    private val _groupState = MutableStateFlow(TvPlaylistGroupState())
+    val groupState = _groupState.asStateFlow()
 
-    private val _channelsState = MutableStateFlow(TvPlaylistChannelGroup())
+    private val _channelsState = MutableStateFlow(TvPlaylistGroupChannels())
     val channelsState = _channelsState.asStateFlow()
 
     private val _searchText = MutableStateFlow(EMPTY_STRING)
 
     private val args = TvPlaylistChannelsArgs(savedStateHandle)
+
     init {
         val group = args.group
         val type = args.type
-        KLog.d("testing TvPlaylistChannelsViewModel init group:$group, type:$type")
+
         viewModelScope.launch {
-            _viewState.update { current ->
+            _groupState.update { current ->
                 current.copy(
                     viewType = viewTypeHelper.getChannelsViewType(),
+                    currentGroup = group,
+                    currentGroupType = type,
                 )
             }
         }
     }
 
-    fun loadChannelsByGroups(
-        group: String,
-        groupType: String,
-    ) {
-        _viewState.update { current ->
-            current.copy(currentGroup = group, isLoading = true)
+    fun loadChannelsByGroups() {
+        val group = groupState.value.currentGroup
+        val groupType = groupState.value.currentGroupType
+
+        _groupState.update { current ->
+            current.copy(isLoading = true)
         }
         viewModelScope.launch {
             val groupChannels = getGroupChannelsUseCase(group = group, groupType = groupType)
 
-            _channelsState.value = TvPlaylistChannelGroup(items = groupChannels)
+            _channelsState.value = TvPlaylistGroupChannels(items = groupChannels)
 
-            _viewState.update { current ->
+            _groupState.update { current ->
                 current.copy(isLoading = false)
             }
 
@@ -174,15 +176,15 @@ class TvPlaylistChannelsViewModel(
 
     private fun searchTextChange(text: String) {
         _searchText.value = text
-        _viewState.update { current ->
+        _groupState.update { current ->
             current.copy(searchString = text)
         }
     }
 
     private fun viewTypeChange(type: ChannelsViewType) {
-        if (viewState.value.viewType != type) {
+        if (groupState.value.viewType != type) {
             viewModelScope.launch {
-                _viewState.update { current ->
+                _groupState.update { current ->
                     current.copy(viewType = type)
                 }
                 viewTypeHelper.setChannelsViewType(type)
@@ -191,8 +193,8 @@ class TvPlaylistChannelsViewModel(
     }
 
     private fun searchTriggered() {
-        _viewState.update { current ->
-            val searchState = viewState.value.isSearching
+        _groupState.update { current ->
+            val searchState = groupState.value.isSearching
             current.copy(isSearching = !searchState)
         }
     }
@@ -227,7 +229,7 @@ class TvPlaylistChannelsViewModel(
     }
 
     private fun toggleEpgVisibility() {
-        _viewState.update { current ->
+        _groupState.update { current ->
             val epgCurrentState = current.isEpgVisible
             current.copy(isEpgVisible = !epgCurrentState)
         }

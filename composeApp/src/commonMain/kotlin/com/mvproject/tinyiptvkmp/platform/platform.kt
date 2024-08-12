@@ -38,7 +38,7 @@ expect fun PlayerViewContainer(
     videoViewState: VideoViewState,
     onPlaybackAction: (PlaybackActions) -> Unit = {},
     onPlaybackStateAction: (PlaybackStateActions) -> Unit = {},
-    controls: @Composable () -> Unit
+    controls: @Composable () -> Unit,
 )
 
 @Composable
@@ -48,20 +48,18 @@ expect fun LocalFileSelectButton(onPlaylistAction: (PlaylistAction) -> Unit)
 expect fun AdditionalPlayerControls(
     modifier: Modifier,
     action: () -> Unit,
-    onPlaybackAction: (PlaybackActions) -> Unit
+    onPlaybackAction: (PlaybackActions) -> Unit,
 )
 
-@Composable
-expect fun ExecuteOnResume(action: () -> Unit)
-
-internal fun createHttpClient(): HttpClient {
-    return createPlatformHttpClient().config {
+internal fun createHttpClient(): HttpClient =
+    createPlatformHttpClient().config {
         install(Logging) {
-            logger = object : Logger {
-                override fun log(message: String) {
-                    KLog.w("Ktor log:") { message }
+            logger =
+                object : Logger {
+                    override fun log(message: String) {
+                        KLog.w("Ktor log:") { message }
+                    }
                 }
-            }
             level = LogLevel.ALL
         }
         install(HttpHeaders.ContentEncoding) {
@@ -69,26 +67,27 @@ internal fun createHttpClient(): HttpClient {
         }
 
         install(ContentNegotiation) {
-            json(Json {
-                prettyPrint = true
-                isLenient = true
-                ignoreUnknownKeys = true
-            })
+            json(
+                Json {
+                    prettyPrint = true
+                    isLenient = true
+                    ignoreUnknownKeys = true
+                },
+            )
         }
 
         install(HttpTimeout)
     }
-}
 
 @Composable
 expect fun TwoPaneContainer(
     first: @Composable () -> Unit,
-    second: @Composable () -> Unit
+    second: @Composable () -> Unit,
 )
 
 expect class LocalPlaylistDataSource {
     fun getLocalPlaylistData(
         playlistId: Long,
-        uri: String
+        uri: String,
     ): List<PlaylistChannel>
 }

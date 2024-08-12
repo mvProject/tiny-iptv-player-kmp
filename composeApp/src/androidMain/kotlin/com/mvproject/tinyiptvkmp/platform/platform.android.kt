@@ -23,7 +23,6 @@ import androidx.compose.material3.windowsizeclass.calculateWindowSizeClass
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
-import androidx.lifecycle.compose.LifecycleResumeEffect
 import androidx.media3.common.PlaybackException
 import com.google.accompanist.adaptive.HorizontalTwoPaneStrategy
 import com.google.accompanist.adaptive.TwoPane
@@ -108,19 +107,6 @@ actual fun AdditionalPlayerControls(
     onPlaybackAction: (PlaybackActions) -> Unit,
 ) {
     // no need yet
-}
-
-@Composable
-actual fun ExecuteOnResume(action: () -> Unit) {
-    LifecycleResumeEffect(
-        key1 = Unit,
-        lifecycleOwner = androidx.compose.ui.platform.LocalLifecycleOwner.current,
-    ) {
-        action()
-
-        onPauseOrDispose {
-        }
-    }
 }
 
 actual fun isMediaPlayable(errorCode: Int?): Boolean {

@@ -7,7 +7,6 @@
 
 package com.mvproject.tinyiptvkmp.ui.screens.playlist.navigation
 
-import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.lifecycle.SavedStateHandle
@@ -26,33 +25,24 @@ fun NavHostController.navigateToPlaylistDetail(id: String) {
     this.navigate(route)
 }
 
-internal class PlaylistDetailArgs(val id: String) {
+internal class PlaylistDetailArgs(
+    val id: String,
+) {
     constructor(savedStateHandle: SavedStateHandle) :
-            this(id = checkNotNull(savedStateHandle[ARG_PLAYLIST_DETAIL]) as String)
+        this(id = checkNotNull(savedStateHandle[ARG_PLAYLIST_DETAIL]) as String)
 }
 
-fun NavGraphBuilder.playlistDetail(
-    onNavigateBack: () -> Unit
-) {
+fun NavGraphBuilder.playlistDetail(onNavigateBack: () -> Unit) {
     composable(
         route = AppRoutes.PlaylistDetail.route + "/{$ARG_PLAYLIST_DETAIL}",
-    ) { backStackEntry ->
+    ) {
+        val playlistViewModel = koinViewModel<PlaylistViewModel>()
+        val state by playlistViewModel.state.collectAsState()
 
-        val detailId = backStackEntry.arguments?.getString(ARG_PLAYLIST_DETAIL)
-
-        detailId?.let { id ->
-            val playlistViewModel = koinViewModel<PlaylistViewModel>()
-            val state by playlistViewModel.state.collectAsState()
-
-            LaunchedEffect(key1 = id) {
-                playlistViewModel.setPlaylistMode(id)
-            }
-
-            PlaylistView(
-                state = state,
-                onPlaylistAction = playlistViewModel::processAction,
-                onNavigateBack = onNavigateBack
-            )
-        }
+        PlaylistView(
+            state = state,
+            onPlaylistAction = playlistViewModel::processAction,
+            onNavigateBack = onNavigateBack,
+        )
     }
 }

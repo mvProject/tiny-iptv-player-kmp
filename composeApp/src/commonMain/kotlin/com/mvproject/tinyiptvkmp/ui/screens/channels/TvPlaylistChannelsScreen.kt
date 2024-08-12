@@ -31,9 +31,9 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
+import androidx.lifecycle.compose.LifecycleResumeEffect
 import com.mvproject.tinyiptvkmp.data.enums.ChannelsViewType
 import com.mvproject.tinyiptvkmp.data.model.channels.TvPlaylistChannel
-import com.mvproject.tinyiptvkmp.platform.ExecuteOnResume
 import com.mvproject.tinyiptvkmp.ui.components.overlay.OverlayContent
 import com.mvproject.tinyiptvkmp.ui.components.overlay.OverlayEpg
 import com.mvproject.tinyiptvkmp.ui.components.toolbars.AppBarWithSearch
@@ -41,24 +41,25 @@ import com.mvproject.tinyiptvkmp.ui.components.views.LoadingView
 import com.mvproject.tinyiptvkmp.ui.screens.channels.action.TvPlaylistChannelAction
 import com.mvproject.tinyiptvkmp.ui.screens.channels.components.ChannelView
 import com.mvproject.tinyiptvkmp.ui.screens.channels.components.OverlayChannelOptions
+import com.mvproject.tinyiptvkmp.ui.screens.channels.navigation.NavigationGroup
 import com.mvproject.tinyiptvkmp.ui.theme.dimens
 import com.mvproject.tinyiptvkmp.utils.AppConstants.INT_VALUE_1
 import com.mvproject.tinyiptvkmp.utils.CommonUtils.empty
 
 @Composable
-fun TvPlaylistChannelsView(
+internal fun TvPlaylistChannelsScreen(
     viewModel: TvPlaylistChannelsViewModel,
-    onNavigateSelected: (String) -> Unit,
+    onNavigateSelected: NavigationGroup,
     onNavigateBack: () -> Unit,
     onAction: (TvPlaylistChannelAction) -> Unit,
-    selectedGroup: String,
-    selectedGroupType: String,
 ) {
-    ExecuteOnResume {
-        viewModel.loadChannelsByGroups(group = selectedGroup, groupType = selectedGroupType)
+    LifecycleResumeEffect(Unit) {
+        viewModel.loadChannelsByGroups()
+
+        onPauseOrDispose { }
     }
 
-    val viewState by viewModel.viewState.collectAsState()
+    val viewState by viewModel.groupState.collectAsState()
     val channelsState by viewModel.channelsState.collectAsState()
 
     var searchString by remember {
@@ -145,7 +146,7 @@ fun TvPlaylistChannelsView(
                             viewType = viewState.viewType,
                             item = item,
                             onChannelSelect = {
-                                onNavigateSelected(item.channelName)
+                                onNavigateSelected(item.channelName, viewState.currentGroup)
                             },
                             onFavoriteClick = {
                                 selected = item

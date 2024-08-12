@@ -15,7 +15,6 @@ import androidx.compose.foundation.layout.systemBars
 import androidx.compose.foundation.layout.windowInsetsPadding
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.DisposableEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
@@ -36,7 +35,6 @@ import com.mvproject.tinyiptvkmp.ui.screens.player.components.OverlayChannelInfo
 import com.mvproject.tinyiptvkmp.ui.screens.player.components.OverlayChannels
 import com.mvproject.tinyiptvkmp.ui.screens.player.components.PlayerChannelView
 import com.mvproject.tinyiptvkmp.ui.theme.dimens
-import org.jetbrains.compose.resources.ExperimentalResourceApi
 import org.jetbrains.compose.resources.painterResource
 import org.jetbrains.compose.resources.stringResource
 import tinyiptvkmp.composeapp.generated.resources.Res
@@ -48,8 +46,6 @@ import tinyiptvkmp.composeapp.generated.resources.sad_face
 @Composable
 fun VideoViewContainer(
     viewModel: VideoViewViewModel,
-    channelName: String,
-    channelGroup: String,
     onNavigateBack: () -> Unit = {},
 ) {
     val videoViewState by viewModel.videoViewState.collectAsState()
@@ -185,14 +181,5 @@ fun VideoViewContainer(
             modifier = Modifier.fillMaxSize(fraction),
             isVisible = videoViewState.isBuffering,
         )
-    }
-
-    DisposableEffect(viewModel) {
-        viewModel.initPlayBack(
-            channelName = channelName,
-            channelGroup = channelGroup,
-        )
-
-        onDispose {}
     }
 }

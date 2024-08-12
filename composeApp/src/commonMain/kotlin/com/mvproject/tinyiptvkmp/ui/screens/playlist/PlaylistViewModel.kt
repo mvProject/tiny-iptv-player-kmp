@@ -35,13 +35,15 @@ class PlaylistViewModel(
     private val _state = MutableStateFlow(PlaylistState())
     val state = _state.asStateFlow()
 
+    private val args = PlaylistDetailArgs(savedStateHandle)
+
     init {
-        val id = PlaylistDetailArgs(savedStateHandle).id
-        KLog.d("testing PlaylistViewModel init id:$id")
+        val playlistId = args.id
+
+        setPlaylistMode(playlistId = playlistId)
     }
 
-    fun setPlaylistMode(playlistId: String) {
-        KLog.w("testing PlaylistViewModel playlistId:$playlistId")
+    private fun setPlaylistMode(playlistId: String) {
         viewModelScope.launch {
             val playlist = getPlaylistUseCase(playlistId = playlistId)
             _state.update { current ->

@@ -53,9 +53,7 @@ fun GroupView(
     Scaffold(
         modifier = Modifier.fillMaxSize(),
         topBar = {
-            AppBarWithSettings(
-                onSettingsClicked = onNavigateToSettings,
-            )
+            AppBarWithSettings(onSettingsClicked = onNavigateToSettings)
         },
     ) { paddingValues ->
         Box(

@@ -22,13 +22,13 @@ import com.mvproject.tinyiptvkmp.data.usecases.ToggleFavoriteChannelUseCase
 import com.mvproject.tinyiptvkmp.ui.data.TvPlaylistChannels
 import com.mvproject.tinyiptvkmp.ui.screens.channels.data.ChannelEpg
 import com.mvproject.tinyiptvkmp.ui.screens.channels.data.TvPlaylistChannelEpg
-import com.mvproject.tinyiptvkmp.ui.screens.channels.navigation.TvPlaylistChannelsArgs
 import com.mvproject.tinyiptvkmp.ui.screens.player.action.PlaybackActions
 import com.mvproject.tinyiptvkmp.ui.screens.player.action.PlaybackStateActions
 import com.mvproject.tinyiptvkmp.ui.screens.player.navigation.VideoViewArgs
 import com.mvproject.tinyiptvkmp.ui.screens.player.state.VideoPlaybackState
 import com.mvproject.tinyiptvkmp.ui.screens.player.state.VideoViewState
 import com.mvproject.tinyiptvkmp.utils.AppConstants.DELAY_50
+import com.mvproject.tinyiptvkmp.utils.AppConstants.EMPTY_STRING
 import com.mvproject.tinyiptvkmp.utils.AppConstants.FLOAT_STEP_VOLUME
 import com.mvproject.tinyiptvkmp.utils.AppConstants.FLOAT_VALUE_1
 import com.mvproject.tinyiptvkmp.utils.AppConstants.FLOAT_VALUE_ZERO
@@ -85,14 +85,19 @@ class VideoViewViewModel(
                 )
             }
         }
+
+        initPlayBack(
+            channelName = media,
+            channelGroup = group,
+        )
     }
 
-    fun initPlayBack(
+    private fun initPlayBack(
         channelName: String,
         channelGroup: String,
     ) {
         viewModelScope.launch {
-            val channelList = getGroupChannelsUseCase(channelGroup, "")
+            val channelList = getGroupChannelsUseCase(channelGroup, EMPTY_STRING)
             val currentPlaying = videoViewState.value.currentChannel.channelName
 
             val name = currentPlaying.ifBlank { channelName }

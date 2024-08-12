@@ -11,11 +11,10 @@ import androidx.lifecycle.SavedStateHandle
 import androidx.navigation.NavGraphBuilder
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.composable
-import com.mvproject.tinyiptvkmp.data.enums.GroupType
 import com.mvproject.tinyiptvkmp.navigation.AppRoutes
 import com.mvproject.tinyiptvkmp.navigation.NavConstants.ARG_TV_PLAYLIST_GROUP
 import com.mvproject.tinyiptvkmp.navigation.NavConstants.ARG_TV_PLAYLIST_TYPE
-import com.mvproject.tinyiptvkmp.ui.screens.channels.TvPlaylistChannelsView
+import com.mvproject.tinyiptvkmp.ui.screens.channels.TvPlaylistChannelsScreen
 import com.mvproject.tinyiptvkmp.ui.screens.channels.TvPlaylistChannelsViewModel
 import org.koin.compose.viewmodel.koinViewModel
 
@@ -27,39 +26,33 @@ fun NavHostController.navigateToTvPlaylistChannels(
     this.navigate(route)
 }
 
-
-internal class TvPlaylistChannelsArgs(val group: String, val type: String) {
+internal class TvPlaylistChannelsArgs(
+    val group: String,
+    val type: String,
+) {
     constructor(savedStateHandle: SavedStateHandle) :
-            this(
-                group = checkNotNull(savedStateHandle[ARG_TV_PLAYLIST_GROUP]) as String,
-                type = checkNotNull(savedStateHandle[ARG_TV_PLAYLIST_TYPE]) as String
-            )
+        this(
+            group = checkNotNull(savedStateHandle[ARG_TV_PLAYLIST_GROUP]) as String,
+            type = checkNotNull(savedStateHandle[ARG_TV_PLAYLIST_TYPE]) as String,
+        )
 }
-
 
 fun NavGraphBuilder.tvPlaylistChannels(
     onNavigateBack: () -> Unit,
-    onNavigateSelected: (String, String) -> Unit,
+    onNavigateSelected: NavigationGroup,
 ) {
     composable(
         route = AppRoutes.TvPlaylistChannels.route + "/{$ARG_TV_PLAYLIST_GROUP}/{$ARG_TV_PLAYLIST_TYPE}",
-    ) { backStackEntry ->
-        val selectedGroup = backStackEntry.arguments?.getString(ARG_TV_PLAYLIST_GROUP)
-        val type = backStackEntry.arguments?.getString(ARG_TV_PLAYLIST_TYPE)
+    ) {
+        val tvPlaylistChannelsViewModel = koinViewModel<TvPlaylistChannelsViewModel>()
 
-        selectedGroup?.let { group ->
-            val tvPlaylistChannelsViewModel = koinViewModel<TvPlaylistChannelsViewModel>()
-
-            TvPlaylistChannelsView(
-                viewModel = tvPlaylistChannelsViewModel,
-                selectedGroup = group,
-                selectedGroupType = type ?: GroupType.ALL.name,
-                onAction = tvPlaylistChannelsViewModel::processAction,
-                onNavigateBack = onNavigateBack,
-                onNavigateSelected = { name ->
-                    onNavigateSelected(name, group)
-                },
-            )
-        }
+        TvPlaylistChannelsScreen(
+            viewModel = tvPlaylistChannelsViewModel,
+            onAction = tvPlaylistChannelsViewModel::processAction,
+            onNavigateBack = onNavigateBack,
+            onNavigateSelected = onNavigateSelected,
+        )
     }
 }
+
+typealias NavigationGroup = (String, String) -> Unit

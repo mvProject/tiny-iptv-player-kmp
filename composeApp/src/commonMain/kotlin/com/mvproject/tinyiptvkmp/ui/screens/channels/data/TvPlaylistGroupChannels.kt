@@ -11,6 +11,6 @@ import androidx.compose.runtime.Immutable
 import com.mvproject.tinyiptvkmp.data.model.channels.TvPlaylistChannel
 
 @Immutable
-data class TvPlaylistChannelGroup(
+data class TvPlaylistGroupChannels(
     val items: List<TvPlaylistChannel> = emptyList(),
 )
