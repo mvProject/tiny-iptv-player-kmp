@@ -28,7 +28,6 @@ object AppConstants {
     const val ALPHA_50 = 0.5f
     const val WEIGHT_50 = 0.5f
     const val WEIGHT_80 = 0.8f
-    const val EMPTY_STRING = ""
 
     const val PLAYLIST_MIME_TYPE = "audio/x-mpegurl"
     const val PLAYLIST_LOCAL_TYPE = "content://"

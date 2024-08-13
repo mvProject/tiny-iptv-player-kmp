@@ -85,7 +85,7 @@ kotlin {
             implementation(libs.urikmp)
 
             // Image processing
-            implementation(libs.kamelimage)
+            implementation(libs.bundles.coil)
 
             // Resources
             implementation(compose.components.resources)
@@ -107,7 +107,7 @@ kotlin {
             implementation(libs.kotlinx.coroutines.swing)
 
             // Network
-            implementation(libs.ktor.client.java)
+            implementation(libs.ktor.client.okhttp)
 
             // FilePicker
             implementation(libs.calf.filepicker)

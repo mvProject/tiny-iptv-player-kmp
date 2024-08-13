@@ -24,7 +24,7 @@ import com.mvproject.tinyiptvkmp.ui.screens.channels.data.TvPlaylistChannelEpg
 import com.mvproject.tinyiptvkmp.ui.screens.channels.data.TvPlaylistGroupChannels
 import com.mvproject.tinyiptvkmp.ui.screens.channels.navigation.TvPlaylistChannelsArgs
 import com.mvproject.tinyiptvkmp.ui.screens.channels.state.TvPlaylistGroupState
-import com.mvproject.tinyiptvkmp.utils.AppConstants.EMPTY_STRING
+import com.mvproject.tinyiptvkmp.utils.CommonUtils.empty
 import com.mvproject.tinyiptvkmp.utils.KLog
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -45,7 +45,7 @@ class TvPlaylistChannelsViewModel(
     private val _channelsState = MutableStateFlow(TvPlaylistGroupChannels())
     val channelsState = _channelsState.asStateFlow()
 
-    private val _searchText = MutableStateFlow(EMPTY_STRING)
+    private val _searchText = MutableStateFlow(String.empty)
 
     private val args = TvPlaylistChannelsArgs(savedStateHandle)
 

@@ -28,7 +28,6 @@ import com.mvproject.tinyiptvkmp.ui.screens.player.navigation.VideoViewArgs
 import com.mvproject.tinyiptvkmp.ui.screens.player.state.VideoPlaybackState
 import com.mvproject.tinyiptvkmp.ui.screens.player.state.VideoViewState
 import com.mvproject.tinyiptvkmp.utils.AppConstants.DELAY_50
-import com.mvproject.tinyiptvkmp.utils.AppConstants.EMPTY_STRING
 import com.mvproject.tinyiptvkmp.utils.AppConstants.FLOAT_STEP_VOLUME
 import com.mvproject.tinyiptvkmp.utils.AppConstants.FLOAT_VALUE_1
 import com.mvproject.tinyiptvkmp.utils.AppConstants.FLOAT_VALUE_ZERO
@@ -37,6 +36,7 @@ import com.mvproject.tinyiptvkmp.utils.AppConstants.INT_VALUE_1
 import com.mvproject.tinyiptvkmp.utils.AppConstants.INT_VALUE_ZERO
 import com.mvproject.tinyiptvkmp.utils.AppConstants.UI_SHOW_DELAY
 import com.mvproject.tinyiptvkmp.utils.AppConstants.VOLUME_SHOW_DELAY
+import com.mvproject.tinyiptvkmp.utils.CommonUtils.empty
 import com.mvproject.tinyiptvkmp.utils.KLog
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.delay
@@ -97,7 +97,7 @@ class VideoViewViewModel(
         channelGroup: String,
     ) {
         viewModelScope.launch {
-            val channelList = getGroupChannelsUseCase(channelGroup, EMPTY_STRING)
+            val channelList = getGroupChannelsUseCase(channelGroup, String.empty)
             val currentPlaying = videoViewState.value.currentChannel.channelName
 
             val name = currentPlaying.ifBlank { channelName }

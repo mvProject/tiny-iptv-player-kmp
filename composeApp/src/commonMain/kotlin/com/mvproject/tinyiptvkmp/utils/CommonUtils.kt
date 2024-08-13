@@ -8,7 +8,6 @@
 package com.mvproject.tinyiptvkmp.utils
 
 import com.eygraber.uri.Uri
-import java.util.Locale
 
 typealias KLog = co.touchlab.kermit.Logger
 
@@ -19,18 +18,11 @@ object CommonUtils {
             .parse(this)
             .path
             ?.split("/")
-            ?.last() ?: AppConstants.EMPTY_STRING
+            ?.last() ?: String.empty
 
     fun Boolean.toLong() = if (this) 1L else 0L
 
     fun Long.toBoolean() = this != 0L
-
-    val isWindowsDesktop
-        get() =
-            System
-                .getProperty("os.name", "generic")
-                .lowercase(Locale.ENGLISH)
-                .contains("windows", ignoreCase = true)
 
     inline val String.Companion.empty get() = ""
 

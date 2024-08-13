@@ -64,10 +64,9 @@ The pragmatic Kotlin & Kotlin Multiplatform Dependency Injection framework
 
 ### Image
 
-#### [Kamel](https://github.com/Kamel-Media/Kamel)
+#### [Coil](https://coil-kt.github.io/coil/)
 
-Asynchronous media loading library, it provides a simple, customizable and efficient way to load,
-cache, decode and display images in your application
+An image loading library for Android and Compose Multiplatform
 
 ### Resources
 

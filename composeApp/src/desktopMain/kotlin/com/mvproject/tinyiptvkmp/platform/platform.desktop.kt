@@ -45,7 +45,7 @@ import com.mvproject.tinyiptvkmp.ui.screens.playlist.action.PlaylistAction
 import com.mvproject.tinyiptvkmp.ui.theme.dimens
 import com.mvproject.tinyiptvkmp.utils.AppConstants
 import io.ktor.client.HttpClient
-import io.ktor.client.engine.java.Java
+import io.ktor.client.engine.okhttp.OkHttp
 import okio.use
 import org.jetbrains.compose.resources.stringResource
 import tinyiptvkmp.composeapp.generated.resources.Res
@@ -57,7 +57,7 @@ import java.io.InputStreamReader
 
 actual fun createPlatformHttpClient(): HttpClient {
     // return HttpClient(OkHttp)
-    return HttpClient(Java)
+    return HttpClient(OkHttp)
 }
 
 @Composable

@@ -32,7 +32,7 @@ import com.mvproject.tinyiptvkmp.ui.screens.settings.components.PlaylistItemView
 import com.mvproject.tinyiptvkmp.ui.screens.settings.playlist.action.SettingsPlaylistAction
 import com.mvproject.tinyiptvkmp.ui.screens.settings.playlist.state.SettingsPlaylistState
 import com.mvproject.tinyiptvkmp.ui.theme.dimens
-import com.mvproject.tinyiptvkmp.utils.AppConstants
+import com.mvproject.tinyiptvkmp.utils.CommonUtils.empty
 import org.jetbrains.compose.resources.ExperimentalResourceApi
 import org.jetbrains.compose.resources.stringResource
 import tinyiptvkmp.composeapp.generated.resources.Res
@@ -63,7 +63,7 @@ fun SettingsPlaylistView(
         bottomBar = {
             ElevatedButton(
                 onClick = {
-                    onNavigatePlaylist(AppConstants.EMPTY_STRING)
+                    onNavigatePlaylist(String.empty)
                 },
                 modifier =
                     Modifier

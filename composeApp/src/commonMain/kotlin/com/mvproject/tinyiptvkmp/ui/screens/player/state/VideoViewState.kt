@@ -12,9 +12,10 @@ import com.mvproject.tinyiptvkmp.data.enums.ResizeMode
 import com.mvproject.tinyiptvkmp.data.model.channels.TvPlaylistChannel
 import com.mvproject.tinyiptvkmp.ui.data.TvPlaylistChannels
 import com.mvproject.tinyiptvkmp.utils.AppConstants
+import com.mvproject.tinyiptvkmp.utils.CommonUtils.empty
 
 data class VideoViewState(
-    val channelGroup: String = AppConstants.EMPTY_STRING,
+    val channelGroup: String = String.empty,
     val currentChannel: TvPlaylistChannel = TvPlaylistChannel(),
     val isRestartRequired: Boolean = false,
     val isUseSubtitle: Boolean = false,

@@ -7,13 +7,13 @@
 
 package com.mvproject.tinyiptvkmp.data.model.epg
 
-import com.mvproject.tinyiptvkmp.utils.AppConstants
 import com.mvproject.tinyiptvkmp.utils.AppConstants.LONG_VALUE_ZERO
+import com.mvproject.tinyiptvkmp.utils.CommonUtils.empty
 
 data class EpgInfo(
-    val channelId: String = AppConstants.EMPTY_STRING,
-    val channelName: String = AppConstants.EMPTY_STRING,
-    val channelLogo: String = AppConstants.EMPTY_STRING,
+    val channelId: String = String.empty,
+    val channelName: String = String.empty,
+    val channelLogo: String = String.empty,
     val lastUpdate: Long = LONG_VALUE_ZERO,
 ) {
     override fun toString() =

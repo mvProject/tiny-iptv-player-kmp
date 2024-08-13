@@ -8,7 +8,7 @@
 package com.mvproject.tinyiptvkmp.data.parser
 
 import com.mvproject.tinyiptvkmp.data.model.parse.PlaylistChannelParseModel
-import com.mvproject.tinyiptvkmp.utils.AppConstants.EMPTY_STRING
+import com.mvproject.tinyiptvkmp.utils.CommonUtils.empty
 
 object M3UParser {
     private const val TAG_PLAYLIST_HEADER = "#EXTM3U"
@@ -22,12 +22,12 @@ object M3UParser {
         return buildList {
             for (_line in lines) {
                 if (!_line.contains(TAG_PLAYLIST_HEADER)) {
-                    //meta + url
+                    // meta + url
                     val entry = _line.split("\n".toRegex()).toTypedArray()
                     if (entry.size > 1) {
                         var meta = entry[0]
-                        var link = EMPTY_STRING
-                        var group = EMPTY_STRING
+                        var link = String.empty
+                        var group = String.empty
                         entry.forEach { content ->
                             if (content.contains("http") || content.contains("https")) {
                                 link = content.trim()
@@ -38,18 +38,23 @@ object M3UParser {
                         }
                         meta = meta.trim()
 
-                        val logo = if (meta.contains(ATTR_LOGO)) {
-                            val start = meta.indexOf(ATTR_LOGO) + ATTR_LOGO.length + 2
-                            val end = meta.substring(start)
-                            end.substring(0, end.indexOf("\"")).trim()
+                        val logo =
+                            if (meta.contains(ATTR_LOGO)) {
+                                val start = meta.indexOf(ATTR_LOGO) + ATTR_LOGO.length + 2
+                                val end = meta.substring(start)
+                                end.substring(0, end.indexOf("\"")).trim()
+                            } else {
+                                String.empty
+                            }
 
-                        } else EMPTY_STRING
-
-                        val groupTitle = if (meta.contains(ATTR_GROUP_TITLE)) {
-                            val start = meta.indexOf(ATTR_GROUP_TITLE) + ATTR_GROUP_TITLE.length + 2
-                            val end = meta.substring(start)
-                            end.substring(0, end.indexOf("\"")).trim()
-                        } else EMPTY_STRING
+                        val groupTitle =
+                            if (meta.contains(ATTR_GROUP_TITLE)) {
+                                val start = meta.indexOf(ATTR_GROUP_TITLE) + ATTR_GROUP_TITLE.length + 2
+                                val end = meta.substring(start)
+                                end.substring(0, end.indexOf("\"")).trim()
+                            } else {
+                                String.empty
+                            }
 
                         val actualGroup = group.ifEmpty { groupTitle }.uppercase()
                         val actualLink = link.ifEmpty { entry[1].trim() }
@@ -57,15 +62,14 @@ object M3UParser {
                         val title = meta.substring(meta.indexOfLast { it == ',' } + 1)
                         val m3u = PlaylistChannelParseModel(actualLink, logo, actualGroup, title)
                         add(m3u)
-
                     } else {
                         add(
                             PlaylistChannelParseModel(
                                 entry[0].trim(),
-                                EMPTY_STRING,
-                                EMPTY_STRING,
-                                EMPTY_STRING
-                            )
+                                String.empty,
+                                String.empty,
+                                String.empty,
+                            ),
                         )
                     }
                 }

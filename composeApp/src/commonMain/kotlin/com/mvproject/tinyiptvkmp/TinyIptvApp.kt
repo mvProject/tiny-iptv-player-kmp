@@ -11,6 +11,8 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
+import coil3.annotation.ExperimentalCoilApi
+import coil3.compose.setSingletonImageLoaderFactory
 import com.mvproject.tinyiptvkmp.data.helpers.DataUpdateHelper
 import com.mvproject.tinyiptvkmp.data.helpers.DataUpdateState
 import com.mvproject.tinyiptvkmp.data.usecases.EpgInfoUpdateUseCase
@@ -20,17 +22,20 @@ import com.mvproject.tinyiptvkmp.data.usecases.UpdateRemotePlaylistChannelsUseCa
 import com.mvproject.tinyiptvkmp.navigation.AppRoutes
 import com.mvproject.tinyiptvkmp.navigation.NavigationHost
 import com.mvproject.tinyiptvkmp.ui.theme.VideoAppTheme
+import com.mvproject.tinyiptvkmp.utils.ImageUtils.getAsyncImageLoader
 import com.mvproject.tinyiptvkmp.utils.KLog
 import kotlinx.coroutines.delay
 import org.koin.compose.KoinContext
 import org.koin.compose.koinInject
 
+@OptIn(ExperimentalCoilApi::class)
 @Composable
 fun TinyIptvApp() {
+    setSingletonImageLoaderFactory { context ->
+        getAsyncImageLoader(context)
+    }
     KoinContext {
-        //PreComposeApp {
-            TinyIptvAppContent()
-       // }
+        TinyIptvAppContent()
     }
 }
 

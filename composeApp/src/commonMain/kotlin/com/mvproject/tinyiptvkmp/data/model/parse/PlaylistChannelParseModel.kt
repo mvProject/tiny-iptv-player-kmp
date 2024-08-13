@@ -7,11 +7,11 @@
 
 package com.mvproject.tinyiptvkmp.data.model.parse
 
-import com.mvproject.tinyiptvkmp.utils.AppConstants.EMPTY_STRING
+import com.mvproject.tinyiptvkmp.utils.CommonUtils.empty
 
 data class PlaylistChannelParseModel(
     val mStreamURL: String,
-    val mLogoURL: String = EMPTY_STRING,
-    val mGroupTitle: String = EMPTY_STRING,
-    val mChannel: String = EMPTY_STRING
+    val mLogoURL: String = String.empty,
+    val mGroupTitle: String = String.empty,
+    val mChannel: String = String.empty,
 )

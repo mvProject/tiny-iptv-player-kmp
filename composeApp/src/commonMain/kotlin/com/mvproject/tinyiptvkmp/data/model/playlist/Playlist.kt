@@ -7,21 +7,21 @@
 
 package com.mvproject.tinyiptvkmp.data.model.playlist
 
-import com.mvproject.tinyiptvkmp.utils.AppConstants.EMPTY_STRING
 import com.mvproject.tinyiptvkmp.utils.AppConstants.LONG_VALUE_ZERO
+import com.mvproject.tinyiptvkmp.utils.CommonUtils.empty
 import kotlin.random.Random
 
 data class Playlist(
     val id: Long = Random.nextLong(),
-    val playlistTitle: String = EMPTY_STRING,
-    val playlistUrl: String = EMPTY_STRING,
-    val playlistLocalName: String = EMPTY_STRING,
+    val playlistTitle: String = String.empty,
+    val playlistUrl: String = String.empty,
+    val playlistLocalName: String = String.empty,
     val lastUpdateDate: Long = LONG_VALUE_ZERO,
     val updatePeriod: Long = LONG_VALUE_ZERO,
-    val isLocalSource: Boolean = false
+    val isLocalSource: Boolean = false,
 ) {
-    override fun toString(): String {
-        return StringBuilder()
+    override fun toString(): String =
+        StringBuilder()
             .append("\n")
             .append("name - $playlistTitle")
             .append("\n")
@@ -35,5 +35,4 @@ data class Playlist(
             .append("\n")
             .append("lastUpdateDate - $lastUpdateDate")
             .toString()
-    }
 }

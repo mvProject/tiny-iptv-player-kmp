@@ -8,14 +8,14 @@
 package com.mvproject.tinyiptvkmp.ui.screens.channels.state
 
 import com.mvproject.tinyiptvkmp.data.enums.ChannelsViewType
-import com.mvproject.tinyiptvkmp.utils.AppConstants.EMPTY_STRING
+import com.mvproject.tinyiptvkmp.utils.CommonUtils.empty
 
 data class TvPlaylistGroupState(
-    val currentGroup: String = EMPTY_STRING,
-    val currentGroupType: String = EMPTY_STRING,
+    val currentGroup: String = String.empty,
+    val currentGroupType: String = String.empty,
     val isLoading: Boolean = false,
     val isSearching: Boolean = false,
     val isEpgVisible: Boolean = false,
-    val searchString: String = EMPTY_STRING,
+    val searchString: String = String.empty,
     val viewType: ChannelsViewType = ChannelsViewType.LIST,
 )

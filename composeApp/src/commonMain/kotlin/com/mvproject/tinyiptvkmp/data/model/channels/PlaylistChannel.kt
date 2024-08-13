@@ -7,15 +7,15 @@
 
 package com.mvproject.tinyiptvkmp.data.model.channels
 
-import com.mvproject.tinyiptvkmp.utils.AppConstants.EMPTY_STRING
+import com.mvproject.tinyiptvkmp.utils.CommonUtils.empty
 
 data class PlaylistChannel(
     val channelName: String,
-    val channelLogo: String = EMPTY_STRING,
+    val channelLogo: String = String.empty,
     val channelUrl: String,
     val channelGroup: String,
-    val epgId: String = EMPTY_STRING,
-    val parentListId: Long
+    val epgId: String = String.empty,
+    val parentListId: Long,
 ) {
     override fun toString() =
         StringBuilder()

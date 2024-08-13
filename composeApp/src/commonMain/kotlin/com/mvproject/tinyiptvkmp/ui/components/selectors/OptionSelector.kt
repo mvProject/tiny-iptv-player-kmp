@@ -26,56 +26,63 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import com.mvproject.tinyiptvkmp.ui.theme.dimens
-import com.mvproject.tinyiptvkmp.utils.AppConstants.EMPTY_STRING
 import com.mvproject.tinyiptvkmp.utils.AppConstants.WEIGHT_1
+import com.mvproject.tinyiptvkmp.utils.CommonUtils.empty
 
 @Composable
 fun OptionSelector(
     modifier: Modifier = Modifier,
-    title: String = EMPTY_STRING,
+    title: String = String.empty,
     enabled: Boolean = true,
-    selectedItem: String = EMPTY_STRING,
+    selectedItem: String = String.empty,
     isExpanded: Boolean = false,
-    onClick: () -> Unit = {}
+    onClick: () -> Unit = {},
 ) {
-    val titleTextColor = if (enabled)
-        MaterialTheme.colorScheme.onPrimary
-    else
-        MaterialTheme.colorScheme.outline
+    val titleTextColor =
+        if (enabled) {
+            MaterialTheme.colorScheme.onPrimary
+        } else {
+            MaterialTheme.colorScheme.outline
+        }
 
-    val selectionTextColor = if (enabled)
-        MaterialTheme.colorScheme.onSurfaceVariant
-    else
-        MaterialTheme.colorScheme.outline
+    val selectionTextColor =
+        if (enabled) {
+            MaterialTheme.colorScheme.onSurfaceVariant
+        } else {
+            MaterialTheme.colorScheme.outline
+        }
 
-    val borderColor = if (enabled)
-        MaterialTheme.colorScheme.onSurface
-    else
-        MaterialTheme.colorScheme.outline
+    val borderColor =
+        if (enabled) {
+            MaterialTheme.colorScheme.onSurface
+        } else {
+            MaterialTheme.colorScheme.outline
+        }
 
     OutlinedButton(
         modifier = modifier,
         shape = MaterialTheme.shapes.extraSmall,
         enabled = enabled,
-        border = BorderStroke(
-            width = MaterialTheme.dimens.size1,
-            color = borderColor
-        ),
-        contentPadding = PaddingValues(
-            start = MaterialTheme.dimens.size12
-        ),
-        onClick = onClick
+        border =
+            BorderStroke(
+                width = MaterialTheme.dimens.size1,
+                color = borderColor,
+            ),
+        contentPadding =
+            PaddingValues(
+                start = MaterialTheme.dimens.size12,
+            ),
+        onClick = onClick,
     ) {
-
         Column(
-            verticalArrangement = Arrangement.Center
+            verticalArrangement = Arrangement.Center,
         ) {
             if (title.isNotEmpty()) {
                 Text(
                     text = title,
                     style = MaterialTheme.typography.labelSmall,
                     color = titleTextColor,
-                    fontSize = MaterialTheme.dimens.font10
+                    fontSize = MaterialTheme.dimens.font10,
                 )
 
                 Spacer(modifier = Modifier.height(MaterialTheme.dimens.size8))
@@ -84,25 +91,28 @@ fun OptionSelector(
             Text(
                 text = selectedItem,
                 style = MaterialTheme.typography.titleSmall,
-                color = selectionTextColor
+                color = selectionTextColor,
             )
         }
 
         Spacer(modifier = Modifier.weight(WEIGHT_1))
 
-        val icon = if (isExpanded)
-            Icons.Filled.ArrowDropUp
-        else
-            Icons.Filled.ArrowDropDown
+        val icon =
+            if (isExpanded) {
+                Icons.Filled.ArrowDropUp
+            } else {
+                Icons.Filled.ArrowDropDown
+            }
 
         FilledIconButton(
             enabled = enabled,
             onClick = onClick,
             modifier = Modifier.padding(MaterialTheme.dimens.size8),
-            colors = IconButtonDefaults.filledIconButtonColors(
-                containerColor = MaterialTheme.colorScheme.primary,
-                contentColor = MaterialTheme.colorScheme.onSurface
-            )
+            colors =
+                IconButtonDefaults.filledIconButtonColors(
+                    containerColor = MaterialTheme.colorScheme.primary,
+                    contentColor = MaterialTheme.colorScheme.onSurface,
+                ),
         ) {
             Icon(
                 imageVector = icon,

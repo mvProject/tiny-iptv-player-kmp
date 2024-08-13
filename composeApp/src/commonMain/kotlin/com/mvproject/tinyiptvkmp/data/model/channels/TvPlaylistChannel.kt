@@ -9,13 +9,13 @@ package com.mvproject.tinyiptvkmp.data.model.channels
 
 import com.mvproject.tinyiptvkmp.data.enums.FavoriteType
 import com.mvproject.tinyiptvkmp.ui.screens.channels.data.TvPlaylistChannelEpg
-import com.mvproject.tinyiptvkmp.utils.AppConstants.EMPTY_STRING
+import com.mvproject.tinyiptvkmp.utils.CommonUtils.empty
 
 data class TvPlaylistChannel(
-    val channelName: String = EMPTY_STRING,
-    val channelUrl: String = EMPTY_STRING,
-    val channelLogo: String = EMPTY_STRING,
-    val epgId: String = EMPTY_STRING,
+    val channelName: String = String.empty,
+    val channelUrl: String = String.empty,
+    val channelLogo: String = String.empty,
+    val epgId: String = String.empty,
     val favoriteType: FavoriteType = FavoriteType.NONE,
     val isEpgUsing: Boolean = false,
     val channelEpg: TvPlaylistChannelEpg = TvPlaylistChannelEpg(),
