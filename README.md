@@ -68,6 +68,13 @@ The pragmatic Kotlin & Kotlin Multiplatform Dependency Injection framework
 
 An image loading library for Android and Compose Multiplatform
 
+### IO
+
+#### [FileKit](https://github.com/vinceglb/FileKit)
+
+FileKit is a library that allows you to pick and save files in a simple way. 
+On each platform, it uses the native file picker API to provide a consistent experience.
+
 ### Resources
 
 Using composeResources for Kotlin Multiplatform

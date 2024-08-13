@@ -9,11 +9,9 @@ package com.mvproject.tinyiptvkmp.platform
 
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
-import com.mvproject.tinyiptvkmp.data.model.channels.PlaylistChannel
 import com.mvproject.tinyiptvkmp.ui.screens.player.action.PlaybackActions
 import com.mvproject.tinyiptvkmp.ui.screens.player.action.PlaybackStateActions
 import com.mvproject.tinyiptvkmp.ui.screens.player.state.VideoViewState
-import com.mvproject.tinyiptvkmp.ui.screens.playlist.action.PlaylistAction
 import com.mvproject.tinyiptvkmp.utils.KLog
 import io.ktor.client.HttpClient
 import io.ktor.client.plugins.HttpTimeout
@@ -40,9 +38,6 @@ expect fun PlayerViewContainer(
     onPlaybackStateAction: (PlaybackStateActions) -> Unit = {},
     controls: @Composable () -> Unit,
 )
-
-@Composable
-expect fun LocalFileSelectButton(onPlaylistAction: (PlaylistAction) -> Unit)
 
 @Composable
 expect fun AdditionalPlayerControls(
@@ -84,10 +79,3 @@ expect fun TwoPaneContainer(
     first: @Composable () -> Unit,
     second: @Composable () -> Unit,
 )
-
-expect class LocalPlaylistDataSource {
-    fun getLocalPlaylistData(
-        playlistId: Long,
-        uri: String,
-    ): List<PlaylistChannel>
-}

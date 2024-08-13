@@ -29,21 +29,12 @@ object AppConstants {
     const val WEIGHT_50 = 0.5f
     const val WEIGHT_80 = 0.8f
 
-    const val PLAYLIST_MIME_TYPE = "audio/x-mpegurl"
-    const val PLAYLIST_LOCAL_TYPE = "content://"
-    const val PLAYLIST_REMOTE_TYPE = "http://"
-    const val PLAYLIST_REMOTE_SEC_TYPE = "https://"
-
     const val DELAY_50 = 50L
     const val UI_SHOW_DELAY = 3000L
     const val VOLUME_SHOW_DELAY = 500L
 
     const val PROGRESS_STATE_COMPLETE = 1f
     const val COUNT_ZERO_FLOAT = 0f
-
-    const val PLAYBACK_START_POSITION = 0L
-
-    const val PLAYLIST_ID = "PLAYLIST_ID"
 
     const val DRAG_THRESHOLD = 5
     const val MOVEMENT_THRESHOLD = 10

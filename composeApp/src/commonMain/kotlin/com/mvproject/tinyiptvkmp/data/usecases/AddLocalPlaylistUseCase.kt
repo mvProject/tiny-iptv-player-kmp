@@ -7,6 +7,7 @@
 
 package com.mvproject.tinyiptvkmp.data.usecases
 
+import com.mvproject.tinyiptvkmp.data.datasource.LocalPlaylistDataSource
 import com.mvproject.tinyiptvkmp.data.model.playlist.Playlist
 import com.mvproject.tinyiptvkmp.data.repository.PlaylistChannelsRepository
 import com.mvproject.tinyiptvkmp.data.repository.PlaylistsRepository
@@ -15,7 +16,7 @@ import com.mvproject.tinyiptvkmp.utils.AppConstants
 import com.mvproject.tinyiptvkmp.utils.KLog
 
 class AddLocalPlaylistUseCase(
-    private val localPlaylistDataSource: com.mvproject.tinyiptvkmp.platform.LocalPlaylistDataSource,
+    private val localPlaylistDataSource: LocalPlaylistDataSource,
     private val playlistChannelsRepository: PlaylistChannelsRepository,
     private val preferenceRepository: PreferenceRepository,
     private val playlistsRepository: PlaylistsRepository,
@@ -25,9 +26,9 @@ class AddLocalPlaylistUseCase(
         source: String,
     ) {
         val channels =
-            localPlaylistDataSource.getLocalPlaylistData(
+            localPlaylistDataSource.getFromLocalPlaylist(
                 playlistId = playlist.id,
-                uri = source,
+                source = source,
             )
 
         if (channels.isEmpty()) {

@@ -26,25 +26,6 @@ kotlin {
     sourceSets {
         val desktopMain by getting
 
-        androidMain.dependencies {
-            implementation(compose.preview)
-
-            implementation(libs.androidx.compose.activity)
-
-            // Network
-            implementation(libs.ktor.client.android)
-
-            // DI
-            implementation(libs.koin.android)
-
-            // Exoplayer
-            implementation(libs.bundles.media3)
-
-            // Misc
-            implementation(libs.kotlinx.collections.immutable)
-            implementation(libs.accompanist.adaptive)
-        }
-
         commonMain.dependencies {
             implementation(compose.runtime)
             implementation(compose.foundation)
@@ -82,7 +63,7 @@ kotlin {
             implementation(libs.kotlinx.datetime)
             implementation(libs.material3.window.size.multiplatform)
             implementation(libs.kotlinx.collections.immutable)
-            implementation(libs.urikmp)
+            implementation(libs.uri.kmp)
 
             // Image processing
             implementation(libs.bundles.coil)
@@ -92,7 +73,28 @@ kotlin {
 
             implementation(libs.bundles.ksoup)
 
+            implementation(libs.bundles.filekit)
+
             implementation(compose.components.uiToolingPreview)
+        }
+
+        androidMain.dependencies {
+            implementation(compose.preview)
+
+            implementation(libs.androidx.compose.activity)
+
+            // Network
+            implementation(libs.ktor.client.android)
+
+            // DI
+            implementation(libs.koin.android)
+
+            // Exoplayer
+            implementation(libs.bundles.media3)
+
+            // Misc
+            implementation(libs.kotlinx.collections.immutable)
+            implementation(libs.accompanist.adaptive)
         }
 
         desktopMain.dependencies {

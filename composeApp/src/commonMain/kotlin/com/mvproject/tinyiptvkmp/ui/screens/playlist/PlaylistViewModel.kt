@@ -124,7 +124,7 @@ class PlaylistViewModel(
                         source = state.value.uri,
                     )
                 }.onFailure {
-                    KLog.e("saveLocalPlayList failure ${it.localizedMessage}")
+                    KLog.e("testing saveLocalPlayList failure ${it.localizedMessage}")
                 }
 
             _state.update { current ->
@@ -174,7 +174,7 @@ class PlaylistViewModel(
                 runCatching {
                     updatePlaylistUseCase(playlist = state.value.toPlaylist())
                 }.onFailure {
-                    KLog.e("updatePlayList failure ${it.localizedMessage}")
+                    KLog.e("testing updatePlayList failure ${it.localizedMessage}")
                 }
 
             _state.update { current ->

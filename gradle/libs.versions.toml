@@ -25,7 +25,7 @@ ktor = "2.3.12"
 koin = "4.0.0-RC1"
 
 calfFilePickerVersion = "0.2.0"
-uriKmpVersion = "0.0.15"
+uri-kmp = "0.0.15"
 
 media3 = "1.4.0"
 
@@ -40,6 +40,8 @@ sqlite = "2.5.0-SNAPSHOT"
 ksoup = "0.1.2"
 
 coil3 = "3.0.0-alpha06"
+
+filekit = "0.7.0"
 
 [plugins]
 compose-multiplatform = { id = "org.jetbrains.compose", version.ref = "compose" }
@@ -117,9 +119,12 @@ coil-compose = { module = "io.coil-kt.coil3:coil-compose", version.ref = "coil3"
 coil-compose-core = { module = "io.coil-kt.coil3:coil-compose-core", version.ref = "coil3" }
 coil-main = { module = "io.coil-kt.coil3:coil", version.ref = "coil3" }
 
-urikmp = { module = "com.eygraber:uri-kmp", version.ref = "uriKmpVersion" }
+uri-kmp = { module = "com.eygraber:uri-kmp", version.ref = "uri-kmp" }
 calf-filepicker = { module = "com.mohamedrejeb.calf:calf-file-picker", version.ref = "calfFilePickerVersion" }
 accompanist-adaptive = { module = "com.google.accompanist:accompanist-adaptive", version.ref = "accompanist" }
+
+filekit-core = { module = "io.github.vinceglb:filekit-core", version.ref = "filekit" }
+filekit-compose = { module = "io.github.vinceglb:filekit-compose", version.ref = "filekit" }
 
 [bundles]
 
@@ -168,4 +173,9 @@ coil = [
     "coil-network",
     "coil-compose",
     "coil-compose-core"
+]
+
+filekit = [
+    "filekit-core",
+    "filekit-compose"
 ]
