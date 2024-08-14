@@ -95,6 +95,8 @@ kotlin {
             // Misc
             implementation(libs.kotlinx.collections.immutable)
             implementation(libs.accompanist.adaptive)
+
+            implementation(libs.bundles.nextlib)
         }
 
         desktopMain.dependencies {
@@ -181,7 +183,7 @@ android {
         compose = true
     }
     dependencies {
-        implementation(fileTree(mapOf("dir" to "libs", "include" to listOf("*.aar"))))
+        //     implementation(fileTree(mapOf("dir" to "libs", "include" to listOf("*.aar"))))
         debugImplementation(compose.uiTooling)
     }
 }

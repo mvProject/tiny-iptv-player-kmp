@@ -23,11 +23,16 @@ import androidx.media3.exoplayer.trackselection.AdaptiveTrackSelection
 import androidx.media3.exoplayer.trackselection.DefaultTrackSelector
 import androidx.media3.exoplayer.upstream.DefaultBandwidthMeter
 import com.mvproject.tinyiptvkmp.ui.screens.player.state.VideoPlaybackState
+import io.github.anilbeesetti.nextlib.media3ext.ffdecoder.NextRenderersFactory
 
 object ExoPlayerUtils {
     @OptIn(UnstableApi::class)
     fun createVideoPlayer(context: Context): ExoPlayer {
-        val renderersFactory = createRenderersFactory(context)
+        //  val renderersFactory = createRenderersFactory(context)
+        val renderersFactory =
+            NextRenderersFactory(context).apply {
+                setExtensionRendererMode(DefaultRenderersFactory.EXTENSION_RENDERER_MODE_PREFER)
+            }
 
         val trackSelector = createTrackSelector(context)
 

@@ -43,6 +43,8 @@ coil3 = "3.0.0-alpha06"
 
 filekit = "0.7.0"
 
+nextlib = "0.8.2"
+
 [plugins]
 compose-multiplatform = { id = "org.jetbrains.compose", version.ref = "compose" }
 compose-compiler = { id = "org.jetbrains.kotlin.plugin.compose", version.ref = "kotlin" }
@@ -126,6 +128,9 @@ accompanist-adaptive = { module = "com.google.accompanist:accompanist-adaptive",
 filekit-core = { module = "io.github.vinceglb:filekit-core", version.ref = "filekit" }
 filekit-compose = { module = "io.github.vinceglb:filekit-compose", version.ref = "filekit" }
 
+nextlib-media3ext = { module = "com.github.anilbeesetti.nextlib:nextlib-media3ext", version.ref = "nextlib" }
+nextlib-mediainfo = { module = "com.github.anilbeesetti.nextlib:nextlib-mediainfo", version.ref = "nextlib" }
+
 [bundles]
 
 ktor = [
@@ -178,4 +183,9 @@ coil = [
 filekit = [
     "filekit-core",
     "filekit-compose"
+]
+
+nextlib = [
+    "nextlib-media3ext",
+    "nextlib-mediainfo"
 ]
