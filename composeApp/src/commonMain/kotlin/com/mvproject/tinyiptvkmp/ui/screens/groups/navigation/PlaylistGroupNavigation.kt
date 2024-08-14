@@ -7,9 +7,9 @@
 
 package com.mvproject.tinyiptvkmp.ui.screens.groups.navigation
 
-import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.lifecycle.compose.LifecycleResumeEffect
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.navigation.NavGraphBuilder
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.composable
@@ -37,10 +37,12 @@ fun NavGraphBuilder.playlistGroups(
             onPauseOrDispose { }
         }
 
-        val playlistDataState by groupViewModel.groupState.collectAsState()
+        val playlistDataState by groupViewModel.groupState.collectAsStateWithLifecycle()
+        val groupUiState by groupViewModel.groupUiState.collectAsStateWithLifecycle()
 
         GroupView(
             dataState = playlistDataState,
+            uiState = groupUiState,
             onNavigateToSettings = onNavigateToSettings,
             onNavigateToGroup = onNavigateToGroup,
             onPlaylistAction = groupViewModel::processAction,

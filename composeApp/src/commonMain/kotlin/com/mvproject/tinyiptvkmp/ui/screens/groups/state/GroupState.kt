@@ -11,7 +11,6 @@ import androidx.compose.runtime.Immutable
 import com.mvproject.tinyiptvkmp.data.model.channels.ChannelsGroup
 import com.mvproject.tinyiptvkmp.data.model.playlist.Playlist
 import com.mvproject.tinyiptvkmp.utils.AppConstants.INT_NO_VALUE
-import com.mvproject.tinyiptvkmp.utils.AppConstants.LONG_NO_VALUE
 
 data class GroupState(
     val allGroup: ChannelsGroup = ChannelsGroup(),
@@ -19,16 +18,10 @@ data class GroupState(
     val groups: ChannelsGroups = ChannelsGroups(),
     val playlists: Playlists = Playlists(),
     val playlistNames: PlaylistNames = PlaylistNames(),
-    val isLoading: Boolean = true,
     val playlistSelectedIndex: Int = INT_NO_VALUE,
-    val playlistSelectedId: Long = LONG_NO_VALUE,
+    val playlistSelectedId: Long? = null,
     val isPlaylistSelectorVisible: Boolean = false,
-) {
-    val dataIsEmpty: Boolean
-        get() {
-            return !isLoading && groups.items.isEmpty()
-        }
-}
+)
 
 @Immutable
 data class ChannelsGroups(

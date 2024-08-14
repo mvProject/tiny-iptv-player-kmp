@@ -12,9 +12,9 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.mvproject.tinyiptvkmp.data.enums.ChannelsViewType
 import com.mvproject.tinyiptvkmp.data.enums.FavoriteType
-import com.mvproject.tinyiptvkmp.data.helpers.ViewTypeHelper
 import com.mvproject.tinyiptvkmp.data.model.channels.TvPlaylistChannel
 import com.mvproject.tinyiptvkmp.data.model.epg.EpgProgram
+import com.mvproject.tinyiptvkmp.data.repository.PreferenceRepository
 import com.mvproject.tinyiptvkmp.data.usecases.GetGroupChannelsEpg
 import com.mvproject.tinyiptvkmp.data.usecases.GetGroupChannelsUseCase
 import com.mvproject.tinyiptvkmp.data.usecases.ToggleFavoriteChannelUseCase
@@ -34,10 +34,10 @@ import kotlinx.coroutines.launch
 
 class TvPlaylistChannelsViewModel(
     savedStateHandle: SavedStateHandle,
-    private val viewTypeHelper: ViewTypeHelper,
     private val getGroupChannelsUseCase: GetGroupChannelsUseCase,
     private val getGroupChannelsEpg: GetGroupChannelsEpg,
     private val toggleFavoriteChannelUseCase: ToggleFavoriteChannelUseCase,
+    private val preferenceRepository: PreferenceRepository,
 ) : ViewModel() {
     private val _groupState = MutableStateFlow(TvPlaylistGroupState())
     val groupState = _groupState.asStateFlow()
@@ -55,8 +55,14 @@ class TvPlaylistChannelsViewModel(
 
         viewModelScope.launch {
             _groupState.update { current ->
+                val viewType =
+                    preferenceRepository
+                        .getChannelsViewType()
+                        ?.let { ChannelsViewType.valueOf(it) }
+                        ?: ChannelsViewType.LIST
+
                 current.copy(
-                    viewType = viewTypeHelper.getChannelsViewType(),
+                    viewType = viewType,
                     currentGroup = group,
                     currentGroupType = type,
                 )
@@ -187,7 +193,7 @@ class TvPlaylistChannelsViewModel(
                 _groupState.update { current ->
                     current.copy(viewType = type)
                 }
-                viewTypeHelper.setChannelsViewType(type)
+                preferenceRepository.setChannelsViewType(type = type.name)
             }
         }
     }
