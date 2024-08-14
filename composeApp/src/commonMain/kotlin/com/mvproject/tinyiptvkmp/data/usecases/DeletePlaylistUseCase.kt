@@ -12,7 +12,7 @@ import com.mvproject.tinyiptvkmp.data.repository.FavoriteChannelsRepository
 import com.mvproject.tinyiptvkmp.data.repository.PlaylistChannelsRepository
 import com.mvproject.tinyiptvkmp.data.repository.PlaylistsRepository
 import com.mvproject.tinyiptvkmp.data.repository.PreferenceRepository
-import com.mvproject.tinyiptvkmp.utils.AppConstants
+import com.mvproject.tinyiptvkmp.utils.AppConstants.LONG_NO_VALUE
 import kotlinx.coroutines.flow.first
 
 class DeletePlaylistUseCase(
@@ -27,12 +27,12 @@ class DeletePlaylistUseCase(
         if (currentPlaylistId == playlist.id) {
             val availablePlaylistIds =
                 playlistsRepository
-                    .getAllPlaylistsRoom()
+                    .getAllPlaylists()
                     .map { it.id }
 
             val newPlaylistId =
                 availablePlaylistIds
-                    .firstOrNull { it != currentPlaylistId } ?: AppConstants.LONG_NO_VALUE
+                    .firstOrNull { it != currentPlaylistId } ?: LONG_NO_VALUE
 
             preferenceRepository.setCurrentPlaylistId(
                 playlistId = newPlaylistId,
@@ -47,10 +47,6 @@ class DeletePlaylistUseCase(
             listId = playlist.id,
         )
 
-        //  playlistsRepository.deletePlaylistById(
-        //      id = playlist.id,
-        //  )
-
-        playlistsRepository.deletePlaylistByIdRoom(id = playlist.id)
+        playlistsRepository.deletePlaylistById(id = playlist.id)
     }
 }

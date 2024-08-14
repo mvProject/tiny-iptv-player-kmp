@@ -38,9 +38,8 @@ object PreviewTestData {
     val testPlaylist =
         Playlist(
             id = Random.nextLong(),
-            playlistTitle = "playlistTitle",
-            playlistUrl = "playlistUrl",
-            playlistLocalName = "playlistLocalName",
+            playlistName = "playlistTitle",
+            playlistSource = "playlistUrl",
             lastUpdateDate = Random.nextLong(),
             updatePeriod = 3,
         )
@@ -65,10 +64,9 @@ object PreviewTestData {
                 add(
                     Playlist(
                         id = Random.nextLong(),
-                        playlistTitle = "listName $it",
-                        playlistUrl = "listUrl $it",
+                        playlistName = "listName $it",
+                        playlistSource = "listUrl $it",
                         lastUpdateDate = Random.nextLong(),
-                        playlistLocalName = "playlistLocalName",
                         updatePeriod = 3,
                     ),
                 )

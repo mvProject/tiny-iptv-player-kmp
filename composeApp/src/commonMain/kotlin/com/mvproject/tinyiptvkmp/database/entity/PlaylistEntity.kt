@@ -9,15 +9,15 @@ package com.mvproject.tinyiptvkmp.database.entity
 
 import androidx.room.Entity
 import androidx.room.PrimaryKey
+import com.mvproject.tinyiptvkmp.data.enums.PlaylistType
 
 @Entity
 data class PlaylistEntity(
     @PrimaryKey
     val id: Long,
-    val title: String,
-    val localFilename: String,
-    val url: String,
+    val playlistName: String,
+    val playlistSource: String,
+    val playlistType: PlaylistType,
     val lastUpdateDate: Long,
     val updatePeriod: Long,
-    val isLocal: Long,
 )

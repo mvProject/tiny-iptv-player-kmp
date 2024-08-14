@@ -33,7 +33,6 @@ import com.mvproject.tinyiptvkmp.ui.screens.settings.playlist.action.SettingsPla
 import com.mvproject.tinyiptvkmp.ui.screens.settings.playlist.state.SettingsPlaylistState
 import com.mvproject.tinyiptvkmp.ui.theme.dimens
 import com.mvproject.tinyiptvkmp.utils.CommonUtils.empty
-import org.jetbrains.compose.resources.ExperimentalResourceApi
 import org.jetbrains.compose.resources.stringResource
 import tinyiptvkmp.composeapp.generated.resources.Res
 import tinyiptvkmp.composeapp.generated.resources.btn_add_new
@@ -41,7 +40,6 @@ import tinyiptvkmp.composeapp.generated.resources.msg_no_items_found
 import tinyiptvkmp.composeapp.generated.resources.msg_no_playlist
 import tinyiptvkmp.composeapp.generated.resources.scr_playlist_settings_title
 
-@OptIn(ExperimentalResourceApi::class)
 @Composable
 fun SettingsPlaylistView(
     dataState: SettingsPlaylistState,

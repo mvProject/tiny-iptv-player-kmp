@@ -43,13 +43,11 @@ class GroupViewModel(
             }
             val currentIndex = playlists.indexOfFirst { it.id == currentId }
 
-            KLog.w("testing init")
-
             _groupState.update { current ->
                 current.copy(
                     isPlaylistSelectorVisible = playlists.count() > INT_VALUE_1,
                     playlists = Playlists(items = playlists),
-                    playlistNames = PlaylistNames(items = playlists.map { it.playlistTitle }),
+                    playlistNames = PlaylistNames(items = playlists.map { it.playlistName }),
                     playlistSelectedIndex = currentIndex,
                     playlistSelectedId = currentId,
                     isLoading = false,
@@ -61,7 +59,6 @@ class GroupViewModel(
     }
 
     fun refresh() {
-        KLog.w("testing refresh")
         viewModelScope.launch {
             val currentId = groupState.value.playlistSelectedId
             refreshGroups(currentId = currentId)

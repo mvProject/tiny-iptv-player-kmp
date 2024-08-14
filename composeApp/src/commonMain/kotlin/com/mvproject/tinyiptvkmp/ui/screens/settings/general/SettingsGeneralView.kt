@@ -41,7 +41,6 @@ import com.mvproject.tinyiptvkmp.ui.screens.settings.general.action.SettingsActi
 import com.mvproject.tinyiptvkmp.ui.screens.settings.general.state.SettingsState
 import com.mvproject.tinyiptvkmp.ui.theme.dimens
 import com.mvproject.tinyiptvkmp.utils.AppConstants.WEIGHT_1
-import org.jetbrains.compose.resources.ExperimentalResourceApi
 import org.jetbrains.compose.resources.stringResource
 import tinyiptvkmp.composeapp.generated.resources.Res
 import tinyiptvkmp.composeapp.generated.resources.hint_update_period
@@ -52,7 +51,6 @@ import tinyiptvkmp.composeapp.generated.resources.scr_player_settings_title
 import tinyiptvkmp.composeapp.generated.resources.scr_playlist_settings_title
 import tinyiptvkmp.composeapp.generated.resources.scr_settings_title
 
-@OptIn(ExperimentalResourceApi::class)
 @Composable
 fun SettingsGeneralView(
     state: SettingsState,

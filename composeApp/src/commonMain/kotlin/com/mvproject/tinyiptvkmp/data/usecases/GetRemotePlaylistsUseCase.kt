@@ -7,6 +7,7 @@
 
 package com.mvproject.tinyiptvkmp.data.usecases
 
+import com.mvproject.tinyiptvkmp.data.enums.PlaylistType
 import com.mvproject.tinyiptvkmp.data.model.playlist.Playlist
 import com.mvproject.tinyiptvkmp.data.repository.PlaylistsRepository
 import com.mvproject.tinyiptvkmp.utils.KLog
@@ -16,10 +17,9 @@ class GetRemotePlaylistsUseCase(
 ) {
     suspend operator fun invoke(): List<Playlist> {
         val remotePlaylists =
-            playlistsRepository.getAllPlaylistsRoom()
-                .filter { playlist ->
-                    !playlist.isLocalSource
-                }
+            playlistsRepository
+                .getAllPlaylists()
+                .filter { playlist -> playlist.playlistType == PlaylistType.REMOTE }
         KLog.w("remotePlaylists count:${remotePlaylists.count()}")
         return remotePlaylists
     }

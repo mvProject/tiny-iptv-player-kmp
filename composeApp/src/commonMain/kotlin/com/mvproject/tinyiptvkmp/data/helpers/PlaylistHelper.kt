@@ -21,7 +21,7 @@ class PlaylistHelper(
             return playlistsRepository.getAllPlaylistsRoom()
         }*/
 
-    fun allPlaylistsFlow() = playlistsRepository.allPlaylistsFlowRoom()
+    fun allPlaylistsFlow() = playlistsRepository.allPlaylistsAsFlow()
 
     suspend fun setCurrentPlaylist(playlistId: Long) {
         preferenceRepository.setCurrentPlaylistId(playlistId)

@@ -16,6 +16,7 @@ import androidx.compose.foundation.layout.WindowInsets
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.ime
 import androidx.compose.foundation.layout.navigationBars
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.windowInsetsPadding
@@ -36,6 +37,7 @@ import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import com.mvproject.tinyiptvkmp.data.enums.PlaylistType
 import com.mvproject.tinyiptvkmp.data.enums.UpdatePeriod
 import com.mvproject.tinyiptvkmp.ui.components.overlay.OverlayContent
 import com.mvproject.tinyiptvkmp.ui.components.overlay.OverlayOptionsMenu
@@ -80,6 +82,38 @@ fun PlaylistView(
         }
     }
 
+    val launcher =
+        rememberFilePickerLauncher(
+            mode = PickerMode.Single,
+            type =
+                PickerType.File(
+                    extensions =
+                        listOf(
+                            String.typeM3U,
+                            String.typeM3U8,
+                        ),
+                ),
+            title = stringResource(Res.string.btn_add_local),
+        ) { selectedFile ->
+            selectedFile?.let { file ->
+                val folderFileTmp = tmpFolder / file.name
+                val fileTmp = folderFileTmp.toFile()
+
+                scope.launch {
+                    FileOutputStream(fileTmp).use {
+                        it.write(file.readBytes())
+                    }
+                }
+
+                onPlaylistAction(
+                    PlaylistAction.SetLocalUri(
+                        name = file.name,
+                        uri = folderFileTmp.toString(),
+                    ),
+                )
+            }
+        }
+
     Scaffold(
         modifier =
             Modifier
@@ -90,40 +124,6 @@ fun PlaylistView(
                 appBarTitle = stringResource(Res.string.msg_playlist_details),
                 onBackClick = onNavigateBack,
             )
-        },
-        bottomBar = {
-            ElevatedButton(
-                enabled = state.isReadyToSave,
-                onClick = {
-                    if (state.isEdit) {
-                        onPlaylistAction(PlaylistAction.UpdatePlaylist)
-                    } else {
-                        onPlaylistAction(PlaylistAction.SavePlaylist)
-                    }
-                },
-                modifier =
-                    Modifier
-                        .padding(MaterialTheme.dimens.size8)
-                        .fillMaxWidth(),
-                colors =
-                    ButtonDefaults.buttonColors(
-                        containerColor = MaterialTheme.colorScheme.onSurface,
-                    ),
-                shape = MaterialTheme.shapes.small,
-            ) {
-                val text =
-                    if (state.isEdit) {
-                        Res.string.btn_update
-                    } else {
-                        Res.string.btn_save
-                    }
-
-                Text(
-                    text = stringResource(text),
-                    color = MaterialTheme.colorScheme.primary,
-                    style = MaterialTheme.typography.titleMedium,
-                )
-            }
         },
     ) { paddingValues ->
         Box(
@@ -143,7 +143,7 @@ fun PlaylistView(
             ) {
                 TextField(
                     modifier = Modifier.fillMaxWidth(),
-                    value = state.listName,
+                    value = state.playlistName,
                     onValueChange = {
                         onPlaylistAction(PlaylistAction.SetTitle(it))
                     },
@@ -169,8 +169,8 @@ fun PlaylistView(
 
                 TextField(
                     modifier = Modifier.fillMaxWidth(),
-                    enabled = !state.isLocal,
-                    value = if (state.isLocal) state.localName else state.url,
+                    enabled = state.playlistType == PlaylistType.REMOTE,
+                    value = if (state.playlistType == PlaylistType.LOCAL) state.playlistName else state.playlistSource,
                     onValueChange = {
                         onPlaylistAction(PlaylistAction.SetRemoteUrl(it))
                     },
@@ -198,7 +198,7 @@ fun PlaylistView(
                 OptionSelector(
                     modifier = Modifier.fillMaxWidth(),
                     title = stringResource(Res.string.hint_update_period),
-                    enabled = !state.isLocal,
+                    enabled = state.playlistType == PlaylistType.REMOTE,
                     selectedItem = stringResource(UpdatePeriod.entries[state.updatePeriod].title),
                     isExpanded = isUpdateOptionOpen.value,
                     onClick = {
@@ -208,73 +208,86 @@ fun PlaylistView(
 
                 Spacer(modifier = Modifier.height(MaterialTheme.dimens.size16))
 
-                Row(
-                    modifier = Modifier.fillMaxWidth(),
-                    horizontalArrangement =
-                        Arrangement.spacedBy(
-                            space = MaterialTheme.dimens.size8,
-                        ),
-                    verticalAlignment = Alignment.CenterVertically,
-                ) {
-                    HorizontalDivider(
-                        modifier = Modifier.weight(WEIGHT_1),
-                        color = MaterialTheme.colorScheme.onPrimary,
-                    )
+                if (!state.isEdit) {
+                    Row(
+                        modifier = Modifier.fillMaxWidth(),
+                        horizontalArrangement =
+                            Arrangement.spacedBy(
+                                space = MaterialTheme.dimens.size8,
+                            ),
+                        verticalAlignment = Alignment.CenterVertically,
+                    ) {
+                        HorizontalDivider(
+                            modifier = Modifier.weight(WEIGHT_1),
+                            color = MaterialTheme.colorScheme.onPrimary,
+                        )
 
-                    Text(
-                        text = stringResource(Res.string.label_or),
-                        style = MaterialTheme.typography.bodyMedium,
-                        color = MaterialTheme.colorScheme.onSurface,
-                    )
+                        Text(
+                            text = stringResource(Res.string.label_or),
+                            style = MaterialTheme.typography.bodyMedium,
+                            color = MaterialTheme.colorScheme.onSurface,
+                        )
 
-                    HorizontalDivider(
-                        modifier = Modifier.weight(WEIGHT_1),
-                        color = MaterialTheme.colorScheme.onPrimary,
-                    )
-                }
-
-                Spacer(modifier = Modifier.height(MaterialTheme.dimens.size16))
-
-                val launcher =
-                    rememberFilePickerLauncher(
-                        mode = PickerMode.Single,
-                        type = PickerType.File(extensions = listOf(String.typeM3U, String.typeM3U8)),
-                        title = stringResource(Res.string.btn_add_local),
-                    ) { selectedFile ->
-                        selectedFile?.let { file ->
-                            val folderFileTmp = tmpFolder / file.name
-                            val fileTmp = folderFileTmp.toFile()
-
-                            scope.launch {
-                                FileOutputStream(fileTmp).use {
-                                    it.write(file.readBytes())
-                                }
-                            }
-
-                            onPlaylistAction(
-                                PlaylistAction.SetLocalUri(
-                                    name = file.name,
-                                    uri = folderFileTmp.toString(),
-                                ),
-                            )
-                        }
+                        HorizontalDivider(
+                            modifier = Modifier.weight(WEIGHT_1),
+                            color = MaterialTheme.colorScheme.onPrimary,
+                        )
                     }
 
-                OutlinedButton(
+                    Spacer(modifier = Modifier.height(MaterialTheme.dimens.size16))
+
+                    OutlinedButton(
+                        onClick = {
+                            launcher.launch()
+                        },
+                        modifier = Modifier.fillMaxWidth(),
+                        colors =
+                            ButtonDefaults.buttonColors(
+                                containerColor = MaterialTheme.colorScheme.primary,
+                            ),
+                        shape = MaterialTheme.shapes.small,
+                    ) {
+                        Text(
+                            text = stringResource(Res.string.btn_add_local),
+                            color = MaterialTheme.colorScheme.onSurface,
+                            style = MaterialTheme.typography.bodyLarge,
+                        )
+                    }
+                }
+
+                Spacer(modifier = Modifier.weight(MaterialTheme.dimens.weight1))
+
+                ElevatedButton(
+                    enabled = state.isReadyToSave,
                     onClick = {
-                        launcher.launch()
+                        if (state.isEdit) {
+                            onPlaylistAction(PlaylistAction.UpdatePlaylist)
+                        } else {
+                            onPlaylistAction(PlaylistAction.SavePlaylist)
+                        }
                     },
-                    modifier = Modifier.fillMaxWidth(),
+                    modifier =
+                        Modifier
+                            .padding(vertical = MaterialTheme.dimens.size8)
+                            .fillMaxWidth()
+                            .windowInsetsPadding(WindowInsets.ime),
                     colors =
                         ButtonDefaults.buttonColors(
-                            containerColor = MaterialTheme.colorScheme.primary,
+                            containerColor = MaterialTheme.colorScheme.onSurface,
                         ),
                     shape = MaterialTheme.shapes.small,
                 ) {
+                    val text =
+                        if (state.isEdit) {
+                            Res.string.btn_update
+                        } else {
+                            Res.string.btn_save
+                        }
+
                     Text(
-                        text = stringResource(Res.string.btn_add_local),
-                        color = MaterialTheme.colorScheme.onSurface,
-                        style = MaterialTheme.typography.bodyLarge,
+                        text = stringResource(text),
+                        color = MaterialTheme.colorScheme.primary,
+                        style = MaterialTheme.typography.titleMedium,
                     )
                 }
             }

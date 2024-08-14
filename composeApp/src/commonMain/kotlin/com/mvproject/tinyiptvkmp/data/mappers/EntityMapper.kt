@@ -18,8 +18,6 @@ import com.mvproject.tinyiptvkmp.database.entity.EpgProgramEntity
 import com.mvproject.tinyiptvkmp.database.entity.PlaylistChannelEntity
 import com.mvproject.tinyiptvkmp.database.entity.PlaylistEntity
 import com.mvproject.tinyiptvkmp.ui.screens.channels.data.TvPlaylistChannelEpg
-import com.mvproject.tinyiptvkmp.utils.CommonUtils.toBoolean
-import com.mvproject.tinyiptvkmp.utils.CommonUtils.toLong
 import com.mvproject.tinyiptvkmp.utils.TimeUtils.correctTimeZone
 
 object EntityMapper {
@@ -67,25 +65,23 @@ object EntityMapper {
         with(this) {
             Playlist(
                 id = id,
-                playlistTitle = title,
-                playlistUrl = url,
+                playlistName = playlistName,
+                playlistSource = playlistSource,
+                playlistType = playlistType,
                 lastUpdateDate = lastUpdateDate,
                 updatePeriod = updatePeriod,
-                playlistLocalName = localFilename,
-                isLocalSource = isLocal.toBoolean(),
             )
         }
 
-    fun Playlist.toPlaylistRoom() =
+    fun Playlist.toPlaylistEntity() =
         with(this) {
             PlaylistEntity(
                 id = id,
-                title = playlistTitle,
-                url = playlistUrl,
+                playlistName = playlistName,
+                playlistSource = playlistSource,
+                playlistType = playlistType,
                 lastUpdateDate = lastUpdateDate,
                 updatePeriod = updatePeriod,
-                localFilename = playlistLocalName,
-                isLocal = isLocalSource.toLong(),
             )
         }
 

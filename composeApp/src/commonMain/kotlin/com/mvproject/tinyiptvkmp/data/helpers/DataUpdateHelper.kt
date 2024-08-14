@@ -8,10 +8,12 @@
 package com.mvproject.tinyiptvkmp.data.helpers
 
 import androidx.compose.runtime.Immutable
+import com.mvproject.tinyiptvkmp.data.enums.PlaylistType
 import com.mvproject.tinyiptvkmp.data.model.playlist.Playlist
 import com.mvproject.tinyiptvkmp.data.repository.PlaylistsRepository
 import com.mvproject.tinyiptvkmp.data.repository.PreferenceRepository
 import com.mvproject.tinyiptvkmp.utils.AppConstants
+import com.mvproject.tinyiptvkmp.utils.AppConstants.LONG_NO_VALUE
 import com.mvproject.tinyiptvkmp.utils.KLog
 import com.mvproject.tinyiptvkmp.utils.TimeUtils.actualDate
 import com.mvproject.tinyiptvkmp.utils.TimeUtils.typeToDuration
@@ -24,17 +26,16 @@ class DataUpdateHelper(
 ) {
     val appState =
         combine(
+            preferenceRepository.idForPlaylistContentLoad(),
             preferenceRepository.isChannelsEpgInfoUpdateRequired(),
             preferenceRepository.isEpgInfoDataExist(),
             preferenceRepository.lastEpgUpdate(),
-        ) { isChannelsInfoRequired, infoExist, _ ->
+        ) { playlistContentId, isChannelsInfoRequired, infoExist, _ ->
 
             val remote =
                 playlistsRepository
-                    .getAllPlaylistsRoom()
-                    .filter { playlist ->
-                        !playlist.isLocalSource
-                    }
+                    .getAllPlaylists()
+                    .filter { playlist -> playlist.playlistType == PlaylistType.REMOTE }
 
             val playlistUpdates =
                 buildList {
@@ -45,7 +46,7 @@ class DataUpdateHelper(
                             actualDate - playlist.lastUpdateDate > updateDuration
                         val isUpdateAllowed = isUpdateSet && isRequiredUpdate
 
-                        KLog.w("testing remotePlaylists ${playlist.playlistTitle} isUpdateAllowed $isUpdateAllowed")
+                        KLog.w("testing remotePlaylists ${playlist.playlistName} isUpdateAllowed $isUpdateAllowed")
                         if (isUpdateAllowed) {
                             add(playlist)
                         }
@@ -57,6 +58,7 @@ class DataUpdateHelper(
             delay(1000)
 
             return@combine DataUpdateState(
+                playlistContentId = playlistContentId,
                 infoExist = infoExist,
                 isChannelsInfoRequired = infoExist && isChannelsInfoRequired,
                 isEpgInfoRequired = isEpgInfoDataUpdateRequired,
@@ -67,6 +69,7 @@ class DataUpdateHelper(
 
 @Immutable
 data class DataUpdateState(
+    val playlistContentId: Long = LONG_NO_VALUE,
     val isChannelsInfoRequired: Boolean = false,
     val isEpgInfoRequired: Boolean = false,
     val infoExist: Boolean = false,
