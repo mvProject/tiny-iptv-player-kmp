@@ -11,7 +11,7 @@ import com.mvproject.tinyiptvkmp.data.model.epg.EpgProgram
 import com.mvproject.tinyiptvkmp.data.repository.EpgProgramRepository
 import com.mvproject.tinyiptvkmp.utils.TimeUtils
 
-class GetChannelsEpg(
+class GetChannelsEpgUseCase(
     private val epgProgramRepository: EpgProgramRepository,
 ) {
     suspend operator fun invoke(channelId: String): List<EpgProgram> {

@@ -11,17 +11,18 @@ import com.mvproject.tinyiptvkmp.data.repository.EpgProgramRepository
 import com.mvproject.tinyiptvkmp.ui.screens.channels.data.ChannelEpg
 import com.mvproject.tinyiptvkmp.utils.TimeUtils
 
-class GetGroupChannelsEpg(
+class GetGroupChannelsEpgUseCase(
     private val epgProgramRepository: EpgProgramRepository,
 ) {
     suspend operator fun invoke(channels: List<ChannelEpg>): List<ChannelEpg> {
         val select = channels.map { it.channelEpgId }
 
         val programsByIds =
-            epgProgramRepository.getEpgProgramsByIds(
-                channelIds = select,
-                time = TimeUtils.actualDate,
-            ).asSequence()
+            epgProgramRepository
+                .getEpgProgramsByIds(
+                    channelIds = select,
+                    time = TimeUtils.actualDate,
+                ).asSequence()
 
         val groupedProgramsByIds = programsByIds.groupBy { it.channelId }
 

@@ -27,10 +27,10 @@ class DataUpdateHelper(
     val appState =
         combine(
             preferenceRepository.idForPlaylistContentLoad(),
-            preferenceRepository.isChannelsEpgInfoUpdateRequired(),
+            preferenceRepository.idForPlaylistContentEpgInfoUpdate(),
             preferenceRepository.isEpgInfoDataExist(),
             preferenceRepository.lastEpgUpdate(),
-        ) { playlistContentId, isChannelsInfoRequired, infoExist, _ ->
+        ) { playlistContentId, playlistContentEpgInfoId, infoExist, _ ->
 
             val remote =
                 playlistsRepository
@@ -60,7 +60,7 @@ class DataUpdateHelper(
             return@combine DataUpdateState(
                 playlistContentId = playlistContentId,
                 infoExist = infoExist,
-                isChannelsInfoRequired = infoExist && isChannelsInfoRequired,
+                isChannelsInfoRequired = if (infoExist) playlistContentEpgInfoId else LONG_NO_VALUE,
                 isEpgInfoRequired = isEpgInfoDataUpdateRequired,
                 playlistUpdates = playlistUpdates,
             )
@@ -70,7 +70,7 @@ class DataUpdateHelper(
 @Immutable
 data class DataUpdateState(
     val playlistContentId: Long = LONG_NO_VALUE,
-    val isChannelsInfoRequired: Boolean = false,
+    val isChannelsInfoRequired: Long = LONG_NO_VALUE,
     val isEpgInfoRequired: Boolean = false,
     val infoExist: Boolean = false,
     val playlistUpdates: List<Playlist> = emptyList(),

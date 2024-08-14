@@ -56,19 +56,18 @@ private fun TinyIptvAppContent() {
     val appState by dataUpdateHelper.appState.collectAsStateWithLifecycle(DataUpdateState())
 
     LaunchedEffect(appState.isChannelsInfoRequired) {
-        KLog.d("testing LaunchedEffect isChannelsInfoRequired ${appState.isChannelsInfoRequired}")
         withContext(Dispatchers.IO) {
-            if (appState.isChannelsInfoRequired) {
+            if (appState.isChannelsInfoRequired != LONG_NO_VALUE) {
                 delay(500)
-                updateChannelsEpgInfoUseCase()
+                updateChannelsEpgInfoUseCase(playlistId = appState.isChannelsInfoRequired)
             }
         }
     }
 
     LaunchedEffect(appState.isEpgInfoRequired) {
-        KLog.d("testing LaunchedEffect isEpgInfoRequired ${appState.isEpgInfoRequired}")
         withContext(Dispatchers.IO) {
             if (appState.isEpgInfoRequired) {
+                KLog.d("testing Launched epgInfoUpdateUseCase")
                 delay(1000)
                 epgInfoUpdateUseCase()
             }
@@ -76,19 +75,19 @@ private fun TinyIptvAppContent() {
     }
 
     LaunchedEffect(appState.playlistUpdates) {
-        KLog.d("testing LaunchedEffect appState playlistUpdates ${appState.playlistUpdates}")
         withContext(Dispatchers.IO) {
             delay(500)
             appState.playlistUpdates.forEach { playlist ->
+                KLog.d("testing Launched updateRemotePlaylistChannelsUseCase")
                 updateRemotePlaylistChannelsUseCase(playlist = playlist)
             }
         }
     }
 
     LaunchedEffect(appState.infoExist) {
-        KLog.d("testing LaunchedEffect appState infoExist ${appState.infoExist}")
         withContext(Dispatchers.IO) {
             if (appState.infoExist) {
+                KLog.d("testing Launched updateEpgUseCase")
                 delay(2000)
                 //    updateEpgUseCase()
             }
@@ -96,9 +95,9 @@ private fun TinyIptvAppContent() {
     }
 
     LaunchedEffect(appState.playlistContentId) {
-        KLog.d("testing LaunchedEffect appState playlistContentId ${appState.playlistContentId}")
         withContext(Dispatchers.IO) {
             if (appState.playlistContentId != LONG_NO_VALUE) {
+                KLog.d("testing Launched savePlaylistContentUseCase")
                 savePlaylistContentUseCase(playlistId = appState.playlistContentId)
             }
         }

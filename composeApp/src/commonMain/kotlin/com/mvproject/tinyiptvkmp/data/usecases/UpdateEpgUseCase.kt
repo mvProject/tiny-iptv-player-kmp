@@ -54,7 +54,7 @@ class UpdateEpgUseCase(
                             channelEpgPrograms = programs,
                         )
                         val updatedInfo = info.copy(lastUpdate = current)
-                        epgInfoRepository.updateEpgInfoUpdate(info = updatedInfo)
+                        epgInfoRepository.saveEpgInfoData(info = listOf(updatedInfo))
                     }
                 }
             }

@@ -8,23 +8,14 @@
 package com.mvproject.tinyiptvkmp.database.dao
 
 import androidx.room.Dao
-import androidx.room.Insert
-import androidx.room.OnConflictStrategy
 import androidx.room.Query
-import androidx.room.Update
+import androidx.room.Upsert
 import com.mvproject.tinyiptvkmp.database.entity.PlaylistChannelEntity
-import kotlinx.coroutines.flow.Flow
 
 @Dao
 interface PlaylistChannelDao {
-    @Insert(onConflict = OnConflictStrategy.REPLACE)
-    suspend fun insertPlaylistChannels(data: List<PlaylistChannelEntity>)
-
-    @Update(onConflict = OnConflictStrategy.REPLACE)
-    suspend fun updatePlaylistChannels(data: List<PlaylistChannelEntity>)
-
-    @Query("SELECT * FROM PlaylistChannelEntity")
-    suspend fun getPlayerListAsFlow(): List<PlaylistChannelEntity>
+    @Upsert
+    suspend fun savePlaylistChannels(data: List<PlaylistChannelEntity>)
 
     @Query("SELECT * FROM PlaylistChannelEntity WHERE parentListId = :id AND channelUrl IN (:urls)")
     suspend fun getChannelsByUrls(
@@ -37,12 +28,6 @@ interface PlaylistChannelDao {
         id: Long,
         group: String,
     ): List<PlaylistChannelEntity>
-
-    @Insert(onConflict = OnConflictStrategy.REPLACE)
-    suspend fun insertPlaylistInfo(data: PlaylistChannelEntity)
-
-    @Query("SELECT * FROM PlaylistChannelEntity")
-    suspend fun getPlaylistChannels(): List<PlaylistChannelEntity>
 
     @Query("SELECT COUNT(*) FROM PlaylistChannelEntity WHERE parentListId = :id")
     suspend fun getPlaylistChannelsCount(id: Long): Int
@@ -58,9 +43,6 @@ interface PlaylistChannelDao {
 
     @Query("SELECT channelGroup FROM PlaylistChannelEntity WHERE parentListId = :id")
     suspend fun getPlaylistChannelsGroups(id: Long): List<String>
-
-    @Query("SELECT * FROM PlaylistChannelEntity")
-    fun getAllPlaylistInfo(): Flow<List<PlaylistChannelEntity>>
 
     @Query("DELETE FROM PlaylistChannelEntity WHERE parentListId = :id")
     suspend fun deletePlaylistChannels(id: Long)

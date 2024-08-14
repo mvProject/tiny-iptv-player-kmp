@@ -19,73 +19,56 @@ class PlaylistChannelsRepository(
     private val playlistChannelDao = appDatabase.playlistChannelDao()
 
     @Transaction
-    suspend fun addPlaylistChannels(channels: List<PlaylistChannel>) {
+    suspend fun savePlaylistChannels(channels: List<PlaylistChannel>) {
         val channelsData =
             channels.map {
                 it.toChannelEntity()
             }
-
-        playlistChannelDao.insertPlaylistChannels(data = channelsData)
+        playlistChannelDao.savePlaylistChannels(data = channelsData)
     }
 
-    @Transaction
-    suspend fun updatePlaylistChannels(channels: List<PlaylistChannel>) {
-        val channelsData =
-            channels.map {
-                it.toChannelEntity()
-            }
-        playlistChannelDao.updatePlaylistChannels(data = channelsData)
-    }
-
-    suspend fun loadPlaylistGroups(listId: Long): List<String> {
-        return playlistChannelDao.getPlaylistChannelsGroups(id = listId)
+    suspend fun loadPlaylistGroups(listId: Long): List<String> =
+        playlistChannelDao
+            .getPlaylistChannelsGroups(id = listId)
             .distinctBy { it }
-    }
 
-    suspend fun loadPlaylistChannelsCount(listId: Long): Int {
-        return playlistChannelDao.getPlaylistChannelsCount(id = listId)
-    }
+    suspend fun loadPlaylistChannelsCount(listId: Long): Int =
+        playlistChannelDao
+            .getPlaylistChannelsCount(id = listId)
 
     suspend fun loadPlaylistGroupChannelsCount(
         listId: Long,
         group: String,
-    ): Int {
-        return playlistChannelDao.getPlaylistGroupChannelsCount(id = listId, group = group)
-    }
+    ): Int =
+        playlistChannelDao
+            .getPlaylistGroupChannelsCount(id = listId, group = group)
 
-    suspend fun loadChannelsById(listId: Long): List<PlaylistChannel> {
-        return playlistChannelDao.getPlaylistChannelsById(id = listId)
+    suspend fun loadChannelsById(listId: Long): List<PlaylistChannel> =
+        playlistChannelDao
+            .getPlaylistChannelsById(id = listId)
             .map { entity ->
                 entity.toPlaylistChannel()
             }
-    }
-
-    suspend fun loadChannels(): List<PlaylistChannel> {
-        return playlistChannelDao.getPlaylistChannels()
-            .map { entity ->
-                entity.toPlaylistChannel()
-            }
-    }
 
     suspend fun loadPlaylistChannelsByUrls(
         listId: Long,
         urls: List<String>,
-    ): List<PlaylistChannel> {
-        return playlistChannelDao.getChannelsByUrls(id = listId, urls = urls)
+    ): List<PlaylistChannel> =
+        playlistChannelDao
+            .getChannelsByUrls(id = listId, urls = urls)
             .map { entity ->
                 entity.toPlaylistChannel()
             }
-    }
 
     suspend fun loadPlaylistGroupChannels(
         listId: Long,
         group: String,
-    ): List<PlaylistChannel> {
-        return playlistChannelDao.getChannelsByPlaylistGroup(id = listId, group = group)
+    ): List<PlaylistChannel> =
+        playlistChannelDao
+            .getChannelsByPlaylistGroup(id = listId, group = group)
             .map { entity ->
                 entity.toPlaylistChannel()
             }
-    }
 
     suspend fun deletePlaylistChannels(listId: Long) {
         playlistChannelDao.deletePlaylistChannels(id = listId)

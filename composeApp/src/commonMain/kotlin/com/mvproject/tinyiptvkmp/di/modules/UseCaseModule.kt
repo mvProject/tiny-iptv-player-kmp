@@ -9,9 +9,9 @@ package com.mvproject.tinyiptvkmp.di.modules
 
 import com.mvproject.tinyiptvkmp.data.usecases.DeletePlaylistUseCase
 import com.mvproject.tinyiptvkmp.data.usecases.EpgInfoUpdateUseCase
-import com.mvproject.tinyiptvkmp.data.usecases.GetChannelsEpg
+import com.mvproject.tinyiptvkmp.data.usecases.GetChannelsEpgUseCase
 import com.mvproject.tinyiptvkmp.data.usecases.GetDefaultPlaylistUseCase
-import com.mvproject.tinyiptvkmp.data.usecases.GetGroupChannelsEpg
+import com.mvproject.tinyiptvkmp.data.usecases.GetGroupChannelsEpgUseCase
 import com.mvproject.tinyiptvkmp.data.usecases.GetGroupChannelsUseCase
 import com.mvproject.tinyiptvkmp.data.usecases.GetPlaylistGroupUseCase
 import com.mvproject.tinyiptvkmp.data.usecases.GetPlaylistUseCase
@@ -45,6 +45,6 @@ val useCaseModule =
         singleOf(::EpgInfoUpdateUseCase)
         singleOf(::UpdateEpgUseCase)
 
-        singleOf(::GetGroupChannelsEpg)
-        singleOf(::GetChannelsEpg)
+        singleOf(::GetGroupChannelsEpgUseCase)
+        singleOf(::GetChannelsEpgUseCase)
     }

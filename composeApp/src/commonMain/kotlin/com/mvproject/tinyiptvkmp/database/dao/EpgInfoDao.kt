@@ -8,19 +8,14 @@
 package com.mvproject.tinyiptvkmp.database.dao
 
 import androidx.room.Dao
-import androidx.room.Insert
-import androidx.room.OnConflictStrategy
 import androidx.room.Query
-import androidx.room.Update
+import androidx.room.Upsert
 import com.mvproject.tinyiptvkmp.database.entity.EpgInfoEntity
 
 @Dao
 interface EpgInfoDao {
-    @Insert(onConflict = OnConflictStrategy.REPLACE)
-    suspend fun insertEpgInfo(data: List<EpgInfoEntity>)
-
-    @Update(onConflict = OnConflictStrategy.REPLACE)
-    suspend fun updateEpgInfo(data: EpgInfoEntity)
+    @Upsert
+    suspend fun saveEpgInfo(vararg info: EpgInfoEntity)
 
     @Query("SELECT * FROM EpgInfoEntity")
     suspend fun getEpgInfo(): List<EpgInfoEntity>

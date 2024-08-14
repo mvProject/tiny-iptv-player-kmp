@@ -24,9 +24,8 @@ class SavePlaylistContentUseCase(
     private val playlistsRepository: PlaylistsRepository,
 ) {
     suspend operator fun invoke(playlistId: Long) {
-        KLog.d("testing SavePlaylistContentUseCase playlistId $playlistId")
         val playlist = playlistsRepository.getPlaylistById(id = playlistId)
-        KLog.d("testing SavePlaylistContentUseCase playlist $playlist")
+
         val channels =
             when (playlist.playlistType) {
                 PlaylistType.LOCAL ->
@@ -47,9 +46,9 @@ class SavePlaylistContentUseCase(
             return
         }
 
-        playlistChannelsRepository.addPlaylistChannels(channels = channels)
+        playlistChannelsRepository.savePlaylistChannels(channels = channels)
 
         preferenceRepository.setIdForPlaylistContentLoad(id = LONG_NO_VALUE)
-        preferenceRepository.setChannelsEpgInfoUpdateRequired(state = true)
+        preferenceRepository.setIdForPlaylistContentEpgInfoUpdate(id = playlistId)
     }
 }

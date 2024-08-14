@@ -15,8 +15,8 @@ import com.mvproject.tinyiptvkmp.data.enums.ResizeMode
 import com.mvproject.tinyiptvkmp.data.model.channels.TvPlaylistChannel
 import com.mvproject.tinyiptvkmp.data.model.epg.EpgProgram
 import com.mvproject.tinyiptvkmp.data.repository.PreferenceRepository
-import com.mvproject.tinyiptvkmp.data.usecases.GetChannelsEpg
-import com.mvproject.tinyiptvkmp.data.usecases.GetGroupChannelsEpg
+import com.mvproject.tinyiptvkmp.data.usecases.GetChannelsEpgUseCase
+import com.mvproject.tinyiptvkmp.data.usecases.GetGroupChannelsEpgUseCase
 import com.mvproject.tinyiptvkmp.data.usecases.GetGroupChannelsUseCase
 import com.mvproject.tinyiptvkmp.data.usecases.ToggleFavoriteChannelUseCase
 import com.mvproject.tinyiptvkmp.ui.data.TvPlaylistChannels
@@ -38,20 +38,22 @@ import com.mvproject.tinyiptvkmp.utils.AppConstants.UI_SHOW_DELAY
 import com.mvproject.tinyiptvkmp.utils.AppConstants.VOLUME_SHOW_DELAY
 import com.mvproject.tinyiptvkmp.utils.CommonUtils.empty
 import com.mvproject.tinyiptvkmp.utils.KLog
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 
 class VideoViewViewModel(
     savedStateHandle: SavedStateHandle,
     private val preferenceRepository: PreferenceRepository,
     private val getGroupChannelsUseCase: GetGroupChannelsUseCase,
     private val toggleFavoriteChannelUseCase: ToggleFavoriteChannelUseCase,
-    private val getChannelsEpg: GetChannelsEpg,
-    private val getGroupChannelsEpg: GetGroupChannelsEpg,
+    private val getChannelsEpgUseCase: GetChannelsEpgUseCase,
+    private val getGroupChannelsEpgUseCase: GetGroupChannelsEpgUseCase,
 ) : ViewModel() {
     private var pollVolumeJob: Job? = null
 
@@ -218,7 +220,7 @@ class VideoViewViewModel(
     private suspend fun loadSelectedChannelEpg() {
         val currentChannel = videoViewState.value.currentChannel
         if (currentChannel.epgId.isNotBlank()) {
-            val channelsEpgData = getChannelsEpg(channelId = currentChannel.epgId)
+            val channelsEpgData = getChannelsEpgUseCase(channelId = currentChannel.epgId)
 
             val currentChannelWithEpg =
                 currentChannel.copy(
@@ -232,23 +234,25 @@ class VideoViewViewModel(
     }
 
     private suspend fun loadAvailableChannelsEpg() {
-        val currentChannels = videoViewChannelsState.value.items
-        if (currentChannels.isNotEmpty()) {
-            val channelsData =
-                currentChannels
-                    .filter { it.epgId.isNotBlank() }
-                    .map {
-                        ChannelEpg(
-                            channelName = it.channelName,
-                            channelEpgId = it.epgId,
-                        )
-                    }
+        withContext(Dispatchers.IO) {
+            val currentChannels = videoViewChannelsState.value.items
+            if (currentChannels.isNotEmpty()) {
+                val channelsData =
+                    currentChannels
+                        .filter { it.epgId.isNotBlank() }
+                        .map {
+                            ChannelEpg(
+                                channelName = it.channelName,
+                                channelEpgId = it.epgId,
+                            )
+                        }
 
-            val channelsEpgData = getGroupChannelsEpg(channels = channelsData)
+                val channelsEpgData = getGroupChannelsEpgUseCase(channels = channelsData)
 
-            channelsEpgData.forEach { data ->
-                delay(200)
-                applyEpg(data = data)
+                channelsEpgData.forEach { data ->
+                    delay(200)
+                    applyEpg(data = data)
+                }
             }
         }
     }

@@ -15,7 +15,7 @@ import com.mvproject.tinyiptvkmp.data.enums.FavoriteType
 import com.mvproject.tinyiptvkmp.data.model.channels.TvPlaylistChannel
 import com.mvproject.tinyiptvkmp.data.model.epg.EpgProgram
 import com.mvproject.tinyiptvkmp.data.repository.PreferenceRepository
-import com.mvproject.tinyiptvkmp.data.usecases.GetGroupChannelsEpg
+import com.mvproject.tinyiptvkmp.data.usecases.GetGroupChannelsEpgUseCase
 import com.mvproject.tinyiptvkmp.data.usecases.GetGroupChannelsUseCase
 import com.mvproject.tinyiptvkmp.data.usecases.ToggleFavoriteChannelUseCase
 import com.mvproject.tinyiptvkmp.ui.screens.channels.action.TvPlaylistChannelAction
@@ -35,7 +35,7 @@ import kotlinx.coroutines.launch
 class TvPlaylistChannelsViewModel(
     savedStateHandle: SavedStateHandle,
     private val getGroupChannelsUseCase: GetGroupChannelsUseCase,
-    private val getGroupChannelsEpg: GetGroupChannelsEpg,
+    private val getGroupChannelsEpgUseCase: GetGroupChannelsEpgUseCase,
     private val toggleFavoriteChannelUseCase: ToggleFavoriteChannelUseCase,
     private val preferenceRepository: PreferenceRepository,
 ) : ViewModel() {
@@ -103,7 +103,7 @@ class TvPlaylistChannelsViewModel(
                         )
                     }
 
-            val channelsEpgData = getGroupChannelsEpg(channels = channelsData)
+            val channelsEpgData = getGroupChannelsEpgUseCase(channels = channelsData)
 
             channelsEpgData.forEach { data ->
                 delay(200)

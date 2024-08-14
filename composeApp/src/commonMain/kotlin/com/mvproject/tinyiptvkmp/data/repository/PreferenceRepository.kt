@@ -173,6 +173,17 @@ class PreferenceRepository(
             preferences[EPG_MAIN_LAST_UPDATE_PERIOD] ?: INT_VALUE_5
         }
 
+    suspend fun setIdForPlaylistContentEpgInfoUpdate(id: Long) {
+        dataStore.edit { settings ->
+            settings[PLAYLIST_CONTENT_INFO_UPDATE] = id
+        }
+    }
+
+    fun idForPlaylistContentEpgInfoUpdate() =
+        dataStore.data.map { preferences ->
+            preferences[PLAYLIST_CONTENT_INFO_UPDATE] ?: LONG_NO_VALUE
+        }
+
     suspend fun setIdForPlaylistContentLoad(id: Long) {
         dataStore.edit { settings ->
             settings[PLAYLIST_CONTENT_LOAD_REQUIRED] = id
@@ -201,6 +212,7 @@ class PreferenceRepository(
         val EPG_INFO_DATA_LAST_UPDATE = longPreferencesKey("EpgInfoDataIsLastUpdate")
         val CHANNELS_EPG_INFO_UPDATE_REQUIRED =
             booleanPreferencesKey("ChannelsEpgInfoUpdateRequired")
+        val PLAYLIST_CONTENT_INFO_UPDATE = longPreferencesKey("PlaylistContentEpgInfoUpdateRequired")
         val PLAYLIST_CONTENT_LOAD_REQUIRED = longPreferencesKey("PlaylistContentLoadRequired")
     }
 }

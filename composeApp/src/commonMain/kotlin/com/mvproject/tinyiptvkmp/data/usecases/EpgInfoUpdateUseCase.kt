@@ -8,6 +8,7 @@
 package com.mvproject.tinyiptvkmp.data.usecases
 
 import com.mvproject.tinyiptvkmp.data.datasource.EpgInfoDataSource
+import com.mvproject.tinyiptvkmp.data.mappers.ParseMappers.toEpgInfo
 import com.mvproject.tinyiptvkmp.data.repository.EpgInfoRepository
 import com.mvproject.tinyiptvkmp.data.repository.PreferenceRepository
 import com.mvproject.tinyiptvkmp.utils.TimeUtils
@@ -20,7 +21,9 @@ class EpgInfoUpdateUseCase(
     suspend operator fun invoke() {
         val epgInfo = epgInfoDataSource.getEpgInfo().distinctBy { it.channelNames }
 
-        epgInfoRepository.saveEpgInfoDataRoom(epgInfo)
+        val epgData = epgInfo.map { it.toEpgInfo() }
+
+        epgInfoRepository.saveEpgInfoData(info = epgData)
 
         preferenceRepository.apply {
             setEpgInfoDataLastUpdate(timestamp = TimeUtils.actualDate)

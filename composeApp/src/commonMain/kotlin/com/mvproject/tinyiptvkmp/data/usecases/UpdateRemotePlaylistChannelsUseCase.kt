@@ -24,8 +24,6 @@ class UpdateRemotePlaylistChannelsUseCase(
     private val playlistsRepository: PlaylistsRepository,
 ) {
     suspend operator fun invoke(playlist: Playlist) {
-        KLog.w("update channels for playlist:${playlist.playlistName}")
-
         val channels =
             remotePlaylistDataSource.getFromRemotePlaylist(
                 playlistId = playlist.id,
@@ -35,7 +33,7 @@ class UpdateRemotePlaylistChannelsUseCase(
             favoriteChannelsRepository
                 .loadPlaylistFavoriteChannelUrls(listId = playlist.id)
 
-        playlistChannelsRepository.updatePlaylistChannels(channels)
+        playlistChannelsRepository.savePlaylistChannels(channels)
 
         channels.forEach { channel ->
             val favoritesUrls = favorites.map { it.url }
@@ -50,7 +48,7 @@ class UpdateRemotePlaylistChannelsUseCase(
             playlist = playlist.copy(lastUpdateDate = TimeUtils.actualDate),
         )
 
-        preferenceRepository.setChannelsEpgInfoUpdateRequired(state = true)
+        preferenceRepository.setIdForPlaylistContentEpgInfoUpdate(id = playlist.id)
 
         KLog.w("update channels finished")
     }
