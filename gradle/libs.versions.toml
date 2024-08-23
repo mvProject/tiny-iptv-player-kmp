@@ -1,9 +1,10 @@
 [versions]
 
-kotlin = "2.0.0"
+kotlin = "2.0.10"
+ksp = "2.0.10-1.0.24"
+
 gradle = "8.5.2"
 compose = "1.7.0-alpha02"
-ksp = "2.0.0-1.0.22"
 
 compose-activity = "1.9.1"
 

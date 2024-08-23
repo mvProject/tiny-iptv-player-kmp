@@ -25,6 +25,9 @@ import com.mvproject.tinyiptvkmp.ui.components.views.TimeItem
 import com.mvproject.tinyiptvkmp.utils.AppConstants.COUNT_ZERO_FLOAT
 import com.mvproject.tinyiptvkmp.utils.AppConstants.PROGRESS_STATE_COMPLETE
 import com.mvproject.tinyiptvkmp.utils.TimeUtils.convertTimeToReadableFormat
+import org.jetbrains.compose.ui.tooling.preview.Preview
+import com.mvproject.tinyiptvkmp.data.PreviewTestData
+import com.mvproject.tinyiptvkmp.ui.theme.VideoAppTheme
 
 @Composable
 fun PlayerEpgItem(
@@ -72,12 +75,10 @@ fun PlayerEpgItem(
     }
 }
 
-// todo replace preview
-/*
 @Composable
-@Preview(showBackground = true)
-fun DarkPreviewPlayerOverlayEpgItemView() {
-    VideoAppTheme(darkTheme = true) {
+@Preview
+private fun PlayerEpgItemPreview() {
+    VideoAppTheme {
         PlayerEpgItem(program = PreviewTestData.testEpgProgram)
     }
-}*/
+}
