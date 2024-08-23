@@ -26,25 +26,6 @@ kotlin {
     sourceSets {
         val desktopMain by getting
 
-        androidMain.dependencies {
-            implementation(compose.preview)
-
-            implementation(libs.androidx.compose.activity)
-
-            // Network
-            implementation(libs.ktor.client.android)
-
-            // DI
-            implementation(libs.koin.android)
-
-            // Exoplayer
-            implementation(libs.bundles.media3)
-
-            // Misc
-            implementation(libs.kotlinx.collections.immutable)
-            implementation(libs.accompanist.adaptive)
-        }
-
         commonMain.dependencies {
             implementation(compose.runtime)
             implementation(compose.foundation)
@@ -82,17 +63,40 @@ kotlin {
             implementation(libs.kotlinx.datetime)
             implementation(libs.material3.window.size.multiplatform)
             implementation(libs.kotlinx.collections.immutable)
-            implementation(libs.urikmp)
+            implementation(libs.uri.kmp)
 
             // Image processing
-            implementation(libs.kamelimage)
+            implementation(libs.bundles.coil)
 
             // Resources
             implementation(compose.components.resources)
 
             implementation(libs.bundles.ksoup)
 
+            implementation(libs.bundles.filekit)
+
             implementation(compose.components.uiToolingPreview)
+        }
+
+        androidMain.dependencies {
+            implementation(compose.preview)
+
+            implementation(libs.androidx.compose.activity)
+
+            // Network
+            implementation(libs.ktor.client.android)
+
+            // DI
+            implementation(libs.koin.android)
+
+            // Exoplayer
+            implementation(libs.bundles.media3)
+
+            // Misc
+            implementation(libs.kotlinx.collections.immutable)
+            implementation(libs.accompanist.adaptive)
+
+            implementation(libs.bundles.nextlib)
         }
 
         desktopMain.dependencies {
@@ -107,7 +111,7 @@ kotlin {
             implementation(libs.kotlinx.coroutines.swing)
 
             // Network
-            implementation(libs.ktor.client.java)
+            implementation(libs.ktor.client.okhttp)
 
             // FilePicker
             implementation(libs.calf.filepicker)
@@ -179,7 +183,7 @@ android {
         compose = true
     }
     dependencies {
-        implementation(fileTree(mapOf("dir" to "libs", "include" to listOf("*.aar"))))
+        //     implementation(fileTree(mapOf("dir" to "libs", "include" to listOf("*.aar"))))
         debugImplementation(compose.uiTooling)
     }
 }

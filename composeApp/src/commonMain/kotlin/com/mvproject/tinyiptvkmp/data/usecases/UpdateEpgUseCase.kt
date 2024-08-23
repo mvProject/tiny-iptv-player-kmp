@@ -34,17 +34,19 @@ class UpdateEpgUseCase(
         val current = Clock.System.now().toEpochMilliseconds()
 
         val epgToUpdate =
-            epgInfoRepository.loadEpgInfoData().filter { (current - it.lastUpdate) >= duration }
-        KLog.e("testing UpdateEpgUseCase epgToUpdate count:${epgToUpdate.count()}")
-        //  val epgIds = epgToUpdate.map { it.channelId }
+            epgInfoRepository
+                .loadEpgInfoData()
+                .filter { (current - it.lastUpdate) >= duration }
 
+        KLog.e("testing UpdateEpgUseCase start:${current.convertTimeToReadableFormat()}")
+
+        KLog.w("testing UpdateEpgUseCase epgToUpdate count:${epgToUpdate.count()}")
         val epgIdsChunked = epgToUpdate.chunked(40)
 
         if (epgIdsChunked.isNotEmpty()) {
-            KLog.e("testing UpdateEpgUseCase start:${current.convertTimeToReadableFormat()}")
             withContext(Dispatchers.IO) {
-                epgIdsChunked.forEachIndexed { index, part ->
-                    delay(500)
+                epgIdsChunked.forEachIndexed { _, part ->
+                    delay(1000)
                     part.forEach { info ->
                         val programs = epgDataSource.getRemoteEpg(channelsId = info.channelId)
                         epgProgramRepository.insertEpgPrograms(
@@ -52,7 +54,7 @@ class UpdateEpgUseCase(
                             channelEpgPrograms = programs,
                         )
                         val updatedInfo = info.copy(lastUpdate = current)
-                        epgInfoRepository.updateEpgInfoUpdate(info = updatedInfo)
+                        epgInfoRepository.saveEpgInfoData(info = listOf(updatedInfo))
                     }
                 }
             }

@@ -14,19 +14,26 @@ import androidx.activity.SystemBarStyle
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
 import androidx.core.view.WindowInsetsControllerCompat
+import io.github.vinceglb.filekit.core.FileKit
 
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         enableEdgeToEdge(
-            statusBarStyle = SystemBarStyle.light(
-                Color.TRANSPARENT, Color.TRANSPARENT
-            ),
-            navigationBarStyle = SystemBarStyle.light(
-                Color.TRANSPARENT, Color.TRANSPARENT
-            )
+            statusBarStyle =
+                SystemBarStyle.light(
+                    Color.TRANSPARENT,
+                    Color.TRANSPARENT,
+                ),
+            navigationBarStyle =
+                SystemBarStyle.light(
+                    Color.TRANSPARENT,
+                    Color.TRANSPARENT,
+                ),
         )
 
         super.onCreate(savedInstanceState)
+
+        FileKit.init(this)
 
         setContent {
             WindowInsetsControllerCompat(window, window.decorView)
@@ -36,6 +43,3 @@ class MainActivity : ComponentActivity() {
         }
     }
 }
-
-
-

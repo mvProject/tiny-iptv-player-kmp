@@ -64,10 +64,16 @@ The pragmatic Kotlin & Kotlin Multiplatform Dependency Injection framework
 
 ### Image
 
-#### [Kamel](https://github.com/Kamel-Media/Kamel)
+#### [Coil](https://coil-kt.github.io/coil/)
 
-Asynchronous media loading library, it provides a simple, customizable and efficient way to load,
-cache, decode and display images in your application
+An image loading library for Android and Compose Multiplatform
+
+### IO
+
+#### [FileKit](https://github.com/vinceglb/FileKit)
+
+FileKit is a library that allows you to pick and save files in a simple way. 
+On each platform, it uses the native file picker API to provide a consistent experience.
 
 ### Resources
 

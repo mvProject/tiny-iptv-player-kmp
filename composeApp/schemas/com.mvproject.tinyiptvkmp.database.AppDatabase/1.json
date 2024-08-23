@@ -2,7 +2,7 @@
   "formatVersion": 1,
   "database": {
     "version": 1,
-    "identityHash": "ae2f3610323b348ac024539ebedcffa5",
+    "identityHash": "fba18bd2eda89c6bc08dff155563b1d0",
     "entities": [
       {
         "tableName": "EpgInfoEntity",
@@ -130,7 +130,7 @@
       },
       {
         "tableName": "PlaylistEntity",
-        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`id` INTEGER NOT NULL, `title` TEXT NOT NULL, `localFilename` TEXT NOT NULL, `url` TEXT NOT NULL, `lastUpdateDate` INTEGER NOT NULL, `updatePeriod` INTEGER NOT NULL, `isLocal` INTEGER NOT NULL, PRIMARY KEY(`id`))",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`id` INTEGER NOT NULL, `playlistName` TEXT NOT NULL, `playlistSource` TEXT NOT NULL, `playlistType` TEXT NOT NULL, `lastUpdateDate` INTEGER NOT NULL, `updatePeriod` INTEGER NOT NULL, PRIMARY KEY(`id`))",
         "fields": [
           {
             "fieldPath": "id",
@@ -139,20 +139,20 @@
             "notNull": true
           },
           {
-            "fieldPath": "title",
-            "columnName": "title",
+            "fieldPath": "playlistName",
+            "columnName": "playlistName",
             "affinity": "TEXT",
             "notNull": true
           },
           {
-            "fieldPath": "localFilename",
-            "columnName": "localFilename",
+            "fieldPath": "playlistSource",
+            "columnName": "playlistSource",
             "affinity": "TEXT",
             "notNull": true
           },
           {
-            "fieldPath": "url",
-            "columnName": "url",
+            "fieldPath": "playlistType",
+            "columnName": "playlistType",
             "affinity": "TEXT",
             "notNull": true
           },
@@ -165,12 +165,6 @@
           {
             "fieldPath": "updatePeriod",
             "columnName": "updatePeriod",
-            "affinity": "INTEGER",
-            "notNull": true
-          },
-          {
-            "fieldPath": "isLocal",
-            "columnName": "isLocal",
             "affinity": "INTEGER",
             "notNull": true
           }
@@ -234,7 +228,7 @@
     ],
     "setupQueries": [
       "CREATE TABLE IF NOT EXISTS room_master_table (id INTEGER PRIMARY KEY,identity_hash TEXT)",
-      "INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, 'ae2f3610323b348ac024539ebedcffa5')"
+      "INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, 'fba18bd2eda89c6bc08dff155563b1d0')"
     ]
   }
 }

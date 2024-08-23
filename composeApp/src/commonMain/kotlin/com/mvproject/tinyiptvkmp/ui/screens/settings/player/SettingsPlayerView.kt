@@ -39,7 +39,6 @@ import com.mvproject.tinyiptvkmp.ui.data.Options
 import com.mvproject.tinyiptvkmp.ui.screens.settings.player.action.SettingsPlayerAction
 import com.mvproject.tinyiptvkmp.ui.screens.settings.player.state.SettingsPlayerState
 import com.mvproject.tinyiptvkmp.ui.theme.dimens
-import org.jetbrains.compose.resources.ExperimentalResourceApi
 import org.jetbrains.compose.resources.stringResource
 import tinyiptvkmp.composeapp.generated.resources.Res
 import tinyiptvkmp.composeapp.generated.resources.option_default_fullscreen_mode
@@ -47,7 +46,6 @@ import tinyiptvkmp.composeapp.generated.resources.option_default_ratio_mode
 import tinyiptvkmp.composeapp.generated.resources.option_default_resize_mode
 import tinyiptvkmp.composeapp.generated.resources.scr_player_settings_title
 
-@OptIn(ExperimentalResourceApi::class)
 @Composable
 fun SettingsPlayerView(
     state: SettingsPlayerState,

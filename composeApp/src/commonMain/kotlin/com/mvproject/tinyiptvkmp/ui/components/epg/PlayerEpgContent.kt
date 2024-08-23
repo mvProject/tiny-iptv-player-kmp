@@ -79,10 +79,9 @@ fun PlayerEpgContent(
     }
 }
 
-// todo replace preview
 @Composable
 @Preview
-fun DarkPreviewPlayerOverlayEpgView() {
+private fun PlayerEpgContentPreview() {
     VideoAppTheme() {
         PlayerEpgContent(epgList = TvPlaylistChannelEpg(items = PreviewTestData.testEpgPrograms))
     }

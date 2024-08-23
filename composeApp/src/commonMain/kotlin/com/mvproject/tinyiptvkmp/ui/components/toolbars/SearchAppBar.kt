@@ -28,7 +28,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.input.KeyboardType
 import com.mvproject.tinyiptvkmp.ui.theme.dimens
-import com.mvproject.tinyiptvkmp.utils.AppConstants.EMPTY_STRING
+import com.mvproject.tinyiptvkmp.utils.CommonUtils.empty
 import org.jetbrains.compose.resources.ExperimentalResourceApi
 import org.jetbrains.compose.resources.stringResource
 import tinyiptvkmp.composeapp.generated.resources.Res
@@ -71,7 +71,7 @@ fun SearchAppBar(
                     FilledIconButton(
                         onClick = {
                             if (text.isNotEmpty()) {
-                                onTextChange(EMPTY_STRING)
+                                onTextChange(String.empty)
                             } else {
                                 onCloseClicked()
                             }

@@ -16,7 +16,6 @@ class GetPlaylistUseCase(
 ) {
     suspend operator fun invoke(playlistId: String): Playlist {
         val id = playlistId.toLongOrNull() ?: return Playlist(id = LONG_VALUE_ZERO)
-        //  return playlistsRepository.getPlaylistById(id = id) ?: Playlist(id = LONG_VALUE_ZERO)
-        return playlistsRepository.getPlaylistByIdRoom(id = id) ?: Playlist(id = LONG_VALUE_ZERO)
+        return playlistsRepository.getPlaylistById(id = id)
     }
 }

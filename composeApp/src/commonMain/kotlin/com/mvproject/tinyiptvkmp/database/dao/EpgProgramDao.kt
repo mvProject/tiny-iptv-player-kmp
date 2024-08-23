@@ -12,7 +12,6 @@ import androidx.room.Insert
 import androidx.room.OnConflictStrategy
 import androidx.room.Query
 import com.mvproject.tinyiptvkmp.database.entity.EpgProgramEntity
-import kotlinx.coroutines.flow.Flow
 
 @Dao
 interface EpgProgramDao {
@@ -30,15 +29,6 @@ interface EpgProgramDao {
         id: String,
         time: Long,
     ): List<EpgProgramEntity>
-
-    @Insert(onConflict = OnConflictStrategy.REPLACE)
-    suspend fun insertPlaylistInfo(data: EpgProgramEntity)
-
-    @Query("SELECT * FROM EpgProgramEntity")
-    fun getAllPlaylistInfo(): Flow<List<EpgProgramEntity>>
-
-    @Query("DELETE FROM EpgProgramEntity WHERE EpgProgramEntity.channelId IN (:ids)")
-    suspend fun deletePrograms(ids: List<String>)
 
     @Query("DELETE FROM EpgProgramEntity WHERE EpgProgramEntity.channelId = :id")
     suspend fun deleteProgram(id: String)

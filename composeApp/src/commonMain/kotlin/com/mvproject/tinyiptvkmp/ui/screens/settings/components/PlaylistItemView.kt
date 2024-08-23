@@ -22,6 +22,7 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
+import com.mvproject.tinyiptvkmp.data.enums.PlaylistType
 import com.mvproject.tinyiptvkmp.data.model.playlist.Playlist
 import com.mvproject.tinyiptvkmp.ui.theme.dimens
 
@@ -53,15 +54,15 @@ fun PlaylistItemView(
                     },
             headlineContent = {
                 Text(
-                    text = item.playlistTitle,
+                    text = item.playlistName,
                     style = MaterialTheme.typography.bodyLarge,
                     color = MaterialTheme.colorScheme.onSurface,
                 )
             },
             supportingContent = {
-                if (item.playlistUrl.isNotEmpty()) {
+                if (item.playlistType == PlaylistType.REMOTE && item.playlistSource.isNotBlank()) {
                     Text(
-                        text = item.playlistUrl,
+                        text = item.playlistSource,
                         style = MaterialTheme.typography.labelMedium,
                         color = MaterialTheme.colorScheme.onPrimary,
                     )

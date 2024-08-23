@@ -22,7 +22,7 @@ import com.mvproject.tinyiptvkmp.data.model.channels.TvPlaylistChannel
 import com.mvproject.tinyiptvkmp.ui.components.modifiers.fullScreenWidth
 import com.mvproject.tinyiptvkmp.ui.components.modifiers.roundedHeader
 import com.mvproject.tinyiptvkmp.ui.theme.dimens
-import com.mvproject.tinyiptvkmp.utils.AppConstants.EMPTY_STRING
+import com.mvproject.tinyiptvkmp.utils.CommonUtils.empty
 import org.jetbrains.compose.resources.stringResource
 import tinyiptvkmp.composeapp.generated.resources.Res
 import tinyiptvkmp.composeapp.generated.resources.msg_no_epg_found
@@ -54,7 +54,10 @@ fun OverlayChannelInfo(
         )
 
         val description =
-            currentChannel.channelEpg.items.toActual().firstOrNull()?.description ?: EMPTY_STRING
+            currentChannel.channelEpg.items
+                .toActual()
+                .firstOrNull()
+                ?.description ?: String.empty
 
         if (description.isEmpty()) {
             Text(

@@ -21,48 +21,49 @@ import kotlinx.coroutines.flow.distinctUntilChanged
 import kotlinx.coroutines.launch
 
 @Composable
-internal fun networkConnectionState(
-    context: Context = LocalContext.current,
-): State<ConnectionState> {
+internal fun networkConnectionState(context: Context = LocalContext.current): State<ConnectionState> {
     val connectivityManager =
         context.getSystemService(Context.CONNECTIVITY_SERVICE) as ConnectivityManager
 
-    val initialState: ConnectionState = ConnectionState.Available
+    fun observeConnectivityAsFlow() =
+        callbackFlow {
+            val callback =
+                object : ConnectivityManager.NetworkCallback() {
+                    override fun onAvailable(network: Network) {
+                        super.onAvailable(network)
+                        KLog.w("testing observeConnectivityAsFlow onAvailable")
+                        launch { send(ConnectionState.Available) }
+                    }
 
-    fun observeConnectivityAsFlow() = callbackFlow {
-        val callback = object : ConnectivityManager.NetworkCallback() {
-            override fun onAvailable(network: Network) {
-                super.onAvailable(network)
-                KLog.w("testing observeConnectivityAsFlow onAvailable")
-                launch { send(ConnectionState.Available) }
+                    override fun onLosing(
+                        network: Network,
+                        maxMsToLive: Int,
+                    ) {
+                        super.onLosing(network, maxMsToLive)
+                        KLog.w("testing observeConnectivityAsFlow onLosing")
+                        launch { send(ConnectionState.Unavailable) }
+                    }
+
+                    override fun onLost(network: Network) {
+                        super.onLost(network)
+                        KLog.w("testing observeConnectivityAsFlow onLost")
+                        launch { send(ConnectionState.Unavailable) }
+                    }
+
+                    override fun onUnavailable() {
+                        super.onUnavailable()
+                        KLog.w("testing observeConnectivityAsFlow onUnavailable")
+                        launch { send(ConnectionState.Unavailable) }
+                    }
+                }
+
+            connectivityManager.registerDefaultNetworkCallback(callback)
+            awaitClose {
+                connectivityManager.unregisterNetworkCallback(callback)
             }
+        }.distinctUntilChanged()
 
-            override fun onLosing(network: Network, maxMsToLive: Int) {
-                super.onLosing(network, maxMsToLive)
-                KLog.w("testing observeConnectivityAsFlow onLosing")
-                launch { send(ConnectionState.Unavailable) }
-            }
-
-            override fun onLost(network: Network) {
-                super.onLost(network)
-                KLog.w("testing observeConnectivityAsFlow onLost")
-                launch { send(ConnectionState.Unavailable) }
-            }
-
-            override fun onUnavailable() {
-                super.onUnavailable()
-                KLog.w("testing observeConnectivityAsFlow onUnavailable")
-                launch { send(ConnectionState.Unavailable) }
-            }
-        }
-
-        connectivityManager.registerDefaultNetworkCallback(callback)
-        awaitClose {
-            connectivityManager.unregisterNetworkCallback(callback)
-        }
-    }.distinctUntilChanged()
-
-    return produceState(initialValue = initialState) {
+    return produceState<ConnectionState>(initialValue = ConnectionState.Available) {
         // In a coroutine, can make suspend calls
         observeConnectivityAsFlow().collect {
             value = it
@@ -72,5 +73,6 @@ internal fun networkConnectionState(
 
 sealed class ConnectionState {
     data object Available : ConnectionState()
+
     data object Unavailable : ConnectionState()
 }

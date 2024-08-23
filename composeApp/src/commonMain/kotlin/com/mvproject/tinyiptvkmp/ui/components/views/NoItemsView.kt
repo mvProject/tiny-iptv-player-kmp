@@ -25,57 +25,59 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.style.TextAlign
 import com.mvproject.tinyiptvkmp.ui.theme.dimens
-import com.mvproject.tinyiptvkmp.utils.AppConstants.EMPTY_STRING
+import com.mvproject.tinyiptvkmp.utils.CommonUtils.empty
 
 @Composable
 fun NoItemsView(
     modifier: Modifier = Modifier,
-    title: String = EMPTY_STRING,
-    navigateTitle: String = EMPTY_STRING,
-    onNavigateClick: () -> Unit = {}
+    title: String = String.empty,
+    navigateTitle: String = String.empty,
+    onNavigateClick: () -> Unit = {},
 ) {
     Surface(
-        modifier = modifier
+        modifier = modifier,
     ) {
         Column(
             modifier = Modifier.fillMaxSize(),
             verticalArrangement = Arrangement.Center,
-            horizontalAlignment = Alignment.CenterHorizontally
+            horizontalAlignment = Alignment.CenterHorizontally,
         ) {
             Icon(
-                modifier = Modifier
-                    .size(MaterialTheme.dimens.size96),
+                modifier =
+                    Modifier
+                        .size(MaterialTheme.dimens.size96),
                 imageVector = Icons.Filled.Info,
                 tint = MaterialTheme.colorScheme.onSurfaceVariant,
-                contentDescription = title
+                contentDescription = title,
             )
 
             Text(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .padding(
-                        top = MaterialTheme.dimens.size16,
-                        bottom = MaterialTheme.dimens.size24
-                    ),
+                modifier =
+                    Modifier
+                        .fillMaxWidth()
+                        .padding(
+                            top = MaterialTheme.dimens.size16,
+                            bottom = MaterialTheme.dimens.size24,
+                        ),
                 text = title,
                 style = MaterialTheme.typography.headlineLarge,
                 color = MaterialTheme.colorScheme.onSurfaceVariant,
-                textAlign = TextAlign.Center
+                textAlign = TextAlign.Center,
             )
 
             if (navigateTitle.isNotEmpty()) {
                 Text(
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .padding(
-                            top = MaterialTheme.dimens.size16,
-                            bottom = MaterialTheme.dimens.size24
-                        )
-                        .clickable { onNavigateClick() },
+                    modifier =
+                        Modifier
+                            .fillMaxWidth()
+                            .padding(
+                                top = MaterialTheme.dimens.size16,
+                                bottom = MaterialTheme.dimens.size24,
+                            ).clickable { onNavigateClick() },
                     text = navigateTitle,
                     style = MaterialTheme.typography.displaySmall,
                     color = MaterialTheme.colorScheme.onSurface,
-                    textAlign = TextAlign.Center
+                    textAlign = TextAlign.Center,
                 )
             }
         }

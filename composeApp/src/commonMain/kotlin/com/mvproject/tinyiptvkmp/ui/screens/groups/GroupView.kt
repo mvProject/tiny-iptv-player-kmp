@@ -36,7 +36,9 @@ import com.mvproject.tinyiptvkmp.ui.screens.groups.action.GroupAction
 import com.mvproject.tinyiptvkmp.ui.screens.groups.components.OptionsDialog
 import com.mvproject.tinyiptvkmp.ui.screens.groups.components.PlaylistGroupItemView
 import com.mvproject.tinyiptvkmp.ui.screens.groups.state.GroupState
+import com.mvproject.tinyiptvkmp.ui.screens.groups.state.GroupUiState
 import com.mvproject.tinyiptvkmp.ui.theme.dimens
+import com.mvproject.tinyiptvkmp.utils.KLog
 import org.jetbrains.compose.resources.stringResource
 import tinyiptvkmp.composeapp.generated.resources.Res
 import tinyiptvkmp.composeapp.generated.resources.btn_add_first_playlist
@@ -45,6 +47,7 @@ import tinyiptvkmp.composeapp.generated.resources.msg_no_items_found
 
 @Composable
 fun GroupView(
+    uiState: GroupUiState,
     dataState: GroupState,
     onNavigateToSettings: () -> Unit = {},
     onNavigateToGroup: (String, String) -> Unit,
@@ -101,74 +104,91 @@ fun GroupView(
 
                     Spacer(modifier = Modifier.height(MaterialTheme.dimens.size8))
                 }
-                /*
 
-                                LazyRow(
-                                    modifier = Modifier.fillMaxWidth(),
-                                    horizontalArrangement = Arrangement.spacedBy(MaterialTheme.dimens.size4),
-                                ) {
-                                    items(
-                                        items = dataState.favorites.items,
-                                        key = { grp -> grp.groupFavoriteType.name },
-                                    ) { item ->
-                                        PlaylistGroupItemView(
+                when (uiState) {
+                    GroupUiState.Empty -> {
+                        NoItemsView(
+                            modifier = Modifier.fillMaxSize(),
+                            title = stringResource(Res.string.msg_no_items_found),
+                            navigateTitle = stringResource(Res.string.btn_add_first_playlist),
+                            onNavigateClick = onNavigateToSettings,
+                        )
+                    }
+
+                    GroupUiState.Groups -> {
+                        Column(
+                            modifier =
+                                Modifier
+                                    .fillMaxSize()
+                                    .padding(vertical = MaterialTheme.dimens.size8),
+                            horizontalAlignment = Alignment.CenterHorizontally,
+                            verticalArrangement = Arrangement.Center,
+                        ) {
+                            /*
+
+                                        LazyRow(
                                             modifier = Modifier.fillMaxWidth(),
-                                            group = item,
-                                            onSelect = onNavigateToGroup,
-                                        )
-                                    }
+                                            horizontalArrangement = Arrangement.spacedBy(MaterialTheme.dimens.size4),
+                                        ) {
+                                            items(
+                                                items = dataState.favorites.items,
+                                                key = { grp -> grp.groupFavoriteType.name },
+                                            ) { item ->
+                                                PlaylistGroupItemView(
+                                                    modifier = Modifier.fillMaxWidth(),
+                                                    group = item,
+                                                    onSelect = onNavigateToGroup,
+                                                )
+                                            }
+                                        }
+
+                                        Spacer(modifier = Modifier.height(MaterialTheme.dimens.size8))
+                             */
+
+                            LazyColumn(
+                                modifier = Modifier.fillMaxHeight(),
+                                verticalArrangement = Arrangement.spacedBy(MaterialTheme.dimens.size4),
+                            ) {
+                                item {
+                                    PlaylistGroupItemView(
+                                        modifier = Modifier.fillMaxWidth(),
+                                        group = dataState.allGroup,
+                                        onSelect = onNavigateToGroup,
+                                    )
                                 }
 
-                                Spacer(modifier = Modifier.height(MaterialTheme.dimens.size8))
-                 */
+                                items(
+                                    items = dataState.favorites.items,
+                                    key = { grp -> grp.groupFavoriteType.name },
+                                ) { item ->
+                                    PlaylistGroupItemView(
+                                        modifier = Modifier.fillMaxWidth(),
+                                        group = item,
+                                        onSelect = onNavigateToGroup,
+                                    )
+                                }
 
-                LazyColumn(
-                    modifier = Modifier.fillMaxHeight(),
-                    verticalArrangement = Arrangement.spacedBy(MaterialTheme.dimens.size4),
-                ) {
-                    item {
-                        PlaylistGroupItemView(
-                            modifier = Modifier.fillMaxWidth(),
-                            group = dataState.allGroup,
-                            onSelect = onNavigateToGroup,
-                        )
+                                items(
+                                    items = dataState.groups.items,
+                                    key = { grp -> grp.groupName },
+                                ) { item ->
+                                    PlaylistGroupItemView(
+                                        modifier = Modifier.fillMaxWidth(),
+                                        group = item,
+                                        onSelect = onNavigateToGroup,
+                                    )
+                                }
+                            }
+                        }
                     }
 
-                    items(
-                        items = dataState.favorites.items,
-                        key = { grp -> grp.groupFavoriteType.name },
-                    ) { item ->
-                        PlaylistGroupItemView(
-                            modifier = Modifier.fillMaxWidth(),
-                            group = item,
-                            onSelect = onNavigateToGroup,
-                        )
-                    }
-
-                    items(
-                        items = dataState.groups.items,
-                        key = { grp -> grp.groupName },
-                    ) { item ->
-                        PlaylistGroupItemView(
-                            modifier = Modifier.fillMaxWidth(),
-                            group = item,
-                            onSelect = onNavigateToGroup,
+                    GroupUiState.Loading -> {
+                        KLog.w("testing GroupUiState Loading")
+                        LoadingView(
+                            isVisible = true,
                         )
                     }
                 }
-            }
-
-            LoadingView(
-                isVisible = dataState.isLoading,
-            )
-
-            if (dataState.dataIsEmpty) {
-                NoItemsView(
-                    modifier = Modifier.fillMaxSize(),
-                    title = stringResource(Res.string.msg_no_items_found),
-                    navigateTitle = stringResource(Res.string.btn_add_first_playlist),
-                    onNavigateClick = onNavigateToSettings,
-                )
             }
         }
     }

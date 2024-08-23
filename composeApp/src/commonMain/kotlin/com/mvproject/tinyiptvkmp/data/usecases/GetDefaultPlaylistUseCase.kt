@@ -17,6 +17,6 @@ class GetDefaultPlaylistUseCase(
 ) {
     suspend operator fun invoke(): Playlist {
         val currentId = preferenceRepository.loadCurrentPlaylistId()
-        return playlistsRepository.getPlaylistByIdRoom(id = currentId)
+        return playlistsRepository.getPlaylistById(id = currentId)
     }
 }

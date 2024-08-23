@@ -12,10 +12,10 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.mvproject.tinyiptvkmp.data.enums.ChannelsViewType
 import com.mvproject.tinyiptvkmp.data.enums.FavoriteType
-import com.mvproject.tinyiptvkmp.data.helpers.ViewTypeHelper
 import com.mvproject.tinyiptvkmp.data.model.channels.TvPlaylistChannel
 import com.mvproject.tinyiptvkmp.data.model.epg.EpgProgram
-import com.mvproject.tinyiptvkmp.data.usecases.GetGroupChannelsEpg
+import com.mvproject.tinyiptvkmp.data.repository.PreferenceRepository
+import com.mvproject.tinyiptvkmp.data.usecases.GetGroupChannelsEpgUseCase
 import com.mvproject.tinyiptvkmp.data.usecases.GetGroupChannelsUseCase
 import com.mvproject.tinyiptvkmp.data.usecases.ToggleFavoriteChannelUseCase
 import com.mvproject.tinyiptvkmp.ui.screens.channels.action.TvPlaylistChannelAction
@@ -24,7 +24,7 @@ import com.mvproject.tinyiptvkmp.ui.screens.channels.data.TvPlaylistChannelEpg
 import com.mvproject.tinyiptvkmp.ui.screens.channels.data.TvPlaylistGroupChannels
 import com.mvproject.tinyiptvkmp.ui.screens.channels.navigation.TvPlaylistChannelsArgs
 import com.mvproject.tinyiptvkmp.ui.screens.channels.state.TvPlaylistGroupState
-import com.mvproject.tinyiptvkmp.utils.AppConstants.EMPTY_STRING
+import com.mvproject.tinyiptvkmp.utils.CommonUtils.empty
 import com.mvproject.tinyiptvkmp.utils.KLog
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -34,10 +34,10 @@ import kotlinx.coroutines.launch
 
 class TvPlaylistChannelsViewModel(
     savedStateHandle: SavedStateHandle,
-    private val viewTypeHelper: ViewTypeHelper,
     private val getGroupChannelsUseCase: GetGroupChannelsUseCase,
-    private val getGroupChannelsEpg: GetGroupChannelsEpg,
+    private val getGroupChannelsEpgUseCase: GetGroupChannelsEpgUseCase,
     private val toggleFavoriteChannelUseCase: ToggleFavoriteChannelUseCase,
+    private val preferenceRepository: PreferenceRepository,
 ) : ViewModel() {
     private val _groupState = MutableStateFlow(TvPlaylistGroupState())
     val groupState = _groupState.asStateFlow()
@@ -45,7 +45,7 @@ class TvPlaylistChannelsViewModel(
     private val _channelsState = MutableStateFlow(TvPlaylistGroupChannels())
     val channelsState = _channelsState.asStateFlow()
 
-    private val _searchText = MutableStateFlow(EMPTY_STRING)
+    private val _searchText = MutableStateFlow(String.empty)
 
     private val args = TvPlaylistChannelsArgs(savedStateHandle)
 
@@ -55,8 +55,14 @@ class TvPlaylistChannelsViewModel(
 
         viewModelScope.launch {
             _groupState.update { current ->
+                val viewType =
+                    preferenceRepository
+                        .getChannelsViewType()
+                        ?.let { ChannelsViewType.valueOf(it) }
+                        ?: ChannelsViewType.LIST
+
                 current.copy(
-                    viewType = viewTypeHelper.getChannelsViewType(),
+                    viewType = viewType,
                     currentGroup = group,
                     currentGroupType = type,
                 )
@@ -97,7 +103,7 @@ class TvPlaylistChannelsViewModel(
                         )
                     }
 
-            val channelsEpgData = getGroupChannelsEpg(channels = channelsData)
+            val channelsEpgData = getGroupChannelsEpgUseCase(channels = channelsData)
 
             channelsEpgData.forEach { data ->
                 delay(200)
@@ -187,7 +193,7 @@ class TvPlaylistChannelsViewModel(
                 _groupState.update { current ->
                     current.copy(viewType = type)
                 }
-                viewTypeHelper.setChannelsViewType(type)
+                preferenceRepository.setChannelsViewType(type = type.name)
             }
         }
     }

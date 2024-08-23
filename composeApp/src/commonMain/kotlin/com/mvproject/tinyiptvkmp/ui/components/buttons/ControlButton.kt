@@ -1,11 +1,4 @@
-/*
- *  Created by Medvediev Viktor [mvproject]
- *  Copyright © 2024
- *  last modified : 17.05.24, 18:23
- *
- */
-
-package com.mvproject.tinyiptvkmp.ui.components.views
+package com.mvproject.tinyiptvkmp.ui.components.buttons
 
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.rounded.ViewList
@@ -15,21 +8,31 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.vector.ImageVector
+import com.mvproject.tinyiptvkmp.ui.theme.VideoAppTheme
+import org.jetbrains.compose.ui.tooling.preview.Preview
 
 @Composable
-fun PlaybackControl(
+fun ControlButton(
     modifier: Modifier = Modifier,
     imageVector: ImageVector = Icons.AutoMirrored.Rounded.ViewList,
-    action: () -> Unit,
+    onClick: () -> Unit = {},
 ) {
     IconButton(
         modifier = modifier,
-        onClick = action,
+        onClick = onClick,
     ) {
         Icon(
             imageVector = imageVector,
             contentDescription = "PlaybackControl",
             tint = MaterialTheme.colorScheme.onSurface,
         )
+    }
+}
+
+@Composable
+@Preview
+private fun ControlButtonPreview() {
+    VideoAppTheme {
+        ControlButton()
     }
 }

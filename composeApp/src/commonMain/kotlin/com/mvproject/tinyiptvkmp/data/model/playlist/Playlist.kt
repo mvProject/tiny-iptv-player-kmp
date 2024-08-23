@@ -7,33 +7,30 @@
 
 package com.mvproject.tinyiptvkmp.data.model.playlist
 
-import com.mvproject.tinyiptvkmp.utils.AppConstants.EMPTY_STRING
+import com.mvproject.tinyiptvkmp.data.enums.PlaylistType
 import com.mvproject.tinyiptvkmp.utils.AppConstants.LONG_VALUE_ZERO
+import com.mvproject.tinyiptvkmp.utils.CommonUtils.empty
 import kotlin.random.Random
 
 data class Playlist(
     val id: Long = Random.nextLong(),
-    val playlistTitle: String = EMPTY_STRING,
-    val playlistUrl: String = EMPTY_STRING,
-    val playlistLocalName: String = EMPTY_STRING,
+    val playlistName: String = String.empty,
+    val playlistSource: String = String.empty,
+    val playlistType: PlaylistType = PlaylistType.REMOTE,
     val lastUpdateDate: Long = LONG_VALUE_ZERO,
     val updatePeriod: Long = LONG_VALUE_ZERO,
-    val isLocalSource: Boolean = false
 ) {
-    override fun toString(): String {
-        return StringBuilder()
+    override fun toString(): String =
+        StringBuilder()
             .append("\n")
-            .append("name - $playlistTitle")
+            .append("playlistName - $playlistName")
             .append("\n")
-            .append("listUrl - $playlistUrl")
+            .append("playlistSource - $playlistSource")
             .append("\n")
-            .append("listUrl - $playlistLocalName")
-            .append("\n")
-            .append("isLocalSource - $isLocalSource")
+            .append("playlistType - $playlistType")
             .append("\n")
             .append("updatePeriod - $updatePeriod")
             .append("\n")
             .append("lastUpdateDate - $lastUpdateDate")
             .toString()
-    }
 }

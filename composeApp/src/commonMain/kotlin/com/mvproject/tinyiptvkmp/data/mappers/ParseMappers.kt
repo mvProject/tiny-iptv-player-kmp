@@ -26,7 +26,7 @@ import kotlin.time.Duration.Companion.hours
 object ParseMappers {
     fun EpgInfoResponse.toEpgInfo() =
         with(this) {
-            EpgInfoEntity(
+            EpgInfo(
                 channelId = channelId,
                 channelName = channelNames.trim(),
                 channelLogo = channelIcon,

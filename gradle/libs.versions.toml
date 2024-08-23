@@ -1,9 +1,10 @@
 [versions]
 
-kotlin = "2.0.0"
+kotlin = "2.0.10"
+ksp = "2.0.10-1.0.24"
+
 gradle = "8.5.2"
 compose = "1.7.0-alpha02"
-ksp = "2.0.0-1.0.22"
 
 compose-activity = "1.9.1"
 
@@ -24,10 +25,8 @@ ktor = "2.3.12"
 
 koin = "4.0.0-RC1"
 
-kamelVersion = "0.8.2"
-
 calfFilePickerVersion = "0.2.0"
-uriKmpVersion = "0.0.15"
+uri-kmp = "0.0.15"
 
 media3 = "1.4.0"
 
@@ -40,6 +39,12 @@ accompanist = "0.31.2-alpha"
 sqlite = "2.5.0-SNAPSHOT"
 
 ksoup = "0.1.2"
+
+coil3 = "3.0.0-alpha06"
+
+filekit = "0.7.0"
+
+nextlib = "0.8.2"
 
 [plugins]
 compose-multiplatform = { id = "org.jetbrains.compose", version.ref = "compose" }
@@ -97,7 +102,7 @@ caprica-vlcj = { module = "uk.co.caprica:vlcj", version.ref = "vlcjVersion" }
 # Network
 ktor-client-core = { module = "io.ktor:ktor-client-core", version.ref = "ktor" }
 ktor-client-android = { module = "io.ktor:ktor-client-android", version.ref = "ktor" }
-ktor-client-java = { module = "io.ktor:ktor-client-java", version.ref = "ktor" }
+ktor-client-okhttp = { module = "io.ktor:ktor-client-okhttp", version.ref = "ktor" }
 ktor-client-logging = { module = "io.ktor:ktor-client-logging", version.ref = "ktor" }
 ktor-client-content-negotiation = { module = "io.ktor:ktor-client-content-negotiation", version.ref = "ktor" }
 ktor-serialization-kotlinx-json = { module = "io.ktor:ktor-serialization-kotlinx-json", version.ref = "ktor" }
@@ -112,10 +117,20 @@ koin-compose-viewmodel = { group = "io.insert-koin", name = "koin-compose-viewmo
 # Logging
 kermit = { module = "co.touchlab:kermit", version.ref = "kermit" }
 
-urikmp = { module = "com.eygraber:uri-kmp", version.ref = "uriKmpVersion" }
+coil-network = { module = "io.coil-kt.coil3:coil-network-ktor", version.ref = "coil3" }
+coil-compose = { module = "io.coil-kt.coil3:coil-compose", version.ref = "coil3" }
+coil-compose-core = { module = "io.coil-kt.coil3:coil-compose-core", version.ref = "coil3" }
+coil-main = { module = "io.coil-kt.coil3:coil", version.ref = "coil3" }
+
+uri-kmp = { module = "com.eygraber:uri-kmp", version.ref = "uri-kmp" }
 calf-filepicker = { module = "com.mohamedrejeb.calf:calf-file-picker", version.ref = "calfFilePickerVersion" }
 accompanist-adaptive = { module = "com.google.accompanist:accompanist-adaptive", version.ref = "accompanist" }
-kamelimage = { module = "media.kamel:kamel-image", version.ref = "kamelVersion" }
+
+filekit-core = { module = "io.github.vinceglb:filekit-core", version.ref = "filekit" }
+filekit-compose = { module = "io.github.vinceglb:filekit-compose", version.ref = "filekit" }
+
+nextlib-media3ext = { module = "com.github.anilbeesetti.nextlib:nextlib-media3ext", version.ref = "nextlib" }
+nextlib-mediainfo = { module = "com.github.anilbeesetti.nextlib:nextlib-mediainfo", version.ref = "nextlib" }
 
 [bundles]
 
@@ -157,4 +172,21 @@ koin = [
     "koin-core",
     "koin-compose",
     "koin-compose-viewmodel"
+]
+
+coil = [
+    "coil-main",
+    "coil-network",
+    "coil-compose",
+    "coil-compose-core"
+]
+
+filekit = [
+    "filekit-core",
+    "filekit-compose"
+]
+
+nextlib = [
+    "nextlib-media3ext",
+    "nextlib-mediainfo"
 ]

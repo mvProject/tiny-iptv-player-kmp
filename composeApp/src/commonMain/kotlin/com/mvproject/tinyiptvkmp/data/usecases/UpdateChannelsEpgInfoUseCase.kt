@@ -21,9 +21,9 @@ class UpdateChannelsEpgInfoUseCase(
     private val favoriteChannelsRepository: FavoriteChannelsRepository,
     private val epgInfoRepository: EpgInfoRepository,
 ) {
-    suspend operator fun invoke() {
+    suspend operator fun invoke(playlistId: Long) {
         val epgInfos = epgInfoRepository.loadEpgInfoData().asSequence()
-        val channels = playlistChannelsRepository.loadChannels().asSequence()
+        val channels = playlistChannelsRepository.loadChannelsById(listId = playlistId).asSequence()
         val favorites = favoriteChannelsRepository.loadFavoriteChannelUrls()
 
         val mappedChannels =
@@ -57,7 +57,9 @@ class UpdateChannelsEpgInfoUseCase(
                 }
             }
 
-        playlistChannelsRepository.updatePlaylistChannels(mappedChannels.toList())
+        KLog.w("testing update mappedChannels count:${mappedChannels.count()}")
+
+        playlistChannelsRepository.savePlaylistChannels(mappedChannels.toList())
 
         mappedChannels.forEach { channel ->
             if (channel.channelUrl in favorites) {

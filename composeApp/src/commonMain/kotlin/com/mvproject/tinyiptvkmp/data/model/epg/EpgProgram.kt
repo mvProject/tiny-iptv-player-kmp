@@ -7,25 +7,25 @@
 
 package com.mvproject.tinyiptvkmp.data.model.epg
 
-import com.mvproject.tinyiptvkmp.utils.AppConstants
+import com.mvproject.tinyiptvkmp.utils.CommonUtils.empty
 import com.mvproject.tinyiptvkmp.utils.TimeUtils.calculateProgramProgress
 
 data class EpgProgram(
     val start: Long,
     val stop: Long,
     val channelId: String,
-    val title: String = AppConstants.EMPTY_STRING,
-    val description: String = AppConstants.EMPTY_STRING
+    val title: String = String.empty,
+    val description: String = String.empty,
 ) {
-
     val key
         get() = (start + stop).toString() + title
 
     val programProgress
-        get() = calculateProgramProgress(
-            startTime = start,
-            endTime = stop
-        )
+        get() =
+            calculateProgramProgress(
+                startTime = start,
+                endTime = stop,
+            )
 
     override fun toString() =
         StringBuilder()
