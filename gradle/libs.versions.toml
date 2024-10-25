@@ -1,29 +1,29 @@
 [versions]
 
-kotlin = "2.0.20"
-ksp = "2.0.20-1.0.25"
+kotlin = "2.0.21"
+ksp = "2.0.21-1.0.25"
 
 gradle = "8.5.2"
-compose = "1.7.0-beta01"
+compose = "1.7.0-rc01"
 
-compose-activity = "1.9.2"
+compose-activity = "1.9.3"
 
-androidx-navigation = "2.8.0-alpha09"
-androidx-lifecycle = "2.8.1"
+androidx-navigation = "2.8.0-alpha10"
+androidx-lifecycle = "2.8.2"
 androidx-datastore = "1.1.1"
-androidx-annotation = "1.8.2"
-androidx-room = "2.7.0-alpha07"
+androidx-annotation = "1.9.0"
+androidx-room = "2.7.0-alpha10"
 
 kotlinx-collections = "0.3.5"
 kotlinx-datetime = "0.6.1"
-kotlinx-coroutines-swing = "1.8.1"
-kotlinx-coroutines-core = "1.8.1"
+kotlinx-coroutines-swing = "1.9.0"
+kotlinx-coroutines-core = "1.9.0"
 
 material3WindowSizeClassMultiplatform = "0.5.0"
 
 ktor = "2.3.12"
 
-koin = "4.0.0-RC2"
+koin = "4.0.0"
 
 calfFilePickerVersion = "0.2.0"
 uri-kmp = "0.0.15"
@@ -38,7 +38,7 @@ accompanist = "0.31.2-alpha"
 
 sqlite = "2.5.0-SNAPSHOT"
 
-ksoup = "0.1.2"
+ksoup = "0.1.5"
 
 coil3 = "3.0.0-alpha10"
 
