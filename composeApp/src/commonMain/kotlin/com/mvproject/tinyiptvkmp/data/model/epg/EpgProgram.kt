@@ -11,20 +11,21 @@ import com.mvproject.tinyiptvkmp.utils.CommonUtils.empty
 import com.mvproject.tinyiptvkmp.utils.TimeUtils.calculateProgramProgress
 
 data class EpgProgram(
-    val start: Long,
-    val stop: Long,
-    val channelId: String,
+    val programId: String,
+    val channelId: String = String.empty,
     val title: String = String.empty,
     val description: String = String.empty,
+    val dateTimeStart: Long,
+    val dateTimeEnd: Long,
 ) {
     val key
-        get() = (start + stop).toString() + title
+        get() = (dateTimeStart + dateTimeEnd).toString() + title
 
     val programProgress
         get() =
             calculateProgramProgress(
-                startTime = start,
-                endTime = stop,
+                startTime = dateTimeStart,
+                endTime = dateTimeEnd,
             )
 
     override fun toString() =
@@ -32,7 +33,7 @@ data class EpgProgram(
             .append("\n")
             .append(channelId)
             .append("\n")
-            .append("$start - $stop")
+            .append("$dateTimeStart - $dateTimeEnd")
             .append("\n")
             .append("title: $title")
             .append("\n")

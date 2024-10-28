@@ -13,14 +13,11 @@ import com.mvproject.tinyiptvkmp.ui.screens.channels.data.TvPlaylistChannelEpg
 import com.mvproject.tinyiptvkmp.utils.TimeUtils
 
 object ListMappers {
-    fun List<EpgProgram>.toActual(): List<EpgProgram> {
-        return this.filter { it.stop > TimeUtils.actualDate }
-    }
+    fun List<EpgProgram>.toActual(): List<EpgProgram> = this.filter { it.dateTimeEnd > TimeUtils.actualDate }
 
-    fun List<TvPlaylistChannel>.withRefreshedEpg(): List<TvPlaylistChannel> {
-        return this.map {
+    fun List<TvPlaylistChannel>.withRefreshedEpg(): List<TvPlaylistChannel> =
+        this.map {
             val epg = it.channelEpg.items.toActual()
             it.copy(channelEpg = TvPlaylistChannelEpg(items = epg))
         }
-    }
 }
