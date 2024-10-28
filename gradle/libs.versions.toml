@@ -3,7 +3,7 @@
 kotlin = "2.0.21"
 ksp = "2.0.21-1.0.25"
 
-gradle = "8.5.2"
+gradle = "8.6.1"
 compose = "1.7.0-rc01"
 
 compose-activity = "1.9.3"

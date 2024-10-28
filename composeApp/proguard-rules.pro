@@ -22,3 +22,4 @@
 
 -dontwarn org.slf4j.impl.StaticLoggerBinder
 -dontwarn org.slf4j.impl.StaticMDCBinder
+-dontwarn io.ktor.client.network.sockets.SocketTimeoutException
