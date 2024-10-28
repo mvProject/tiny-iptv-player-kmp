@@ -15,7 +15,7 @@ import com.mvproject.tinyiptvkmp.database.entity.FavoriteChannelEntity
 
 @Dao
 interface FavoriteChannelDao {
-    @Query("UPDATE FavoriteChannelEntity SET channelName = :channelName WHERE channelUrl = :channelUrl")
+    @Query("UPDATE favoriteChannels SET channelName = :channelName WHERE channelUrl = :channelUrl")
     suspend fun updateFavoriteChannels(
         channelName: String,
         channelUrl: String,
@@ -24,21 +24,23 @@ interface FavoriteChannelDao {
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     suspend fun insertFavoriteChannel(data: FavoriteChannelEntity)
 
-    @Query("SELECT COUNT(*) FROM FavoriteChannelEntity WHERE parentListId = :id")
-    suspend fun getFavoriteChannelCount(id: Long): Int
+    @Query("SELECT COUNT(*) FROM favoriteChannels WHERE parentListId == (SELECT id FROM playlists WHERE isSelected == 1)")
+    suspend fun getFavoriteChannelCount(): Int
 
-    @Query("SELECT * FROM FavoriteChannelEntity WHERE parentListId = :id")
-    suspend fun getPlaylistFavoriteChannelUrls(id: Long): List<FavoriteChannelEntity>
+    @Query("SELECT * FROM favoriteChannels WHERE parentListId == (SELECT id FROM playlists WHERE isSelected == 1)")
+    suspend fun getSelectedFavoriteChannels(): List<FavoriteChannelEntity>
 
-    @Query("SELECT channelUrl FROM FavoriteChannelEntity")
+    @Query("SELECT * FROM favoriteChannels WHERE parentListId == :id")
+    suspend fun getFavoriteChannelById(id: Long): List<FavoriteChannelEntity>
+
+    @Query("SELECT channelUrl FROM favoriteChannels")
     suspend fun getFavoriteChannelUrls(): List<String>
 
-    @Query("DELETE FROM FavoriteChannelEntity WHERE parentListId = :id AND channelUrl = :channelUrl")
-    suspend fun deleteChannelFromFavorite(
-        id: Long,
-        channelUrl: String,
+    @Query(
+        "DELETE FROM favoriteChannels WHERE parentListId == (SELECT id FROM playlists WHERE isSelected == 1) AND channelUrl = :channelUrl",
     )
+    suspend fun deleteChannelFromFavorite(channelUrl: String)
 
-    @Query("DELETE FROM FavoriteChannelEntity WHERE parentListId = :id")
+    @Query("DELETE FROM favoriteChannels WHERE parentListId = :id")
     suspend fun deletePlaylistFavoriteChannelEntities(id: Long)
 }

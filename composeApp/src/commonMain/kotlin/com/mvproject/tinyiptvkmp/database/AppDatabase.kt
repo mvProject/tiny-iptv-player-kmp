@@ -7,16 +7,18 @@
 
 package com.mvproject.tinyiptvkmp.database
 
+import androidx.room.ConstructedBy
 import androidx.room.Database
 import androidx.room.RoomDatabase
+import androidx.room.RoomDatabaseConstructor
 import androidx.room.TypeConverter
 import androidx.room.TypeConverters
-import com.mvproject.tinyiptvkmp.database.dao.EpgInfoDao
+import com.mvproject.tinyiptvkmp.database.dao.EpgChannelDao
 import com.mvproject.tinyiptvkmp.database.dao.EpgProgramDao
 import com.mvproject.tinyiptvkmp.database.dao.FavoriteChannelDao
 import com.mvproject.tinyiptvkmp.database.dao.PlaylistChannelDao
 import com.mvproject.tinyiptvkmp.database.dao.PlaylistDao
-import com.mvproject.tinyiptvkmp.database.entity.EpgInfoEntity
+import com.mvproject.tinyiptvkmp.database.entity.EpgChannelEntity
 import com.mvproject.tinyiptvkmp.database.entity.EpgProgramEntity
 import com.mvproject.tinyiptvkmp.database.entity.FavoriteChannelEntity
 import com.mvproject.tinyiptvkmp.database.entity.PlaylistChannelEntity
@@ -25,7 +27,7 @@ import kotlinx.datetime.LocalDateTime
 
 @Database(
     entities = [
-        EpgInfoEntity::class,
+        EpgChannelEntity::class,
         EpgProgramEntity::class,
         FavoriteChannelEntity::class,
         PlaylistEntity::class,
@@ -33,9 +35,10 @@ import kotlinx.datetime.LocalDateTime
     ],
     version = 1,
 )
-@TypeConverters(LocalDateTimeConverter::class)
+
+@ConstructedBy(AppDatabaseCtor::class)
 abstract class AppDatabase : RoomDatabase() {
-    abstract fun epgInfoDao(): EpgInfoDao
+    abstract fun epgInfoDao(): EpgChannelDao
 
     abstract fun epgProgramDao(): EpgProgramDao
 
@@ -48,14 +51,7 @@ abstract class AppDatabase : RoomDatabase() {
 
 internal const val dbFileName = "tinyiptvkmp.db"
 
-class LocalDateTimeConverter {
-    @TypeConverter
-    fun fromTimestamp(value: String?): LocalDateTime? {
-        return value?.let { LocalDateTime.parse(it) }
-    }
-
-    @TypeConverter
-    fun dateToTimestamp(date: LocalDateTime?): String? {
-        return date?.toString()
-    }
+@Suppress("NO_ACTUAL_FOR_EXPECT")
+expect object AppDatabaseCtor : RoomDatabaseConstructor<AppDatabase> {
+    override fun initialize(): AppDatabase
 }
