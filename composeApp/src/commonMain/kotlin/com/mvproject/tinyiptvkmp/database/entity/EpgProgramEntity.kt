@@ -11,14 +11,6 @@ import androidx.room.Entity
 import androidx.room.PrimaryKey
 import com.mvproject.tinyiptvkmp.utils.CommonUtils.empty
 
-/*@Entity(primaryKeys = ["programStart", "programEnd", "title"])
-data class EpgProgramEntity(
-    val channelId: String,
-    val programStart: Long,
-    val programEnd: Long,
-    val title: String,
-    val description: String,
-)*/
 @Entity(tableName = "epgPrograms")
 data class EpgProgramEntity(
     @PrimaryKey
