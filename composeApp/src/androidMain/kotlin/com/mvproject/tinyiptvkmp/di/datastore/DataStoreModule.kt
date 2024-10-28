@@ -19,19 +19,24 @@ import org.koin.android.ext.koin.androidContext
 import org.koin.core.module.Module
 import org.koin.dsl.module
 
-actual fun platformDataStoreModule(): Module = module {
-    single {
-        PreferenceDataStoreFactory.createWithPath(
-            corruptionHandler = ReplaceFileCorruptionHandler(
-                produceNewData = { emptyPreferences() }
-            ),
-            scope = CoroutineScope(Dispatchers.IO + SupervisorJob()),
-            produceFile = {
-                val path =
-                    androidContext().filesDir.resolve(dataStoreFileName).absolutePath.toPath()
-                println("testing android path:$path")
-                path
-            }
-        )
+actual fun platformDataStoreModule(): Module =
+    module {
+        single {
+            PreferenceDataStoreFactory.createWithPath(
+                corruptionHandler =
+                    ReplaceFileCorruptionHandler(
+                        produceNewData = { emptyPreferences() },
+                    ),
+                scope = CoroutineScope(Dispatchers.IO + SupervisorJob()),
+                produceFile = {
+                    val path =
+                        androidContext()
+                            .filesDir
+                            .resolve(dataStoreFileName)
+                            .absolutePath
+                            .toPath()
+                    path
+                },
+            )
+        }
     }
-}
