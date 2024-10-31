@@ -21,13 +21,11 @@ import androidx.compose.foundation.lazy.items
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
-import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.lifecycle.compose.LifecycleResumeEffect
 import com.mvproject.tinyiptvkmp.ui.components.selectors.OptionSelector
 import com.mvproject.tinyiptvkmp.ui.components.toolbars.AppBarWithSettings
 import com.mvproject.tinyiptvkmp.ui.components.views.LoadingView
@@ -38,7 +36,6 @@ import com.mvproject.tinyiptvkmp.ui.screens.groups.components.PlaylistGroupItemV
 import com.mvproject.tinyiptvkmp.ui.screens.groups.state.GroupState
 import com.mvproject.tinyiptvkmp.ui.screens.groups.state.GroupUiState
 import com.mvproject.tinyiptvkmp.ui.theme.dimens
-import com.mvproject.tinyiptvkmp.utils.KLog
 import org.jetbrains.compose.resources.stringResource
 import tinyiptvkmp.composeapp.generated.resources.Res
 import tinyiptvkmp.composeapp.generated.resources.btn_add_first_playlist
@@ -47,12 +44,18 @@ import tinyiptvkmp.composeapp.generated.resources.msg_no_items_found
 
 @Composable
 fun GroupView(
+    state: GroupState,
     uiState: GroupUiState,
-    dataState: GroupState,
     onNavigateToSettings: () -> Unit = {},
     onNavigateToGroup: (String, String) -> Unit,
     onPlaylistAction: (GroupAction) -> Unit = {},
 ) {
+    LifecycleResumeEffect(Unit) {
+        onPlaylistAction(GroupAction.RefreshPlaylist)
+
+        onPauseOrDispose { }
+    }
+
     Scaffold(
         modifier = Modifier.fillMaxSize(),
         topBar = {
@@ -73,17 +76,13 @@ fun GroupView(
                 horizontalAlignment = Alignment.CenterHorizontally,
                 verticalArrangement = Arrangement.Center,
             ) {
-                if (dataState.isPlaylistSelectorVisible) {
+                if (state.isPlaylistSelectorVisible) {
                     val isSelectPlaylistOpen = remember { mutableStateOf(false) }
-
-                    var selectedIndex by remember {
-                        mutableIntStateOf(dataState.playlistSelectedIndex)
-                    }
 
                     OptionSelector(
                         modifier = Modifier.fillMaxWidth(),
                         title = stringResource(Res.string.hint_current_playlist),
-                        selectedItem = dataState.playlistNames.items[selectedIndex],
+                        selectedItem = state.selectedPlaylist.playlistName,
                         isExpanded = isSelectPlaylistOpen.value,
                         onClick = {
                             isSelectPlaylistOpen.value = true
@@ -93,12 +92,10 @@ fun GroupView(
                     OptionsDialog(
                         isDialogOpen = isSelectPlaylistOpen,
                         title = stringResource(Res.string.hint_current_playlist),
-                        selectedIndex = selectedIndex,
-                        items = dataState.playlistNames.items,
-                        onItemSelected = { index ->
-                            selectedIndex = index
+                        playlists = state.playlists,
+                        onItemSelected = { item ->
                             isSelectPlaylistOpen.value = false
-                            onPlaylistAction(GroupAction.SelectPlaylist(index))
+                            onPlaylistAction(GroupAction.SelectPlaylist(item))
                         },
                     )
 
@@ -106,14 +103,13 @@ fun GroupView(
                 }
 
                 when (uiState) {
-                    GroupUiState.Empty -> {
+                    GroupUiState.Empty ->
                         NoItemsView(
                             modifier = Modifier.fillMaxSize(),
                             title = stringResource(Res.string.msg_no_items_found),
                             navigateTitle = stringResource(Res.string.btn_add_first_playlist),
                             onNavigateClick = onNavigateToSettings,
                         )
-                    }
 
                     GroupUiState.Groups -> {
                         Column(
@@ -124,53 +120,13 @@ fun GroupView(
                             horizontalAlignment = Alignment.CenterHorizontally,
                             verticalArrangement = Arrangement.Center,
                         ) {
-                            /*
-
-                                        LazyRow(
-                                            modifier = Modifier.fillMaxWidth(),
-                                            horizontalArrangement = Arrangement.spacedBy(MaterialTheme.dimens.size4),
-                                        ) {
-                                            items(
-                                                items = dataState.favorites.items,
-                                                key = { grp -> grp.groupFavoriteType.name },
-                                            ) { item ->
-                                                PlaylistGroupItemView(
-                                                    modifier = Modifier.fillMaxWidth(),
-                                                    group = item,
-                                                    onSelect = onNavigateToGroup,
-                                                )
-                                            }
-                                        }
-
-                                        Spacer(modifier = Modifier.height(MaterialTheme.dimens.size8))
-                             */
-
                             LazyColumn(
                                 modifier = Modifier.fillMaxHeight(),
                                 verticalArrangement = Arrangement.spacedBy(MaterialTheme.dimens.size4),
                             ) {
-                                item {
-                                    PlaylistGroupItemView(
-                                        modifier = Modifier.fillMaxWidth(),
-                                        group = dataState.allGroup,
-                                        onSelect = onNavigateToGroup,
-                                    )
-                                }
-
                                 items(
-                                    items = dataState.favorites.items,
-                                    key = { grp -> grp.groupFavoriteType.name },
-                                ) { item ->
-                                    PlaylistGroupItemView(
-                                        modifier = Modifier.fillMaxWidth(),
-                                        group = item,
-                                        onSelect = onNavigateToGroup,
-                                    )
-                                }
-
-                                items(
-                                    items = dataState.groups.items,
-                                    key = { grp -> grp.groupName },
+                                    items = state.channelGroups,
+                                    key = { grp -> grp.groupId },
                                 ) { item ->
                                     PlaylistGroupItemView(
                                         modifier = Modifier.fillMaxWidth(),
@@ -182,12 +138,7 @@ fun GroupView(
                         }
                     }
 
-                    GroupUiState.Loading -> {
-                        KLog.w("testing GroupUiState Loading")
-                        LoadingView(
-                            isVisible = true,
-                        )
-                    }
+                    GroupUiState.Loading -> LoadingView(isVisible = true)
                 }
             }
         }

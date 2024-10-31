@@ -19,15 +19,15 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import com.mvproject.tinyiptvkmp.data.PreviewTestData
 import com.mvproject.tinyiptvkmp.data.model.epg.EpgProgram
 import com.mvproject.tinyiptvkmp.ui.components.views.DurationProgressView
 import com.mvproject.tinyiptvkmp.ui.components.views.TimeItem
+import com.mvproject.tinyiptvkmp.ui.theme.VideoAppTheme
 import com.mvproject.tinyiptvkmp.utils.AppConstants.COUNT_ZERO_FLOAT
 import com.mvproject.tinyiptvkmp.utils.AppConstants.PROGRESS_STATE_COMPLETE
 import com.mvproject.tinyiptvkmp.utils.TimeUtils.convertTimeToReadableFormat
 import org.jetbrains.compose.ui.tooling.preview.Preview
-import com.mvproject.tinyiptvkmp.data.PreviewTestData
-import com.mvproject.tinyiptvkmp.ui.theme.VideoAppTheme
 
 @Composable
 fun PlayerEpgItem(
@@ -55,7 +55,7 @@ fun PlayerEpgItem(
                 ),
             leadingContent = {
                 TimeItem(
-                    time = program.start.convertTimeToReadableFormat(),
+                    time = program.dateTimeStart.convertTimeToReadableFormat(),
                     timeColor = contentColor,
                 )
             },

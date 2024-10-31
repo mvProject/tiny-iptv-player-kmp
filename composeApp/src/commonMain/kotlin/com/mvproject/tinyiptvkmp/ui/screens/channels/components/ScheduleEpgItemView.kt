@@ -63,7 +63,7 @@ fun ScheduleEpgItemView(
 
         val text =
             StringBuilder().apply {
-                append(program.start.convertTimeToReadableFormat())
+                append(program.dateTimeStart.convertTimeToReadableFormat())
                 append(" - ")
                 append(program.title)
             }

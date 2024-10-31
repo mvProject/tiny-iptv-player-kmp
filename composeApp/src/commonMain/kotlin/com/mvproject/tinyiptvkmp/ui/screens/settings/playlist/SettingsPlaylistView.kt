@@ -96,7 +96,7 @@ fun SettingsPlaylistView(
                 contentPadding = PaddingValues(MaterialTheme.dimens.size8),
             ) {
                 items(
-                    dataState.playlists.items,
+                    dataState.playlists,
                     key = { it.id },
                 ) { item ->
                     PlaylistItemView(

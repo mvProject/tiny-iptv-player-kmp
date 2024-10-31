@@ -238,14 +238,12 @@ class VideoViewViewModel(
             val currentChannels = videoViewChannelsState.value.items
             if (currentChannels.isNotEmpty()) {
                 val channelsData =
-                    currentChannels
-                        .filter { it.epgId.isNotBlank() }
-                        .map {
-                            ChannelEpg(
-                                channelName = it.channelName,
-                                channelEpgId = it.epgId,
-                            )
-                        }
+                    currentChannels.filter { it.epgId.isNotBlank() }.map {
+                        ChannelEpg(
+                            channelName = it.channelName,
+                            channelEpgId = it.epgId,
+                        )
+                    }
 
                 val channelsEpgData = getGroupChannelsEpgUseCase(channels = channelsData)
 
@@ -291,11 +289,9 @@ class VideoViewViewModel(
         val current = videoViewChannelsState.value.items
 
         val updatedList =
-            current
-                .toMutableList()
-                .apply {
-                    set(index, channel)
-                }
+            current.toMutableList().apply {
+                set(index, channel)
+            }
 
         _videoViewChannelsState.update { state ->
             state.copy(items = updatedList)
@@ -308,9 +304,7 @@ class VideoViewViewModel(
     ): Int {
         val currentPos = videoViewState.value.mediaPosition
 
-        val targetPos =
-            channels
-                .indexOfFirst { it.channelName == channelName }
+        val targetPos = channels.indexOfFirst { it.channelName == channelName }
 
         val mediaPosition =
             if (targetPos > INT_NO_VALUE) {
@@ -435,7 +429,6 @@ class VideoViewViewModel(
             _videoViewChannelsState.update { state ->
                 state.copy(items = updatedFavoriteChangedChannels)
             }
-
             toggleFavoriteChannelUseCase(channel = currentChannel)
         }
     }

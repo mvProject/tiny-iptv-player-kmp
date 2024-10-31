@@ -10,15 +10,11 @@ package com.mvproject.tinyiptvkmp.ui.screens.settings.playlist.state
 import androidx.compose.runtime.Immutable
 import com.mvproject.tinyiptvkmp.data.model.playlist.Playlist
 
+@Immutable
 data class SettingsPlaylistState(
-    val playlists: Playlists = Playlists(),
+    val playlists: List<Playlist> = emptyList(),
     val isLoading: Boolean = true,
 ) {
     val dataIsEmpty
-        get() = !isLoading && playlists.items.isEmpty()
+        get() = !isLoading && playlists.isEmpty()
 }
-
-@Immutable
-data class Playlists(
-    val items: List<Playlist> = emptyList(),
-)

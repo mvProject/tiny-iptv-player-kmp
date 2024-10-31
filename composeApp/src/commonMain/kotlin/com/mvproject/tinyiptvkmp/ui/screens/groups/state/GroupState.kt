@@ -10,30 +10,11 @@ package com.mvproject.tinyiptvkmp.ui.screens.groups.state
 import androidx.compose.runtime.Immutable
 import com.mvproject.tinyiptvkmp.data.model.channels.ChannelsGroup
 import com.mvproject.tinyiptvkmp.data.model.playlist.Playlist
-import com.mvproject.tinyiptvkmp.utils.AppConstants.INT_NO_VALUE
 
+@Immutable
 data class GroupState(
-    val allGroup: ChannelsGroup = ChannelsGroup(),
-    val favorites: ChannelsGroups = ChannelsGroups(),
-    val groups: ChannelsGroups = ChannelsGroups(),
-    val playlists: Playlists = Playlists(),
-    val playlistNames: PlaylistNames = PlaylistNames(),
-    val playlistSelectedIndex: Int = INT_NO_VALUE,
-    val playlistSelectedId: Long? = null,
+    val channelGroups: List<ChannelsGroup> = emptyList(),
+    val playlists: List<Playlist> = emptyList(),
+    val selectedPlaylist: Playlist = Playlist(),
     val isPlaylistSelectorVisible: Boolean = false,
-)
-
-@Immutable
-data class ChannelsGroups(
-    val items: List<ChannelsGroup> = emptyList(),
-)
-
-@Immutable
-data class Playlists(
-    val items: List<Playlist> = emptyList(),
-)
-
-@Immutable
-data class PlaylistNames(
-    val items: List<String> = emptyList(),
 )

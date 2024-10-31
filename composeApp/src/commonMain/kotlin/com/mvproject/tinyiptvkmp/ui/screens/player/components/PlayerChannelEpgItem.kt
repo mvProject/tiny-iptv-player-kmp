@@ -66,7 +66,7 @@ fun PlayerChannelEpgItem(epgProgram: EpgProgram) {
             ) {
                 Text(
                     modifier = Modifier.wrapContentWidth(),
-                    text = epgProgram.start.convertTimeToReadableFormat(),
+                    text = epgProgram.dateTimeStart.convertTimeToReadableFormat(),
                     style = MaterialTheme.typography.bodySmall,
                     color = MaterialTheme.colorScheme.onSurfaceVariant,
                     textAlign = TextAlign.Center,
@@ -79,7 +79,7 @@ fun PlayerChannelEpgItem(epgProgram: EpgProgram) {
 
                 Text(
                     modifier = Modifier.wrapContentWidth(),
-                    text = epgProgram.stop.convertTimeToReadableFormat(),
+                    text = epgProgram.dateTimeEnd.convertTimeToReadableFormat(),
                     style = MaterialTheme.typography.bodySmall,
                     color = MaterialTheme.colorScheme.onSurfaceVariant,
                     textAlign = TextAlign.Center,

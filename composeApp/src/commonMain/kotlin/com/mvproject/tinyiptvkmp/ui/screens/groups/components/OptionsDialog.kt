@@ -32,6 +32,7 @@ import androidx.compose.runtime.MutableState
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.window.Dialog
+import com.mvproject.tinyiptvkmp.data.model.playlist.Playlist
 import com.mvproject.tinyiptvkmp.ui.theme.dimens
 import com.mvproject.tinyiptvkmp.utils.AppConstants.INT_NO_VALUE
 
@@ -40,9 +41,8 @@ fun OptionsDialog(
     modifier: Modifier = Modifier,
     isDialogOpen: MutableState<Boolean>,
     title: String? = null,
-    items: List<String>,
-    selectedIndex: Int = INT_NO_VALUE,
-    onItemSelected: (index: Int) -> Unit = {},
+    playlists: List<Playlist>,
+    onItemSelected: (Playlist) -> Unit = {},
 ) {
     AnimatedVisibility(
         visible = isDialogOpen.value,
@@ -52,6 +52,15 @@ fun OptionsDialog(
         Dialog(
             onDismissRequest = { isDialogOpen.value = false },
         ) {
+            val listState = rememberLazyListState()
+
+            LaunchedEffect(playlists) {
+                val indexSelected = playlists.indexOfFirst { it.isSelected }
+                if (indexSelected > INT_NO_VALUE) {
+                    listState.scrollToItem(index = indexSelected)
+                }
+            }
+
             Surface(
                 modifier =
                     modifier
@@ -60,13 +69,6 @@ fun OptionsDialog(
                 shape = MaterialTheme.shapes.medium,
                 shadowElevation = MaterialTheme.dimens.size8,
             ) {
-                val listState = rememberLazyListState()
-                if (selectedIndex > INT_NO_VALUE) {
-                    LaunchedEffect(selectedIndex) {
-                        listState.scrollToItem(index = selectedIndex)
-                    }
-                }
-
                 LazyColumn(
                     modifier = Modifier.fillMaxWidth(),
                     state = listState,
@@ -79,8 +81,7 @@ fun OptionsDialog(
                                         .fillMaxWidth()
                                         .background(
                                             color = MaterialTheme.colorScheme.onSurface,
-                                        )
-                                        .padding(MaterialTheme.dimens.size12),
+                                        ).padding(MaterialTheme.dimens.size12),
                             ) {
                                 Text(
                                     text = text,
@@ -92,19 +93,18 @@ fun OptionsDialog(
                         }
                     }
 
-                    itemsIndexed(items) { index, item ->
-                        val selectedItem = index == selectedIndex
+                    itemsIndexed(playlists) { index, item ->
                         TextButton(
                             modifier = Modifier.fillMaxWidth(),
                             shape = MaterialTheme.shapes.small,
                             contentPadding = PaddingValues(),
-                            onClick = { onItemSelected(index) },
+                            onClick = { onItemSelected(item) },
                         ) {
                             Text(
-                                text = item,
+                                text = item.playlistName,
                                 style = MaterialTheme.typography.titleSmall,
                                 color =
-                                    if (selectedItem) {
+                                    if (item.isSelected) {
                                         MaterialTheme.colorScheme.onSurfaceVariant
                                     } else {
                                         MaterialTheme.colorScheme.onSurface
@@ -112,7 +112,7 @@ fun OptionsDialog(
                             )
                         }
 
-                        if (index < items.lastIndex) {
+                        if (index < playlists.lastIndex) {
                             HorizontalDivider(
                                 modifier =
                                     Modifier
