@@ -28,9 +28,10 @@ object PreviewTestData {
 
     val testEpgProgram =
         EpgProgram(
+            programId = "1",
             channelId = Random.nextLong().toString(),
-            start = actualDate - 30.minutes.inWholeMilliseconds,
-            stop = actualDate + 90.minutes.inWholeMilliseconds,
+            dateTimeStart = actualDate - 30.minutes.inWholeMilliseconds,
+            dateTimeEnd = actualDate + 90.minutes.inWholeMilliseconds,
             title = "test title",
             description = "test description",
         )
@@ -49,9 +50,10 @@ object PreviewTestData {
             repeat(10) {
                 add(
                     EpgProgram(
+                        programId = "1",
                         channelId = Random.nextLong().toString(),
-                        start = actualDate + it * 30.minutes.inWholeMilliseconds,
-                        stop = actualDate + (it + 1) * 30.minutes.inWholeMilliseconds,
+                        dateTimeStart = actualDate + it * 30.minutes.inWholeMilliseconds,
+                        dateTimeEnd = actualDate + (it + 1) * 30.minutes.inWholeMilliseconds,
                         title = "title $it",
                         description = "description $it",
                     ),

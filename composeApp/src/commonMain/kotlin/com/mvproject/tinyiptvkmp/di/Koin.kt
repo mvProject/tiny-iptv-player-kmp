@@ -11,7 +11,6 @@ import com.mvproject.tinyiptvkmp.di.database.platformDatabaseModule
 import com.mvproject.tinyiptvkmp.di.datastore.platformDataStoreModule
 import com.mvproject.tinyiptvkmp.di.modules.dataSourceModule
 import com.mvproject.tinyiptvkmp.di.modules.databaseModule
-import com.mvproject.tinyiptvkmp.di.modules.helperModule
 import com.mvproject.tinyiptvkmp.di.modules.networkModule
 import com.mvproject.tinyiptvkmp.di.modules.repositoryModule
 import com.mvproject.tinyiptvkmp.di.modules.useCaseModule
@@ -28,7 +27,6 @@ fun initKoin(appDeclaration: KoinAppDeclaration = {}) =
             networkModule,
             repositoryModule,
             dataSourceModule,
-            helperModule,
             useCaseModule,
             viewModelsModule,
             databaseModule,
