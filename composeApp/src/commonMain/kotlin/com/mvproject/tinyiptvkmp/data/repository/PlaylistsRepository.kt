@@ -40,10 +40,13 @@ class PlaylistsRepository(
                 it.toPlaylist()
             }
 
-    suspend fun playlistCount() = playlistDao.getAllPlaylistsCount()
+    suspend fun deleteSinglePlaylist(playlist: Playlist) {
+        playlistDao.deletePlaylist(id = playlist.id)
+    }
 
-    suspend fun deletePlaylistById(id: Long) {
-        playlistDao.deletePlaylist(id = id)
+    suspend fun savePlaylists(playlists: List<Playlist>) {
+        val lists = playlists.map { it.toPlaylistEntity() }
+        playlistDao.savePlaylists(data = lists)
     }
 
     suspend fun savePlaylist(playlist: Playlist) {

@@ -28,24 +28,6 @@ import kotlin.time.Duration.Companion.days
 class PreferenceRepository(
     private val dataStore: DataStore<Preferences>,
 ) {
-    suspend fun setCurrentPlaylistId(playlistId: Long) {
-        dataStore.edit { settings ->
-            settings[SELECTED_PLAYLIST] = playlistId
-        }
-    }
-
-    suspend fun loadCurrentPlaylistId() =
-        dataStore.data
-            .map { preferences ->
-                preferences[SELECTED_PLAYLIST] ?: LONG_NO_VALUE
-            }.first()
-
-    val currentPlaylistId
-        get() =
-            dataStore.data.map { preferences ->
-                preferences[SELECTED_PLAYLIST] ?: LONG_NO_VALUE
-            }
-
     suspend fun setChannelsViewType(type: String) {
         dataStore.edit { settings ->
             settings[CHANNELS_VIEW_TYPE] = type
@@ -135,6 +117,12 @@ class PreferenceRepository(
         }
     }
 
+    suspend fun getEpgInfoDataLastUpdate() =
+        dataStore.data
+            .map { preferences ->
+                preferences[EPG_INFO_DATA_LAST_UPDATE] ?: LONG_VALUE_ZERO
+            }.first()
+
     suspend fun isEpgInfoDataUpdateRequired() =
         dataStore.data
             .map { preferences ->
@@ -151,9 +139,7 @@ class PreferenceRepository(
 
     fun isChannelsEpgInfoUpdateRequired() =
         dataStore.data.map { preferences ->
-            val isUpdateRequired = preferences[CHANNELS_EPG_INFO_UPDATE_REQUIRED] ?: false
-            val selectedId = preferences[SELECTED_PLAYLIST] ?: LONG_NO_VALUE
-            if (selectedId != LONG_NO_VALUE) isUpdateRequired else false
+            preferences[CHANNELS_EPG_INFO_UPDATE_REQUIRED] ?: false
         }
 
     suspend fun setEpgLastUpdate(timestamp: Long) {
@@ -163,10 +149,11 @@ class PreferenceRepository(
         }
     }
 
-    fun lastEpgUpdate() =
-        dataStore.data.map { preferences ->
-            preferences[EPG_DATA_LAST_UPDATE] ?: LONG_NO_VALUE
-        }
+    suspend fun lastEpgUpdate() =
+        dataStore.data
+            .map { preferences ->
+                preferences[EPG_DATA_LAST_UPDATE] ?: LONG_NO_VALUE
+            }.first()
 
     fun epgUpdatePeriod() =
         dataStore.data.map { preferences ->
@@ -195,8 +182,29 @@ class PreferenceRepository(
             preferences[PLAYLIST_CONTENT_LOAD_REQUIRED] ?: LONG_NO_VALUE
         }
 
+    /**
+     * Sets the time for cleaning programs.
+     *
+     * @param timeInMillis The clean time in milliseconds.
+     */
+    suspend fun setProgramsCleanTime(timeInMillis: Long) {
+        dataStore.edit { settings ->
+            settings[EPG_PROGRAM_CLEAN] = timeInMillis
+        }
+    }
+
+    /**
+     * Gets the time for cleaning programs.
+     *
+     * @return The clean time in milliseconds.
+     */
+    suspend fun getProgramsCleanTime() =
+        dataStore.data
+            .map { preferences ->
+                preferences[EPG_PROGRAM_CLEAN] ?: LONG_NO_VALUE
+            }.first()
+
     private companion object {
-        val SELECTED_PLAYLIST = longPreferencesKey("SelectedPlaylist")
         val CHANNELS_VIEW_TYPE = stringPreferencesKey("ChannelsViewType")
 
         val EPG_DATA_LAST_UPDATE = longPreferencesKey("EpgDaTaLastUpdate")
@@ -214,5 +222,6 @@ class PreferenceRepository(
             booleanPreferencesKey("ChannelsEpgInfoUpdateRequired")
         val PLAYLIST_CONTENT_INFO_UPDATE = longPreferencesKey("PlaylistContentEpgInfoUpdateRequired")
         val PLAYLIST_CONTENT_LOAD_REQUIRED = longPreferencesKey("PlaylistContentLoadRequired")
+        val EPG_PROGRAM_CLEAN = longPreferencesKey("epgProgramClean")
     }
 }

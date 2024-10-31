@@ -7,7 +7,7 @@
 
 package com.mvproject.tinyiptvkmp.di.modules
 
-import com.mvproject.tinyiptvkmp.data.repository.EpgInfoRepository
+import com.mvproject.tinyiptvkmp.data.repository.EpgChannelRepository
 import com.mvproject.tinyiptvkmp.data.repository.EpgProgramRepository
 import com.mvproject.tinyiptvkmp.data.repository.FavoriteChannelsRepository
 import com.mvproject.tinyiptvkmp.data.repository.PlaylistChannelsRepository
@@ -22,6 +22,6 @@ val repositoryModule =
         singleOf(::PlaylistsRepository)
         singleOf(::PlaylistChannelsRepository)
         singleOf(::EpgProgramRepository)
-        singleOf(::EpgInfoRepository)
+        singleOf(::EpgChannelRepository)
         singleOf(::FavoriteChannelsRepository)
     }

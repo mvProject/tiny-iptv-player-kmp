@@ -9,9 +9,12 @@ package com.mvproject.tinyiptvkmp.data.repository
 
 import androidx.room.Transaction
 import com.mvproject.tinyiptvkmp.data.mappers.EntityMapper.toEpgProgram
-import com.mvproject.tinyiptvkmp.data.mappers.EntityMapper.toEpgProgramEntity
+import com.mvproject.tinyiptvkmp.data.mappers.Mapper.asProgramEntity
 import com.mvproject.tinyiptvkmp.data.model.epg.EpgProgram
+import com.mvproject.tinyiptvkmp.data.model.response.EpgProgramResponse
 import com.mvproject.tinyiptvkmp.database.AppDatabase
+import com.mvproject.tinyiptvkmp.utils.KLog
+import com.mvproject.tinyiptvkmp.utils.TimeUtils.correctTimeZone
 
 class EpgProgramRepository(
     private val appDatabase: AppDatabase,
@@ -21,33 +24,43 @@ class EpgProgramRepository(
     suspend fun getEpgProgramsByIds(
         channelIds: List<String>,
         time: Long,
-    ): List<EpgProgram> {
-        return epgProgramDao.getPrograms(ids = channelIds, time = time)
+    ): List<EpgProgram> =
+        epgProgramDao
+            .getPrograms(ids = channelIds, time = time)
             .map {
                 it.toEpgProgram()
             }
-    }
 
     suspend fun getEpgProgramsById(
         channelId: String,
         time: Long,
-    ): List<EpgProgram> {
-        return epgProgramDao.getProgram(id = channelId, time = time)
+    ): List<EpgProgram> =
+        epgProgramDao
+            .getProgram(id = channelId, time = time)
             .map {
                 it.toEpgProgram()
             }
+
+    suspend fun cleanProgramsBeforeDate(date: Long) {
+        val deleted = epgProgramDao.deleteProgramsByDate(timeStamp = date)
+        KLog.e("testing cleanProgramsBeforeDate deleted=$deleted")
     }
 
     @Transaction
-    suspend fun insertEpgPrograms(
+    suspend fun updatePrograms(
         channelId: String,
-        channelEpgPrograms: List<EpgProgram>,
+        programs: List<EpgProgramResponse>,
     ) {
-        epgProgramDao.deleteProgram(id = channelId)
-        val programs =
-            channelEpgPrograms.map {
-                it.toEpgProgramEntity()
+        val entities =
+            programs.map { item ->
+                item
+                    .asProgramEntity(id = channelId)
+                    .correctTimeZone()
             }
-        epgProgramDao.insertPrograms(data = programs)
+
+        epgProgramDao.apply {
+            deleteProgram(id = channelId)
+            insertPrograms(data = entities)
+        }
     }
 }
