@@ -7,50 +7,32 @@
 
 package com.mvproject.tinyiptvkmp.data.usecases
 
-import com.mvproject.tinyiptvkmp.data.repository.EpgInfoRepository
+import com.mvproject.tinyiptvkmp.data.repository.EpgChannelRepository
 import com.mvproject.tinyiptvkmp.data.repository.FavoriteChannelsRepository
 import com.mvproject.tinyiptvkmp.data.repository.PlaylistChannelsRepository
 import com.mvproject.tinyiptvkmp.data.repository.PreferenceRepository
-import com.mvproject.tinyiptvkmp.utils.CommonUtils.empty
-import com.mvproject.tinyiptvkmp.utils.CommonUtils.space
 import com.mvproject.tinyiptvkmp.utils.KLog
 
 class UpdateChannelsEpgInfoUseCase(
     private val preferenceRepository: PreferenceRepository,
     private val playlistChannelsRepository: PlaylistChannelsRepository,
     private val favoriteChannelsRepository: FavoriteChannelsRepository,
-    private val epgInfoRepository: EpgInfoRepository,
+    private val epgChannelRepository: EpgChannelRepository,
 ) {
-    suspend operator fun invoke(playlistId: Long) {
-        val epgInfos = epgInfoRepository.loadEpgInfoData().asSequence()
-        val channels = playlistChannelsRepository.loadChannelsById(listId = playlistId).asSequence()
+    suspend operator fun invoke() {
+        val epgInfos = epgChannelRepository.loadEpgInfoData().asSequence()
+        val channels = playlistChannelsRepository.loadAllChannels().asSequence()
         val favorites = favoriteChannelsRepository.loadFavoriteChannelUrls()
 
         val mappedChannels =
             channels.map { channel ->
-                val channelName =
-                    channel.channelName
-                        .trim()
-                        .lowercase()
-                        .replace(String.space, String.empty)
-
-                val epgInfo =
-                    epgInfos.firstOrNull { epg ->
-                        val epgName =
-                            epg.channelName
-                                .trim()
-                                .lowercase()
-                                .replace(String.space, String.empty)
-
-                        val epgNameHd = epgName + "hd"
-
-                        channelName == epgName || channelName == epgNameHd
-                    }
+                val channelName = channel.channelName
+                val epgInfo = epgInfos.firstOrNull { channelName == it.title }
 
                 if (epgInfo != null) {
                     channel.copy(
-                        channelLogo = epgInfo.channelLogo,
-                        epgId = epgInfo.channelId,
+                        channelLogo = epgInfo.logo,
+                        epgId = epgInfo.programId,
                     )
                 } else {
                     channel // If no match is found, keep the original Class1 object

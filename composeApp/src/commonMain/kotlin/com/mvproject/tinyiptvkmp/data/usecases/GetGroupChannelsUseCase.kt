@@ -13,11 +13,9 @@ import com.mvproject.tinyiptvkmp.data.mappers.EntityMapper.toTvPlaylistChannel
 import com.mvproject.tinyiptvkmp.data.model.channels.TvPlaylistChannel
 import com.mvproject.tinyiptvkmp.data.repository.FavoriteChannelsRepository
 import com.mvproject.tinyiptvkmp.data.repository.PlaylistChannelsRepository
-import com.mvproject.tinyiptvkmp.data.repository.PreferenceRepository
 import com.mvproject.tinyiptvkmp.utils.KLog
 
 class GetGroupChannelsUseCase(
-    private val preferenceRepository: PreferenceRepository,
     private val playlistChannelsRepository: PlaylistChannelsRepository,
     private val favoriteChannelsRepository: FavoriteChannelsRepository,
 ) {
@@ -25,18 +23,14 @@ class GetGroupChannelsUseCase(
         group: String,
         groupType: String,
     ): List<TvPlaylistChannel> {
-        val currentPlaylistId = preferenceRepository.loadCurrentPlaylistId()
         KLog.d("testing GetGroupChannelsUseCase group = $group, groupType = $groupType")
 
-        val favorites =
-            favoriteChannelsRepository
-                .loadPlaylistFavoriteChannelUrls(listId = currentPlaylistId)
+        val favorites = favoriteChannelsRepository.loadSelectedFavoriteChannels()
 
         val channels =
             when (groupType) {
                 GroupType.SPECIFIED.name -> {
                     playlistChannelsRepository.loadPlaylistGroupChannels(
-                        listId = currentPlaylistId,
                         group = group,
                     )
                 }
@@ -44,14 +38,12 @@ class GetGroupChannelsUseCase(
                 GroupType.FAVORITE.name -> {
                     val filtered = favorites.filter { it.type.name == group }
                     playlistChannelsRepository.loadPlaylistChannelsByUrls(
-                        listId = currentPlaylistId,
                         urls = filtered.map { it.url },
                     )
                 }
+
                 else -> {
-                    playlistChannelsRepository.loadChannelsById(
-                        listId = currentPlaylistId,
-                    )
+                    playlistChannelsRepository.loadChannelsById()
                 }
             }
 

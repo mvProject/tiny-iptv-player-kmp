@@ -7,20 +7,20 @@
 
 package com.mvproject.tinyiptvkmp.di.modules
 
+import com.mvproject.tinyiptvkmp.data.usecases.CleanProgramsUseCase
 import com.mvproject.tinyiptvkmp.data.usecases.DeletePlaylistUseCase
-import com.mvproject.tinyiptvkmp.data.usecases.EpgInfoUpdateUseCase
 import com.mvproject.tinyiptvkmp.data.usecases.GetChannelsEpgUseCase
-import com.mvproject.tinyiptvkmp.data.usecases.GetDefaultPlaylistUseCase
 import com.mvproject.tinyiptvkmp.data.usecases.GetGroupChannelsEpgUseCase
 import com.mvproject.tinyiptvkmp.data.usecases.GetGroupChannelsUseCase
 import com.mvproject.tinyiptvkmp.data.usecases.GetPlaylistGroupUseCase
 import com.mvproject.tinyiptvkmp.data.usecases.GetPlaylistUseCase
-import com.mvproject.tinyiptvkmp.data.usecases.GetRemotePlaylistsUseCase
+import com.mvproject.tinyiptvkmp.data.usecases.RefreshEpgChannelsUseCase
+import com.mvproject.tinyiptvkmp.data.usecases.RefreshEpgProgramsUseCase
 import com.mvproject.tinyiptvkmp.data.usecases.SavePlaylistContentUseCase
 import com.mvproject.tinyiptvkmp.data.usecases.SavePlaylistUseCase
+import com.mvproject.tinyiptvkmp.data.usecases.SelectPlaylistUseCase
 import com.mvproject.tinyiptvkmp.data.usecases.ToggleFavoriteChannelUseCase
 import com.mvproject.tinyiptvkmp.data.usecases.UpdateChannelsEpgInfoUseCase
-import com.mvproject.tinyiptvkmp.data.usecases.UpdateEpgUseCase
 import com.mvproject.tinyiptvkmp.data.usecases.UpdateRemotePlaylistChannelsUseCase
 import org.koin.core.module.dsl.singleOf
 import org.koin.dsl.module
@@ -32,8 +32,6 @@ val useCaseModule =
         singleOf(::DeletePlaylistUseCase)
 
         singleOf(::GetPlaylistUseCase)
-        singleOf(::GetDefaultPlaylistUseCase)
-        singleOf(::GetRemotePlaylistsUseCase)
 
         singleOf(::UpdateRemotePlaylistChannelsUseCase)
         singleOf(::UpdateChannelsEpgInfoUseCase)
@@ -42,9 +40,11 @@ val useCaseModule =
         singleOf(::GetGroupChannelsUseCase)
 
         singleOf(::ToggleFavoriteChannelUseCase)
-        singleOf(::EpgInfoUpdateUseCase)
-        singleOf(::UpdateEpgUseCase)
 
         singleOf(::GetGroupChannelsEpgUseCase)
         singleOf(::GetChannelsEpgUseCase)
+        singleOf(::RefreshEpgChannelsUseCase)
+        singleOf(::RefreshEpgProgramsUseCase)
+        singleOf(::SelectPlaylistUseCase)
+        singleOf(::CleanProgramsUseCase)
     }

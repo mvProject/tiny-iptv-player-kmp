@@ -8,13 +8,17 @@
 package com.mvproject.tinyiptvkmp.data.usecases
 
 import com.mvproject.tinyiptvkmp.data.datasource.RemotePlaylistDataSource
-import com.mvproject.tinyiptvkmp.data.model.playlist.Playlist
+import com.mvproject.tinyiptvkmp.data.enums.PlaylistType
 import com.mvproject.tinyiptvkmp.data.repository.FavoriteChannelsRepository
 import com.mvproject.tinyiptvkmp.data.repository.PlaylistChannelsRepository
 import com.mvproject.tinyiptvkmp.data.repository.PlaylistsRepository
 import com.mvproject.tinyiptvkmp.data.repository.PreferenceRepository
+import com.mvproject.tinyiptvkmp.utils.AppConstants
 import com.mvproject.tinyiptvkmp.utils.KLog
 import com.mvproject.tinyiptvkmp.utils.TimeUtils
+import com.mvproject.tinyiptvkmp.utils.TimeUtils.typeToDuration
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.withContext
 
 class UpdateRemotePlaylistChannelsUseCase(
     private val preferenceRepository: PreferenceRepository,
@@ -23,33 +27,63 @@ class UpdateRemotePlaylistChannelsUseCase(
     private val favoriteChannelsRepository: FavoriteChannelsRepository,
     private val playlistsRepository: PlaylistsRepository,
 ) {
-    suspend operator fun invoke(playlist: Playlist) {
-        val channels =
-            remotePlaylistDataSource.getFromRemotePlaylist(
-                playlistId = playlist.id,
-                url = playlist.playlistSource,
-            )
-        val favorites =
-            favoriteChannelsRepository
-                .loadPlaylistFavoriteChannelUrls(listId = playlist.id)
+    suspend operator fun invoke() {
+        withContext(Dispatchers.IO) {
+            var isRefreshEpgIdRequired = false
 
-        playlistChannelsRepository.savePlaylistChannels(channels)
+            val currentDate = TimeUtils.actualDate
+            val remote =
+                playlistsRepository
+                    .getAllPlaylists()
+                    .filter { playlist -> playlist.playlistType == PlaylistType.REMOTE }
 
-        channels.forEach { channel ->
-            val favoritesUrls = favorites.map { it.url }
+            val playlistUpdates =
+                buildList {
+                    remote.forEach { playlist ->
+                        val updateDuration = typeToDuration(playlist.updatePeriod.toInt())
+                        val isUpdateSet = updateDuration > AppConstants.LONG_VALUE_ZERO
+                        val isRequiredUpdate =
+                            currentDate - playlist.lastUpdateDate > updateDuration
+                        val isUpdateAllowed = isUpdateSet && isRequiredUpdate
 
-            if (channel.channelUrl in favoritesUrls) {
-                KLog.w("update in favorite ${channel.channelName}")
-                favoriteChannelsRepository.updatePlaylistFavoriteChannels(channel = channel)
+                        KLog.w("testing remotePlaylists ${playlist.playlistName} isUpdateAllowed $isUpdateAllowed")
+                        if (isUpdateAllowed) {
+                            add(playlist)
+                        }
+                    }
+                }
+
+            playlistUpdates.forEach { playlist ->
+                val channels =
+                    remotePlaylistDataSource.getFromRemotePlaylist(
+                        playlistId = playlist.id,
+                        url = playlist.playlistSource,
+                    )
+
+                val favorites =
+                    favoriteChannelsRepository.loadFavoriteChannelById(playlist.id)
+
+                playlistChannelsRepository.savePlaylistChannels(channels)
+
+                channels.forEach { channel ->
+                    val favoritesUrls = favorites.map { it.url }
+
+                    if (channel.channelUrl in favoritesUrls) {
+                        KLog.w("update in favorite ${channel.channelName}")
+                        favoriteChannelsRepository.updatePlaylistFavoriteChannels(channel = channel)
+                    }
+                }
+
+                playlistsRepository.savePlaylist(
+                    playlist = playlist.copy(lastUpdateDate = currentDate),
+                )
+
+                isRefreshEpgIdRequired = true
+
+                KLog.w("update channels finished")
             }
+
+            preferenceRepository.setChannelsEpgInfoUpdateRequired(state = isRefreshEpgIdRequired)
         }
-
-        playlistsRepository.savePlaylist(
-            playlist = playlist.copy(lastUpdateDate = TimeUtils.actualDate),
-        )
-
-        preferenceRepository.setIdForPlaylistContentEpgInfoUpdate(id = playlist.id)
-
-        KLog.w("update channels finished")
     }
 }
