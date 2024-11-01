@@ -9,7 +9,6 @@ package com.mvproject.tinyiptvkmp.data.mappers
 
 import com.mvproject.tinyiptvkmp.data.model.channels.TvPlaylistChannel
 import com.mvproject.tinyiptvkmp.data.model.epg.EpgProgram
-import com.mvproject.tinyiptvkmp.ui.screens.channels.data.TvPlaylistChannelEpg
 import com.mvproject.tinyiptvkmp.utils.TimeUtils
 
 object ListMappers {
@@ -17,7 +16,7 @@ object ListMappers {
 
     fun List<TvPlaylistChannel>.withRefreshedEpg(): List<TvPlaylistChannel> =
         this.map {
-            val epg = it.channelEpg.items.toActual()
-            it.copy(channelEpg = TvPlaylistChannelEpg(items = epg))
+            val epg = it.programs.toActual()
+            it.copy(programs = epg)
         }
 }

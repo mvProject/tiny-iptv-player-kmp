@@ -23,23 +23,23 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.style.TextAlign
 import com.mvproject.tinyiptvkmp.data.PreviewTestData
-import com.mvproject.tinyiptvkmp.ui.screens.channels.data.TvPlaylistChannelEpg
+import com.mvproject.tinyiptvkmp.data.model.epg.EpgProgram
 import com.mvproject.tinyiptvkmp.ui.theme.VideoAppTheme
 import com.mvproject.tinyiptvkmp.ui.theme.dimens
 import org.jetbrains.compose.resources.stringResource
 import org.jetbrains.compose.ui.tooling.preview.Preview
-import tinyiptvkmp.composeapp.generated.resources.msg_no_epg_found
 import tinyiptvkmp.composeapp.generated.resources.Res
+import tinyiptvkmp.composeapp.generated.resources.msg_no_epg_found
 
 @Composable
 fun PlayerEpgContent(
     modifier: Modifier = Modifier,
-    epgList: TvPlaylistChannelEpg,
+    epgList: List<EpgProgram>,
 ) {
     Box(
         modifier = modifier.fillMaxSize(),
     ) {
-        if (epgList.items.isEmpty()) {
+        if (epgList.isEmpty()) {
             Text(
                 modifier =
                     Modifier
@@ -64,7 +64,7 @@ fun PlayerEpgContent(
                 ),
             content = {
                 items(
-                    items = epgList.items,
+                    items = epgList,
                     key = { epg -> epg.key },
                 ) { epg ->
                     PlayerEpgItem(
@@ -83,6 +83,6 @@ fun PlayerEpgContent(
 @Preview
 private fun PlayerEpgContentPreview() {
     VideoAppTheme() {
-        PlayerEpgContent(epgList = TvPlaylistChannelEpg(items = PreviewTestData.testEpgPrograms))
+        PlayerEpgContent(epgList = PreviewTestData.testEpgPrograms)
     }
 }

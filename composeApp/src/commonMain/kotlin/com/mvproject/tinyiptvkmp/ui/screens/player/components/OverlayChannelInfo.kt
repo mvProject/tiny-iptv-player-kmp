@@ -54,7 +54,7 @@ fun OverlayChannelInfo(
         )
 
         val description =
-            currentChannel.channelEpg.items
+            currentChannel.programs
                 .toActual()
                 .firstOrNull()
                 ?.description ?: String.empty

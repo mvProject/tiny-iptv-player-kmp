@@ -74,8 +74,8 @@ fun PlayerChannelView(
 
                 Spacer(modifier = Modifier.height(MaterialTheme.dimens.size2))
 
-                if (currentChannel.channelEpg.items.isNotEmpty()) {
-                    currentChannel.channelEpg.items.toActual().take(programCount).forEach { epg ->
+                if (currentChannel.programs.isNotEmpty()) {
+                    currentChannel.programs.toActual().take(programCount).forEach { epg ->
                         PlayerChannelEpgItem(epgProgram = epg)
                     }
                     Spacer(modifier = Modifier.height(MaterialTheme.dimens.size2))

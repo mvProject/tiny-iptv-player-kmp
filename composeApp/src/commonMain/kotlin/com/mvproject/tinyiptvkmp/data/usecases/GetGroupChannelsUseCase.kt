@@ -10,10 +10,11 @@ package com.mvproject.tinyiptvkmp.data.usecases
 import com.mvproject.tinyiptvkmp.data.enums.FavoriteType
 import com.mvproject.tinyiptvkmp.data.enums.GroupType
 import com.mvproject.tinyiptvkmp.data.mappers.EntityMapper.toTvPlaylistChannel
-import com.mvproject.tinyiptvkmp.data.model.channels.TvPlaylistChannel
 import com.mvproject.tinyiptvkmp.data.repository.FavoriteChannelsRepository
 import com.mvproject.tinyiptvkmp.data.repository.PlaylistChannelsRepository
 import com.mvproject.tinyiptvkmp.utils.KLog
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.withContext
 
 class GetGroupChannelsUseCase(
     private val playlistChannelsRepository: PlaylistChannelsRepository,
@@ -22,7 +23,7 @@ class GetGroupChannelsUseCase(
     suspend operator fun invoke(
         group: String,
         groupType: String,
-    ): List<TvPlaylistChannel> {
+    ) = withContext(Dispatchers.IO) {
         KLog.d("testing GetGroupChannelsUseCase group = $group, groupType = $groupType")
 
         val favorites = favoriteChannelsRepository.loadSelectedFavoriteChannels()
@@ -30,16 +31,15 @@ class GetGroupChannelsUseCase(
         val channels =
             when (groupType) {
                 GroupType.SPECIFIED.name -> {
-                    playlistChannelsRepository.loadPlaylistGroupChannels(
-                        group = group,
-                    )
+                    playlistChannelsRepository.loadPlaylistGroupChannels(group = group)
                 }
 
                 GroupType.FAVORITE.name -> {
-                    val filtered = favorites.filter { it.type.name == group }
-                    playlistChannelsRepository.loadPlaylistChannelsByUrls(
-                        urls = filtered.map { it.url },
-                    )
+                    val filtered = favorites
+                        .filter { it.type.name == group }
+                        .map { it.url }
+
+                    playlistChannelsRepository.loadPlaylistChannelsByUrls(urls = filtered)
                 }
 
                 else -> {
@@ -47,7 +47,7 @@ class GetGroupChannelsUseCase(
                 }
             }
 
-        return channels
+        channels
             .asSequence()
             .map { channel ->
 

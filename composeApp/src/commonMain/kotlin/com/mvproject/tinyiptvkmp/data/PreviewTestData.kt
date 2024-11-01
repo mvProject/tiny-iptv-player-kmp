@@ -12,7 +12,6 @@ import com.mvproject.tinyiptvkmp.data.model.channels.ChannelsGroup
 import com.mvproject.tinyiptvkmp.data.model.channels.TvPlaylistChannel
 import com.mvproject.tinyiptvkmp.data.model.epg.EpgProgram
 import com.mvproject.tinyiptvkmp.data.model.playlist.Playlist
-import com.mvproject.tinyiptvkmp.ui.screens.channels.data.TvPlaylistChannelEpg
 import com.mvproject.tinyiptvkmp.utils.TimeUtils.actualDate
 import kotlin.random.Random
 import kotlin.time.Duration.Companion.minutes
@@ -23,7 +22,7 @@ object PreviewTestData {
             channelName = "channelName",
             channelLogo = "",
             channelUrl = "",
-            channelEpg = TvPlaylistChannelEpg(),
+            programs = emptyList(),
         )
 
     val testEpgProgram =

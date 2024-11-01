@@ -13,15 +13,12 @@ import androidx.lifecycle.viewModelScope
 import com.mvproject.tinyiptvkmp.data.enums.RatioMode
 import com.mvproject.tinyiptvkmp.data.enums.ResizeMode
 import com.mvproject.tinyiptvkmp.data.model.channels.TvPlaylistChannel
-import com.mvproject.tinyiptvkmp.data.model.epg.EpgProgram
 import com.mvproject.tinyiptvkmp.data.repository.PreferenceRepository
 import com.mvproject.tinyiptvkmp.data.usecases.GetChannelsEpgUseCase
 import com.mvproject.tinyiptvkmp.data.usecases.GetGroupChannelsEpgUseCase
 import com.mvproject.tinyiptvkmp.data.usecases.GetGroupChannelsUseCase
 import com.mvproject.tinyiptvkmp.data.usecases.ToggleFavoriteChannelUseCase
 import com.mvproject.tinyiptvkmp.ui.data.TvPlaylistChannels
-import com.mvproject.tinyiptvkmp.ui.screens.channels.data.ChannelEpg
-import com.mvproject.tinyiptvkmp.ui.screens.channels.data.TvPlaylistChannelEpg
 import com.mvproject.tinyiptvkmp.ui.screens.player.action.PlaybackActions
 import com.mvproject.tinyiptvkmp.ui.screens.player.action.PlaybackStateActions
 import com.mvproject.tinyiptvkmp.ui.screens.player.navigation.VideoViewArgs
@@ -224,7 +221,7 @@ class VideoViewViewModel(
 
             val currentChannelWithEpg =
                 currentChannel.copy(
-                    channelEpg = TvPlaylistChannelEpg(items = channelsEpgData),
+                    programs = channelsEpgData,
                 )
 
             _videoViewState.update { state ->
@@ -237,28 +234,27 @@ class VideoViewViewModel(
         withContext(Dispatchers.IO) {
             val currentChannels = videoViewChannelsState.value.items
             if (currentChannels.isNotEmpty()) {
-                val channelsData =
-                    currentChannels.filter { it.epgId.isNotBlank() }.map {
-                        ChannelEpg(
-                            channelName = it.channelName,
-                            channelEpgId = it.epgId,
-                        )
-                    }
+                val channelsIds =
+                    currentChannels
+                        .map { it.epgId }
+                        .filter { it.isNotBlank() }
 
-                val channelsEpgData = getGroupChannelsEpgUseCase(channels = channelsData)
+                val channelsEpgData = getGroupChannelsEpgUseCase(channelsIds = channelsIds)
 
-                channelsEpgData.forEach { data ->
-                    delay(200)
-                    applyEpg(data = data)
+                val channelsWithPrograms = currentChannels.map { ch ->
+                    val programs = channelsEpgData[ch.epgId] ?: emptyList()
+                    ch.copy(programs = programs)
                 }
+
+                _videoViewChannelsState.value = TvPlaylistChannels(items = channelsWithPrograms)
             }
         }
     }
 
-    private fun applyEpg(data: ChannelEpg) {
+/*    private fun applyEpg(data: ChannelEpg) {
         KLog.d("testing channelsEpgData id = ${data.channelEpgId}, count = ${data.programs.count()}")
         val channels = videoViewChannelsState.value.items
-        val channelIndex = channels.indexOfFirst { it.channelName == data.channelName }
+        val channelIndex = channels.indexOfFirst { it.epgId == data.channelEpgId }
 
         val channelWithEpg =
             updateChannelWithEpg(
@@ -270,19 +266,20 @@ class VideoViewViewModel(
             index = channelIndex,
             channel = channelWithEpg,
         )
-    }
+    }*/
 
+/*
     private fun updateChannelWithEpg(
         index: Int,
         programsData: List<EpgProgram>,
     ): TvPlaylistChannel {
         val current = videoViewChannelsState.value.items[index]
-        val programs = TvPlaylistChannelEpg(items = programsData)
-        val updated = current.copy(channelEpg = programs)
+        val updated = current.copy(programs = programsData)
         return updated
     }
+*/
 
-    private fun updateChannel(
+/*    private fun updateChannel(
         index: Int,
         channel: TvPlaylistChannel,
     ) {
@@ -296,7 +293,7 @@ class VideoViewViewModel(
         _videoViewChannelsState.update { state ->
             state.copy(items = updatedList)
         }
-    }
+    }*/
 
     private fun getCurrentMediaPosition(
         channelName: String,

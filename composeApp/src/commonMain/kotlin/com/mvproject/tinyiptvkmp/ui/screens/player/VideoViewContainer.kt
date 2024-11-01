@@ -115,7 +115,7 @@ fun VideoViewContainer(
                             Modifier.background(
                                 color = MaterialTheme.colorScheme.primary,
                             ),
-                        epgList = videoViewState.currentChannel.channelEpg,
+                        epgList = videoViewState.currentChannel.programs,
                     )
                 },
             )
@@ -133,6 +133,8 @@ fun VideoViewContainer(
         ) {
             OverlayEpg(
                 isFullScreen = videoViewState.isFullscreen,
+                title = videoViewState.currentChannel.channelName,
+                programs = videoViewState.currentChannel.programs,
                 currentChannel = videoViewState.currentChannel,
             )
         }

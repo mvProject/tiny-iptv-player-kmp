@@ -32,10 +32,8 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.text.style.TextAlign
 import com.mvproject.tinyiptvkmp.data.enums.FavoriteType
-import com.mvproject.tinyiptvkmp.data.mappers.ListMappers.toActual
 import com.mvproject.tinyiptvkmp.data.model.channels.TvPlaylistChannel
 import com.mvproject.tinyiptvkmp.ui.theme.dimens
-import org.jetbrains.compose.resources.ExperimentalResourceApi
 import org.jetbrains.compose.resources.stringResource
 import tinyiptvkmp.composeapp.generated.resources.Res
 import tinyiptvkmp.composeapp.generated.resources.msg_no_epg_found
@@ -51,13 +49,13 @@ fun ChannelGridView(
 ) {
     ElevatedCard(
         modifier =
-            modifier
-                .height(MaterialTheme.dimens.size140)
-                .clip(MaterialTheme.shapes.extraSmall)
-                .combinedClickable(
-                    onClick = onChannelSelect,
-                    onLongClick = onShowEpgClick,
-                ),
+        modifier
+            .height(MaterialTheme.dimens.size140)
+            .clip(MaterialTheme.shapes.extraSmall)
+            .combinedClickable(
+                onClick = onChannelSelect,
+                onLongClick = onShowEpgClick,
+            ),
     ) {
         Column(
             modifier = Modifier.fillMaxSize(),
@@ -66,11 +64,11 @@ fun ChannelGridView(
         ) {
             Row(
                 modifier =
-                    Modifier
-                        .padding(
-                            horizontal = MaterialTheme.dimens.size8,
-                            vertical = MaterialTheme.dimens.size4,
-                        ),
+                Modifier
+                    .padding(
+                        horizontal = MaterialTheme.dimens.size8,
+                        vertical = MaterialTheme.dimens.size4,
+                    ),
                 verticalAlignment = Alignment.CenterVertically,
             ) {
                 ChannelImageLogo(
@@ -84,14 +82,14 @@ fun ChannelGridView(
                     text = channel.channelName,
                     style = MaterialTheme.typography.bodyMedium,
                     color =
-                        if (channel.favoriteType != FavoriteType.NONE) {
-                            MaterialTheme.colorScheme.onSurfaceVariant
-                        } else {
-                            MaterialTheme.colorScheme.onPrimary
-                        },
+                    if (channel.favoriteType != FavoriteType.NONE) {
+                        MaterialTheme.colorScheme.onSurfaceVariant
+                    } else {
+                        MaterialTheme.colorScheme.onPrimary
+                    },
                     modifier =
-                        Modifier
-                            .weight(MaterialTheme.dimens.weight5),
+                    Modifier
+                        .weight(MaterialTheme.dimens.weight5),
                 )
 
                 Spacer(modifier = Modifier.width(MaterialTheme.dimens.size8))
@@ -102,13 +100,13 @@ fun ChannelGridView(
                 ) {
                     Icon(
                         imageVector =
-                            if (channel.favoriteType !=
-                                FavoriteType.NONE
-                            ) {
-                                Icons.Rounded.Favorite
-                            } else {
-                                Icons.Rounded.FavoriteBorder
-                            },
+                        if (channel.favoriteType !=
+                            FavoriteType.NONE
+                        ) {
+                            Icons.Rounded.Favorite
+                        } else {
+                            Icons.Rounded.FavoriteBorder
+                        },
                         contentDescription = "PlaybackControl",
                         tint = MaterialTheme.colorScheme.onSurface,
                     )
@@ -117,7 +115,7 @@ fun ChannelGridView(
 
             Spacer(modifier = Modifier.height(MaterialTheme.dimens.size10))
 
-            if (channel.channelEpg.items.isEmpty()) {
+            if (channel.programs.isEmpty()) {
                 Box(
                     modifier = Modifier.fillMaxSize(),
                     contentAlignment = Alignment.Center,
@@ -127,18 +125,17 @@ fun ChannelGridView(
                         style = MaterialTheme.typography.labelMedium,
                         color = MaterialTheme.colorScheme.outline,
                         modifier =
-                            Modifier
-                                .padding(MaterialTheme.dimens.size8),
+                        Modifier
+                            .padding(MaterialTheme.dimens.size8),
                         textAlign = TextAlign.Center,
                     )
                 }
             } else {
-                // todo epg count view
-                channel.channelEpg.items.toActual().take(1).forEach {
+                channel.programs.forEach {
                     ScheduleEpgItemView(
                         modifier =
-                            Modifier
-                                .padding(horizontal = MaterialTheme.dimens.size4),
+                        Modifier
+                            .padding(horizontal = MaterialTheme.dimens.size4),
                         program = it,
                     )
                 }

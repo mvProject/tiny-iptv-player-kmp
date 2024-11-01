@@ -7,33 +7,28 @@
 
 package com.mvproject.tinyiptvkmp.data.usecases
 
+import com.mvproject.tinyiptvkmp.data.model.epg.EpgProgram
 import com.mvproject.tinyiptvkmp.data.repository.EpgProgramRepository
-import com.mvproject.tinyiptvkmp.ui.screens.channels.data.ChannelEpg
 import com.mvproject.tinyiptvkmp.utils.TimeUtils
 
 class GetGroupChannelsEpgUseCase(
     private val epgProgramRepository: EpgProgramRepository,
 ) {
-    suspend operator fun invoke(channels: List<ChannelEpg>): List<ChannelEpg> {
-        val select = channels.map { it.channelEpgId }
+    suspend operator fun invoke(channelsIds: List<String>): ChannelEpgMap {
 
         val programsByIds =
             epgProgramRepository
                 .getEpgProgramsByIds(
-                    channelIds = select,
+                    channelIds = channelsIds,
                     time = TimeUtils.actualDate,
                 ).asSequence()
 
-        val groupedProgramsByIds = programsByIds.groupBy { it.channelId }
+        val groupedProgramsByIds = programsByIds
+            .groupBy { it.channelId }
+            .mapValues { (_, programs) -> programs.take(1) }
 
-        val channelEpgData =
-            buildList {
-                channels.forEach {
-                    val programs = groupedProgramsByIds[it.channelEpgId] ?: emptyList()
-                    add(it.copy(programs = programs))
-                }
-            }
-
-        return channelEpgData
+        return groupedProgramsByIds
     }
 }
+
+typealias ChannelEpgMap = Map<String, List<EpgProgram>>

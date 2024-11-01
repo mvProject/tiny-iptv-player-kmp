@@ -13,27 +13,26 @@ import androidx.lifecycle.viewModelScope
 import com.mvproject.tinyiptvkmp.data.enums.ChannelsViewType
 import com.mvproject.tinyiptvkmp.data.enums.FavoriteType
 import com.mvproject.tinyiptvkmp.data.model.channels.TvPlaylistChannel
-import com.mvproject.tinyiptvkmp.data.model.epg.EpgProgram
 import com.mvproject.tinyiptvkmp.data.repository.PreferenceRepository
+import com.mvproject.tinyiptvkmp.data.usecases.GetChannelsEpgUseCase
 import com.mvproject.tinyiptvkmp.data.usecases.GetGroupChannelsEpgUseCase
 import com.mvproject.tinyiptvkmp.data.usecases.GetGroupChannelsUseCase
 import com.mvproject.tinyiptvkmp.data.usecases.ToggleFavoriteChannelUseCase
 import com.mvproject.tinyiptvkmp.ui.screens.channels.action.TvPlaylistChannelAction
-import com.mvproject.tinyiptvkmp.ui.screens.channels.data.ChannelEpg
-import com.mvproject.tinyiptvkmp.ui.screens.channels.data.TvPlaylistChannelEpg
-import com.mvproject.tinyiptvkmp.ui.screens.channels.data.TvPlaylistGroupChannels
 import com.mvproject.tinyiptvkmp.ui.screens.channels.navigation.TvPlaylistChannelsArgs
 import com.mvproject.tinyiptvkmp.ui.screens.channels.state.TvPlaylistGroupState
-import com.mvproject.tinyiptvkmp.utils.CommonUtils.empty
 import com.mvproject.tinyiptvkmp.utils.KLog
-import kotlinx.coroutines.delay
+import com.mvproject.tinyiptvkmp.utils.TimeUtils
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
+import kotlin.time.Duration.Companion.minutes
 
 class TvPlaylistChannelsViewModel(
     savedStateHandle: SavedStateHandle,
+    private val getChannelsEpgUseCase: GetChannelsEpgUseCase,
     private val getGroupChannelsUseCase: GetGroupChannelsUseCase,
     private val getGroupChannelsEpgUseCase: GetGroupChannelsEpgUseCase,
     private val toggleFavoriteChannelUseCase: ToggleFavoriteChannelUseCase,
@@ -42,119 +41,63 @@ class TvPlaylistChannelsViewModel(
     private val _groupState = MutableStateFlow(TvPlaylistGroupState())
     val groupState = _groupState.asStateFlow()
 
-    private val _channelsState = MutableStateFlow(TvPlaylistGroupChannels())
-    val channelsState = _channelsState.asStateFlow()
-
-    private val _searchText = MutableStateFlow(String.empty)
-
     private val args = TvPlaylistChannelsArgs(savedStateHandle)
+    private val group = args.group
+    private val type = args.type
+
+    private var lastRefresh: Long = 0
 
     init {
-        val group = args.group
-        val type = args.type
-
         viewModelScope.launch {
-            _groupState.update { current ->
-                val viewType =
-                    preferenceRepository
-                        .getChannelsViewType()
-                        ?.let { ChannelsViewType.valueOf(it) }
-                        ?: ChannelsViewType.LIST
+            val groupChannels = getGroupChannelsUseCase(group = group, groupType = type)
 
-                current.copy(
+            val viewType =
+                preferenceRepository
+                    .getChannelsViewType()
+                    ?.let { ChannelsViewType.valueOf(it) }
+                    ?: ChannelsViewType.LIST
+
+            _groupState.update { state ->
+                state.copy(
                     viewType = viewType,
                     currentGroup = group,
-                    currentGroupType = type,
+                    channels = groupChannels
                 )
             }
         }
     }
 
     fun loadChannelsByGroups() {
-        val group = groupState.value.currentGroup
-        val groupType = groupState.value.currentGroupType
-
-        _groupState.update { current ->
-            current.copy(isLoading = true)
-        }
-        viewModelScope.launch {
-            val groupChannels = getGroupChannelsUseCase(group = group, groupType = groupType)
-
-            _channelsState.value = TvPlaylistGroupChannels(items = groupChannels)
-
-            _groupState.update { current ->
-                current.copy(isLoading = false)
-            }
-
-            launchEpgUpdate()
+        viewModelScope.launch(Dispatchers.IO) {
+            refreshEpgPrograms()
         }
     }
 
-    private suspend fun launchEpgUpdate() {
-        val channels = channelsState.value.items
-        if (channels.isNotEmpty()) {
-            val channelsData =
-                channels
-                    .filter { it.epgId.isNotBlank() }
-                    .map {
-                        ChannelEpg(
-                            channelName = it.channelName,
-                            channelEpgId = it.epgId,
-                        )
-                    }
+    private suspend fun refreshEpgPrograms() {
+        if (TimeUtils.actualDate - lastRefresh > 1.minutes.inWholeMilliseconds) {
+            val channels = groupState.value.channels
+            if (channels.isNotEmpty()) {
+                val channelsIds =
+                    channels
+                        .map { it.epgId }
+                        .filter { it.isNotBlank() }
 
-            val channelsEpgData = getGroupChannelsEpgUseCase(channels = channelsData)
+                val channelsEpgData = getGroupChannelsEpgUseCase(channelsIds = channelsIds)
 
-            channelsEpgData.forEach { data ->
-                delay(200)
-                applyEpg(data = data)
-            }
-        }
-    }
-
-    private fun applyEpg(data: ChannelEpg) {
-        val channels = channelsState.value.items
-        val channelIndex = channels.indexOfFirst { it.channelName == data.channelName }
-
-        val channelWithEpg =
-            updateChannelWithEpg(
-                index = channelIndex,
-                programsData = data.programs,
-            )
-
-        updateChannel(
-            index = channelIndex,
-            channel = channelWithEpg,
-        )
-    }
-
-    private fun updateChannelWithEpg(
-        index: Int,
-        programsData: List<EpgProgram>,
-    ): TvPlaylistChannel {
-        val current = channelsState.value.items[index]
-        val programs = TvPlaylistChannelEpg(items = programsData)
-        val updated = current.copy(channelEpg = programs)
-        return updated
-    }
-
-    private fun updateChannel(
-        index: Int,
-        channel: TvPlaylistChannel,
-    ) {
-        val current = channelsState.value.items
-
-        val updatedList =
-            current
-                .toMutableList()
-                .apply {
-                    set(index, channel)
+                val channelsWithPrograms = channels.map { ch ->
+                    val programs = channelsEpgData[ch.epgId] ?: emptyList()
+                    ch.copy(programs = programs)
                 }
 
-        _channelsState.update { state ->
-            state.copy(items = updatedList)
+                _groupState.update { state ->
+                    state.copy(channels = channelsWithPrograms)
+                }
+
+                lastRefresh = TimeUtils.actualDate
+            }
         }
     }
+
 
     fun processAction(action: TvPlaylistChannelAction) {
         when (action) {
@@ -166,8 +109,8 @@ class TvPlaylistChannelsViewModel(
                 searchTriggered()
             }
 
-            TvPlaylistChannelAction.ToggleEpgVisibility -> {
-                toggleEpgVisibility()
+            is TvPlaylistChannelAction.ToggleEpgVisibility -> {
+                toggleEpgVisibility(name = action.name, epgId = action.epgID)
             }
 
             is TvPlaylistChannelAction.ToggleFavourites -> {
@@ -181,9 +124,31 @@ class TvPlaylistChannelsViewModel(
     }
 
     private fun searchTextChange(text: String) {
-        _searchText.value = text
         _groupState.update { current ->
             current.copy(searchString = text)
+        }
+    }
+
+    private fun searchTriggered() {
+        _groupState.update { state ->
+            state.copy(isSearching = !state.isSearching)
+        }
+    }
+
+    private fun toggleEpgVisibility(name: String, epgId: String) {
+        KLog.w("testing name:$name,epgId:$epgId")
+        viewModelScope.launch(Dispatchers.IO) {
+            val programs = if (epgId.isNotBlank()) {
+                getChannelsEpgUseCase(channelId = epgId)
+            } else {
+                emptyList()
+            }
+            _groupState.update { state ->
+                state.copy(
+                    selectedName = name,
+                    selectedPrograms = programs
+                )
+            }
         }
     }
 
@@ -198,46 +163,48 @@ class TvPlaylistChannelsViewModel(
         }
     }
 
-    private fun searchTriggered() {
-        _groupState.update { current ->
-            val searchState = groupState.value.isSearching
-            current.copy(isSearching = !searchState)
-        }
-    }
-
     private fun toggleFavorites(
         channel: TvPlaylistChannel,
         type: FavoriteType,
     ) {
-        viewModelScope.launch {
+        viewModelScope.launch(Dispatchers.IO) {
             KLog.w("testing toggleFavorites type $type")
 
-            val channels = channelsState.value.items
-            val channelIndex = channels.indexOfFirst { it.channelName == channel.channelName }
+            val channelWithEpg = channel.toggleFavorite(
+                type = type
+            )
 
-            val favType =
-                if (channel.favoriteType == type) {
-                    FavoriteType.NONE
-                } else {
-                    type
-                }
-
-            val channelWithEpg =
-                channel.copy(favoriteType = favType)
-
-            updateChannel(
-                index = channelIndex,
+            val updatedChannels = groupState.value.channels.replaceUpdated(
                 channel = channelWithEpg,
             )
 
-            toggleFavoriteChannelUseCase(channel = channel, favoriteType = favType)
+            _groupState.update { state ->
+                state.copy(channels = updatedChannels)
+            }
+
+            toggleFavoriteChannelUseCase(
+                channel = channel,
+                favoriteType = channelWithEpg.favoriteType
+            )
         }
     }
 
-    private fun toggleEpgVisibility() {
-        _groupState.update { current ->
-            val epgCurrentState = current.isEpgVisible
-            current.copy(isEpgVisible = !epgCurrentState)
-        }
+    private fun TvPlaylistChannel.toggleFavorite(
+        type: FavoriteType
+    ): TvPlaylistChannel {
+        val favType =
+            if (this.favoriteType == type) {
+                FavoriteType.NONE
+            } else {
+                type
+            }
+        return this.copy(favoriteType = favType)
+    }
+
+    private fun List<TvPlaylistChannel>.replaceUpdated(
+        channel: TvPlaylistChannel
+    ): List<TvPlaylistChannel> {
+        val index = this.indexOfFirst { it.channelName == channel.channelName }
+        return this.toMutableList().apply { set(index, channel) }
     }
 }

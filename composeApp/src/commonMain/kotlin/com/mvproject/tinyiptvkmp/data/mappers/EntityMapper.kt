@@ -15,7 +15,6 @@ import com.mvproject.tinyiptvkmp.data.model.playlist.Playlist
 import com.mvproject.tinyiptvkmp.database.entity.EpgProgramEntity
 import com.mvproject.tinyiptvkmp.database.entity.PlaylistChannelEntity
 import com.mvproject.tinyiptvkmp.database.entity.PlaylistEntity
-import com.mvproject.tinyiptvkmp.ui.screens.channels.data.TvPlaylistChannelEpg
 
 object EntityMapper {
     fun PlaylistChannelEntity.toPlaylistChannel() =
@@ -45,7 +44,7 @@ object EntityMapper {
     fun PlaylistChannel.toTvPlaylistChannel(
         isEpgUsing: Boolean = false,
         favoriteType: FavoriteType,
-        epgContent: TvPlaylistChannelEpg = TvPlaylistChannelEpg(),
+        epgContent: List<EpgProgram> = emptyList(),
     ) = with(this) {
         TvPlaylistChannel(
             channelName = channelName,
@@ -53,7 +52,7 @@ object EntityMapper {
             channelUrl = channelUrl,
             epgId = epgId,
             favoriteType = favoriteType,
-            channelEpg = epgContent,
+            programs = epgContent,
             isEpgUsing = isEpgUsing,
         )
     }

@@ -59,8 +59,7 @@ internal fun TvPlaylistChannelsScreen(
         onPauseOrDispose { }
     }
 
-    val viewState by viewModel.groupState.collectAsState()
-    val channelsState by viewModel.channelsState.collectAsState()
+    val groupState by viewModel.groupState.collectAsState()
 
     var searchString by remember {
         mutableStateOf(String.empty)
@@ -68,14 +67,14 @@ internal fun TvPlaylistChannelsScreen(
 
     Scaffold(
         modifier =
-            Modifier
-                .fillMaxSize()
-                .windowInsetsPadding(WindowInsets.ime),
+        Modifier
+            .fillMaxSize()
+            .windowInsetsPadding(WindowInsets.ime),
         topBar = {
             AppBarWithSearch(
-                appBarTitle = viewState.currentGroup,
+                appBarTitle = groupState.currentGroup,
                 searchTextState = searchString,
-                searchWidgetState = viewState.isSearching,
+                searchWidgetState = groupState.isSearching,
                 onBackClick = onNavigateBack,
                 onSearchTriggered = {
                     onAction(TvPlaylistChannelAction.SearchTriggered)
@@ -98,11 +97,11 @@ internal fun TvPlaylistChannelsScreen(
         val channelsList by remember(searchString) {
             derivedStateOf {
                 if (searchString.length > INT_VALUE_1) {
-                    channelsState.items.filter {
+                    groupState.channels.filter {
                         it.channelName.contains(searchString, true)
                     }
                 } else {
-                    channelsState.items
+                    groupState.channels
                 }
             }
         }
@@ -111,12 +110,12 @@ internal fun TvPlaylistChannelsScreen(
 
         Box(
             modifier =
-                Modifier
-                    .fillMaxSize()
-                    .padding(paddingValues),
+            Modifier
+                .fillMaxSize()
+                .padding(paddingValues),
         ) {
             val columns =
-                when (viewState.viewType) {
+                when (groupState.viewType) {
                     ChannelsViewType.LIST -> {
                         GridCells.Fixed(INT_VALUE_1)
                     }
@@ -133,9 +132,9 @@ internal fun TvPlaylistChannelsScreen(
                 verticalArrangement = Arrangement.spacedBy(MaterialTheme.dimens.size8),
                 horizontalArrangement = Arrangement.spacedBy(MaterialTheme.dimens.size8),
                 contentPadding =
-                    PaddingValues(
-                        vertical = MaterialTheme.dimens.size4,
-                    ),
+                PaddingValues(
+                    vertical = MaterialTheme.dimens.size4,
+                ),
                 content = {
                     items(
                         items = channelsList,
@@ -143,17 +142,26 @@ internal fun TvPlaylistChannelsScreen(
                     ) { item ->
                         ChannelView(
                             modifier = Modifier.fillMaxSize(),
-                            viewType = viewState.viewType,
+                            viewType = groupState.viewType,
                             item = item,
                             onChannelSelect = {
-                                onNavigateSelected(item.channelName, viewState.currentGroup)
+                                onNavigateSelected(
+                                    item.channelName,
+                                    groupState.currentGroup
+                                )
                             },
                             onFavoriteClick = {
                                 selected = item
                                 isChannelOptionOpen.value = true
                             },
                             onShowEpgClick = {
-                                onAction(TvPlaylistChannelAction.ToggleEpgVisibility)
+                                selected = item
+                                onAction(
+                                    TvPlaylistChannelAction.ToggleEpgVisibility(
+                                        item.channelName,
+                                        item.epgId
+                                    )
+                                )
                             },
                         )
                     }
@@ -161,7 +169,7 @@ internal fun TvPlaylistChannelsScreen(
             )
 
             LoadingView(
-                isVisible = viewState.isLoading,
+                isVisible = groupState.isLoading,
             )
 
             OverlayContent(
@@ -179,11 +187,13 @@ internal fun TvPlaylistChannelsScreen(
             }
 
             OverlayContent(
-                isVisible = viewState.isEpgVisible,
-                onViewTap = { onAction(TvPlaylistChannelAction.ToggleEpgVisibility) },
+                isVisible = groupState.selectedName.isNotBlank(),
+                onViewTap = { onAction(TvPlaylistChannelAction.ToggleEpgVisibility()) },
             ) {
                 OverlayEpg(
                     isFullScreen = false,
+                    groupState.selectedName,
+                    groupState.selectedPrograms,
                     currentChannel = selected,
                 )
             }
