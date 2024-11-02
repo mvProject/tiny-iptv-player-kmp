@@ -1,18 +1,8 @@
-/*
- *  Created by Medvediev Viktor [mvproject]
- *  Copyright © 2024
- *  last modified : 24.03.24, 10:57
- *
- */
-
-package com.mvproject.tinyiptvkmp.platform
+package com.mvproject.tinyiptvkmp.ui.components
 
 import androidx.compose.foundation.layout.Arrangement
-import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
-import androidx.compose.foundation.layout.fillMaxHeight
-import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.width
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.rounded.FeaturedPlayList
@@ -27,33 +17,9 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import com.mvproject.tinyiptvkmp.ui.PlayerView
 import com.mvproject.tinyiptvkmp.ui.components.views.PlaybackControl
 import com.mvproject.tinyiptvkmp.ui.screens.player.action.PlaybackActions
-import com.mvproject.tinyiptvkmp.ui.screens.player.action.PlaybackStateActions
-import com.mvproject.tinyiptvkmp.ui.screens.player.state.VideoViewState
 import com.mvproject.tinyiptvkmp.ui.theme.dimens
-import io.ktor.client.HttpClient
-import io.ktor.client.engine.okhttp.OkHttp
-
-actual fun createPlatformHttpClient(): HttpClient = HttpClient(OkHttp)
-
-@Composable
-actual fun PlayerViewContainer(
-    modifier: Modifier,
-    videoViewState: VideoViewState,
-    onPlaybackAction: (PlaybackActions) -> Unit,
-    onPlaybackStateAction: (PlaybackStateActions) -> Unit,
-    controls: @Composable () -> Unit,
-) {
-    PlayerView(
-        modifier = modifier,
-        videoViewState = videoViewState,
-        onPlaybackAction = onPlaybackAction,
-        onPlaybackStateAction = onPlaybackStateAction,
-        controls = controls,
-    )
-}
 
 @Composable
 actual fun AdditionalPlayerControls(
@@ -121,35 +87,5 @@ actual fun AdditionalPlayerControls(
         )
 
         Spacer(modifier = Modifier.width(MaterialTheme.dimens.size24))
-    }
-}
-
-actual fun isMediaPlayable(errorCode: Int?): Boolean {
-    // todo check media playable
-    return true
-}
-
-@Composable
-actual fun TwoPaneContainer(
-    first: @Composable () -> Unit,
-    second: @Composable () -> Unit,
-) {
-    Row(modifier = Modifier.fillMaxSize()) {
-        Column(
-            modifier =
-                Modifier
-                    .weight(MaterialTheme.dimens.weight6)
-                    .fillMaxHeight(),
-        ) {
-            first()
-        }
-        Column(
-            modifier =
-                Modifier
-                    .weight(MaterialTheme.dimens.weight2)
-                    .fillMaxHeight(),
-        ) {
-            second()
-        }
     }
 }
