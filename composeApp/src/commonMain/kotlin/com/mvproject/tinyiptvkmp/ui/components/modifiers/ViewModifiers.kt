@@ -18,6 +18,7 @@ import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.NonRestartableComposable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.Dp
@@ -48,21 +49,25 @@ fun Modifier.roundedHeader(
     .padding(padding)
 
 @Composable
+@NonRestartableComposable
 fun ColumnScope.SpacerHeight(height: Dp) {
     Spacer(modifier = Modifier.height(height = height))
 }
 
 @Composable
+@NonRestartableComposable
 fun ColumnScope.SpacerHeight(weight: Float) {
     Spacer(modifier = Modifier.weight(weight = weight))
 }
 
 @Composable
+@NonRestartableComposable
 fun RowScope.SpacerWidth(width: Dp) {
     Spacer(modifier = Modifier.width(width = width))
 }
 
 @Composable
+@NonRestartableComposable
 fun RowScope.SpacerWidth(weight: Float) {
     Spacer(modifier = Modifier.weight(weight = weight))
 }

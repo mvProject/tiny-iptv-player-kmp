@@ -27,7 +27,6 @@ import com.mvproject.tinyiptvkmp.data.mappers.ListMappers.withRefreshedEpg
 import com.mvproject.tinyiptvkmp.data.model.channels.TvPlaylistChannel
 import com.mvproject.tinyiptvkmp.ui.components.modifiers.fullScreenWidth
 import com.mvproject.tinyiptvkmp.ui.components.modifiers.roundedHeader
-import com.mvproject.tinyiptvkmp.ui.data.TvPlaylistChannels
 import com.mvproject.tinyiptvkmp.ui.screens.channels.components.ChannelListView
 import com.mvproject.tinyiptvkmp.ui.theme.dimens
 
@@ -35,7 +34,7 @@ import com.mvproject.tinyiptvkmp.ui.theme.dimens
 fun OverlayChannels(
     isFullScreen: Boolean = false,
     group: String,
-    channels: TvPlaylistChannels,
+    channels: List<TvPlaylistChannel> = emptyList(),
     current: Int = 0,
     onChannelSelect: (TvPlaylistChannel) -> Unit = {},
 ) {
@@ -76,7 +75,7 @@ fun OverlayChannels(
                 ),
             content = {
                 items(
-                    items = channels.items.withRefreshedEpg(),
+                    items = channels.withRefreshedEpg(),
                     key = { chn -> chn.hashCode() },
                 ) { chn ->
                     ChannelListView(

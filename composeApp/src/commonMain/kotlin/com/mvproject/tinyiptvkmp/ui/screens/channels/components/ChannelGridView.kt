@@ -13,11 +13,9 @@ import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.width
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.rounded.Favorite
 import androidx.compose.material.icons.rounded.FavoriteBorder
@@ -33,6 +31,8 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.text.style.TextAlign
 import com.mvproject.tinyiptvkmp.data.enums.FavoriteType
 import com.mvproject.tinyiptvkmp.data.model.channels.TvPlaylistChannel
+import com.mvproject.tinyiptvkmp.ui.components.modifiers.SpacerHeight
+import com.mvproject.tinyiptvkmp.ui.components.modifiers.SpacerWidth
 import com.mvproject.tinyiptvkmp.ui.theme.dimens
 import org.jetbrains.compose.resources.stringResource
 import tinyiptvkmp.composeapp.generated.resources.Res
@@ -76,7 +76,7 @@ fun ChannelGridView(
                     channelName = channel.channelName,
                 )
 
-                Spacer(modifier = Modifier.width(MaterialTheme.dimens.size8))
+                SpacerWidth(width = MaterialTheme.dimens.size8)
 
                 Text(
                     text = channel.channelName,
@@ -92,8 +92,7 @@ fun ChannelGridView(
                         .weight(MaterialTheme.dimens.weight5),
                 )
 
-                Spacer(modifier = Modifier.width(MaterialTheme.dimens.size8))
-
+                SpacerWidth(width = MaterialTheme.dimens.size8)
                 IconButton(
                     // modifier = modifier,
                     onClick = onFavoriteClick,
@@ -113,8 +112,7 @@ fun ChannelGridView(
                 }
             }
 
-            Spacer(modifier = Modifier.height(MaterialTheme.dimens.size10))
-
+            SpacerHeight(height = MaterialTheme.dimens.size8)
             if (channel.programs.isEmpty()) {
                 Box(
                     modifier = Modifier.fillMaxSize(),

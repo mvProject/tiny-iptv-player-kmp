@@ -15,11 +15,9 @@ import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.shape.CircleShape
@@ -32,6 +30,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.painter.Painter
 import androidx.compose.ui.text.style.TextAlign
+import com.mvproject.tinyiptvkmp.ui.components.modifiers.SpacerHeight
 import com.mvproject.tinyiptvkmp.ui.theme.dimens
 import com.mvproject.tinyiptvkmp.utils.AppConstants.WEIGHT_50
 import com.mvproject.tinyiptvkmp.utils.AppConstants.WEIGHT_80
@@ -87,8 +86,7 @@ fun NoPlaybackView(
                     contentDescription = text
                 )
 
-                Spacer(modifier = Modifier.height(MaterialTheme.dimens.size16))
-
+                SpacerHeight(height = MaterialTheme.dimens.size16)
                 Text(
                     text = text,
                     style = MaterialTheme.typography.headlineMedium,

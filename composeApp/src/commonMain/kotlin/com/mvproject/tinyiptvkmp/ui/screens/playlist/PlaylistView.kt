@@ -11,11 +11,9 @@ import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.WindowInsets
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.ime
 import androidx.compose.foundation.layout.navigationBars
 import androidx.compose.foundation.layout.padding
@@ -41,12 +39,12 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import com.mvproject.tinyiptvkmp.data.enums.PlaylistType
 import com.mvproject.tinyiptvkmp.data.enums.UpdatePeriod
+import com.mvproject.tinyiptvkmp.ui.components.modifiers.SpacerHeight
 import com.mvproject.tinyiptvkmp.ui.components.overlay.OverlayContent
 import com.mvproject.tinyiptvkmp.ui.components.overlay.OverlayOptionsMenu
 import com.mvproject.tinyiptvkmp.ui.components.selectors.OptionSelector
 import com.mvproject.tinyiptvkmp.ui.components.toolbars.AppBarWithBackNav
 import com.mvproject.tinyiptvkmp.ui.components.views.LoadingView
-import com.mvproject.tinyiptvkmp.ui.data.Options
 import com.mvproject.tinyiptvkmp.ui.screens.playlist.action.PlaylistAction
 import com.mvproject.tinyiptvkmp.ui.screens.playlist.state.PlaylistState
 import com.mvproject.tinyiptvkmp.ui.theme.dimens
@@ -181,7 +179,7 @@ private fun PlaylistView(
                     ),
                 )
 
-                Spacer(modifier = Modifier.height(MaterialTheme.dimens.size8))
+                SpacerHeight(height = MaterialTheme.dimens.size8)
 
                 TextField(
                     modifier = Modifier.fillMaxWidth(),
@@ -209,8 +207,7 @@ private fun PlaylistView(
                     ),
                 )
 
-                Spacer(modifier = Modifier.height(MaterialTheme.dimens.size8))
-
+                SpacerHeight(height = MaterialTheme.dimens.size8)
                 OptionSelector(
                     modifier = Modifier.fillMaxWidth(),
                     title = stringResource(Res.string.hint_update_period),
@@ -222,8 +219,7 @@ private fun PlaylistView(
                     },
                 )
 
-                Spacer(modifier = Modifier.height(MaterialTheme.dimens.size16))
-
+                SpacerHeight(height = MaterialTheme.dimens.size16)
                 if (!state.isEdit) {
                     Row(
                         modifier = Modifier.fillMaxWidth(),
@@ -250,8 +246,7 @@ private fun PlaylistView(
                         )
                     }
 
-                    Spacer(modifier = Modifier.height(MaterialTheme.dimens.size16))
-
+                    SpacerHeight(height = MaterialTheme.dimens.size16)
                     OutlinedButton(
                         onClick = {
                             launcher.launch()
@@ -271,8 +266,7 @@ private fun PlaylistView(
                     }
                 }
 
-                Spacer(modifier = Modifier.weight(MaterialTheme.dimens.weight1))
-
+                SpacerHeight(weight = MaterialTheme.dimens.weight1)
                 ElevatedButton(
                     enabled = state.isReadyToSave,
                     onClick = {
@@ -320,13 +314,7 @@ private fun PlaylistView(
                 OverlayOptionsMenu(
                     title = stringResource(Res.string.hint_update_period),
                     selectedIndex = state.updatePeriod,
-                    options =
-                    Options(
-                        items =
-                        UpdatePeriod.entries.map {
-                            stringResource(it.title)
-                        },
-                    ),
+                    options = UpdatePeriod.entries.map { stringResource(it.title) },
                     onItemSelected = { index ->
                         onPlaylistAction(PlaylistAction.SetUpdatePeriod(index))
                         isUpdateOptionOpen.value = false

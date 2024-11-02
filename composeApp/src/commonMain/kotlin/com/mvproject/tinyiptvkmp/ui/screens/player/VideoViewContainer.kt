@@ -20,6 +20,7 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import com.mvproject.tinyiptvkmp.data.model.channels.TvPlaylistChannel
 import com.mvproject.tinyiptvkmp.ui.components.PlayerViewContainer
 import com.mvproject.tinyiptvkmp.ui.components.TwoPaneContainer
 import com.mvproject.tinyiptvkmp.ui.components.epg.PlayerEpgContent
@@ -31,7 +32,6 @@ import com.mvproject.tinyiptvkmp.ui.components.overlay.OverlayEpg
 import com.mvproject.tinyiptvkmp.ui.components.views.LoadingView
 import com.mvproject.tinyiptvkmp.ui.components.views.NoPlaybackView
 import com.mvproject.tinyiptvkmp.ui.components.views.VolumeProgressView
-import com.mvproject.tinyiptvkmp.ui.data.TvPlaylistChannels
 import com.mvproject.tinyiptvkmp.ui.screens.player.action.PlaybackActions
 import com.mvproject.tinyiptvkmp.ui.screens.player.action.PlaybackStateActions
 import com.mvproject.tinyiptvkmp.ui.screens.player.components.OverlayChannelInfo
@@ -68,7 +68,7 @@ internal fun PlayerScreen(
 @Composable
 private fun PlayerScreen(
     videoViewState: VideoViewState,
-    videoViewChannelsState: TvPlaylistChannels,
+    videoViewChannelsState: List<TvPlaylistChannel> = emptyList(),
     onPlaybackAction: (PlaybackActions) -> Unit,
     onPlaybackStateAction: (PlaybackStateActions) -> Unit,
     onNavigateBack: () -> Unit = {},
@@ -81,9 +81,9 @@ private fun PlayerScreen(
     Box(
         modifier =
         Modifier
-            .windowInsetsPadding(WindowInsets.systemBars)
             .fillMaxSize()
-            .background(MaterialTheme.colorScheme.scrim),
+            .background(MaterialTheme.colorScheme.scrim)
+            .windowInsetsPadding(WindowInsets.systemBars),
         contentAlignment = Alignment.TopCenter,
     ) {
         if (videoViewState.isFullscreen) {

@@ -10,11 +10,9 @@ package com.mvproject.tinyiptvkmp.ui.screens.settings.player
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.WindowInsets
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.navigationBars
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
@@ -33,11 +31,11 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import com.mvproject.tinyiptvkmp.data.enums.RatioMode
 import com.mvproject.tinyiptvkmp.data.enums.ResizeMode
+import com.mvproject.tinyiptvkmp.ui.components.modifiers.SpacerHeight
 import com.mvproject.tinyiptvkmp.ui.components.overlay.OverlayContent
 import com.mvproject.tinyiptvkmp.ui.components.overlay.OverlayOptionsMenu
 import com.mvproject.tinyiptvkmp.ui.components.selectors.OptionSelector
 import com.mvproject.tinyiptvkmp.ui.components.toolbars.AppBarWithBackNav
-import com.mvproject.tinyiptvkmp.ui.data.Options
 import com.mvproject.tinyiptvkmp.ui.screens.settings.player.action.SettingsPlayerAction
 import com.mvproject.tinyiptvkmp.ui.screens.settings.player.state.SettingsPlayerState
 import com.mvproject.tinyiptvkmp.ui.theme.dimens
@@ -124,7 +122,7 @@ private fun SettingsPlayerScreen(
                 )
             }
 
-            Spacer(modifier = Modifier.height(MaterialTheme.dimens.size12))
+            SpacerHeight(MaterialTheme.dimens.size12)
 
             OptionSelector(
                 modifier = Modifier.fillMaxWidth(),
@@ -136,7 +134,7 @@ private fun SettingsPlayerScreen(
                 },
             )
 
-            Spacer(modifier = Modifier.height(MaterialTheme.dimens.size12))
+            SpacerHeight(MaterialTheme.dimens.size12)
 
             OptionSelector(
                 modifier = Modifier.fillMaxWidth(),
@@ -157,7 +155,7 @@ private fun SettingsPlayerScreen(
             OverlayOptionsMenu(
                 title = stringResource(Res.string.option_default_resize_mode),
                 selectedIndex = state.resizeMode,
-                options = Options(items = ResizeMode.entries.map { stringResource(it.title) }),
+                options = ResizeMode.entries.map { stringResource(it.title) },
                 onItemSelected = { index ->
                     onSettingsPlayerAction(SettingsPlayerAction.SetResizeMode(index))
                     isSelectResizeModeOpen.value = false
@@ -173,7 +171,7 @@ private fun SettingsPlayerScreen(
             OverlayOptionsMenu(
                 title = stringResource(Res.string.option_default_ratio_mode),
                 selectedIndex = state.ratioMode,
-                options = Options(items = RatioMode.entries.map { stringResource(it.title) }),
+                options = RatioMode.entries.map { stringResource(it.title) },
                 onItemSelected = { index ->
                     onSettingsPlayerAction(SettingsPlayerAction.SetRatioMode(index))
                     isSelectRatioModeOpen.value = false

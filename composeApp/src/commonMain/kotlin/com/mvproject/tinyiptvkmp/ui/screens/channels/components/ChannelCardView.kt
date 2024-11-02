@@ -12,7 +12,6 @@ import androidx.compose.foundation.combinedClickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
@@ -32,6 +31,7 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.text.style.TextAlign
 import com.mvproject.tinyiptvkmp.data.enums.FavoriteType
 import com.mvproject.tinyiptvkmp.data.model.channels.TvPlaylistChannel
+import com.mvproject.tinyiptvkmp.ui.components.modifiers.SpacerHeight
 import com.mvproject.tinyiptvkmp.ui.theme.dimens
 
 @OptIn(ExperimentalFoundationApi::class)
@@ -72,8 +72,7 @@ fun ChannelCardView(
                     isLarge = true,
                 )
 
-                Spacer(modifier = Modifier.height(MaterialTheme.dimens.size8))
-
+                SpacerHeight(height = MaterialTheme.dimens.size8)
                 Box(
                     modifier =
                         Modifier

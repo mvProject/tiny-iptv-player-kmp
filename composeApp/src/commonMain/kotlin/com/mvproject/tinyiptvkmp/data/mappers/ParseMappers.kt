@@ -15,7 +15,7 @@ object ParseMappers {
         playlistId: Long,
         source: String,
     ): List<PlaylistChannel> {
-        val parsed = M3UParser.parsePlaylist(source)
+        val parsed = M3UParser.parsePlaylist2(source)
         val filtered =
             parsed.filter {
                 it.mChannel.isNotEmpty() && it.mStreamURL.isNotEmpty()

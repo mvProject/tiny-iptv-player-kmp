@@ -8,7 +8,6 @@
 package com.mvproject.tinyiptvkmp.ui
 
 import android.app.Activity
-import android.content.pm.ActivityInfo
 import android.view.SurfaceView
 import android.view.ViewGroup
 import androidx.compose.foundation.layout.Box
@@ -61,15 +60,15 @@ internal fun PlayerView(
         }
     }
 
-    LaunchedEffect(videoViewState.isFullscreen) {
-        systemUIController.isSystemBarsVisible = !videoViewState.isFullscreen
-
-        if (videoViewState.isFullscreen) {
-            activity.requestedOrientation = ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE
-        } else {
-            activity.requestedOrientation = ActivityInfo.SCREEN_ORIENTATION_PORTRAIT
-        }
-    }
+   // LaunchedEffect(videoViewState.isFullscreen) {
+   //     systemUIController.isSystemBarsVisible = !videoViewState.isFullscreen
+//
+   //     if (videoViewState.isFullscreen) {
+   //         activity.requestedOrientation = ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE
+   //     } else {
+   //         activity.requestedOrientation = ActivityInfo.SCREEN_ORIENTATION_PORTRAIT
+   //     }
+   // }
 
     LaunchedEffect(videoViewState.currentVolume) {
         playerState.setVolume(videoViewState.currentVolume)
@@ -126,7 +125,7 @@ internal fun PlayerView(
         onStopOrDispose {
             playerState.player.stop()
             systemUIController.isSystemBarsVisible = true
-            activity.requestedOrientation = ActivityInfo.SCREEN_ORIENTATION_PORTRAIT
+       //     activity.requestedOrientation = ActivityInfo.SCREEN_ORIENTATION_PORTRAIT
         }
     }
 }

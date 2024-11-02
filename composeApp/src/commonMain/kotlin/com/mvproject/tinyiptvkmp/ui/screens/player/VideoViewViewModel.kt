@@ -21,7 +21,6 @@ import com.mvproject.tinyiptvkmp.data.usecases.GetGroupChannelsUseCase
 import com.mvproject.tinyiptvkmp.data.usecases.ToggleFavoriteChannelUseCase
 import com.mvproject.tinyiptvkmp.navigation.AppRoutes
 import com.mvproject.tinyiptvkmp.ui.components.isMediaPlayable
-import com.mvproject.tinyiptvkmp.ui.data.TvPlaylistChannels
 import com.mvproject.tinyiptvkmp.ui.screens.player.action.PlaybackActions
 import com.mvproject.tinyiptvkmp.ui.screens.player.action.PlaybackStateActions
 import com.mvproject.tinyiptvkmp.ui.screens.player.state.VideoPlaybackState
@@ -62,7 +61,7 @@ class VideoViewViewModel(
     private var _videoViewState = MutableStateFlow(VideoViewState())
     val videoViewState = _videoViewState.asStateFlow()
 
-    private var _videoViewChannelsState = MutableStateFlow(TvPlaylistChannels())
+    private var _videoViewChannelsState = MutableStateFlow<List<TvPlaylistChannel>>(emptyList())
     val videoViewChannelsState = _videoViewChannelsState.asStateFlow()
 
     private var _videoRatio = FLOAT_VALUE_1
@@ -118,7 +117,7 @@ class VideoViewViewModel(
                 )
             }
 
-            _videoViewChannelsState.value = TvPlaylistChannels(items = channelList)
+            _videoViewChannelsState.value = channelList
 
             loadSelectedChannelEpg()
 
@@ -129,7 +128,7 @@ class VideoViewViewModel(
     private fun switchToChannel(channel: TvPlaylistChannel) {
         viewModelScope.launch {
             //   val channelsRefreshed = videoViewState.value.channels.items.withRefreshedEpg()
-            val currentChannels = videoViewChannelsState.value.items
+            val currentChannels = videoViewChannelsState.value
 
             val newMediaPosition =
                 getCurrentMediaPosition(
@@ -233,7 +232,7 @@ class VideoViewViewModel(
 
     private suspend fun loadAvailableChannelsEpg() {
         withContext(Dispatchers.IO) {
-            val currentChannels = videoViewChannelsState.value.items
+            val currentChannels = videoViewChannelsState.value
             if (currentChannels.isNotEmpty()) {
                 val channelsIds =
                     currentChannels
@@ -247,7 +246,7 @@ class VideoViewViewModel(
                     ch.copy(programs = programs)
                 }
 
-                _videoViewChannelsState.value = TvPlaylistChannels(items = channelsWithPrograms)
+                _videoViewChannelsState.value = channelsWithPrograms
             }
         }
     }
@@ -328,7 +327,7 @@ class VideoViewViewModel(
     }
 
     private fun switchToNextChannel() {
-        val currentChannelsCount = videoViewChannelsState.value.items.count()
+        val currentChannelsCount = videoViewChannelsState.value.count()
         val nextIndex = videoViewState.value.mediaPosition + INT_VALUE_1
         val newMediaPosition =
             if (nextIndex > currentChannelsCount - INT_VALUE_1) {
@@ -343,7 +342,7 @@ class VideoViewViewModel(
     }
 
     private fun switchToPreviousChannel() {
-        val currentChannelsCount = videoViewChannelsState.value.items.count()
+        val currentChannelsCount = videoViewChannelsState.value.count()
         val nextIndex = videoViewState.value.mediaPosition - INT_VALUE_1
         val newMediaPosition =
             if (nextIndex < INT_VALUE_ZERO) {
@@ -382,7 +381,7 @@ class VideoViewViewModel(
     }
 
     private suspend fun setCurrentChannel(currentMediaPosition: Int) {
-        val currentChannels = videoViewChannelsState.value.items
+        val currentChannels = videoViewChannelsState.value
         val currentChannel = currentChannels[currentMediaPosition]
 
         _videoViewState.update { current ->
@@ -399,7 +398,7 @@ class VideoViewViewModel(
 
     private fun toggleChannelFavorite() {
         val currentChannel = videoViewState.value.currentChannel
-        val currentChannels = videoViewChannelsState.value.items
+        val currentChannels = videoViewChannelsState.value
         val currentIndex = videoViewState.value.mediaPosition
 
         // todo
@@ -424,9 +423,8 @@ class VideoViewViewModel(
                 )
             }
 
-            _videoViewChannelsState.update { state ->
-                state.copy(items = updatedFavoriteChangedChannels)
-            }
+            _videoViewChannelsState.value = updatedFavoriteChangedChannels
+
             toggleFavoriteChannelUseCase(channel = currentChannel)
         }
     }

@@ -10,11 +10,9 @@ package com.mvproject.tinyiptvkmp.ui.screens.groups
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
@@ -28,6 +26,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.lifecycle.compose.LifecycleResumeEffect
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
+import com.mvproject.tinyiptvkmp.ui.components.modifiers.SpacerHeight
 import com.mvproject.tinyiptvkmp.ui.components.selectors.OptionSelector
 import com.mvproject.tinyiptvkmp.ui.components.toolbars.AppBarWithSettings
 import com.mvproject.tinyiptvkmp.ui.components.views.LoadingView
@@ -120,7 +119,7 @@ private fun GroupScreen(
                         },
                     )
 
-                    Spacer(modifier = Modifier.height(MaterialTheme.dimens.size8))
+                    SpacerHeight(height = MaterialTheme.dimens.size8)
                 }
 
                 when (uiState) {

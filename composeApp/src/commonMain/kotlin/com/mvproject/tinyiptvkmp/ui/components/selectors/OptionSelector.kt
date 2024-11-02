@@ -11,8 +11,6 @@ import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
-import androidx.compose.foundation.layout.Spacer
-import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ArrowDropDown
@@ -25,8 +23,9 @@ import androidx.compose.material3.OutlinedButton
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
+import com.mvproject.tinyiptvkmp.ui.components.modifiers.SpacerHeight
+import com.mvproject.tinyiptvkmp.ui.components.modifiers.SpacerWidth
 import com.mvproject.tinyiptvkmp.ui.theme.dimens
-import com.mvproject.tinyiptvkmp.utils.AppConstants.WEIGHT_1
 import com.mvproject.tinyiptvkmp.utils.CommonUtils.empty
 
 @Composable
@@ -85,7 +84,7 @@ fun OptionSelector(
                     fontSize = MaterialTheme.dimens.font10,
                 )
 
-                Spacer(modifier = Modifier.height(MaterialTheme.dimens.size8))
+                SpacerHeight(height = MaterialTheme.dimens.size8)
             }
 
             Text(
@@ -95,8 +94,7 @@ fun OptionSelector(
             )
         }
 
-        Spacer(modifier = Modifier.weight(WEIGHT_1))
-
+        SpacerWidth(weight = MaterialTheme.dimens.weight1)
         val icon =
             if (isExpanded) {
                 Icons.Filled.ArrowDropUp
