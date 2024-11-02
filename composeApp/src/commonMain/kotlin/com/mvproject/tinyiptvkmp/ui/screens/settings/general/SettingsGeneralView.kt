@@ -26,6 +26,8 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
@@ -39,9 +41,11 @@ import com.mvproject.tinyiptvkmp.ui.components.toolbars.AppBarWithBackNav
 import com.mvproject.tinyiptvkmp.ui.data.Options
 import com.mvproject.tinyiptvkmp.ui.screens.settings.general.action.SettingsAction
 import com.mvproject.tinyiptvkmp.ui.screens.settings.general.state.SettingsState
+import com.mvproject.tinyiptvkmp.ui.theme.VideoAppTheme
 import com.mvproject.tinyiptvkmp.ui.theme.dimens
 import com.mvproject.tinyiptvkmp.utils.AppConstants.WEIGHT_1
 import org.jetbrains.compose.resources.stringResource
+import org.jetbrains.compose.ui.tooling.preview.Preview
 import tinyiptvkmp.composeapp.generated.resources.Res
 import tinyiptvkmp.composeapp.generated.resources.hint_update_period
 import tinyiptvkmp.composeapp.generated.resources.option_update_epg_data
@@ -52,7 +56,25 @@ import tinyiptvkmp.composeapp.generated.resources.scr_playlist_settings_title
 import tinyiptvkmp.composeapp.generated.resources.scr_settings_title
 
 @Composable
-fun SettingsGeneralView(
+internal fun SettingsGeneralScreen(
+    viewModel: SettingsViewModel,
+    onNavigateBack: () -> Unit,
+    onNavigatePlayerSettings: () -> Unit,
+    onNavigatePlaylistSettings: () -> Unit
+){
+    val settingsState by viewModel.state.collectAsState()
+
+    SettingsGeneralScreen(
+        state = settingsState,
+        onSettingsAction = viewModel::processAction,
+        onNavigateBack = onNavigateBack,
+        onNavigatePlayerSettings = onNavigatePlayerSettings,
+        onNavigatePlaylistSettings = onNavigatePlaylistSettings
+    )
+}
+
+@Composable
+private fun SettingsGeneralScreen(
     state: SettingsState,
     onSettingsAction: (SettingsAction) -> Unit = {},
     onNavigateBack: () -> Unit = {},
@@ -266,11 +288,11 @@ fun SettingsGeneralView(
     }
 }
 // todo replace preview
-/*
-@Preview(showBackground = true, showSystemUi = true)
+
+@Preview
 @Composable
 fun PreviewDarkSettingsView() {
     VideoAppTheme(darkTheme = true) {
-        SettingsView(state = SettingsState())
+        SettingsGeneralScreen(state = SettingsState())
     }
-}*/
+}

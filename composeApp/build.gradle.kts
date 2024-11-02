@@ -63,7 +63,6 @@ kotlin {
             implementation(libs.kotlinx.datetime)
             implementation(libs.material3.window.size.multiplatform)
             implementation(libs.kotlinx.collections.immutable)
-            implementation(libs.uri.kmp)
 
             // Image processing
             implementation(libs.bundles.coil)
@@ -113,10 +112,7 @@ kotlin {
             // Network
             implementation(libs.ktor.client.okhttp)
 
-            // FilePicker
-            implementation(libs.calf.filepicker)
-
-            // Vlc player
+             // Vlc player
             implementation(libs.caprica.vlcj)
         }
     }
@@ -128,7 +124,6 @@ android {
 
     sourceSets["main"].manifest.srcFile("src/androidMain/AndroidManifest.xml")
     sourceSets["main"].res.srcDirs("src/androidMain/res")
-    //  sourceSets["main"].resources.srcDirs("src/commonMain/resources")
 
     defaultConfig {
         applicationId = "com.mvproject.tinyiptvkmp"

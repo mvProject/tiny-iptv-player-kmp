@@ -24,7 +24,7 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import com.mvproject.tinyiptvkmp.platform.AdditionalPlayerControls
+import com.mvproject.tinyiptvkmp.ui.components.AdditionalPlayerControls
 import com.mvproject.tinyiptvkmp.ui.components.views.PlaybackControl
 import com.mvproject.tinyiptvkmp.ui.screens.player.action.PlaybackActions
 import com.mvproject.tinyiptvkmp.ui.theme.dimens

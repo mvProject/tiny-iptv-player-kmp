@@ -10,6 +10,7 @@ package com.mvproject.tinyiptvkmp.ui.screens.player
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import androidx.navigation.toRoute
 import com.mvproject.tinyiptvkmp.data.enums.RatioMode
 import com.mvproject.tinyiptvkmp.data.enums.ResizeMode
 import com.mvproject.tinyiptvkmp.data.model.channels.TvPlaylistChannel
@@ -18,10 +19,11 @@ import com.mvproject.tinyiptvkmp.data.usecases.GetChannelsEpgUseCase
 import com.mvproject.tinyiptvkmp.data.usecases.GetGroupChannelsEpgUseCase
 import com.mvproject.tinyiptvkmp.data.usecases.GetGroupChannelsUseCase
 import com.mvproject.tinyiptvkmp.data.usecases.ToggleFavoriteChannelUseCase
+import com.mvproject.tinyiptvkmp.navigation.AppRoutes
+import com.mvproject.tinyiptvkmp.ui.components.isMediaPlayable
 import com.mvproject.tinyiptvkmp.ui.data.TvPlaylistChannels
 import com.mvproject.tinyiptvkmp.ui.screens.player.action.PlaybackActions
 import com.mvproject.tinyiptvkmp.ui.screens.player.action.PlaybackStateActions
-import com.mvproject.tinyiptvkmp.ui.screens.player.navigation.VideoViewArgs
 import com.mvproject.tinyiptvkmp.ui.screens.player.state.VideoPlaybackState
 import com.mvproject.tinyiptvkmp.ui.screens.player.state.VideoViewState
 import com.mvproject.tinyiptvkmp.utils.AppConstants.DELAY_50
@@ -65,11 +67,11 @@ class VideoViewViewModel(
 
     private var _videoRatio = FLOAT_VALUE_1
 
-    private val args = VideoViewArgs(savedStateHandle)
+    private val args = savedStateHandle.toRoute<AppRoutes.VideoView>()
 
     init {
-        val media = args.media
-        val group = args.group
+        val media = args.mediaName
+        val group = args.mediaGroup
         KLog.d("testing VideoViewViewModel init media:$media, group:$group")
 
         viewModelScope.launch {
@@ -124,7 +126,7 @@ class VideoViewViewModel(
         }
     }
 
-    fun switchToChannel(channel: TvPlaylistChannel) {
+    private fun switchToChannel(channel: TvPlaylistChannel) {
         viewModelScope.launch {
             //   val channelsRefreshed = videoViewState.value.channels.items.withRefreshedEpg()
             val currentChannels = videoViewChannelsState.value.items
@@ -155,6 +157,7 @@ class VideoViewViewModel(
             PlaybackActions.OnVolumeDown -> decreaseVolume()
             PlaybackActions.OnVolumeUp -> increaseVolume()
             PlaybackActions.OnRestarted -> consumeRestart()
+            is PlaybackActions.OnChannelSelected -> switchToChannel(channel = action.channel)
         }
     }
 
@@ -191,9 +194,7 @@ class VideoViewViewModel(
 
                 when (action.state) {
                     is VideoPlaybackState.VideoPlaybackIdle -> {
-                        isMediaPlayable =
-                            com.mvproject.tinyiptvkmp.platform
-                                .isMediaPlayable(action.state.errorCode)
+                        isMediaPlayable = isMediaPlayable(action.state.errorCode)
                     }
 
                     VideoPlaybackState.VideoPlaybackReady -> {
@@ -251,49 +252,49 @@ class VideoViewViewModel(
         }
     }
 
-/*    private fun applyEpg(data: ChannelEpg) {
-        KLog.d("testing channelsEpgData id = ${data.channelEpgId}, count = ${data.programs.count()}")
-        val channels = videoViewChannelsState.value.items
-        val channelIndex = channels.indexOfFirst { it.epgId == data.channelEpgId }
+    /*    private fun applyEpg(data: ChannelEpg) {
+            KLog.d("testing channelsEpgData id = ${data.channelEpgId}, count = ${data.programs.count()}")
+            val channels = videoViewChannelsState.value.items
+            val channelIndex = channels.indexOfFirst { it.epgId == data.channelEpgId }
 
-        val channelWithEpg =
-            updateChannelWithEpg(
+            val channelWithEpg =
+                updateChannelWithEpg(
+                    index = channelIndex,
+                    programsData = data.programs,
+                )
+
+            updateChannel(
                 index = channelIndex,
-                programsData = data.programs,
+                channel = channelWithEpg,
             )
+        }*/
 
-        updateChannel(
-            index = channelIndex,
-            channel = channelWithEpg,
-        )
-    }*/
-
-/*
-    private fun updateChannelWithEpg(
-        index: Int,
-        programsData: List<EpgProgram>,
-    ): TvPlaylistChannel {
-        val current = videoViewChannelsState.value.items[index]
-        val updated = current.copy(programs = programsData)
-        return updated
-    }
-*/
-
-/*    private fun updateChannel(
-        index: Int,
-        channel: TvPlaylistChannel,
-    ) {
-        val current = videoViewChannelsState.value.items
-
-        val updatedList =
-            current.toMutableList().apply {
-                set(index, channel)
-            }
-
-        _videoViewChannelsState.update { state ->
-            state.copy(items = updatedList)
+    /*
+        private fun updateChannelWithEpg(
+            index: Int,
+            programsData: List<EpgProgram>,
+        ): TvPlaylistChannel {
+            val current = videoViewChannelsState.value.items[index]
+            val updated = current.copy(programs = programsData)
+            return updated
         }
-    }*/
+    */
+
+    /*    private fun updateChannel(
+            index: Int,
+            channel: TvPlaylistChannel,
+        ) {
+            val current = videoViewChannelsState.value.items
+
+            val updatedList =
+                current.toMutableList().apply {
+                    set(index, channel)
+                }
+
+            _videoViewChannelsState.update { state ->
+                state.copy(items = updatedList)
+            }
+        }*/
 
     private fun getCurrentMediaPosition(
         channelName: String,
@@ -430,21 +431,21 @@ class VideoViewViewModel(
         }
     }
 
-    fun toggleEpgVisibility() {
+    private fun toggleEpgVisibility() {
         _videoViewState.update { current ->
             val currentEpgVisibleState = current.isEpgVisible
             current.copy(isEpgVisible = !currentEpgVisibleState)
         }
     }
 
-    fun toggleChannelsVisibility() {
+    private fun toggleChannelsVisibility() {
         _videoViewState.update { current ->
             val currentChannelsVisibleState = current.isChannelsVisible
             current.copy(isChannelsVisible = !currentChannelsVisibleState)
         }
     }
 
-    fun toggleChannelInfoVisibility() {
+    private fun toggleChannelInfoVisibility() {
         _videoViewState.update { current ->
             val currentChannelInfoVisibleState = current.isChannelInfoVisible
             current.copy(isChannelInfoVisible = !currentChannelInfoVisibleState)

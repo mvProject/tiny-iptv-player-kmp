@@ -17,7 +17,6 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.style.TextAlign
-import com.mvproject.tinyiptvkmp.data.model.channels.TvPlaylistChannel
 import com.mvproject.tinyiptvkmp.data.model.epg.EpgProgram
 import com.mvproject.tinyiptvkmp.ui.components.epg.PlayerEpgContent
 import com.mvproject.tinyiptvkmp.ui.components.modifiers.fullScreenWidth
@@ -28,8 +27,7 @@ import com.mvproject.tinyiptvkmp.ui.theme.dimens
 fun OverlayEpg(
     isFullScreen: Boolean = false,
     title:String,
-    programs: List<EpgProgram>,
-    currentChannel: TvPlaylistChannel,
+    programs: List<EpgProgram>
 
 ) {
     Column(

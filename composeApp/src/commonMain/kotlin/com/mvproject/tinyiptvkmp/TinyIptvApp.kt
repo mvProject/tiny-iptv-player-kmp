@@ -23,7 +23,7 @@ fun TinyIptvApp() {
     KoinContext {
         VideoAppTheme {
             NavigationHost(
-                startDestination = AppRoutes.PlaylistGroup.route,
+                startDestination = AppRoutes.PlaylistGroup,
             )
         }
     }

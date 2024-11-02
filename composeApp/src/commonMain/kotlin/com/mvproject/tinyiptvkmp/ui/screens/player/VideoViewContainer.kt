@@ -20,8 +20,8 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import com.mvproject.tinyiptvkmp.platform.PlayerViewContainer
-import com.mvproject.tinyiptvkmp.platform.TwoPaneContainer
+import com.mvproject.tinyiptvkmp.ui.components.PlayerViewContainer
+import com.mvproject.tinyiptvkmp.ui.components.TwoPaneContainer
 import com.mvproject.tinyiptvkmp.ui.components.epg.PlayerEpgContent
 import com.mvproject.tinyiptvkmp.ui.components.modifiers.defaultPlayerHorizontalGestures
 import com.mvproject.tinyiptvkmp.ui.components.modifiers.defaultPlayerTapGesturesState
@@ -31,9 +31,13 @@ import com.mvproject.tinyiptvkmp.ui.components.overlay.OverlayEpg
 import com.mvproject.tinyiptvkmp.ui.components.views.LoadingView
 import com.mvproject.tinyiptvkmp.ui.components.views.NoPlaybackView
 import com.mvproject.tinyiptvkmp.ui.components.views.VolumeProgressView
+import com.mvproject.tinyiptvkmp.ui.data.TvPlaylistChannels
+import com.mvproject.tinyiptvkmp.ui.screens.player.action.PlaybackActions
+import com.mvproject.tinyiptvkmp.ui.screens.player.action.PlaybackStateActions
 import com.mvproject.tinyiptvkmp.ui.screens.player.components.OverlayChannelInfo
 import com.mvproject.tinyiptvkmp.ui.screens.player.components.OverlayChannels
 import com.mvproject.tinyiptvkmp.ui.screens.player.components.PlayerChannelView
+import com.mvproject.tinyiptvkmp.ui.screens.player.state.VideoViewState
 import com.mvproject.tinyiptvkmp.ui.theme.dimens
 import org.jetbrains.compose.resources.painterResource
 import org.jetbrains.compose.resources.stringResource
@@ -43,14 +47,32 @@ import tinyiptvkmp.composeapp.generated.resources.msg_no_playable_media_found
 import tinyiptvkmp.composeapp.generated.resources.no_network
 import tinyiptvkmp.composeapp.generated.resources.sad_face
 
+
 @Composable
-fun VideoViewContainer(
+internal fun PlayerScreen(
     viewModel: VideoViewViewModel,
     onNavigateBack: () -> Unit = {},
 ) {
     val videoViewState by viewModel.videoViewState.collectAsState()
     val videoViewChannelsState by viewModel.videoViewChannelsState.collectAsState()
 
+    PlayerScreen(
+        videoViewState = videoViewState,
+        videoViewChannelsState = videoViewChannelsState,
+        onPlaybackAction = viewModel::processPlaybackActions,
+        onPlaybackStateAction = viewModel::processPlaybackStateActions,
+        onNavigateBack = onNavigateBack
+    )
+}
+
+@Composable
+private fun PlayerScreen(
+    videoViewState: VideoViewState,
+    videoViewChannelsState: TvPlaylistChannels,
+    onPlaybackAction: (PlaybackActions) -> Unit,
+    onPlaybackStateAction: (PlaybackStateActions) -> Unit,
+    onNavigateBack: () -> Unit = {},
+) {
     val fraction =
         remember(videoViewState.isFullscreen) {
             if (videoViewState.isFullscreen) 1f else 0.5f
@@ -58,22 +80,22 @@ fun VideoViewContainer(
 
     Box(
         modifier =
-            Modifier
-                .windowInsetsPadding(WindowInsets.systemBars)
-                .fillMaxSize()
-                .background(MaterialTheme.colorScheme.scrim),
+        Modifier
+            .windowInsetsPadding(WindowInsets.systemBars)
+            .fillMaxSize()
+            .background(MaterialTheme.colorScheme.scrim),
         contentAlignment = Alignment.TopCenter,
     ) {
         if (videoViewState.isFullscreen) {
             PlayerViewContainer(
                 modifier =
-                    Modifier
-                        .defaultPlayerHorizontalGestures(onAction = viewModel::processPlaybackActions)
-                        .defaultPlayerVerticalGestures(onAction = viewModel::processPlaybackActions)
-                        .defaultPlayerTapGesturesState(onAction = viewModel::processPlaybackActions),
+                Modifier
+                    .defaultPlayerHorizontalGestures(onAction = onPlaybackAction)
+                    .defaultPlayerVerticalGestures(onAction = onPlaybackAction)
+                    .defaultPlayerTapGesturesState(onAction = onPlaybackAction),
                 videoViewState = videoViewState,
-                onPlaybackAction = viewModel::processPlaybackActions,
-                onPlaybackStateAction = viewModel::processPlaybackStateActions,
+                onPlaybackAction = onPlaybackAction,
+                onPlaybackStateAction = onPlaybackStateAction,
             ) {
                 PlayerChannelView(
                     modifier = Modifier.fillMaxSize(),
@@ -81,7 +103,7 @@ fun VideoViewContainer(
                     currentChannel = videoViewState.currentChannel,
                     isPlaying = videoViewState.isPlaying,
                     isFullScreen = true,
-                    onPlaybackAction = viewModel::processPlaybackActions,
+                    onPlaybackAction = onPlaybackAction,
                     onPlaybackClose = onNavigateBack,
                 )
             }
@@ -90,13 +112,13 @@ fun VideoViewContainer(
                 first = {
                     PlayerViewContainer(
                         modifier =
-                            Modifier
-                                .defaultPlayerHorizontalGestures(onAction = viewModel::processPlaybackActions)
-                                .defaultPlayerVerticalGestures(onAction = viewModel::processPlaybackActions)
-                                .defaultPlayerTapGesturesState(onAction = viewModel::processPlaybackActions),
+                        Modifier
+                            .defaultPlayerHorizontalGestures(onAction = onPlaybackAction)
+                            .defaultPlayerVerticalGestures(onAction = onPlaybackAction)
+                            .defaultPlayerTapGesturesState(onAction = onPlaybackAction),
                         videoViewState = videoViewState,
-                        onPlaybackAction = viewModel::processPlaybackActions,
-                        onPlaybackStateAction = viewModel::processPlaybackStateActions,
+                        onPlaybackAction = onPlaybackAction,
+                        onPlaybackStateAction = onPlaybackStateAction,
                     ) {
                         PlayerChannelView(
                             modifier = Modifier.fillMaxSize(),
@@ -104,7 +126,7 @@ fun VideoViewContainer(
                             currentChannel = videoViewState.currentChannel,
                             isPlaying = videoViewState.isPlaying,
                             isFullScreen = false,
-                            onPlaybackAction = viewModel::processPlaybackActions,
+                            onPlaybackAction = onPlaybackAction,
                             onPlaybackClose = onNavigateBack,
                         )
                     }
@@ -112,9 +134,9 @@ fun VideoViewContainer(
                 second = {
                     PlayerEpgContent(
                         modifier =
-                            Modifier.background(
-                                color = MaterialTheme.colorScheme.primary,
-                            ),
+                        Modifier.background(
+                            color = MaterialTheme.colorScheme.primary,
+                        ),
                         epgList = videoViewState.currentChannel.programs,
                     )
                 },
@@ -129,19 +151,18 @@ fun VideoViewContainer(
 
         OverlayContent(
             isVisible = videoViewState.isEpgVisible,
-            onViewTap = viewModel::toggleEpgVisibility,
+            onViewTap = { onPlaybackAction(PlaybackActions.OnEpgUiToggle) }
         ) {
             OverlayEpg(
                 isFullScreen = videoViewState.isFullscreen,
                 title = videoViewState.currentChannel.channelName,
                 programs = videoViewState.currentChannel.programs,
-                currentChannel = videoViewState.currentChannel,
             )
         }
 
         OverlayContent(
             isVisible = videoViewState.isChannelsVisible,
-            onViewTap = viewModel::toggleChannelsVisibility,
+            onViewTap = { onPlaybackAction(PlaybackActions.OnChannelsUiToggle) },
             contentAlpha = MaterialTheme.dimens.alpha90,
         ) {
             OverlayChannels(
@@ -149,13 +170,13 @@ fun VideoViewContainer(
                 channels = videoViewChannelsState,
                 current = videoViewState.mediaPosition,
                 group = videoViewState.channelGroup,
-                onChannelSelect = viewModel::switchToChannel,
+                onChannelSelect = { chn -> onPlaybackAction(PlaybackActions.OnChannelSelected(chn)) }
             )
         }
 
         OverlayContent(
             isVisible = videoViewState.isChannelInfoVisible,
-            onViewTap = viewModel::toggleChannelInfoVisibility,
+            onViewTap = { onPlaybackAction(PlaybackActions.OnChannelInfoUiToggle) },
         ) {
             OverlayChannelInfo(
                 isFullScreen = videoViewState.isFullscreen,

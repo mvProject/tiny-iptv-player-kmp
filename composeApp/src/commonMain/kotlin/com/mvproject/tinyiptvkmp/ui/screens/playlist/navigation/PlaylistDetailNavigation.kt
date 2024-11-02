@@ -7,41 +7,26 @@
 
 package com.mvproject.tinyiptvkmp.ui.screens.playlist.navigation
 
-import androidx.compose.runtime.collectAsState
-import androidx.compose.runtime.getValue
-import androidx.lifecycle.SavedStateHandle
 import androidx.navigation.NavGraphBuilder
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.composable
 import com.mvproject.tinyiptvkmp.navigation.AppRoutes
-import com.mvproject.tinyiptvkmp.navigation.NavConstants.ARG_PLAYLIST_DETAIL
-import com.mvproject.tinyiptvkmp.navigation.NavConstants.ARG_PLAYLIST_DETAIL_NEW
 import com.mvproject.tinyiptvkmp.ui.screens.playlist.PlaylistView
 import com.mvproject.tinyiptvkmp.ui.screens.playlist.PlaylistViewModel
+import com.mvproject.tinyiptvkmp.utils.CommonUtils.empty
 import org.koin.compose.viewmodel.koinViewModel
 
-fun NavHostController.navigateToPlaylistDetail(id: String) {
-    val route = AppRoutes.PlaylistDetail.route + "/${id.ifEmpty { ARG_PLAYLIST_DETAIL_NEW }}"
+fun NavHostController.navigateToPlaylistDetail(id: String = String.empty) {
+    val route = AppRoutes.PlaylistDetail(id = id)
     this.navigate(route)
 }
 
-internal class PlaylistDetailArgs(
-    val id: String,
-) {
-    constructor(savedStateHandle: SavedStateHandle) :
-        this(id = checkNotNull(savedStateHandle[ARG_PLAYLIST_DETAIL]) as String)
-}
-
 fun NavGraphBuilder.playlistDetail(onNavigateBack: () -> Unit) {
-    composable(
-        route = AppRoutes.PlaylistDetail.route + "/{$ARG_PLAYLIST_DETAIL}",
-    ) {
+    composable<AppRoutes.PlaylistDetail> {
         val playlistViewModel = koinViewModel<PlaylistViewModel>()
-        val state by playlistViewModel.state.collectAsState()
 
         PlaylistView(
-            state = state,
-            onPlaylistAction = playlistViewModel::processAction,
+            viewModel = playlistViewModel,
             onNavigateBack = onNavigateBack,
         )
     }

@@ -10,6 +10,7 @@ package com.mvproject.tinyiptvkmp.ui.screens.channels
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import androidx.navigation.toRoute
 import com.mvproject.tinyiptvkmp.data.enums.ChannelsViewType
 import com.mvproject.tinyiptvkmp.data.enums.FavoriteType
 import com.mvproject.tinyiptvkmp.data.model.channels.TvPlaylistChannel
@@ -18,8 +19,8 @@ import com.mvproject.tinyiptvkmp.data.usecases.GetChannelsEpgUseCase
 import com.mvproject.tinyiptvkmp.data.usecases.GetGroupChannelsEpgUseCase
 import com.mvproject.tinyiptvkmp.data.usecases.GetGroupChannelsUseCase
 import com.mvproject.tinyiptvkmp.data.usecases.ToggleFavoriteChannelUseCase
+import com.mvproject.tinyiptvkmp.navigation.AppRoutes
 import com.mvproject.tinyiptvkmp.ui.screens.channels.action.TvPlaylistChannelAction
-import com.mvproject.tinyiptvkmp.ui.screens.channels.navigation.TvPlaylistChannelsArgs
 import com.mvproject.tinyiptvkmp.ui.screens.channels.state.TvPlaylistGroupState
 import com.mvproject.tinyiptvkmp.utils.KLog
 import com.mvproject.tinyiptvkmp.utils.TimeUtils
@@ -41,9 +42,10 @@ class TvPlaylistChannelsViewModel(
     private val _groupState = MutableStateFlow(TvPlaylistGroupState())
     val groupState = _groupState.asStateFlow()
 
-    private val args = TvPlaylistChannelsArgs(savedStateHandle)
+    private val args = savedStateHandle.toRoute<AppRoutes.TvPlaylistChannels>()
+
     private val group = args.group
-    private val type = args.type
+    private val type = args.groupType
 
     private var lastRefresh: Long = 0
 

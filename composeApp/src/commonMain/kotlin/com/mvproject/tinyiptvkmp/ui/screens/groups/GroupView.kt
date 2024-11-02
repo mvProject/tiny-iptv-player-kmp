@@ -21,11 +21,13 @@ import androidx.compose.foundation.lazy.items
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.lifecycle.compose.LifecycleResumeEffect
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.mvproject.tinyiptvkmp.ui.components.selectors.OptionSelector
 import com.mvproject.tinyiptvkmp.ui.components.toolbars.AppBarWithSettings
 import com.mvproject.tinyiptvkmp.ui.components.views.LoadingView
@@ -42,8 +44,27 @@ import tinyiptvkmp.composeapp.generated.resources.btn_add_first_playlist
 import tinyiptvkmp.composeapp.generated.resources.hint_current_playlist
 import tinyiptvkmp.composeapp.generated.resources.msg_no_items_found
 
+
 @Composable
-fun GroupView(
+internal fun GroupScreen(
+    viewModel: GroupViewModel,
+    onNavigateToSettings: () -> Unit = {},
+    onNavigateToGroup: (String, String) -> Unit,
+) {
+    val groupState by viewModel.groupState.collectAsStateWithLifecycle()
+    val groupUiState by viewModel.groupUiState.collectAsStateWithLifecycle()
+
+    GroupScreen(
+        state = groupState,
+        uiState = groupUiState,
+        onNavigateToSettings = onNavigateToSettings,
+        onNavigateToGroup = onNavigateToGroup,
+        onPlaylistAction = viewModel::processAction,
+    )
+}
+
+@Composable
+private fun GroupScreen(
     state: GroupState,
     uiState: GroupUiState,
     onNavigateToSettings: () -> Unit = {},
@@ -64,15 +85,15 @@ fun GroupView(
     ) { paddingValues ->
         Box(
             modifier =
-                Modifier
-                    .padding(paddingValues)
-                    .fillMaxSize(),
+            Modifier
+                .padding(paddingValues)
+                .fillMaxSize(),
         ) {
             Column(
                 modifier =
-                    Modifier
-                        .fillMaxSize()
-                        .padding(MaterialTheme.dimens.size8),
+                Modifier
+                    .fillMaxSize()
+                    .padding(MaterialTheme.dimens.size8),
                 horizontalAlignment = Alignment.CenterHorizontally,
                 verticalArrangement = Arrangement.Center,
             ) {
@@ -114,9 +135,9 @@ fun GroupView(
                     GroupUiState.Groups -> {
                         Column(
                             modifier =
-                                Modifier
-                                    .fillMaxSize()
-                                    .padding(vertical = MaterialTheme.dimens.size8),
+                            Modifier
+                                .fillMaxSize()
+                                .padding(vertical = MaterialTheme.dimens.size8),
                             horizontalAlignment = Alignment.CenterHorizontally,
                             verticalArrangement = Arrangement.Center,
                         ) {

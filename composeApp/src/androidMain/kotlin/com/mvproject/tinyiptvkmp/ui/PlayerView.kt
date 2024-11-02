@@ -126,6 +126,7 @@ internal fun PlayerView(
         onStopOrDispose {
             playerState.player.stop()
             systemUIController.isSystemBarsVisible = true
+            activity.requestedOrientation = ActivityInfo.SCREEN_ORIENTATION_PORTRAIT
         }
     }
 }

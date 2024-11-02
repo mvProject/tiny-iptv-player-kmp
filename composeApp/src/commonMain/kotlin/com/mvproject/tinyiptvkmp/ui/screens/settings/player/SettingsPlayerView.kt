@@ -25,6 +25,8 @@ import androidx.compose.material3.Switch
 import androidx.compose.material3.SwitchDefaults
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
@@ -47,7 +49,21 @@ import tinyiptvkmp.composeapp.generated.resources.option_default_resize_mode
 import tinyiptvkmp.composeapp.generated.resources.scr_player_settings_title
 
 @Composable
-fun SettingsPlayerView(
+internal fun SettingsPlayerScreen(
+    viewModel: SettingsPlayerViewModel,
+    onNavigateBack: () -> Unit
+){
+    val state by viewModel.settingsPlayerState.collectAsState()
+
+    SettingsPlayerScreen(
+        state = state,
+        onSettingsPlayerAction = viewModel::processAction,
+        onNavigateBack = onNavigateBack
+    )
+}
+
+@Composable
+private fun SettingsPlayerScreen(
     state: SettingsPlayerState,
     onNavigateBack: () -> Unit = {},
     onSettingsPlayerAction: (SettingsPlayerAction) -> Unit = {},

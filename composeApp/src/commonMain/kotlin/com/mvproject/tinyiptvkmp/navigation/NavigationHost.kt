@@ -28,7 +28,7 @@ import com.mvproject.tinyiptvkmp.ui.screens.settings.playlist.navigation.setting
 @Composable
 fun NavigationHost(
     modifier: Modifier = Modifier,
-    startDestination: String
+    startDestination: AppRoutes
 ) {
     val navController = rememberNavController()
 

@@ -8,8 +8,13 @@
 package com.mvproject.tinyiptvkmp.ui.components.modifiers
 
 import androidx.compose.foundation.background
+import androidx.compose.foundation.layout.ColumnScope
+import androidx.compose.foundation.layout.RowScope
+import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
@@ -41,3 +46,23 @@ fun Modifier.roundedHeader(
         )
     )
     .padding(padding)
+
+@Composable
+fun ColumnScope.SpacerHeight(height: Dp) {
+    Spacer(modifier = Modifier.height(height = height))
+}
+
+@Composable
+fun ColumnScope.SpacerHeight(weight: Float) {
+    Spacer(modifier = Modifier.weight(weight = weight))
+}
+
+@Composable
+fun RowScope.SpacerWidth(width: Dp) {
+    Spacer(modifier = Modifier.width(width = width))
+}
+
+@Composable
+fun RowScope.SpacerWidth(weight: Float) {
+    Spacer(modifier = Modifier.weight(weight = weight))
+}

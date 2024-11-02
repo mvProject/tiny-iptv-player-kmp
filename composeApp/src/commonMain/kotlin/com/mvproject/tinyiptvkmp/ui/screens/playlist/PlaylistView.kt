@@ -31,6 +31,8 @@ import androidx.compose.material3.TextField
 import androidx.compose.material3.TextFieldDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
@@ -69,7 +71,21 @@ import tinyiptvkmp.composeapp.generated.resources.msg_playlist_details
 import java.io.FileOutputStream
 
 @Composable
-fun PlaylistView(
+internal fun PlaylistView(
+    viewModel: PlaylistViewModel,
+    onNavigateBack: () -> Unit = {},
+) {
+    val state by viewModel.state.collectAsState()
+
+    PlaylistView(
+        state = state,
+        onPlaylistAction = viewModel::processAction,
+        onNavigateBack = onNavigateBack,
+    )
+}
+
+@Composable
+private fun PlaylistView(
     state: PlaylistState,
     onNavigateBack: () -> Unit = {},
     onPlaylistAction: (PlaylistAction) -> Unit = {},
@@ -86,13 +102,13 @@ fun PlaylistView(
         rememberFilePickerLauncher(
             mode = PickerMode.Single,
             type =
-                PickerType.File(
-                    extensions =
-                        listOf(
-                            String.typeM3U,
-                            String.typeM3U8,
-                        ),
+            PickerType.File(
+                extensions =
+                listOf(
+                    String.typeM3U,
+                    String.typeM3U8,
                 ),
+            ),
             title = stringResource(Res.string.btn_add_local),
         ) { selectedFile ->
             selectedFile?.let { file ->
@@ -116,9 +132,9 @@ fun PlaylistView(
 
     Scaffold(
         modifier =
-            Modifier
-                .fillMaxSize()
-                .windowInsetsPadding(WindowInsets.navigationBars),
+        Modifier
+            .fillMaxSize()
+            .windowInsetsPadding(WindowInsets.navigationBars),
         topBar = {
             AppBarWithBackNav(
                 appBarTitle = stringResource(Res.string.msg_playlist_details),
@@ -128,17 +144,17 @@ fun PlaylistView(
     ) { paddingValues ->
         Box(
             modifier =
-                Modifier
-                    .fillMaxSize()
-                    .padding(paddingValues),
+            Modifier
+                .fillMaxSize()
+                .padding(paddingValues),
         ) {
             val isUpdateOptionOpen = remember { mutableStateOf(false) }
 
             Column(
                 modifier =
-                    Modifier
-                        .fillMaxSize()
-                        .padding(MaterialTheme.dimens.size12),
+                Modifier
+                    .fillMaxSize()
+                    .padding(MaterialTheme.dimens.size12),
                 horizontalAlignment = Alignment.CenterHorizontally,
             ) {
                 TextField(
@@ -156,13 +172,13 @@ fun PlaylistView(
                     },
                     textStyle = MaterialTheme.typography.labelMedium,
                     colors =
-                        TextFieldDefaults.colors(
-                            focusedTextColor = MaterialTheme.colorScheme.onSurface,
-                            focusedContainerColor = Color.Transparent,
-                            unfocusedContainerColor = Color.Transparent,
-                            cursorColor = MaterialTheme.colorScheme.onSurfaceVariant,
-                            focusedIndicatorColor = MaterialTheme.colorScheme.onSurfaceVariant,
-                        ),
+                    TextFieldDefaults.colors(
+                        focusedTextColor = MaterialTheme.colorScheme.onSurface,
+                        focusedContainerColor = Color.Transparent,
+                        unfocusedContainerColor = Color.Transparent,
+                        cursorColor = MaterialTheme.colorScheme.onSurfaceVariant,
+                        focusedIndicatorColor = MaterialTheme.colorScheme.onSurfaceVariant,
+                    ),
                 )
 
                 Spacer(modifier = Modifier.height(MaterialTheme.dimens.size8))
@@ -183,14 +199,14 @@ fun PlaylistView(
                     },
                     textStyle = MaterialTheme.typography.labelMedium,
                     colors =
-                        TextFieldDefaults.colors(
-                            focusedTextColor = MaterialTheme.colorScheme.onSurface,
-                            focusedContainerColor = Color.Transparent,
-                            unfocusedContainerColor = Color.Transparent,
-                            disabledContainerColor = Color.DarkGray,
-                            cursorColor = MaterialTheme.colorScheme.onSurfaceVariant,
-                            focusedIndicatorColor = MaterialTheme.colorScheme.onSurfaceVariant,
-                        ),
+                    TextFieldDefaults.colors(
+                        focusedTextColor = MaterialTheme.colorScheme.onSurface,
+                        focusedContainerColor = Color.Transparent,
+                        unfocusedContainerColor = Color.Transparent,
+                        disabledContainerColor = Color.DarkGray,
+                        cursorColor = MaterialTheme.colorScheme.onSurfaceVariant,
+                        focusedIndicatorColor = MaterialTheme.colorScheme.onSurfaceVariant,
+                    ),
                 )
 
                 Spacer(modifier = Modifier.height(MaterialTheme.dimens.size8))
@@ -212,9 +228,9 @@ fun PlaylistView(
                     Row(
                         modifier = Modifier.fillMaxWidth(),
                         horizontalArrangement =
-                            Arrangement.spacedBy(
-                                space = MaterialTheme.dimens.size8,
-                            ),
+                        Arrangement.spacedBy(
+                            space = MaterialTheme.dimens.size8,
+                        ),
                         verticalAlignment = Alignment.CenterVertically,
                     ) {
                         HorizontalDivider(
@@ -242,9 +258,9 @@ fun PlaylistView(
                         },
                         modifier = Modifier.fillMaxWidth(),
                         colors =
-                            ButtonDefaults.buttonColors(
-                                containerColor = MaterialTheme.colorScheme.primary,
-                            ),
+                        ButtonDefaults.buttonColors(
+                            containerColor = MaterialTheme.colorScheme.primary,
+                        ),
                         shape = MaterialTheme.shapes.small,
                     ) {
                         Text(
@@ -267,14 +283,14 @@ fun PlaylistView(
                         }
                     },
                     modifier =
-                        Modifier
-                            .padding(vertical = MaterialTheme.dimens.size8)
-                            .fillMaxWidth()
-                            .windowInsetsPadding(WindowInsets.ime),
+                    Modifier
+                        .padding(vertical = MaterialTheme.dimens.size8)
+                        .fillMaxWidth()
+                        .windowInsetsPadding(WindowInsets.ime),
                     colors =
-                        ButtonDefaults.buttonColors(
-                            containerColor = MaterialTheme.colorScheme.onSurface,
-                        ),
+                    ButtonDefaults.buttonColors(
+                        containerColor = MaterialTheme.colorScheme.onSurface,
+                    ),
                     shape = MaterialTheme.shapes.small,
                 ) {
                     val text =
@@ -305,12 +321,12 @@ fun PlaylistView(
                     title = stringResource(Res.string.hint_update_period),
                     selectedIndex = state.updatePeriod,
                     options =
-                        Options(
-                            items =
-                                UpdatePeriod.entries.map {
-                                    stringResource(it.title)
-                                },
-                        ),
+                    Options(
+                        items =
+                        UpdatePeriod.entries.map {
+                            stringResource(it.title)
+                        },
+                    ),
                     onItemSelected = { index ->
                         onPlaylistAction(PlaylistAction.SetUpdatePeriod(index))
                         isUpdateOptionOpen.value = false
