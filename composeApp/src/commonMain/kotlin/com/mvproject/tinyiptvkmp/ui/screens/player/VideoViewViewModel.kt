@@ -251,50 +251,6 @@ class VideoViewViewModel(
         }
     }
 
-    /*    private fun applyEpg(data: ChannelEpg) {
-            KLog.d("testing channelsEpgData id = ${data.channelEpgId}, count = ${data.programs.count()}")
-            val channels = videoViewChannelsState.value.items
-            val channelIndex = channels.indexOfFirst { it.epgId == data.channelEpgId }
-
-            val channelWithEpg =
-                updateChannelWithEpg(
-                    index = channelIndex,
-                    programsData = data.programs,
-                )
-
-            updateChannel(
-                index = channelIndex,
-                channel = channelWithEpg,
-            )
-        }*/
-
-    /*
-        private fun updateChannelWithEpg(
-            index: Int,
-            programsData: List<EpgProgram>,
-        ): TvPlaylistChannel {
-            val current = videoViewChannelsState.value.items[index]
-            val updated = current.copy(programs = programsData)
-            return updated
-        }
-    */
-
-    /*    private fun updateChannel(
-            index: Int,
-            channel: TvPlaylistChannel,
-        ) {
-            val current = videoViewChannelsState.value.items
-
-            val updatedList =
-                current.toMutableList().apply {
-                    set(index, channel)
-                }
-
-            _videoViewChannelsState.update { state ->
-                state.copy(items = updatedList)
-            }
-        }*/
-
     private fun getCurrentMediaPosition(
         channelName: String,
         channels: List<TvPlaylistChannel>,
@@ -430,9 +386,11 @@ class VideoViewViewModel(
     }
 
     private fun toggleEpgVisibility() {
-        _videoViewState.update { current ->
-            val currentEpgVisibleState = current.isEpgVisible
-            current.copy(isEpgVisible = !currentEpgVisibleState)
+        if (videoViewState.value.isFullscreen) {
+            _videoViewState.update { current ->
+                val currentEpgVisibleState = current.isEpgVisible
+                current.copy(isEpgVisible = !currentEpgVisibleState)
+            }
         }
     }
 
@@ -505,28 +463,6 @@ class VideoViewViewModel(
             )
         }
     }
-
-    // private fun showControlUi() {
-    //     _videoViewState.update { current ->
-    //         current.copy(isControlUiVisible = true)
-    //     }
-    //     pollVideoPositionJob?.cancel()
-    //     pollVideoPositionJob =
-    //         viewModelScope.launch {
-    //             delay(hideControllerAfterMs)
-    //             hideControlUi()
-    //         }
-    // }
-
-    //  private fun hideControlUi() {
-    //      // todo temporally always show ui for desktop
-    //      _videoViewState.update { current ->
-    //          //        current.copy(isControlUiVisible = false)
-    //          current.copy(isControlUiVisible = isWindowsDesktop)
-    //      }
-    //      pollVideoPositionJob?.cancel()
-    //      pollVideoPositionJob = null
-    //  }
 
     private fun showVolumeUi() {
         _videoViewState.update { current ->

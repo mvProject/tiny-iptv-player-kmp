@@ -7,10 +7,10 @@ import com.mvproject.tinyiptvkmp.ui.screens.player.action.PlaybackStateActions
 import com.mvproject.tinyiptvkmp.ui.screens.player.state.VideoViewState
 
 @Composable
-expect fun PlayerViewContainer(
+expect fun PlayerView(
     modifier: Modifier = Modifier,
     videoViewState: VideoViewState,
     onPlaybackAction: (PlaybackActions) -> Unit = {},
     onPlaybackStateAction: (PlaybackStateActions) -> Unit = {},
-    controls: @Composable () -> Unit,
 )
+

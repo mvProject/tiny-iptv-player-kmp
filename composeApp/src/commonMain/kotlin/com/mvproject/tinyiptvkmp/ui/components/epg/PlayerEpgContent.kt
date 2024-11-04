@@ -42,10 +42,10 @@ fun PlayerEpgContent(
         if (epgList.isEmpty()) {
             Text(
                 modifier =
-                    Modifier
-                        .fillMaxWidth()
-                        .padding(horizontal = MaterialTheme.dimens.size12)
-                        .align(Alignment.Center),
+                Modifier
+                    .fillMaxWidth()
+                    .padding(horizontal = MaterialTheme.dimens.size12)
+                    .align(Alignment.Center),
                 text = stringResource(Res.string.msg_no_epg_found),
                 style = MaterialTheme.typography.titleLarge,
                 color = MaterialTheme.colorScheme.onSurface,
@@ -58,21 +58,16 @@ fun PlayerEpgContent(
             state = rememberLazyListState(),
             verticalArrangement = Arrangement.spacedBy(MaterialTheme.dimens.size10),
             contentPadding =
-                PaddingValues(
-                    vertical = MaterialTheme.dimens.size4,
-                    horizontal = MaterialTheme.dimens.size2,
-                ),
+            PaddingValues(
+                vertical = MaterialTheme.dimens.size4,
+                horizontal = MaterialTheme.dimens.size2,
+            ),
             content = {
                 items(
                     items = epgList,
                     key = { epg -> epg.key },
                 ) { epg ->
-                    PlayerEpgItem(
-                        modifier =
-                            Modifier
-                                .padding(start = MaterialTheme.dimens.size4),
-                        program = epg,
-                    )
+                    PlayerEpgItem(program = epg)
                 }
             },
         )

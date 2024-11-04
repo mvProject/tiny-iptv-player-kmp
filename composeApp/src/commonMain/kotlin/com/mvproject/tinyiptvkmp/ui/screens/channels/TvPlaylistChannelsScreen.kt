@@ -7,6 +7,7 @@
 
 package com.mvproject.tinyiptvkmp.ui.screens.channels
 
+import androidx.compose.animation.Crossfade
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.PaddingValues
@@ -111,65 +112,64 @@ private fun TvPlaylistChannelsScreen(
         // todo adaptive size depend on windowSizeClass
 
         Box(
-            modifier =
-            Modifier
+            modifier = Modifier
                 .fillMaxSize()
                 .padding(paddingValues),
         ) {
-            val columns =
+            val columns = remember(state.viewType) {
                 when (state.viewType) {
-                    ChannelsViewType.LIST -> {
-                        GridCells.Fixed(INT_VALUE_1)
-                    }
-
-                    else -> {
-                        GridCells.Adaptive(180.dp)
-                    }
+                    ChannelsViewType.LIST -> GridCells.Fixed(INT_VALUE_1)
+                    else -> GridCells.Adaptive(180.dp)
                 }
+            }
 
-            LazyVerticalGrid(
-                modifier = Modifier.fillMaxHeight(),
-                columns = columns,
-                state = rememberLazyGridState(),
-                verticalArrangement = Arrangement.spacedBy(MaterialTheme.dimens.size8),
-                horizontalArrangement = Arrangement.spacedBy(MaterialTheme.dimens.size8),
-                contentPadding =
-                PaddingValues(
-                    vertical = MaterialTheme.dimens.size4,
-                ),
-                content = {
-                    items(
-                        items = state.channels.filter {
-                            it.channelName.contains(searchString, true)
-                        },
-                        key = { chn -> chn.hashCode() },
-                    ) { item ->
-                        ChannelView(
-                            modifier = Modifier.fillMaxSize(),
-                            viewType = state.viewType,
-                            item = item,
-                            onChannelSelect = {
-                                onNavigateSelected(
-                                    item.channelName,
-                                    state.currentGroup
-                                )
+            Crossfade(
+                targetState = state.viewType
+            ) { viewType ->
+                LazyVerticalGrid(
+                    modifier = Modifier.fillMaxHeight(),
+                    columns = columns,
+                    state = rememberLazyGridState(),
+                    verticalArrangement = Arrangement.spacedBy(MaterialTheme.dimens.size8),
+                    horizontalArrangement = Arrangement.spacedBy(MaterialTheme.dimens.size8),
+                    contentPadding =
+                    PaddingValues(
+                        vertical = MaterialTheme.dimens.size4,
+                    ),
+                    content = {
+                        items(
+                            items = state.channels.filter {
+                                it.channelName.contains(searchString, true)
                             },
-                            onFavoriteClick = {
-                                selected = item
-                                isChannelOptionOpen.value = true
-                            },
-                            onShowEpgClick = {
-                                onAction(
-                                    TvPlaylistChannelAction.ToggleEpgVisibility(
+                            key = { chn -> chn.hashCode() },
+                        ) { item ->
+                            ChannelView(
+                                modifier = Modifier.fillMaxSize(),
+                                viewType = viewType,
+                                item = item,
+                                onChannelSelect = {
+                                    onNavigateSelected(
                                         item.channelName,
-                                        item.epgId
+                                        state.currentGroup
                                     )
-                                )
-                            },
-                        )
-                    }
-                },
-            )
+                                },
+                                onFavoriteClick = {
+                                    selected = item
+                                    isChannelOptionOpen.value = true
+                                },
+                                onShowEpgClick = {
+                                    onAction(
+                                        TvPlaylistChannelAction.ToggleEpgVisibility(
+                                            item.channelName,
+                                            item.epgId
+                                        )
+                                    )
+                                },
+                            )
+                        }
+                    },
+                )
+            }
 
             LoadingView(isVisible = state.isLoading)
 
@@ -192,7 +192,6 @@ private fun TvPlaylistChannelsScreen(
                 onViewTap = { onAction(TvPlaylistChannelAction.ToggleEpgVisibility()) },
             ) {
                 OverlayEpg(
-                    isFullScreen = false,
                     state.selectedName,
                     state.selectedPrograms
                 )

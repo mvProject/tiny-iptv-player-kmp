@@ -10,7 +10,6 @@ plugins {
     alias(libs.plugins.compose.compiler)
     alias(libs.plugins.kotlinx.serialization.plugin)
     alias(libs.plugins.ksp)
-    alias(libs.plugins.room)
 }
 
 kotlin {
@@ -18,6 +17,19 @@ kotlin {
         @OptIn(ExperimentalKotlinGradlePluginApi::class)
         compilerOptions {
             jvmTarget.set(JvmTarget.JVM_17)
+        }
+    }
+
+    targets.configureEach {
+        compilations.configureEach {
+            compileTaskProvider.configure {
+                compilerOptions {
+                    freeCompilerArgs.addAll(
+                        "-opt-in=kotlin.ExperimentalUnsignedTypes,kotlin.RequiresOptIn",
+                        "-Xexpect-actual-classes"
+                    )
+                }
+            }
         }
     }
 
@@ -61,8 +73,8 @@ kotlin {
             // Misc
             implementation(libs.androidx.annotation)
             implementation(libs.kotlinx.datetime)
-            implementation(libs.material3.window.size.multiplatform)
             implementation(libs.kotlinx.collections.immutable)
+            implementation(libs.compose.material3.adaptive)
 
             // Image processing
             implementation(libs.bundles.coil)
@@ -93,7 +105,6 @@ kotlin {
 
             // Misc
             implementation(libs.kotlinx.collections.immutable)
-            implementation(libs.accompanist.adaptive)
 
             implementation(libs.bundles.nextlib)
         }
@@ -112,7 +123,7 @@ kotlin {
             // Network
             implementation(libs.ktor.client.okhttp)
 
-             // Vlc player
+            // Vlc player
             implementation(libs.caprica.vlcj)
         }
     }
@@ -185,7 +196,7 @@ android {
 
 compose.desktop {
     application {
-        mainClass = "DesktopAppKt"
+        mainClass = "MainKt"
         nativeDistributions {
             packageName = "Tiny Iptv"
             packageVersion = "1.0.0"
@@ -208,8 +219,11 @@ dependencies {
     add("kspDesktop", libs.androidx.room.compiler)
 }
 
-room {
+/*room {
     schemaDirectory("$projectDir/schemas")
+}*/
+ksp {
+    arg("room.schemaLocation", "$projectDir/schemas")
 }
 
 fun readProperties(propertiesFile: File) =

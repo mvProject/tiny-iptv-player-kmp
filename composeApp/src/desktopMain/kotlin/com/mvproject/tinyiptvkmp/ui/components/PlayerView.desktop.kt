@@ -1,14 +1,6 @@
-/*
- *  Created by Medvediev Viktor [mvproject]
- *  Copyright © 2024
- *  last modified : 06.12.23, 12:45
- *
- */
-
-package com.mvproject.tinyiptvkmp.ui
+package com.mvproject.tinyiptvkmp.ui.components
 
 import androidx.compose.foundation.Canvas
-import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.aspectRatio
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.runtime.Composable
@@ -49,14 +41,12 @@ import uk.co.caprica.vlcj.player.embedded.videosurface.callback.RenderCallback
 import uk.co.caprica.vlcj.player.embedded.videosurface.callback.format.RV32BufferFormat
 import java.nio.ByteBuffer
 
-
 @Composable
-internal fun PlayerView(
-    modifier: Modifier = Modifier,
+actual fun PlayerView(
+    modifier: Modifier,
     videoViewState: VideoViewState,
-    onPlaybackAction: (PlaybackActions) -> Unit = {},
-    onPlaybackStateAction: (PlaybackStateActions) -> Unit = {},
-    controls: @Composable () -> Unit
+    onPlaybackAction: (PlaybackActions) -> Unit,
+    onPlaybackStateAction: (PlaybackStateActions) -> Unit,
 ) {
     // todo network Available check
 
@@ -91,20 +81,16 @@ internal fun PlayerView(
         videoPlayerState.setPlayingState(videoViewState.isPlaying)
     }
 
-    Box(
-        modifier = modifier.fillMaxSize()
-    ) {
-        VideoPlayerDirect(
-            modifier = Modifier
-                .fillMaxSize()
-                .aspectRatio(videoPlayerState.aspectRatio),
-            state = videoPlayerState,
-            url = videoViewState.currentChannel.channelUrl,
-            onPlaybackStateAction = onPlaybackStateAction
-        )
+    VideoPlayerDirect(
+        modifier = modifier
+            .fillMaxSize()
+            .aspectRatio(videoPlayerState.aspectRatio),
+        state = videoPlayerState,
+        url = videoViewState.currentChannel.channelUrl,
+        onPlaybackStateAction = onPlaybackStateAction
+    )
 
-        controls()
-    }
+
 }
 
 interface VideoPlayerState {

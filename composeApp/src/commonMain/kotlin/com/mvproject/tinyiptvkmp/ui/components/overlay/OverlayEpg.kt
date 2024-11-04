@@ -19,22 +19,19 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.style.TextAlign
 import com.mvproject.tinyiptvkmp.data.model.epg.EpgProgram
 import com.mvproject.tinyiptvkmp.ui.components.epg.PlayerEpgContent
-import com.mvproject.tinyiptvkmp.ui.components.modifiers.fullScreenWidth
 import com.mvproject.tinyiptvkmp.ui.components.modifiers.roundedHeader
 import com.mvproject.tinyiptvkmp.ui.theme.dimens
 
 @Composable
 fun OverlayEpg(
-    isFullScreen: Boolean = false,
     title:String,
     programs: List<EpgProgram>
-
 ) {
     Column(
         modifier =
             Modifier
                 .fillMaxHeight(MaterialTheme.dimens.fraction90)
-                .fullScreenWidth(enabled = isFullScreen),
+                .fillMaxWidth(MaterialTheme.dimens.fraction80)
     ) {
         Text(
             modifier =

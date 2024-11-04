@@ -15,16 +15,13 @@ import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -32,25 +29,14 @@ import androidx.compose.ui.graphics.painter.Painter
 import androidx.compose.ui.text.style.TextAlign
 import com.mvproject.tinyiptvkmp.ui.components.modifiers.SpacerHeight
 import com.mvproject.tinyiptvkmp.ui.theme.dimens
-import com.mvproject.tinyiptvkmp.utils.AppConstants.WEIGHT_50
-import com.mvproject.tinyiptvkmp.utils.AppConstants.WEIGHT_80
 
 @Composable
 fun NoPlaybackView(
     modifier: Modifier = Modifier.fillMaxSize(),
     isVisible: Boolean = false,
-    isFullScreen: Boolean = false,
     text: String = "NoPlaybackView",
     logo: Painter,
 ) {
-    val fraction = remember(isFullScreen) {
-        if (isFullScreen) WEIGHT_80 else WEIGHT_50
-    }
-
-    val alignment = remember(isFullScreen) {
-        if (isFullScreen) Alignment.Center else Alignment.TopCenter
-    }
-
     AnimatedVisibility(
         visible = isVisible,
         enter = fadeIn(),
@@ -58,18 +44,11 @@ fun NoPlaybackView(
     ) {
         Box(
             modifier = modifier,
-            contentAlignment = alignment
+            contentAlignment = Alignment.Center
         ) {
             Column(
                 modifier = Modifier
-                    .fillMaxHeight(fraction)
-                    .fillMaxWidth()
-                    .background(
-                        color = MaterialTheme.colorScheme.inverseSurface.copy(
-                            alpha = MaterialTheme.dimens.alpha70
-                        ),
-                        shape = MaterialTheme.shapes.small
-                    ),
+                    .fillMaxSize(MaterialTheme.dimens.fraction70),
                 verticalArrangement = Arrangement.Center,
                 horizontalAlignment = Alignment.CenterHorizontally
             ) {

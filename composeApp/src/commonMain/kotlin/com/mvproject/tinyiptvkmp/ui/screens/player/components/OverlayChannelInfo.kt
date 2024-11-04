@@ -17,9 +17,6 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.style.TextAlign
-import com.mvproject.tinyiptvkmp.data.mappers.ListMappers.toActual
-import com.mvproject.tinyiptvkmp.data.model.channels.TvPlaylistChannel
-import com.mvproject.tinyiptvkmp.ui.components.modifiers.fullScreenWidth
 import com.mvproject.tinyiptvkmp.ui.components.modifiers.roundedHeader
 import com.mvproject.tinyiptvkmp.ui.theme.dimens
 import com.mvproject.tinyiptvkmp.utils.CommonUtils.empty
@@ -29,45 +26,39 @@ import tinyiptvkmp.composeapp.generated.resources.msg_no_epg_found
 
 @Composable
 fun OverlayChannelInfo(
-    isFullScreen: Boolean = false,
-    currentChannel: TvPlaylistChannel,
+    channelName: String = String.empty,
+    channelDescription: String = String.empty,
 ) {
     Column(
         modifier =
-            Modifier
-                .wrapContentHeight()
-                .fullScreenWidth(enabled = isFullScreen)
-                .background(
-                    color = MaterialTheme.colorScheme.primary,
-                    shape = MaterialTheme.shapes.small,
-                ),
+        Modifier
+            .wrapContentHeight()
+            .fillMaxWidth(MaterialTheme.dimens.fraction80)
+            .background(
+                color = MaterialTheme.colorScheme.primary,
+                shape = MaterialTheme.shapes.small,
+            ),
     ) {
         Text(
             modifier =
-                Modifier
-                    .fillMaxWidth()
-                    .roundedHeader(),
-            text = currentChannel.channelName,
+            Modifier
+                .fillMaxWidth()
+                .roundedHeader(),
+            text = channelName,
             style = MaterialTheme.typography.titleMedium,
             color = MaterialTheme.colorScheme.primary,
             textAlign = TextAlign.Center,
         )
 
-        val description =
-            currentChannel.programs
-                .toActual()
-                .firstOrNull()
-                ?.description ?: String.empty
-
-        if (description.isEmpty()) {
+        if (channelDescription.isEmpty()) {
             Text(
                 modifier =
-                    Modifier
-                        .fillMaxWidth()
-                        .padding(
-                            horizontal = MaterialTheme.dimens.size18,
-                            vertical = MaterialTheme.dimens.size48,
-                        ),
+                Modifier
+                    .fillMaxWidth()
+                    .padding(
+                        horizontal = MaterialTheme.dimens.size18,
+                        vertical = MaterialTheme.dimens.size48,
+                    ),
                 text = stringResource(Res.string.msg_no_epg_found),
                 style = MaterialTheme.typography.titleLarge,
                 color = MaterialTheme.colorScheme.onSurfaceVariant,
@@ -76,11 +67,11 @@ fun OverlayChannelInfo(
         } else {
             Text(
                 modifier =
-                    Modifier
-                        .fillMaxWidth()
-                        .padding(all = MaterialTheme.dimens.size8),
-                text = description,
-                style = MaterialTheme.typography.labelMedium,
+                Modifier
+                    .fillMaxWidth()
+                    .padding(all = MaterialTheme.dimens.size16),
+                text = channelDescription,
+                style = MaterialTheme.typography.labelLarge,
                 color = MaterialTheme.colorScheme.onSurface,
             )
         }
