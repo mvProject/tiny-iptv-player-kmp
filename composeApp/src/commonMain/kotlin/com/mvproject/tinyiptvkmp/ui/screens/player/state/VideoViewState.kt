@@ -10,7 +10,6 @@ package com.mvproject.tinyiptvkmp.ui.screens.player.state
 import com.mvproject.tinyiptvkmp.data.enums.RatioMode
 import com.mvproject.tinyiptvkmp.data.enums.ResizeMode
 import com.mvproject.tinyiptvkmp.data.model.channels.TvPlaylistChannel
-import com.mvproject.tinyiptvkmp.ui.data.TvPlaylistChannels
 import com.mvproject.tinyiptvkmp.utils.AppConstants
 import com.mvproject.tinyiptvkmp.utils.CommonUtils.empty
 
@@ -35,8 +34,4 @@ data class VideoViewState(
     val videoRatio: Float = RatioMode.WideScreen.ratio,
     val videoResizeMode: ResizeMode = ResizeMode.Fit,
     val mediaPosition: Int = AppConstants.INT_NO_VALUE,
-)
-
-data class VideoViewChannelsState(
-    val channels: TvPlaylistChannels = TvPlaylistChannels(),
 )

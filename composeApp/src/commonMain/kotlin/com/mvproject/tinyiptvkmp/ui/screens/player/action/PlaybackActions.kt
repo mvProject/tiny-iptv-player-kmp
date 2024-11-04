@@ -7,6 +7,8 @@
 
 package com.mvproject.tinyiptvkmp.ui.screens.player.action
 
+import com.mvproject.tinyiptvkmp.data.model.channels.TvPlaylistChannel
+
 sealed class PlaybackActions {
 
     data object OnPlaybackToggle : PlaybackActions()
@@ -20,6 +22,7 @@ sealed class PlaybackActions {
     data object OnChannelInfoUiToggle : PlaybackActions()
     data object OnNextSelected : PlaybackActions()
     data object OnPreviousSelected : PlaybackActions()
+    data class OnChannelSelected(val channel: TvPlaylistChannel) : PlaybackActions()
     data object OnVolumeUp : PlaybackActions()
     data object OnVolumeDown : PlaybackActions()
     data object OnRestarted : PlaybackActions()

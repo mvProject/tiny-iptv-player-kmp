@@ -7,10 +7,12 @@
 
 package com.mvproject.tinyiptvkmp.data.model.channels
 
+import androidx.compose.runtime.Immutable
 import com.mvproject.tinyiptvkmp.data.enums.FavoriteType
-import com.mvproject.tinyiptvkmp.ui.screens.channels.data.TvPlaylistChannelEpg
+import com.mvproject.tinyiptvkmp.data.model.epg.EpgProgram
 import com.mvproject.tinyiptvkmp.utils.CommonUtils.empty
 
+@Immutable
 data class TvPlaylistChannel(
     val channelName: String = String.empty,
     val channelUrl: String = String.empty,
@@ -18,7 +20,7 @@ data class TvPlaylistChannel(
     val epgId: String = String.empty,
     val favoriteType: FavoriteType = FavoriteType.NONE,
     val isEpgUsing: Boolean = false,
-    val channelEpg: TvPlaylistChannelEpg = TvPlaylistChannelEpg(),
+    val programs: List<EpgProgram> = emptyList(),
 ) {
     override fun toString() =
         StringBuilder()
@@ -28,6 +30,6 @@ data class TvPlaylistChannel(
             .append("\n")
             .append("channelLogo: $channelLogo")
             .append("\n")
-            .append("channelEpgCount: ${channelEpg.items.count()}")
+            .append("channelEpgCount: ${programs.count()}")
             .toString()
 }

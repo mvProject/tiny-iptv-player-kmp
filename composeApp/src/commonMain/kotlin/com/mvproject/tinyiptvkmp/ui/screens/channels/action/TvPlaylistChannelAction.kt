@@ -10,6 +10,7 @@ package com.mvproject.tinyiptvkmp.ui.screens.channels.action
 import com.mvproject.tinyiptvkmp.data.enums.ChannelsViewType
 import com.mvproject.tinyiptvkmp.data.enums.FavoriteType
 import com.mvproject.tinyiptvkmp.data.model.channels.TvPlaylistChannel
+import com.mvproject.tinyiptvkmp.utils.CommonUtils.empty
 
 sealed class TvPlaylistChannelAction {
     data class ToggleFavourites(
@@ -27,5 +28,8 @@ sealed class TvPlaylistChannelAction {
 
     data object SearchTriggered : TvPlaylistChannelAction()
 
-    data object ToggleEpgVisibility : TvPlaylistChannelAction()
+    data class ToggleEpgVisibility(
+        val name: String = String.empty,
+        val epgID: String = String.empty
+    ) : TvPlaylistChannelAction()
 }

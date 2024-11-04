@@ -22,7 +22,6 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import com.mvproject.tinyiptvkmp.data.enums.FavoriteType
-import com.mvproject.tinyiptvkmp.data.mappers.ListMappers.toActual
 import com.mvproject.tinyiptvkmp.data.model.channels.TvPlaylistChannel
 import org.jetbrains.compose.resources.stringResource
 import tinyiptvkmp.composeapp.generated.resources.Res
@@ -39,15 +38,15 @@ fun ChannelListView(
 ) {
     ListItem(
         modifier =
-            modifier
-                .combinedClickable(
-                    onClick = onChannelSelect,
-                    onLongClick = onShowEpgClick,
-                ).clip(MaterialTheme.shapes.extraSmall),
+        modifier
+            .combinedClickable(
+                onClick = onChannelSelect,
+                onLongClick = onShowEpgClick,
+            ).clip(MaterialTheme.shapes.extraSmall),
         colors =
-            ListItemDefaults.colors(
-                containerColor = MaterialTheme.colorScheme.surface,
-            ),
+        ListItemDefaults.colors(
+            containerColor = MaterialTheme.colorScheme.surface,
+        ),
         leadingContent = {
             ChannelImageLogo(
                 channelLogo = channel.channelLogo,
@@ -59,20 +58,19 @@ fun ChannelListView(
                 text = channel.channelName,
                 style = MaterialTheme.typography.bodyMedium,
                 color =
-                    if (channel.favoriteType != FavoriteType.NONE) {
-                        MaterialTheme.colorScheme.onSurfaceVariant
-                    } else {
-                        MaterialTheme.colorScheme.onPrimary
-                    },
+                if (channel.favoriteType != FavoriteType.NONE) {
+                    MaterialTheme.colorScheme.onSurfaceVariant
+                } else {
+                    MaterialTheme.colorScheme.onPrimary
+                },
             )
         },
         supportingContent = {
-            // todo epg count view
-            channel.channelEpg.items.toActual().take(1).forEach {
+            channel.programs.forEach {
                 ScheduleEpgItemView(program = it)
             }
 
-            if (channel.channelEpg.items.isEmpty()) {
+            if (channel.programs.isEmpty()) {
                 Text(
                     text = stringResource(Res.string.msg_no_epg_found),
                     style = MaterialTheme.typography.labelMedium,

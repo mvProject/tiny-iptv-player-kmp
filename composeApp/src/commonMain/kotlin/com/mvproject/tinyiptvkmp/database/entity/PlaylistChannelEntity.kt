@@ -9,7 +9,7 @@ package com.mvproject.tinyiptvkmp.database.entity
 
 import androidx.room.Entity
 
-@Entity(primaryKeys = ["channelUrl", "parentListId"])
+@Entity(tableName = "playlistChannels", primaryKeys = ["channelUrl", "parentListId"])
 data class PlaylistChannelEntity(
     val channelUrl: String,
     val channelName: String,

@@ -7,6 +7,7 @@
 
 package com.mvproject.tinyiptvkmp.ui.screens.channels
 
+import androidx.compose.animation.Crossfade
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.PaddingValues
@@ -24,7 +25,6 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
-import androidx.compose.runtime.derivedStateOf
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -42,6 +42,7 @@ import com.mvproject.tinyiptvkmp.ui.screens.channels.action.TvPlaylistChannelAct
 import com.mvproject.tinyiptvkmp.ui.screens.channels.components.ChannelView
 import com.mvproject.tinyiptvkmp.ui.screens.channels.components.OverlayChannelOptions
 import com.mvproject.tinyiptvkmp.ui.screens.channels.navigation.NavigationGroup
+import com.mvproject.tinyiptvkmp.ui.screens.channels.state.TvPlaylistGroupState
 import com.mvproject.tinyiptvkmp.ui.theme.dimens
 import com.mvproject.tinyiptvkmp.utils.AppConstants.INT_VALUE_1
 import com.mvproject.tinyiptvkmp.utils.CommonUtils.empty
@@ -51,7 +52,6 @@ internal fun TvPlaylistChannelsScreen(
     viewModel: TvPlaylistChannelsViewModel,
     onNavigateSelected: NavigationGroup,
     onNavigateBack: () -> Unit,
-    onAction: (TvPlaylistChannelAction) -> Unit,
 ) {
     LifecycleResumeEffect(Unit) {
         viewModel.loadChannelsByGroups()
@@ -59,23 +59,37 @@ internal fun TvPlaylistChannelsScreen(
         onPauseOrDispose { }
     }
 
-    val viewState by viewModel.groupState.collectAsState()
-    val channelsState by viewModel.channelsState.collectAsState()
+    val groupState by viewModel.groupState.collectAsState()
 
+    TvPlaylistChannelsScreen(
+        state = groupState,
+        onAction = viewModel::processAction,
+        onNavigateBack = onNavigateBack,
+        onNavigateSelected = onNavigateSelected
+    )
+}
+
+@Composable
+private fun TvPlaylistChannelsScreen(
+    state: TvPlaylistGroupState,
+    onNavigateSelected: NavigationGroup,
+    onNavigateBack: () -> Unit,
+    onAction: (TvPlaylistChannelAction) -> Unit,
+) {
     var searchString by remember {
         mutableStateOf(String.empty)
     }
 
     Scaffold(
         modifier =
-            Modifier
-                .fillMaxSize()
-                .windowInsetsPadding(WindowInsets.ime),
+        Modifier
+            .fillMaxSize()
+            .windowInsetsPadding(WindowInsets.ime),
         topBar = {
             AppBarWithSearch(
-                appBarTitle = viewState.currentGroup,
+                appBarTitle = state.currentGroup,
                 searchTextState = searchString,
-                searchWidgetState = viewState.isSearching,
+                searchWidgetState = state.isSearching,
                 onBackClick = onNavigateBack,
                 onSearchTriggered = {
                     onAction(TvPlaylistChannelAction.SearchTriggered)
@@ -95,74 +109,69 @@ internal fun TvPlaylistChannelsScreen(
             mutableStateOf(TvPlaylistChannel())
         }
 
-        val channelsList by remember(searchString) {
-            derivedStateOf {
-                if (searchString.length > INT_VALUE_1) {
-                    channelsState.items.filter {
-                        it.channelName.contains(searchString, true)
-                    }
-                } else {
-                    channelsState.items
-                }
-            }
-        }
-
         // todo adaptive size depend on windowSizeClass
 
         Box(
-            modifier =
-                Modifier
-                    .fillMaxSize()
-                    .padding(paddingValues),
+            modifier = Modifier
+                .fillMaxSize()
+                .padding(paddingValues),
         ) {
-            val columns =
-                when (viewState.viewType) {
-                    ChannelsViewType.LIST -> {
-                        GridCells.Fixed(INT_VALUE_1)
-                    }
-
-                    else -> {
-                        GridCells.Adaptive(180.dp)
-                    }
+            val columns = remember(state.viewType) {
+                when (state.viewType) {
+                    ChannelsViewType.LIST -> GridCells.Fixed(INT_VALUE_1)
+                    else -> GridCells.Adaptive(180.dp)
                 }
+            }
 
-            LazyVerticalGrid(
-                modifier = Modifier.fillMaxHeight(),
-                columns = columns,
-                state = rememberLazyGridState(),
-                verticalArrangement = Arrangement.spacedBy(MaterialTheme.dimens.size8),
-                horizontalArrangement = Arrangement.spacedBy(MaterialTheme.dimens.size8),
-                contentPadding =
+            Crossfade(
+                targetState = state.viewType
+            ) { viewType ->
+                LazyVerticalGrid(
+                    modifier = Modifier.fillMaxHeight(),
+                    columns = columns,
+                    state = rememberLazyGridState(),
+                    verticalArrangement = Arrangement.spacedBy(MaterialTheme.dimens.size8),
+                    horizontalArrangement = Arrangement.spacedBy(MaterialTheme.dimens.size8),
+                    contentPadding =
                     PaddingValues(
                         vertical = MaterialTheme.dimens.size4,
                     ),
-                content = {
-                    items(
-                        items = channelsList,
-                        key = { chn -> chn.hashCode() },
-                    ) { item ->
-                        ChannelView(
-                            modifier = Modifier.fillMaxSize(),
-                            viewType = viewState.viewType,
-                            item = item,
-                            onChannelSelect = {
-                                onNavigateSelected(item.channelName, viewState.currentGroup)
+                    content = {
+                        items(
+                            items = state.channels.filter {
+                                it.channelName.contains(searchString, true)
                             },
-                            onFavoriteClick = {
-                                selected = item
-                                isChannelOptionOpen.value = true
-                            },
-                            onShowEpgClick = {
-                                onAction(TvPlaylistChannelAction.ToggleEpgVisibility)
-                            },
-                        )
-                    }
-                },
-            )
+                            key = { chn -> chn.hashCode() },
+                        ) { item ->
+                            ChannelView(
+                                modifier = Modifier.fillMaxSize(),
+                                viewType = viewType,
+                                item = item,
+                                onChannelSelect = {
+                                    onNavigateSelected(
+                                        item.channelName,
+                                        state.currentGroup
+                                    )
+                                },
+                                onFavoriteClick = {
+                                    selected = item
+                                    isChannelOptionOpen.value = true
+                                },
+                                onShowEpgClick = {
+                                    onAction(
+                                        TvPlaylistChannelAction.ToggleEpgVisibility(
+                                            item.channelName,
+                                            item.epgId
+                                        )
+                                    )
+                                },
+                            )
+                        }
+                    },
+                )
+            }
 
-            LoadingView(
-                isVisible = viewState.isLoading,
-            )
+            LoadingView(isVisible = state.isLoading)
 
             OverlayContent(
                 isVisible = isChannelOptionOpen.value,
@@ -179,12 +188,12 @@ internal fun TvPlaylistChannelsScreen(
             }
 
             OverlayContent(
-                isVisible = viewState.isEpgVisible,
-                onViewTap = { onAction(TvPlaylistChannelAction.ToggleEpgVisibility) },
+                isVisible = state.selectedName.isNotBlank(),
+                onViewTap = { onAction(TvPlaylistChannelAction.ToggleEpgVisibility()) },
             ) {
                 OverlayEpg(
-                    isFullScreen = false,
-                    currentChannel = selected,
+                    state.selectedName,
+                    state.selectedPrograms
                 )
             }
         }

@@ -26,6 +26,8 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
@@ -36,12 +38,13 @@ import com.mvproject.tinyiptvkmp.ui.components.overlay.OverlayContent
 import com.mvproject.tinyiptvkmp.ui.components.overlay.OverlayOptionsMenu
 import com.mvproject.tinyiptvkmp.ui.components.selectors.OptionSelector
 import com.mvproject.tinyiptvkmp.ui.components.toolbars.AppBarWithBackNav
-import com.mvproject.tinyiptvkmp.ui.data.Options
 import com.mvproject.tinyiptvkmp.ui.screens.settings.general.action.SettingsAction
 import com.mvproject.tinyiptvkmp.ui.screens.settings.general.state.SettingsState
+import com.mvproject.tinyiptvkmp.ui.theme.VideoAppTheme
 import com.mvproject.tinyiptvkmp.ui.theme.dimens
 import com.mvproject.tinyiptvkmp.utils.AppConstants.WEIGHT_1
 import org.jetbrains.compose.resources.stringResource
+import org.jetbrains.compose.ui.tooling.preview.Preview
 import tinyiptvkmp.composeapp.generated.resources.Res
 import tinyiptvkmp.composeapp.generated.resources.hint_update_period
 import tinyiptvkmp.composeapp.generated.resources.option_update_epg_data
@@ -52,7 +55,25 @@ import tinyiptvkmp.composeapp.generated.resources.scr_playlist_settings_title
 import tinyiptvkmp.composeapp.generated.resources.scr_settings_title
 
 @Composable
-fun SettingsGeneralView(
+internal fun SettingsGeneralScreen(
+    viewModel: SettingsViewModel,
+    onNavigateBack: () -> Unit,
+    onNavigatePlayerSettings: () -> Unit,
+    onNavigatePlaylistSettings: () -> Unit
+) {
+    val settingsState by viewModel.state.collectAsState()
+
+    SettingsGeneralScreen(
+        state = settingsState,
+        onSettingsAction = viewModel::processAction,
+        onNavigateBack = onNavigateBack,
+        onNavigatePlayerSettings = onNavigatePlayerSettings,
+        onNavigatePlaylistSettings = onNavigatePlaylistSettings
+    )
+}
+
+@Composable
+private fun SettingsGeneralScreen(
     state: SettingsState,
     onSettingsAction: (SettingsAction) -> Unit = {},
     onNavigateBack: () -> Unit = {},
@@ -61,8 +82,8 @@ fun SettingsGeneralView(
 ) {
     Scaffold(
         modifier =
-            Modifier
-                .fillMaxSize(),
+        Modifier
+            .fillMaxSize(),
         topBar = {
             AppBarWithBackNav(
                 appBarTitle = stringResource(Res.string.scr_settings_title),
@@ -76,22 +97,22 @@ fun SettingsGeneralView(
 
         Column(
             modifier =
-                Modifier
-                    .padding(paddingValues)
-                    .fillMaxSize()
-                    .padding(MaterialTheme.dimens.size8),
+            Modifier
+                .padding(paddingValues)
+                .fillMaxSize()
+                .padding(MaterialTheme.dimens.size8),
             verticalArrangement = Arrangement.spacedBy(MaterialTheme.dimens.size12),
         ) {
             Column {
                 ListItem(
                     modifier =
-                        Modifier
-                            .clickable(onClick = onNavigatePlaylistSettings)
-                            .clip(MaterialTheme.shapes.extraSmall),
+                    Modifier
+                        .clickable(onClick = onNavigatePlaylistSettings)
+                        .clip(MaterialTheme.shapes.extraSmall),
                     colors =
-                        ListItemDefaults.colors(
-                            containerColor = MaterialTheme.colorScheme.background,
-                        ),
+                    ListItemDefaults.colors(
+                        containerColor = MaterialTheme.colorScheme.background,
+                    ),
                     headlineContent = {
                         Text(
                             text = stringResource(Res.string.scr_playlist_settings_title),
@@ -103,10 +124,10 @@ fun SettingsGeneralView(
                         FilledIconButton(
                             onClick = onNavigatePlaylistSettings,
                             colors =
-                                IconButtonDefaults.filledIconButtonColors(
-                                    containerColor = MaterialTheme.colorScheme.onPrimary,
-                                    contentColor = MaterialTheme.colorScheme.primary,
-                                ),
+                            IconButtonDefaults.filledIconButtonColors(
+                                containerColor = MaterialTheme.colorScheme.onPrimary,
+                                contentColor = MaterialTheme.colorScheme.primary,
+                            ),
                         ) {
                             Icon(
                                 imageVector = Icons.AutoMirrored.Filled.ArrowRight,
@@ -117,8 +138,8 @@ fun SettingsGeneralView(
                 )
                 HorizontalDivider(
                     modifier =
-                        Modifier
-                            .padding(horizontal = MaterialTheme.dimens.size8),
+                    Modifier
+                        .padding(horizontal = MaterialTheme.dimens.size8),
                     color = MaterialTheme.colorScheme.onPrimary,
                 )
             }
@@ -126,13 +147,13 @@ fun SettingsGeneralView(
             Column {
                 ListItem(
                     modifier =
-                        Modifier
-                            .clickable(onClick = onNavigatePlayerSettings)
-                            .clip(MaterialTheme.shapes.extraSmall),
+                    Modifier
+                        .clickable(onClick = onNavigatePlayerSettings)
+                        .clip(MaterialTheme.shapes.extraSmall),
                     colors =
-                        ListItemDefaults.colors(
-                            containerColor = MaterialTheme.colorScheme.background,
-                        ),
+                    ListItemDefaults.colors(
+                        containerColor = MaterialTheme.colorScheme.background,
+                    ),
                     headlineContent = {
                         Text(
                             text = stringResource(Res.string.scr_player_settings_title),
@@ -144,10 +165,10 @@ fun SettingsGeneralView(
                         FilledIconButton(
                             onClick = onNavigatePlaylistSettings,
                             colors =
-                                IconButtonDefaults.filledIconButtonColors(
-                                    containerColor = MaterialTheme.colorScheme.onPrimary,
-                                    contentColor = MaterialTheme.colorScheme.primary,
-                                ),
+                            IconButtonDefaults.filledIconButtonColors(
+                                containerColor = MaterialTheme.colorScheme.onPrimary,
+                                contentColor = MaterialTheme.colorScheme.primary,
+                            ),
                         ) {
                             Icon(
                                 imageVector = Icons.AutoMirrored.Filled.ArrowRight,
@@ -159,21 +180,21 @@ fun SettingsGeneralView(
 
                 HorizontalDivider(
                     modifier =
-                        Modifier
-                            .padding(horizontal = MaterialTheme.dimens.size8),
+                    Modifier
+                        .padding(horizontal = MaterialTheme.dimens.size8),
                     color = MaterialTheme.colorScheme.onPrimary,
                 )
             }
 
             Row(
                 modifier =
-                    Modifier
-                        .fillMaxWidth()
-                        .padding(horizontal = MaterialTheme.dimens.size8),
+                Modifier
+                    .fillMaxWidth()
+                    .padding(horizontal = MaterialTheme.dimens.size8),
                 horizontalArrangement =
-                    Arrangement.spacedBy(
-                        space = MaterialTheme.dimens.size8,
-                    ),
+                Arrangement.spacedBy(
+                    space = MaterialTheme.dimens.size8,
+                ),
                 verticalAlignment = Alignment.CenterVertically,
             ) {
                 HorizontalDivider(
@@ -195,9 +216,9 @@ fun SettingsGeneralView(
 
             OptionSelector(
                 modifier =
-                    Modifier
-                        .fillMaxWidth()
-                        .padding(horizontal = MaterialTheme.dimens.size8),
+                Modifier
+                    .fillMaxWidth()
+                    .padding(horizontal = MaterialTheme.dimens.size8),
                 title = stringResource(Res.string.option_update_epg_info),
                 selectedItem = stringResource(UpdatePeriod.entries[state.infoUpdatePeriod].title),
                 isExpanded = isSelectInfoUpdateOpen.value,
@@ -208,9 +229,9 @@ fun SettingsGeneralView(
 
             OptionSelector(
                 modifier =
-                    Modifier
-                        .fillMaxWidth()
-                        .padding(horizontal = MaterialTheme.dimens.size8),
+                Modifier
+                    .fillMaxWidth()
+                    .padding(horizontal = MaterialTheme.dimens.size8),
                 title = stringResource(Res.string.option_update_epg_data),
                 selectedItem = stringResource(UpdatePeriod.entries[state.epgUpdatePeriod].title),
                 isExpanded = isSelectEpgUpdateOpen.value,
@@ -228,13 +249,7 @@ fun SettingsGeneralView(
             OverlayOptionsMenu(
                 title = stringResource(Res.string.hint_update_period),
                 selectedIndex = state.infoUpdatePeriod,
-                options =
-                    Options(
-                        items =
-                            UpdatePeriod.entries.map {
-                                stringResource(it.title)
-                            },
-                    ),
+                options = UpdatePeriod.entries.map { stringResource(it.title) },
                 onItemSelected = { index ->
                     onSettingsAction(SettingsAction.SetInfoUpdatePeriod(index))
                     isSelectInfoUpdateOpen.value = false
@@ -250,13 +265,7 @@ fun SettingsGeneralView(
             OverlayOptionsMenu(
                 title = stringResource(Res.string.hint_update_period),
                 selectedIndex = state.epgUpdatePeriod,
-                options =
-                    Options(
-                        items =
-                            UpdatePeriod.entries.map {
-                                stringResource(it.title)
-                            },
-                    ),
+                options = UpdatePeriod.entries.map { stringResource(it.title) },
                 onItemSelected = { index ->
                     onSettingsAction(SettingsAction.SetEpgUpdatePeriod(index))
                     isSelectEpgUpdateOpen.value = false
@@ -266,11 +275,11 @@ fun SettingsGeneralView(
     }
 }
 // todo replace preview
-/*
-@Preview(showBackground = true, showSystemUi = true)
+
+@Preview
 @Composable
 fun PreviewDarkSettingsView() {
     VideoAppTheme(darkTheme = true) {
-        SettingsView(state = SettingsState())
+        SettingsGeneralScreen(state = SettingsState())
     }
-}*/
+}

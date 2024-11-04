@@ -19,6 +19,7 @@ data class Playlist(
     val playlistType: PlaylistType = PlaylistType.REMOTE,
     val lastUpdateDate: Long = LONG_VALUE_ZERO,
     val updatePeriod: Long = LONG_VALUE_ZERO,
+    val isSelected: Boolean = false,
 ) {
     override fun toString(): String =
         StringBuilder()
@@ -32,5 +33,7 @@ data class Playlist(
             .append("updatePeriod - $updatePeriod")
             .append("\n")
             .append("lastUpdateDate - $lastUpdateDate")
+            .append("\n")
+            .append("isSelected - $isSelected")
             .toString()
 }

@@ -17,29 +17,28 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.style.TextAlign
-import com.mvproject.tinyiptvkmp.data.model.channels.TvPlaylistChannel
+import com.mvproject.tinyiptvkmp.data.model.epg.EpgProgram
 import com.mvproject.tinyiptvkmp.ui.components.epg.PlayerEpgContent
-import com.mvproject.tinyiptvkmp.ui.components.modifiers.fullScreenWidth
 import com.mvproject.tinyiptvkmp.ui.components.modifiers.roundedHeader
 import com.mvproject.tinyiptvkmp.ui.theme.dimens
 
 @Composable
 fun OverlayEpg(
-    isFullScreen: Boolean = false,
-    currentChannel: TvPlaylistChannel,
+    title:String,
+    programs: List<EpgProgram>
 ) {
     Column(
         modifier =
             Modifier
                 .fillMaxHeight(MaterialTheme.dimens.fraction90)
-                .fullScreenWidth(enabled = isFullScreen),
+                .fillMaxWidth(MaterialTheme.dimens.fraction80)
     ) {
         Text(
             modifier =
                 Modifier
                     .fillMaxWidth()
                     .roundedHeader(),
-            text = currentChannel.channelName,
+            text = title,
             style = MaterialTheme.typography.titleMedium,
             color = MaterialTheme.colorScheme.primary,
             textAlign = TextAlign.Center,
@@ -55,7 +54,7 @@ fun OverlayEpg(
                             bottomEnd = MaterialTheme.dimens.size8,
                         ),
                 ),
-            epgList = currentChannel.channelEpg,
+            epgList = programs,
         )
     }
 }

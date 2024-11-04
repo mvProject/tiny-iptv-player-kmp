@@ -27,45 +27,41 @@ class PlaylistChannelsRepository(
         playlistChannelDao.savePlaylistChannels(data = channelsData)
     }
 
-    suspend fun loadPlaylistGroups(listId: Long): List<String> =
+    suspend fun loadPlaylistGroups(): List<String> =
         playlistChannelDao
-            .getPlaylistChannelsGroups(id = listId)
+            .getPlaylistChannelsGroups()
             .distinctBy { it }
 
-    suspend fun loadPlaylistChannelsCount(listId: Long): Int =
-        playlistChannelDao
-            .getPlaylistChannelsCount(id = listId)
+    suspend fun loadPlaylistChannelsCount(): Int = playlistChannelDao.getPlaylistChannelsCount()
 
-    suspend fun loadPlaylistGroupChannelsCount(
-        listId: Long,
-        group: String,
-    ): Int =
+    suspend fun loadPlaylistGroupChannelsCount(group: String): Int =
         playlistChannelDao
-            .getPlaylistGroupChannelsCount(id = listId, group = group)
+            .getPlaylistGroupChannelsCount(group = group)
 
-    suspend fun loadChannelsById(listId: Long): List<PlaylistChannel> =
+    suspend fun loadChannelsById(): List<PlaylistChannel> =
         playlistChannelDao
-            .getPlaylistChannelsById(id = listId)
+            .getPlaylistChannelsById()
             .map { entity ->
                 entity.toPlaylistChannel()
             }
 
-    suspend fun loadPlaylistChannelsByUrls(
-        listId: Long,
-        urls: List<String>,
-    ): List<PlaylistChannel> =
+    suspend fun loadAllChannels(): List<PlaylistChannel> =
         playlistChannelDao
-            .getChannelsByUrls(id = listId, urls = urls)
+            .getAllChannels()
             .map { entity ->
                 entity.toPlaylistChannel()
             }
 
-    suspend fun loadPlaylistGroupChannels(
-        listId: Long,
-        group: String,
-    ): List<PlaylistChannel> =
+    suspend fun loadPlaylistChannelsByUrls(urls: List<String>): List<PlaylistChannel> =
         playlistChannelDao
-            .getChannelsByPlaylistGroup(id = listId, group = group)
+            .getChannelsByUrls(urls = urls)
+            .map { entity ->
+                entity.toPlaylistChannel()
+            }
+
+    suspend fun loadPlaylistGroupChannels(group: String): List<PlaylistChannel> =
+        playlistChannelDao
+            .getChannelsByPlaylistGroup(group = group)
             .map { entity ->
                 entity.toPlaylistChannel()
             }

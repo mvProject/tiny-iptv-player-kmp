@@ -15,9 +15,7 @@ import androidx.compose.animation.scaleOut
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.wrapContentHeight
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
@@ -29,6 +27,7 @@ import androidx.compose.ui.text.style.TextAlign
 import com.mvproject.tinyiptvkmp.data.enums.FavoriteType
 import com.mvproject.tinyiptvkmp.data.mappers.ListMappers.toActual
 import com.mvproject.tinyiptvkmp.data.model.channels.TvPlaylistChannel
+import com.mvproject.tinyiptvkmp.ui.components.modifiers.SpacerHeight
 import com.mvproject.tinyiptvkmp.ui.components.modifiers.roundedHeader
 import com.mvproject.tinyiptvkmp.ui.screens.player.action.PlaybackActions
 import com.mvproject.tinyiptvkmp.ui.theme.dimens
@@ -72,13 +71,12 @@ fun PlayerChannelView(
                     textAlign = TextAlign.Center,
                 )
 
-                Spacer(modifier = Modifier.height(MaterialTheme.dimens.size2))
-
-                if (currentChannel.channelEpg.items.isNotEmpty()) {
-                    currentChannel.channelEpg.items.toActual().take(programCount).forEach { epg ->
+                SpacerHeight(height = MaterialTheme.dimens.size2)
+                if (currentChannel.programs.isNotEmpty()) {
+                    currentChannel.programs.toActual().take(programCount).forEach { epg ->
                         PlayerChannelEpgItem(epgProgram = epg)
                     }
-                    Spacer(modifier = Modifier.height(MaterialTheme.dimens.size2))
+                    SpacerHeight(height = MaterialTheme.dimens.size2)
                 }
 
                 PlayerControlView(

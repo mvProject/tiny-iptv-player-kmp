@@ -10,52 +10,44 @@ package com.mvproject.tinyiptvkmp.data.usecases
 import com.mvproject.tinyiptvkmp.data.enums.FavoriteType
 import com.mvproject.tinyiptvkmp.data.enums.GroupType
 import com.mvproject.tinyiptvkmp.data.mappers.EntityMapper.toTvPlaylistChannel
-import com.mvproject.tinyiptvkmp.data.model.channels.TvPlaylistChannel
 import com.mvproject.tinyiptvkmp.data.repository.FavoriteChannelsRepository
 import com.mvproject.tinyiptvkmp.data.repository.PlaylistChannelsRepository
-import com.mvproject.tinyiptvkmp.data.repository.PreferenceRepository
 import com.mvproject.tinyiptvkmp.utils.KLog
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.withContext
 
 class GetGroupChannelsUseCase(
-    private val preferenceRepository: PreferenceRepository,
     private val playlistChannelsRepository: PlaylistChannelsRepository,
     private val favoriteChannelsRepository: FavoriteChannelsRepository,
 ) {
     suspend operator fun invoke(
         group: String,
         groupType: String,
-    ): List<TvPlaylistChannel> {
-        val currentPlaylistId = preferenceRepository.loadCurrentPlaylistId()
+    ) = withContext(Dispatchers.IO) {
         KLog.d("testing GetGroupChannelsUseCase group = $group, groupType = $groupType")
 
-        val favorites =
-            favoriteChannelsRepository
-                .loadPlaylistFavoriteChannelUrls(listId = currentPlaylistId)
+        val favorites = favoriteChannelsRepository.loadSelectedFavoriteChannels()
 
         val channels =
             when (groupType) {
                 GroupType.SPECIFIED.name -> {
-                    playlistChannelsRepository.loadPlaylistGroupChannels(
-                        listId = currentPlaylistId,
-                        group = group,
-                    )
+                    playlistChannelsRepository.loadPlaylistGroupChannels(group = group)
                 }
 
                 GroupType.FAVORITE.name -> {
-                    val filtered = favorites.filter { it.type.name == group }
-                    playlistChannelsRepository.loadPlaylistChannelsByUrls(
-                        listId = currentPlaylistId,
-                        urls = filtered.map { it.url },
-                    )
+                    val filtered = favorites
+                        .filter { it.type.name == group }
+                        .map { it.url }
+
+                    playlistChannelsRepository.loadPlaylistChannelsByUrls(urls = filtered)
                 }
+
                 else -> {
-                    playlistChannelsRepository.loadChannelsById(
-                        listId = currentPlaylistId,
-                    )
+                    playlistChannelsRepository.loadChannelsById()
                 }
             }
 
-        return channels
+        channels
             .asSequence()
             .map { channel ->
 

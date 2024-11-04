@@ -25,6 +25,8 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
 import com.mvproject.tinyiptvkmp.ui.components.toolbars.AppBarWithBackNav
 import com.mvproject.tinyiptvkmp.ui.components.views.NoItemsView
@@ -41,17 +43,33 @@ import tinyiptvkmp.composeapp.generated.resources.msg_no_playlist
 import tinyiptvkmp.composeapp.generated.resources.scr_playlist_settings_title
 
 @Composable
-fun SettingsPlaylistView(
-    dataState: SettingsPlaylistState,
+internal fun SettingsPlaylistScreen(
+    viewModel: SettingsPlaylistViewModel,
+    onNavigateBack: () -> Unit = {},
+    onNavigatePlaylist: (String) -> Unit = {},
+) {
+    val playlistDataState by viewModel.playlistDataState.collectAsState()
+
+    SettingsPlaylistScreen(
+        state = playlistDataState,
+        onPlaylistAction = viewModel::processAction,
+        onNavigateBack = onNavigateBack,
+        onNavigatePlaylist = onNavigatePlaylist
+    )
+}
+
+@Composable
+private fun SettingsPlaylistScreen(
+    state: SettingsPlaylistState,
     onNavigateBack: () -> Unit = {},
     onNavigatePlaylist: (String) -> Unit = {},
     onPlaylistAction: (SettingsPlaylistAction) -> Unit = {},
 ) {
     Scaffold(
         modifier =
-            Modifier
-                .fillMaxSize()
-                .windowInsetsPadding(WindowInsets.navigationBars),
+        Modifier
+            .fillMaxSize()
+            .windowInsetsPadding(WindowInsets.navigationBars),
         topBar = {
             AppBarWithBackNav(
                 appBarTitle = stringResource(Res.string.scr_playlist_settings_title),
@@ -64,13 +82,13 @@ fun SettingsPlaylistView(
                     onNavigatePlaylist(String.empty)
                 },
                 modifier =
-                    Modifier
-                        .padding(MaterialTheme.dimens.size8)
-                        .fillMaxWidth(),
+                Modifier
+                    .padding(MaterialTheme.dimens.size8)
+                    .fillMaxWidth(),
                 colors =
-                    ButtonDefaults.buttonColors(
-                        containerColor = MaterialTheme.colorScheme.onSurface,
-                    ),
+                ButtonDefaults.buttonColors(
+                    containerColor = MaterialTheme.colorScheme.onSurface,
+                ),
                 shape = MaterialTheme.shapes.small,
             ) {
                 Text(
@@ -83,20 +101,20 @@ fun SettingsPlaylistView(
     ) { paddingValues ->
         Box(
             modifier =
-                Modifier
-                    .padding(paddingValues)
-                    .fillMaxSize(),
+            Modifier
+                .padding(paddingValues)
+                .fillMaxSize(),
         ) {
             LazyColumn(
                 modifier =
-                    Modifier
-                        .fillMaxSize(),
+                Modifier
+                    .fillMaxSize(),
                 state = rememberLazyListState(),
                 verticalArrangement = Arrangement.spacedBy(MaterialTheme.dimens.size4),
                 contentPadding = PaddingValues(MaterialTheme.dimens.size8),
             ) {
                 items(
-                    dataState.playlists.items,
+                    state.playlists,
                     key = { it.id },
                 ) { item ->
                     PlaylistItemView(
@@ -112,7 +130,7 @@ fun SettingsPlaylistView(
                 }
             }
 
-            if (dataState.dataIsEmpty) {
+            if (state.dataIsEmpty) {
                 NoItemsView(
                     modifier = Modifier.fillMaxSize(),
                     title = stringResource(Res.string.msg_no_items_found),

@@ -76,4 +76,32 @@ object M3UParser {
             }
         }
     }
+
+    fun parsePlaylist2(string: String): List<PlaylistChannelParseModel> {
+        return string.split(TAG_METADATA)
+            .filter { !it.contains(TAG_PLAYLIST_HEADER) }
+            .mapNotNull { parseEntry(it) }
+    }
+
+    private fun parseEntry(entry: String): PlaylistChannelParseModel? {
+        val lines = entry.split("\n")
+        if (lines.size < 2) return null
+
+        val meta = lines[0].trim()
+        val link = lines.find { it.startsWith("http") || it.startsWith("https") }?.trim() ?: lines[1].trim()
+        val group = lines.find { it.startsWith(TAG_GROUP) }?.substringAfter(TAG_GROUP)?.trim() ?: ""
+
+        val logo = extractAttribute(meta, ATTR_LOGO)
+        val groupTitle = extractAttribute(meta, ATTR_GROUP_TITLE)
+        val actualGroup = group.ifEmpty { groupTitle }.uppercase()
+        val title = meta.substringAfterLast(',').trim()
+
+        return PlaylistChannelParseModel(link, logo, actualGroup, title)
+    }
+
+    private fun extractAttribute(meta: String, attr: String): String {
+        val regex = """$attr="([^"]*)"""".toRegex()
+        return regex.find(meta)?.groupValues?.get(1) ?: ""
+    }
 }
+

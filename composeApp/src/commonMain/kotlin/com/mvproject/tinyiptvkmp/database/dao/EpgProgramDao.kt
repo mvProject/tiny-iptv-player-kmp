@@ -8,6 +8,7 @@
 package com.mvproject.tinyiptvkmp.database.dao
 
 import androidx.room.Dao
+import androidx.room.Delete
 import androidx.room.Insert
 import androidx.room.OnConflictStrategy
 import androidx.room.Query
@@ -18,18 +19,21 @@ interface EpgProgramDao {
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     suspend fun insertPrograms(data: List<EpgProgramEntity>)
 
-    @Query("SELECT * FROM EpgProgramEntity WHERE EpgProgramEntity.channelId IN (:ids) AND programEnd > :time")
+    @Query("SELECT * FROM epgPrograms WHERE channelId IN (:ids) AND dateTimeEnd > :time")
     suspend fun getPrograms(
         ids: List<String>,
         time: Long,
     ): List<EpgProgramEntity>
 
-    @Query("SELECT * FROM EpgProgramEntity WHERE EpgProgramEntity.channelId = :id AND programEnd > :time")
+    @Query("SELECT * FROM epgPrograms WHERE channelId = :id AND dateTimeEnd > :time")
     suspend fun getProgram(
         id: String,
         time: Long,
     ): List<EpgProgramEntity>
 
-    @Query("DELETE FROM EpgProgramEntity WHERE EpgProgramEntity.channelId = :id")
+    @Query("DELETE FROM epgPrograms WHERE channelId = :id")
     suspend fun deleteProgram(id: String)
+
+    @Query("DELETE FROM epgPrograms WHERE dateTimeEnd < :timeStamp")
+    suspend fun deleteProgramsByDate(timeStamp: Long) :Int
 }

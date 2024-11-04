@@ -11,33 +11,25 @@ import com.mvproject.tinyiptvkmp.data.model.playlist.Playlist
 import com.mvproject.tinyiptvkmp.data.repository.FavoriteChannelsRepository
 import com.mvproject.tinyiptvkmp.data.repository.PlaylistChannelsRepository
 import com.mvproject.tinyiptvkmp.data.repository.PlaylistsRepository
-import com.mvproject.tinyiptvkmp.data.repository.PreferenceRepository
-import com.mvproject.tinyiptvkmp.utils.AppConstants.LONG_NO_VALUE
-import kotlinx.coroutines.flow.first
 
 class DeletePlaylistUseCase(
-    private val preferenceRepository: PreferenceRepository,
     private val playlistsRepository: PlaylistsRepository,
     private val playlistChannelsRepository: PlaylistChannelsRepository,
     private val favoriteChannelsRepository: FavoriteChannelsRepository,
 ) {
     suspend operator fun invoke(playlist: Playlist) {
-        val currentPlaylistId = preferenceRepository.currentPlaylistId.first()
-
-        if (currentPlaylistId == playlist.id) {
-            val availablePlaylistIds =
+        if (playlist.isSelected) {
+            // Find another list to be set as selected
+            val updateSelected =
                 playlistsRepository
                     .getAllPlaylists()
-                    .map { it.id }
-
-            val newPlaylistId =
-                availablePlaylistIds
-                    .firstOrNull { it != currentPlaylistId } ?: LONG_NO_VALUE
-
-            preferenceRepository.setCurrentPlaylistId(
-                playlistId = newPlaylistId,
-            )
+                    .firstOrNull { !it.isSelected }
+            // Update the selection state of the new list if found
+            updateSelected?.let { selected ->
+                playlistsRepository.savePlaylist(selected.copy(isSelected = true))
+            }
         }
+        playlistsRepository.deleteSinglePlaylist(playlist = playlist)
 
         favoriteChannelsRepository.deletePlaylistFavoriteChannels(
             listId = playlist.id,
@@ -46,7 +38,5 @@ class DeletePlaylistUseCase(
         playlistChannelsRepository.deletePlaylistChannels(
             listId = playlist.id,
         )
-
-        playlistsRepository.deletePlaylistById(id = playlist.id)
     }
 }

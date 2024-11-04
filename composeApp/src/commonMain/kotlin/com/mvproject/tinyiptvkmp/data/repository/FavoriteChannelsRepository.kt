@@ -20,15 +20,15 @@ class FavoriteChannelsRepository(
     private val appDatabase: AppDatabase,
 ) {
     private val favoriteChannelDao = appDatabase.favoriteChannelDao()
+    private val playlistDao = appDatabase.playlistDao()
 
     suspend fun addChannelToFavorite(
         channel: TvPlaylistChannel,
         favoriteType: FavoriteType,
-        listId: Long,
     ) {
         withContext(Dispatchers.IO) {
-            val favoriteCount =
-                favoriteChannelDao.getFavoriteChannelCount(id = listId)
+            val favoriteCount = favoriteChannelDao.getFavoriteChannelCount()
+            val playlistId = playlistDao.getSelectedPlaylistId()
 
             val order = (favoriteCount + INT_VALUE_1).toLong()
 
@@ -38,7 +38,7 @@ class FavoriteChannelsRepository(
                     channelUrl = channel.channelUrl,
                     channelOrder = order,
                     favoriteType = favoriteType,
-                    parentListId = listId,
+                    parentListId = playlistId,
                 ),
             )
         }
@@ -53,18 +53,20 @@ class FavoriteChannelsRepository(
         }
     }
 
-    suspend fun deleteChannelFromFavorite(
-        channelUrl: String,
-        listId: Long,
-    ) {
-        favoriteChannelDao.deleteChannelFromFavorite(
-            id = listId,
-            channelUrl = channelUrl,
-        )
+    suspend fun deleteChannelFromFavorite(channelUrl: String) {
+        favoriteChannelDao.deleteChannelFromFavorite(channelUrl = channelUrl)
     }
 
-    suspend fun loadPlaylistFavoriteChannelUrls(listId: Long): List<FavTypes> =
-        favoriteChannelDao.getPlaylistFavoriteChannelUrls(id = listId).map { item ->
+    suspend fun loadSelectedFavoriteChannels(): List<FavTypes> =
+        favoriteChannelDao.getSelectedFavoriteChannels().map { item ->
+            FavTypes(
+                url = item.channelUrl,
+                type = item.favoriteType,
+            )
+        }
+
+    suspend fun loadFavoriteChannelById(id: Long): List<FavTypes> =
+        favoriteChannelDao.getFavoriteChannelById(id = id).map { item ->
             FavTypes(
                 url = item.channelUrl,
                 type = item.favoriteType,

@@ -10,9 +10,7 @@ package com.mvproject.tinyiptvkmp.ui.screens.player.components
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.wrapContentHeight
 import androidx.compose.foundation.layout.wrapContentWidth
 import androidx.compose.material3.MaterialTheme
@@ -25,6 +23,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.style.TextAlign
 import com.mvproject.tinyiptvkmp.data.model.epg.EpgProgram
+import com.mvproject.tinyiptvkmp.ui.components.modifiers.SpacerHeight
 import com.mvproject.tinyiptvkmp.ui.components.views.DurationProgressView
 import com.mvproject.tinyiptvkmp.ui.theme.dimens
 import com.mvproject.tinyiptvkmp.utils.AppConstants.COUNT_ZERO_FLOAT
@@ -47,7 +46,7 @@ fun PlayerChannelEpgItem(epgProgram: EpgProgram) {
             color = MaterialTheme.colorScheme.onSurfaceVariant,
         )
 
-        Spacer(modifier = Modifier.height(MaterialTheme.dimens.size2))
+        SpacerHeight(height = MaterialTheme.dimens.size2)
 
         val isProgramProgressShow by remember {
             derivedStateOf {
@@ -66,7 +65,7 @@ fun PlayerChannelEpgItem(epgProgram: EpgProgram) {
             ) {
                 Text(
                     modifier = Modifier.wrapContentWidth(),
-                    text = epgProgram.start.convertTimeToReadableFormat(),
+                    text = epgProgram.dateTimeStart.convertTimeToReadableFormat(),
                     style = MaterialTheme.typography.bodySmall,
                     color = MaterialTheme.colorScheme.onSurfaceVariant,
                     textAlign = TextAlign.Center,
@@ -79,7 +78,7 @@ fun PlayerChannelEpgItem(epgProgram: EpgProgram) {
 
                 Text(
                     modifier = Modifier.wrapContentWidth(),
-                    text = epgProgram.stop.convertTimeToReadableFormat(),
+                    text = epgProgram.dateTimeEnd.convertTimeToReadableFormat(),
                     style = MaterialTheme.typography.bodySmall,
                     color = MaterialTheme.colorScheme.onSurfaceVariant,
                     textAlign = TextAlign.Center,

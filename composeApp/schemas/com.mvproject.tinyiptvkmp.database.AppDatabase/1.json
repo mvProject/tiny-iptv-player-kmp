@@ -2,65 +2,58 @@
   "formatVersion": 1,
   "database": {
     "version": 1,
-    "identityHash": "fba18bd2eda89c6bc08dff155563b1d0",
+    "identityHash": "1374b2db5f304d303c9d0e5f7499f37a",
     "entities": [
       {
-        "tableName": "EpgInfoEntity",
-        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`channelId` TEXT NOT NULL, `channelName` TEXT NOT NULL, `channelLogo` TEXT NOT NULL, `lastUpdated` INTEGER NOT NULL, PRIMARY KEY(`channelId`, `channelName`))",
+        "tableName": "epgChannels",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`id` TEXT NOT NULL, `programId` TEXT NOT NULL, `title` TEXT NOT NULL, `logo` TEXT NOT NULL, PRIMARY KEY(`id`))",
         "fields": [
           {
-            "fieldPath": "channelId",
-            "columnName": "channelId",
+            "fieldPath": "id",
+            "columnName": "id",
             "affinity": "TEXT",
             "notNull": true
           },
           {
-            "fieldPath": "channelName",
-            "columnName": "channelName",
+            "fieldPath": "programId",
+            "columnName": "programId",
             "affinity": "TEXT",
             "notNull": true
           },
           {
-            "fieldPath": "channelLogo",
-            "columnName": "channelLogo",
+            "fieldPath": "title",
+            "columnName": "title",
             "affinity": "TEXT",
             "notNull": true
           },
           {
-            "fieldPath": "lastUpdated",
-            "columnName": "lastUpdated",
-            "affinity": "INTEGER",
+            "fieldPath": "logo",
+            "columnName": "logo",
+            "affinity": "TEXT",
             "notNull": true
           }
         ],
         "primaryKey": {
           "autoGenerate": false,
           "columnNames": [
-            "channelId",
-            "channelName"
+            "id"
           ]
         }
       },
       {
-        "tableName": "EpgProgramEntity",
-        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`channelId` TEXT NOT NULL, `programStart` INTEGER NOT NULL, `programEnd` INTEGER NOT NULL, `title` TEXT NOT NULL, `description` TEXT NOT NULL, PRIMARY KEY(`programStart`, `programEnd`, `title`))",
+        "tableName": "epgPrograms",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`programId` TEXT NOT NULL, `channelId` TEXT NOT NULL, `title` TEXT NOT NULL, `description` TEXT NOT NULL, `dateTimeStart` INTEGER NOT NULL, `dateTimeEnd` INTEGER NOT NULL, PRIMARY KEY(`programId`))",
         "fields": [
           {
-            "fieldPath": "channelId",
-            "columnName": "channelId",
+            "fieldPath": "programId",
+            "columnName": "programId",
             "affinity": "TEXT",
             "notNull": true
           },
           {
-            "fieldPath": "programStart",
-            "columnName": "programStart",
-            "affinity": "INTEGER",
-            "notNull": true
-          },
-          {
-            "fieldPath": "programEnd",
-            "columnName": "programEnd",
-            "affinity": "INTEGER",
+            "fieldPath": "channelId",
+            "columnName": "channelId",
+            "affinity": "TEXT",
             "notNull": true
           },
           {
@@ -74,19 +67,29 @@
             "columnName": "description",
             "affinity": "TEXT",
             "notNull": true
+          },
+          {
+            "fieldPath": "dateTimeStart",
+            "columnName": "dateTimeStart",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "dateTimeEnd",
+            "columnName": "dateTimeEnd",
+            "affinity": "INTEGER",
+            "notNull": true
           }
         ],
         "primaryKey": {
           "autoGenerate": false,
           "columnNames": [
-            "programStart",
-            "programEnd",
-            "title"
+            "programId"
           ]
         }
       },
       {
-        "tableName": "FavoriteChannelEntity",
+        "tableName": "favoriteChannels",
         "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`channelName` TEXT NOT NULL, `channelUrl` TEXT NOT NULL, `channelOrder` INTEGER NOT NULL, `favoriteType` TEXT NOT NULL, `parentListId` INTEGER NOT NULL, PRIMARY KEY(`channelName`, `parentListId`))",
         "fields": [
           {
@@ -129,8 +132,8 @@
         }
       },
       {
-        "tableName": "PlaylistEntity",
-        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`id` INTEGER NOT NULL, `playlistName` TEXT NOT NULL, `playlistSource` TEXT NOT NULL, `playlistType` TEXT NOT NULL, `lastUpdateDate` INTEGER NOT NULL, `updatePeriod` INTEGER NOT NULL, PRIMARY KEY(`id`))",
+        "tableName": "playlists",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`id` INTEGER NOT NULL, `playlistName` TEXT NOT NULL, `playlistSource` TEXT NOT NULL, `playlistType` TEXT NOT NULL, `lastUpdateDate` INTEGER NOT NULL, `updatePeriod` INTEGER NOT NULL, `isSelected` INTEGER NOT NULL, PRIMARY KEY(`id`))",
         "fields": [
           {
             "fieldPath": "id",
@@ -167,6 +170,12 @@
             "columnName": "updatePeriod",
             "affinity": "INTEGER",
             "notNull": true
+          },
+          {
+            "fieldPath": "isSelected",
+            "columnName": "isSelected",
+            "affinity": "INTEGER",
+            "notNull": true
           }
         ],
         "primaryKey": {
@@ -177,7 +186,7 @@
         }
       },
       {
-        "tableName": "PlaylistChannelEntity",
+        "tableName": "playlistChannels",
         "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`channelUrl` TEXT NOT NULL, `channelName` TEXT NOT NULL, `channelLogo` TEXT NOT NULL, `channelGroup` TEXT NOT NULL, `epgId` TEXT NOT NULL, `parentListId` INTEGER NOT NULL, PRIMARY KEY(`channelUrl`, `parentListId`))",
         "fields": [
           {
@@ -228,7 +237,7 @@
     ],
     "setupQueries": [
       "CREATE TABLE IF NOT EXISTS room_master_table (id INTEGER PRIMARY KEY,identity_hash TEXT)",
-      "INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, 'fba18bd2eda89c6bc08dff155563b1d0')"
+      "INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, '1374b2db5f304d303c9d0e5f7499f37a')"
     ]
   }
 }

@@ -25,17 +25,14 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.style.TextAlign
 import com.mvproject.tinyiptvkmp.data.mappers.ListMappers.withRefreshedEpg
 import com.mvproject.tinyiptvkmp.data.model.channels.TvPlaylistChannel
-import com.mvproject.tinyiptvkmp.ui.components.modifiers.fullScreenWidth
 import com.mvproject.tinyiptvkmp.ui.components.modifiers.roundedHeader
-import com.mvproject.tinyiptvkmp.ui.data.TvPlaylistChannels
 import com.mvproject.tinyiptvkmp.ui.screens.channels.components.ChannelListView
 import com.mvproject.tinyiptvkmp.ui.theme.dimens
 
 @Composable
 fun OverlayChannels(
-    isFullScreen: Boolean = false,
     group: String,
-    channels: TvPlaylistChannels,
+    channels: List<TvPlaylistChannel> = emptyList(),
     current: Int = 0,
     onChannelSelect: (TvPlaylistChannel) -> Unit = {},
 ) {
@@ -48,7 +45,7 @@ fun OverlayChannels(
         modifier =
             Modifier
                 .fillMaxHeight(MaterialTheme.dimens.fraction90)
-                .fullScreenWidth(enabled = isFullScreen)
+                .fillMaxWidth(MaterialTheme.dimens.fraction80)
                 .background(
                     color = MaterialTheme.colorScheme.primary,
                     shape = MaterialTheme.shapes.small,
@@ -76,7 +73,7 @@ fun OverlayChannels(
                 ),
             content = {
                 items(
-                    items = channels.items.withRefreshedEpg(),
+                    items = channels.withRefreshedEpg(),
                     key = { chn -> chn.hashCode() },
                 ) { chn ->
                     ChannelListView(

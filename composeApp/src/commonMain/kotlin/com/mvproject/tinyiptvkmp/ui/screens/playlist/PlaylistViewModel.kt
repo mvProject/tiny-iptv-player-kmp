@@ -10,11 +10,12 @@ package com.mvproject.tinyiptvkmp.ui.screens.playlist
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import androidx.navigation.toRoute
 import com.mvproject.tinyiptvkmp.data.enums.PlaylistType
 import com.mvproject.tinyiptvkmp.data.usecases.GetPlaylistUseCase
 import com.mvproject.tinyiptvkmp.data.usecases.SavePlaylistUseCase
+import com.mvproject.tinyiptvkmp.navigation.AppRoutes
 import com.mvproject.tinyiptvkmp.ui.screens.playlist.action.PlaylistAction
-import com.mvproject.tinyiptvkmp.ui.screens.playlist.navigation.PlaylistDetailArgs
 import com.mvproject.tinyiptvkmp.ui.screens.playlist.state.PlaylistState
 import com.mvproject.tinyiptvkmp.utils.AppConstants.LONG_VALUE_ZERO
 import com.mvproject.tinyiptvkmp.utils.KLog
@@ -32,7 +33,7 @@ class PlaylistViewModel(
     private val _state = MutableStateFlow(PlaylistState())
     val state = _state.asStateFlow()
 
-    private val args = PlaylistDetailArgs(savedStateHandle)
+    private val args = savedStateHandle.toRoute<AppRoutes.PlaylistDetail>()
 
     init {
         initPlaylist(playlistId = args.id)

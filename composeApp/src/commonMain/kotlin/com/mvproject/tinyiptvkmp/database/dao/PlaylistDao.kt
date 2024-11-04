@@ -18,18 +18,21 @@ interface PlaylistDao {
     @Upsert
     suspend fun savePlaylist(data: PlaylistEntity)
 
-    @Query("SELECT * FROM PlaylistEntity")
+    @Upsert
+    suspend fun savePlaylists(data: List<PlaylistEntity>)
+
+    @Query("SELECT * FROM playlists")
     fun getAllPlaylistsAsFlow(): Flow<List<PlaylistEntity>>
 
-    @Query("SELECT * FROM PlaylistEntity")
+    @Query("SELECT * FROM playlists")
     suspend fun getAllPlaylists(): List<PlaylistEntity>
 
-    @Query("SELECT COUNT(*) FROM PlaylistEntity ")
-    suspend fun getAllPlaylistsCount(): Int
+    @Query("SELECT id FROM playlists WHERE isSelected==1")
+    suspend fun getSelectedPlaylistId(): Long
 
-    @Query("SELECT * FROM PlaylistEntity WHERE id = :id")
+    @Query("SELECT * FROM playlists WHERE id = :id")
     suspend fun getPlaylistById(id: Long): PlaylistEntity
 
-    @Query("DELETE FROM PlaylistEntity WHERE id = :id")
+    @Query("DELETE FROM playlists WHERE id = :id")
     suspend fun deletePlaylist(id: Long)
 }

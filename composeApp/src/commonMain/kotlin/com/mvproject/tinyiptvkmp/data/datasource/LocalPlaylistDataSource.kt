@@ -9,32 +9,26 @@ package com.mvproject.tinyiptvkmp.data.datasource
 
 import com.mvproject.tinyiptvkmp.data.mappers.ParseMappers
 import com.mvproject.tinyiptvkmp.data.model.channels.PlaylistChannel
-import java.io.BufferedReader
-import java.io.FileInputStream
-import java.io.InputStreamReader
-import kotlin.io.path.Path
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.withContext
+import okio.FileSystem
+import okio.Path.Companion.toPath
 
 class LocalPlaylistDataSource {
-    fun getFromLocalPlaylist(
+    suspend fun getFromLocalPlaylist(
         playlistId: Long,
         source: String,
-    ): List<PlaylistChannel> {
-        val file = Path(source).toFile()
-        return buildList {
-            InputStreamReader(FileInputStream(file), Charsets.UTF_8).use { inputStreamReader ->
-                BufferedReader(inputStreamReader).use { bufferedReader ->
-                    bufferedReader.readText().also { content ->
-
-                        val channels =
-                            ParseMappers.parseStringToChannels(
-                                playlistId = playlistId,
-                                source = content,
-                            )
-
-                        addAll(channels)
-                    }
+    ): List<PlaylistChannel> =
+        withContext(Dispatchers.Default) {
+            val path = source.toPath()
+            val content =
+                FileSystem.SYSTEM.read(path) {
+                    readUtf8()
                 }
-            }
+
+            ParseMappers.parseStringToChannels(
+                playlistId = playlistId,
+                source = content,
+            )
         }
-    }
 }

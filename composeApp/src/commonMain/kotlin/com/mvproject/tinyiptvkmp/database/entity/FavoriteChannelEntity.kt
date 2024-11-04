@@ -10,7 +10,7 @@ package com.mvproject.tinyiptvkmp.database.entity
 import androidx.room.Entity
 import com.mvproject.tinyiptvkmp.data.enums.FavoriteType
 
-@Entity(primaryKeys = ["channelName", "parentListId"])
+@Entity(tableName = "favoriteChannels", primaryKeys = ["channelName", "parentListId"])
 data class FavoriteChannelEntity(
     val channelName: String,
     val channelUrl: String,

@@ -12,7 +12,6 @@ import com.mvproject.tinyiptvkmp.data.model.channels.ChannelsGroup
 import com.mvproject.tinyiptvkmp.data.model.channels.TvPlaylistChannel
 import com.mvproject.tinyiptvkmp.data.model.epg.EpgProgram
 import com.mvproject.tinyiptvkmp.data.model.playlist.Playlist
-import com.mvproject.tinyiptvkmp.ui.screens.channels.data.TvPlaylistChannelEpg
 import com.mvproject.tinyiptvkmp.utils.TimeUtils.actualDate
 import kotlin.random.Random
 import kotlin.time.Duration.Companion.minutes
@@ -23,14 +22,15 @@ object PreviewTestData {
             channelName = "channelName",
             channelLogo = "",
             channelUrl = "",
-            channelEpg = TvPlaylistChannelEpg(),
+            programs = emptyList(),
         )
 
     val testEpgProgram =
         EpgProgram(
+            programId = "1",
             channelId = Random.nextLong().toString(),
-            start = actualDate - 30.minutes.inWholeMilliseconds,
-            stop = actualDate + 90.minutes.inWholeMilliseconds,
+            dateTimeStart = actualDate - 30.minutes.inWholeMilliseconds,
+            dateTimeEnd = actualDate + 90.minutes.inWholeMilliseconds,
             title = "test title",
             description = "test description",
         )
@@ -49,9 +49,10 @@ object PreviewTestData {
             repeat(10) {
                 add(
                     EpgProgram(
+                        programId = "1",
                         channelId = Random.nextLong().toString(),
-                        start = actualDate + it * 30.minutes.inWholeMilliseconds,
-                        stop = actualDate + (it + 1) * 30.minutes.inWholeMilliseconds,
+                        dateTimeStart = actualDate + it * 30.minutes.inWholeMilliseconds,
+                        dateTimeEnd = actualDate + (it + 1) * 30.minutes.inWholeMilliseconds,
                         title = "title $it",
                         description = "description $it",
                     ),

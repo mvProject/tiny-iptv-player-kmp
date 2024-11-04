@@ -7,7 +7,12 @@
 
 package com.mvproject.tinyiptvkmp.ui.screens.groups.action
 
-sealed class GroupAction {
-    data class SelectPlaylist(val id: Int) : GroupAction()
-}
+import com.mvproject.tinyiptvkmp.data.model.playlist.Playlist
 
+sealed class GroupAction {
+    data class SelectPlaylist(
+        val playlist: Playlist,
+    ) : GroupAction()
+
+    data object RefreshPlaylist : GroupAction()
+}

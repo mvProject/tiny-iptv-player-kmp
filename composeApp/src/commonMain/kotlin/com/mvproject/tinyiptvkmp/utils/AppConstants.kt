@@ -38,7 +38,6 @@ object AppConstants {
 
     const val DRAG_THRESHOLD = 5
     const val MOVEMENT_THRESHOLD = 10
-
     const val SCREEN_PERCENTAGE_25 = 0.25
     const val SCREEN_PERCENTAGE_30 = 0.3
     const val SCREEN_PERCENTAGE_70 = 0.7
@@ -46,4 +45,7 @@ object AppConstants {
 
     const val PROGRAM_TIME_MEASURE_DELIMITER = ":"
     const val PROGRAM_TIME_MEASURE_COUNT = 2
+
+    const val PROGRAMS_SOURCE_URL = "http://epg.one/epg2.xml.gz"
+    const val CHANNELS_SOURCE_URL = "https://epg.ott-play.com/php/show_prow.php?f=edem/edem.xml.gz"
 }

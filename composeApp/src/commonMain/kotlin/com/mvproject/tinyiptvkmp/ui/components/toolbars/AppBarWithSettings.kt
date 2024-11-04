@@ -17,12 +17,11 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.Composable
-import org.jetbrains.compose.resources.ExperimentalResourceApi
 import org.jetbrains.compose.resources.stringResource
 import tinyiptvkmp.composeapp.generated.resources.Res
 import tinyiptvkmp.composeapp.generated.resources.app_name
 
-@OptIn(ExperimentalMaterial3Api::class, ExperimentalResourceApi::class)
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun AppBarWithSettings(onSettingsClicked: () -> Unit = {}) {
     CenterAlignedTopAppBar(

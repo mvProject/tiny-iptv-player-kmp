@@ -49,6 +49,6 @@ class SavePlaylistContentUseCase(
         playlistChannelsRepository.savePlaylistChannels(channels = channels)
 
         preferenceRepository.setIdForPlaylistContentLoad(id = LONG_NO_VALUE)
-        preferenceRepository.setIdForPlaylistContentEpgInfoUpdate(id = playlistId)
+        preferenceRepository.setChannelsEpgInfoUpdateRequired(state = true)
     }
 }

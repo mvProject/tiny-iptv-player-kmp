@@ -27,7 +27,6 @@ import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.style.TextAlign
-import com.mvproject.tinyiptvkmp.ui.data.Options
 import com.mvproject.tinyiptvkmp.ui.theme.dimens
 import com.mvproject.tinyiptvkmp.utils.AppConstants
 
@@ -35,7 +34,7 @@ import com.mvproject.tinyiptvkmp.utils.AppConstants
 fun OverlayOptionsMenu(
     modifier: Modifier = Modifier,
     title: String? = null,
-    options: Options,
+    options: List<String> = emptyList(),
     selectedIndex: Int = AppConstants.INT_NO_VALUE,
     onItemSelected: (index: Int) -> Unit = {},
 ) {
@@ -81,7 +80,7 @@ fun OverlayOptionsMenu(
                 }
             }
 
-            itemsIndexed(options.items) { index, item ->
+            itemsIndexed(options) { index, item ->
                 val selectedItem = index == selectedIndex
                 TextButton(
                     modifier = Modifier.fillMaxWidth(),
@@ -101,7 +100,7 @@ fun OverlayOptionsMenu(
                     )
                 }
 
-                if (index < options.items.lastIndex) {
+                if (index < options.lastIndex) {
                     HorizontalDivider(
                         modifier =
                             Modifier

@@ -7,55 +7,77 @@
 
 package com.mvproject.tinyiptvkmp.data.usecases
 
+import com.mvproject.tinyiptvkmp.data.enums.FavoriteType
 import com.mvproject.tinyiptvkmp.data.enums.GroupType
 import com.mvproject.tinyiptvkmp.data.model.channels.ChannelsGroup
+import com.mvproject.tinyiptvkmp.data.repository.FavoriteChannelsRepository
 import com.mvproject.tinyiptvkmp.data.repository.PlaylistChannelsRepository
-import com.mvproject.tinyiptvkmp.data.repository.PreferenceRepository
+import com.mvproject.tinyiptvkmp.utils.AppConstants.INT_VALUE_ZERO
 
 class GetPlaylistGroupUseCase(
-    private val preferenceRepository: PreferenceRepository,
     private val playlistChannelsRepository: PlaylistChannelsRepository,
+    private val favoriteChannelsRepository: FavoriteChannelsRepository,
 ) {
     suspend operator fun invoke(): List<ChannelsGroup> {
-        val currentPlaylistId = preferenceRepository.loadCurrentPlaylistId()
-
-        val groups =
-            playlistChannelsRepository.loadPlaylistGroups(
-                listId = currentPlaylistId,
-            )
         val allChannelsCount =
-            playlistChannelsRepository.loadPlaylistChannelsCount(
-                listId = currentPlaylistId,
+            playlistChannelsRepository.loadPlaylistChannelsCount()
+
+        val favorites = favoriteChannelsRepository.loadSelectedFavoriteChannels()
+
+        val groups = playlistChannelsRepository.loadPlaylistGroups()
+
+        val allGroup =
+            ChannelsGroup(
+                groupType = GroupType.ALL,
+                groupContentCount = allChannelsCount,
             )
+
+        val favouriteGroups =
+            buildList {
+                FavoriteType.entries.forEach { fav ->
+                    if (fav != FavoriteType.NONE) {
+                        val favCount = favorites.count { it.type.name == fav.name }
+                        if (fav == FavoriteType.COMMON) {
+                            add(
+                                ChannelsGroup(
+                                    groupType = GroupType.FAVORITE,
+                                    groupFavoriteType = fav,
+                                    groupContentCount = favCount,
+                                ),
+                            )
+                        } else if (favCount > INT_VALUE_ZERO) {
+                            add(
+                                ChannelsGroup(
+                                    groupType = GroupType.FAVORITE,
+                                    groupFavoriteType = fav,
+                                    groupContentCount = favCount,
+                                ),
+                            )
+                        }
+                    }
+                }
+            }
+
+        val playlistGroups =
+            buildList {
+                groups.forEach { group ->
+                    val count =
+                        playlistChannelsRepository
+                            .loadPlaylistGroupChannelsCount(group = group)
+                    add(
+                        ChannelsGroup(
+                            groupName = group,
+                            groupType = GroupType.SPECIFIED,
+                            groupContentCount = count,
+                        ),
+                    )
+                }
+            }
 
         return buildList {
-            // add(
-            //     ChannelsGroup(
-            //         groupName = getString(Res.string.channel_folder_all),
-            //         groupContentCount = allChannelsCount,
-            //     ),
-            // )
-
-            // add(
-            //     ChannelsGroup(
-            //         groupName = getString(Res.string.channel_folder_favorite),
-            //     ),
-            // )
-
-            groups.forEach { group ->
-                val count =
-                    playlistChannelsRepository.loadPlaylistGroupChannelsCount(
-                        listId = currentPlaylistId,
-                        group = group,
-                    )
-                add(
-                    ChannelsGroup(
-                        groupName = group,
-                        groupType = GroupType.SPECIFIED,
-                        groupContentCount = count,
-                    ),
-                )
-            }
+            add(allGroup)
+            addAll(favouriteGroups)
+            addAll(playlistGroups)
         }
     }
 }
