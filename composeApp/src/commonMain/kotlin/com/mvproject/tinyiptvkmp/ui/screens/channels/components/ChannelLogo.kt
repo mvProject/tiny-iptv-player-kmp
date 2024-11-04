@@ -18,6 +18,7 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.unit.Dp
 import coil3.compose.AsyncImage
 import com.mvproject.tinyiptvkmp.ui.components.views.ThreeBounceAnimation
 import com.mvproject.tinyiptvkmp.ui.theme.dimens
@@ -26,28 +27,21 @@ import tinyiptvkmp.composeapp.generated.resources.Res
 import tinyiptvkmp.composeapp.generated.resources.no_channel_logo
 
 @Composable
-fun ChannelImageLogo(
+fun ChannelLogo(
     modifier: Modifier = Modifier,
-    isLarge: Boolean = false,
     channelLogo: String,
     channelName: String,
+    imageSize : Dp = MaterialTheme.dimens.size48
 ) {
     var isLoading by remember {
         mutableStateOf(false)
     }
 
-    val imageSize =
-        if (isLarge) {
-            MaterialTheme.dimens.size64
-        } else {
-            MaterialTheme.dimens.size42
-        }
-
     AsyncImage(
         modifier =
-            modifier
-                .size(imageSize)
-                .clip(MaterialTheme.shapes.small),
+        modifier
+            .size(imageSize)
+            .clip(MaterialTheme.shapes.small),
         model = channelLogo,
         onLoading = {
             isLoading = true

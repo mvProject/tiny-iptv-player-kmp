@@ -12,20 +12,25 @@ import androidx.compose.animation.slideInHorizontally
 import androidx.compose.animation.slideOutHorizontally
 import androidx.compose.animation.togetherWith
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import com.mvproject.tinyiptvkmp.data.enums.ChannelsViewType
 
 @Composable
 fun AppBarWithSearch(
-    searchWidgetState: Boolean,
     appBarTitle: String,
     searchTextState: String,
     onBackClick: () -> Unit = {},
     onTextChange: (String) -> Unit = {},
-    onSearchTriggered: () -> Unit = {},
     onViewTypeChange: (ChannelsViewType) -> Unit = {}
 ) {
+    var isSearching by remember {
+        mutableStateOf(false)
+    }
     AnimatedContent(
-        targetState = searchWidgetState,
+        targetState = isSearching,
         transitionSpec = {
             slideInHorizontally(
                 initialOffsetX = { it }
@@ -39,13 +44,17 @@ fun AppBarWithSearch(
             SearchAppBar(
                 text = searchTextState,
                 onTextChange = onTextChange,
-                onCloseClicked = onSearchTriggered
+                onCloseClicked = {
+                    isSearching = false
+                }
             )
         } else {
             AppBarWithActions(
                 appBarTitle = appBarTitle,
                 onBackClick = onBackClick,
-                onSearchClicked = onSearchTriggered,
+                onSearchClicked = {
+                    isSearching = true
+                },
                 onViewTypeChange = onViewTypeChange
             )
         }

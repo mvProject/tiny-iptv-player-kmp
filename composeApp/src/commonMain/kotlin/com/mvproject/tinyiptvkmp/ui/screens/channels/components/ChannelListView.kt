@@ -8,24 +8,28 @@
 package com.mvproject.tinyiptvkmp.ui.screens.channels.components
 
 import androidx.compose.foundation.ExperimentalFoundationApi
+import androidx.compose.foundation.background
 import androidx.compose.foundation.combinedClickable
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.rounded.Favorite
-import androidx.compose.material.icons.rounded.FavoriteBorder
-import androidx.compose.material3.Icon
-import androidx.compose.material3.IconButton
-import androidx.compose.material3.ListItem
-import androidx.compose.material3.ListItemDefaults
+import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import com.mvproject.tinyiptvkmp.data.PreviewTestData
 import com.mvproject.tinyiptvkmp.data.enums.FavoriteType
 import com.mvproject.tinyiptvkmp.data.model.channels.TvPlaylistChannel
-import org.jetbrains.compose.resources.stringResource
-import tinyiptvkmp.composeapp.generated.resources.Res
-import tinyiptvkmp.composeapp.generated.resources.msg_no_epg_found
+import com.mvproject.tinyiptvkmp.ui.components.buttons.FavoriteButton
+import com.mvproject.tinyiptvkmp.ui.components.texts.ChannelTitle
+import com.mvproject.tinyiptvkmp.ui.components.texts.EmptyProgramTitle
+import com.mvproject.tinyiptvkmp.ui.components.texts.ProgramTitle
+import com.mvproject.tinyiptvkmp.ui.components.views.DurationProgressView
+import com.mvproject.tinyiptvkmp.ui.theme.VideoAppTheme
+import com.mvproject.tinyiptvkmp.ui.theme.dimens
+import org.jetbrains.compose.ui.tooling.preview.Preview
 
 @OptIn(ExperimentalFoundationApi::class)
 @Composable
@@ -36,59 +40,54 @@ fun ChannelListView(
     onFavoriteClick: () -> Unit = {},
     onShowEpgClick: () -> Unit = {},
 ) {
-    ListItem(
-        modifier =
-        modifier
+    Column(
+        modifier = modifier
+            .background(MaterialTheme.colorScheme.surface)
             .combinedClickable(
                 onClick = onChannelSelect,
                 onLongClick = onShowEpgClick,
-            ).clip(MaterialTheme.shapes.extraSmall),
-        colors =
-        ListItemDefaults.colors(
-            containerColor = MaterialTheme.colorScheme.surface,
-        ),
-        leadingContent = {
-            ChannelImageLogo(
+            )
+            .clip(MaterialTheme.shapes.extraSmall),
+    ) {
+        Row(
+            modifier = Modifier.padding(MaterialTheme.dimens.size8),
+            verticalAlignment = Alignment.CenterVertically,
+            horizontalArrangement = Arrangement.spacedBy(MaterialTheme.dimens.size8)
+        ) {
+            ChannelLogo(
                 channelLogo = channel.channelLogo,
                 channelName = channel.channelName,
             )
-        },
-        headlineContent = {
-            Text(
-                text = channel.channelName,
-                style = MaterialTheme.typography.bodyMedium,
-                color =
-                if (channel.favoriteType != FavoriteType.NONE) {
-                    MaterialTheme.colorScheme.onSurfaceVariant
-                } else {
-                    MaterialTheme.colorScheme.onPrimary
-                },
-            )
-        },
-        supportingContent = {
-            channel.programs.forEach {
-                ScheduleEpgItemView(program = it)
-            }
-
-            if (channel.programs.isEmpty()) {
-                Text(
-                    text = stringResource(Res.string.msg_no_epg_found),
-                    style = MaterialTheme.typography.labelMedium,
-                    color = MaterialTheme.colorScheme.outline,
-                )
-            }
-        },
-        trailingContent = {
-            IconButton(
-                // modifier = modifier,
-                onClick = onFavoriteClick,
+            Column(
+                modifier = Modifier.weight(MaterialTheme.dimens.weight1),
+                verticalArrangement = Arrangement.spacedBy(MaterialTheme.dimens.size4)
             ) {
-                Icon(
-                    imageVector = if (channel.favoriteType != FavoriteType.NONE) Icons.Rounded.Favorite else Icons.Rounded.FavoriteBorder,
-                    contentDescription = "PlaybackControl",
-                    tint = MaterialTheme.colorScheme.onSurface,
+                ChannelTitle(
+                    title = channel.channelName,
+                    isFavorite = channel.favoriteType != FavoriteType.NONE
                 )
+                if (channel.programs.isEmpty()) {
+                    EmptyProgramTitle()
+                } else {
+                    ProgramTitle(title = channel.programs.first().title)
+                }
             }
-        },
-    )
+            FavoriteButton(
+                isFavorite = channel.favoriteType != FavoriteType.NONE,
+                onClick = onFavoriteClick
+            )
+        }
+
+        if (channel.programs.isNotEmpty()) {
+            DurationProgressView(progress = channel.programs.first().programProgress)
+        }
+    }
+}
+
+@Preview
+@Composable
+private fun ChannelListViewPreview() {
+    VideoAppTheme {
+        ChannelListView(channel = PreviewTestData.testProgram.copy(programs = PreviewTestData.testEpgPrograms))
+    }
 }

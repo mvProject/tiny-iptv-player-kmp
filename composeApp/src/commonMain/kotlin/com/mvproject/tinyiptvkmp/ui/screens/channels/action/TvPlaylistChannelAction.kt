@@ -26,8 +26,6 @@ sealed class TvPlaylistChannelAction {
         val type: ChannelsViewType,
     ) : TvPlaylistChannelAction()
 
-    data object SearchTriggered : TvPlaylistChannelAction()
-
     data class ToggleEpgVisibility(
         val name: String = String.empty,
         val epgID: String = String.empty

@@ -75,8 +75,8 @@ fun PlayerEpgItem(
     }
 }
 
-@Composable
 @Preview
+@Composable
 private fun PlayerEpgItemPreview() {
     VideoAppTheme {
         PlayerEpgItem(program = PreviewTestData.testEpgProgram)
