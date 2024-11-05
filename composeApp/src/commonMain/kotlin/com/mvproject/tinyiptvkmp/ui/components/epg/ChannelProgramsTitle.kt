@@ -1,4 +1,4 @@
-package com.mvproject.tinyiptvkmp.ui.components.texts
+package com.mvproject.tinyiptvkmp.ui.components.epg
 
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.material3.MaterialTheme
@@ -7,23 +7,20 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.TextStyle
-import androidx.compose.ui.text.style.TextOverflow
+import androidx.compose.ui.text.style.TextAlign
 
 @Composable
-fun ProgramTitle(
+internal fun ChannelProgramsTitle(
     modifier: Modifier = Modifier,
     title: String,
-    color: Color = MaterialTheme.colorScheme.onSurface,
-    style: TextStyle = MaterialTheme.typography.labelMedium,
-    lines: Int = 2
+    color: Color = MaterialTheme.colorScheme.primary,
+    style: TextStyle = MaterialTheme.typography.titleMedium,
 ) {
     Text(
         modifier = modifier.fillMaxWidth(),
         text = title,
         style = style,
         color = color,
-        overflow = TextOverflow.Ellipsis,
-        maxLines = lines,
-        minLines = lines,
+        textAlign = TextAlign.Center,
     )
 }

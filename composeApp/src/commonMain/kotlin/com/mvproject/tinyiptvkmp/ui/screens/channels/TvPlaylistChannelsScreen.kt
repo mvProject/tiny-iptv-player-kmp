@@ -8,12 +8,16 @@
 package com.mvproject.tinyiptvkmp.ui.screens.channels
 
 import androidx.compose.animation.Crossfade
+import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.WindowInsets
+import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.ime
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.windowInsetsPadding
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.runtime.Composable
@@ -25,10 +29,10 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.lifecycle.compose.LifecycleResumeEffect
 import com.mvproject.tinyiptvkmp.data.model.channels.TvPlaylistChannel
+import com.mvproject.tinyiptvkmp.ui.components.epg.ChannelPrograms
+import com.mvproject.tinyiptvkmp.ui.components.indicators.LoadingIndicator
 import com.mvproject.tinyiptvkmp.ui.components.overlay.OverlayContent
-import com.mvproject.tinyiptvkmp.ui.components.overlay.OverlayEpg
 import com.mvproject.tinyiptvkmp.ui.components.toolbars.AppBarWithSearch
-import com.mvproject.tinyiptvkmp.ui.components.views.LoadingView
 import com.mvproject.tinyiptvkmp.ui.screens.channels.action.TvPlaylistChannelAction
 import com.mvproject.tinyiptvkmp.ui.screens.channels.components.ChannelView
 import com.mvproject.tinyiptvkmp.ui.screens.channels.components.OverlayChannelOptions
@@ -134,7 +138,7 @@ private fun TvPlaylistChannelsScreen(
                 )
             }
 
-            LoadingView(isVisible = state.isLoading)
+            LoadingIndicator(isVisible = state.isLoading)
 
             OverlayContent(
                 isVisible = isChannelOptionOpen.value,
@@ -154,9 +158,20 @@ private fun TvPlaylistChannelsScreen(
                 isVisible = state.selectedName.isNotBlank(),
                 onViewTap = { onAction(TvPlaylistChannelAction.ToggleEpgVisibility()) },
             ) {
-                OverlayEpg(
-                    state.selectedName,
-                    state.selectedPrograms
+                ChannelPrograms(
+                    modifier = Modifier
+                        .fillMaxHeight(MaterialTheme.dimens.fraction90)
+                        .fillMaxWidth(MaterialTheme.dimens.fraction80)
+                        .background(
+                            color = MaterialTheme.colorScheme.primary,
+                            shape =
+                            RoundedCornerShape(
+                                bottomStart = MaterialTheme.dimens.size8,
+                                bottomEnd = MaterialTheme.dimens.size8,
+                            ),
+                        ),
+                    title = state.selectedName,
+                    programs = state.selectedPrograms,
                 )
             }
         }

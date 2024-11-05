@@ -9,6 +9,7 @@ package com.mvproject.tinyiptvkmp.ui.screens.channels.components
 
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.size
+import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
@@ -20,7 +21,6 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.unit.Dp
 import coil3.compose.AsyncImage
-import com.mvproject.tinyiptvkmp.ui.components.views.ThreeBounceAnimation
 import com.mvproject.tinyiptvkmp.ui.theme.dimens
 import org.jetbrains.compose.resources.painterResource
 import tinyiptvkmp.composeapp.generated.resources.Res
@@ -31,7 +31,7 @@ fun ChannelLogo(
     modifier: Modifier = Modifier,
     channelLogo: String,
     channelName: String,
-    imageSize : Dp = MaterialTheme.dimens.size48
+    imageSize: Dp = MaterialTheme.dimens.size48
 ) {
     var isLoading by remember {
         mutableStateOf(false)
@@ -60,7 +60,9 @@ fun ChannelLogo(
 
     if (isLoading) {
         Box(modifier = modifier.size(imageSize)) {
-            ThreeBounceAnimation()
+            CircularProgressIndicator(
+                color = MaterialTheme.colorScheme.onSurface
+            )
         }
     }
 }

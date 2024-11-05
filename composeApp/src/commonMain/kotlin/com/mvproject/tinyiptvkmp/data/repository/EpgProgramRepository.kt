@@ -14,7 +14,6 @@ import com.mvproject.tinyiptvkmp.data.model.epg.EpgProgram
 import com.mvproject.tinyiptvkmp.data.model.response.EpgProgramResponse
 import com.mvproject.tinyiptvkmp.database.AppDatabase
 import com.mvproject.tinyiptvkmp.utils.KLog
-import com.mvproject.tinyiptvkmp.utils.TimeUtils.correctTimeZone
 
 class EpgProgramRepository(
     private val appDatabase: AppDatabase,
@@ -27,9 +26,7 @@ class EpgProgramRepository(
     ): List<EpgProgram> =
         epgProgramDao
             .getPrograms(ids = channelIds, time = time)
-            .map {
-                it.toEpgProgram()
-            }
+            .map { it.toEpgProgram() }
 
     suspend fun getEpgProgramsById(
         channelId: String,
@@ -37,9 +34,7 @@ class EpgProgramRepository(
     ): List<EpgProgram> =
         epgProgramDao
             .getProgram(id = channelId, time = time)
-            .map {
-                it.toEpgProgram()
-            }
+            .map { it.toEpgProgram() }
 
     suspend fun cleanProgramsBeforeDate(date: Long) {
         val deleted = epgProgramDao.deleteProgramsByDate(timeStamp = date)
@@ -53,9 +48,7 @@ class EpgProgramRepository(
     ) {
         val entities =
             programs.map { item ->
-                item
-                    .asProgramEntity(id = channelId)
-                    .correctTimeZone()
+                item.asProgramEntity(id = channelId)
             }
 
         epgProgramDao.apply {

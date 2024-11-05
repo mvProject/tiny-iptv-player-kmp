@@ -23,8 +23,8 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.style.TextAlign
 import com.mvproject.tinyiptvkmp.data.model.epg.EpgProgram
+import com.mvproject.tinyiptvkmp.ui.components.indicators.ProgramProgressIndicator
 import com.mvproject.tinyiptvkmp.ui.components.modifiers.SpacerHeight
-import com.mvproject.tinyiptvkmp.ui.components.views.DurationProgressView
 import com.mvproject.tinyiptvkmp.ui.theme.dimens
 import com.mvproject.tinyiptvkmp.utils.AppConstants.COUNT_ZERO_FLOAT
 import com.mvproject.tinyiptvkmp.utils.AppConstants.PROGRESS_STATE_COMPLETE
@@ -71,7 +71,7 @@ fun PlayerChannelEpgItem(epgProgram: EpgProgram) {
                     textAlign = TextAlign.Center,
                 )
 
-                DurationProgressView(
+                ProgramProgressIndicator(
                     modifier = Modifier.weight(6f),
                     progress = epgProgram.programProgress,
                 )

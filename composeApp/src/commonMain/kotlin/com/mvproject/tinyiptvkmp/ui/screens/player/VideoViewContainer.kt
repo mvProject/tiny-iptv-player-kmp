@@ -12,9 +12,12 @@ import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.WindowInsets
+import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.systemBars
 import androidx.compose.foundation.layout.windowInsetsPadding
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.adaptive.currentWindowAdaptiveInfo
 import androidx.compose.runtime.Composable
@@ -27,17 +30,16 @@ import androidx.window.core.layout.WindowSizeClass
 import androidx.window.core.layout.WindowWidthSizeClass
 import com.mvproject.tinyiptvkmp.data.mappers.ListMappers.toActual
 import com.mvproject.tinyiptvkmp.data.model.channels.TvPlaylistChannel
-import com.mvproject.tinyiptvkmp.ui.components.epg.PlayerEpgContent
+import com.mvproject.tinyiptvkmp.ui.components.epg.ChannelPrograms
+import com.mvproject.tinyiptvkmp.ui.components.indicators.LoadingIndicator
+import com.mvproject.tinyiptvkmp.ui.components.indicators.VolumeIndicator
 import com.mvproject.tinyiptvkmp.ui.components.modifiers.defaultPlayerHorizontalGestures
 import com.mvproject.tinyiptvkmp.ui.components.modifiers.defaultPlayerTapGesturesState
 import com.mvproject.tinyiptvkmp.ui.components.modifiers.defaultPlayerVerticalGestures
 import com.mvproject.tinyiptvkmp.ui.components.overlay.OverlayContent
-import com.mvproject.tinyiptvkmp.ui.components.overlay.OverlayEpg
-import com.mvproject.tinyiptvkmp.ui.components.views.LoadingView
-import com.mvproject.tinyiptvkmp.ui.components.views.NoPlaybackView
-import com.mvproject.tinyiptvkmp.ui.components.views.VolumeProgressView
 import com.mvproject.tinyiptvkmp.ui.screens.player.action.PlaybackActions
 import com.mvproject.tinyiptvkmp.ui.screens.player.action.PlaybackStateActions
+import com.mvproject.tinyiptvkmp.ui.screens.player.components.NoPlaybackView
 import com.mvproject.tinyiptvkmp.ui.screens.player.components.OverlayChannelInfo
 import com.mvproject.tinyiptvkmp.ui.screens.player.components.OverlayChannels
 import com.mvproject.tinyiptvkmp.ui.screens.player.components.PlayerChannelView
@@ -52,7 +54,6 @@ import tinyiptvkmp.composeapp.generated.resources.msg_no_internet_found
 import tinyiptvkmp.composeapp.generated.resources.msg_no_playable_media_found
 import tinyiptvkmp.composeapp.generated.resources.no_network
 import tinyiptvkmp.composeapp.generated.resources.sad_face
-
 
 @Composable
 internal fun PlayerScreen(
@@ -102,11 +103,11 @@ private fun PlayerScreen(
                 )
 
                 if (!videoViewState.isFullscreen) {
-                    PlayerEpgContent(
+                    ChannelPrograms(
                         modifier = Modifier
                             .weight(MaterialTheme.dimens.weight1)
                             .background(color = MaterialTheme.colorScheme.primary),
-                        epgList = videoViewState.currentChannel.programs,
+                        programs = videoViewState.currentChannel.programs,
                     )
                 }
             }
@@ -121,17 +122,17 @@ private fun PlayerScreen(
                 )
 
                 if (!videoViewState.isFullscreen) {
-                    PlayerEpgContent(
+                    ChannelPrograms(
                         modifier = Modifier
                             .weight(MaterialTheme.dimens.weight1)
                             .background(color = MaterialTheme.colorScheme.primary),
-                        epgList = videoViewState.currentChannel.programs,
+                        programs = videoViewState.currentChannel.programs,
                     )
                 }
             }
         }
 
-        VolumeProgressView(
+        VolumeIndicator(
             modifier = Modifier.fillMaxSize(0.7f),
             isVisible = videoViewState.isVolumeUiVisible,
             value = videoViewState.currentVolume,
@@ -141,7 +142,19 @@ private fun PlayerScreen(
             isVisible = videoViewState.isEpgVisible,
             onViewTap = { onPlaybackAction(PlaybackActions.OnEpgUiToggle) }
         ) {
-            OverlayEpg(
+            ChannelPrograms(
+                modifier =
+                Modifier
+                    .fillMaxHeight(MaterialTheme.dimens.fraction90)
+                    .fillMaxWidth(MaterialTheme.dimens.fraction80)
+                    .background(
+                        color = MaterialTheme.colorScheme.primary,
+                        shape =
+                        RoundedCornerShape(
+                            bottomStart = MaterialTheme.dimens.size8,
+                            bottomEnd = MaterialTheme.dimens.size8,
+                        ),
+                    ),
                 title = videoViewState.currentChannel.channelName,
                 programs = videoViewState.currentChannel.programs,
             )
@@ -204,7 +217,7 @@ fun PlayerContent(
             logo = painterResource(Res.drawable.sad_face),
         )
 
-        LoadingView(isVisible = videoViewState.isBuffering)
+        LoadingIndicator(isVisible = videoViewState.isBuffering)
 
         PlayerChannelView(
             modifier = Modifier.fillMaxSize(),

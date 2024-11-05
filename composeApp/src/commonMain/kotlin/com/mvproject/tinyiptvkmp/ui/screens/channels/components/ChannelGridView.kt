@@ -25,11 +25,11 @@ import com.mvproject.tinyiptvkmp.data.PreviewTestData
 import com.mvproject.tinyiptvkmp.data.enums.FavoriteType
 import com.mvproject.tinyiptvkmp.data.model.channels.TvPlaylistChannel
 import com.mvproject.tinyiptvkmp.ui.components.buttons.FavoriteButton
+import com.mvproject.tinyiptvkmp.ui.components.indicators.ProgramProgressIndicator
 import com.mvproject.tinyiptvkmp.ui.components.modifiers.SpacerHeight
 import com.mvproject.tinyiptvkmp.ui.components.texts.ChannelTitle
 import com.mvproject.tinyiptvkmp.ui.components.texts.EmptyProgramTitle
 import com.mvproject.tinyiptvkmp.ui.components.texts.ProgramTitle
-import com.mvproject.tinyiptvkmp.ui.components.views.DurationProgressView
 import com.mvproject.tinyiptvkmp.ui.theme.VideoAppTheme
 import com.mvproject.tinyiptvkmp.ui.theme.dimens
 import org.jetbrains.compose.ui.tooling.preview.Preview
@@ -101,7 +101,7 @@ fun ChannelGridView(
             SpacerHeight(MaterialTheme.dimens.weight1)
 
             if (channel.programs.isNotEmpty()) {
-                DurationProgressView(progress = channel.programs.first().programProgress)
+                ProgramProgressIndicator(progress = channel.programs.first().programProgress)
             }
         }
     }

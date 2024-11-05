@@ -5,7 +5,7 @@
  *
  */
 
-package com.mvproject.tinyiptvkmp.ui.components.views
+package com.mvproject.tinyiptvkmp.ui.components.indicators
 
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
@@ -20,7 +20,7 @@ import com.mvproject.tinyiptvkmp.ui.theme.dimens
 import org.jetbrains.compose.ui.tooling.preview.Preview
 
 @Composable
-fun DurationProgressView(
+fun ProgramProgressIndicator(
     modifier: Modifier = Modifier,
     progress: Float,
     trackColor: Color = MaterialTheme.colorScheme.primary,
@@ -38,8 +38,8 @@ fun DurationProgressView(
 
 @Preview
 @Composable
-private fun DarkPreviewDurationProgressView() {
+private fun ProgramProgressIndicatorPreview() {
     VideoAppTheme {
-        DurationProgressView(progress = 0.5f)
+        ProgramProgressIndicator(progress = 0.5f)
     }
 }

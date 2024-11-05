@@ -26,10 +26,10 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.lifecycle.compose.LifecycleResumeEffect
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
+import com.mvproject.tinyiptvkmp.ui.components.indicators.LoadingIndicator
 import com.mvproject.tinyiptvkmp.ui.components.modifiers.SpacerHeight
 import com.mvproject.tinyiptvkmp.ui.components.selectors.OptionSelector
 import com.mvproject.tinyiptvkmp.ui.components.toolbars.AppBarWithSettings
-import com.mvproject.tinyiptvkmp.ui.components.views.LoadingView
 import com.mvproject.tinyiptvkmp.ui.components.views.NoItemsView
 import com.mvproject.tinyiptvkmp.ui.screens.groups.action.GroupAction
 import com.mvproject.tinyiptvkmp.ui.screens.groups.components.OptionsDialog
@@ -158,7 +158,7 @@ private fun GroupScreen(
                         }
                     }
 
-                    GroupUiState.Loading -> LoadingView(isVisible = true)
+                    GroupUiState.Loading -> LoadingIndicator(isVisible = true)
                 }
             }
         }
