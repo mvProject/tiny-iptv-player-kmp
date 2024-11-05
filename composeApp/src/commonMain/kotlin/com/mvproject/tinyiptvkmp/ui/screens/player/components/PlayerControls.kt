@@ -29,7 +29,7 @@ import com.mvproject.tinyiptvkmp.ui.screens.player.action.PlaybackActions
 import com.mvproject.tinyiptvkmp.ui.theme.dimens
 
 @Composable
-fun PlayerControlView(
+fun PlayerControls(
     modifier: Modifier = Modifier,
     isFavorite: Boolean,
     isPlaying: Boolean,

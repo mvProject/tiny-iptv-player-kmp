@@ -29,6 +29,7 @@ import androidx.window.core.layout.WindowHeightSizeClass
 import androidx.window.core.layout.WindowSizeClass
 import androidx.window.core.layout.WindowWidthSizeClass
 import com.mvproject.tinyiptvkmp.data.mappers.ListMappers.toActual
+import com.mvproject.tinyiptvkmp.data.mappers.ListMappers.withRefreshedEpg
 import com.mvproject.tinyiptvkmp.data.model.channels.TvPlaylistChannel
 import com.mvproject.tinyiptvkmp.ui.components.epg.ChannelPrograms
 import com.mvproject.tinyiptvkmp.ui.components.indicators.LoadingIndicator
@@ -40,10 +41,10 @@ import com.mvproject.tinyiptvkmp.ui.components.overlay.OverlayContent
 import com.mvproject.tinyiptvkmp.ui.screens.player.action.PlaybackActions
 import com.mvproject.tinyiptvkmp.ui.screens.player.action.PlaybackStateActions
 import com.mvproject.tinyiptvkmp.ui.screens.player.components.NoPlaybackView
-import com.mvproject.tinyiptvkmp.ui.screens.player.components.OverlayChannelInfo
-import com.mvproject.tinyiptvkmp.ui.screens.player.components.OverlayChannels
-import com.mvproject.tinyiptvkmp.ui.screens.player.components.PlayerChannelView
-import com.mvproject.tinyiptvkmp.ui.screens.player.components.PlayerViewContainer
+import com.mvproject.tinyiptvkmp.ui.screens.player.components.PlayerChannels
+import com.mvproject.tinyiptvkmp.ui.screens.player.components.PlayerContainer
+import com.mvproject.tinyiptvkmp.ui.screens.player.components.PlayerToolbar
+import com.mvproject.tinyiptvkmp.ui.screens.player.components.ProgramInfo
 import com.mvproject.tinyiptvkmp.ui.screens.player.state.VideoViewState
 import com.mvproject.tinyiptvkmp.ui.theme.dimens
 import com.mvproject.tinyiptvkmp.utils.CommonUtils.empty
@@ -165,8 +166,8 @@ private fun PlayerScreen(
             onViewTap = { onPlaybackAction(PlaybackActions.OnChannelsUiToggle) },
             contentAlpha = MaterialTheme.dimens.alpha90,
         ) {
-            OverlayChannels(
-                channels = videoViewChannelsState,
+            PlayerChannels(
+                channels = videoViewChannelsState.withRefreshedEpg(),
                 current = videoViewState.mediaPosition,
                 group = videoViewState.channelGroup,
                 onChannelSelect = { chn -> onPlaybackAction(PlaybackActions.OnChannelSelected(chn)) }
@@ -177,9 +178,11 @@ private fun PlayerScreen(
             isVisible = videoViewState.isChannelInfoVisible,
             onViewTap = { onPlaybackAction(PlaybackActions.OnChannelInfoUiToggle) },
         ) {
-            OverlayChannelInfo(
+            ProgramInfo(
                 channelName = videoViewState.currentChannel.channelName,
-                channelDescription = videoViewState.currentChannel.programs.toActual().firstOrNull()
+                programName = videoViewState.currentChannel.programs.toActual().firstOrNull()
+                    ?.title ?: String.empty,
+                description = videoViewState.currentChannel.programs.toActual().firstOrNull()
                     ?.description ?: String.empty,
             )
         }
@@ -194,7 +197,7 @@ fun PlayerContent(
     onPlaybackStateAction: (PlaybackStateActions) -> Unit,
     onNavigateBack: () -> Unit = {},
 ) {
-    PlayerViewContainer(
+    PlayerContainer(
         modifier =
         modifier
             .defaultPlayerHorizontalGestures(onAction = onPlaybackAction)
@@ -219,7 +222,7 @@ fun PlayerContent(
 
         LoadingIndicator(isVisible = videoViewState.isBuffering)
 
-        PlayerChannelView(
+        PlayerToolbar(
             modifier = Modifier.fillMaxSize(),
             isVisible = videoViewState.isControlUiVisible,
             currentChannel = videoViewState.currentChannel,
