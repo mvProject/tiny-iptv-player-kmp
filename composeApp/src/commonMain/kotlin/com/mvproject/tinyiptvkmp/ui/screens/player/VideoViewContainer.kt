@@ -34,9 +34,9 @@ import com.mvproject.tinyiptvkmp.data.model.channels.TvPlaylistChannel
 import com.mvproject.tinyiptvkmp.ui.components.epg.ChannelPrograms
 import com.mvproject.tinyiptvkmp.ui.components.indicators.LoadingIndicator
 import com.mvproject.tinyiptvkmp.ui.components.indicators.VolumeIndicator
-import com.mvproject.tinyiptvkmp.ui.components.modifiers.defaultPlayerHorizontalGestures
-import com.mvproject.tinyiptvkmp.ui.components.modifiers.defaultPlayerTapGesturesState
-import com.mvproject.tinyiptvkmp.ui.components.modifiers.defaultPlayerVerticalGestures
+import com.mvproject.tinyiptvkmp.ui.components.modifiers.handleHorizontalGestures
+import com.mvproject.tinyiptvkmp.ui.components.modifiers.handleTapGestures
+import com.mvproject.tinyiptvkmp.ui.components.modifiers.handleVerticalGestures
 import com.mvproject.tinyiptvkmp.ui.components.overlay.OverlayContent
 import com.mvproject.tinyiptvkmp.ui.screens.player.action.PlaybackActions
 import com.mvproject.tinyiptvkmp.ui.screens.player.action.PlaybackStateActions
@@ -198,11 +198,10 @@ fun PlayerContent(
     onNavigateBack: () -> Unit = {},
 ) {
     PlayerContainer(
-        modifier =
-        modifier
-            .defaultPlayerHorizontalGestures(onAction = onPlaybackAction)
-            .defaultPlayerVerticalGestures(onAction = onPlaybackAction)
-            .defaultPlayerTapGesturesState(onAction = onPlaybackAction),
+        modifier = modifier
+            .handleHorizontalGestures(onAction = onPlaybackAction)
+            .handleVerticalGestures(onAction = onPlaybackAction)
+            .handleTapGestures(onAction = onPlaybackAction),
         videoViewState = videoViewState,
         onPlaybackAction = onPlaybackAction,
         onPlaybackStateAction = onPlaybackStateAction,
