@@ -22,10 +22,10 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.style.TextAlign
+import com.mvproject.tinyiptvkmp.core.ui.components.modifiers.roundedHeader
+import com.mvproject.tinyiptvkmp.core.ui.theme.dimens
 import com.mvproject.tinyiptvkmp.data.model.channels.TvPlaylistChannel
-import com.mvproject.tinyiptvkmp.ui.components.modifiers.roundedHeader
 import com.mvproject.tinyiptvkmp.ui.screens.channels.components.ChannelListView
-import com.mvproject.tinyiptvkmp.ui.theme.dimens
 
 @Composable
 fun PlayerChannels(

@@ -20,8 +20,8 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.style.TextAlign
-import com.mvproject.tinyiptvkmp.ui.components.modifiers.roundedHeader
-import com.mvproject.tinyiptvkmp.ui.theme.dimens
+import com.mvproject.tinyiptvkmp.core.ui.components.modifiers.roundedHeader
+import com.mvproject.tinyiptvkmp.core.ui.theme.dimens
 import com.mvproject.tinyiptvkmp.utils.CommonUtils.empty
 import org.jetbrains.compose.resources.stringResource
 import tinyiptvkmp.composeapp.generated.resources.Res

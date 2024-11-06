@@ -7,8 +7,8 @@
 
 package com.mvproject.tinyiptvkmp.utils
 
+import com.mvproject.tinyiptvkmp.core.database.entity.EpgProgramEntity
 import com.mvproject.tinyiptvkmp.data.enums.UpdatePeriod
-import com.mvproject.tinyiptvkmp.database.entity.EpgProgramEntity
 import com.mvproject.tinyiptvkmp.utils.CommonUtils.delimiterTime
 import kotlinx.datetime.Clock
 import kotlinx.datetime.Instant

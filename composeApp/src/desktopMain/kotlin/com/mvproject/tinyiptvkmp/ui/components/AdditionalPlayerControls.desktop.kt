@@ -15,8 +15,8 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import com.mvproject.tinyiptvkmp.ui.components.buttons.ControlButton
 import com.mvproject.tinyiptvkmp.ui.components.modifiers.SpacerWidth
-import com.mvproject.tinyiptvkmp.ui.components.views.PlaybackControl
 import com.mvproject.tinyiptvkmp.ui.screens.player.action.PlaybackActions
 import com.mvproject.tinyiptvkmp.ui.theme.dimens
 
@@ -31,51 +31,51 @@ actual fun AdditionalPlayerControls(
         verticalAlignment = Alignment.CenterVertically,
         horizontalArrangement = Arrangement.Start,
     ) {
-        PlaybackControl(
+        ControlButton(
             imageVector = Icons.Rounded.Close,
-            action = action,
+            onClick = action,
         )
 
         SpacerWidth(width = MaterialTheme.dimens.size32)
-        PlaybackControl(
+        ControlButton(
             imageVector = Icons.AutoMirrored.Rounded.VolumeDown,
-            action = { onPlaybackAction(PlaybackActions.OnVolumeDown) },
+            onClick = { onPlaybackAction(PlaybackActions.OnVolumeDown) },
         )
 
         SpacerWidth(width = MaterialTheme.dimens.size8)
-        PlaybackControl(
+        ControlButton(
             imageVector = Icons.AutoMirrored.Rounded.VolumeUp,
-            action = { onPlaybackAction(PlaybackActions.OnVolumeUp) },
+            onClick = { onPlaybackAction(PlaybackActions.OnVolumeUp) },
         )
 
         SpacerWidth(width = MaterialTheme.dimens.size24)
-        PlaybackControl(
+        ControlButton(
             imageVector = Icons.Rounded.SkipPrevious,
-            action = { onPlaybackAction(PlaybackActions.OnPreviousSelected) },
+            onClick = { onPlaybackAction(PlaybackActions.OnPreviousSelected) },
         )
 
         SpacerWidth(width = MaterialTheme.dimens.size8)
-        PlaybackControl(
+        ControlButton(
             imageVector = Icons.Rounded.SkipNext,
-            action = { onPlaybackAction(PlaybackActions.OnNextSelected) },
+            onClick = { onPlaybackAction(PlaybackActions.OnNextSelected) },
         )
 
         SpacerWidth(width = MaterialTheme.dimens.size24)
-        PlaybackControl(
+        ControlButton(
             imageVector = Icons.AutoMirrored.Rounded.ViewList,
-            action = { onPlaybackAction(PlaybackActions.OnEpgUiToggle) },
+            onClick = { onPlaybackAction(PlaybackActions.OnEpgUiToggle) },
         )
 
         SpacerWidth(width = MaterialTheme.dimens.size8)
-        PlaybackControl(
+        ControlButton(
             imageVector = Icons.AutoMirrored.Rounded.FeaturedPlayList,
-            action = { onPlaybackAction(PlaybackActions.OnChannelsUiToggle) },
+            onClick = { onPlaybackAction(PlaybackActions.OnChannelsUiToggle) },
         )
 
         SpacerWidth(width = MaterialTheme.dimens.size8)
-        PlaybackControl(
+        ControlButton(
             imageVector = Icons.Rounded.Info,
-            action = { onPlaybackAction(PlaybackActions.OnChannelInfoUiToggle) },
+            onClick = { onPlaybackAction(PlaybackActions.OnChannelInfoUiToggle) },
         )
 
         SpacerWidth(width = MaterialTheme.dimens.size24)

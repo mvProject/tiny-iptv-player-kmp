@@ -21,17 +21,17 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import com.mvproject.tinyiptvkmp.core.ui.components.buttons.FavoriteButton
+import com.mvproject.tinyiptvkmp.core.ui.components.indicators.ProgramProgressIndicator
+import com.mvproject.tinyiptvkmp.core.ui.components.modifiers.SpacerHeight
+import com.mvproject.tinyiptvkmp.core.ui.components.texts.ChannelTitle
+import com.mvproject.tinyiptvkmp.core.ui.components.texts.EmptyProgramTitle
+import com.mvproject.tinyiptvkmp.core.ui.components.texts.ProgramTitle
+import com.mvproject.tinyiptvkmp.core.ui.theme.VideoAppTheme
+import com.mvproject.tinyiptvkmp.core.ui.theme.dimens
 import com.mvproject.tinyiptvkmp.data.PreviewTestData
 import com.mvproject.tinyiptvkmp.data.enums.FavoriteType
 import com.mvproject.tinyiptvkmp.data.model.channels.TvPlaylistChannel
-import com.mvproject.tinyiptvkmp.ui.components.buttons.FavoriteButton
-import com.mvproject.tinyiptvkmp.ui.components.indicators.ProgramProgressIndicator
-import com.mvproject.tinyiptvkmp.ui.components.modifiers.SpacerHeight
-import com.mvproject.tinyiptvkmp.ui.components.texts.ChannelTitle
-import com.mvproject.tinyiptvkmp.ui.components.texts.EmptyProgramTitle
-import com.mvproject.tinyiptvkmp.ui.components.texts.ProgramTitle
-import com.mvproject.tinyiptvkmp.ui.theme.VideoAppTheme
-import com.mvproject.tinyiptvkmp.ui.theme.dimens
 import org.jetbrains.compose.ui.tooling.preview.Preview
 
 @OptIn(ExperimentalFoundationApi::class)

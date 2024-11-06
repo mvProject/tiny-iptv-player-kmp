@@ -1,10 +1,10 @@
 package com.mvproject.tinyiptvkmp.data.mappers
 
+import com.mvproject.tinyiptvkmp.core.database.entity.EpgChannelEntity
+import com.mvproject.tinyiptvkmp.core.database.entity.EpgProgramEntity
+import com.mvproject.tinyiptvkmp.core.network.data.response.EpgChannelResponse
+import com.mvproject.tinyiptvkmp.core.network.data.response.EpgProgramResponse
 import com.mvproject.tinyiptvkmp.data.model.epg.EpgChannel
-import com.mvproject.tinyiptvkmp.data.model.response.EpgChannelResponse
-import com.mvproject.tinyiptvkmp.data.model.response.EpgProgramResponse
-import com.mvproject.tinyiptvkmp.database.entity.EpgChannelEntity
-import com.mvproject.tinyiptvkmp.database.entity.EpgProgramEntity
 import kotlin.uuid.ExperimentalUuidApi
 import kotlin.uuid.Uuid
 

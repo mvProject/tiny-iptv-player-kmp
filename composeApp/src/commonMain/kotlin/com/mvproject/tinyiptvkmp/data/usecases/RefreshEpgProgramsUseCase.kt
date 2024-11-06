@@ -1,7 +1,7 @@
 package com.mvproject.tinyiptvkmp.data.usecases
 
-import com.mvproject.tinyiptvkmp.data.datasource.EpgProgramDatasource
-import com.mvproject.tinyiptvkmp.data.model.response.EpgProgramResponse
+import com.mvproject.tinyiptvkmp.core.network.data.response.EpgProgramResponse
+import com.mvproject.tinyiptvkmp.core.network.datasource.EpgProgramDatasource
 import com.mvproject.tinyiptvkmp.data.repository.EpgProgramRepository
 import com.mvproject.tinyiptvkmp.data.repository.PreferenceRepository
 import com.mvproject.tinyiptvkmp.utils.AppConstants.PROGRAMS_SOURCE_URL

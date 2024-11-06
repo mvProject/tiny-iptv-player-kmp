@@ -7,10 +7,10 @@
 
 package com.mvproject.tinyiptvkmp.data.repository
 
+import com.mvproject.tinyiptvkmp.core.database.db.AppDatabase
 import com.mvproject.tinyiptvkmp.data.mappers.EntityMapper.toPlaylist
 import com.mvproject.tinyiptvkmp.data.mappers.EntityMapper.toPlaylistEntity
 import com.mvproject.tinyiptvkmp.data.model.playlist.Playlist
-import com.mvproject.tinyiptvkmp.database.AppDatabase
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.map
 

@@ -7,12 +7,12 @@
 
 package com.mvproject.tinyiptvkmp.data.usecases
 
-import com.mvproject.tinyiptvkmp.data.datasource.RemotePlaylistDataSource
 import com.mvproject.tinyiptvkmp.data.enums.PlaylistType
 import com.mvproject.tinyiptvkmp.data.repository.FavoriteChannelsRepository
 import com.mvproject.tinyiptvkmp.data.repository.PlaylistChannelsRepository
 import com.mvproject.tinyiptvkmp.data.repository.PlaylistsRepository
 import com.mvproject.tinyiptvkmp.data.repository.PreferenceRepository
+import com.mvproject.tinyiptvkmp.data.repository.RemotePlaylistRepository
 import com.mvproject.tinyiptvkmp.utils.AppConstants
 import com.mvproject.tinyiptvkmp.utils.KLog
 import com.mvproject.tinyiptvkmp.utils.TimeUtils
@@ -22,7 +22,7 @@ import kotlinx.coroutines.withContext
 
 class UpdateRemotePlaylistChannelsUseCase(
     private val preferenceRepository: PreferenceRepository,
-    private val remotePlaylistDataSource: RemotePlaylistDataSource,
+    private val remotePlaylistRepository: RemotePlaylistRepository,
     private val playlistChannelsRepository: PlaylistChannelsRepository,
     private val favoriteChannelsRepository: FavoriteChannelsRepository,
     private val playlistsRepository: PlaylistsRepository,
@@ -55,7 +55,7 @@ class UpdateRemotePlaylistChannelsUseCase(
 
             playlistUpdates.forEach { playlist ->
                 val channels =
-                    remotePlaylistDataSource.getFromRemotePlaylist(
+                    remotePlaylistRepository.getFromRemotePlaylist(
                         playlistId = playlist.id,
                         url = playlist.playlistSource,
                     )

@@ -8,11 +8,11 @@
 package com.mvproject.tinyiptvkmp.data.repository
 
 import androidx.room.Transaction
+import com.mvproject.tinyiptvkmp.core.database.db.AppDatabase
+import com.mvproject.tinyiptvkmp.core.network.data.response.EpgProgramResponse
 import com.mvproject.tinyiptvkmp.data.mappers.EntityMapper.toEpgProgram
 import com.mvproject.tinyiptvkmp.data.mappers.Mapper.asProgramEntity
 import com.mvproject.tinyiptvkmp.data.model.epg.EpgProgram
-import com.mvproject.tinyiptvkmp.data.model.response.EpgProgramResponse
-import com.mvproject.tinyiptvkmp.database.AppDatabase
 import com.mvproject.tinyiptvkmp.utils.KLog
 
 class EpgProgramRepository(

@@ -7,20 +7,20 @@
 
 package com.mvproject.tinyiptvkmp.data.usecases
 
-import com.mvproject.tinyiptvkmp.data.datasource.LocalPlaylistDataSource
-import com.mvproject.tinyiptvkmp.data.datasource.RemotePlaylistDataSource
 import com.mvproject.tinyiptvkmp.data.enums.PlaylistType
+import com.mvproject.tinyiptvkmp.data.repository.LocalPlaylistRepository
 import com.mvproject.tinyiptvkmp.data.repository.PlaylistChannelsRepository
 import com.mvproject.tinyiptvkmp.data.repository.PlaylistsRepository
 import com.mvproject.tinyiptvkmp.data.repository.PreferenceRepository
+import com.mvproject.tinyiptvkmp.data.repository.RemotePlaylistRepository
 import com.mvproject.tinyiptvkmp.utils.AppConstants.LONG_NO_VALUE
 import com.mvproject.tinyiptvkmp.utils.KLog
 
 class SavePlaylistContentUseCase(
-    private val localPlaylistDataSource: LocalPlaylistDataSource,
+    private val localPlaylistRepository: LocalPlaylistRepository,
     private val playlistChannelsRepository: PlaylistChannelsRepository,
     private val preferenceRepository: PreferenceRepository,
-    private val remotePlaylistDataSource: RemotePlaylistDataSource,
+    private val remotePlaylistRepository: RemotePlaylistRepository,
     private val playlistsRepository: PlaylistsRepository,
 ) {
     suspend operator fun invoke(playlistId: Long) {
@@ -29,13 +29,13 @@ class SavePlaylistContentUseCase(
         val channels =
             when (playlist.playlistType) {
                 PlaylistType.LOCAL ->
-                    localPlaylistDataSource.getFromLocalPlaylist(
+                    localPlaylistRepository.getFromLocalPlaylist(
                         playlistId = playlistId,
                         source = playlist.playlistSource,
                     )
 
                 PlaylistType.REMOTE ->
-                    remotePlaylistDataSource.getFromRemotePlaylist(
+                    remotePlaylistRepository.getFromRemotePlaylist(
                         playlistId = playlistId,
                         url = playlist.playlistSource,
                     )

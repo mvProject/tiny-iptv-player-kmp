@@ -1,6 +1,6 @@
 package com.mvproject.tinyiptvkmp.data.usecases
 
-import com.mvproject.tinyiptvkmp.data.datasource.EpgChannelDatasource
+import com.mvproject.tinyiptvkmp.core.network.datasource.EpgChannelDatasource
 import com.mvproject.tinyiptvkmp.data.repository.EpgChannelRepository
 import com.mvproject.tinyiptvkmp.data.repository.PreferenceRepository
 import com.mvproject.tinyiptvkmp.utils.AppConstants.CHANNELS_SOURCE_URL

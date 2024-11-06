@@ -25,14 +25,14 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.alpha
 import androidx.compose.ui.text.style.TextAlign
+import com.mvproject.tinyiptvkmp.core.ui.components.indicators.ProgramProgressIndicator
+import com.mvproject.tinyiptvkmp.core.ui.components.modifiers.roundedHeader
+import com.mvproject.tinyiptvkmp.core.ui.components.views.TimeItem
+import com.mvproject.tinyiptvkmp.core.ui.theme.dimens
 import com.mvproject.tinyiptvkmp.data.enums.FavoriteType
 import com.mvproject.tinyiptvkmp.data.model.channels.TvPlaylistChannel
 import com.mvproject.tinyiptvkmp.data.model.epg.EpgProgram
-import com.mvproject.tinyiptvkmp.ui.components.indicators.ProgramProgressIndicator
-import com.mvproject.tinyiptvkmp.ui.components.modifiers.roundedHeader
-import com.mvproject.tinyiptvkmp.ui.components.views.TimeItem
 import com.mvproject.tinyiptvkmp.ui.screens.player.action.PlaybackActions
-import com.mvproject.tinyiptvkmp.ui.theme.dimens
 
 @Composable
 fun PlayerToolbar(

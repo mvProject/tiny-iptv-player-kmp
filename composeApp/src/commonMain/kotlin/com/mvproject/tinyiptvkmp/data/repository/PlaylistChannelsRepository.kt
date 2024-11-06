@@ -8,10 +8,10 @@
 package com.mvproject.tinyiptvkmp.data.repository
 
 import androidx.room.Transaction
+import com.mvproject.tinyiptvkmp.core.database.db.AppDatabase
 import com.mvproject.tinyiptvkmp.data.mappers.EntityMapper.toChannelEntity
 import com.mvproject.tinyiptvkmp.data.mappers.EntityMapper.toPlaylistChannel
 import com.mvproject.tinyiptvkmp.data.model.channels.PlaylistChannel
-import com.mvproject.tinyiptvkmp.database.AppDatabase
 
 class PlaylistChannelsRepository(
     private val appDatabase: AppDatabase,

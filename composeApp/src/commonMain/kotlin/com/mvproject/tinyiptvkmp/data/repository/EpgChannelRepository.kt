@@ -8,11 +8,11 @@
 package com.mvproject.tinyiptvkmp.data.repository
 
 import androidx.room.Transaction
+import com.mvproject.tinyiptvkmp.core.database.db.AppDatabase
+import com.mvproject.tinyiptvkmp.core.network.data.response.EpgChannelResponse
 import com.mvproject.tinyiptvkmp.data.mappers.Mapper.toEpgChannelEntity
 import com.mvproject.tinyiptvkmp.data.mappers.Mapper.toEpgChannelModel
 import com.mvproject.tinyiptvkmp.data.model.epg.EpgChannel
-import com.mvproject.tinyiptvkmp.data.model.response.EpgChannelResponse
-import com.mvproject.tinyiptvkmp.database.AppDatabase
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.map
 

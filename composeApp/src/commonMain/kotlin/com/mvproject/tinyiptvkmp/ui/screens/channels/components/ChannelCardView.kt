@@ -19,13 +19,13 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import com.mvproject.tinyiptvkmp.core.ui.components.buttons.FavoriteButton
+import com.mvproject.tinyiptvkmp.core.ui.components.texts.ChannelTitleLarge
+import com.mvproject.tinyiptvkmp.core.ui.theme.VideoAppTheme
+import com.mvproject.tinyiptvkmp.core.ui.theme.dimens
 import com.mvproject.tinyiptvkmp.data.PreviewTestData
 import com.mvproject.tinyiptvkmp.data.enums.FavoriteType
 import com.mvproject.tinyiptvkmp.data.model.channels.TvPlaylistChannel
-import com.mvproject.tinyiptvkmp.ui.components.buttons.FavoriteButton
-import com.mvproject.tinyiptvkmp.ui.components.texts.ChannelTitleLarge
-import com.mvproject.tinyiptvkmp.ui.theme.VideoAppTheme
-import com.mvproject.tinyiptvkmp.ui.theme.dimens
 import org.jetbrains.compose.ui.tooling.preview.Preview
 
 @OptIn(ExperimentalFoundationApi::class)

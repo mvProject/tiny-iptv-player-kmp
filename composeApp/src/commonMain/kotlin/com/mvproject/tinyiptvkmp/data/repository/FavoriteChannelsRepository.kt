@@ -7,11 +7,11 @@
 
 package com.mvproject.tinyiptvkmp.data.repository
 
+import com.mvproject.tinyiptvkmp.core.database.db.AppDatabase
+import com.mvproject.tinyiptvkmp.core.database.entity.FavoriteChannelEntity
 import com.mvproject.tinyiptvkmp.data.enums.FavoriteType
 import com.mvproject.tinyiptvkmp.data.model.channels.PlaylistChannel
 import com.mvproject.tinyiptvkmp.data.model.channels.TvPlaylistChannel
-import com.mvproject.tinyiptvkmp.database.AppDatabase
-import com.mvproject.tinyiptvkmp.database.entity.FavoriteChannelEntity
 import com.mvproject.tinyiptvkmp.utils.AppConstants.INT_VALUE_1
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext

@@ -7,14 +7,14 @@
 
 package com.mvproject.tinyiptvkmp.data.mappers
 
+import com.mvproject.tinyiptvkmp.core.database.entity.EpgProgramEntity
+import com.mvproject.tinyiptvkmp.core.database.entity.PlaylistChannelEntity
+import com.mvproject.tinyiptvkmp.core.database.entity.PlaylistEntity
 import com.mvproject.tinyiptvkmp.data.enums.FavoriteType
 import com.mvproject.tinyiptvkmp.data.model.channels.PlaylistChannel
 import com.mvproject.tinyiptvkmp.data.model.channels.TvPlaylistChannel
 import com.mvproject.tinyiptvkmp.data.model.epg.EpgProgram
 import com.mvproject.tinyiptvkmp.data.model.playlist.Playlist
-import com.mvproject.tinyiptvkmp.database.entity.EpgProgramEntity
-import com.mvproject.tinyiptvkmp.database.entity.PlaylistChannelEntity
-import com.mvproject.tinyiptvkmp.database.entity.PlaylistEntity
 
 object EntityMapper {
     fun PlaylistChannelEntity.toPlaylistChannel() =

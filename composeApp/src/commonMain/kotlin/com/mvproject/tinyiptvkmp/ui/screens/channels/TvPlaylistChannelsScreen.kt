@@ -28,17 +28,17 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.lifecycle.compose.LifecycleResumeEffect
+import com.mvproject.tinyiptvkmp.core.ui.components.epg.ChannelPrograms
+import com.mvproject.tinyiptvkmp.core.ui.components.indicators.LoadingIndicator
+import com.mvproject.tinyiptvkmp.core.ui.components.overlay.OverlayContent
+import com.mvproject.tinyiptvkmp.core.ui.components.toolbars.AppBarWithSearch
+import com.mvproject.tinyiptvkmp.core.ui.theme.dimens
 import com.mvproject.tinyiptvkmp.data.model.channels.TvPlaylistChannel
-import com.mvproject.tinyiptvkmp.ui.components.epg.ChannelPrograms
-import com.mvproject.tinyiptvkmp.ui.components.indicators.LoadingIndicator
-import com.mvproject.tinyiptvkmp.ui.components.overlay.OverlayContent
-import com.mvproject.tinyiptvkmp.ui.components.toolbars.AppBarWithSearch
 import com.mvproject.tinyiptvkmp.ui.screens.channels.action.TvPlaylistChannelAction
 import com.mvproject.tinyiptvkmp.ui.screens.channels.components.ChannelView
 import com.mvproject.tinyiptvkmp.ui.screens.channels.components.OverlayChannelOptions
 import com.mvproject.tinyiptvkmp.ui.screens.channels.navigation.NavigationGroup
 import com.mvproject.tinyiptvkmp.ui.screens.channels.state.TvPlaylistGroupState
-import com.mvproject.tinyiptvkmp.ui.theme.dimens
 import com.mvproject.tinyiptvkmp.utils.CommonUtils.empty
 
 @Composable
