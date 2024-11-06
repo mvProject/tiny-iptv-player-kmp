@@ -41,6 +41,7 @@ object AppConstants {
     const val SCREEN_PERCENTAGE_25 = 0.25
     const val SCREEN_PERCENTAGE_30 = 0.3
     const val SCREEN_PERCENTAGE_70 = 0.7
+    const val SCREEN_PERCENTAGE_75 = 0.75
     const val SCREEN_PERCENTAGE_40 = 0.4
 
     const val PROGRAM_TIME_MEASURE_DELIMITER = ":"

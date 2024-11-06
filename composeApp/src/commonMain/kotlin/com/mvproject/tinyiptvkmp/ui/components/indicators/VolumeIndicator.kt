@@ -5,7 +5,7 @@
  *
  */
 
-package com.mvproject.tinyiptvkmp.ui.components.views
+package com.mvproject.tinyiptvkmp.ui.components.indicators
 
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.fadeIn
@@ -29,7 +29,7 @@ import com.mvproject.tinyiptvkmp.ui.theme.dimens
 import com.mvproject.tinyiptvkmp.utils.PlayerUtils.getProperVolumeIcon
 
 @Composable
-fun VolumeProgressView(
+fun VolumeIndicator(
     isVisible: Boolean = false,
     modifier: Modifier = Modifier,
     value: Float,

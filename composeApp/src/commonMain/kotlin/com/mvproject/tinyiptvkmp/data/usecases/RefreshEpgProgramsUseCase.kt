@@ -25,7 +25,8 @@ class RefreshEpgProgramsUseCase(
             val currentDate = TimeUtils.actualDate
             val lastUpdate = preferenceRepository.lastEpgUpdate()
             val periodUpdate = typeToDuration(preferenceRepository.getMainEpgUpdatePeriod())
-            val isRequired = (currentDate - lastUpdate) > periodUpdate
+            val lastUpdateElapsed = currentDate - lastUpdate
+            val isRequired = lastUpdateElapsed > periodUpdate
             KLog.d("testing RefreshEpgProgramsUseCase isRequired $isRequired")
             if (isRequired) {
                 delay(1.minutes)

@@ -15,6 +15,7 @@ import androidx.compose.animation.scaleOut
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.wrapContentHeight
 import androidx.compose.material3.MaterialTheme
@@ -25,19 +26,19 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.alpha
 import androidx.compose.ui.text.style.TextAlign
 import com.mvproject.tinyiptvkmp.data.enums.FavoriteType
-import com.mvproject.tinyiptvkmp.data.mappers.ListMappers.toActual
 import com.mvproject.tinyiptvkmp.data.model.channels.TvPlaylistChannel
-import com.mvproject.tinyiptvkmp.ui.components.modifiers.SpacerHeight
+import com.mvproject.tinyiptvkmp.data.model.epg.EpgProgram
+import com.mvproject.tinyiptvkmp.ui.components.indicators.ProgramProgressIndicator
 import com.mvproject.tinyiptvkmp.ui.components.modifiers.roundedHeader
+import com.mvproject.tinyiptvkmp.ui.components.views.TimeItem
 import com.mvproject.tinyiptvkmp.ui.screens.player.action.PlaybackActions
 import com.mvproject.tinyiptvkmp.ui.theme.dimens
-import com.mvproject.tinyiptvkmp.utils.AppConstants
 
 @Composable
-fun PlayerChannelView(
+fun PlayerToolbar(
     modifier: Modifier = Modifier,
     currentChannel: TvPlaylistChannel,
-    programCount: Int = AppConstants.INT_VALUE_1,
+    programCount: Int = 2,
     isVisible: Boolean = false,
     isPlaying: Boolean = false,
     isFullScreen: Boolean = false,
@@ -51,39 +52,37 @@ fun PlayerChannelView(
     ) {
         Box(
             modifier =
-                modifier
-                    .alpha(MaterialTheme.dimens.alpha80),
+            modifier
+                .alpha(MaterialTheme.dimens.alpha80),
         ) {
             Column(
                 modifier =
-                    Modifier
-                        .fillMaxWidth()
-                        .wrapContentHeight()
-                        .roundedHeader(color = MaterialTheme.colorScheme.primary)
-                        .align(Alignment.BottomCenter),
-                verticalArrangement = Arrangement.Center,
+                Modifier
+                    .fillMaxWidth()
+                    .wrapContentHeight()
+                    .roundedHeader(color = MaterialTheme.colorScheme.primary)
+                    .align(Alignment.BottomCenter),
+                verticalArrangement = Arrangement.spacedBy(MaterialTheme.dimens.size8),
             ) {
-                Text(
+
+                PlayerChannel(
                     modifier = Modifier.fillMaxWidth(),
-                    text = currentChannel.channelName,
-                    style = MaterialTheme.typography.titleLarge,
-                    color = MaterialTheme.colorScheme.onPrimary,
-                    textAlign = TextAlign.Center,
+                    title = currentChannel.channelName,
                 )
 
-                SpacerHeight(height = MaterialTheme.dimens.size2)
                 if (currentChannel.programs.isNotEmpty()) {
-                    currentChannel.programs.toActual().take(programCount).forEach { epg ->
-                        PlayerChannelEpgItem(epgProgram = epg)
-                    }
-                    SpacerHeight(height = MaterialTheme.dimens.size2)
+
+                    PlayerPrograms(programs = currentChannel.programs.take(programCount))
+
+                    PlayerProgress(
+                        programStart = currentChannel.programs.first().dateTimeStart,
+                        programEnd = currentChannel.programs.first().dateTimeEnd,
+                        programProgress = currentChannel.programs.first().programProgress
+                    )
                 }
 
-                PlayerControlView(
-                    modifier =
-                        Modifier
-                            .fillMaxWidth()
-                            .alpha(MaterialTheme.dimens.alpha70),
+                PlayerControls(
+                    modifier = Modifier.fillMaxWidth(),
                     isFavorite = currentChannel.favoriteType != FavoriteType.NONE,
                     isPlaying = isPlaying,
                     isFullScreen = isFullScreen,
@@ -92,6 +91,66 @@ fun PlayerChannelView(
                 )
             }
         }
+    }
+}
+
+@Composable
+private fun PlayerChannel(
+    modifier: Modifier,
+    title: String
+) {
+    Text(
+        modifier = modifier,
+        text = title,
+        style = MaterialTheme.typography.titleLarge,
+        color = MaterialTheme.colorScheme.onPrimary,
+        textAlign = TextAlign.Center,
+    )
+}
+
+@Composable
+private fun PlayerPrograms(programs: List<EpgProgram>) {
+    programs.forEachIndexed { index, program ->
+        val color = if (index == 0) {
+            MaterialTheme.colorScheme.onSurfaceVariant
+        } else {
+            MaterialTheme.colorScheme.onSurface
+        }
+
+        Text(
+            text = program.title,
+            style = MaterialTheme.typography.labelMedium,
+            color = color,
+        )
+    }
+}
+
+@Composable
+private fun PlayerProgress(
+    modifier: Modifier = Modifier,
+    programStart: Long,
+    programEnd: Long,
+    programProgress: Float
+,) {
+    Row(
+        modifier = modifier,
+        verticalAlignment = Alignment.CenterVertically,
+        horizontalArrangement = Arrangement.spacedBy(MaterialTheme.dimens.size8)
+    ) {
+        TimeItem(
+            timeStamp = programStart,
+            timeColor = MaterialTheme.colorScheme.onSurfaceVariant
+        )
+
+        ProgramProgressIndicator(
+            modifier = Modifier.weight(MaterialTheme.dimens.weight1),
+            progress = programProgress
+        )
+
+        TimeItem(
+            timeStamp = programEnd,
+            timeColor = MaterialTheme.colorScheme.onSurfaceVariant
+        )
     }
 }
 

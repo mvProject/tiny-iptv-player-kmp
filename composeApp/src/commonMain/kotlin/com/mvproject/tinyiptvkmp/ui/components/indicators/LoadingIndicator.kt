@@ -5,7 +5,7 @@
  *
  */
 
-package com.mvproject.tinyiptvkmp.ui.components.views
+package com.mvproject.tinyiptvkmp.ui.components.indicators
 
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.fadeIn
@@ -14,12 +14,14 @@ import androidx.compose.animation.scaleIn
 import androidx.compose.animation.scaleOut
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.material3.CircularProgressIndicator
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 
 @Composable
-fun LoadingView(
+fun LoadingIndicator(
     modifier: Modifier = Modifier.fillMaxSize(),
     isVisible: Boolean = false,
 ) {
@@ -32,7 +34,9 @@ fun LoadingView(
             modifier = modifier,
             contentAlignment = Alignment.Center
         ) {
-            ThreeBounceAnimation()
+            CircularProgressIndicator(
+                color = MaterialTheme.colorScheme.onSurface
+            )
         }
     }
 }

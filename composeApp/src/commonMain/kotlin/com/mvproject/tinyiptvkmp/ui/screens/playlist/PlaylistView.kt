@@ -39,12 +39,12 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import com.mvproject.tinyiptvkmp.data.enums.PlaylistType
 import com.mvproject.tinyiptvkmp.data.enums.UpdatePeriod
+import com.mvproject.tinyiptvkmp.ui.components.indicators.LoadingIndicator
 import com.mvproject.tinyiptvkmp.ui.components.modifiers.SpacerHeight
 import com.mvproject.tinyiptvkmp.ui.components.overlay.OverlayContent
 import com.mvproject.tinyiptvkmp.ui.components.overlay.OverlayOptionsMenu
 import com.mvproject.tinyiptvkmp.ui.components.selectors.OptionSelector
 import com.mvproject.tinyiptvkmp.ui.components.toolbars.AppBarWithBackNav
-import com.mvproject.tinyiptvkmp.ui.components.views.LoadingView
 import com.mvproject.tinyiptvkmp.ui.screens.playlist.action.PlaylistAction
 import com.mvproject.tinyiptvkmp.ui.screens.playlist.state.PlaylistState
 import com.mvproject.tinyiptvkmp.ui.theme.dimens
@@ -302,7 +302,7 @@ private fun PlaylistView(
                 }
             }
 
-            LoadingView(
+            LoadingIndicator(
                 isVisible = state.isSaving,
             )
 

@@ -9,6 +9,7 @@ package com.mvproject.tinyiptvkmp.utils
 
 import com.mvproject.tinyiptvkmp.data.enums.UpdatePeriod
 import com.mvproject.tinyiptvkmp.database.entity.EpgProgramEntity
+import com.mvproject.tinyiptvkmp.utils.CommonUtils.delimiterTime
 import kotlinx.datetime.Clock
 import kotlinx.datetime.Instant
 import kotlinx.datetime.LocalDate
@@ -20,6 +21,7 @@ import kotlinx.datetime.toInstant
 import kotlinx.datetime.toLocalDateTime
 import kotlin.time.Duration.Companion.days
 import kotlin.time.Duration.Companion.hours
+import kotlin.time.Duration.Companion.milliseconds
 
 object TimeUtils {
     private val tzSourceBerlin = TimeZone.of("Europe/Berlin")
@@ -45,6 +47,14 @@ object TimeUtils {
             minute()
         }
 
+    val sourceActualDate
+        get() = Instant
+            .fromEpochMilliseconds(Clock.System.now().toEpochMilliseconds())
+            .toLocalDateTime(tzCurrent)
+            .toInstant(tzSourceMoscow)
+            .toEpochMilliseconds()
+
+
     /**
      * Extension Method to non-null long variable which
      * convert value to specified time with local timezone
@@ -52,11 +62,11 @@ object TimeUtils {
      * @return String converted time value
      */
     fun Long.convertTimeToReadableFormat(): String {
-        val local =
-            Instant
-                .fromEpochMilliseconds(this)
-                .toLocalDateTime(tzCurrent)
-        return ("${local.hour.asTwoSign()}:${local.minute.asTwoSign()}")
+        return Instant
+            .fromEpochMilliseconds(this)
+            .toLocalDateTime(tzCurrent)
+            .time
+            .let { timeFormat.format(it) }
     }
 
     fun EpgProgramEntity.correctTimeZone(): EpgProgramEntity {
@@ -82,8 +92,6 @@ object TimeUtils {
             updatedDateTimeEnd,
         )
     }
-
-    private fun Int.asTwoSign() = if (this < 10) "0$this" else this.toString()
 
     fun typeToDuration(type: Int): Long =
         when (type) {
@@ -124,7 +132,7 @@ object TimeUtils {
     }
 
     private fun roundTimeString(time: String): String {
-        val (hour, minute) = time.split(":").map { it.toInt() }
+        val (hour, minute) = time.split(String.delimiterTime).map { it.toInt() }
         val lastDigit = minute % 10
         if (hour > 23) {
             throw IllegalArgumentException()
@@ -158,5 +166,27 @@ object TimeUtils {
 
         val localDateTime = LocalDateTime(localDate, localTime)
         return localDateTime.toInstant(tzSourceMoscow).toEpochMilliseconds()
+    }
+
+    fun calculateDuration(
+        start: Long,
+        end: Long
+    ): Pair<Long, Long> {
+        val duration = (end - start).milliseconds
+        val hours = duration.inWholeHours
+        val minutes = duration.inWholeMinutes % 60
+
+        return Pair(hours, minutes)
+    }
+
+    fun Long.convertToTime(): Pair<String, String> {
+        val local =
+            Instant
+                .fromEpochMilliseconds(this)
+                .toLocalDateTime(tzCurrent)
+
+        val hour = String.format("%02d", local.hour)
+        val minute = String.format("%02d", local.minute)
+        return Pair(hour, minute)
     }
 }

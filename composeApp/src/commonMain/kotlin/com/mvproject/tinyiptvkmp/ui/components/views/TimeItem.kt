@@ -17,21 +17,20 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.style.TextAlign
 import com.mvproject.tinyiptvkmp.ui.theme.dimens
-import com.mvproject.tinyiptvkmp.utils.AppConstants.PROGRAM_TIME_MEASURE_COUNT
-import com.mvproject.tinyiptvkmp.utils.AppConstants.PROGRAM_TIME_MEASURE_DELIMITER
+import com.mvproject.tinyiptvkmp.utils.CommonUtils.delimiterTime
+import com.mvproject.tinyiptvkmp.utils.TimeUtils.convertToTime
 
 @Composable
 fun TimeItem(
     modifier: Modifier = Modifier,
-    time: String,
+    timeStamp: Long,
     timeColor: Color = MaterialTheme.colorScheme.onSurface,
+    timeStyle: TextStyle = MaterialTheme.typography.bodyMedium,
 ) {
-    val datTime =
-        time
-            .split(PROGRAM_TIME_MEASURE_DELIMITER)
-            .take(PROGRAM_TIME_MEASURE_COUNT)
+    val (hour, minute) = timeStamp.convertToTime()
 
     Row(
         modifier = modifier.wrapContentSize(),
@@ -40,19 +39,19 @@ fun TimeItem(
     ) {
         Text(
             modifier = Modifier.width(MaterialTheme.dimens.size22),
-            text = datTime.first(),
+            text = hour,
             textAlign = TextAlign.Center,
-            style = MaterialTheme.typography.bodyMedium,
+            style = timeStyle,
             color = timeColor,
         )
         Text(
-            text = PROGRAM_TIME_MEASURE_DELIMITER,
-            style = MaterialTheme.typography.bodySmall,
+            text = String.delimiterTime,
+            style = timeStyle,
             color = timeColor,
         )
         Text(
             modifier = Modifier.width(MaterialTheme.dimens.size22),
-            text = datTime.last(),
+            text = minute,
             textAlign = TextAlign.Center,
             style = MaterialTheme.typography.bodyMedium,
             color = timeColor,

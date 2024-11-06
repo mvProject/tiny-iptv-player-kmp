@@ -46,7 +46,7 @@ object PreviewTestData {
 
     val testEpgPrograms =
         buildList {
-            repeat(10) {
+            repeat(4) {
                 add(
                     EpgProgram(
                         programId = "1",

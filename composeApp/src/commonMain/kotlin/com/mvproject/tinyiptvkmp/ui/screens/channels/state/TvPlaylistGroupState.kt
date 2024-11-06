@@ -17,7 +17,6 @@ import com.mvproject.tinyiptvkmp.utils.CommonUtils.empty
 data class TvPlaylistGroupState(
     val currentGroup: String = String.empty,
     val isLoading: Boolean = false,
-    val isSearching: Boolean = false,
     val isEpgVisible: Boolean = false,
     val searchString: String = String.empty,
     val viewType: ChannelsViewType = ChannelsViewType.LIST,

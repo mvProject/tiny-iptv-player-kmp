@@ -8,13 +8,16 @@
 package com.mvproject.tinyiptvkmp.ui.screens.player.components
 
 import androidx.compose.foundation.background
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.wrapContentHeight
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.style.TextAlign
 import com.mvproject.tinyiptvkmp.ui.components.modifiers.roundedHeader
@@ -25,9 +28,10 @@ import tinyiptvkmp.composeapp.generated.resources.Res
 import tinyiptvkmp.composeapp.generated.resources.msg_no_epg_found
 
 @Composable
-fun OverlayChannelInfo(
+fun ProgramInfo(
     channelName: String = String.empty,
-    channelDescription: String = String.empty,
+    programName: String = String.empty,
+    description: String = String.empty,
 ) {
     Column(
         modifier =
@@ -39,44 +43,72 @@ fun OverlayChannelInfo(
                 shape = MaterialTheme.shapes.small,
             ),
     ) {
-        Text(
-            modifier =
-            Modifier
-                .fillMaxWidth()
-                .roundedHeader(),
-            text = channelName,
-            style = MaterialTheme.typography.titleMedium,
-            color = MaterialTheme.colorScheme.primary,
-            textAlign = TextAlign.Center,
+        ProgramTitle(
+            modifier = Modifier.roundedHeader(),
+            title = programName.ifEmpty { channelName }
         )
 
-        if (channelDescription.isEmpty()) {
-            Text(
-                modifier =
-                Modifier
-                    .fillMaxWidth()
-                    .padding(
-                        horizontal = MaterialTheme.dimens.size18,
-                        vertical = MaterialTheme.dimens.size48,
-                    ),
-                text = stringResource(Res.string.msg_no_epg_found),
-                style = MaterialTheme.typography.titleLarge,
-                color = MaterialTheme.colorScheme.onSurfaceVariant,
-                textAlign = TextAlign.Center,
+        if (description.isEmpty()) {
+            ProgramDescriptionEmpty(
+                modifier = Modifier.height(MaterialTheme.dimens.size180),
+                title = stringResource(Res.string.msg_no_epg_found)
             )
         } else {
-            Text(
-                modifier =
-                Modifier
-                    .fillMaxWidth()
-                    .padding(all = MaterialTheme.dimens.size16),
-                text = channelDescription,
-                style = MaterialTheme.typography.labelLarge,
-                color = MaterialTheme.colorScheme.onSurface,
+            ProgramDescription(
+                modifier = Modifier.padding(all = MaterialTheme.dimens.size16),
+                title = description
             )
         }
     }
 }
+
+@Composable
+private fun ProgramTitle(
+    modifier: Modifier = Modifier,
+    title: String = String.empty
+) {
+    Text(
+        modifier = modifier.fillMaxWidth(),
+        text = title,
+        style = MaterialTheme.typography.titleMedium,
+        color = MaterialTheme.colorScheme.primary,
+        textAlign = TextAlign.Center,
+    )
+}
+
+@Composable
+private fun ProgramDescription(
+    modifier: Modifier = Modifier,
+    title: String = String.empty
+) {
+    Text(
+        modifier = modifier.fillMaxWidth(),
+        text = title,
+        style = MaterialTheme.typography.labelLarge,
+        color = MaterialTheme.colorScheme.onSurface,
+    )
+}
+
+@Composable
+private fun ProgramDescriptionEmpty(
+    modifier: Modifier = Modifier,
+    title: String = String.empty
+) {
+    Box(
+        modifier = modifier.fillMaxWidth(),
+        contentAlignment = Alignment.Center
+    ) {
+        Text(
+            modifier = Modifier
+                .padding(horizontal = MaterialTheme.dimens.size12),
+            text = title,
+            style = MaterialTheme.typography.titleLarge,
+            color = MaterialTheme.colorScheme.onSurface,
+            textAlign = TextAlign.Center,
+        )
+    }
+}
+
 // todo replace preview
 /*
 @Composable

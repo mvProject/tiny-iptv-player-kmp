@@ -10,7 +10,6 @@ package com.mvproject.tinyiptvkmp.ui.screens.player.components
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -23,14 +22,13 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.style.TextAlign
-import com.mvproject.tinyiptvkmp.data.mappers.ListMappers.withRefreshedEpg
 import com.mvproject.tinyiptvkmp.data.model.channels.TvPlaylistChannel
 import com.mvproject.tinyiptvkmp.ui.components.modifiers.roundedHeader
 import com.mvproject.tinyiptvkmp.ui.screens.channels.components.ChannelListView
 import com.mvproject.tinyiptvkmp.ui.theme.dimens
 
 @Composable
-fun OverlayChannels(
+fun PlayerChannels(
     group: String,
     channels: List<TvPlaylistChannel> = emptyList(),
     current: Int = 0,
@@ -65,15 +63,10 @@ fun OverlayChannels(
         LazyColumn(
             modifier = Modifier.fillMaxSize(),
             state = listState,
-            verticalArrangement = Arrangement.spacedBy(MaterialTheme.dimens.size8),
-            contentPadding =
-                PaddingValues(
-                    vertical = MaterialTheme.dimens.size4,
-                    horizontal = MaterialTheme.dimens.size2,
-                ),
+            verticalArrangement = Arrangement.spacedBy(MaterialTheme.dimens.size2),
             content = {
                 items(
-                    items = channels.withRefreshedEpg(),
+                    items = channels,
                     key = { chn -> chn.hashCode() },
                 ) { chn ->
                     ChannelListView(

@@ -11,12 +11,12 @@ import com.mvproject.tinyiptvkmp.ui.screens.player.action.PlaybackStateActions
 import com.mvproject.tinyiptvkmp.ui.screens.player.state.VideoViewState
 
 @Composable
-fun PlayerViewContainer(
+fun PlayerContainer(
     modifier: Modifier,
     videoViewState: VideoViewState,
     onPlaybackAction: (PlaybackActions) -> Unit,
     onPlaybackStateAction: (PlaybackStateActions) -> Unit,
-    controls: @Composable () -> Unit,
+    toolbar: @Composable () -> Unit,
 ) {
     Box(
         modifier = modifier.fillMaxSize(),
@@ -33,6 +33,6 @@ fun PlayerViewContainer(
             )
         }
 
-        controls()
+        toolbar()
     }
 }

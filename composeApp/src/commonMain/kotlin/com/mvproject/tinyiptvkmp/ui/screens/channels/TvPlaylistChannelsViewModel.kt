@@ -69,6 +69,27 @@ class TvPlaylistChannelsViewModel(
         }
     }
 
+    fun processAction(action: TvPlaylistChannelAction) {
+        when (action) {
+            is TvPlaylistChannelAction.SearchTextChange -> {
+                searchTextChange(text = action.text)
+            }
+
+            is TvPlaylistChannelAction.ToggleEpgVisibility -> {
+                toggleEpgVisibility(name = action.name, epgId = action.epgID)
+            }
+
+            is TvPlaylistChannelAction.ToggleFavourites -> {
+                toggleFavorites(channel = action.channel, type = action.type)
+            }
+
+            is TvPlaylistChannelAction.ViewTypeChange -> {
+                viewTypeChange(type = action.type)
+            }
+        }
+    }
+
+
     fun loadChannelsByGroups() {
         viewModelScope.launch(Dispatchers.IO) {
             refreshEpgPrograms()
@@ -100,40 +121,9 @@ class TvPlaylistChannelsViewModel(
         }
     }
 
-
-    fun processAction(action: TvPlaylistChannelAction) {
-        when (action) {
-            is TvPlaylistChannelAction.SearchTextChange -> {
-                searchTextChange(text = action.text)
-            }
-
-            TvPlaylistChannelAction.SearchTriggered -> {
-                searchTriggered()
-            }
-
-            is TvPlaylistChannelAction.ToggleEpgVisibility -> {
-                toggleEpgVisibility(name = action.name, epgId = action.epgID)
-            }
-
-            is TvPlaylistChannelAction.ToggleFavourites -> {
-                toggleFavorites(channel = action.channel, type = action.type)
-            }
-
-            is TvPlaylistChannelAction.ViewTypeChange -> {
-                viewTypeChange(type = action.type)
-            }
-        }
-    }
-
     private fun searchTextChange(text: String) {
         _groupState.update { current ->
             current.copy(searchString = text)
-        }
-    }
-
-    private fun searchTriggered() {
-        _groupState.update { state ->
-            state.copy(isSearching = !state.isSearching)
         }
     }
 
@@ -172,13 +162,10 @@ class TvPlaylistChannelsViewModel(
         viewModelScope.launch(Dispatchers.IO) {
             KLog.w("testing toggleFavorites type $type")
 
-            val channelWithEpg = channel.toggleFavorite(
-                type = type
-            )
+            val channelWithEpg = channel.toggleFavorite(type = type)
 
-            val updatedChannels = groupState.value.channels.replaceUpdated(
-                channel = channelWithEpg,
-            )
+            val updatedChannels = groupState.value.channels
+                .replaceUpdated(channel = channelWithEpg)
 
             _groupState.update { state ->
                 state.copy(channels = updatedChannels)
