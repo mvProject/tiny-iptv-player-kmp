@@ -7,9 +7,9 @@
 
 package com.mvproject.tinyiptvkmp.ui.screens.playlist.state
 
+import com.mvproject.tinyiptvkmp.core.domain.model.Playlist
 import com.mvproject.tinyiptvkmp.data.enums.PlaylistType
 import com.mvproject.tinyiptvkmp.data.enums.UpdatePeriod
-import com.mvproject.tinyiptvkmp.data.model.playlist.Playlist
 import com.mvproject.tinyiptvkmp.utils.AppConstants.LONG_VALUE_ZERO
 import com.mvproject.tinyiptvkmp.utils.CommonUtils.empty
 

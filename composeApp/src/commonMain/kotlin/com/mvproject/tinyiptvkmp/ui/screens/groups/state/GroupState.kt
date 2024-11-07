@@ -8,8 +8,8 @@
 package com.mvproject.tinyiptvkmp.ui.screens.groups.state
 
 import androidx.compose.runtime.Immutable
-import com.mvproject.tinyiptvkmp.data.model.channels.ChannelsGroup
-import com.mvproject.tinyiptvkmp.data.model.playlist.Playlist
+import com.mvproject.tinyiptvkmp.core.domain.model.ChannelsGroup
+import com.mvproject.tinyiptvkmp.core.domain.model.Playlist
 
 @Immutable
 data class GroupState(

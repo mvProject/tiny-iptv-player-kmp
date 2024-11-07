@@ -5,19 +5,17 @@
  *
  */
 
-@file:OptIn(ExperimentalResourceApi::class)
 
 package com.mvproject.tinyiptvkmp.data.enums
 
-import org.jetbrains.compose.resources.ExperimentalResourceApi
 import org.jetbrains.compose.resources.StringResource
+import tinyiptvkmp.composeapp.generated.resources.Res
 import tinyiptvkmp.composeapp.generated.resources.playlist_update_12_hours
 import tinyiptvkmp.composeapp.generated.resources.playlist_update_1_week
 import tinyiptvkmp.composeapp.generated.resources.playlist_update_24_hours
 import tinyiptvkmp.composeapp.generated.resources.playlist_update_2_days
 import tinyiptvkmp.composeapp.generated.resources.playlist_update_6_hours
 import tinyiptvkmp.composeapp.generated.resources.playlist_update_never
-import tinyiptvkmp.composeapp.generated.resources.Res
 
 enum class UpdatePeriod(val value: Int, val title: StringResource) {
     NO_UPDATE(0, Res.string.playlist_update_never),

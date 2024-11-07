@@ -7,7 +7,7 @@
 
 package com.mvproject.tinyiptvkmp.ui.screens.groups.action
 
-import com.mvproject.tinyiptvkmp.data.model.playlist.Playlist
+import com.mvproject.tinyiptvkmp.core.domain.model.Playlist
 
 sealed class GroupAction {
     data class SelectPlaylist(

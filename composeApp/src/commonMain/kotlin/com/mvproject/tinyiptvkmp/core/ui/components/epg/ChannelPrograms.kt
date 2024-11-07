@@ -29,6 +29,8 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.style.TextAlign
+import com.mvproject.tinyiptvkmp.core.common.PreviewTestData
+import com.mvproject.tinyiptvkmp.core.domain.model.EpgProgram
 import com.mvproject.tinyiptvkmp.core.ui.components.indicators.ProgramProgressIndicator
 import com.mvproject.tinyiptvkmp.core.ui.components.modifiers.SpacerHeight
 import com.mvproject.tinyiptvkmp.core.ui.components.modifiers.SpacerWidth
@@ -37,8 +39,6 @@ import com.mvproject.tinyiptvkmp.core.ui.components.texts.ProgramTitle
 import com.mvproject.tinyiptvkmp.core.ui.components.views.TimeItem
 import com.mvproject.tinyiptvkmp.core.ui.theme.VideoAppTheme
 import com.mvproject.tinyiptvkmp.core.ui.theme.dimens
-import com.mvproject.tinyiptvkmp.data.PreviewTestData
-import com.mvproject.tinyiptvkmp.data.model.epg.EpgProgram
 import com.mvproject.tinyiptvkmp.utils.AppConstants.COUNT_ZERO_FLOAT
 import com.mvproject.tinyiptvkmp.utils.AppConstants.PROGRESS_STATE_COMPLETE
 import com.mvproject.tinyiptvkmp.utils.CommonUtils.delimiterDash

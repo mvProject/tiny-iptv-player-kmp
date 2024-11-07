@@ -28,6 +28,9 @@ import androidx.compose.ui.Modifier
 import androidx.window.core.layout.WindowHeightSizeClass
 import androidx.window.core.layout.WindowSizeClass
 import androidx.window.core.layout.WindowWidthSizeClass
+import com.mvproject.tinyiptvkmp.core.domain.mappers.ListMappers.toActual
+import com.mvproject.tinyiptvkmp.core.domain.mappers.ListMappers.withRefreshedEpg
+import com.mvproject.tinyiptvkmp.core.domain.model.TvPlaylistChannel
 import com.mvproject.tinyiptvkmp.core.ui.components.epg.ChannelPrograms
 import com.mvproject.tinyiptvkmp.core.ui.components.indicators.LoadingIndicator
 import com.mvproject.tinyiptvkmp.core.ui.components.indicators.VolumeIndicator
@@ -36,9 +39,6 @@ import com.mvproject.tinyiptvkmp.core.ui.components.modifiers.handleTapGestures
 import com.mvproject.tinyiptvkmp.core.ui.components.modifiers.handleVerticalGestures
 import com.mvproject.tinyiptvkmp.core.ui.components.overlay.OverlayContent
 import com.mvproject.tinyiptvkmp.core.ui.theme.dimens
-import com.mvproject.tinyiptvkmp.data.mappers.ListMappers.toActual
-import com.mvproject.tinyiptvkmp.data.mappers.ListMappers.withRefreshedEpg
-import com.mvproject.tinyiptvkmp.data.model.channels.TvPlaylistChannel
 import com.mvproject.tinyiptvkmp.ui.screens.player.action.PlaybackActions
 import com.mvproject.tinyiptvkmp.ui.screens.player.action.PlaybackStateActions
 import com.mvproject.tinyiptvkmp.ui.screens.player.components.NoPlaybackView

@@ -15,10 +15,10 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import com.mvproject.tinyiptvkmp.ui.components.buttons.ControlButton
-import com.mvproject.tinyiptvkmp.ui.components.modifiers.SpacerWidth
+import com.mvproject.tinyiptvkmp.core.ui.components.buttons.ControlButton
+import com.mvproject.tinyiptvkmp.core.ui.components.modifiers.SpacerWidth
+import com.mvproject.tinyiptvkmp.core.ui.theme.dimens
 import com.mvproject.tinyiptvkmp.ui.screens.player.action.PlaybackActions
-import com.mvproject.tinyiptvkmp.ui.theme.dimens
 
 @Composable
 actual fun AdditionalPlayerControls(

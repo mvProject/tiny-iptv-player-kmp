@@ -7,7 +7,7 @@
 
 package com.mvproject.tinyiptvkmp.ui.screens.settings.playlist.action
 
-import com.mvproject.tinyiptvkmp.data.model.playlist.Playlist
+import com.mvproject.tinyiptvkmp.core.domain.model.Playlist
 
 sealed class SettingsPlaylistAction {
     data class DeletePlaylist(val playlist: Playlist) : SettingsPlaylistAction()

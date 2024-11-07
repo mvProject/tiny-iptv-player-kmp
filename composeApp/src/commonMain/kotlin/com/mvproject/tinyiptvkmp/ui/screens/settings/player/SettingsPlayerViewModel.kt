@@ -9,7 +9,7 @@ package com.mvproject.tinyiptvkmp.ui.screens.settings.player
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.mvproject.tinyiptvkmp.data.repository.PreferenceRepository
+import com.mvproject.tinyiptvkmp.core.datastore.repository.PreferenceRepository
 import com.mvproject.tinyiptvkmp.ui.screens.settings.player.action.SettingsPlayerAction
 import com.mvproject.tinyiptvkmp.ui.screens.settings.player.state.SettingsPlayerState
 import kotlinx.coroutines.flow.MutableStateFlow

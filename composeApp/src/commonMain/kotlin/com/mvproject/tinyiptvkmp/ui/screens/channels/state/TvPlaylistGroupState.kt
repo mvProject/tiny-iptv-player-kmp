@@ -8,9 +8,9 @@
 package com.mvproject.tinyiptvkmp.ui.screens.channels.state
 
 import androidx.compose.runtime.Immutable
+import com.mvproject.tinyiptvkmp.core.domain.model.EpgProgram
+import com.mvproject.tinyiptvkmp.core.domain.model.TvPlaylistChannel
 import com.mvproject.tinyiptvkmp.data.enums.ChannelsViewType
-import com.mvproject.tinyiptvkmp.data.model.channels.TvPlaylistChannel
-import com.mvproject.tinyiptvkmp.data.model.epg.EpgProgram
 import com.mvproject.tinyiptvkmp.utils.CommonUtils.empty
 
 @Immutable

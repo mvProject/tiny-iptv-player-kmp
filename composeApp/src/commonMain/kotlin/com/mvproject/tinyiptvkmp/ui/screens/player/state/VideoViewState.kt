@@ -7,9 +7,9 @@
 
 package com.mvproject.tinyiptvkmp.ui.screens.player.state
 
+import com.mvproject.tinyiptvkmp.core.domain.model.TvPlaylistChannel
 import com.mvproject.tinyiptvkmp.data.enums.RatioMode
 import com.mvproject.tinyiptvkmp.data.enums.ResizeMode
-import com.mvproject.tinyiptvkmp.data.model.channels.TvPlaylistChannel
 import com.mvproject.tinyiptvkmp.utils.AppConstants
 import com.mvproject.tinyiptvkmp.utils.CommonUtils.empty
 

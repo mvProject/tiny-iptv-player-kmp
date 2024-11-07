@@ -11,9 +11,9 @@ import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import androidx.navigation.toRoute
+import com.mvproject.tinyiptvkmp.core.domain.usecase.GetPlaylistUseCase
+import com.mvproject.tinyiptvkmp.core.domain.usecase.SavePlaylistUseCase
 import com.mvproject.tinyiptvkmp.data.enums.PlaylistType
-import com.mvproject.tinyiptvkmp.data.usecases.GetPlaylistUseCase
-import com.mvproject.tinyiptvkmp.data.usecases.SavePlaylistUseCase
 import com.mvproject.tinyiptvkmp.navigation.AppRoutes
 import com.mvproject.tinyiptvkmp.ui.screens.playlist.action.PlaylistAction
 import com.mvproject.tinyiptvkmp.ui.screens.playlist.state.PlaylistState

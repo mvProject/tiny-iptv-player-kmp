@@ -7,7 +7,7 @@
 
 package com.mvproject.tinyiptvkmp.ui.screens.player.action
 
-import com.mvproject.tinyiptvkmp.data.model.channels.TvPlaylistChannel
+import com.mvproject.tinyiptvkmp.core.domain.model.TvPlaylistChannel
 
 sealed class PlaybackActions {
 

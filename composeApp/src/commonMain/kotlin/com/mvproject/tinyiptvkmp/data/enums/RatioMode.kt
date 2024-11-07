@@ -5,18 +5,15 @@
  *
  */
 
-@file:OptIn(ExperimentalResourceApi::class)
-
 package com.mvproject.tinyiptvkmp.data.enums
 
-import org.jetbrains.compose.resources.ExperimentalResourceApi
 import org.jetbrains.compose.resources.StringResource
+import tinyiptvkmp.composeapp.generated.resources.Res
 import tinyiptvkmp.composeapp.generated.resources.video_ratio_mode_cinematic
 import tinyiptvkmp.composeapp.generated.resources.video_ratio_mode_fullScreen
 import tinyiptvkmp.composeapp.generated.resources.video_ratio_mode_original
 import tinyiptvkmp.composeapp.generated.resources.video_ratio_mode_square
 import tinyiptvkmp.composeapp.generated.resources.video_ratio_mode_wideScreen
-import tinyiptvkmp.composeapp.generated.resources.Res
 
 enum class RatioMode(val value: Int, val title: StringResource, val ratio: Float) {
     Original(0, Res.string.video_ratio_mode_original, 1f),

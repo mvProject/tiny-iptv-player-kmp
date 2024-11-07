@@ -14,6 +14,7 @@ import org.koin.dsl.module
 
 val databaseModule =
     module {
+        includes(databaseBuilderModule())
         single<AppDatabase> {
             createRoomDatabase(get())
         }

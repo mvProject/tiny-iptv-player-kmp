@@ -9,8 +9,8 @@ package com.mvproject.tinyiptvkmp.ui.screens.settings.playlist
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.mvproject.tinyiptvkmp.data.repository.PlaylistsRepository
-import com.mvproject.tinyiptvkmp.data.usecases.DeletePlaylistUseCase
+import com.mvproject.tinyiptvkmp.core.data.repository.PlaylistsRepository
+import com.mvproject.tinyiptvkmp.core.domain.usecase.DeletePlaylistUseCase
 import com.mvproject.tinyiptvkmp.ui.screens.settings.playlist.action.SettingsPlaylistAction
 import com.mvproject.tinyiptvkmp.ui.screens.settings.playlist.state.SettingsPlaylistState
 import kotlinx.coroutines.Dispatchers

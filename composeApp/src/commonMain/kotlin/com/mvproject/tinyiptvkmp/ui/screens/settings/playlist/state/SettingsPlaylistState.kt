@@ -8,7 +8,7 @@
 package com.mvproject.tinyiptvkmp.ui.screens.settings.playlist.state
 
 import androidx.compose.runtime.Immutable
-import com.mvproject.tinyiptvkmp.data.model.playlist.Playlist
+import com.mvproject.tinyiptvkmp.core.domain.model.Playlist
 
 @Immutable
 data class SettingsPlaylistState(

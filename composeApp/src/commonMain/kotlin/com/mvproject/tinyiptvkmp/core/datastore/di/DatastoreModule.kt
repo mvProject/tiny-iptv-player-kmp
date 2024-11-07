@@ -7,6 +7,39 @@
 
 package com.mvproject.tinyiptvkmp.core.datastore.di
 
-import org.koin.core.module.Module
+import androidx.datastore.core.DataStore
+import androidx.datastore.core.handlers.ReplaceFileCorruptionHandler
+import androidx.datastore.preferences.core.PreferenceDataStoreFactory
+import androidx.datastore.preferences.core.Preferences
+import androidx.datastore.preferences.core.emptyPreferences
+import com.mvproject.tinyiptvkmp.core.datastore.repository.PreferenceRepository
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.SupervisorJob
+import okio.Path.Companion.toPath
+import org.koin.core.module.dsl.singleOf
+import org.koin.dsl.module
 
-expect fun datastoreModule(): Module
+
+val datastoreModule =
+    module {
+        includes(datastorePathModule())
+        single<DataStore<Preferences>> {
+            createDataStore(producePath = get())
+        }
+        singleOf(::PreferenceRepository)
+    }
+
+private fun createDataStore(
+    corruptionHandler: ReplaceFileCorruptionHandler<Preferences>? = ReplaceFileCorruptionHandler(
+        produceNewData = { emptyPreferences() },
+    ),
+    coroutineScope: CoroutineScope = CoroutineScope(Dispatchers.IO + SupervisorJob()),
+    producePath: () -> String
+): DataStore<Preferences> {
+    return PreferenceDataStoreFactory.createWithPath(
+        corruptionHandler = corruptionHandler,
+        scope = coroutineScope,
+        produceFile = { producePath().toPath() },
+    )
+}
