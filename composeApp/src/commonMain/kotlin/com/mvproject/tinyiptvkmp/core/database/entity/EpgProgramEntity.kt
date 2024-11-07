@@ -9,7 +9,7 @@ package com.mvproject.tinyiptvkmp.core.database.entity
 
 import androidx.room.Entity
 import androidx.room.PrimaryKey
-import com.mvproject.tinyiptvkmp.utils.CommonUtils.empty
+import com.mvproject.tinyiptvkmp.core.common.utils.CommonUtils.empty
 
 @Entity(tableName = "epgPrograms")
 data class EpgProgramEntity(

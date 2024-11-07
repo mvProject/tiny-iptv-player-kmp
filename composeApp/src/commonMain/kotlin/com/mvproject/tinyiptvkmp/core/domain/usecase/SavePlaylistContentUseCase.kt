@@ -1,13 +1,14 @@
 package com.mvproject.tinyiptvkmp.core.domain.usecase
 
+import co.touchlab.kermit.Logger
+import com.mvproject.tinyiptvkmp.core.common.AppConstants
 import com.mvproject.tinyiptvkmp.core.data.repository.LocalPlaylistRepository
 import com.mvproject.tinyiptvkmp.core.data.repository.PlaylistChannelsRepository
 import com.mvproject.tinyiptvkmp.core.data.repository.PlaylistsRepository
 import com.mvproject.tinyiptvkmp.core.data.repository.RemotePlaylistRepository
 import com.mvproject.tinyiptvkmp.core.datastore.repository.PreferenceRepository
-import com.mvproject.tinyiptvkmp.data.enums.PlaylistType
-import com.mvproject.tinyiptvkmp.utils.AppConstants
-import com.mvproject.tinyiptvkmp.utils.KLog
+import com.mvproject.tinyiptvkmp.core.domain.enums.PlaylistType
+import com.mvproject.tinyiptvkmp.core.domain.mappers.Mapper.toPlaylistChannel
 
 class SavePlaylistContentUseCase(
     private val localPlaylistRepository: LocalPlaylistRepository,
@@ -19,25 +20,25 @@ class SavePlaylistContentUseCase(
     suspend operator fun invoke(playlistId: Long) {
         val playlist = playlistsRepository.getPlaylistById(id = playlistId)
 
-        val channels =
+        val parsedChannels =
             when (playlist.playlistType) {
                 PlaylistType.LOCAL ->
                     localPlaylistRepository.getFromLocalPlaylist(
-                        playlistId = playlistId,
-                        source = playlist.playlistSource,
+                        source = playlist.playlistSource
                     )
 
                 PlaylistType.REMOTE ->
                     remotePlaylistRepository.getFromRemotePlaylist(
-                        playlistId = playlistId,
                         url = playlist.playlistSource,
                     )
             }
 
-        if (channels.isEmpty()) {
-            KLog.e("SavePlaylistContentUseCase channels is empty")
+        if (parsedChannels.isEmpty()) {
+            Logger.e("SavePlaylistContentUseCase channels is empty")
             return
         }
+
+        val channels = parsedChannels.map { it.toPlaylistChannel(id = playlistId) }
 
         playlistChannelsRepository.savePlaylistChannels(channels = channels)
 

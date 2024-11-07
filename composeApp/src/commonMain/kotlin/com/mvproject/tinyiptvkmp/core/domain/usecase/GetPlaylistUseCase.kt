@@ -1,8 +1,8 @@
 package com.mvproject.tinyiptvkmp.core.domain.usecase
 
+import com.mvproject.tinyiptvkmp.core.common.AppConstants
 import com.mvproject.tinyiptvkmp.core.data.repository.PlaylistsRepository
 import com.mvproject.tinyiptvkmp.core.domain.model.Playlist
-import com.mvproject.tinyiptvkmp.utils.AppConstants
 
 class GetPlaylistUseCase(
     private val playlistsRepository: PlaylistsRepository,

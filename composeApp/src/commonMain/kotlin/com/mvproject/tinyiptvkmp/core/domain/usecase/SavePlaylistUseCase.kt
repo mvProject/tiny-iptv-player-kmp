@@ -2,8 +2,8 @@ package com.mvproject.tinyiptvkmp.core.domain.usecase
 
 import com.mvproject.tinyiptvkmp.core.data.repository.PlaylistsRepository
 import com.mvproject.tinyiptvkmp.core.datastore.repository.PreferenceRepository
+import com.mvproject.tinyiptvkmp.core.domain.enums.PlaylistType
 import com.mvproject.tinyiptvkmp.core.domain.model.Playlist
-import com.mvproject.tinyiptvkmp.data.enums.PlaylistType
 
 class SavePlaylistUseCase(
     private val preferenceRepository: PreferenceRepository,

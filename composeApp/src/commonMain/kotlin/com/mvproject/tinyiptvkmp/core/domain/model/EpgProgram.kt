@@ -7,8 +7,8 @@
 
 package com.mvproject.tinyiptvkmp.core.domain.model
 
-import com.mvproject.tinyiptvkmp.utils.CommonUtils.empty
-import com.mvproject.tinyiptvkmp.utils.TimeUtils.calculateProgramProgress
+import com.mvproject.tinyiptvkmp.core.common.utils.CommonUtils.empty
+import com.mvproject.tinyiptvkmp.core.common.utils.TimeUtils.calculateProgramProgress
 
 data class EpgProgram(
     val programId: String,
@@ -28,15 +28,14 @@ data class EpgProgram(
                 endTime = dateTimeEnd,
             )
 
-    override fun toString() =
-        StringBuilder()
-            .append("\n")
-            .append(channelId)
-            .append("\n")
-            .append("$dateTimeStart - $dateTimeEnd")
-            .append("\n")
-            .append("title: $title")
-            .append("\n")
-            .append("description: $description")
-            .toString()
+    override fun toString() = buildString {
+        append("\n")
+        append(channelId)
+        append("\n")
+        append("$dateTimeStart - $dateTimeEnd")
+        append("\n")
+        append("title: $title")
+        append("\n")
+        append("description: $description")
+    }
 }

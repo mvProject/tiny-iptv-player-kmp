@@ -7,10 +7,10 @@
 
 package com.mvproject.tinyiptvkmp.core.domain.model
 
-import com.mvproject.tinyiptvkmp.data.enums.FavoriteType
-import com.mvproject.tinyiptvkmp.data.enums.GroupType
-import com.mvproject.tinyiptvkmp.utils.AppConstants.INT_VALUE_ZERO
-import com.mvproject.tinyiptvkmp.utils.CommonUtils.empty
+import com.mvproject.tinyiptvkmp.core.common.AppConstants.INT_VALUE_ZERO
+import com.mvproject.tinyiptvkmp.core.common.utils.CommonUtils.empty
+import com.mvproject.tinyiptvkmp.core.domain.enums.FavoriteType
+import com.mvproject.tinyiptvkmp.core.domain.enums.GroupType
 import kotlin.uuid.ExperimentalUuidApi
 import kotlin.uuid.Uuid
 
@@ -22,11 +22,10 @@ data class ChannelsGroup(
     val groupFavoriteType: FavoriteType = FavoriteType.NONE,
     val groupContentCount: Int = INT_VALUE_ZERO,
 ) {
-    override fun toString() =
-        StringBuilder()
-            .append("\n")
-            .append("groupName: $groupName")
-            .append("\n")
-            .append("groupContentCount: $groupContentCount")
-            .toString()
+    override fun toString() = buildString {
+        append("\n")
+        append("groupName: $groupName")
+        append("\n")
+        append("groupContentCount: $groupContentCount")
+    }
 }

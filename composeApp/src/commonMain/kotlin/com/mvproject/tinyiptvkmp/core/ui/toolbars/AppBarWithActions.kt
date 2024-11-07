@@ -34,9 +34,9 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.style.TextOverflow
+import com.mvproject.tinyiptvkmp.core.common.AppConstants.INT_VALUE_1
+import com.mvproject.tinyiptvkmp.core.domain.enums.ChannelsViewType
 import com.mvproject.tinyiptvkmp.core.theme.dimens
-import com.mvproject.tinyiptvkmp.data.enums.ChannelsViewType
-import com.mvproject.tinyiptvkmp.utils.AppConstants.INT_VALUE_1
 import org.jetbrains.compose.resources.stringResource
 import tinyiptvkmp.composeapp.generated.resources.Res
 import tinyiptvkmp.composeapp.generated.resources.menu_view_type_card

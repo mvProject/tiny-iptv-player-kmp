@@ -19,6 +19,10 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.automirrored.rounded.VolumeDown
+import androidx.compose.material.icons.automirrored.rounded.VolumeMute
+import androidx.compose.material.icons.automirrored.rounded.VolumeUp
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
@@ -26,7 +30,6 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import com.mvproject.tinyiptvkmp.core.theme.dimens
-import com.mvproject.tinyiptvkmp.utils.PlayerUtils.getProperVolumeIcon
 
 @Composable
 fun VolumeIndicator(
@@ -73,6 +76,12 @@ fun VolumeIndicator(
         }
     }
 
+}
+
+private fun getProperVolumeIcon(value: Int) = when {
+    value < 35 -> Icons.AutoMirrored.Rounded.VolumeMute
+    value > 65 -> Icons.AutoMirrored.Rounded.VolumeUp
+    else -> Icons.AutoMirrored.Rounded.VolumeDown
 }
 
 // todo replace preview

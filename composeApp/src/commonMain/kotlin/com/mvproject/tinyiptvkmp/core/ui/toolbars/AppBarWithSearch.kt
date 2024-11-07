@@ -16,7 +16,7 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
-import com.mvproject.tinyiptvkmp.data.enums.ChannelsViewType
+import com.mvproject.tinyiptvkmp.core.domain.enums.ChannelsViewType
 
 @Composable
 fun AppBarWithSearch(

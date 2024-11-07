@@ -7,7 +7,7 @@
 
 package com.mvproject.tinyiptvkmp.core.data.model
 
-import com.mvproject.tinyiptvkmp.utils.CommonUtils.empty
+import com.mvproject.tinyiptvkmp.core.common.utils.CommonUtils.empty
 
 data class PlaylistChannel(
     val channelName: String,
@@ -17,19 +17,18 @@ data class PlaylistChannel(
     val epgId: String = String.empty,
     val parentListId: Long,
 ) {
-    override fun toString() =
-        StringBuilder()
-            .append("\n")
-            .append("channelName: $channelName")
-            .append("\n")
-            .append("channelLogo: $channelLogo")
-            .append("\n")
-            .append("channelUrl: $channelUrl")
-            .append("\n")
-            .append("channelGroup: $channelGroup")
-            .append("\n")
-            .append("epgId: $epgId")
-            .append("\n")
-            .append("parentListId: $parentListId")
-            .toString()
+    override fun toString() = buildString {
+        append("\n")
+        append("channelName: $channelName")
+        append("\n")
+        append("channelLogo: $channelLogo")
+        append("\n")
+        append("channelUrl: $channelUrl")
+        append("\n")
+        append("channelGroup: $channelGroup")
+        append("\n")
+        append("epgId: $epgId")
+        append("\n")
+        append("parentListId: $parentListId")
+    }
 }

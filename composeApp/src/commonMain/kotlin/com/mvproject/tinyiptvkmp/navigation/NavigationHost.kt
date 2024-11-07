@@ -11,19 +11,19 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.rememberNavController
-import com.mvproject.tinyiptvkmp.ui.screens.channels.navigation.navigateToTvPlaylistChannels
-import com.mvproject.tinyiptvkmp.ui.screens.channels.navigation.tvPlaylistChannels
-import com.mvproject.tinyiptvkmp.ui.screens.groups.navigation.playlistGroups
-import com.mvproject.tinyiptvkmp.ui.screens.player.navigation.navigateToVideoView
-import com.mvproject.tinyiptvkmp.ui.screens.player.navigation.videoView
-import com.mvproject.tinyiptvkmp.ui.screens.playlist.navigation.navigateToPlaylistDetail
-import com.mvproject.tinyiptvkmp.ui.screens.playlist.navigation.playlistDetail
-import com.mvproject.tinyiptvkmp.ui.screens.settings.general.navigation.navigateToSettingsGeneral
-import com.mvproject.tinyiptvkmp.ui.screens.settings.general.navigation.settingsGeneral
-import com.mvproject.tinyiptvkmp.ui.screens.settings.player.navigation.navigateToSettingsPlayer
-import com.mvproject.tinyiptvkmp.ui.screens.settings.player.navigation.settingsPlayer
-import com.mvproject.tinyiptvkmp.ui.screens.settings.playlist.navigation.navigateToSettingsPlaylist
-import com.mvproject.tinyiptvkmp.ui.screens.settings.playlist.navigation.settingsPlaylist
+import com.mvproject.tinyiptvkmp.features.channels.navigation.groupChannels
+import com.mvproject.tinyiptvkmp.features.channels.navigation.navigateToGroupChannels
+import com.mvproject.tinyiptvkmp.features.groups.navigation.playlistGroups
+import com.mvproject.tinyiptvkmp.features.player.navigation.navigateToPlayer
+import com.mvproject.tinyiptvkmp.features.player.navigation.player
+import com.mvproject.tinyiptvkmp.features.playlist.navigation.navigateToPlaylistDetail
+import com.mvproject.tinyiptvkmp.features.playlist.navigation.playlistDetail
+import com.mvproject.tinyiptvkmp.features.settings.general.navigation.navigateToSettingsGeneral
+import com.mvproject.tinyiptvkmp.features.settings.general.navigation.settingsGeneral
+import com.mvproject.tinyiptvkmp.features.settings.player.navigation.navigateToSettingsPlayer
+import com.mvproject.tinyiptvkmp.features.settings.player.navigation.settingsPlayer
+import com.mvproject.tinyiptvkmp.features.settings.playlist.navigation.navigateToSettingsPlaylist
+import com.mvproject.tinyiptvkmp.features.settings.playlist.navigation.settingsPlaylist
 
 @Composable
 fun NavigationHost(
@@ -40,19 +40,19 @@ fun NavigationHost(
 
         playlistGroups(
             onNavigateToSettings = navController::navigateToSettingsGeneral,
-            onNavigateToGroup = navController::navigateToTvPlaylistChannels
+            onNavigateToGroup = navController::navigateToGroupChannels
         )
 
-        tvPlaylistChannels(
+        groupChannels(
             onNavigateBack = navController::navigateUp,
-            onNavigateSelected = navController::navigateToVideoView
+            onNavigateSelected = navController::navigateToPlayer
         )
 
         playlistDetail(
             onNavigateBack = navController::navigateUp
         )
 
-        videoView(
+        player(
             onNavigateBack = navController::navigateUp
         )
 

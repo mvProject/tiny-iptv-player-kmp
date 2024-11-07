@@ -14,7 +14,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.State
 import androidx.compose.runtime.produceState
 import androidx.compose.ui.platform.LocalContext
-import com.mvproject.tinyiptvkmp.utils.KLog
+import co.touchlab.kermit.Logger
 import kotlinx.coroutines.channels.awaitClose
 import kotlinx.coroutines.flow.callbackFlow
 import kotlinx.coroutines.flow.distinctUntilChanged
@@ -31,7 +31,7 @@ internal fun networkConnectionState(context: Context = LocalContext.current): St
                 object : ConnectivityManager.NetworkCallback() {
                     override fun onAvailable(network: Network) {
                         super.onAvailable(network)
-                        KLog.w("testing observeConnectivityAsFlow onAvailable")
+                        Logger.w("testing observeConnectivityAsFlow onAvailable")
                         launch { send(ConnectionState.Available) }
                     }
 
@@ -40,19 +40,19 @@ internal fun networkConnectionState(context: Context = LocalContext.current): St
                         maxMsToLive: Int,
                     ) {
                         super.onLosing(network, maxMsToLive)
-                        KLog.w("testing observeConnectivityAsFlow onLosing")
+                        Logger.w("testing observeConnectivityAsFlow onLosing")
                         launch { send(ConnectionState.Unavailable) }
                     }
 
                     override fun onLost(network: Network) {
                         super.onLost(network)
-                        KLog.w("testing observeConnectivityAsFlow onLost")
+                        Logger.w("testing observeConnectivityAsFlow onLost")
                         launch { send(ConnectionState.Unavailable) }
                     }
 
                     override fun onUnavailable() {
                         super.onUnavailable()
-                        KLog.w("testing observeConnectivityAsFlow onUnavailable")
+                        Logger.w("testing observeConnectivityAsFlow onUnavailable")
                         launch { send(ConnectionState.Unavailable) }
                     }
                 }

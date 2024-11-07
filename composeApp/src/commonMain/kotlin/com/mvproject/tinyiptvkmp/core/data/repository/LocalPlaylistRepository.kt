@@ -7,18 +7,15 @@
 
 package com.mvproject.tinyiptvkmp.core.data.repository
 
-import com.mvproject.tinyiptvkmp.core.data.model.PlaylistChannel
-import com.mvproject.tinyiptvkmp.core.domain.mappers.ParseMappers
+import com.mvproject.tinyiptvkmp.core.data.model.PlaylistChannelParseModel
+import com.mvproject.tinyiptvkmp.core.data.parser.M3UParser.parseStringToChannels
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 import okio.FileSystem
 import okio.Path.Companion.toPath
 
 class LocalPlaylistRepository {
-    suspend fun getFromLocalPlaylist(
-        playlistId: Long,
-        source: String,
-    ): List<PlaylistChannel> =
+    suspend fun getFromLocalPlaylist(source: String): List<PlaylistChannelParseModel> =
         withContext(Dispatchers.Default) {
             val path = source.toPath()
             val content =
@@ -26,9 +23,6 @@ class LocalPlaylistRepository {
                     readUtf8()
                 }
 
-            ParseMappers.parseStringToChannels(
-                playlistId = playlistId,
-                source = content,
-            )
+            parseStringToChannels(source = content)
         }
 }

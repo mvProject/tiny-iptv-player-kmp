@@ -8,12 +8,12 @@
 package com.mvproject.tinyiptvkmp.core.data.repository
 
 import androidx.room.Transaction
+import co.touchlab.kermit.Logger
 import com.mvproject.tinyiptvkmp.core.database.db.AppDatabase
-import com.mvproject.tinyiptvkmp.core.domain.mappers.EntityMapper.toEpgProgram
 import com.mvproject.tinyiptvkmp.core.domain.mappers.Mapper.asProgramEntity
+import com.mvproject.tinyiptvkmp.core.domain.mappers.Mapper.toEpgProgram
 import com.mvproject.tinyiptvkmp.core.domain.model.EpgProgram
 import com.mvproject.tinyiptvkmp.core.network.data.response.EpgProgramResponse
-import com.mvproject.tinyiptvkmp.utils.KLog
 
 class EpgProgramRepository(
     private val appDatabase: AppDatabase,
@@ -38,7 +38,7 @@ class EpgProgramRepository(
 
     suspend fun cleanProgramsBeforeDate(date: Long) {
         val deleted = epgProgramDao.deleteProgramsByDate(timeStamp = date)
-        KLog.e("testing cleanProgramsBeforeDate deleted=$deleted")
+        Logger.e("testing cleanProgramsBeforeDate deleted=$deleted")
     }
 
     @Transaction

@@ -7,9 +7,9 @@
 
 package com.mvproject.tinyiptvkmp.core.domain.model
 
-import com.mvproject.tinyiptvkmp.data.enums.PlaylistType
-import com.mvproject.tinyiptvkmp.utils.AppConstants.LONG_VALUE_ZERO
-import com.mvproject.tinyiptvkmp.utils.CommonUtils.empty
+import com.mvproject.tinyiptvkmp.core.common.AppConstants.LONG_VALUE_ZERO
+import com.mvproject.tinyiptvkmp.core.common.utils.CommonUtils.empty
+import com.mvproject.tinyiptvkmp.core.domain.enums.PlaylistType
 import kotlin.random.Random
 
 data class Playlist(
@@ -21,19 +21,18 @@ data class Playlist(
     val updatePeriod: Long = LONG_VALUE_ZERO,
     val isSelected: Boolean = false,
 ) {
-    override fun toString(): String =
-        StringBuilder()
-            .append("\n")
-            .append("playlistName - $playlistName")
-            .append("\n")
-            .append("playlistSource - $playlistSource")
-            .append("\n")
-            .append("playlistType - $playlistType")
-            .append("\n")
-            .append("updatePeriod - $updatePeriod")
-            .append("\n")
-            .append("lastUpdateDate - $lastUpdateDate")
-            .append("\n")
-            .append("isSelected - $isSelected")
-            .toString()
+    override fun toString(): String = buildString {
+        append("\n")
+        append("playlistName - $playlistName")
+        append("\n")
+        append("playlistSource - $playlistSource")
+        append("\n")
+        append("playlistType - $playlistType")
+        append("\n")
+        append("updatePeriod - $updatePeriod")
+        append("\n")
+        append("lastUpdateDate - $lastUpdateDate")
+        append("\n")
+        append("isSelected - $isSelected")
+    }
 }

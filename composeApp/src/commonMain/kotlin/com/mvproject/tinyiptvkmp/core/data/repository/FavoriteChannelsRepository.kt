@@ -7,10 +7,10 @@
 
 package com.mvproject.tinyiptvkmp.core.data.repository
 
+import com.mvproject.tinyiptvkmp.core.common.AppConstants.INT_VALUE_1
 import com.mvproject.tinyiptvkmp.core.database.db.AppDatabase
 import com.mvproject.tinyiptvkmp.core.database.entity.FavoriteChannelEntity
-import com.mvproject.tinyiptvkmp.data.enums.FavoriteType
-import com.mvproject.tinyiptvkmp.utils.AppConstants.INT_VALUE_1
+import com.mvproject.tinyiptvkmp.core.domain.enums.FavoriteType
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 
@@ -36,7 +36,7 @@ class FavoriteChannelsRepository(
                     channelName = channelName,
                     channelUrl = channelUrl,
                     channelOrder = order,
-                    favoriteType = favoriteType,
+                    favoriteType = favoriteType.name,
                     parentListId = playlistId,
                 )
             )

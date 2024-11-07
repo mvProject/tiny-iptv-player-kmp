@@ -1,10 +1,10 @@
 package com.mvproject.tinyiptvkmp.core.domain.usecase
 
+import co.touchlab.kermit.Logger
 import com.mvproject.tinyiptvkmp.core.data.repository.EpgChannelRepository
 import com.mvproject.tinyiptvkmp.core.data.repository.FavoriteChannelsRepository
 import com.mvproject.tinyiptvkmp.core.data.repository.PlaylistChannelsRepository
 import com.mvproject.tinyiptvkmp.core.datastore.repository.PreferenceRepository
-import com.mvproject.tinyiptvkmp.utils.KLog
 
 class UpdateChannelsEpgInfoUseCase(
     private val preferenceRepository: PreferenceRepository,
@@ -32,13 +32,13 @@ class UpdateChannelsEpgInfoUseCase(
                 }
             }
 
-        KLog.w("testing update mappedChannels count:${mappedChannels.count()}")
+        Logger.w("testing update mappedChannels count:${mappedChannels.count()}")
 
         playlistChannelsRepository.savePlaylistChannels(mappedChannels.toList())
 
         mappedChannels.forEach { channel ->
             if (channel.channelUrl in favorites) {
-                KLog.w("update in favorite ${channel.channelName}")
+                Logger.w("update in favorite ${channel.channelName}")
                 favoriteChannelsRepository.updatePlaylistFavoriteChannels(
                     channelName = channel.channelName,
                     channelUrl = channel.channelUrl

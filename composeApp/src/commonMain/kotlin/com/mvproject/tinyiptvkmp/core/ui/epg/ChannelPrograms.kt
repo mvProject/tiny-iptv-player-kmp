@@ -29,7 +29,13 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.style.TextAlign
-import com.mvproject.tinyiptvkmp.core.common.PreviewTestData
+import com.mvproject.tinyiptvkmp.core.common.AppConstants.COUNT_ZERO_FLOAT
+import com.mvproject.tinyiptvkmp.core.common.AppConstants.PROGRESS_STATE_COMPLETE
+import com.mvproject.tinyiptvkmp.core.common.utils.CommonUtils.delimiterDash
+import com.mvproject.tinyiptvkmp.core.common.utils.CommonUtils.empty
+import com.mvproject.tinyiptvkmp.core.common.utils.CommonUtils.space
+import com.mvproject.tinyiptvkmp.core.common.utils.TimeUtils.calculateDuration
+import com.mvproject.tinyiptvkmp.core.domain.PreviewTestData
 import com.mvproject.tinyiptvkmp.core.domain.model.EpgProgram
 import com.mvproject.tinyiptvkmp.core.theme.VideoAppTheme
 import com.mvproject.tinyiptvkmp.core.theme.dimens
@@ -39,12 +45,6 @@ import com.mvproject.tinyiptvkmp.core.ui.modifiers.SpacerWidth
 import com.mvproject.tinyiptvkmp.core.ui.modifiers.roundedHeader
 import com.mvproject.tinyiptvkmp.core.ui.texts.ProgramTitle
 import com.mvproject.tinyiptvkmp.core.ui.views.TimeItem
-import com.mvproject.tinyiptvkmp.utils.AppConstants.COUNT_ZERO_FLOAT
-import com.mvproject.tinyiptvkmp.utils.AppConstants.PROGRESS_STATE_COMPLETE
-import com.mvproject.tinyiptvkmp.utils.CommonUtils.delimiterDash
-import com.mvproject.tinyiptvkmp.utils.CommonUtils.empty
-import com.mvproject.tinyiptvkmp.utils.CommonUtils.space
-import com.mvproject.tinyiptvkmp.utils.TimeUtils.calculateDuration
 import org.jetbrains.compose.resources.stringResource
 import org.jetbrains.compose.ui.tooling.preview.Preview
 import tinyiptvkmp.composeapp.generated.resources.Res

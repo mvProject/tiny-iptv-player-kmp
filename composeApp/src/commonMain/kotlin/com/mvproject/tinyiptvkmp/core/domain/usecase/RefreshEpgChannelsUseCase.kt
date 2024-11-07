@@ -1,11 +1,11 @@
 package com.mvproject.tinyiptvkmp.core.domain.usecase
 
+import co.touchlab.kermit.Logger
+import com.mvproject.tinyiptvkmp.core.common.AppConstants
+import com.mvproject.tinyiptvkmp.core.common.utils.TimeUtils
 import com.mvproject.tinyiptvkmp.core.data.repository.EpgChannelRepository
 import com.mvproject.tinyiptvkmp.core.datastore.repository.PreferenceRepository
 import com.mvproject.tinyiptvkmp.core.network.datasource.EpgChannelDatasource
-import com.mvproject.tinyiptvkmp.utils.AppConstants
-import com.mvproject.tinyiptvkmp.utils.KLog
-import com.mvproject.tinyiptvkmp.utils.TimeUtils
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 
@@ -21,7 +21,7 @@ class RefreshEpgChannelsUseCase(
             val updatePeriod =
                 TimeUtils.typeToDuration(preferenceRepository.getEpgInfoUpdatePeriod())
             val isRequired = (currentDate - lastUpdate) > updatePeriod
-            KLog.d("testing RefreshEpgChannelsUseCase isRequired $isRequired")
+            Logger.d("testing RefreshEpgChannelsUseCase isRequired $isRequired")
             if (isRequired) {
                 val sourceChannels =
                     epgChannelDatasource.getChannelsFromSource(
@@ -29,7 +29,7 @@ class RefreshEpgChannelsUseCase(
                     )
 
                 channelRepository.updateChannels(channels = sourceChannels)
-                KLog.w("testing RefreshEpgChannelsUseCase updateChannels complete")
+                Logger.w("testing RefreshEpgChannelsUseCase updateChannels complete")
                 preferenceRepository.apply {
                     setEpgInfoDataLastUpdate(timestamp = currentDate)
                     setChannelsEpgInfoUpdateRequired(state = true)

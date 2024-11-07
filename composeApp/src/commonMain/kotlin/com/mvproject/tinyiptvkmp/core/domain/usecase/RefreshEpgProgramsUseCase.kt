@@ -1,13 +1,13 @@
 package com.mvproject.tinyiptvkmp.core.domain.usecase
 
+import co.touchlab.kermit.Logger
+import com.mvproject.tinyiptvkmp.core.common.AppConstants
+import com.mvproject.tinyiptvkmp.core.common.utils.CommonUtils.empty
+import com.mvproject.tinyiptvkmp.core.common.utils.TimeUtils
 import com.mvproject.tinyiptvkmp.core.data.repository.EpgProgramRepository
 import com.mvproject.tinyiptvkmp.core.datastore.repository.PreferenceRepository
 import com.mvproject.tinyiptvkmp.core.network.data.response.EpgProgramResponse
 import com.mvproject.tinyiptvkmp.core.network.datasource.EpgProgramDatasource
-import com.mvproject.tinyiptvkmp.utils.AppConstants
-import com.mvproject.tinyiptvkmp.utils.CommonUtils.empty
-import com.mvproject.tinyiptvkmp.utils.KLog
-import com.mvproject.tinyiptvkmp.utils.TimeUtils
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.withContext
@@ -26,7 +26,7 @@ class RefreshEpgProgramsUseCase(
                 TimeUtils.typeToDuration(preferenceRepository.getMainEpgUpdatePeriod())
             val lastUpdateElapsed = currentDate - lastUpdate
             val isRequired = lastUpdateElapsed > periodUpdate
-            KLog.d("testing RefreshEpgProgramsUseCase isRequired $isRequired")
+            Logger.d("testing RefreshEpgProgramsUseCase isRequired $isRequired")
             if (isRequired) {
                 delay(1.minutes)
                 var programmeCount = 0
@@ -68,11 +68,11 @@ class RefreshEpgProgramsUseCase(
                             }
                         }
                         if (programmeCount > 0 && programmeCount % 10000 == 0) {
-                            KLog.i("testing Parsed $programmeCount programmes")
+                            Logger.i("testing Parsed $programmeCount programmes")
                         }
                     },
                 )
-                KLog.w("testing Parsed Complete $programmeCount programmes")
+                Logger.w("testing Parsed Complete $programmeCount programmes")
                 if (programmeCount != 0) {
                     preferenceRepository.setEpgLastUpdate(timestamp = currentDate)
                 }

@@ -7,8 +7,8 @@
 
 package com.mvproject.tinyiptvkmp.core.data.repository
 
-import com.mvproject.tinyiptvkmp.core.data.model.PlaylistChannel
-import com.mvproject.tinyiptvkmp.core.domain.mappers.ParseMappers
+import com.mvproject.tinyiptvkmp.core.data.model.PlaylistChannelParseModel
+import com.mvproject.tinyiptvkmp.core.data.parser.M3UParser.parseStringToChannels
 import com.mvproject.tinyiptvkmp.core.network.datasource.NetworkPlaylistDatasource
 import io.ktor.client.statement.bodyAsText
 import kotlinx.coroutines.Dispatchers
@@ -17,17 +17,11 @@ import kotlinx.coroutines.withContext
 class RemotePlaylistRepository(
     private val networkPlaylistDatasource: NetworkPlaylistDatasource,
 ) {
-    suspend fun getFromRemotePlaylist(
-        playlistId: Long,
-        url: String,
-    ): List<PlaylistChannel> =
+    suspend fun getFromRemotePlaylist(url: String): List<PlaylistChannelParseModel> =
         withContext(Dispatchers.Default) {
             val response = networkPlaylistDatasource.loadPlaylistData(url)
             val content = response.bodyAsText()
 
-            ParseMappers.parseStringToChannels(
-                playlistId = playlistId,
-                source = content,
-            )
+            parseStringToChannels(source = content)
         }
 }

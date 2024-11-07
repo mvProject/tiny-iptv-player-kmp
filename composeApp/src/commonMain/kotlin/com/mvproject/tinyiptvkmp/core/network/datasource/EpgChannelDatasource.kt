@@ -1,8 +1,8 @@
 package com.mvproject.tinyiptvkmp.core.network.datasource
 
+import com.mvproject.tinyiptvkmp.core.data.utils.ParserUtils.loadElements
+import com.mvproject.tinyiptvkmp.core.data.utils.ParserUtils.parseElementDataAsChannel
 import com.mvproject.tinyiptvkmp.core.network.data.response.EpgChannelResponse
-import com.mvproject.tinyiptvkmp.utils.ParserUtils.loadElements
-import com.mvproject.tinyiptvkmp.utils.ParserUtils.parseElementDataAsChannel
 
 class EpgChannelDatasource {
     suspend fun getChannelsFromSource(sourceUrl: String): List<EpgChannelResponse> {

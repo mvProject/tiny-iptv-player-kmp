@@ -1,12 +1,12 @@
 package com.mvproject.tinyiptvkmp.core.domain.usecase
 
+import co.touchlab.kermit.Logger
 import com.mvproject.tinyiptvkmp.core.data.repository.FavoriteChannelsRepository
 import com.mvproject.tinyiptvkmp.core.data.repository.PlaylistChannelsRepository
-import com.mvproject.tinyiptvkmp.core.domain.mappers.EntityMapper.toFavType
-import com.mvproject.tinyiptvkmp.core.domain.mappers.EntityMapper.toTvPlaylistChannel
-import com.mvproject.tinyiptvkmp.data.enums.FavoriteType
-import com.mvproject.tinyiptvkmp.data.enums.GroupType
-import com.mvproject.tinyiptvkmp.utils.KLog
+import com.mvproject.tinyiptvkmp.core.domain.enums.FavoriteType
+import com.mvproject.tinyiptvkmp.core.domain.enums.GroupType
+import com.mvproject.tinyiptvkmp.core.domain.mappers.Mapper.toFavType
+import com.mvproject.tinyiptvkmp.core.domain.mappers.Mapper.toTvChannel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 
@@ -18,7 +18,7 @@ class GetGroupChannelsUseCase(
         group: String,
         groupType: String,
     ) = withContext(Dispatchers.IO) {
-        KLog.d("testing GetGroupChannelsUseCase group = $group, groupType = $groupType")
+        Logger.d("testing GetGroupChannelsUseCase group = $group, groupType = $groupType")
 
         val favorites = favoriteChannelsRepository
             .loadSelectedFavoriteChannels()
@@ -50,7 +50,7 @@ class GetGroupChannelsUseCase(
                 val favType = favorites.firstOrNull { it.url == channel.channelUrl }
                 val type = favType?.type ?: FavoriteType.NONE
 
-                channel.toTvPlaylistChannel(favoriteType = type)
+                channel.toTvChannel(favoriteType = type)
             }.toList()
     }
 }

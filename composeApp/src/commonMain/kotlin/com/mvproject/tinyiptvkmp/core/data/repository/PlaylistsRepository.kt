@@ -8,8 +8,8 @@
 package com.mvproject.tinyiptvkmp.core.data.repository
 
 import com.mvproject.tinyiptvkmp.core.database.db.AppDatabase
-import com.mvproject.tinyiptvkmp.core.domain.mappers.EntityMapper.toPlaylist
-import com.mvproject.tinyiptvkmp.core.domain.mappers.EntityMapper.toPlaylistEntity
+import com.mvproject.tinyiptvkmp.core.domain.mappers.Mapper.toPlaylist
+import com.mvproject.tinyiptvkmp.core.domain.mappers.Mapper.toPlaylistEntity
 import com.mvproject.tinyiptvkmp.core.domain.model.Playlist
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.map
@@ -28,17 +28,13 @@ class PlaylistsRepository(
         playlistDao
             .getAllPlaylistsAsFlow()
             .map { list ->
-                list.map {
-                    it.toPlaylist()
-                }
+                list.map { it.toPlaylist() }
             }
 
     suspend fun getAllPlaylists(): List<Playlist> =
         playlistDao
             .getAllPlaylists()
-            .map {
-                it.toPlaylist()
-            }
+            .map { it.toPlaylist() }
 
     suspend fun deleteSinglePlaylist(playlist: Playlist) {
         playlistDao.deletePlaylist(id = playlist.id)

@@ -9,7 +9,6 @@ package com.mvproject.tinyiptvkmp.core.database.entity
 
 import androidx.room.Entity
 import androidx.room.PrimaryKey
-import com.mvproject.tinyiptvkmp.data.enums.PlaylistType
 
 @Entity(tableName = "playlists")
 data class PlaylistEntity(
@@ -17,7 +16,7 @@ data class PlaylistEntity(
     val id: Long,
     val playlistName: String,
     val playlistSource: String,
-    val playlistType: PlaylistType,
+    val playlistType: String,
     val lastUpdateDate: Long,
     val updatePeriod: Long,
     val isSelected: Boolean,

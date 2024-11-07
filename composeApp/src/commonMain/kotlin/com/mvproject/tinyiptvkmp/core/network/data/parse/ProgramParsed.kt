@@ -1,6 +1,6 @@
 package com.mvproject.tinyiptvkmp.core.network.data.parse
 
-import com.mvproject.tinyiptvkmp.utils.CommonUtils.empty
+import com.mvproject.tinyiptvkmp.core.common.utils.CommonUtils.empty
 
 data class ProgramParsed(
     var start: String = String.empty,

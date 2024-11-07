@@ -1,15 +1,16 @@
 package com.mvproject.tinyiptvkmp.core.domain.usecase
 
+import co.touchlab.kermit.Logger
+import com.mvproject.tinyiptvkmp.core.common.AppConstants
+import com.mvproject.tinyiptvkmp.core.common.utils.TimeUtils
 import com.mvproject.tinyiptvkmp.core.data.repository.FavoriteChannelsRepository
 import com.mvproject.tinyiptvkmp.core.data.repository.PlaylistChannelsRepository
 import com.mvproject.tinyiptvkmp.core.data.repository.PlaylistsRepository
 import com.mvproject.tinyiptvkmp.core.data.repository.RemotePlaylistRepository
 import com.mvproject.tinyiptvkmp.core.datastore.repository.PreferenceRepository
-import com.mvproject.tinyiptvkmp.core.domain.mappers.EntityMapper.toFavType
-import com.mvproject.tinyiptvkmp.data.enums.PlaylistType
-import com.mvproject.tinyiptvkmp.utils.AppConstants
-import com.mvproject.tinyiptvkmp.utils.KLog
-import com.mvproject.tinyiptvkmp.utils.TimeUtils
+import com.mvproject.tinyiptvkmp.core.domain.enums.PlaylistType
+import com.mvproject.tinyiptvkmp.core.domain.mappers.Mapper.toFavType
+import com.mvproject.tinyiptvkmp.core.domain.mappers.Mapper.toPlaylistChannel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 
@@ -39,7 +40,7 @@ class UpdateRemotePlaylistChannelsUseCase(
                             currentDate - playlist.lastUpdateDate > updateDuration
                         val isUpdateAllowed = isUpdateSet && isRequiredUpdate
 
-                        KLog.w("testing remotePlaylists ${playlist.playlistName} isUpdateAllowed $isUpdateAllowed")
+                        Logger.w("testing remotePlaylists ${playlist.playlistName} isUpdateAllowed $isUpdateAllowed")
                         if (isUpdateAllowed) {
                             add(playlist)
                         }
@@ -47,11 +48,9 @@ class UpdateRemotePlaylistChannelsUseCase(
                 }
 
             playlistUpdates.forEach { playlist ->
-                val channels =
-                    remotePlaylistRepository.getFromRemotePlaylist(
-                        playlistId = playlist.id,
-                        url = playlist.playlistSource,
-                    )
+                val channels = remotePlaylistRepository
+                    .getFromRemotePlaylist(url = playlist.playlistSource)
+                    .map { it.toPlaylistChannel(id = playlist.id) }
 
                 val favorites = favoriteChannelsRepository
                     .loadFavoriteChannelById(playlist.id)
@@ -63,7 +62,7 @@ class UpdateRemotePlaylistChannelsUseCase(
                     val favoritesUrls = favorites.map { it.url }
 
                     if (channel.channelUrl in favoritesUrls) {
-                        KLog.w("update in favorite ${channel.channelName}")
+                        Logger.w("update in favorite ${channel.channelName}")
                         favoriteChannelsRepository.updatePlaylistFavoriteChannels(
                             channelName = channel.channelName,
                             channelUrl = channel.channelUrl
@@ -77,7 +76,7 @@ class UpdateRemotePlaylistChannelsUseCase(
 
                 isRefreshEpgIdRequired = true
 
-                KLog.w("update channels finished")
+                Logger.w("update channels finished")
             }
 
             preferenceRepository.setChannelsEpgInfoUpdateRequired(state = isRefreshEpgIdRequired)

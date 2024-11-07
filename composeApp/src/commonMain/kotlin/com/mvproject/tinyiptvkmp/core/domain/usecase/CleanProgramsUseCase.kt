@@ -1,9 +1,9 @@
 package com.mvproject.tinyiptvkmp.core.domain.usecase
 
+import com.mvproject.tinyiptvkmp.core.common.AppConstants
+import com.mvproject.tinyiptvkmp.core.common.utils.TimeUtils
 import com.mvproject.tinyiptvkmp.core.data.repository.EpgProgramRepository
 import com.mvproject.tinyiptvkmp.core.datastore.repository.PreferenceRepository
-import com.mvproject.tinyiptvkmp.utils.AppConstants
-import com.mvproject.tinyiptvkmp.utils.TimeUtils
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 import kotlin.time.Duration.Companion.days

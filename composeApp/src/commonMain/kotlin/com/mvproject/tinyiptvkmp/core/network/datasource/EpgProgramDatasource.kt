@@ -1,8 +1,8 @@
 package com.mvproject.tinyiptvkmp.core.network.datasource
 
+import co.touchlab.kermit.Logger
+import com.mvproject.tinyiptvkmp.core.common.utils.CommonUtils.empty
 import com.mvproject.tinyiptvkmp.core.network.data.parse.ProgramParsed
-import com.mvproject.tinyiptvkmp.utils.CommonUtils.empty
-import com.mvproject.tinyiptvkmp.utils.KLog
 import io.ktor.client.HttpClient
 import io.ktor.client.request.prepareGet
 import io.ktor.client.statement.bodyAsChannel
@@ -26,7 +26,7 @@ class EpgProgramDatasource(
         try {
             client.use { service ->
                 service.prepareGet(url).execute { response ->
-                    KLog.i("testing File download started. Content length: ${response.contentLength()}")
+                    Logger.i("testing File download started. Content length: ${response.contentLength()}")
                     val channel = response.bodyAsChannel()
                     parseGzippedXml(channel, onProgrammeParsed)
                 }
@@ -38,7 +38,7 @@ class EpgProgramDatasource(
             }
         } catch (ex: Exception) {
             client.close()
-            KLog.e("testing Error downloading or parsing XML: ${ex.message}")
+            Logger.e("testing Error downloading or parsing XML: ${ex.message}")
         }
     }
 
@@ -46,7 +46,7 @@ class EpgProgramDatasource(
         channel: ByteReadChannel,
         onProgrammeParsed: suspend (ProgramParsed) -> Unit,
     ) = withContext(Dispatchers.Default) {
-        KLog.i("testing start parsing programmes")
+        Logger.i("testing start parsing programmes")
         val inputStream = channel.toInputStream()
         GzipSource(inputStream.source()).buffer().use { bufferedSource ->
             var currentProgram: ProgramParsed? = null

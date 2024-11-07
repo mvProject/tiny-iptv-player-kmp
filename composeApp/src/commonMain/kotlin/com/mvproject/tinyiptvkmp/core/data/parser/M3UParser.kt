@@ -7,8 +7,8 @@
 
 package com.mvproject.tinyiptvkmp.core.data.parser
 
+import com.mvproject.tinyiptvkmp.core.common.utils.CommonUtils.empty
 import com.mvproject.tinyiptvkmp.core.data.model.PlaylistChannelParseModel
-import com.mvproject.tinyiptvkmp.utils.CommonUtils.empty
 
 object M3UParser {
     private const val TAG_PLAYLIST_HEADER = "#EXTM3U"
@@ -77,7 +77,27 @@ object M3UParser {
         }
     }*/
 
-    fun parsePlaylist(string: String): List<PlaylistChannelParseModel> {
+    fun parseStringToChannels(source: String): List<PlaylistChannelParseModel> {
+        val parsed = parsePlaylist(source)
+        val filtered =
+            parsed.filter {
+                it.channel.isNotEmpty() && it.streamURL.isNotEmpty()
+            }
+        //val mappedResult =
+        //    filtered
+        //     PlaylistChannel(
+        //         channelName = model.channel,
+        //         channelLogo = model.logoURL,
+        //         channelUrl = model.streamURL,
+        //         channelGroup = model.groupTitle,
+        //         parentListId = playlistId,
+        //     )
+        // }
+
+        return filtered
+    }
+
+    private fun parsePlaylist(string: String): List<PlaylistChannelParseModel> {
         return string.split(TAG_METADATA)
             .filter { !it.contains(TAG_PLAYLIST_HEADER) }
             .mapNotNull { parseEntry(it) }

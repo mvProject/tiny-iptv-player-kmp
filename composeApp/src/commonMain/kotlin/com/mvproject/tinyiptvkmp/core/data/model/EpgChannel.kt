@@ -7,7 +7,7 @@
 
 package com.mvproject.tinyiptvkmp.core.data.model
 
-import com.mvproject.tinyiptvkmp.utils.CommonUtils.empty
+import com.mvproject.tinyiptvkmp.core.common.utils.CommonUtils.empty
 import kotlinx.serialization.Serializable
 
 @Serializable

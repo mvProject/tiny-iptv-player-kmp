@@ -1,12 +1,12 @@
 package com.mvproject.tinyiptvkmp.core.domain.usecase
 
+import com.mvproject.tinyiptvkmp.core.common.AppConstants
 import com.mvproject.tinyiptvkmp.core.data.repository.FavoriteChannelsRepository
 import com.mvproject.tinyiptvkmp.core.data.repository.PlaylistChannelsRepository
-import com.mvproject.tinyiptvkmp.core.domain.mappers.EntityMapper.toFavType
+import com.mvproject.tinyiptvkmp.core.domain.enums.FavoriteType
+import com.mvproject.tinyiptvkmp.core.domain.enums.GroupType
+import com.mvproject.tinyiptvkmp.core.domain.mappers.Mapper.toFavType
 import com.mvproject.tinyiptvkmp.core.domain.model.ChannelsGroup
-import com.mvproject.tinyiptvkmp.data.enums.FavoriteType
-import com.mvproject.tinyiptvkmp.data.enums.GroupType
-import com.mvproject.tinyiptvkmp.utils.AppConstants
 
 class GetPlaylistGroupUseCase(
     private val playlistChannelsRepository: PlaylistChannelsRepository,
