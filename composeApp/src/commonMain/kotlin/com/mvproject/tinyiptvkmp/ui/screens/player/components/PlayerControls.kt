@@ -22,9 +22,9 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import com.mvproject.tinyiptvkmp.core.ui.components.buttons.ControlButton
-import com.mvproject.tinyiptvkmp.core.ui.components.modifiers.SpacerWidth
-import com.mvproject.tinyiptvkmp.core.ui.theme.dimens
+import com.mvproject.tinyiptvkmp.core.theme.dimens
+import com.mvproject.tinyiptvkmp.core.ui.buttons.ControlButton
+import com.mvproject.tinyiptvkmp.core.ui.modifiers.SpacerWidth
 import com.mvproject.tinyiptvkmp.ui.components.AdditionalPlayerControls
 import com.mvproject.tinyiptvkmp.ui.screens.player.action.PlaybackActions
 

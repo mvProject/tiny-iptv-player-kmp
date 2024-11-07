@@ -29,11 +29,11 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.lifecycle.compose.LifecycleResumeEffect
 import com.mvproject.tinyiptvkmp.core.domain.model.TvPlaylistChannel
-import com.mvproject.tinyiptvkmp.core.ui.components.epg.ChannelPrograms
-import com.mvproject.tinyiptvkmp.core.ui.components.indicators.LoadingIndicator
-import com.mvproject.tinyiptvkmp.core.ui.components.overlay.OverlayContent
-import com.mvproject.tinyiptvkmp.core.ui.components.toolbars.AppBarWithSearch
-import com.mvproject.tinyiptvkmp.core.ui.theme.dimens
+import com.mvproject.tinyiptvkmp.core.theme.dimens
+import com.mvproject.tinyiptvkmp.core.ui.epg.ChannelPrograms
+import com.mvproject.tinyiptvkmp.core.ui.indicators.LoadingIndicator
+import com.mvproject.tinyiptvkmp.core.ui.overlay.OverlayContent
+import com.mvproject.tinyiptvkmp.core.ui.toolbars.AppBarWithSearch
 import com.mvproject.tinyiptvkmp.ui.screens.channels.action.TvPlaylistChannelAction
 import com.mvproject.tinyiptvkmp.ui.screens.channels.components.ChannelView
 import com.mvproject.tinyiptvkmp.ui.screens.channels.components.OverlayChannelOptions

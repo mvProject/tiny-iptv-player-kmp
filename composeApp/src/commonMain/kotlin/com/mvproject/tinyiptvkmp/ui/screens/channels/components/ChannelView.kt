@@ -20,7 +20,7 @@ import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import com.mvproject.tinyiptvkmp.core.domain.model.TvPlaylistChannel
-import com.mvproject.tinyiptvkmp.core.ui.theme.dimens
+import com.mvproject.tinyiptvkmp.core.theme.dimens
 import com.mvproject.tinyiptvkmp.data.enums.ChannelsViewType
 import com.mvproject.tinyiptvkmp.utils.AppConstants.INT_VALUE_1
 

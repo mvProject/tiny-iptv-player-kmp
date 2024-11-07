@@ -21,10 +21,10 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import com.mvproject.tinyiptvkmp.core.common.PreviewTestData
 import com.mvproject.tinyiptvkmp.core.domain.model.TvPlaylistChannel
-import com.mvproject.tinyiptvkmp.core.ui.components.buttons.FavoriteButton
-import com.mvproject.tinyiptvkmp.core.ui.components.texts.ChannelTitleLarge
-import com.mvproject.tinyiptvkmp.core.ui.theme.VideoAppTheme
-import com.mvproject.tinyiptvkmp.core.ui.theme.dimens
+import com.mvproject.tinyiptvkmp.core.theme.VideoAppTheme
+import com.mvproject.tinyiptvkmp.core.theme.dimens
+import com.mvproject.tinyiptvkmp.core.ui.buttons.FavoriteButton
+import com.mvproject.tinyiptvkmp.core.ui.texts.ChannelTitleLarge
 import com.mvproject.tinyiptvkmp.data.enums.FavoriteType
 import org.jetbrains.compose.ui.tooling.preview.Preview
 

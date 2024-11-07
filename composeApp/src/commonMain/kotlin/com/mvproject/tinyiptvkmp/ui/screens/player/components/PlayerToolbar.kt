@@ -27,10 +27,10 @@ import androidx.compose.ui.draw.alpha
 import androidx.compose.ui.text.style.TextAlign
 import com.mvproject.tinyiptvkmp.core.domain.model.EpgProgram
 import com.mvproject.tinyiptvkmp.core.domain.model.TvPlaylistChannel
-import com.mvproject.tinyiptvkmp.core.ui.components.indicators.ProgramProgressIndicator
-import com.mvproject.tinyiptvkmp.core.ui.components.modifiers.roundedHeader
-import com.mvproject.tinyiptvkmp.core.ui.components.views.TimeItem
-import com.mvproject.tinyiptvkmp.core.ui.theme.dimens
+import com.mvproject.tinyiptvkmp.core.theme.dimens
+import com.mvproject.tinyiptvkmp.core.ui.indicators.ProgramProgressIndicator
+import com.mvproject.tinyiptvkmp.core.ui.modifiers.roundedHeader
+import com.mvproject.tinyiptvkmp.core.ui.views.TimeItem
 import com.mvproject.tinyiptvkmp.data.enums.FavoriteType
 import com.mvproject.tinyiptvkmp.ui.screens.player.action.PlaybackActions
 

@@ -21,13 +21,13 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import com.mvproject.tinyiptvkmp.core.common.PreviewTestData
 import com.mvproject.tinyiptvkmp.core.domain.model.TvPlaylistChannel
-import com.mvproject.tinyiptvkmp.core.ui.components.buttons.FavoriteButton
-import com.mvproject.tinyiptvkmp.core.ui.components.indicators.ProgramProgressIndicator
-import com.mvproject.tinyiptvkmp.core.ui.components.texts.ChannelTitle
-import com.mvproject.tinyiptvkmp.core.ui.components.texts.EmptyProgramTitle
-import com.mvproject.tinyiptvkmp.core.ui.components.texts.ProgramTitle
-import com.mvproject.tinyiptvkmp.core.ui.theme.VideoAppTheme
-import com.mvproject.tinyiptvkmp.core.ui.theme.dimens
+import com.mvproject.tinyiptvkmp.core.theme.VideoAppTheme
+import com.mvproject.tinyiptvkmp.core.theme.dimens
+import com.mvproject.tinyiptvkmp.core.ui.buttons.FavoriteButton
+import com.mvproject.tinyiptvkmp.core.ui.indicators.ProgramProgressIndicator
+import com.mvproject.tinyiptvkmp.core.ui.texts.ChannelTitle
+import com.mvproject.tinyiptvkmp.core.ui.texts.EmptyProgramTitle
+import com.mvproject.tinyiptvkmp.core.ui.texts.ProgramTitle
 import com.mvproject.tinyiptvkmp.data.enums.FavoriteType
 import org.jetbrains.compose.ui.tooling.preview.Preview
 

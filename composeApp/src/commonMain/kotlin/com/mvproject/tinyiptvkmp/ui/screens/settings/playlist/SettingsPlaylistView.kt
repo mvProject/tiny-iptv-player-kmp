@@ -28,9 +28,9 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
-import com.mvproject.tinyiptvkmp.core.ui.components.toolbars.AppBarWithBackNav
-import com.mvproject.tinyiptvkmp.core.ui.components.views.NoItemsView
-import com.mvproject.tinyiptvkmp.core.ui.theme.dimens
+import com.mvproject.tinyiptvkmp.core.theme.dimens
+import com.mvproject.tinyiptvkmp.core.ui.toolbars.AppBarWithBackNav
+import com.mvproject.tinyiptvkmp.core.ui.views.NoItemsView
 import com.mvproject.tinyiptvkmp.ui.screens.settings.components.PlaylistItemView
 import com.mvproject.tinyiptvkmp.ui.screens.settings.playlist.action.SettingsPlaylistAction
 import com.mvproject.tinyiptvkmp.ui.screens.settings.playlist.state.SettingsPlaylistState
