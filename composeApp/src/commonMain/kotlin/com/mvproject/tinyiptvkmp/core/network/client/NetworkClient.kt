@@ -1,0 +1,38 @@
+package com.mvproject.tinyiptvkmp.core.network.client
+
+import io.ktor.client.HttpClient
+import io.ktor.client.plugins.HttpTimeout
+import io.ktor.client.plugins.contentnegotiation.ContentNegotiation
+import io.ktor.client.plugins.logging.LogLevel
+import io.ktor.client.plugins.logging.Logger
+import io.ktor.client.plugins.logging.Logging
+import io.ktor.client.plugins.logging.SIMPLE
+import io.ktor.http.HttpHeaders
+import io.ktor.serialization.kotlinx.json.json
+import io.ktor.util.GZip
+import kotlinx.serialization.json.Json
+
+expect fun createPlatformHttpClient(): HttpClient
+
+internal fun createHttpClient(): HttpClient =
+    createPlatformHttpClient().config {
+        install(Logging) {
+            logger = Logger.SIMPLE
+            level = LogLevel.ALL
+        }
+        install(HttpHeaders.ContentEncoding) {
+            GZip
+        }
+
+        install(ContentNegotiation) {
+            json(
+                Json {
+                    prettyPrint = true
+                    isLenient = true
+                    ignoreUnknownKeys = true
+                },
+            )
+        }
+
+        install(HttpTimeout)
+    }

@@ -9,10 +9,10 @@ package com.mvproject.tinyiptvkmp
 
 import androidx.compose.runtime.Composable
 import coil3.compose.setSingletonImageLoaderFactory
+import com.mvproject.tinyiptvkmp.core.common.utils.ImageUtils.getAsyncImageLoader
+import com.mvproject.tinyiptvkmp.core.theme.VideoAppTheme
 import com.mvproject.tinyiptvkmp.navigation.AppRoutes
 import com.mvproject.tinyiptvkmp.navigation.NavigationHost
-import com.mvproject.tinyiptvkmp.ui.theme.VideoAppTheme
-import com.mvproject.tinyiptvkmp.utils.ImageUtils.getAsyncImageLoader
 import org.koin.compose.KoinContext
 
 @Composable

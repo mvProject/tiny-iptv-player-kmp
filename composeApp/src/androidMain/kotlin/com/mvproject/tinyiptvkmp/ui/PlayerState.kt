@@ -15,7 +15,7 @@ import androidx.media3.common.MediaItem
 import androidx.media3.common.Player
 import androidx.media3.common.VideoSize
 import androidx.media3.exoplayer.ExoPlayer
-import com.mvproject.tinyiptvkmp.ui.screens.player.action.PlaybackStateActions
+import com.mvproject.tinyiptvkmp.features.player.action.PlaybackStateActions
 import com.mvproject.tinyiptvkmp.utils.ExoPlayerUtils.createMediaItem
 import com.mvproject.tinyiptvkmp.utils.ExoPlayerUtils.createVideoPlayer
 import com.mvproject.tinyiptvkmp.utils.ExoPlayerUtils.mapToVideoPlaybackState

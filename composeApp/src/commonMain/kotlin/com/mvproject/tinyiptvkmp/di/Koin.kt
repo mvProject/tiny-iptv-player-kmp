@@ -7,14 +7,16 @@
 
 package com.mvproject.tinyiptvkmp.di
 
-import com.mvproject.tinyiptvkmp.di.database.platformDatabaseModule
-import com.mvproject.tinyiptvkmp.di.datastore.platformDataStoreModule
-import com.mvproject.tinyiptvkmp.di.modules.dataSourceModule
-import com.mvproject.tinyiptvkmp.di.modules.databaseModule
-import com.mvproject.tinyiptvkmp.di.modules.networkModule
-import com.mvproject.tinyiptvkmp.di.modules.repositoryModule
-import com.mvproject.tinyiptvkmp.di.modules.useCaseModule
-import com.mvproject.tinyiptvkmp.di.modules.viewModelsModule
+import com.mvproject.tinyiptvkmp.core.data.di.repositoryModule
+import com.mvproject.tinyiptvkmp.core.database.di.databaseModule
+import com.mvproject.tinyiptvkmp.core.datastore.di.datastoreModule
+import com.mvproject.tinyiptvkmp.core.domain.di.useCaseModule
+import com.mvproject.tinyiptvkmp.core.network.di.networkModule
+import com.mvproject.tinyiptvkmp.features.channels.di.channelsModule
+import com.mvproject.tinyiptvkmp.features.groups.di.groupsModule
+import com.mvproject.tinyiptvkmp.features.player.di.playerModule
+import com.mvproject.tinyiptvkmp.features.playlist.di.playlistModule
+import com.mvproject.tinyiptvkmp.features.settings.di.settingsModule
 import org.koin.core.context.startKoin
 import org.koin.dsl.KoinAppDeclaration
 
@@ -22,13 +24,15 @@ fun initKoin(appDeclaration: KoinAppDeclaration = {}) =
     startKoin {
         appDeclaration()
         modules(
-            platformDatabaseModule(),
-            platformDataStoreModule(),
+            datastoreModule,
+            databaseModule,
             networkModule,
             repositoryModule,
-            dataSourceModule,
             useCaseModule,
-            viewModelsModule,
-            databaseModule,
+            channelsModule,
+            groupsModule,
+            playerModule,
+            playlistModule,
+            settingsModule
         )
     }
