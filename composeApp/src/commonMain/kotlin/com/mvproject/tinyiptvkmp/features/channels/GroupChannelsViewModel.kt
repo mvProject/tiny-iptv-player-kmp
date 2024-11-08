@@ -12,6 +12,8 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import androidx.navigation.toRoute
 import co.touchlab.kermit.Logger
+import com.mvproject.tinyiptvkmp.core.common.mvi.MVI
+import com.mvproject.tinyiptvkmp.core.common.mvi.mvi
 import com.mvproject.tinyiptvkmp.core.common.utils.TimeUtils
 import com.mvproject.tinyiptvkmp.core.datastore.repository.PreferenceRepository
 import com.mvproject.tinyiptvkmp.core.domain.enums.ChannelsViewType
@@ -22,13 +24,11 @@ import com.mvproject.tinyiptvkmp.core.domain.usecase.GetChannelsEpgUseCase
 import com.mvproject.tinyiptvkmp.core.domain.usecase.GetGroupChannelsEpgUseCase
 import com.mvproject.tinyiptvkmp.core.domain.usecase.GetGroupChannelsUseCase
 import com.mvproject.tinyiptvkmp.core.domain.usecase.ToggleFavoriteChannelUseCase
-import com.mvproject.tinyiptvkmp.features.channels.action.GroupChannelsAction
-import com.mvproject.tinyiptvkmp.features.channels.state.GroupChannelsState
+import com.mvproject.tinyiptvkmp.features.channels.GroupChannelsContract.UiAction
+import com.mvproject.tinyiptvkmp.features.channels.GroupChannelsContract.UiEffect
+import com.mvproject.tinyiptvkmp.features.channels.GroupChannelsContract.UiState
 import com.mvproject.tinyiptvkmp.navigation.AppRoutes
 import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.flow.MutableStateFlow
-import kotlinx.coroutines.flow.StateFlow
-import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 import kotlin.time.Duration.Companion.minutes
 
@@ -39,9 +39,8 @@ class GroupChannelsViewModel(
     private val getGroupChannelsEpgUseCase: GetGroupChannelsEpgUseCase,
     private val toggleFavoriteChannelUseCase: ToggleFavoriteChannelUseCase,
     private val preferenceRepository: PreferenceRepository,
-) : ViewModel() {
-    private val _groupChannelsState = MutableStateFlow(GroupChannelsState())
-    val groupChannelsState: StateFlow<GroupChannelsState> = _groupChannelsState
+) : ViewModel(),
+    MVI<UiState, UiAction, UiEffect> by mvi(UiState()) {
 
     private val args = savedStateHandle.toRoute<AppRoutes.TvPlaylistChannels>()
 
@@ -53,11 +52,10 @@ class GroupChannelsViewModel(
     init {
         viewModelScope.launch {
             val groupChannels = getGroupChannelsUseCase(group = group, groupType = type)
-
             val viewType = preferenceRepository.getChannelsViewType().mapViewType()
 
-            _groupChannelsState.update { state ->
-                state.copy(
+            updateUiState {
+                copy(
                     viewType = viewType,
                     currentGroup = group,
                     channels = groupChannels
@@ -66,26 +64,30 @@ class GroupChannelsViewModel(
         }
     }
 
-    fun processAction(action: GroupChannelsAction) {
-        when (action) {
-            is GroupChannelsAction.SearchTextChange -> {
-                searchTextChange(text = action.text)
-            }
+    override fun onAction(uiAction: UiAction) {
+        when (uiAction) {
+            UiAction.NavigateBack -> viewModelScope.postUiEffect(UiEffect.NavigateBack)
+            is UiAction.NavigateToSelected -> viewModelScope.postUiEffect(
+                UiEffect.NavigateToSelected(
+                    name = uiAction.name,
+                    group = uiAction.group
+                )
+            )
 
-            is GroupChannelsAction.ToggleEpgVisibility -> {
-                toggleEpgVisibility(name = action.name, epgId = action.epgID)
-            }
+            is UiAction.SearchTextChange -> searchTextChange(text = uiAction.text)
+            is UiAction.ToggleEpgVisibility -> toggleEpgVisibility(
+                name = uiAction.name,
+                epgId = uiAction.epgID
+            )
 
-            is GroupChannelsAction.ToggleFavourites -> {
-                toggleFavorites(channel = action.channel, type = action.type)
-            }
+            is UiAction.ToggleFavourites -> toggleFavorites(
+                channel = uiAction.channel,
+                type = uiAction.type
+            )
 
-            is GroupChannelsAction.ViewTypeChange -> {
-                viewTypeChange(type = action.type)
-            }
+            is UiAction.ViewTypeChange -> viewTypeChange(type = uiAction.type)
         }
     }
-
 
     fun loadChannelsByGroups() {
         viewModelScope.launch(Dispatchers.IO) {
@@ -95,7 +97,7 @@ class GroupChannelsViewModel(
 
     private suspend fun refreshEpgPrograms() {
         if (TimeUtils.actualDate - lastRefresh > 1.minutes.inWholeMilliseconds) {
-            val channels = groupChannelsState.value.channels
+            val channels = uiState.value.channels
             if (channels.isNotEmpty()) {
                 val channelsIds =
                     channels
@@ -109,8 +111,8 @@ class GroupChannelsViewModel(
                     ch.copy(programs = programs)
                 }
 
-                _groupChannelsState.update { state ->
-                    state.copy(channels = channelsWithPrograms)
+                updateUiState {
+                    copy(channels = channelsWithPrograms)
                 }
 
                 lastRefresh = TimeUtils.actualDate
@@ -119,8 +121,8 @@ class GroupChannelsViewModel(
     }
 
     private fun searchTextChange(text: String) {
-        _groupChannelsState.update { current ->
-            current.copy(searchString = text)
+        updateUiState {
+            copy(searchString = text)
         }
     }
 
@@ -132,8 +134,9 @@ class GroupChannelsViewModel(
             } else {
                 emptyList()
             }
-            _groupChannelsState.update { state ->
-                state.copy(
+
+            updateUiState {
+                copy(
                     selectedName = name,
                     selectedPrograms = programs
                 )
@@ -142,12 +145,12 @@ class GroupChannelsViewModel(
     }
 
     private fun viewTypeChange(type: ChannelsViewType) {
-        if (groupChannelsState.value.viewType != type) {
+        if (uiState.value.viewType != type) {
             viewModelScope.launch {
-                _groupChannelsState.update { current ->
-                    current.copy(viewType = type)
-                }
                 preferenceRepository.setChannelsViewType(type = type.name)
+                updateUiState {
+                    copy(viewType = type)
+                }
             }
         }
     }
@@ -161,11 +164,11 @@ class GroupChannelsViewModel(
 
             val channelWithEpg = channel.toggleFavorite(type = type)
 
-            val updatedChannels = groupChannelsState.value.channels
+            val updatedChannels = uiState.value.channels
                 .replaceUpdated(channel = channelWithEpg)
 
-            _groupChannelsState.update { state ->
-                state.copy(channels = updatedChannels)
+            updateUiState {
+                copy(channels = updatedChannels)
             }
 
             toggleFavoriteChannelUseCase(
