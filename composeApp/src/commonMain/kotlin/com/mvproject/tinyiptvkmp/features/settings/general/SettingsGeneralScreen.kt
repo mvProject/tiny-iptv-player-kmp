@@ -26,25 +26,25 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.mvproject.tinyiptvkmp.core.common.AppConstants.WEIGHT_1
+import com.mvproject.tinyiptvkmp.core.common.mvi.CollectSideEffect
 import com.mvproject.tinyiptvkmp.core.domain.enums.UpdatePeriod
-import com.mvproject.tinyiptvkmp.core.theme.VideoAppTheme
 import com.mvproject.tinyiptvkmp.core.theme.dimens
 import com.mvproject.tinyiptvkmp.core.ui.overlay.OverlayContent
 import com.mvproject.tinyiptvkmp.core.ui.overlay.OverlayOptionsMenu
 import com.mvproject.tinyiptvkmp.core.ui.selectors.OptionSelector
 import com.mvproject.tinyiptvkmp.core.ui.toolbars.AppBarWithBackNav
-import com.mvproject.tinyiptvkmp.features.settings.general.action.SettingsAction
-import com.mvproject.tinyiptvkmp.features.settings.general.state.SettingsState
+import com.mvproject.tinyiptvkmp.features.settings.general.SettingsGeneralContract.UiAction
+import com.mvproject.tinyiptvkmp.features.settings.general.SettingsGeneralContract.UiEffect
+import com.mvproject.tinyiptvkmp.features.settings.general.SettingsGeneralContract.UiState
 import org.jetbrains.compose.resources.stringResource
-import org.jetbrains.compose.ui.tooling.preview.Preview
 import tinyiptvkmp.composeapp.generated.resources.Res
 import tinyiptvkmp.composeapp.generated.resources.hint_update_period
 import tinyiptvkmp.composeapp.generated.resources.option_update_epg_data
@@ -61,33 +61,33 @@ internal fun SettingsGeneralScreen(
     onNavigatePlayerSettings: () -> Unit,
     onNavigatePlaylistSettings: () -> Unit
 ) {
-    val settingsState by viewModel.state.collectAsState()
+    val uiState by viewModel.uiState.collectAsStateWithLifecycle()
+
+    CollectSideEffect(viewModel.uiEffect) {
+        when (it) {
+            UiEffect.NavigateBack -> onNavigateBack()
+            UiEffect.NavigateToPlayerSettings -> onNavigatePlayerSettings()
+            UiEffect.NavigateToPlaylistSettings -> onNavigatePlaylistSettings()
+        }
+    }
 
     SettingsGeneralScreen(
-        state = settingsState,
-        onSettingsAction = viewModel::processAction,
-        onNavigateBack = onNavigateBack,
-        onNavigatePlayerSettings = onNavigatePlayerSettings,
-        onNavigatePlaylistSettings = onNavigatePlaylistSettings
+        uiState = uiState,
+        onAction = viewModel::onAction,
     )
 }
 
 @Composable
 private fun SettingsGeneralScreen(
-    state: SettingsState,
-    onSettingsAction: (SettingsAction) -> Unit = {},
-    onNavigateBack: () -> Unit = {},
-    onNavigatePlaylistSettings: () -> Unit = {},
-    onNavigatePlayerSettings: () -> Unit = {},
+    uiState: UiState,
+    onAction: (UiAction) -> Unit,
 ) {
     Scaffold(
-        modifier =
-        Modifier
-            .fillMaxSize(),
+        modifier = Modifier.fillMaxSize(),
         topBar = {
             AppBarWithBackNav(
                 appBarTitle = stringResource(Res.string.scr_settings_title),
-                onBackClick = onNavigateBack,
+                onBackClick = { onAction(UiAction.NavigateBack) },
             )
         },
     ) { paddingValues ->
@@ -96,8 +96,7 @@ private fun SettingsGeneralScreen(
         val isSelectEpgUpdateOpen = remember { mutableStateOf(false) }
 
         Column(
-            modifier =
-            Modifier
+            modifier = Modifier
                 .padding(paddingValues)
                 .fillMaxSize()
                 .padding(MaterialTheme.dimens.size8),
@@ -107,7 +106,7 @@ private fun SettingsGeneralScreen(
                 ListItem(
                     modifier =
                     Modifier
-                        .clickable(onClick = onNavigatePlaylistSettings)
+                        .clickable(onClick = { onAction(UiAction.NavigateToPlaylistSettings) })
                         .clip(MaterialTheme.shapes.extraSmall),
                     colors =
                     ListItemDefaults.colors(
@@ -122,7 +121,7 @@ private fun SettingsGeneralScreen(
                     },
                     trailingContent = {
                         FilledIconButton(
-                            onClick = onNavigatePlaylistSettings,
+                            onClick = { onAction(UiAction.NavigateToPlaylistSettings) },
                             colors =
                             IconButtonDefaults.filledIconButtonColors(
                                 containerColor = MaterialTheme.colorScheme.onPrimary,
@@ -148,7 +147,7 @@ private fun SettingsGeneralScreen(
                 ListItem(
                     modifier =
                     Modifier
-                        .clickable(onClick = onNavigatePlayerSettings)
+                        .clickable(onClick = { onAction(UiAction.NavigateToPlayerSettings) })
                         .clip(MaterialTheme.shapes.extraSmall),
                     colors =
                     ListItemDefaults.colors(
@@ -163,7 +162,7 @@ private fun SettingsGeneralScreen(
                     },
                     trailingContent = {
                         FilledIconButton(
-                            onClick = onNavigatePlaylistSettings,
+                            onClick = { onAction(UiAction.NavigateToPlayerSettings) },
                             colors =
                             IconButtonDefaults.filledIconButtonColors(
                                 containerColor = MaterialTheme.colorScheme.onPrimary,
@@ -220,7 +219,7 @@ private fun SettingsGeneralScreen(
                     .fillMaxWidth()
                     .padding(horizontal = MaterialTheme.dimens.size8),
                 title = stringResource(Res.string.option_update_epg_info),
-                selectedItem = stringResource(UpdatePeriod.entries[state.infoUpdatePeriod].title),
+                selectedItem = stringResource(UpdatePeriod.entries[uiState.infoUpdatePeriod].title),
                 isExpanded = isSelectInfoUpdateOpen.value,
                 onClick = {
                     isSelectInfoUpdateOpen.value = true
@@ -233,7 +232,7 @@ private fun SettingsGeneralScreen(
                     .fillMaxWidth()
                     .padding(horizontal = MaterialTheme.dimens.size8),
                 title = stringResource(Res.string.option_update_epg_data),
-                selectedItem = stringResource(UpdatePeriod.entries[state.epgUpdatePeriod].title),
+                selectedItem = stringResource(UpdatePeriod.entries[uiState.epgUpdatePeriod].title),
                 isExpanded = isSelectEpgUpdateOpen.value,
                 onClick = {
                     isSelectEpgUpdateOpen.value = true
@@ -248,10 +247,10 @@ private fun SettingsGeneralScreen(
         ) {
             OverlayOptionsMenu(
                 title = stringResource(Res.string.hint_update_period),
-                selectedIndex = state.infoUpdatePeriod,
+                selectedIndex = uiState.infoUpdatePeriod,
                 options = UpdatePeriod.entries.map { stringResource(it.title) },
                 onItemSelected = { index ->
-                    onSettingsAction(SettingsAction.SetInfoUpdatePeriod(index))
+                    onAction(UiAction.SetInfoUpdatePeriod(type = index))
                     isSelectInfoUpdateOpen.value = false
                 },
             )
@@ -264,10 +263,10 @@ private fun SettingsGeneralScreen(
         ) {
             OverlayOptionsMenu(
                 title = stringResource(Res.string.hint_update_period),
-                selectedIndex = state.epgUpdatePeriod,
+                selectedIndex = uiState.epgUpdatePeriod,
                 options = UpdatePeriod.entries.map { stringResource(it.title) },
                 onItemSelected = { index ->
-                    onSettingsAction(SettingsAction.SetEpgUpdatePeriod(index))
+                    onAction(UiAction.SetEpgUpdatePeriod(type = index))
                     isSelectEpgUpdateOpen.value = false
                 },
             )
@@ -275,11 +274,13 @@ private fun SettingsGeneralScreen(
     }
 }
 // todo replace preview
+/*
 
 @Preview
 @Composable
 fun PreviewDarkSettingsView() {
     VideoAppTheme(darkTheme = true) {
-        SettingsGeneralScreen(state = SettingsState())
+        SettingsGeneralScreen(state = UiState(), onAction = {})
     }
 }
+*/

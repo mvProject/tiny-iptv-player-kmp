@@ -9,63 +9,67 @@ package com.mvproject.tinyiptvkmp.features.settings.player
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.mvproject.tinyiptvkmp.core.common.mvi.MVI
+import com.mvproject.tinyiptvkmp.core.common.mvi.mvi
 import com.mvproject.tinyiptvkmp.core.datastore.repository.PreferenceRepository
-import com.mvproject.tinyiptvkmp.features.settings.player.action.SettingsPlayerAction
-import com.mvproject.tinyiptvkmp.features.settings.player.state.SettingsPlayerState
-import kotlinx.coroutines.flow.MutableStateFlow
-import kotlinx.coroutines.flow.asStateFlow
-import kotlinx.coroutines.flow.update
+import com.mvproject.tinyiptvkmp.features.settings.player.SettingsPlayerContract.UiAction
+import com.mvproject.tinyiptvkmp.features.settings.player.SettingsPlayerContract.UiEffect
+import com.mvproject.tinyiptvkmp.features.settings.player.SettingsPlayerContract.UiState
 import kotlinx.coroutines.launch
 
 class SettingsPlayerViewModel(
     private val preferenceRepository: PreferenceRepository
-) : ViewModel() {
-
-    private val _settingsPlayerState = MutableStateFlow(SettingsPlayerState())
-    val settingsPlayerState = _settingsPlayerState.asStateFlow()
+) : ViewModel(),
+    MVI<UiState, UiAction, UiEffect> by mvi(UiState()) {
 
     init {
         viewModelScope.launch {
-            _settingsPlayerState.update { current ->
-                current.copy(
-                    isFullscreenEnabled = preferenceRepository.getDefaultFullscreenMode(),
-                    resizeMode = preferenceRepository.getDefaultResizeMode(),
-                    ratioMode = preferenceRepository.getDefaultRatioMode()
+            val isFullscreenEnabled = preferenceRepository.getDefaultFullscreenMode()
+            val resizeMode = preferenceRepository.getDefaultResizeMode()
+            val ratioMode = preferenceRepository.getDefaultRatioMode()
+
+            updateUiState {
+                copy(
+                    isFullscreenEnabled = isFullscreenEnabled,
+                    resizeMode = resizeMode,
+                    ratioMode = ratioMode
                 )
             }
         }
     }
 
-    fun processAction(action: SettingsPlayerAction) {
-        when (action) {
-            is SettingsPlayerAction.SetFullScreenMode -> {
-                val fullScreenState = action.state
-                viewModelScope.launch {
-                    _settingsPlayerState.update { current ->
-                        current.copy(isFullscreenEnabled = fullScreenState)
-                    }
-                    preferenceRepository.setDefaultFullscreenMode(state = fullScreenState)
-                }
-            }
+    override fun onAction(uiAction: UiAction) {
+        when (uiAction) {
+            UiAction.NavigateBack -> viewModelScope.postUiEffect(UiEffect.NavigateBack)
+            is UiAction.SetFullScreenMode -> setFullscreenMode(state = uiAction.state)
+            is UiAction.SetRatioMode -> setRatioMode(mode = uiAction.mode)
+            is UiAction.SetResizeMode -> setResizeMode(mode = uiAction.mode)
+        }
+    }
 
-            is SettingsPlayerAction.SetResizeMode -> {
-                val resizeMode = action.mode
-                viewModelScope.launch {
-                    _settingsPlayerState.update { current ->
-                        current.copy(resizeMode = resizeMode)
-                    }
-                    preferenceRepository.setDefaultResizeMode(mode = resizeMode)
-                }
+    private fun setFullscreenMode(state: Boolean) {
+        viewModelScope.launch {
+            preferenceRepository.setDefaultFullscreenMode(state = state)
+            updateUiState {
+                copy(isFullscreenEnabled = state)
             }
+        }
+    }
 
-            is SettingsPlayerAction.SetRatioMode -> {
-                val ratioMode = action.mode
-                viewModelScope.launch {
-                    _settingsPlayerState.update { current ->
-                        current.copy(ratioMode = ratioMode)
-                    }
-                    preferenceRepository.setDefaultRatioMode(mode = ratioMode)
-                }
+    private fun setResizeMode(mode: Int) {
+        viewModelScope.launch {
+            preferenceRepository.setDefaultResizeMode(mode = mode)
+            updateUiState {
+                copy(resizeMode = mode)
+            }
+        }
+    }
+
+    private fun setRatioMode(mode: Int) {
+        viewModelScope.launch {
+            preferenceRepository.setDefaultRatioMode(mode = mode)
+            updateUiState {
+                copy(ratioMode = mode)
             }
         }
     }

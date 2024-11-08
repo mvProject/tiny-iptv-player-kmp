@@ -9,52 +9,56 @@ package com.mvproject.tinyiptvkmp.features.settings.general
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.mvproject.tinyiptvkmp.core.common.mvi.MVI
+import com.mvproject.tinyiptvkmp.core.common.mvi.mvi
 import com.mvproject.tinyiptvkmp.core.datastore.repository.PreferenceRepository
-import com.mvproject.tinyiptvkmp.features.settings.general.action.SettingsAction
-import com.mvproject.tinyiptvkmp.features.settings.general.state.SettingsState
-import kotlinx.coroutines.flow.MutableStateFlow
-import kotlinx.coroutines.flow.asStateFlow
-import kotlinx.coroutines.flow.update
+import com.mvproject.tinyiptvkmp.features.settings.general.SettingsGeneralContract.UiAction
+import com.mvproject.tinyiptvkmp.features.settings.general.SettingsGeneralContract.UiEffect
+import com.mvproject.tinyiptvkmp.features.settings.general.SettingsGeneralContract.UiState
 import kotlinx.coroutines.launch
 
 class SettingsViewModel(
     private val preferenceRepository: PreferenceRepository
-) : ViewModel() {
-
-    private val _state = MutableStateFlow(SettingsState())
-    val state = _state.asStateFlow()
+) : ViewModel(),
+    MVI<UiState, UiAction, UiEffect> by mvi(UiState()) {
 
     init {
         viewModelScope.launch {
-            _state.update {
-                it.copy(
-                    infoUpdatePeriod = preferenceRepository.getEpgInfoUpdatePeriod(),
-                    epgUpdatePeriod = preferenceRepository.getMainEpgUpdatePeriod()
+            val infoUpdatePeriod = preferenceRepository.getEpgInfoUpdatePeriod()
+            val epgUpdatePeriod = preferenceRepository.getMainEpgUpdatePeriod()
+            updateUiState {
+                copy(
+                    infoUpdatePeriod = infoUpdatePeriod,
+                    epgUpdatePeriod = epgUpdatePeriod
                 )
             }
         }
     }
 
-    fun processAction(action: SettingsAction) {
-        when (action) {
-            is SettingsAction.SetInfoUpdatePeriod -> {
-                val newType = action.type
-                viewModelScope.launch {
-                    _state.update { current ->
-                        current.copy(infoUpdatePeriod = newType)
-                    }
-                    preferenceRepository.setEpgInfoUpdatePeriod(type = newType)
-                }
-            }
+    override fun onAction(uiAction: UiAction) {
+        when (uiAction) {
+            UiAction.NavigateBack -> viewModelScope.postUiEffect(UiEffect.NavigateBack)
+            UiAction.NavigateToPlayerSettings -> viewModelScope.postUiEffect(UiEffect.NavigateToPlayerSettings)
+            UiAction.NavigateToPlaylistSettings -> viewModelScope.postUiEffect(UiEffect.NavigateToPlaylistSettings)
+            is UiAction.SetEpgUpdatePeriod -> setUpdateEpgProgramsPeriod(type = uiAction.type)
+            is UiAction.SetInfoUpdatePeriod -> setUpdateInfoPeriod(type = uiAction.type)
+        }
+    }
 
-            is SettingsAction.SetEpgUpdatePeriod -> {
-                val newType = action.type
-                viewModelScope.launch {
-                    _state.update { current ->
-                        current.copy(epgUpdatePeriod = newType)
-                    }
-                    preferenceRepository.setMainEpgUpdatePeriod(type = newType)
-                }
+    private fun setUpdateInfoPeriod(type: Int) {
+        viewModelScope.launch {
+            preferenceRepository.setEpgInfoUpdatePeriod(type = type)
+            updateUiState {
+                copy(infoUpdatePeriod = type)
+            }
+        }
+    }
+
+    private fun setUpdateEpgProgramsPeriod(type: Int) {
+        viewModelScope.launch {
+            preferenceRepository.setMainEpgUpdatePeriod(type = type)
+            updateUiState {
+                copy(epgUpdatePeriod = type)
             }
         }
     }

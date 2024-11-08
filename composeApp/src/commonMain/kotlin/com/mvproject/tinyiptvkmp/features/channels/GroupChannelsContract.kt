@@ -28,19 +28,9 @@ interface GroupChannelsContract {
     )
 
     sealed interface UiAction {
-        data class ToggleFavourites(
-            val channel: TvChannel,
-            val type: FavoriteType,
-        ) : UiAction
-
-        data class SearchTextChange(
-            val text: String,
-        ) : UiAction
-
-        data class ViewTypeChange(
-            val type: ChannelsViewType,
-        ) : UiAction
-
+        data class ToggleFavourites(val channel: TvChannel, val type: FavoriteType) : UiAction
+        data class SearchTextChange(val text: String) : UiAction
+        data class ViewTypeChange(val type: ChannelsViewType) : UiAction
         data class ToggleEpgVisibility(
             val name: String = String.empty,
             val epgID: String = String.empty

@@ -29,6 +29,7 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import com.mvproject.tinyiptvkmp.core.common.mvi.CollectSideEffect
 import com.mvproject.tinyiptvkmp.core.domain.enums.RatioMode
 import com.mvproject.tinyiptvkmp.core.domain.enums.ResizeMode
 import com.mvproject.tinyiptvkmp.core.theme.dimens
@@ -37,8 +38,9 @@ import com.mvproject.tinyiptvkmp.core.ui.overlay.OverlayContent
 import com.mvproject.tinyiptvkmp.core.ui.overlay.OverlayOptionsMenu
 import com.mvproject.tinyiptvkmp.core.ui.selectors.OptionSelector
 import com.mvproject.tinyiptvkmp.core.ui.toolbars.AppBarWithBackNav
-import com.mvproject.tinyiptvkmp.features.settings.player.action.SettingsPlayerAction
-import com.mvproject.tinyiptvkmp.features.settings.player.state.SettingsPlayerState
+import com.mvproject.tinyiptvkmp.features.settings.player.SettingsPlayerContract.UiAction
+import com.mvproject.tinyiptvkmp.features.settings.player.SettingsPlayerContract.UiEffect
+import com.mvproject.tinyiptvkmp.features.settings.player.SettingsPlayerContract.UiState
 import org.jetbrains.compose.resources.stringResource
 import tinyiptvkmp.composeapp.generated.resources.Res
 import tinyiptvkmp.composeapp.generated.resources.option_default_fullscreen_mode
@@ -50,31 +52,34 @@ import tinyiptvkmp.composeapp.generated.resources.scr_player_settings_title
 internal fun SettingsPlayerScreen(
     viewModel: SettingsPlayerViewModel,
     onNavigateBack: () -> Unit
-){
-    val state by viewModel.settingsPlayerState.collectAsState()
+) {
+    val state by viewModel.uiState.collectAsState()
 
+    CollectSideEffect(viewModel.uiEffect) {
+        when (it) {
+            UiEffect.NavigateBack -> onNavigateBack()
+        }
+    }
     SettingsPlayerScreen(
         state = state,
-        onSettingsPlayerAction = viewModel::processAction,
-        onNavigateBack = onNavigateBack
+        onAction = viewModel::onAction,
     )
 }
 
 @Composable
 private fun SettingsPlayerScreen(
-    state: SettingsPlayerState,
-    onNavigateBack: () -> Unit = {},
-    onSettingsPlayerAction: (SettingsPlayerAction) -> Unit = {},
+    state: UiState,
+    onAction: (UiAction) -> Unit,
 ) {
     Scaffold(
         modifier =
-            Modifier
-                .fillMaxSize()
-                .windowInsetsPadding(WindowInsets.navigationBars),
+        Modifier
+            .fillMaxSize()
+            .windowInsetsPadding(WindowInsets.navigationBars),
         topBar = {
             AppBarWithBackNav(
                 appBarTitle = stringResource(Res.string.scr_player_settings_title),
-                onBackClick = onNavigateBack,
+                onBackClick = { onAction(UiAction.NavigateBack) },
             )
         },
     ) { paddingValues ->
@@ -84,10 +89,10 @@ private fun SettingsPlayerScreen(
 
         Column(
             modifier =
-                Modifier
-                    .padding(paddingValues)
-                    .fillMaxSize()
-                    .padding(MaterialTheme.dimens.size12),
+            Modifier
+                .padding(paddingValues)
+                .fillMaxSize()
+                .padding(MaterialTheme.dimens.size12),
         ) {
             Row(
                 modifier = Modifier.fillMaxWidth(),
@@ -96,9 +101,9 @@ private fun SettingsPlayerScreen(
             ) {
                 Text(
                     modifier =
-                        Modifier
-                            .weight(MaterialTheme.dimens.weight6)
-                            .padding(horizontal = MaterialTheme.dimens.size8),
+                    Modifier
+                        .weight(MaterialTheme.dimens.weight6)
+                        .padding(horizontal = MaterialTheme.dimens.size8),
                     text = stringResource(Res.string.option_default_fullscreen_mode),
                     style = MaterialTheme.typography.bodyMedium,
                     color = MaterialTheme.colorScheme.onPrimary,
@@ -108,16 +113,16 @@ private fun SettingsPlayerScreen(
                     modifier = Modifier.width(MaterialTheme.dimens.size82),
                     checked = state.isFullscreenEnabled,
                     colors =
-                        SwitchDefaults.colors(
-                            checkedThumbColor = MaterialTheme.colorScheme.primary,
-                            uncheckedThumbColor =
-                                MaterialTheme.colorScheme.primary
-                                    .copy(alpha = MaterialTheme.dimens.alpha50),
-                            checkedTrackColor = MaterialTheme.colorScheme.onSurfaceVariant,
-                            uncheckedTrackColor = MaterialTheme.colorScheme.onSurface,
-                        ),
+                    SwitchDefaults.colors(
+                        checkedThumbColor = MaterialTheme.colorScheme.primary,
+                        uncheckedThumbColor =
+                        MaterialTheme.colorScheme.primary
+                            .copy(alpha = MaterialTheme.dimens.alpha50),
+                        checkedTrackColor = MaterialTheme.colorScheme.onSurfaceVariant,
+                        uncheckedTrackColor = MaterialTheme.colorScheme.onSurface,
+                    ),
                     onCheckedChange = { state ->
-                        onSettingsPlayerAction(SettingsPlayerAction.SetFullScreenMode(state))
+                        onAction(UiAction.SetFullScreenMode(state = state))
                     },
                 )
             }
@@ -157,7 +162,7 @@ private fun SettingsPlayerScreen(
                 selectedIndex = state.resizeMode,
                 options = ResizeMode.entries.map { stringResource(it.title) },
                 onItemSelected = { index ->
-                    onSettingsPlayerAction(SettingsPlayerAction.SetResizeMode(index))
+                    onAction(UiAction.SetResizeMode(mode = index))
                     isSelectResizeModeOpen.value = false
                 },
             )
@@ -173,7 +178,7 @@ private fun SettingsPlayerScreen(
                 selectedIndex = state.ratioMode,
                 options = RatioMode.entries.map { stringResource(it.title) },
                 onItemSelected = { index ->
-                    onSettingsPlayerAction(SettingsPlayerAction.SetRatioMode(index))
+                    onAction(UiAction.SetRatioMode(mode = index))
                     isSelectRatioModeOpen.value = false
                 },
             )

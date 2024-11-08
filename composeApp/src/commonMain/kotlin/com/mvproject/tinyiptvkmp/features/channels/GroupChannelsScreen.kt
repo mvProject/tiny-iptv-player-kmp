@@ -37,6 +37,7 @@ import com.mvproject.tinyiptvkmp.core.ui.indicators.LoadingIndicator
 import com.mvproject.tinyiptvkmp.core.ui.overlay.OverlayContent
 import com.mvproject.tinyiptvkmp.core.ui.toolbars.AppBarWithSearch
 import com.mvproject.tinyiptvkmp.features.channels.GroupChannelsContract.UiAction
+import com.mvproject.tinyiptvkmp.features.channels.GroupChannelsContract.UiEffect
 import com.mvproject.tinyiptvkmp.features.channels.GroupChannelsContract.UiState
 import com.mvproject.tinyiptvkmp.features.channels.components.ChannelView
 import com.mvproject.tinyiptvkmp.features.channels.components.OverlayChannelOptions
@@ -57,8 +58,8 @@ internal fun GroupChannelsScreen(
 
     CollectSideEffect(viewModel.uiEffect) {
         when (it) {
-            GroupChannelsContract.UiEffect.NavigateBack -> onNavigateBack()
-            is GroupChannelsContract.UiEffect.NavigateToSelected ->
+            UiEffect.NavigateBack -> onNavigateBack()
+            is UiEffect.NavigateToSelected ->
                 onNavigateSelected(it.name, it.group)
         }
     }

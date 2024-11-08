@@ -9,47 +9,64 @@ package com.mvproject.tinyiptvkmp.features.settings.playlist
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.mvproject.tinyiptvkmp.core.common.mvi.MVI
+import com.mvproject.tinyiptvkmp.core.common.mvi.mvi
 import com.mvproject.tinyiptvkmp.core.data.repository.PlaylistsRepository
+import com.mvproject.tinyiptvkmp.core.domain.model.Playlist
 import com.mvproject.tinyiptvkmp.core.domain.usecase.DeletePlaylistUseCase
-import com.mvproject.tinyiptvkmp.features.settings.playlist.action.SettingsPlaylistAction
-import com.mvproject.tinyiptvkmp.features.settings.playlist.state.SettingsPlaylistState
+import com.mvproject.tinyiptvkmp.features.settings.playlist.SettingsPlaylistContract.UiAction
+import com.mvproject.tinyiptvkmp.features.settings.playlist.SettingsPlaylistContract.UiEffect
+import com.mvproject.tinyiptvkmp.features.settings.playlist.SettingsPlaylistContract.UiState
 import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.flow.MutableStateFlow
-import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.flowOn
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
-import kotlinx.coroutines.flow.update
+import kotlinx.coroutines.flow.onStart
 import kotlinx.coroutines.launch
 
 class SettingsPlaylistViewModel(
     private val playlistsRepository: PlaylistsRepository,
     private val deletePlaylistUseCase: DeletePlaylistUseCase,
-) : ViewModel() {
-    private val _playlistDataState = MutableStateFlow(SettingsPlaylistState())
-    val playlistDataState = _playlistDataState.asStateFlow()
+) : ViewModel(),
+    MVI<UiState, UiAction, UiEffect> by mvi(UiState()) {
 
     init {
         playlistsRepository
             .allPlaylistsAsFlow()
+            .onStart {
+                updateUiState {
+                    copy(isLoading = true)
+                }
+            }
             .flowOn(Dispatchers.IO)
             .onEach { lists ->
-                _playlistDataState.update { current ->
-                    current.copy(
-                        playlists = lists,
+
+                val playlistState = if (lists.isEmpty())
+                    PlaylistState.Empty
+                else
+                    PlaylistState.Success(lists)
+
+                updateUiState {
+                    copy(
+                        playlistState = playlistState,
                         isLoading = false,
                     )
                 }
             }.launchIn(viewModelScope)
     }
 
-    fun processAction(action: SettingsPlaylistAction) {
-        when (action) {
-            is SettingsPlaylistAction.DeletePlaylist -> {
-                viewModelScope.launch {
-                    deletePlaylistUseCase(playlist = action.playlist)
-                }
-            }
+    override fun onAction(uiAction: UiAction) {
+        when (uiAction) {
+            is UiAction.DeletePlaylist -> deletePlaylist(playlist = uiAction.playlist)
+            UiAction.NavigateBack -> viewModelScope.postUiEffect(UiEffect.NavigateBack)
+            is UiAction.NavigateToSelected ->
+                viewModelScope.postUiEffect(UiEffect.NavigateToSelected(uiAction.id))
+        }
+    }
+
+    private fun deletePlaylist(playlist: Playlist) {
+        viewModelScope.launch {
+            deletePlaylistUseCase(playlist = playlist)
         }
     }
 }

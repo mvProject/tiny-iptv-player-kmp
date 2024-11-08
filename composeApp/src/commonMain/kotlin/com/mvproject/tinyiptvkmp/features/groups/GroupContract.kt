@@ -22,10 +22,7 @@ interface GroupContract {
     )
 
     sealed interface UiAction {
-        data class SelectPlaylist(
-            val playlist: Playlist,
-        ) : UiAction
-
+        data class SelectPlaylist(val playlist: Playlist) : UiAction
         data class NavigateToGroup(val title: String, val group: String) : UiAction
         data object NavigateToSettings : UiAction
         data object RefreshPlaylist : UiAction
