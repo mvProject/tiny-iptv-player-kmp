@@ -1,6 +1,7 @@
 package com.mvproject.tinyiptvkmp.features.settings.playlist
 
 import androidx.compose.runtime.Stable
+import com.mvproject.tinyiptvkmp.core.common.utils.CommonUtils.empty
 import com.mvproject.tinyiptvkmp.core.domain.model.Playlist
 
 interface SettingsPlaylistContract {
@@ -12,12 +13,12 @@ interface SettingsPlaylistContract {
 
     sealed interface UiAction {
         data class DeletePlaylist(val playlist: Playlist) : UiAction
-        data class NavigateToSelected(val id: String) : UiAction
+        data class NavigateToPlaylist(val id: String = String.empty) : UiAction
         data object NavigateBack : UiAction
     }
 
     sealed interface UiEffect {
-        data class NavigateToSelected(val id: String) : UiEffect
+        data class NavigateToPlaylist(val id: String) : UiEffect
         data object NavigateBack : UiEffect
     }
 }

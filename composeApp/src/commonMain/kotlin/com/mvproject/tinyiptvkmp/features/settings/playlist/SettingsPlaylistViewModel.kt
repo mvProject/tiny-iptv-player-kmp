@@ -59,8 +59,8 @@ class SettingsPlaylistViewModel(
         when (uiAction) {
             is UiAction.DeletePlaylist -> deletePlaylist(playlist = uiAction.playlist)
             UiAction.NavigateBack -> viewModelScope.postUiEffect(UiEffect.NavigateBack)
-            is UiAction.NavigateToSelected ->
-                viewModelScope.postUiEffect(UiEffect.NavigateToSelected(uiAction.id))
+            is UiAction.NavigateToPlaylist ->
+                viewModelScope.postUiEffect(UiEffect.NavigateToPlaylist(uiAction.id))
         }
     }
 

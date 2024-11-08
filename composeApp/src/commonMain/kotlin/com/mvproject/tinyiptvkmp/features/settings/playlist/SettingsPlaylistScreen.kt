@@ -29,7 +29,6 @@ import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
 import com.mvproject.tinyiptvkmp.core.common.mvi.CollectSideEffect
-import com.mvproject.tinyiptvkmp.core.common.utils.CommonUtils.empty
 import com.mvproject.tinyiptvkmp.core.theme.dimens
 import com.mvproject.tinyiptvkmp.core.ui.indicators.LoadingIndicator
 import com.mvproject.tinyiptvkmp.core.ui.toolbars.AppBarWithBackNav
@@ -56,7 +55,7 @@ internal fun SettingsPlaylistScreen(
     CollectSideEffect(viewModel.uiEffect) {
         when (it) {
             UiEffect.NavigateBack -> onNavigateBack()
-            is UiEffect.NavigateToSelected -> onNavigatePlaylist(it.id)
+            is UiEffect.NavigateToPlaylist -> onNavigatePlaylist(it.id)
         }
     }
     SettingsPlaylistScreen(
@@ -84,7 +83,7 @@ private fun SettingsPlaylistScreen(
         bottomBar = {
             ElevatedButton(
                 onClick = {
-                    onAction(UiAction.NavigateToSelected(id = String.empty))
+                    onAction(UiAction.NavigateToPlaylist())
                 },
                 modifier =
                 Modifier
@@ -136,7 +135,7 @@ private fun SettingsPlaylistScreen(
                                 modifier = Modifier.fillMaxSize(),
                                 item = item,
                                 onSelect = {
-                                    onAction(UiAction.NavigateToSelected(id = item.id.toString()))
+                                    onAction(UiAction.NavigateToPlaylist(id = item.id.toString()))
                                 },
                                 onDelete = {
                                     onAction(UiAction.DeletePlaylist(playlist = item))
