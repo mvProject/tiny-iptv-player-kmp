@@ -24,6 +24,7 @@ import com.mvproject.tinyiptvkmp.core.common.AppConstants
 import com.mvproject.tinyiptvkmp.core.domain.enums.GroupType
 import com.mvproject.tinyiptvkmp.core.domain.model.ChannelsGroup
 import com.mvproject.tinyiptvkmp.core.theme.dimens
+import com.mvproject.tinyiptvkmp.features.groups.GroupContract.UiAction
 import org.jetbrains.compose.resources.stringResource
 import tinyiptvkmp.composeapp.generated.resources.Res
 import tinyiptvkmp.composeapp.generated.resources.channel_folder_all
@@ -32,7 +33,7 @@ import tinyiptvkmp.composeapp.generated.resources.channel_folder_all
 fun PlaylistGroupItem(
     modifier: Modifier = Modifier,
     group: ChannelsGroup,
-    onSelect: (String, String) -> Unit,
+    onUiAction: (UiAction) -> Unit = {},
 ) {
     val title =
         when (group.groupType) {
@@ -43,16 +44,21 @@ fun PlaylistGroupItem(
 
     ListItem(
         modifier =
-            modifier
-                .clickable {
-                    onSelect(title, group.groupType.name)
-                },
+        modifier
+            .clickable {
+                onUiAction(
+                    UiAction.NavigateToGroup(
+                        title = title,
+                        group = group.groupType.name
+                    )
+                )
+            },
         leadingContent = {
             Icon(
                 modifier =
-                    Modifier
-                        .size(MaterialTheme.dimens.size42)
-                        .clip(MaterialTheme.shapes.small),
+                Modifier
+                    .size(MaterialTheme.dimens.size42)
+                    .clip(MaterialTheme.shapes.small),
                 imageVector = Icons.Filled.Folder,
                 contentDescription = group.groupName,
                 tint = MaterialTheme.colorScheme.onSurface,

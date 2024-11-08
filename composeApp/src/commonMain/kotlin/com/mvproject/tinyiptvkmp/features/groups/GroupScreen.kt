@@ -26,17 +26,18 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.lifecycle.compose.LifecycleResumeEffect
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
+import com.mvproject.tinyiptvkmp.core.common.mvi.CollectSideEffect
 import com.mvproject.tinyiptvkmp.core.theme.dimens
 import com.mvproject.tinyiptvkmp.core.ui.indicators.LoadingIndicator
 import com.mvproject.tinyiptvkmp.core.ui.modifiers.SpacerHeight
 import com.mvproject.tinyiptvkmp.core.ui.selectors.OptionSelector
 import com.mvproject.tinyiptvkmp.core.ui.toolbars.AppBarWithSettings
 import com.mvproject.tinyiptvkmp.core.ui.views.NoItemsView
-import com.mvproject.tinyiptvkmp.features.groups.action.GroupAction
+import com.mvproject.tinyiptvkmp.features.groups.GroupContract.UiAction
+import com.mvproject.tinyiptvkmp.features.groups.GroupContract.UiEffect
+import com.mvproject.tinyiptvkmp.features.groups.GroupContract.UiState
 import com.mvproject.tinyiptvkmp.features.groups.components.PlaylistGroupItem
 import com.mvproject.tinyiptvkmp.features.groups.components.PlaylistSelectDialog
-import com.mvproject.tinyiptvkmp.features.groups.state.GroupState
-import com.mvproject.tinyiptvkmp.features.groups.state.GroupUiState
 import org.jetbrains.compose.resources.stringResource
 import tinyiptvkmp.composeapp.generated.resources.Res
 import tinyiptvkmp.composeapp.generated.resources.btn_add_first_playlist
@@ -50,28 +51,28 @@ internal fun GroupScreen(
     onNavigateToSettings: () -> Unit = {},
     onNavigateToGroup: (String, String) -> Unit,
 ) {
-    val groupState by viewModel.groupState.collectAsStateWithLifecycle()
-    val groupUiState by viewModel.groupUiState.collectAsStateWithLifecycle()
+    val uiState by viewModel.uiState.collectAsStateWithLifecycle()
+
+    CollectSideEffect(viewModel.uiEffect) {
+        when (it) {
+            is UiEffect.NavigateToGroup -> onNavigateToGroup(it.title, it.group)
+            UiEffect.NavigateToSettings -> onNavigateToSettings()
+        }
+    }
 
     GroupScreen(
-        state = groupState,
-        uiState = groupUiState,
-        onNavigateToSettings = onNavigateToSettings,
-        onNavigateToGroup = onNavigateToGroup,
-        onPlaylistAction = viewModel::processAction,
+        uiState = uiState,
+        onUiAction = viewModel::onAction,
     )
 }
 
 @Composable
 private fun GroupScreen(
-    state: GroupState,
-    uiState: GroupUiState,
-    onNavigateToSettings: () -> Unit = {},
-    onNavigateToGroup: (String, String) -> Unit,
-    onPlaylistAction: (GroupAction) -> Unit = {},
+    uiState: UiState,
+    onUiAction: (UiAction) -> Unit = {},
 ) {
     LifecycleResumeEffect(Unit) {
-        onPlaylistAction(GroupAction.RefreshPlaylist)
+        onUiAction(UiAction.RefreshPlaylist)
 
         onPauseOrDispose { }
     }
@@ -79,7 +80,7 @@ private fun GroupScreen(
     Scaffold(
         modifier = Modifier.fillMaxSize(),
         topBar = {
-            AppBarWithSettings(onSettingsClicked = onNavigateToSettings)
+            AppBarWithSettings(onSettingsClicked = { onUiAction(UiAction.NavigateToSettings) })
         },
     ) { paddingValues ->
         Box(
@@ -96,13 +97,13 @@ private fun GroupScreen(
                 horizontalAlignment = Alignment.CenterHorizontally,
                 verticalArrangement = Arrangement.Center,
             ) {
-                if (state.isPlaylistSelectorVisible) {
+                if (uiState.isPlaylistSelectorVisible) {
                     val isSelectPlaylistOpen = remember { mutableStateOf(false) }
 
                     OptionSelector(
                         modifier = Modifier.fillMaxWidth(),
                         title = stringResource(Res.string.hint_current_playlist),
-                        selectedItem = state.selectedPlaylist.playlistName,
+                        selectedItem = uiState.selectedPlaylist.playlistName,
                         isExpanded = isSelectPlaylistOpen.value,
                         onClick = {
                             isSelectPlaylistOpen.value = true
@@ -112,26 +113,24 @@ private fun GroupScreen(
                     PlaylistSelectDialog(
                         isDialogOpen = isSelectPlaylistOpen,
                         title = stringResource(Res.string.hint_current_playlist),
-                        playlists = state.playlists,
+                        playlists = uiState.playlists,
                         onItemSelected = { item ->
                             isSelectPlaylistOpen.value = false
-                            onPlaylistAction(GroupAction.SelectPlaylist(item))
+                            onUiAction(UiAction.SelectPlaylist(item))
                         },
                     )
 
                     SpacerHeight(height = MaterialTheme.dimens.size8)
                 }
+                when (val groupState = uiState.groupState) {
+                    GroupState.Empty -> NoItemsView(
+                        modifier = Modifier.fillMaxSize(),
+                        title = stringResource(Res.string.msg_no_items_found),
+                        navigateTitle = stringResource(Res.string.btn_add_first_playlist),
+                        onNavigateClick = { onUiAction(UiAction.NavigateToSettings) },
+                    )
 
-                when (uiState) {
-                    GroupUiState.Empty ->
-                        NoItemsView(
-                            modifier = Modifier.fillMaxSize(),
-                            title = stringResource(Res.string.msg_no_items_found),
-                            navigateTitle = stringResource(Res.string.btn_add_first_playlist),
-                            onNavigateClick = onNavigateToSettings,
-                        )
-
-                    GroupUiState.Groups -> {
+                    is GroupState.Success -> {
                         Column(
                             modifier =
                             Modifier
@@ -145,25 +144,26 @@ private fun GroupScreen(
                                 verticalArrangement = Arrangement.spacedBy(MaterialTheme.dimens.size4),
                             ) {
                                 items(
-                                    items = state.channelGroups,
+                                    items = groupState.groups,
                                     key = { grp -> grp.groupId },
                                 ) { item ->
                                     PlaylistGroupItem(
                                         modifier = Modifier.fillMaxWidth(),
                                         group = item,
-                                        onSelect = onNavigateToGroup,
+                                        onUiAction = onUiAction
                                     )
                                 }
                             }
                         }
                     }
-
-                    GroupUiState.Loading -> LoadingIndicator(isVisible = true)
                 }
             }
+
+            LoadingIndicator(isVisible = uiState.isLoading)
         }
     }
 }
+
 
 // todo replace preview
 /*
