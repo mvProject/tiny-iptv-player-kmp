@@ -15,5 +15,5 @@ data class FavoriteChannelEntity(
     val channelUrl: String,
     val channelOrder: Long,
     val favoriteType: String,
-    val parentListId: Long,
+    val parentListId: String,
 )

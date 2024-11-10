@@ -101,13 +101,13 @@ class GroupChannelsViewModel(
             if (channels.isNotEmpty()) {
                 val channelsIds =
                     channels
-                        .map { it.epgId }
+                        .map { it.programId }
                         .filter { it.isNotBlank() }
 
                 val channelsEpgData = getGroupChannelsEpgUseCase(channelsIds = channelsIds)
 
                 val channelsWithPrograms = channels.map { ch ->
-                    val programs = channelsEpgData[ch.epgId] ?: emptyList()
+                    val programs = channelsEpgData[ch.programId] ?: emptyList()
                     ch.copy(programs = programs)
                 }
 

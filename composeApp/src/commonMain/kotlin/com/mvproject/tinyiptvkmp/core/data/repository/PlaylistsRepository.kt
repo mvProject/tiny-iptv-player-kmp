@@ -19,7 +19,7 @@ class PlaylistsRepository(
 ) {
     private val playlistDao = appDatabase.playlistDao()
 
-    suspend fun getPlaylistById(id: Long): Playlist =
+    suspend fun getPlaylistById(id: String): Playlist =
         playlistDao
             .getPlaylistById(id = id)
             .toPlaylist()

@@ -14,8 +14,8 @@ data class PlaylistChannel(
     val channelLogo: String = String.empty,
     val channelUrl: String,
     val channelGroup: String,
-    val epgId: String = String.empty,
-    val parentListId: Long,
+    val programId: String = String.empty,
+    val parentListId: String,
 ) {
     override fun toString() = buildString {
         append("\n")
@@ -27,7 +27,7 @@ data class PlaylistChannel(
         append("\n")
         append("channelGroup: $channelGroup")
         append("\n")
-        append("epgId: $epgId")
+        append("programId: $programId")
         append("\n")
         append("parentListId: $parentListId")
     }

@@ -25,7 +25,7 @@ class UpdateChannelsEpgInfoUseCase(
                 if (epgInfo != null) {
                     channel.copy(
                         channelLogo = epgInfo.logo,
-                        epgId = epgInfo.programId,
+                        programId = epgInfo.programId,
                     )
                 } else {
                     channel // If no match is found, keep the original Class1 object

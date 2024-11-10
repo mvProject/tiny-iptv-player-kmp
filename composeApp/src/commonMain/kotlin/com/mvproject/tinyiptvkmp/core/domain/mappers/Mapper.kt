@@ -61,7 +61,7 @@ object Mapper {
                 channelLogo = channelLogo,
                 channelUrl = channelUrl,
                 channelGroup = channelGroup,
-                epgId = epgId,
+                programId = programId,
                 parentListId = parentListId,
             )
         }
@@ -73,24 +73,20 @@ object Mapper {
                 channelLogo = channelLogo,
                 channelUrl = channelUrl,
                 channelGroup = channelGroup,
-                epgId = epgId,
+                programId = programId,
                 parentListId = parentListId,
             )
         }
 
     fun PlaylistChannel.toTvChannel(
-        isEpgUsing: Boolean = false,
-        favoriteType: FavoriteType,
-        epgContent: List<EpgProgram> = emptyList(),
+        favoriteType: FavoriteType
     ) = with(this) {
         TvChannel(
             channelName = channelName,
             channelLogo = channelLogo,
             channelUrl = channelUrl,
-            epgId = epgId,
-            favoriteType = favoriteType,
-            programs = epgContent,
-            isEpgUsing = isEpgUsing,
+            programId = programId,
+            favoriteType = favoriteType
         )
     }
 
@@ -140,7 +136,7 @@ object Mapper {
             )
         }
 
-    fun PlaylistChannelParseModel.toPlaylistChannel(id: Long) =
+    fun PlaylistChannelParseModel.toPlaylistChannel(id: String) =
         with(this) {
             PlaylistChannel(
                 channelName = channel,

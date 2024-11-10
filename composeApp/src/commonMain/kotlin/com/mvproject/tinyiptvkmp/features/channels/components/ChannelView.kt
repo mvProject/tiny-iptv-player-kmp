@@ -9,7 +9,7 @@ package com.mvproject.tinyiptvkmp.features.channels.components
 
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.PaddingValues
-import androidx.compose.foundation.layout.fillMaxHeight
+import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.lazy.grid.GridCells
 import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
 import androidx.compose.foundation.lazy.grid.items
@@ -18,6 +18,7 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clipToBounds
 import androidx.compose.ui.unit.dp
 import com.mvproject.tinyiptvkmp.core.common.AppConstants.INT_VALUE_1
 import com.mvproject.tinyiptvkmp.core.domain.enums.ChannelsViewType
@@ -33,6 +34,9 @@ fun ChannelView(
     onFavoriteClick: (TvChannel) -> Unit = {},
     onShowEpgClick: (TvChannel) -> Unit = {},
 ) {
+
+    // todo adaptive size depend on windowSizeClass
+
     val columns = remember(viewType) {
         when (viewType) {
             ChannelsViewType.LIST -> GridCells.Fixed(INT_VALUE_1)
@@ -41,7 +45,7 @@ fun ChannelView(
     }
 
     LazyVerticalGrid(
-        modifier = Modifier.fillMaxHeight(),
+        modifier = modifier.clipToBounds(),
         columns = columns,
         state = rememberLazyGridState(),
         verticalArrangement = Arrangement.spacedBy(MaterialTheme.dimens.size4),
@@ -55,7 +59,7 @@ fun ChannelView(
                 when (viewType) {
                     ChannelsViewType.LIST -> {
                         ChannelListView(
-                            modifier = modifier,
+                            modifier = Modifier.fillMaxSize().animateItem(),
                             channel = item,
                             onChannelSelect = { onChannelSelect(item) },
                             onFavoriteClick = { onFavoriteClick(item) },
@@ -65,7 +69,7 @@ fun ChannelView(
 
                     ChannelsViewType.GRID -> {
                         ChannelGridView(
-                            modifier = modifier,
+                            modifier = Modifier.fillMaxSize().animateItem(),
                             channel = item,
                             onChannelSelect = { onChannelSelect(item) },
                             onFavoriteClick = { onFavoriteClick(item) },
@@ -75,7 +79,7 @@ fun ChannelView(
 
                     ChannelsViewType.CARD -> {
                         ChannelCardView(
-                            modifier = modifier,
+                            modifier = Modifier.fillMaxSize().animateItem(),
                             channel = item,
                             onChannelSelect = { onChannelSelect(item) },
                             onFavoriteClick = { onFavoriteClick(item) },

@@ -16,9 +16,8 @@ data class TvChannel(
     val channelName: String = String.empty,
     val channelUrl: String = String.empty,
     val channelLogo: String = String.empty,
-    val epgId: String = String.empty,
+    val programId: String = String.empty,
     val favoriteType: FavoriteType = FavoriteType.NONE,
-    val isEpgUsing: Boolean = false,
     val programs: List<EpgProgram> = emptyList(),
 ) {
     override fun toString() = buildString {

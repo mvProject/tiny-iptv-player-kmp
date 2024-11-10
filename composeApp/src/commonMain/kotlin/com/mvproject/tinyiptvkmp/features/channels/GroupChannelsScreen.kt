@@ -107,8 +107,6 @@ private fun GroupChannelsScreen(
             mutableStateOf(TvChannel())
         }
 
-        // todo adaptive size depend on windowSizeClass
-
         Box(
             modifier = Modifier
                 .fillMaxSize()
@@ -118,12 +116,14 @@ private fun GroupChannelsScreen(
                 targetState = uiState.viewType
             ) { viewType ->
 
+                val filteredResults = uiState.channels.filter { channel ->
+                    channel.channelName.contains(searchString, true)
+                }
+
                 ChannelView(
                     modifier = Modifier.fillMaxSize(),
                     viewType = viewType,
-                    items = uiState.channels.filter {
-                        it.channelName.contains(searchString, true)
-                    },
+                    items = filteredResults,
                     onChannelSelect = { selected ->
                         onAction(
                             UiAction.NavigateToSelected(
@@ -140,7 +140,7 @@ private fun GroupChannelsScreen(
                         onAction(
                             UiAction.ToggleEpgVisibility(
                                 name = selected.channelName,
-                                epgID = selected.epgId
+                                epgID = selected.programId
                             )
                         )
                     },

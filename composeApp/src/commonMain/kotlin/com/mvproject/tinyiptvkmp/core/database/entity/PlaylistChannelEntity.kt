@@ -15,6 +15,6 @@ data class PlaylistChannelEntity(
     val channelName: String,
     val channelLogo: String,
     val channelGroup: String,
-    val epgId: String,
-    val parentListId: Long,
+    val programId: String,
+    val parentListId: String,
 )

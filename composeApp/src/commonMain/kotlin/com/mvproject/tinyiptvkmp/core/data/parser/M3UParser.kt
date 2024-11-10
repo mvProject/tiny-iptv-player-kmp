@@ -15,7 +15,7 @@ object M3UParser {
     private const val TAG_METADATA = "#EXTINF:"
     private const val ATTR_LOGO = "tvg-logo"
     private const val ATTR_GROUP_TITLE = "group-title"
-    private const val TAG_GROUP = "#EXTGRP"
+    private const val TAG_GROUP = "#EXTGRP:"
 
     /*fun parsePlaylist2(string: String): List<PlaylistChannelParseModel> {
         val lines = string.split(TAG_METADATA.toRegex()).toTypedArray()
@@ -128,7 +128,7 @@ object M3UParser {
         val regex = """$attr="([^"]*)"""".toRegex()
         return regex.find(meta)
             ?.groupValues
-            ?.get(1) ?: String.empty
+            ?.get(1)?.trim() ?: String.empty
     }
 }
 

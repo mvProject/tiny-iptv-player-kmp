@@ -5,7 +5,7 @@
  *
  */
 
-package com.mvproject.tinyiptvkmp.core.ui.modifiers
+package com.mvproject.tinyiptvkmp.features.player.components
 
 import androidx.compose.foundation.gestures.detectHorizontalDragGestures
 import androidx.compose.foundation.gestures.detectTapGestures

@@ -11,7 +11,6 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import co.touchlab.kermit.Logger
 import com.mvproject.tinyiptvkmp.core.common.AppConstants.INT_VALUE_1
-import com.mvproject.tinyiptvkmp.core.common.AppConstants.LONG_NO_VALUE
 import com.mvproject.tinyiptvkmp.core.common.mvi.MVI
 import com.mvproject.tinyiptvkmp.core.common.mvi.mvi
 import com.mvproject.tinyiptvkmp.core.data.repository.PlaylistsRepository
@@ -78,7 +77,7 @@ class GroupViewModel(
             .idForPlaylistContentLoad()
             .flowOn(Dispatchers.IO)
             .onEach { id ->
-                if (id != LONG_NO_VALUE) {
+                if (id.isNotBlank()) {
                     savePlaylistContentUseCase(playlistId = id)
                 }
             }.launchIn(viewModelScope)

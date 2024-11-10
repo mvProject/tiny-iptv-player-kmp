@@ -10,7 +10,7 @@ import com.mvproject.tinyiptvkmp.core.domain.model.Playlist
 interface PlaylistContract {
     @Stable
     data class UiState(
-        val selectedId: Long = LONG_VALUE_ZERO,
+        val selectedId: String = String.empty,
         val playlistName: String = String.empty,
         val playlistSource: String = String.empty,
         val playlistType: PlaylistType = PlaylistType.REMOTE,

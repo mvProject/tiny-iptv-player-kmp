@@ -114,12 +114,9 @@ class PlayerStateImpl(
         }
     }
 
-    override fun setPlayerChannel(
-        channelName: String,
-        channelUrl: String,
-    ) {
+    override fun setPlayerChannel(channelUrl: String) {
         this.player.apply {
-            setMediaItem(createMediaItem(title = channelName, url = channelUrl))
+            setMediaItem(createMediaItem(url = channelUrl))
             prepare()
             playWhenReady = true
         }
@@ -137,8 +134,5 @@ interface PlayerState {
 
     fun restartPlayer()
 
-    fun setPlayerChannel(
-        channelName: String,
-        channelUrl: String,
-    )
+    fun setPlayerChannel(channelUrl: String)
 }

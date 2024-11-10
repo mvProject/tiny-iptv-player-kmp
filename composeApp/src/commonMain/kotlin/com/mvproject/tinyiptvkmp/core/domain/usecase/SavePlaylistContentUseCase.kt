@@ -1,7 +1,7 @@
 package com.mvproject.tinyiptvkmp.core.domain.usecase
 
 import co.touchlab.kermit.Logger
-import com.mvproject.tinyiptvkmp.core.common.AppConstants
+import com.mvproject.tinyiptvkmp.core.common.utils.CommonUtils.empty
 import com.mvproject.tinyiptvkmp.core.data.repository.LocalPlaylistRepository
 import com.mvproject.tinyiptvkmp.core.data.repository.PlaylistChannelsRepository
 import com.mvproject.tinyiptvkmp.core.data.repository.PlaylistsRepository
@@ -17,7 +17,7 @@ class SavePlaylistContentUseCase(
     private val remotePlaylistRepository: RemotePlaylistRepository,
     private val playlistsRepository: PlaylistsRepository,
 ) {
-    suspend operator fun invoke(playlistId: Long) {
+    suspend operator fun invoke(playlistId: String) {
         val playlist = playlistsRepository.getPlaylistById(id = playlistId)
 
         val parsedChannels =
@@ -42,7 +42,7 @@ class SavePlaylistContentUseCase(
 
         playlistChannelsRepository.savePlaylistChannels(channels = channels)
 
-        preferenceRepository.setIdForPlaylistContentLoad(id = AppConstants.LONG_NO_VALUE)
+        preferenceRepository.setIdForPlaylistContentLoad(id = String.empty)
         preferenceRepository.setChannelsEpgInfoUpdateRequired(state = true)
     }
 }

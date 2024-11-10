@@ -58,6 +58,8 @@ import io.github.vinceglb.filekit.compose.rememberFilePickerLauncher
 import io.github.vinceglb.filekit.core.PickerMode
 import io.github.vinceglb.filekit.core.PickerType
 import kotlinx.coroutines.launch
+import okio.buffer
+import okio.sink
 import org.jetbrains.compose.resources.stringResource
 import tinyiptvkmp.composeapp.generated.resources.Res
 import tinyiptvkmp.composeapp.generated.resources.btn_add_local
@@ -68,7 +70,6 @@ import tinyiptvkmp.composeapp.generated.resources.hint_name
 import tinyiptvkmp.composeapp.generated.resources.hint_update_period
 import tinyiptvkmp.composeapp.generated.resources.label_or
 import tinyiptvkmp.composeapp.generated.resources.msg_playlist_details
-import java.io.FileOutputStream
 
 @Composable
 internal fun PlaylistScreen(
@@ -119,8 +120,11 @@ private fun PlaylistScreen(
                 val fileTmp = folderFileTmp.toFile()
 
                 scope.launch {
-                    FileOutputStream(fileTmp).use {
-                        it.write(file.readBytes())
+                    //FileOutputStream(fileTmp).use {
+                    //    it.write(file.readBytes())
+                    //}
+                    fileTmp.sink().buffer().use { sink ->
+                        sink.write(file.readBytes())
                     }
                 }
 

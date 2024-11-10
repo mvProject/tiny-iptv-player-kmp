@@ -12,7 +12,6 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import androidx.navigation.toRoute
 import co.touchlab.kermit.Logger
-import com.mvproject.tinyiptvkmp.core.common.AppConstants.LONG_VALUE_ZERO
 import com.mvproject.tinyiptvkmp.core.common.mvi.MVI
 import com.mvproject.tinyiptvkmp.core.common.mvi.mvi
 import com.mvproject.tinyiptvkmp.core.domain.enums.PlaylistType
@@ -23,7 +22,8 @@ import com.mvproject.tinyiptvkmp.features.playlist.PlaylistContract.UiEffect
 import com.mvproject.tinyiptvkmp.features.playlist.PlaylistContract.UiState
 import com.mvproject.tinyiptvkmp.navigation.AppRoutes
 import kotlinx.coroutines.launch
-import kotlin.random.Random
+import kotlin.uuid.ExperimentalUuidApi
+import kotlin.uuid.Uuid
 
 class PlaylistViewModel(
     savedStateHandle: SavedStateHandle,
@@ -48,7 +48,7 @@ class PlaylistViewModel(
                     playlistName = playlist.playlistName,
                     playlistSource = playlist.playlistSource,
                     playlistType = playlist.playlistType,
-                    isEdit = playlist.id != LONG_VALUE_ZERO,
+                    isEdit = playlist.id.isNotBlank(),
                     lastUpdateDate = playlist.lastUpdateDate,
                     updatePeriod = playlist.updatePeriod.toInt(),
                 )
@@ -111,10 +111,11 @@ class PlaylistViewModel(
         saveOrUpdatePlayList(isUpdate = true)
     }
 
+    @OptIn(ExperimentalUuidApi::class)
     private fun savePlaylist() {
         updateUiState {
             copy(
-                selectedId = Random.nextLong(),
+                selectedId = uiState.value.selectedId.ifEmpty { Uuid.random().toString() },
                 isSaving = true
             )
         }

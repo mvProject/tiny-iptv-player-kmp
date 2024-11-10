@@ -216,8 +216,8 @@ class PlayerViewModel(
 
     private suspend fun loadSelectedChannelEpg() {
         val currentChannel = tvPlayerState.value.currentChannel
-        if (currentChannel.epgId.isNotBlank()) {
-            val channelsEpgData = getChannelsEpgUseCase(channelId = currentChannel.epgId)
+        if (currentChannel.programId.isNotBlank()) {
+            val channelsEpgData = getChannelsEpgUseCase(channelId = currentChannel.programId)
 
             val currentChannelWithEpg =
                 currentChannel.copy(
@@ -236,13 +236,13 @@ class PlayerViewModel(
             if (currentChannels.isNotEmpty()) {
                 val channelsIds =
                     currentChannels
-                        .map { it.epgId }
+                        .map { it.programId }
                         .filter { it.isNotBlank() }
 
                 val channelsEpgData = getGroupChannelsEpgUseCase(channelsIds = channelsIds)
 
                 val channelsWithPrograms = currentChannels.map { ch ->
-                    val programs = channelsEpgData[ch.epgId] ?: emptyList()
+                    val programs = channelsEpgData[ch.programId] ?: emptyList()
                     ch.copy(programs = programs)
                 }
 

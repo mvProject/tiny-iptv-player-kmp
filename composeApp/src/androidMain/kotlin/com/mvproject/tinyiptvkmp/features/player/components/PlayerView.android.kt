@@ -48,7 +48,6 @@ actual fun PlayerView(
     LaunchedEffect(tvPlayerState.mediaPosition) {
         if (tvPlayerState.mediaPosition > AppConstants.INT_NO_VALUE) {
             playerState.setPlayerChannel(
-                channelName = tvPlayerState.currentChannel.channelName,
                 channelUrl = tvPlayerState.currentChannel.channelUrl,
             )
         }

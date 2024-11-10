@@ -20,6 +20,7 @@ import com.mvproject.tinyiptvkmp.core.common.AppConstants.INT_VALUE_5
 import com.mvproject.tinyiptvkmp.core.common.AppConstants.INT_VALUE_ZERO
 import com.mvproject.tinyiptvkmp.core.common.AppConstants.LONG_NO_VALUE
 import com.mvproject.tinyiptvkmp.core.common.AppConstants.LONG_VALUE_ZERO
+import com.mvproject.tinyiptvkmp.core.common.utils.CommonUtils.empty
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.map
 
@@ -135,7 +136,7 @@ class PreferenceRepository(
                 preferences[EPG_DATA_LAST_UPDATE] ?: LONG_NO_VALUE
             }.first()
 
-    suspend fun setIdForPlaylistContentLoad(id: Long) {
+    suspend fun setIdForPlaylistContentLoad(id: String) {
         dataStore.edit { settings ->
             settings[PLAYLIST_CONTENT_LOAD_REQUIRED] = id
         }
@@ -143,7 +144,7 @@ class PreferenceRepository(
 
     fun idForPlaylistContentLoad() =
         dataStore.data.map { preferences ->
-            preferences[PLAYLIST_CONTENT_LOAD_REQUIRED] ?: LONG_NO_VALUE
+            preferences[PLAYLIST_CONTENT_LOAD_REQUIRED] ?: String.empty
         }
 
     /**
@@ -184,7 +185,7 @@ class PreferenceRepository(
         val CHANNELS_EPG_INFO_UPDATE_REQUIRED =
             booleanPreferencesKey("ChannelsEpgInfoUpdateRequired")
 
-        val PLAYLIST_CONTENT_LOAD_REQUIRED = longPreferencesKey("PlaylistContentLoadRequired")
+        val PLAYLIST_CONTENT_LOAD_REQUIRED = stringPreferencesKey("PlaylistContentLoadRequired")
         val EPG_PROGRAM_CLEAN = longPreferencesKey("epgProgramClean")
     }
 }

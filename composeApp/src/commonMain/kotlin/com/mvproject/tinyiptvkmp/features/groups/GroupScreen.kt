@@ -24,6 +24,7 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clipToBounds
 import androidx.lifecycle.compose.LifecycleResumeEffect
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.mvproject.tinyiptvkmp.core.common.mvi.CollectSideEffect
@@ -140,7 +141,7 @@ private fun GroupScreen(
                             verticalArrangement = Arrangement.Center,
                         ) {
                             LazyColumn(
-                                modifier = Modifier.fillMaxHeight(),
+                                modifier = Modifier.fillMaxHeight().clipToBounds(),
                                 verticalArrangement = Arrangement.spacedBy(MaterialTheme.dimens.size4),
                             ) {
                                 items(
@@ -148,7 +149,7 @@ private fun GroupScreen(
                                     key = { grp -> grp.groupId },
                                 ) { item ->
                                     PlaylistGroupItem(
-                                        modifier = Modifier.fillMaxWidth(),
+                                        modifier = Modifier.fillMaxWidth().animateItem(),
                                         group = item,
                                         onUiAction = onUiAction
                                     )

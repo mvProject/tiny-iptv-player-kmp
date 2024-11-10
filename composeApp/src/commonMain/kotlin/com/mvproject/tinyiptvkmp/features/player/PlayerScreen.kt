@@ -34,9 +34,6 @@ import com.mvproject.tinyiptvkmp.core.theme.dimens
 import com.mvproject.tinyiptvkmp.core.ui.epg.ChannelPrograms
 import com.mvproject.tinyiptvkmp.core.ui.indicators.LoadingIndicator
 import com.mvproject.tinyiptvkmp.core.ui.indicators.VolumeIndicator
-import com.mvproject.tinyiptvkmp.core.ui.modifiers.handleHorizontalGestures
-import com.mvproject.tinyiptvkmp.core.ui.modifiers.handleTapGestures
-import com.mvproject.tinyiptvkmp.core.ui.modifiers.handleVerticalGestures
 import com.mvproject.tinyiptvkmp.core.ui.overlay.OverlayContent
 import com.mvproject.tinyiptvkmp.features.player.action.PlaybackActions
 import com.mvproject.tinyiptvkmp.features.player.action.PlaybackStateActions
@@ -45,6 +42,9 @@ import com.mvproject.tinyiptvkmp.features.player.components.PlayerChannels
 import com.mvproject.tinyiptvkmp.features.player.components.PlayerContainer
 import com.mvproject.tinyiptvkmp.features.player.components.PlayerToolbar
 import com.mvproject.tinyiptvkmp.features.player.components.ProgramInfo
+import com.mvproject.tinyiptvkmp.features.player.components.handleHorizontalGestures
+import com.mvproject.tinyiptvkmp.features.player.components.handleTapGestures
+import com.mvproject.tinyiptvkmp.features.player.components.handleVerticalGestures
 import com.mvproject.tinyiptvkmp.features.player.state.TvPlayerState
 import org.jetbrains.compose.resources.painterResource
 import org.jetbrains.compose.resources.stringResource

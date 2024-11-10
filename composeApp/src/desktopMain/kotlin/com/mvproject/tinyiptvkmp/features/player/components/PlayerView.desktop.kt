@@ -17,7 +17,7 @@ import androidx.compose.ui.graphics.ImageBitmap
 import androidx.compose.ui.graphics.asComposeImageBitmap
 import androidx.compose.ui.unit.IntOffset
 import androidx.compose.ui.unit.IntSize
-import com.mvproject.tinyiptvkmp.core.common.AppConstants
+import co.touchlab.kermit.Logger
 import com.mvproject.tinyiptvkmp.core.common.AppConstants.FLOAT_VALUE_1
 import com.mvproject.tinyiptvkmp.core.common.AppConstants.INT_NO_VALUE
 import com.mvproject.tinyiptvkmp.core.common.AppConstants.INT_VALUE_2
@@ -28,7 +28,6 @@ import com.mvproject.tinyiptvkmp.features.player.action.PlaybackActions
 import com.mvproject.tinyiptvkmp.features.player.action.PlaybackStateActions
 import com.mvproject.tinyiptvkmp.features.player.state.PlaybackState
 import com.mvproject.tinyiptvkmp.features.player.state.TvPlayerState
-import com.mvproject.tinyiptvkmp.utils.KLog
 import org.jetbrains.skia.Bitmap
 import uk.co.caprica.vlcj.factory.discovery.NativeDiscovery
 import uk.co.caprica.vlcj.media.MediaRef
@@ -151,7 +150,7 @@ class VideoPlayerStateImpl : VideoPlayerState {
     }
 
     init {
-        KLog.w("init VideoPlayerStateImpl")
+        Logger.w("init VideoPlayerStateImpl")
     }
 }
 
@@ -167,12 +166,12 @@ fun VideoPlayerDirect(
     DisposableEffect(state) {
         val eventListener = object : MediaPlayerEventAdapter() {
             override fun error(mediaPlayer: MediaPlayer) {
-                KLog.e("testing mediaPlayer error")
+                Logger.e("testing mediaPlayer error")
             }
 
             override fun mediaPlayerReady(mediaPlayer: MediaPlayer) {
                 mediaPlayer.media().info().audioTracks().forEach { info ->
-                    KLog.i("testing audioTrack info: $info")
+                    Logger.i("testing audioTrack info: $info")
                 }
 
                 onPlaybackStateAction(
@@ -232,7 +231,7 @@ fun VideoPlayerDirect(
     var frameTime: Long by remember { mutableStateOf(LONG_VALUE_ZERO) }
 
     LaunchedEffect(url) {
-        KLog.w("testing LaunchedEffect started")
+        Logger.w("testing LaunchedEffect started")
         state.mediaPlayer.media()?.start(url)
         state.mediaPlayer.subpictures().setTrack(INT_NO_VALUE)
         while (true) {
@@ -271,7 +270,7 @@ internal class RenderState {
     private var composeImage: ImageBitmap? = null
 
     init {
-        KLog.w("init RenderState")
+        Logger.w("init RenderState")
     }
 
     fun updateComposeImage(frameTime: Long): ImageBitmap? {
@@ -283,7 +282,7 @@ internal class RenderState {
                 return composeImage
             }
         } catch (ex: Exception) {
-            KLog.e("updateComposeImage exception ${ex.localizedMessage}")
+            Logger.e("updateComposeImage exception ${ex.localizedMessage}")
         }
 
         return null
