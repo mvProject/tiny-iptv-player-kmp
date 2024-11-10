@@ -14,7 +14,7 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.media3.common.Player
 import androidx.media3.common.VideoSize
 import androidx.media3.exoplayer.ExoPlayer
-import com.mvproject.tinyiptvkmp.features.player.action.UiActions
+import com.mvproject.tinyiptvkmp.features.player.PlayerContract.UiAction
 import com.mvproject.tinyiptvkmp.utils.ExoPlayerUtils.createMediaItem
 import com.mvproject.tinyiptvkmp.utils.ExoPlayerUtils.createVideoPlayer
 import com.mvproject.tinyiptvkmp.utils.ExoPlayerUtils.mapToVideoPlaybackState
@@ -27,7 +27,7 @@ import com.mvproject.tinyiptvkmp.utils.ExoPlayerUtils.mapToVideoPlaybackState
 @Composable
 internal fun rememberPlayerState(
     context: Context = LocalContext.current,
-    onPlaybackAction: (UiActions) -> Unit = {},
+    onPlaybackAction: (UiAction) -> Unit = {},
 ) = remember {
     PlayerStateImpl(
         player = createVideoPlayer(context),
@@ -41,7 +41,7 @@ internal fun rememberPlayerState(
 
 class PlayerStateImpl(
     val player: ExoPlayer,
-    private val onPlaybackAction: (UiActions) -> Unit = {},
+    private val onPlaybackAction: (UiAction) -> Unit = {},
 ) : PlayerState, Player.Listener {
     override fun setVolume(value: Float) {
         player.volume = value
@@ -62,7 +62,7 @@ class PlayerStateImpl(
 
     override fun onIsPlayingChanged(isPlaying: Boolean) {
         onPlaybackAction(
-            UiActions.OnIsPlayingChanged(isPlaying),
+            UiAction.OnIsPlayingChanged(isPlaying),
         )
     }
 
@@ -74,13 +74,13 @@ class PlayerStateImpl(
             )
 
         onPlaybackAction(
-            UiActions.OnPlaybackStateChanged(state),
+            UiAction.OnPlaybackStateChanged(state),
         )
     }
 
     override fun onVideoSizeChanged(videoSize: VideoSize) {
         onPlaybackAction(
-            UiActions.OnVideoSizeChanged(
+            UiAction.OnVideoSizeChanged(
                 videoSize.height,
                 videoSize.width,
                 videoSize.pixelWidthHeightRatio,

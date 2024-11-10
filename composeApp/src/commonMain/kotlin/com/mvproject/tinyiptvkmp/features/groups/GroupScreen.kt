@@ -54,9 +54,9 @@ internal fun GroupScreen(
 ) {
     val uiState by viewModel.uiState.collectAsStateWithLifecycle()
 
-    CollectSideEffect(viewModel.uiEffect) {
-        when (it) {
-            is UiEffect.NavigateToGroup -> onNavigateToGroup(it.title, it.group)
+    CollectSideEffect(viewModel.uiEffect) { event ->
+        when (event) {
+            is UiEffect.NavigateToGroup -> onNavigateToGroup(event.title, event.group)
             UiEffect.NavigateToSettings -> onNavigateToSettings()
         }
     }

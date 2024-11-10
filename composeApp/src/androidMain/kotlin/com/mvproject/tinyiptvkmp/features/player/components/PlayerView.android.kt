@@ -8,15 +8,15 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.viewinterop.AndroidView
 import androidx.lifecycle.compose.LifecycleStartEffect
 import com.mvproject.tinyiptvkmp.core.common.AppConstants
-import com.mvproject.tinyiptvkmp.features.player.action.UiActions
-import com.mvproject.tinyiptvkmp.features.player.state.TvPlayerState
+import com.mvproject.tinyiptvkmp.features.player.PlayerContract.UiAction
+import com.mvproject.tinyiptvkmp.features.player.PlayerContract.UiState
 import com.mvproject.tinyiptvkmp.ui.rememberPlayerState
 
 @Composable
 actual fun PlayerView(
     modifier: Modifier,
-    tvPlayerState: TvPlayerState,
-    onUiAction: (UiActions) -> Unit
+    uiState: UiState,
+    onUiAction: (UiAction) -> Unit
 ) {
     // todo network Available check
     // val connection by networkConnectionState()
@@ -39,22 +39,22 @@ actual fun PlayerView(
     //    }
     //}
 
-    LaunchedEffect(tvPlayerState.currentVolume) {
-        playerState.setVolume(tvPlayerState.currentVolume)
+    LaunchedEffect(uiState.currentVolume) {
+        playerState.setVolume(uiState.currentVolume)
     }
 
-    LaunchedEffect(tvPlayerState.channelIndex) {
-        if (tvPlayerState.channelIndex > AppConstants.INT_NO_VALUE) {
+    LaunchedEffect(uiState.channelIndex) {
+        if (uiState.channelIndex > AppConstants.INT_NO_VALUE) {
             playerState.setPlayerChannel(
-                channelUrl = tvPlayerState.currentChannel.channelUrl,
+                channelUrl = uiState.currentChannel.channelUrl,
             )
             //playerState.restartPlayer()
         }
     }
 
-    LaunchedEffect(tvPlayerState.isPlaying) {
-        if (playerState.player.isPlaying != tvPlayerState.isPlaying) {
-            playerState.setPlayingState(tvPlayerState.isPlaying)
+    LaunchedEffect(uiState.isPlaying) {
+        if (playerState.player.isPlaying != uiState.isPlaying) {
+            playerState.setPlayingState(uiState.isPlaying)
         }
     }
 

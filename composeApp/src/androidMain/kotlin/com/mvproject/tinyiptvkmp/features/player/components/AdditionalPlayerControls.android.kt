@@ -2,13 +2,12 @@ package com.mvproject.tinyiptvkmp.features.player.components
 
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
-import com.mvproject.tinyiptvkmp.features.player.action.UiActions
+import com.mvproject.tinyiptvkmp.features.player.PlayerContract.UiAction
 
 @Composable
 actual fun AdditionalPlayerControls(
     modifier: Modifier,
-    action: () -> Unit,
-    onClick: (UiActions) -> Unit,
+    onClick: (UiAction) -> Unit
 ) {
     // no need yet
 }

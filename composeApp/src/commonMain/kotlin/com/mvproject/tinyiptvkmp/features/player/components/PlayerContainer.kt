@@ -5,14 +5,14 @@ import androidx.compose.foundation.layout.aspectRatio
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
-import com.mvproject.tinyiptvkmp.features.player.action.UiActions
-import com.mvproject.tinyiptvkmp.features.player.state.TvPlayerState
+import com.mvproject.tinyiptvkmp.features.player.PlayerContract.UiAction
+import com.mvproject.tinyiptvkmp.features.player.PlayerContract.UiState
 
 @Composable
 fun PlayerContainer(
     modifier: Modifier,
-    tvPlayerState: TvPlayerState,
-    onUiAction: (UiActions) -> Unit,
+    uiState: UiState,
+    onUiAction: (UiAction) -> Unit,
     toolbar: @Composable () -> Unit,
 ) {
     Box(
@@ -21,10 +21,10 @@ fun PlayerContainer(
         Box(
             modifier = Modifier
                 .fillMaxSize()
-                .aspectRatio(tvPlayerState.videoRatio)
+                .aspectRatio(uiState.videoRatio)
         ) {
             PlayerView(
-                tvPlayerState = tvPlayerState,
+                uiState = uiState,
                 onUiAction = onUiAction
             )
         }

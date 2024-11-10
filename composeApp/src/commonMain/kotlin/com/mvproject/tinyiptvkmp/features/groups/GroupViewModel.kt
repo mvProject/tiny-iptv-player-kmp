@@ -45,8 +45,7 @@ class GroupViewModel(
     private val savePlaylistContentUseCase: SavePlaylistContentUseCase,
     private val updateChannelsEpgInfoUseCase: UpdateChannelsEpgInfoUseCase,
     private val cleanProgramsUseCase: CleanProgramsUseCase,
-) : ViewModel(),
-    MVI<UiState, UiAction, UiEffect> by mvi(UiState()) {
+) : ViewModel(), MVI<UiState, UiAction, UiEffect> by mvi(UiState()) {
 
     init {
         playlistsRepository
