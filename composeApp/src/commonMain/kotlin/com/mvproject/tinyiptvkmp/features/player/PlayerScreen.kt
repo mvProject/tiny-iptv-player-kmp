@@ -28,15 +28,12 @@ import androidx.compose.ui.Modifier
 import androidx.window.core.layout.WindowHeightSizeClass
 import androidx.window.core.layout.WindowSizeClass
 import androidx.window.core.layout.WindowWidthSizeClass
-import com.mvproject.tinyiptvkmp.core.common.utils.CommonUtils.empty
-import com.mvproject.tinyiptvkmp.core.domain.model.TvChannel
 import com.mvproject.tinyiptvkmp.core.theme.dimens
 import com.mvproject.tinyiptvkmp.core.ui.epg.ChannelPrograms
 import com.mvproject.tinyiptvkmp.core.ui.indicators.LoadingIndicator
 import com.mvproject.tinyiptvkmp.core.ui.indicators.VolumeIndicator
 import com.mvproject.tinyiptvkmp.core.ui.overlay.OverlayContent
-import com.mvproject.tinyiptvkmp.features.player.action.PlaybackActions
-import com.mvproject.tinyiptvkmp.features.player.action.PlaybackStateActions
+import com.mvproject.tinyiptvkmp.features.player.action.UiActions
 import com.mvproject.tinyiptvkmp.features.player.components.NoPlaybackView
 import com.mvproject.tinyiptvkmp.features.player.components.PlayerChannels
 import com.mvproject.tinyiptvkmp.features.player.components.PlayerContainer
@@ -46,6 +43,8 @@ import com.mvproject.tinyiptvkmp.features.player.components.handleHorizontalGest
 import com.mvproject.tinyiptvkmp.features.player.components.handleTapGestures
 import com.mvproject.tinyiptvkmp.features.player.components.handleVerticalGestures
 import com.mvproject.tinyiptvkmp.features.player.state.TvPlayerState
+import com.mvproject.tinyiptvkmp.features.player.utils.PlayerUtils.programDescription
+import com.mvproject.tinyiptvkmp.features.player.utils.PlayerUtils.programTitle
 import org.jetbrains.compose.resources.painterResource
 import org.jetbrains.compose.resources.stringResource
 import tinyiptvkmp.composeapp.generated.resources.Res
@@ -60,13 +59,10 @@ internal fun PlayerScreen(
     onNavigateBack: () -> Unit = {},
 ) {
     val tvPlayerState by viewModel.tvPlayerState.collectAsState()
-    val tvChannelState by viewModel.tvChannelState.collectAsState()
 
     PlayerScreen(
         tvPlayerState = tvPlayerState,
-        tvChannels = tvChannelState,
-        onPlaybackAction = viewModel::processPlaybackActions,
-        onPlaybackStateAction = viewModel::processPlaybackStateActions,
+        onUiAction = viewModel::processPlaybackActions,
         onNavigateBack = onNavigateBack
     )
 }
@@ -74,10 +70,8 @@ internal fun PlayerScreen(
 @Composable
 private fun PlayerScreen(
     tvPlayerState: TvPlayerState,
-    tvChannels: List<TvChannel> = emptyList(),
     windowSizeClass: WindowSizeClass = currentWindowAdaptiveInfo().windowSizeClass,
-    onPlaybackAction: (PlaybackActions) -> Unit,
-    onPlaybackStateAction: (PlaybackStateActions) -> Unit,
+    onUiAction: (UiActions) -> Unit,
     onNavigateBack: () -> Unit = {},
 ) {
     Box(
@@ -96,8 +90,7 @@ private fun PlayerScreen(
                 PlayerContent(
                     modifier = Modifier.weight(MaterialTheme.dimens.weight2),
                     tvPlayerState = tvPlayerState,
-                    onPlaybackAction = onPlaybackAction,
-                    onPlaybackStateAction = onPlaybackStateAction,
+                    onUiAction = onUiAction,
                     onNavigateBack = onNavigateBack
                 )
 
@@ -115,8 +108,7 @@ private fun PlayerScreen(
                 PlayerContent(
                     modifier = Modifier.weight(MaterialTheme.dimens.weight2),
                     tvPlayerState = tvPlayerState,
-                    onPlaybackAction = onPlaybackAction,
-                    onPlaybackStateAction = onPlaybackStateAction,
+                    onUiAction = onUiAction,
                     onNavigateBack = onNavigateBack
                 )
 
@@ -131,15 +123,9 @@ private fun PlayerScreen(
             }
         }
 
-        VolumeIndicator(
-            modifier = Modifier.fillMaxSize(0.7f),
-            isVisible = tvPlayerState.isVolumeUiVisible,
-            value = tvPlayerState.currentVolume,
-        )
-
         OverlayContent(
             isVisible = tvPlayerState.isEpgVisible,
-            onViewTap = { onPlaybackAction(PlaybackActions.OnEpgUiToggle) }
+            onViewTap = { onUiAction(UiActions.ToggleProgramsUi) }
         ) {
             ChannelPrograms(
                 modifier =
@@ -161,27 +147,25 @@ private fun PlayerScreen(
 
         OverlayContent(
             isVisible = tvPlayerState.isChannelsVisible,
-            onViewTap = { onPlaybackAction(PlaybackActions.OnChannelsUiToggle) },
+            onViewTap = { onUiAction(UiActions.ToggleChannelsUi) },
             contentAlpha = MaterialTheme.dimens.alpha90,
         ) {
             PlayerChannels(
-                channels = tvChannels,
-                current = tvPlayerState.mediaPosition,
+                channels = tvPlayerState.groupChannels,
+                current = tvPlayerState.channelIndex,
                 group = tvPlayerState.channelGroup,
-                onChannelSelect = { chn -> onPlaybackAction(PlaybackActions.OnChannelSelected(chn)) }
+                onChannelSelect = { chn -> onUiAction(UiActions.SelectChannel(chn)) }
             )
         }
 
         OverlayContent(
             isVisible = tvPlayerState.isChannelInfoVisible,
-            onViewTap = { onPlaybackAction(PlaybackActions.OnChannelInfoUiToggle) },
+            onViewTap = { onUiAction(UiActions.ToggleProgramInfoUi) },
         ) {
             ProgramInfo(
                 channelName = tvPlayerState.currentChannel.channelName,
-                programName = tvPlayerState.currentChannel.programs.firstOrNull()
-                    ?.title ?: String.empty,
-                description = tvPlayerState.currentChannel.programs.firstOrNull()
-                    ?.description ?: String.empty,
+                programName = tvPlayerState.currentChannel.programTitle,
+                description = tvPlayerState.currentChannel.programDescription,
             )
         }
     }
@@ -191,18 +175,16 @@ private fun PlayerScreen(
 private fun PlayerContent(
     modifier: Modifier = Modifier,
     tvPlayerState: TvPlayerState,
-    onPlaybackAction: (PlaybackActions) -> Unit,
-    onPlaybackStateAction: (PlaybackStateActions) -> Unit,
+    onUiAction: (UiActions) -> Unit,
     onNavigateBack: () -> Unit = {},
 ) {
     PlayerContainer(
         modifier = modifier
-            .handleHorizontalGestures(onAction = onPlaybackAction)
-            .handleVerticalGestures(onAction = onPlaybackAction)
-            .handleTapGestures(onAction = onPlaybackAction),
+            .handleHorizontalGestures(onAction = onUiAction)
+            .handleVerticalGestures(onAction = onUiAction)
+            .handleTapGestures(onAction = onUiAction),
         tvPlayerState = tvPlayerState,
-        onPlaybackAction = onPlaybackAction,
-        onPlaybackStateAction = onPlaybackStateAction,
+        onUiAction = onUiAction,
     ) {
 
         NoPlaybackView(
@@ -217,6 +199,12 @@ private fun PlayerContent(
             logo = painterResource(Res.drawable.sad_face),
         )
 
+        VolumeIndicator(
+            modifier = Modifier.fillMaxSize(),
+            isVisible = tvPlayerState.isVolumeUiVisible,
+            value = tvPlayerState.currentVolume,
+        )
+
         LoadingIndicator(isVisible = tvPlayerState.isBuffering)
 
         PlayerToolbar(
@@ -225,7 +213,7 @@ private fun PlayerContent(
             currentChannel = tvPlayerState.currentChannel,
             isPlaying = tvPlayerState.isPlaying,
             isFullScreen = true,
-            onPlaybackAction = onPlaybackAction,
+            onUiAction = onUiAction,
             onPlaybackClose = onNavigateBack,
         )
     }

@@ -16,12 +16,10 @@ import com.mvproject.tinyiptvkmp.core.common.AppConstants.DELAY_50
 import com.mvproject.tinyiptvkmp.core.common.AppConstants.FLOAT_STEP_VOLUME
 import com.mvproject.tinyiptvkmp.core.common.AppConstants.FLOAT_VALUE_1
 import com.mvproject.tinyiptvkmp.core.common.AppConstants.FLOAT_VALUE_ZERO
-import com.mvproject.tinyiptvkmp.core.common.AppConstants.INT_NO_VALUE
 import com.mvproject.tinyiptvkmp.core.common.AppConstants.INT_VALUE_1
 import com.mvproject.tinyiptvkmp.core.common.AppConstants.INT_VALUE_ZERO
 import com.mvproject.tinyiptvkmp.core.common.AppConstants.UI_SHOW_DELAY
 import com.mvproject.tinyiptvkmp.core.common.AppConstants.VOLUME_SHOW_DELAY
-import com.mvproject.tinyiptvkmp.core.common.utils.CommonUtils.empty
 import com.mvproject.tinyiptvkmp.core.datastore.repository.PreferenceRepository
 import com.mvproject.tinyiptvkmp.core.domain.enums.RatioMode
 import com.mvproject.tinyiptvkmp.core.domain.enums.ResizeMode
@@ -30,8 +28,10 @@ import com.mvproject.tinyiptvkmp.core.domain.usecase.GetChannelsEpgUseCase
 import com.mvproject.tinyiptvkmp.core.domain.usecase.GetGroupChannelsEpgUseCase
 import com.mvproject.tinyiptvkmp.core.domain.usecase.GetGroupChannelsUseCase
 import com.mvproject.tinyiptvkmp.core.domain.usecase.ToggleFavoriteChannelUseCase
-import com.mvproject.tinyiptvkmp.features.player.action.PlaybackActions
-import com.mvproject.tinyiptvkmp.features.player.action.PlaybackStateActions
+import com.mvproject.tinyiptvkmp.core.domain.utils.ChannelsUtils.mapProgramIds
+import com.mvproject.tinyiptvkmp.core.domain.utils.ChannelsUtils.mapPrograms
+import com.mvproject.tinyiptvkmp.core.domain.utils.ChannelsUtils.replaceUpdated
+import com.mvproject.tinyiptvkmp.features.player.action.UiActions
 import com.mvproject.tinyiptvkmp.features.player.components.isMediaPlayable
 import com.mvproject.tinyiptvkmp.features.player.state.PlaybackState
 import com.mvproject.tinyiptvkmp.features.player.state.TvPlayerState
@@ -43,7 +43,6 @@ import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
-import kotlinx.coroutines.withContext
 
 class PlayerViewModel(
     savedStateHandle: SavedStateHandle,
@@ -61,156 +60,125 @@ class PlayerViewModel(
     private var _tvPlayerState = MutableStateFlow(TvPlayerState())
     val tvPlayerState: StateFlow<TvPlayerState> = _tvPlayerState
 
-    private var _tvChannelState = MutableStateFlow<List<TvChannel>>(emptyList())
-    val tvChannelState: StateFlow<List<TvChannel>> = _tvChannelState
-
-    private var _videoRatio = FLOAT_VALUE_1
-
-    private val args = savedStateHandle.toRoute<AppRoutes.VideoView>()
+    private val args = savedStateHandle.toRoute<AppRoutes.Player>()
+    private val media = args.channelName
+    private val group = args.group
+    private val groupType = args.groupType
 
     init {
-        val media = args.mediaName
-        val group = args.mediaGroup
-        Logger.d("testing VideoViewViewModel init media:$media, group:$group")
+        Logger.d("testing VideoViewViewModel init media:$media, group:$group, groupType:$groupType")
 
+        loadGroupChannels()
+
+        initPlayBack(channelName = media)
+
+        refreshGroupChannelsPrograms()
+    }
+
+    private fun loadGroupChannels() {
         viewModelScope.launch {
+            val channelList = getGroupChannelsUseCase(group, groupType)
             _tvPlayerState.update { current ->
-                val ratioMode = RatioMode.entries[preferenceRepository.getDefaultRatioMode()]
-
                 current.copy(
-                    isFullscreen = preferenceRepository.getDefaultFullscreenMode(),
-                    videoResizeMode = ResizeMode.entries[preferenceRepository.getDefaultResizeMode()],
+                    channelGroup = group,
+                    groupChannels = channelList
+                )
+            }
+        }
+    }
+
+    private fun initPlayBack(channelName: String) {
+        viewModelScope.launch {
+            val ratioMode = RatioMode.entries[preferenceRepository.getDefaultRatioMode()]
+            val resizeMode = ResizeMode.entries[preferenceRepository.getDefaultResizeMode()]
+            val isFullscreen = preferenceRepository.getDefaultFullscreenMode()
+
+            _tvPlayerState.update { current ->
+                current.copy(
+                    isFullscreen = isFullscreen,
+                    videoResizeMode = resizeMode,
                     videoRatioMode = ratioMode,
                     videoRatio = ratioMode.ratio,
                 )
             }
-        }
 
-        initPlayBack(
-            channelName = media,
-            channelGroup = group,
-        )
-    }
+            val name = tvPlayerState.value.currentChannel.channelName.ifBlank { channelName }
 
-    private fun initPlayBack(
-        channelName: String,
-        channelGroup: String,
-    ) {
-        viewModelScope.launch {
-            val channelList = getGroupChannelsUseCase(channelGroup, String.empty)
-            val currentPlaying = tvPlayerState.value.currentChannel.channelName
+            val currentItemPosition = getCurrentMediaPosition(channelName = name)
 
-            val name = currentPlaying.ifBlank { channelName }
-
-            val currentItemPosition =
-                getCurrentMediaPosition(
-                    channelName = name,
-                    channels = channelList,
-                )
-            val currentChannel = channelList[currentItemPosition]
-
-            _tvPlayerState.update { current ->
-                current.copy(
-                    channelGroup = channelGroup,
-                    mediaPosition = currentItemPosition,
-                    currentChannel = currentChannel,
-                )
-            }
-
-            _tvChannelState.value = channelList
-
-            loadSelectedChannelEpg()
-
-            loadAvailableChannelsEpg()
+            setCurrentChannel(channelIndex = currentItemPosition)
         }
     }
 
     private fun switchToChannel(channel: TvChannel) {
         viewModelScope.launch {
-            //   val channelsRefreshed = videoViewState.value.channels.items.withRefreshedEpg()
-            val currentChannels = tvChannelState.value
+            val newMediaPosition = getCurrentMediaPosition(channelName = channel.channelName)
 
-            val newMediaPosition =
-                getCurrentMediaPosition(
-                    channelName = channel.channelName,
-                    channels = currentChannels,
-                )
-
-            setCurrentChannel(currentMediaPosition = newMediaPosition)
+            setCurrentChannel(channelIndex = newMediaPosition)
         }
     }
 
-    fun processPlaybackActions(action: PlaybackActions) {
+    fun processPlaybackActions(action: UiActions) {
         when (action) {
-            PlaybackActions.OnNextSelected -> switchToNextChannel()
-            PlaybackActions.OnPreviousSelected -> switchToPreviousChannel()
-            PlaybackActions.OnChannelsUiToggle -> toggleChannelsVisibility()
-            PlaybackActions.OnEpgUiToggle -> toggleEpgVisibility()
-            PlaybackActions.OnFullScreenToggle -> toggleFullScreen()
-            PlaybackActions.OnVideoResizeToggle -> toggleVideoResizeMode()
-            PlaybackActions.OnVideoRatioToggle -> toggleVideoRatioMode()
-            PlaybackActions.OnChannelInfoUiToggle -> toggleChannelInfoVisibility()
-            PlaybackActions.OnFavoriteToggle -> toggleChannelFavorite()
-            PlaybackActions.OnPlaybackToggle -> togglePlayingState()
-            PlaybackActions.OnPlayerUiToggle -> toggleControlUiState()
-            PlaybackActions.OnVolumeDown -> decreaseVolume()
-            PlaybackActions.OnVolumeUp -> increaseVolume()
-            PlaybackActions.OnRestarted -> consumeRestart()
-            is PlaybackActions.OnChannelSelected -> switchToChannel(channel = action.channel)
+            UiActions.SelectNext -> switchToNextChannel()
+            UiActions.SelectPrevious -> switchToPreviousChannel()
+            UiActions.ToggleChannelsUi -> toggleChannelsVisibility()
+            UiActions.ToggleProgramsUi -> toggleEpgVisibility()
+            UiActions.ToggleFullScreen -> toggleFullScreen()
+            UiActions.ChangeVideoSize -> toggleVideoResizeMode()
+            UiActions.ChangeVideoRatio -> toggleVideoRatioMode()
+            UiActions.ToggleProgramInfoUi -> toggleChannelInfoVisibility()
+            UiActions.ToggleChannelFavorite -> toggleChannelFavorite()
+            UiActions.TogglePlayback -> togglePlayingState()
+            UiActions.TogglePlayerUi -> toggleControlUiState()
+            UiActions.VolumeDown -> decreaseVolume()
+            UiActions.VolumeUp -> increaseVolume()
+            is UiActions.SelectChannel -> switchToChannel(channel = action.channel)
+            is UiActions.OnVideoSizeChanged -> changeVideoRatio(ratio = action.videoRatio)
+            is UiActions.OnIsPlayingChanged -> changePlayingState(state = action.state)
+            is UiActions.OnPlaybackStateChanged -> changePlaybackState(state = action.state)
         }
     }
 
-    fun processPlaybackStateActions(action: PlaybackStateActions) {
-        when (action) {
-            is PlaybackStateActions.OnVideoSizeChanged -> {
-                _videoRatio = action.videoRatio
+    private fun changeVideoRatio(ratio: Float) {
+        val videoRatio = when {
+            tvPlayerState.value.videoRatioMode == RatioMode.Original -> ratio
+            else -> tvPlayerState.value.videoRatioMode.ratio
+        }
 
-                val ratio =
-                    if (tvPlayerState.value.videoRatioMode == RatioMode.Original) {
-                        _videoRatio
-                    } else {
-                        tvPlayerState.value.videoRatioMode.ratio
-                    }
+        _tvPlayerState.update { current ->
+            current.copy(videoRatio = videoRatio)
+        }
+    }
 
-                _tvPlayerState.update { current ->
-                    current.copy(videoRatio = ratio)
-                }
+    private fun changePlayingState(state: Boolean) {
+        _tvPlayerState.update { current ->
+            current.copy(isPlaying = state)
+        }
+    }
+
+    private fun changePlaybackState(state: PlaybackState) {
+        var isMediaPlayable = tvPlayerState.value.isMediaPlayable
+        val isBuffering = state == PlaybackState.PlaybackBuffering
+
+        when (state) {
+            is PlaybackState.PlaybackIdle -> {
+                isMediaPlayable = isMediaPlayable(state.errorCode)
             }
 
-            is PlaybackStateActions.OnIsPlayingChanged -> {
-                _tvPlayerState.update { current ->
-                    current.copy(isPlaying = action.state)
-                }
+            PlaybackState.PlaybackReady -> {
+                isMediaPlayable = true
             }
 
-            is PlaybackStateActions.OnMediaItemTransition -> {
-                triggerRestart()
+            else -> {
             }
+        }
 
-            is PlaybackStateActions.OnPlaybackStateChanged -> {
-                var isMediaPlayable = tvPlayerState.value.isMediaPlayable
-                val isBuffering = action.state == PlaybackState.PlaybackBuffering
-
-                when (action.state) {
-                    is PlaybackState.PlaybackIdle -> {
-                        isMediaPlayable = isMediaPlayable(action.state.errorCode)
-                    }
-
-                    PlaybackState.PlaybackReady -> {
-                        isMediaPlayable = true
-                    }
-
-                    else -> {
-                    }
-                }
-
-                _tvPlayerState.update { current ->
-                    current.copy(
-                        isMediaPlayable = isMediaPlayable,
-                        isBuffering = isBuffering,
-                    )
-                }
-            }
+        _tvPlayerState.update { current ->
+            current.copy(
+                isMediaPlayable = isMediaPlayable,
+                isBuffering = isBuffering,
+            )
         }
     }
 
@@ -218,73 +186,44 @@ class PlayerViewModel(
         val currentChannel = tvPlayerState.value.currentChannel
         if (currentChannel.programId.isNotBlank()) {
             val channelsEpgData = getChannelsEpgUseCase(channelId = currentChannel.programId)
-
-            val currentChannelWithEpg =
-                currentChannel.copy(
-                    programs = channelsEpgData,
-                )
+            val currentChannelWithEpg = currentChannel.copy(programs = channelsEpgData)
 
             _tvPlayerState.update { state ->
                 state.copy(currentChannel = currentChannelWithEpg)
             }
+
         }
     }
 
-    private suspend fun loadAvailableChannelsEpg() {
-        withContext(Dispatchers.IO) {
-            val currentChannels = tvChannelState.value
-            if (currentChannels.isNotEmpty()) {
-                val channelsIds =
-                    currentChannels
-                        .map { it.programId }
-                        .filter { it.isNotBlank() }
-
+    private fun refreshGroupChannelsPrograms() {
+        viewModelScope.launch(Dispatchers.IO) {
+            val currentChannels = tvPlayerState.value.groupChannels
+            val channelsIds = currentChannels.mapProgramIds()
+            if (channelsIds.isNotEmpty()) {
                 val channelsEpgData = getGroupChannelsEpgUseCase(channelsIds = channelsIds)
-
-                val channelsWithPrograms = currentChannels.map { ch ->
-                    val programs = channelsEpgData[ch.programId] ?: emptyList()
-                    ch.copy(programs = programs)
+                val channelsWithPrograms =
+                    currentChannels.mapPrograms(channelEpgMap = channelsEpgData)
+                _tvPlayerState.update { current ->
+                    current.copy(groupChannels = channelsWithPrograms)
                 }
-
-                _tvChannelState.value = channelsWithPrograms
             }
         }
     }
 
-    private fun getCurrentMediaPosition(
-        channelName: String,
-        channels: List<TvChannel>,
-    ): Int {
-        val currentPos = tvPlayerState.value.mediaPosition
+    private fun getCurrentMediaPosition(channelName: String): Int {
+        val currentPos = tvPlayerState.value.channelIndex
+        val groupChannels = tvPlayerState.value.groupChannels
 
-        val targetPos = channels.indexOfFirst { it.channelName == channelName }
+        val targetPos = groupChannels.indexOfFirst { it.channelName == channelName }
 
-        val mediaPosition =
-            if (targetPos > INT_NO_VALUE) {
-                targetPos
-            } else {
-                currentPos
-            }
+        val mediaPosition = targetPos.coerceAtLeast(currentPos)
 
         return mediaPosition
     }
 
-    private fun triggerRestart() {
-        _tvPlayerState.update { current ->
-            current.copy(isRestartRequired = true)
-        }
-        toggleControlUiState()
-    }
-
-    private fun consumeRestart() {
-        _tvPlayerState.update { current ->
-            current.copy(isRestartRequired = false)
-        }
-    }
-
     private fun switchToNextChannel() {
-        val currentChannelsCount = tvChannelState.value.count()
-        val nextIndex = tvPlayerState.value.mediaPosition + INT_VALUE_1
+        val currentChannelsCount = tvPlayerState.value.groupChannels.count()
+        val nextIndex = tvPlayerState.value.channelIndex + INT_VALUE_1
         val newMediaPosition =
             if (nextIndex > currentChannelsCount - INT_VALUE_1) {
                 INT_VALUE_ZERO
@@ -293,13 +232,14 @@ class PlayerViewModel(
             }
 
         viewModelScope.launch {
-            setCurrentChannel(currentMediaPosition = newMediaPosition)
+            setCurrentChannel(channelIndex = newMediaPosition)
         }
     }
 
     private fun switchToPreviousChannel() {
-        val currentChannelsCount = tvChannelState.value.count()
-        val nextIndex = tvPlayerState.value.mediaPosition - INT_VALUE_1
+        val currentChannelsCount = tvPlayerState.value.groupChannels.count()
+        val nextIndex = tvPlayerState.value.channelIndex - INT_VALUE_1
+
         val newMediaPosition =
             if (nextIndex < INT_VALUE_ZERO) {
                 currentChannelsCount - INT_VALUE_1
@@ -308,7 +248,7 @@ class PlayerViewModel(
             }
 
         viewModelScope.launch {
-            setCurrentChannel(currentMediaPosition = newMediaPosition)
+            setCurrentChannel(channelIndex = newMediaPosition)
         }
     }
 
@@ -336,15 +276,14 @@ class PlayerViewModel(
         }
     }
 
-    private suspend fun setCurrentChannel(currentMediaPosition: Int) {
-        val currentChannels = tvChannelState.value
-        val currentChannel = currentChannels[currentMediaPosition]
+    private suspend fun setCurrentChannel(channelIndex: Int) {
+        val currentChannels = tvPlayerState.value.groupChannels
+        val currentChannel = currentChannels[channelIndex]
 
         _tvPlayerState.update { current ->
             current.copy(
-                mediaPosition = currentMediaPosition,
+                channelIndex = channelIndex,
                 currentChannel = currentChannel,
-                // channels = TvPlaylistChannels(items = currentChannels),
                 isChannelsVisible = false,
             )
         }
@@ -354,34 +293,28 @@ class PlayerViewModel(
 
     private fun toggleChannelFavorite() {
         val currentChannel = tvPlayerState.value.currentChannel
-        val currentChannels = tvChannelState.value
-        val currentIndex = tvPlayerState.value.mediaPosition
 
         // todo
-        val currentChannelFavoriteChanged =
+        val updatedChannel =
             currentChannel.copy(
                 // isInFavorites = !currentChannel.isInFavorites,
             )
 
-        val updatedFavoriteChangedChannels =
-            currentChannels.mapIndexed { index, channel ->
-                if (index == currentIndex) {
-                    currentChannelFavoriteChanged
-                } else {
-                    channel
-                }
-            }
+
+        // val channelWithEpg = currentChannel.toggleFavorite(type = type)
+
+        val updatedChannels = tvPlayerState.value.groupChannels
+            .replaceUpdated(channel = updatedChannel)
 
         viewModelScope.launch {
             _tvPlayerState.update { current ->
                 current.copy(
-                    currentChannel = currentChannelFavoriteChanged,
+                    currentChannel = updatedChannel,
+                    groupChannels = updatedChannels,
                 )
             }
 
-            _tvChannelState.value = updatedFavoriteChangedChannels
-
-            toggleFavoriteChannelUseCase(channel = currentChannel)
+            toggleFavoriteChannelUseCase(channel = updatedChannel)
         }
     }
 
@@ -453,7 +386,7 @@ class PlayerViewModel(
 
             val nextRatio =
                 if (nextMode == RatioMode.Original) {
-                    _videoRatio
+                    tvPlayerState.value.videoRatio
                 } else {
                     nextMode.ratio
                 }

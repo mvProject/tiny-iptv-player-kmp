@@ -41,7 +41,9 @@ interface GroupChannelsContract {
     }
 
     sealed interface UiEffect {
-        data class NavigateToSelected(val name: String, val group: String) : UiEffect
+        data class NavigateToSelected(val name: String, val group: String, val groupType: String) :
+            UiEffect
+
         data object NavigateBack : UiEffect
     }
 }

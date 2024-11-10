@@ -81,7 +81,7 @@ internal fun ChannelPrograms(
         ) {
             items(
                 items = programs,
-                key = { program -> program.key },
+                key = { program -> program.programId },
             ) { program ->
                 ChannelProgramItem(program = program)
             }

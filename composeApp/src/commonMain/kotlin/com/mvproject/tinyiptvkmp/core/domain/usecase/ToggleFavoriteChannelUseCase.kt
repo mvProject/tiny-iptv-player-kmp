@@ -7,10 +7,7 @@ import com.mvproject.tinyiptvkmp.core.domain.model.TvChannel
 class ToggleFavoriteChannelUseCase(
     private val favoriteChannelsRepository: FavoriteChannelsRepository,
 ) {
-    suspend operator fun invoke(
-        channel: TvChannel,
-        favoriteType: FavoriteType = FavoriteType.COMMON,
-    ) {
+    suspend operator fun invoke(channel: TvChannel) {
         val isFavorite = channel.favoriteType != FavoriteType.NONE
 
         if (isFavorite) {
@@ -19,7 +16,7 @@ class ToggleFavoriteChannelUseCase(
             favoriteChannelsRepository.addChannelToFavorite(
                 channelName = channel.channelName,
                 channelUrl = channel.channelUrl,
-                favoriteType = favoriteType,
+                favoriteType = channel.favoriteType,
             )
         }
     }

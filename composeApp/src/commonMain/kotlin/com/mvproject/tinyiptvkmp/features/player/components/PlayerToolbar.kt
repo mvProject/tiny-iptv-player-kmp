@@ -32,7 +32,7 @@ import com.mvproject.tinyiptvkmp.core.theme.dimens
 import com.mvproject.tinyiptvkmp.core.ui.indicators.ProgramProgressIndicator
 import com.mvproject.tinyiptvkmp.core.ui.modifiers.roundedHeader
 import com.mvproject.tinyiptvkmp.core.ui.views.TimeItem
-import com.mvproject.tinyiptvkmp.features.player.action.PlaybackActions
+import com.mvproject.tinyiptvkmp.features.player.action.UiActions
 
 @Composable
 fun PlayerToolbar(
@@ -43,7 +43,7 @@ fun PlayerToolbar(
     isPlaying: Boolean = false,
     isFullScreen: Boolean = false,
     onPlaybackClose: () -> Unit = {},
-    onPlaybackAction: (PlaybackActions) -> Unit = {},
+    onUiAction: (UiActions) -> Unit = {},
 ) {
     AnimatedVisibility(
         visible = isVisible,
@@ -86,7 +86,7 @@ fun PlayerToolbar(
                     isFavorite = currentChannel.favoriteType != FavoriteType.NONE,
                     isPlaying = isPlaying,
                     isFullScreen = isFullScreen,
-                    onPlaybackAction = onPlaybackAction,
+                    onPlaybackAction = onUiAction,
                     onPlaybackClose = onPlaybackClose,
                 )
             }

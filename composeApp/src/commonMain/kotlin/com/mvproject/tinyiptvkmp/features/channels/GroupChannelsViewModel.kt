@@ -24,6 +24,10 @@ import com.mvproject.tinyiptvkmp.core.domain.usecase.GetChannelsEpgUseCase
 import com.mvproject.tinyiptvkmp.core.domain.usecase.GetGroupChannelsEpgUseCase
 import com.mvproject.tinyiptvkmp.core.domain.usecase.GetGroupChannelsUseCase
 import com.mvproject.tinyiptvkmp.core.domain.usecase.ToggleFavoriteChannelUseCase
+import com.mvproject.tinyiptvkmp.core.domain.utils.ChannelsUtils.mapProgramIds
+import com.mvproject.tinyiptvkmp.core.domain.utils.ChannelsUtils.mapPrograms
+import com.mvproject.tinyiptvkmp.core.domain.utils.ChannelsUtils.replaceUpdated
+import com.mvproject.tinyiptvkmp.core.domain.utils.ChannelsUtils.toggleFavorite
 import com.mvproject.tinyiptvkmp.features.channels.GroupChannelsContract.UiAction
 import com.mvproject.tinyiptvkmp.features.channels.GroupChannelsContract.UiEffect
 import com.mvproject.tinyiptvkmp.features.channels.GroupChannelsContract.UiState
@@ -70,7 +74,8 @@ class GroupChannelsViewModel(
             is UiAction.NavigateToSelected -> viewModelScope.postUiEffect(
                 UiEffect.NavigateToSelected(
                     name = uiAction.name,
-                    group = uiAction.group
+                    group = uiAction.group,
+                    groupType = type
                 )
             )
 
@@ -98,18 +103,10 @@ class GroupChannelsViewModel(
     private suspend fun refreshEpgPrograms() {
         if (TimeUtils.actualDate - lastRefresh > 1.minutes.inWholeMilliseconds) {
             val channels = uiState.value.channels
-            if (channels.isNotEmpty()) {
-                val channelsIds =
-                    channels
-                        .map { it.programId }
-                        .filter { it.isNotBlank() }
-
+            val channelsIds = channels.mapProgramIds()
+            if (channelsIds.isNotEmpty()) {
                 val channelsEpgData = getGroupChannelsEpgUseCase(channelsIds = channelsIds)
-
-                val channelsWithPrograms = channels.map { ch ->
-                    val programs = channelsEpgData[ch.programId] ?: emptyList()
-                    ch.copy(programs = programs)
-                }
+                val channelsWithPrograms = channels.mapPrograms(channelEpgMap = channelsEpgData)
 
                 updateUiState {
                     copy(channels = channelsWithPrograms)
@@ -162,38 +159,16 @@ class GroupChannelsViewModel(
         viewModelScope.launch(Dispatchers.IO) {
             Logger.w("testing toggleFavorites type $type")
 
-            val channelWithEpg = channel.toggleFavorite(type = type)
+            val updatedChannel = channel.toggleFavorite(type = type)
 
             val updatedChannels = uiState.value.channels
-                .replaceUpdated(channel = channelWithEpg)
+                .replaceUpdated(channel = updatedChannel)
 
             updateUiState {
                 copy(channels = updatedChannels)
             }
 
-            toggleFavoriteChannelUseCase(
-                channel = channel,
-                favoriteType = channelWithEpg.favoriteType
-            )
+            toggleFavoriteChannelUseCase(channel = channel)
         }
-    }
-
-    private fun TvChannel.toggleFavorite(
-        type: FavoriteType
-    ): TvChannel {
-        val favType =
-            if (this.favoriteType == type) {
-                FavoriteType.NONE
-            } else {
-                type
-            }
-        return this.copy(favoriteType = favType)
-    }
-
-    private fun List<TvChannel>.replaceUpdated(
-        channel: TvChannel
-    ): List<TvChannel> {
-        val index = this.indexOfFirst { it.channelName == channel.channelName }
-        return this.toMutableList().apply { set(index, channel) }
     }
 }

@@ -24,7 +24,7 @@ fun NavHostController.navigateToGroupChannels(
 
 fun NavGraphBuilder.groupChannels(
     onNavigateBack: () -> Unit,
-    onNavigateSelected: (String, String) -> Unit,
+    onNavigateSelected: (String, String, String) -> Unit,
 ) {
     composable<AppRoutes.TvPlaylistChannels> {
         val groupChannelsViewModel = koinViewModel<GroupChannelsViewModel>()

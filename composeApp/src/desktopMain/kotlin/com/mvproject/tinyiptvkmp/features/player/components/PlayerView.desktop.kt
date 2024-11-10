@@ -24,8 +24,7 @@ import com.mvproject.tinyiptvkmp.core.common.AppConstants.INT_VALUE_2
 import com.mvproject.tinyiptvkmp.core.common.AppConstants.INT_VALUE_4
 import com.mvproject.tinyiptvkmp.core.common.AppConstants.INT_VALUE_ZERO
 import com.mvproject.tinyiptvkmp.core.common.AppConstants.LONG_VALUE_ZERO
-import com.mvproject.tinyiptvkmp.features.player.action.PlaybackActions
-import com.mvproject.tinyiptvkmp.features.player.action.PlaybackStateActions
+import com.mvproject.tinyiptvkmp.features.player.action.UiActions
 import com.mvproject.tinyiptvkmp.features.player.state.PlaybackState
 import com.mvproject.tinyiptvkmp.features.player.state.TvPlayerState
 import org.jetbrains.skia.Bitmap
@@ -44,20 +43,19 @@ import java.nio.ByteBuffer
 actual fun PlayerView(
     modifier: Modifier,
     tvPlayerState: TvPlayerState,
-    onPlaybackAction: (PlaybackActions) -> Unit,
-    onPlaybackStateAction: (PlaybackStateActions) -> Unit,
+    onUiAction: (UiActions) -> Unit,
 ) {
     // todo network Available check
 
     val videoPlayerState = remember { VideoPlayerStateImpl() }
 
-    LaunchedEffect(tvPlayerState.isRestartRequired) {
-        if (tvPlayerState.isRestartRequired) {
-            // todo player restart
-            videoPlayerState.restartPlayer()
-            onPlaybackAction(PlaybackActions.OnRestarted)
-        }
-    }
+    /*    LaunchedEffect(tvPlayerState.isRestartRequired) {
+            if (tvPlayerState.isRestartRequired) {
+                // todo player restart
+                videoPlayerState.restartPlayer()
+                onPlaybackAction(UiActions.Restart)
+            }
+        }*/
 
     LaunchedEffect(tvPlayerState.isFullscreen) {
         // todo handle fullscreen state
@@ -67,8 +65,8 @@ actual fun PlayerView(
         videoPlayerState.setVolume(tvPlayerState.currentVolume)
     }
 
-    LaunchedEffect(tvPlayerState.mediaPosition) {
-        if (tvPlayerState.mediaPosition > INT_NO_VALUE) {
+    LaunchedEffect(tvPlayerState.channelIndex) {
+        if (tvPlayerState.channelIndex > INT_NO_VALUE) {
             videoPlayerState.setPlayerChannel(
                 channelName = tvPlayerState.currentChannel.channelName,
                 channelUrl = tvPlayerState.currentChannel.channelUrl
@@ -86,7 +84,7 @@ actual fun PlayerView(
             .aspectRatio(videoPlayerState.aspectRatio),
         state = videoPlayerState,
         url = tvPlayerState.currentChannel.channelUrl,
-        onPlaybackStateAction = onPlaybackStateAction
+        onPlaybackAction = onUiAction
     )
 
 
@@ -159,7 +157,7 @@ fun VideoPlayerDirect(
     modifier: Modifier = Modifier,
     state: VideoPlayerStateImpl = remember { VideoPlayerStateImpl() },
     url: String,
-    onPlaybackStateAction: (PlaybackStateActions) -> Unit = {}
+    onPlaybackAction: (UiActions) -> Unit
 ) {
     NativeDiscovery().discover()
 
@@ -174,18 +172,18 @@ fun VideoPlayerDirect(
                     Logger.i("testing audioTrack info: $info")
                 }
 
-                onPlaybackStateAction(
-                    PlaybackStateActions.OnPlaybackStateChanged(PlaybackState.PlaybackReady)
+                onPlaybackAction(
+                    UiActions.OnPlaybackStateChanged(PlaybackState.PlaybackReady)
                 )
             }
 
             override fun mediaChanged(mediaPlayer: MediaPlayer, media: MediaRef?) {
-                onPlaybackStateAction(
-                    PlaybackStateActions.OnMediaItemTransition(
-                        mediaTitle = "",
-                        index = 1
-                    )
-                )
+                //onAction(
+                //    UiActions.OnMediaItemTransition(
+                //        mediaTitle = "",
+                //        index = 1
+                //    )
+                //)
             }
 
             override fun buffering(mediaPlayer: MediaPlayer, newCache: Float) {
@@ -199,23 +197,23 @@ fun VideoPlayerDirect(
 
             override fun playing(mediaPlayer: MediaPlayer) {
                 mediaPlayer.status().isPlaying.let { isPlaying ->
-                    onPlaybackStateAction(
-                        PlaybackStateActions.OnIsPlayingChanged(isPlaying)
+                    onPlaybackAction(
+                        UiActions.OnIsPlayingChanged(isPlaying)
                     )
                 }
             }
 
             override fun paused(mediaPlayer: MediaPlayer) {
                 mediaPlayer.status().isPlaying.let { isPlaying ->
-                    onPlaybackStateAction(
-                        PlaybackStateActions.OnIsPlayingChanged(isPlaying)
+                    onPlaybackAction(
+                        UiActions.OnIsPlayingChanged(isPlaying)
                     )
                 }
             }
 
             override fun stopped(mediaPlayer: MediaPlayer) {
-                onPlaybackStateAction(
-                    PlaybackStateActions.OnPlaybackStateChanged(PlaybackState.PlaybackEnded)
+                onPlaybackAction(
+                    UiActions.OnPlaybackStateChanged(PlaybackState.PlaybackEnded)
                 )
             }
         }

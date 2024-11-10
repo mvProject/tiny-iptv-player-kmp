@@ -8,8 +8,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.viewinterop.AndroidView
 import androidx.lifecycle.compose.LifecycleStartEffect
 import com.mvproject.tinyiptvkmp.core.common.AppConstants
-import com.mvproject.tinyiptvkmp.features.player.action.PlaybackActions
-import com.mvproject.tinyiptvkmp.features.player.action.PlaybackStateActions
+import com.mvproject.tinyiptvkmp.features.player.action.UiActions
 import com.mvproject.tinyiptvkmp.features.player.state.TvPlayerState
 import com.mvproject.tinyiptvkmp.ui.rememberPlayerState
 
@@ -17,8 +16,7 @@ import com.mvproject.tinyiptvkmp.ui.rememberPlayerState
 actual fun PlayerView(
     modifier: Modifier,
     tvPlayerState: TvPlayerState,
-    onPlaybackAction: (PlaybackActions) -> Unit,
-    onPlaybackStateAction: (PlaybackStateActions) -> Unit,
+    onUiAction: (UiActions) -> Unit
 ) {
     // todo network Available check
     // val connection by networkConnectionState()
@@ -31,25 +29,26 @@ actual fun PlayerView(
     // }
 
     val playerState = rememberPlayerState(
-        onPlaybackStateAction = onPlaybackStateAction,
+        onPlaybackAction = onUiAction,
     )
 
-    LaunchedEffect(tvPlayerState.isRestartRequired) {
-        if (tvPlayerState.isRestartRequired) {
-            playerState.restartPlayer()
-            onPlaybackAction(PlaybackActions.OnRestarted)
-        }
-    }
+    //LaunchedEffect(tvPlayerState.isRestartRequired) {
+    //    if (tvPlayerState.isRestartRequired) {
+    //        playerState.restartPlayer()
+    //        onPlaybackAction(UiActions.Restart)
+    //    }
+    //}
 
     LaunchedEffect(tvPlayerState.currentVolume) {
         playerState.setVolume(tvPlayerState.currentVolume)
     }
 
-    LaunchedEffect(tvPlayerState.mediaPosition) {
-        if (tvPlayerState.mediaPosition > AppConstants.INT_NO_VALUE) {
+    LaunchedEffect(tvPlayerState.channelIndex) {
+        if (tvPlayerState.channelIndex > AppConstants.INT_NO_VALUE) {
             playerState.setPlayerChannel(
                 channelUrl = tvPlayerState.currentChannel.channelUrl,
             )
+            //playerState.restartPlayer()
         }
     }
 

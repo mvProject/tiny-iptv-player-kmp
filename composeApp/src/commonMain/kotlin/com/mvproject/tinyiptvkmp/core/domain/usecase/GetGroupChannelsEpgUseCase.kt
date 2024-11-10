@@ -2,7 +2,7 @@ package com.mvproject.tinyiptvkmp.core.domain.usecase
 
 import com.mvproject.tinyiptvkmp.core.common.utils.TimeUtils
 import com.mvproject.tinyiptvkmp.core.data.repository.EpgProgramRepository
-import com.mvproject.tinyiptvkmp.core.domain.model.EpgProgram
+import com.mvproject.tinyiptvkmp.core.domain.utils.ChannelEpgMap
 
 class GetGroupChannelsEpgUseCase(
     private val epgProgramRepository: EpgProgramRepository,
@@ -23,4 +23,3 @@ class GetGroupChannelsEpgUseCase(
         return groupedProgramsByIds
     }
 }
-typealias ChannelEpgMap = Map<String, List<EpgProgram>>

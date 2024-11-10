@@ -11,11 +11,10 @@ import android.content.Context
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.remember
 import androidx.compose.ui.platform.LocalContext
-import androidx.media3.common.MediaItem
 import androidx.media3.common.Player
 import androidx.media3.common.VideoSize
 import androidx.media3.exoplayer.ExoPlayer
-import com.mvproject.tinyiptvkmp.features.player.action.PlaybackStateActions
+import com.mvproject.tinyiptvkmp.features.player.action.UiActions
 import com.mvproject.tinyiptvkmp.utils.ExoPlayerUtils.createMediaItem
 import com.mvproject.tinyiptvkmp.utils.ExoPlayerUtils.createVideoPlayer
 import com.mvproject.tinyiptvkmp.utils.ExoPlayerUtils.mapToVideoPlaybackState
@@ -28,11 +27,11 @@ import com.mvproject.tinyiptvkmp.utils.ExoPlayerUtils.mapToVideoPlaybackState
 @Composable
 internal fun rememberPlayerState(
     context: Context = LocalContext.current,
-    onPlaybackStateAction: (PlaybackStateActions) -> Unit = {},
+    onPlaybackAction: (UiActions) -> Unit = {},
 ) = remember {
     PlayerStateImpl(
         player = createVideoPlayer(context),
-        onPlaybackStateAction = onPlaybackStateAction,
+        onPlaybackAction = onPlaybackAction,
     ).also { playerState ->
         playerState.player.apply {
             addListener(playerState)
@@ -42,28 +41,28 @@ internal fun rememberPlayerState(
 
 class PlayerStateImpl(
     val player: ExoPlayer,
-    private val onPlaybackStateAction: (PlaybackStateActions) -> Unit = {},
+    private val onPlaybackAction: (UiActions) -> Unit = {},
 ) : PlayerState, Player.Listener {
     override fun setVolume(value: Float) {
         player.volume = value
     }
 
-    override fun onMediaItemTransition(
-        mediaItem: MediaItem?,
-        reason: Int,
-    ) {
-        val data = mediaItem?.mediaMetadata?.displayTitle.toString()
-        onPlaybackStateAction(
-            PlaybackStateActions.OnMediaItemTransition(
-                mediaTitle = data,
-                index = player.currentMediaItemIndex,
-            ),
-        )
-    }
+    /*    override fun onMediaItemTransition(
+            mediaItem: MediaItem?,
+            reason: Int,
+        ) {
+            val data = mediaItem?.mediaMetadata?.displayTitle.toString()
+            onPlaybackStateAction(
+                PlaybackStateActions.OnMediaItemTransition(
+                    mediaTitle = data,
+                    index = player.currentMediaItemIndex,
+                ),
+            )
+        }*/
 
     override fun onIsPlayingChanged(isPlaying: Boolean) {
-        onPlaybackStateAction(
-            PlaybackStateActions.OnIsPlayingChanged(isPlaying),
+        onPlaybackAction(
+            UiActions.OnIsPlayingChanged(isPlaying),
         )
     }
 
@@ -74,14 +73,14 @@ class PlayerStateImpl(
                 errorCode = player.playerError?.errorCode,
             )
 
-        onPlaybackStateAction(
-            PlaybackStateActions.OnPlaybackStateChanged(state),
+        onPlaybackAction(
+            UiActions.OnPlaybackStateChanged(state),
         )
     }
 
     override fun onVideoSizeChanged(videoSize: VideoSize) {
-        onPlaybackStateAction(
-            PlaybackStateActions.OnVideoSizeChanged(
+        onPlaybackAction(
+            UiActions.OnVideoSizeChanged(
                 videoSize.height,
                 videoSize.width,
                 videoSize.pixelWidthHeightRatio,

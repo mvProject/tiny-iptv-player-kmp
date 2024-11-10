@@ -45,7 +45,7 @@ import com.mvproject.tinyiptvkmp.features.channels.components.OverlayChannelOpti
 @Composable
 internal fun GroupChannelsScreen(
     viewModel: GroupChannelsViewModel,
-    onNavigateSelected: (String, String) -> Unit,
+    onNavigateSelected: (String, String, String) -> Unit,
     onNavigateBack: () -> Unit,
 ) {
     LifecycleResumeEffect(Unit) {
@@ -60,7 +60,7 @@ internal fun GroupChannelsScreen(
         when (it) {
             UiEffect.NavigateBack -> onNavigateBack()
             is UiEffect.NavigateToSelected ->
-                onNavigateSelected(it.name, it.group)
+                onNavigateSelected(it.name, it.group, it.groupType)
         }
     }
 

@@ -25,7 +25,7 @@ import androidx.compose.ui.Modifier
 import com.mvproject.tinyiptvkmp.core.theme.dimens
 import com.mvproject.tinyiptvkmp.core.ui.buttons.ControlButton
 import com.mvproject.tinyiptvkmp.core.ui.modifiers.SpacerWidth
-import com.mvproject.tinyiptvkmp.features.player.action.PlaybackActions
+import com.mvproject.tinyiptvkmp.features.player.action.UiActions
 
 @Composable
 fun PlayerControls(
@@ -33,7 +33,7 @@ fun PlayerControls(
     isFavorite: Boolean,
     isPlaying: Boolean,
     isFullScreen: Boolean,
-    onPlaybackAction: (PlaybackActions) -> Unit = {},
+    onPlaybackAction: (UiActions) -> Unit = {},
     onPlaybackClose: () -> Unit = {},
 ) {
     Row(
@@ -44,12 +44,12 @@ fun PlayerControls(
         AdditionalPlayerControls(
             modifier = Modifier,
             action = onPlaybackClose,
-            onPlaybackAction = onPlaybackAction,
+            onClick = onPlaybackAction,
         )
 
         ControlButton(
             imageVector = if (isPlaying) Icons.Rounded.Pause else Icons.Rounded.PlayArrow,
-            onClick = { onPlaybackAction(PlaybackActions.OnPlaybackToggle) },
+            onClick = { onPlaybackAction(UiActions.TogglePlayback) },
         )
 
         Row(
@@ -59,25 +59,25 @@ fun PlayerControls(
         ) {
             ControlButton(
                 imageVector = if (isFavorite) Icons.Rounded.Favorite else Icons.Rounded.FavoriteBorder,
-                onClick = { onPlaybackAction(PlaybackActions.OnFavoriteToggle) },
+                onClick = { onPlaybackAction(UiActions.ToggleChannelFavorite) },
             )
 
             SpacerWidth(width = MaterialTheme.dimens.size8)
             ControlButton(
                 imageVector = Icons.Rounded.AspectRatio,
-                onClick = { onPlaybackAction(PlaybackActions.OnVideoRatioToggle) },
+                onClick = { onPlaybackAction(UiActions.ChangeVideoRatio) },
             )
 
             SpacerWidth(width = MaterialTheme.dimens.size8)
             ControlButton(
                 imageVector = Icons.Rounded.Crop,
-                onClick = { onPlaybackAction(PlaybackActions.OnVideoResizeToggle) },
+                onClick = { onPlaybackAction(UiActions.ChangeVideoSize) },
             )
 
             SpacerWidth(width = MaterialTheme.dimens.size8)
             ControlButton(
                 imageVector = if (isFullScreen) Icons.Rounded.FullscreenExit else Icons.Rounded.Fullscreen,
-                onClick = { onPlaybackAction(PlaybackActions.OnFullScreenToggle) },
+                onClick = { onPlaybackAction(UiActions.ToggleFullScreen) },
             )
         }
     }

@@ -54,7 +54,7 @@ fun ChannelView(
         content = {
             items(
                 items = items,
-                key = { chn -> chn.hashCode() },
+                key = { chn -> "${chn.channelName}${chn.channelUrl}" },
             ) { item ->
                 when (viewType) {
                     ChannelsViewType.LIST -> {

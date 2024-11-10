@@ -16,14 +16,15 @@ import com.mvproject.tinyiptvkmp.navigation.AppRoutes
 import org.koin.compose.viewmodel.koinViewModel
 
 fun NavHostController.navigateToPlayer(
-    mediaName: String,
-    mediaGroup: String,
+    channelName: String,
+    group: String,
+    groupType: String,
 ) {
-    this.navigate(AppRoutes.VideoView(mediaName = mediaName, mediaGroup = mediaGroup))
+    this.navigate(AppRoutes.Player(channelName = channelName, group = group, groupType = groupType))
 }
 
 fun NavGraphBuilder.player(onNavigateBack: () -> Unit) {
-    composable<AppRoutes.VideoView>{
+    composable<AppRoutes.Player> {
         val playerViewModel = koinViewModel<PlayerViewModel>()
 
         PlayerScreen(
