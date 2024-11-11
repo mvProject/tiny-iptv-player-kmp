@@ -7,11 +7,13 @@
 
 package com.mvproject.tinyiptvkmp.features.player
 
+import androidx.compose.runtime.Immutable
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import androidx.navigation.toRoute
 import co.touchlab.kermit.Logger
+import com.mvproject.tinyiptvkmp.core.common.AppConstants
 import com.mvproject.tinyiptvkmp.core.common.AppConstants.DELAY_50
 import com.mvproject.tinyiptvkmp.core.common.AppConstants.FLOAT_STEP_VOLUME
 import com.mvproject.tinyiptvkmp.core.common.AppConstants.FLOAT_VALUE_1
@@ -20,8 +22,9 @@ import com.mvproject.tinyiptvkmp.core.common.AppConstants.INT_VALUE_1
 import com.mvproject.tinyiptvkmp.core.common.AppConstants.INT_VALUE_ZERO
 import com.mvproject.tinyiptvkmp.core.common.AppConstants.UI_SHOW_DELAY
 import com.mvproject.tinyiptvkmp.core.common.AppConstants.VOLUME_SHOW_DELAY
-import com.mvproject.tinyiptvkmp.core.common.mvi.MVI
-import com.mvproject.tinyiptvkmp.core.common.mvi.mvi
+import com.mvproject.tinyiptvkmp.core.common.mvi.MviCore
+import com.mvproject.tinyiptvkmp.core.common.mvi.mviCore
+import com.mvproject.tinyiptvkmp.core.common.utils.CommonUtils.empty
 import com.mvproject.tinyiptvkmp.core.datastore.repository.PreferenceRepository
 import com.mvproject.tinyiptvkmp.core.domain.enums.RatioMode
 import com.mvproject.tinyiptvkmp.core.domain.enums.ResizeMode
@@ -33,9 +36,6 @@ import com.mvproject.tinyiptvkmp.core.domain.usecase.ToggleFavoriteChannelUseCas
 import com.mvproject.tinyiptvkmp.core.domain.utils.ChannelsUtils.mapProgramIds
 import com.mvproject.tinyiptvkmp.core.domain.utils.ChannelsUtils.mapPrograms
 import com.mvproject.tinyiptvkmp.core.domain.utils.ChannelsUtils.replaceUpdated
-import com.mvproject.tinyiptvkmp.features.player.PlayerContract.UiAction
-import com.mvproject.tinyiptvkmp.features.player.PlayerContract.UiEffect
-import com.mvproject.tinyiptvkmp.features.player.PlayerContract.UiState
 import com.mvproject.tinyiptvkmp.features.player.components.isMediaPlayable
 import com.mvproject.tinyiptvkmp.navigation.AppRoutes
 import kotlinx.coroutines.Dispatchers
@@ -50,7 +50,8 @@ class PlayerViewModel(
     private val toggleFavoriteChannelUseCase: ToggleFavoriteChannelUseCase,
     private val getChannelsEpgUseCase: GetChannelsEpgUseCase,
     private val getGroupChannelsEpgUseCase: GetGroupChannelsEpgUseCase,
-) : ViewModel(), MVI<UiState, UiAction, UiEffect> by mvi(UiState()) {
+) : ViewModel(),
+    MviCore<PlayerUiState, PlayerUiAction, PlayerUiEffect> by mviCore(PlayerUiState()) {
 
     private val args = savedStateHandle.toRoute<AppRoutes.Player>()
     private val media = args.channelName
@@ -116,26 +117,26 @@ class PlayerViewModel(
         }
     }
 
-    override fun onAction(uiAction: UiAction) {
+    override fun onAction(uiAction: PlayerUiAction) {
         when (uiAction) {
-            UiAction.SelectNext -> switchToNextChannel()
-            UiAction.SelectPrevious -> switchToPreviousChannel()
-            UiAction.ToggleChannelsUi -> toggleChannelsVisibility()
-            UiAction.ToggleProgramsUi -> toggleEpgVisibility()
-            UiAction.ToggleFullScreen -> toggleFullScreen()
-            UiAction.ChangeVideoSize -> toggleVideoResizeMode()
-            UiAction.ChangeVideoRatio -> toggleVideoRatioMode()
-            UiAction.ToggleProgramInfoUi -> toggleChannelInfoVisibility()
-            UiAction.ToggleChannelFavorite -> toggleChannelFavorite()
-            UiAction.TogglePlayback -> togglePlayingState()
-            UiAction.TogglePlayerUi -> toggleControlUiState()
-            UiAction.VolumeDown -> decreaseVolume()
-            UiAction.VolumeUp -> increaseVolume()
-            is UiAction.SelectChannel -> switchToChannel(channel = uiAction.channel)
-            is UiAction.OnVideoSizeChanged -> changeVideoRatio(ratio = uiAction.videoRatio)
-            is UiAction.OnIsPlayingChanged -> changePlayingState(state = uiAction.state)
-            is UiAction.OnPlaybackStateChanged -> changePlaybackState(state = uiAction.state)
-            UiAction.NavigateBack -> viewModelScope.postUiEffect(UiEffect.OnNavigateBack)
+            PlayerUiAction.SelectNext -> switchToNextChannel()
+            PlayerUiAction.SelectPrevious -> switchToPreviousChannel()
+            PlayerUiAction.ToggleChannelsUi -> toggleChannelsVisibility()
+            PlayerUiAction.ToggleProgramsUi -> toggleEpgVisibility()
+            PlayerUiAction.ToggleFullScreen -> toggleFullScreen()
+            PlayerUiAction.ChangeVideoSize -> toggleVideoResizeMode()
+            PlayerUiAction.ChangeVideoRatio -> toggleVideoRatioMode()
+            PlayerUiAction.ToggleProgramInfoUi -> toggleChannelInfoVisibility()
+            PlayerUiAction.ToggleChannelFavorite -> toggleChannelFavorite()
+            PlayerUiAction.TogglePlayback -> togglePlayingState()
+            PlayerUiAction.TogglePlayerUi -> toggleControlUiState()
+            PlayerUiAction.VolumeDown -> decreaseVolume()
+            PlayerUiAction.VolumeUp -> increaseVolume()
+            is PlayerUiAction.SelectChannel -> switchToChannel(channel = uiAction.channel)
+            is PlayerUiAction.OnVideoSizeChanged -> changeVideoRatio(ratio = uiAction.videoRatio)
+            is PlayerUiAction.OnIsPlayingChanged -> changePlayingState(state = uiAction.state)
+            is PlayerUiAction.OnPlaybackStateChanged -> changePlaybackState(state = uiAction.state)
+            PlayerUiAction.NavigateBack -> viewModelScope.postUiEffect(PlayerUiEffect.OnNavigateBack)
         }
     }
 
@@ -156,16 +157,16 @@ class PlayerViewModel(
         }
     }
 
-    private fun changePlaybackState(state: PlayerPlaybackState) {
+    private fun changePlaybackState(state: PlayerUiState.PlayerPlaybackState) {
         var isMediaPlayable = uiState.value.isMediaPlayable
-        val isBuffering = state == PlayerPlaybackState.PlaybackBuffering
+        val isBuffering = state == PlayerUiState.PlayerPlaybackState.PlaybackBuffering
 
         when (state) {
-            is PlayerPlaybackState.PlaybackIdle -> {
+            is PlayerUiState.PlayerPlaybackState.PlaybackIdle -> {
                 isMediaPlayable = isMediaPlayable(state.errorCode)
             }
 
-            PlayerPlaybackState.PlaybackReady -> {
+            PlayerUiState.PlayerPlaybackState.PlaybackReady -> {
                 isMediaPlayable = true
             }
 
@@ -417,4 +418,61 @@ class PlayerViewModel(
         pollVolumeJob?.cancel()
         pollVolumeJob = null
     }
+}
+
+@Immutable
+data class PlayerUiState(
+    val channelGroup: String = String.empty,
+    val currentChannel: TvChannel = TvChannel(),
+    val isControlUiVisible: Boolean = false,
+    val isVolumeUiVisible: Boolean = false,
+    val isEpgVisible: Boolean = false,
+    val isChannelsVisible: Boolean = false,
+    val isChannelInfoVisible: Boolean = false,
+    val isFullscreen: Boolean = false,
+    val isPlaying: Boolean = false,
+    val currentVolume: Float = 0.5f,
+    val isBuffering: Boolean = false,
+    val isMediaPlayable: Boolean = true,
+    val isOnline: Boolean = true,
+    val videoRatioMode: RatioMode = RatioMode.WideScreen,
+    val videoRatio: Float = RatioMode.WideScreen.ratio,
+    val videoResizeMode: ResizeMode = ResizeMode.Fit,
+    val channelIndex: Int = AppConstants.INT_NO_VALUE,
+    val groupChannels: List<TvChannel> = emptyList(),
+) {
+    sealed interface PlayerPlaybackState {
+        data object PlaybackReady : PlayerPlaybackState
+        data object PlaybackEnded : PlayerPlaybackState
+        data object PlaybackBuffering : PlayerPlaybackState
+        data class PlaybackIdle(val errorCode: Int?) : PlayerPlaybackState
+    }
+}
+
+sealed interface PlayerUiAction {
+    data object NavigateBack : PlayerUiAction
+    data object TogglePlayback : PlayerUiAction
+    data object ChangeVideoSize : PlayerUiAction
+    data object ChangeVideoRatio : PlayerUiAction
+    data object ToggleFullScreen : PlayerUiAction
+    data object ToggleChannelFavorite : PlayerUiAction
+    data object TogglePlayerUi : PlayerUiAction
+    data object ToggleProgramsUi : PlayerUiAction
+    data object ToggleChannelsUi : PlayerUiAction
+    data object ToggleProgramInfoUi : PlayerUiAction
+    data object SelectNext : PlayerUiAction
+    data object SelectPrevious : PlayerUiAction
+    data object VolumeUp : PlayerUiAction
+    data object VolumeDown : PlayerUiAction
+
+    data class SelectChannel(val channel: TvChannel) : PlayerUiAction
+    data class OnVideoSizeChanged(val height: Int, val width: Int, val videoRatio: Float) :
+        PlayerUiAction
+
+    data class OnIsPlayingChanged(val state: Boolean) : PlayerUiAction
+    data class OnPlaybackStateChanged(val state: PlayerUiState.PlayerPlaybackState) : PlayerUiAction
+}
+
+sealed interface PlayerUiEffect {
+    data object OnNavigateBack : PlayerUiEffect
 }

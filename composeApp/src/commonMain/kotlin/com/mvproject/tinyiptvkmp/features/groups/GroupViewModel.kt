@@ -7,15 +7,17 @@
 
 package com.mvproject.tinyiptvkmp.features.groups
 
+import androidx.compose.runtime.Immutable
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import co.touchlab.kermit.Logger
 import com.mvproject.tinyiptvkmp.core.common.AppConstants.INT_VALUE_1
-import com.mvproject.tinyiptvkmp.core.common.mvi.MVI
-import com.mvproject.tinyiptvkmp.core.common.mvi.mvi
+import com.mvproject.tinyiptvkmp.core.common.mvi.MviCore
+import com.mvproject.tinyiptvkmp.core.common.mvi.mviCore
 import com.mvproject.tinyiptvkmp.core.data.repository.PlaylistsRepository
 import com.mvproject.tinyiptvkmp.core.datastore.repository.PreferenceRepository
 import com.mvproject.tinyiptvkmp.core.domain.enums.GroupType
+import com.mvproject.tinyiptvkmp.core.domain.model.ChannelsGroup
 import com.mvproject.tinyiptvkmp.core.domain.model.Playlist
 import com.mvproject.tinyiptvkmp.core.domain.usecase.CleanProgramsUseCase
 import com.mvproject.tinyiptvkmp.core.domain.usecase.GetPlaylistGroupUseCase
@@ -25,9 +27,6 @@ import com.mvproject.tinyiptvkmp.core.domain.usecase.SavePlaylistContentUseCase
 import com.mvproject.tinyiptvkmp.core.domain.usecase.SelectPlaylistUseCase
 import com.mvproject.tinyiptvkmp.core.domain.usecase.UpdateChannelsEpgInfoUseCase
 import com.mvproject.tinyiptvkmp.core.domain.usecase.UpdateRemotePlaylistChannelsUseCase
-import com.mvproject.tinyiptvkmp.features.groups.GroupContract.UiAction
-import com.mvproject.tinyiptvkmp.features.groups.GroupContract.UiEffect
-import com.mvproject.tinyiptvkmp.features.groups.GroupContract.UiState
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.flowOn
 import kotlinx.coroutines.flow.launchIn
@@ -45,7 +44,7 @@ class GroupViewModel(
     private val savePlaylistContentUseCase: SavePlaylistContentUseCase,
     private val updateChannelsEpgInfoUseCase: UpdateChannelsEpgInfoUseCase,
     private val cleanProgramsUseCase: CleanProgramsUseCase,
-) : ViewModel(), MVI<UiState, UiAction, UiEffect> by mvi(UiState()) {
+) : ViewModel(), MviCore<GroupUiState, GroupUiAction, GroupUiEffect> by mviCore(GroupUiState()) {
 
     init {
         playlistsRepository
@@ -98,10 +97,10 @@ class GroupViewModel(
         }
     }
 
-    override fun onAction(uiAction: UiAction) {
+    override fun onAction(uiAction: GroupUiAction) {
         when (uiAction) {
-            UiAction.RefreshPlaylist -> refresh()
-            is UiAction.SelectPlaylist -> {
+            GroupUiAction.RefreshPlaylist -> refresh()
+            is GroupUiAction.SelectPlaylist -> {
                 val selected = uiAction.playlist
                 if (!selected.isSelected) {
                     viewModelScope.launch {
@@ -110,17 +109,17 @@ class GroupViewModel(
                 }
             }
 
-            is UiAction.NavigateToGroup -> {
+            is GroupUiAction.NavigateToGroup -> {
                 viewModelScope.postUiEffect(
-                    UiEffect.NavigateToGroup(
+                    GroupUiEffect.OnNavigateToGroup(
                         title = uiAction.title,
                         group = uiAction.group
                     )
                 )
             }
 
-            UiAction.NavigateToSettings -> {
-                viewModelScope.postUiEffect(UiEffect.NavigateToSettings)
+            GroupUiAction.NavigateToSettings -> {
+                viewModelScope.postUiEffect(GroupUiEffect.OnNavigateToSettings)
             }
         }
     }
@@ -137,9 +136,9 @@ class GroupViewModel(
         val channelGroups = getPlaylistGroupUseCase()
 
         val groupState = if (channelGroups.none { it.groupType == GroupType.SPECIFIED }) {
-            GroupState.Empty
+            GroupUiState.GroupState.Empty
         } else {
-            GroupState.Success(channelGroups)
+            GroupUiState.GroupState.Success(channelGroups)
         }
 
         updateUiState {
@@ -149,4 +148,30 @@ class GroupViewModel(
             )
         }
     }
+}
+
+@Immutable
+data class GroupUiState(
+    val groupState: GroupState = GroupState.Empty,
+    val playlists: List<Playlist> = emptyList(),
+    val selectedPlaylist: Playlist = Playlist(),
+    val isPlaylistSelectorVisible: Boolean = false,
+    val isLoading: Boolean = false,
+) {
+    sealed interface GroupState {
+        data class Success(val groups: List<ChannelsGroup>) : GroupState
+        data object Empty : GroupState
+    }
+}
+
+sealed interface GroupUiAction {
+    data class SelectPlaylist(val playlist: Playlist) : GroupUiAction
+    data class NavigateToGroup(val title: String, val group: String) : GroupUiAction
+    data object NavigateToSettings : GroupUiAction
+    data object RefreshPlaylist : GroupUiAction
+}
+
+sealed interface GroupUiEffect {
+    data object OnNavigateToSettings : GroupUiEffect
+    data class OnNavigateToGroup(val title: String, val group: String) : GroupUiEffect
 }

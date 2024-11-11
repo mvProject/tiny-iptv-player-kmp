@@ -34,16 +34,13 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.mvproject.tinyiptvkmp.core.common.AppConstants.WEIGHT_1
-import com.mvproject.tinyiptvkmp.core.common.mvi.CollectSideEffect
+import com.mvproject.tinyiptvkmp.core.common.mvi.CollectUiEffect
 import com.mvproject.tinyiptvkmp.core.domain.enums.UpdatePeriod
 import com.mvproject.tinyiptvkmp.core.theme.dimens
 import com.mvproject.tinyiptvkmp.core.ui.overlay.OverlayContent
 import com.mvproject.tinyiptvkmp.core.ui.overlay.OverlayOptionsMenu
 import com.mvproject.tinyiptvkmp.core.ui.selectors.OptionSelector
 import com.mvproject.tinyiptvkmp.core.ui.toolbars.AppBarWithBackNav
-import com.mvproject.tinyiptvkmp.features.settings.general.SettingsGeneralContract.UiAction
-import com.mvproject.tinyiptvkmp.features.settings.general.SettingsGeneralContract.UiEffect
-import com.mvproject.tinyiptvkmp.features.settings.general.SettingsGeneralContract.UiState
 import org.jetbrains.compose.resources.stringResource
 import tinyiptvkmp.composeapp.generated.resources.Res
 import tinyiptvkmp.composeapp.generated.resources.hint_update_period
@@ -56,18 +53,18 @@ import tinyiptvkmp.composeapp.generated.resources.scr_settings_title
 
 @Composable
 internal fun SettingsGeneralScreen(
-    viewModel: SettingsViewModel,
+    viewModel: SettingsGeneralViewModel,
     onNavigateBack: () -> Unit,
-    onNavigatePlayerSettings: () -> Unit,
-    onNavigatePlaylistSettings: () -> Unit
+    onNavigateToPlayerSettings: () -> Unit,
+    onNavigateToPlaylistSettings: () -> Unit
 ) {
     val uiState by viewModel.uiState.collectAsStateWithLifecycle()
 
-    CollectSideEffect(viewModel.uiEffect) {
-        when (it) {
-            UiEffect.NavigateBack -> onNavigateBack()
-            UiEffect.NavigateToPlayerSettings -> onNavigatePlayerSettings()
-            UiEffect.NavigateToPlaylistSettings -> onNavigatePlaylistSettings()
+    CollectUiEffect(viewModel.uiEffect) { effect ->
+        when (effect) {
+            SettingsGeneralUiEffect.OnNavigateBack -> onNavigateBack()
+            SettingsGeneralUiEffect.OnNavigateToPlayerSettings -> onNavigateToPlayerSettings()
+            SettingsGeneralUiEffect.OnNavigateToPlaylistSettings -> onNavigateToPlaylistSettings()
         }
     }
 
@@ -79,15 +76,15 @@ internal fun SettingsGeneralScreen(
 
 @Composable
 private fun SettingsGeneralScreen(
-    uiState: UiState,
-    onAction: (UiAction) -> Unit,
+    uiState: SettingsGeneralUiState,
+    onAction: (SettingsGeneralUiAction) -> Unit,
 ) {
     Scaffold(
         modifier = Modifier.fillMaxSize(),
         topBar = {
             AppBarWithBackNav(
                 appBarTitle = stringResource(Res.string.scr_settings_title),
-                onBackClick = { onAction(UiAction.NavigateBack) },
+                onBackClick = { onAction(SettingsGeneralUiAction.NavigateBack) },
             )
         },
     ) { paddingValues ->
@@ -106,7 +103,7 @@ private fun SettingsGeneralScreen(
                 ListItem(
                     modifier =
                     Modifier
-                        .clickable(onClick = { onAction(UiAction.NavigateToPlaylistSettings) })
+                        .clickable(onClick = { onAction(SettingsGeneralUiAction.NavigateToPlaylistSettings) })
                         .clip(MaterialTheme.shapes.extraSmall),
                     colors =
                     ListItemDefaults.colors(
@@ -121,7 +118,7 @@ private fun SettingsGeneralScreen(
                     },
                     trailingContent = {
                         FilledIconButton(
-                            onClick = { onAction(UiAction.NavigateToPlaylistSettings) },
+                            onClick = { onAction(SettingsGeneralUiAction.NavigateToPlaylistSettings) },
                             colors =
                             IconButtonDefaults.filledIconButtonColors(
                                 containerColor = MaterialTheme.colorScheme.onPrimary,
@@ -147,7 +144,7 @@ private fun SettingsGeneralScreen(
                 ListItem(
                     modifier =
                     Modifier
-                        .clickable(onClick = { onAction(UiAction.NavigateToPlayerSettings) })
+                        .clickable(onClick = { onAction(SettingsGeneralUiAction.NavigateToPlayerSettings) })
                         .clip(MaterialTheme.shapes.extraSmall),
                     colors =
                     ListItemDefaults.colors(
@@ -162,7 +159,7 @@ private fun SettingsGeneralScreen(
                     },
                     trailingContent = {
                         FilledIconButton(
-                            onClick = { onAction(UiAction.NavigateToPlayerSettings) },
+                            onClick = { onAction(SettingsGeneralUiAction.NavigateToPlayerSettings) },
                             colors =
                             IconButtonDefaults.filledIconButtonColors(
                                 containerColor = MaterialTheme.colorScheme.onPrimary,
@@ -250,7 +247,7 @@ private fun SettingsGeneralScreen(
                 selectedIndex = uiState.infoUpdatePeriod,
                 options = UpdatePeriod.entries.map { stringResource(it.title) },
                 onItemSelected = { index ->
-                    onAction(UiAction.SetInfoUpdatePeriod(type = index))
+                    onAction(SettingsGeneralUiAction.SetInfoUpdatePeriod(type = index))
                     isSelectInfoUpdateOpen.value = false
                 },
             )
@@ -266,7 +263,7 @@ private fun SettingsGeneralScreen(
                 selectedIndex = uiState.epgUpdatePeriod,
                 options = UpdatePeriod.entries.map { stringResource(it.title) },
                 onItemSelected = { index ->
-                    onAction(UiAction.SetEpgUpdatePeriod(type = index))
+                    onAction(SettingsGeneralUiAction.SetEpgUpdatePeriod(type = index))
                     isSelectEpgUpdateOpen.value = false
                 },
             )

@@ -15,7 +15,7 @@ import com.mvproject.tinyiptvkmp.features.settings.player.SettingsPlayerViewMode
 import com.mvproject.tinyiptvkmp.navigation.AppRoutes
 import org.koin.compose.viewmodel.koinViewModel
 
-fun NavHostController.navigateToSettingsPlayer() {
+fun NavHostController.navigateToPlayerSettings() {
     this.navigate(AppRoutes.SettingsPlayer)
 }
 

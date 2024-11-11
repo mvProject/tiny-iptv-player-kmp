@@ -8,15 +8,15 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.viewinterop.AndroidView
 import androidx.lifecycle.compose.LifecycleStartEffect
 import com.mvproject.tinyiptvkmp.core.common.AppConstants
-import com.mvproject.tinyiptvkmp.features.player.PlayerContract.UiAction
-import com.mvproject.tinyiptvkmp.features.player.PlayerContract.UiState
+import com.mvproject.tinyiptvkmp.features.player.PlayerUiAction
+import com.mvproject.tinyiptvkmp.features.player.PlayerUiState
 import com.mvproject.tinyiptvkmp.ui.rememberPlayerState
 
 @Composable
 actual fun PlayerView(
     modifier: Modifier,
-    uiState: UiState,
-    onUiAction: (UiAction) -> Unit
+    uiState: PlayerUiState,
+    onUiAction: (PlayerUiAction) -> Unit
 ) {
     // todo network Available check
     // val connection by networkConnectionState()

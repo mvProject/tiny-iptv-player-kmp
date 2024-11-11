@@ -5,14 +5,14 @@ import androidx.compose.foundation.layout.aspectRatio
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
-import com.mvproject.tinyiptvkmp.features.player.PlayerContract.UiAction
-import com.mvproject.tinyiptvkmp.features.player.PlayerContract.UiState
+import com.mvproject.tinyiptvkmp.features.player.PlayerUiAction
+import com.mvproject.tinyiptvkmp.features.player.PlayerUiState
 
 @Composable
 fun PlayerContainer(
     modifier: Modifier,
-    uiState: UiState,
-    onUiAction: (UiAction) -> Unit,
+    uiState: PlayerUiState,
+    onUiAction: (PlayerUiAction) -> Unit,
     toolbar: @Composable () -> Unit,
 ) {
     Box(

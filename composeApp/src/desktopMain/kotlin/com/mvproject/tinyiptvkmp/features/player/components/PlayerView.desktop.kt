@@ -24,8 +24,6 @@ import com.mvproject.tinyiptvkmp.core.common.AppConstants.INT_VALUE_2
 import com.mvproject.tinyiptvkmp.core.common.AppConstants.INT_VALUE_4
 import com.mvproject.tinyiptvkmp.core.common.AppConstants.INT_VALUE_ZERO
 import com.mvproject.tinyiptvkmp.core.common.AppConstants.LONG_VALUE_ZERO
-import com.mvproject.tinyiptvkmp.features.player.PlayerContract.UiAction
-import com.mvproject.tinyiptvkmp.features.player.PlayerContract.UiState
 import com.mvproject.tinyiptvkmp.features.player.PlayerPlaybackState
 import org.jetbrains.skia.Bitmap
 import uk.co.caprica.vlcj.factory.discovery.NativeDiscovery
@@ -42,8 +40,8 @@ import java.nio.ByteBuffer
 @Composable
 actual fun PlayerView(
     modifier: Modifier,
-    uiState: UiState,
-    onUiAction: (UiAction) -> Unit,
+    uiState: PlayerUiState,
+    onUiAction: (PlayerUiAction) -> Unit,
 ) {
     // todo network Available check
 
@@ -157,7 +155,7 @@ fun VideoPlayerDirect(
     modifier: Modifier = Modifier,
     state: VideoPlayerStateImpl = remember { VideoPlayerStateImpl() },
     url: String,
-    onPlaybackAction: (UiAction) -> Unit
+    onPlaybackAction: (PlayerUiAction) -> Unit
 ) {
     NativeDiscovery().discover()
 
@@ -173,7 +171,7 @@ fun VideoPlayerDirect(
                 }
 
                 onPlaybackAction(
-                    UiAction.OnPlaybackStateChanged(PlayerPlaybackState.PlaybackReady)
+                    PlayerUiAction.OnPlaybackStateChanged(PlayerPlaybackState.PlaybackReady)
                 )
             }
 
@@ -198,7 +196,7 @@ fun VideoPlayerDirect(
             override fun playing(mediaPlayer: MediaPlayer) {
                 mediaPlayer.status().isPlaying.let { isPlaying ->
                     onPlaybackAction(
-                        UiAction.OnIsPlayingChanged(isPlaying)
+                        PlayerUiAction.OnIsPlayingChanged(isPlaying)
                     )
                 }
             }
@@ -206,14 +204,14 @@ fun VideoPlayerDirect(
             override fun paused(mediaPlayer: MediaPlayer) {
                 mediaPlayer.status().isPlaying.let { isPlaying ->
                     onPlaybackAction(
-                        UiAction.OnIsPlayingChanged(isPlaying)
+                        PlayerUiAction.OnIsPlayingChanged(isPlaying)
                     )
                 }
             }
 
             override fun stopped(mediaPlayer: MediaPlayer) {
                 onPlaybackAction(
-                    UiAction.OnPlaybackStateChanged(PlayerPlaybackState.PlaybackEnded)
+                    PlayerUiAction.OnPlaybackStateChanged(PlayerPlaybackState.PlaybackEnded)
                 )
             }
         }

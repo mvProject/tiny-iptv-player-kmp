@@ -15,7 +15,7 @@ import com.mvproject.tinyiptvkmp.features.settings.playlist.SettingsPlaylistView
 import com.mvproject.tinyiptvkmp.navigation.AppRoutes
 import org.koin.compose.viewmodel.koinViewModel
 
-fun NavHostController.navigateToSettingsPlaylist() {
+fun NavHostController.navigateToPlaylistSettings() {
     this.navigate(AppRoutes.SettingsPlaylist)
 }
 

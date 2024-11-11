@@ -7,18 +7,21 @@
 
 package com.mvproject.tinyiptvkmp.features.channels
 
+import androidx.compose.runtime.Immutable
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import androidx.navigation.toRoute
 import co.touchlab.kermit.Logger
-import com.mvproject.tinyiptvkmp.core.common.mvi.MVI
-import com.mvproject.tinyiptvkmp.core.common.mvi.mvi
+import com.mvproject.tinyiptvkmp.core.common.mvi.MviCore
+import com.mvproject.tinyiptvkmp.core.common.mvi.mviCore
+import com.mvproject.tinyiptvkmp.core.common.utils.CommonUtils.empty
 import com.mvproject.tinyiptvkmp.core.common.utils.TimeUtils
 import com.mvproject.tinyiptvkmp.core.datastore.repository.PreferenceRepository
 import com.mvproject.tinyiptvkmp.core.domain.enums.ChannelsViewType
 import com.mvproject.tinyiptvkmp.core.domain.enums.ChannelsViewType.Companion.mapViewType
 import com.mvproject.tinyiptvkmp.core.domain.enums.FavoriteType
+import com.mvproject.tinyiptvkmp.core.domain.model.EpgProgram
 import com.mvproject.tinyiptvkmp.core.domain.model.TvChannel
 import com.mvproject.tinyiptvkmp.core.domain.usecase.GetChannelsEpgUseCase
 import com.mvproject.tinyiptvkmp.core.domain.usecase.GetGroupChannelsEpgUseCase
@@ -28,9 +31,6 @@ import com.mvproject.tinyiptvkmp.core.domain.utils.ChannelsUtils.mapProgramIds
 import com.mvproject.tinyiptvkmp.core.domain.utils.ChannelsUtils.mapPrograms
 import com.mvproject.tinyiptvkmp.core.domain.utils.ChannelsUtils.replaceUpdated
 import com.mvproject.tinyiptvkmp.core.domain.utils.ChannelsUtils.toggleFavorite
-import com.mvproject.tinyiptvkmp.features.channels.GroupChannelsContract.UiAction
-import com.mvproject.tinyiptvkmp.features.channels.GroupChannelsContract.UiEffect
-import com.mvproject.tinyiptvkmp.features.channels.GroupChannelsContract.UiState
 import com.mvproject.tinyiptvkmp.navigation.AppRoutes
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
@@ -44,7 +44,9 @@ class GroupChannelsViewModel(
     private val toggleFavoriteChannelUseCase: ToggleFavoriteChannelUseCase,
     private val preferenceRepository: PreferenceRepository,
 ) : ViewModel(),
-    MVI<UiState, UiAction, UiEffect> by mvi(UiState()) {
+    MviCore<GroupChannelsUiState, GroupChannelsUiAction, GroupChannelsUiEffect> by mviCore(
+        GroupChannelsUiState()
+    ) {
 
     private val args = savedStateHandle.toRoute<AppRoutes.TvPlaylistChannels>()
 
@@ -68,29 +70,29 @@ class GroupChannelsViewModel(
         }
     }
 
-    override fun onAction(uiAction: UiAction) {
+    override fun onAction(uiAction: GroupChannelsUiAction) {
         when (uiAction) {
-            UiAction.NavigateBack -> viewModelScope.postUiEffect(UiEffect.NavigateBack)
-            is UiAction.NavigateToSelected -> viewModelScope.postUiEffect(
-                UiEffect.NavigateToSelected(
+            GroupChannelsUiAction.NavigateBack -> viewModelScope.postUiEffect(GroupChannelsUiEffect.OnNavigateBack)
+            is GroupChannelsUiAction.SelectChannel -> viewModelScope.postUiEffect(
+                GroupChannelsUiEffect.OnNavigateToPlayer(
                     name = uiAction.name,
                     group = uiAction.group,
                     groupType = type
                 )
             )
 
-            is UiAction.SearchTextChange -> searchTextChange(text = uiAction.text)
-            is UiAction.ToggleEpgVisibility -> toggleEpgVisibility(
+            is GroupChannelsUiAction.SearchTextChange -> searchTextChange(text = uiAction.text)
+            is GroupChannelsUiAction.ToggleEpgVisibility -> toggleEpgVisibility(
                 name = uiAction.name,
-                epgId = uiAction.epgID
+                epgId = uiAction.programId
             )
 
-            is UiAction.ToggleFavourites -> toggleFavorites(
+            is GroupChannelsUiAction.ToggleFavorite -> toggleFavorites(
                 channel = uiAction.channel,
                 type = uiAction.type
             )
 
-            is UiAction.ViewTypeChange -> viewTypeChange(type = uiAction.type)
+            is GroupChannelsUiAction.ViewTypeChange -> viewTypeChange(type = uiAction.type)
         }
     }
 
@@ -171,4 +173,38 @@ class GroupChannelsViewModel(
             toggleFavoriteChannelUseCase(channel = channel)
         }
     }
+}
+
+@Immutable
+data class GroupChannelsUiState(
+    val currentGroup: String = String.empty,
+    val isLoading: Boolean = false,
+    val isEpgVisible: Boolean = false,
+    val searchString: String = String.empty,
+    val viewType: ChannelsViewType = ChannelsViewType.LIST,
+    val channels: List<TvChannel> = emptyList(),
+    val selectedName: String = String.empty,
+    val selectedPrograms: List<EpgProgram> = emptyList()
+)
+
+sealed interface GroupChannelsUiAction {
+    data class ToggleFavorite(val channel: TvChannel, val type: FavoriteType) :
+        GroupChannelsUiAction
+
+    data class SearchTextChange(val text: String) : GroupChannelsUiAction
+    data class ViewTypeChange(val type: ChannelsViewType) : GroupChannelsUiAction
+    data class ToggleEpgVisibility(
+        val name: String = String.empty,
+        val programId: String = String.empty
+    ) : GroupChannelsUiAction
+
+    data class SelectChannel(val name: String, val group: String) : GroupChannelsUiAction
+    data object NavigateBack : GroupChannelsUiAction
+}
+
+sealed interface GroupChannelsUiEffect {
+    data class OnNavigateToPlayer(val name: String, val group: String, val groupType: String) :
+        GroupChannelsUiEffect
+
+    data object OnNavigateBack : GroupChannelsUiEffect
 }

@@ -24,7 +24,7 @@ import com.mvproject.tinyiptvkmp.core.common.AppConstants
 import com.mvproject.tinyiptvkmp.core.domain.enums.GroupType
 import com.mvproject.tinyiptvkmp.core.domain.model.ChannelsGroup
 import com.mvproject.tinyiptvkmp.core.theme.dimens
-import com.mvproject.tinyiptvkmp.features.groups.GroupContract.UiAction
+import com.mvproject.tinyiptvkmp.features.groups.GroupUiAction
 import org.jetbrains.compose.resources.stringResource
 import tinyiptvkmp.composeapp.generated.resources.Res
 import tinyiptvkmp.composeapp.generated.resources.channel_folder_all
@@ -33,7 +33,7 @@ import tinyiptvkmp.composeapp.generated.resources.channel_folder_all
 fun PlaylistGroupItem(
     modifier: Modifier = Modifier,
     group: ChannelsGroup,
-    onUiAction: (UiAction) -> Unit = {},
+    onUiAction: (GroupUiAction) -> Unit = {},
 ) {
     val title =
         when (group.groupType) {
@@ -47,7 +47,7 @@ fun PlaylistGroupItem(
         modifier
             .clickable {
                 onUiAction(
-                    UiAction.NavigateToGroup(
+                    GroupUiAction.NavigateToGroup(
                         title = title,
                         group = group.groupType.name
                     )

@@ -7,20 +7,22 @@
 
 package com.mvproject.tinyiptvkmp.features.settings.player
 
+import androidx.compose.runtime.Immutable
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.mvproject.tinyiptvkmp.core.common.mvi.MVI
-import com.mvproject.tinyiptvkmp.core.common.mvi.mvi
+import com.mvproject.tinyiptvkmp.core.common.mvi.MviCore
+import com.mvproject.tinyiptvkmp.core.common.mvi.mviCore
 import com.mvproject.tinyiptvkmp.core.datastore.repository.PreferenceRepository
-import com.mvproject.tinyiptvkmp.features.settings.player.SettingsPlayerContract.UiAction
-import com.mvproject.tinyiptvkmp.features.settings.player.SettingsPlayerContract.UiEffect
-import com.mvproject.tinyiptvkmp.features.settings.player.SettingsPlayerContract.UiState
+import com.mvproject.tinyiptvkmp.core.domain.enums.RatioMode
+import com.mvproject.tinyiptvkmp.core.domain.enums.ResizeMode
 import kotlinx.coroutines.launch
 
 class SettingsPlayerViewModel(
     private val preferenceRepository: PreferenceRepository
 ) : ViewModel(),
-    MVI<UiState, UiAction, UiEffect> by mvi(UiState()) {
+    MviCore<SettingsPlayerUiState, SettingsPlayerUiAction, SettingsPlayerUiEffect> by mviCore(
+        SettingsPlayerUiState()
+    ) {
 
     init {
         viewModelScope.launch {
@@ -38,12 +40,15 @@ class SettingsPlayerViewModel(
         }
     }
 
-    override fun onAction(uiAction: UiAction) {
+    override fun onAction(uiAction: SettingsPlayerUiAction) {
         when (uiAction) {
-            UiAction.NavigateBack -> viewModelScope.postUiEffect(UiEffect.NavigateBack)
-            is UiAction.SetFullScreenMode -> setFullscreenMode(state = uiAction.state)
-            is UiAction.SetRatioMode -> setRatioMode(mode = uiAction.mode)
-            is UiAction.SetResizeMode -> setResizeMode(mode = uiAction.mode)
+            SettingsPlayerUiAction.NavigateBack -> viewModelScope.postUiEffect(
+                SettingsPlayerUiEffect.OnNavigateBack
+            )
+
+            is SettingsPlayerUiAction.SetFullScreenMode -> setFullscreenMode(state = uiAction.state)
+            is SettingsPlayerUiAction.SetRatioMode -> setRatioMode(mode = uiAction.mode)
+            is SettingsPlayerUiAction.SetResizeMode -> setResizeMode(mode = uiAction.mode)
         }
     }
 
@@ -73,4 +78,23 @@ class SettingsPlayerViewModel(
             }
         }
     }
+}
+
+@Immutable
+data class SettingsPlayerUiState(
+    val resizeMode: Int = ResizeMode.Fill.value,
+    val ratioMode: Int = RatioMode.WideScreen.value,
+    val isFullscreenEnabled: Boolean = true,
+)
+
+sealed interface SettingsPlayerUiAction {
+    data class SetResizeMode(val mode: Int) : SettingsPlayerUiAction
+    data class SetRatioMode(val mode: Int) : SettingsPlayerUiAction
+    data class SetFullScreenMode(val state: Boolean) : SettingsPlayerUiAction
+    data object NavigateBack : SettingsPlayerUiAction
+
+}
+
+sealed interface SettingsPlayerUiEffect {
+    data object OnNavigateBack : SettingsPlayerUiEffect
 }

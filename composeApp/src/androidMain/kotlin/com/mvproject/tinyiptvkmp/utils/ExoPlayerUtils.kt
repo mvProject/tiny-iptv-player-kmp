@@ -21,7 +21,7 @@ import androidx.media3.exoplayer.hls.HlsMediaSource
 import androidx.media3.exoplayer.trackselection.AdaptiveTrackSelection
 import androidx.media3.exoplayer.trackselection.DefaultTrackSelector
 import androidx.media3.exoplayer.upstream.DefaultBandwidthMeter
-import com.mvproject.tinyiptvkmp.features.player.PlayerPlaybackState
+import com.mvproject.tinyiptvkmp.features.player.PlayerUiState
 import io.github.anilbeesetti.nextlib.media3ext.ffdecoder.NextRenderersFactory
 
 object ExoPlayerUtils {
@@ -96,15 +96,15 @@ object ExoPlayerUtils {
     fun mapToVideoPlaybackState(
         playbackState: Int,
         errorCode: Int? = null,
-    ): PlayerPlaybackState =
+    ): PlayerUiState.PlayerPlaybackState =
         when (playbackState) {
             Player.STATE_IDLE -> {
-                PlayerPlaybackState.PlaybackIdle(errorCode = errorCode)
+                PlayerUiState.PlayerPlaybackState.PlaybackIdle(errorCode = errorCode)
             }
 
-            Player.STATE_BUFFERING -> PlayerPlaybackState.PlaybackBuffering
-            Player.STATE_ENDED -> PlayerPlaybackState.PlaybackEnded
-            else -> PlayerPlaybackState.PlaybackReady
+            Player.STATE_BUFFERING -> PlayerUiState.PlayerPlaybackState.PlaybackBuffering
+            Player.STATE_ENDED -> PlayerUiState.PlayerPlaybackState.PlaybackEnded
+            else -> PlayerUiState.PlayerPlaybackState.PlaybackReady
         }
 
     fun createMediaItem(url: String): MediaItem =

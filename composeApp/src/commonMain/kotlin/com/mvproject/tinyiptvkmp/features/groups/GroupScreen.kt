@@ -27,16 +27,13 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clipToBounds
 import androidx.lifecycle.compose.LifecycleResumeEffect
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
-import com.mvproject.tinyiptvkmp.core.common.mvi.CollectSideEffect
+import com.mvproject.tinyiptvkmp.core.common.mvi.CollectUiEffect
 import com.mvproject.tinyiptvkmp.core.theme.dimens
 import com.mvproject.tinyiptvkmp.core.ui.indicators.LoadingIndicator
 import com.mvproject.tinyiptvkmp.core.ui.modifiers.SpacerHeight
 import com.mvproject.tinyiptvkmp.core.ui.selectors.OptionSelector
 import com.mvproject.tinyiptvkmp.core.ui.toolbars.AppBarWithSettings
 import com.mvproject.tinyiptvkmp.core.ui.views.NoItemsView
-import com.mvproject.tinyiptvkmp.features.groups.GroupContract.UiAction
-import com.mvproject.tinyiptvkmp.features.groups.GroupContract.UiEffect
-import com.mvproject.tinyiptvkmp.features.groups.GroupContract.UiState
 import com.mvproject.tinyiptvkmp.features.groups.components.PlaylistGroupItem
 import com.mvproject.tinyiptvkmp.features.groups.components.PlaylistSelectDialog
 import org.jetbrains.compose.resources.stringResource
@@ -54,10 +51,10 @@ internal fun GroupScreen(
 ) {
     val uiState by viewModel.uiState.collectAsStateWithLifecycle()
 
-    CollectSideEffect(viewModel.uiEffect) { event ->
-        when (event) {
-            is UiEffect.NavigateToGroup -> onNavigateToGroup(event.title, event.group)
-            UiEffect.NavigateToSettings -> onNavigateToSettings()
+    CollectUiEffect(viewModel.uiEffect) { effect ->
+        when (effect) {
+            is GroupUiEffect.OnNavigateToGroup -> onNavigateToGroup(effect.title, effect.group)
+            GroupUiEffect.OnNavigateToSettings -> onNavigateToSettings()
         }
     }
 
@@ -69,11 +66,11 @@ internal fun GroupScreen(
 
 @Composable
 private fun GroupScreen(
-    uiState: UiState,
-    onUiAction: (UiAction) -> Unit = {},
+    uiState: GroupUiState,
+    onUiAction: (GroupUiAction) -> Unit = {},
 ) {
     LifecycleResumeEffect(Unit) {
-        onUiAction(UiAction.RefreshPlaylist)
+        onUiAction(GroupUiAction.RefreshPlaylist)
 
         onPauseOrDispose { }
     }
@@ -81,7 +78,7 @@ private fun GroupScreen(
     Scaffold(
         modifier = Modifier.fillMaxSize(),
         topBar = {
-            AppBarWithSettings(onSettingsClicked = { onUiAction(UiAction.NavigateToSettings) })
+            AppBarWithSettings(onSettingsClicked = { onUiAction(GroupUiAction.NavigateToSettings) })
         },
     ) { paddingValues ->
         Box(
@@ -117,21 +114,21 @@ private fun GroupScreen(
                         playlists = uiState.playlists,
                         onItemSelected = { item ->
                             isSelectPlaylistOpen.value = false
-                            onUiAction(UiAction.SelectPlaylist(item))
+                            onUiAction(GroupUiAction.SelectPlaylist(item))
                         },
                     )
 
                     SpacerHeight(height = MaterialTheme.dimens.size8)
                 }
                 when (val groupState = uiState.groupState) {
-                    GroupState.Empty -> NoItemsView(
+                    GroupUiState.GroupState.Empty -> NoItemsView(
                         modifier = Modifier.fillMaxSize(),
                         title = stringResource(Res.string.msg_no_items_found),
                         navigateTitle = stringResource(Res.string.btn_add_first_playlist),
-                        onNavigateClick = { onUiAction(UiAction.NavigateToSettings) },
+                        onNavigateClick = { onUiAction(GroupUiAction.NavigateToSettings) },
                     )
 
-                    is GroupState.Success -> {
+                    is GroupUiState.GroupState.Success -> {
                         Column(
                             modifier =
                             Modifier

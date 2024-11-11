@@ -7,19 +7,21 @@
 
 package com.mvproject.tinyiptvkmp.features.playlist
 
+import androidx.compose.runtime.Immutable
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import androidx.navigation.toRoute
 import co.touchlab.kermit.Logger
-import com.mvproject.tinyiptvkmp.core.common.mvi.MVI
-import com.mvproject.tinyiptvkmp.core.common.mvi.mvi
+import com.mvproject.tinyiptvkmp.core.common.AppConstants.LONG_VALUE_ZERO
+import com.mvproject.tinyiptvkmp.core.common.mvi.MviCore
+import com.mvproject.tinyiptvkmp.core.common.mvi.mviCore
+import com.mvproject.tinyiptvkmp.core.common.utils.CommonUtils.empty
 import com.mvproject.tinyiptvkmp.core.domain.enums.PlaylistType
+import com.mvproject.tinyiptvkmp.core.domain.enums.UpdatePeriod
+import com.mvproject.tinyiptvkmp.core.domain.model.Playlist
 import com.mvproject.tinyiptvkmp.core.domain.usecase.GetPlaylistUseCase
 import com.mvproject.tinyiptvkmp.core.domain.usecase.SavePlaylistUseCase
-import com.mvproject.tinyiptvkmp.features.playlist.PlaylistContract.UiAction
-import com.mvproject.tinyiptvkmp.features.playlist.PlaylistContract.UiEffect
-import com.mvproject.tinyiptvkmp.features.playlist.PlaylistContract.UiState
 import com.mvproject.tinyiptvkmp.navigation.AppRoutes
 import kotlinx.coroutines.launch
 import kotlin.uuid.ExperimentalUuidApi
@@ -30,7 +32,7 @@ class PlaylistViewModel(
     private val getPlaylistUseCase: GetPlaylistUseCase,
     private val savePlaylistUseCase: SavePlaylistUseCase,
 ) : ViewModel(),
-    MVI<UiState, UiAction, UiEffect> by mvi(UiState()) {
+    MviCore<PlaylistUiState, PlaylistUiAction, PlaylistUiEffect> by mviCore(PlaylistUiState()) {
 
     private val args = savedStateHandle.toRoute<AppRoutes.PlaylistDetail>()
 
@@ -56,18 +58,18 @@ class PlaylistViewModel(
         }
     }
 
-    override fun onAction(uiAction: UiAction) = when (uiAction) {
-        UiAction.SavePlaylist -> savePlaylist()
-        is UiAction.SetLocalUri -> setLocalPlaylistUri(
+    override fun onAction(uiAction: PlaylistUiAction) = when (uiAction) {
+        PlaylistUiAction.SavePlaylist -> savePlaylist()
+        is PlaylistUiAction.SetLocalUri -> setLocalPlaylistUri(
             name = uiAction.name,
             uri = uiAction.uri
         )
 
-        is UiAction.SetRemoteUrl -> setRemotePlaylistUrl(url = uiAction.url)
-        is UiAction.SetTitle -> setPlaylistTitle(title = uiAction.title)
-        is UiAction.SetUpdatePeriod -> setPlaylistUpdatePeriod(type = uiAction.period)
-        UiAction.UpdatePlaylist -> updatePlaylist()
-        UiAction.NavigateBack -> viewModelScope.postUiEffect(UiEffect.NavigateBack)
+        is PlaylistUiAction.SetRemoteUrl -> setRemotePlaylistUrl(url = uiAction.url)
+        is PlaylistUiAction.SetTitle -> setPlaylistTitle(title = uiAction.title)
+        is PlaylistUiAction.SetUpdatePeriod -> setPlaylistUpdatePeriod(type = uiAction.period)
+        PlaylistUiAction.UpdatePlaylist -> updatePlaylist()
+        PlaylistUiAction.NavigateBack -> viewModelScope.postUiEffect(PlaylistUiEffect.OnNavigateBack)
     }
 
     private fun setLocalPlaylistUri(name: String, uri: String) {
@@ -144,4 +146,46 @@ class PlaylistViewModel(
             }
         }
     }
+}
+
+@Immutable
+data class PlaylistUiState(
+    val selectedId: String = String.empty,
+    val playlistName: String = String.empty,
+    val playlistSource: String = String.empty,
+    val playlistType: PlaylistType = PlaylistType.REMOTE,
+    val updatePeriod: Int = UpdatePeriod.NO_UPDATE.value,
+    val lastUpdateDate: Long = LONG_VALUE_ZERO,
+    val isSaving: Boolean = false,
+    val isEdit: Boolean = false,
+    val isComplete: Boolean = false,
+) {
+    val isReadyToSave: Boolean
+        get() = playlistName.isNotBlank() && playlistSource.isNotBlank()
+
+    fun toPlaylist() =
+        with(this) {
+            Playlist(
+                id = selectedId,
+                playlistName = playlistName,
+                playlistSource = playlistSource,
+                playlistType = playlistType,
+                lastUpdateDate = lastUpdateDate,
+                updatePeriod = updatePeriod.toLong(),
+            )
+        }
+}
+
+sealed interface PlaylistUiAction {
+    data class SetTitle(val title: String) : PlaylistUiAction
+    data class SetRemoteUrl(val url: String) : PlaylistUiAction
+    data class SetLocalUri(val name: String, val uri: String) : PlaylistUiAction
+    data class SetUpdatePeriod(val period: Int) : PlaylistUiAction
+    data object SavePlaylist : PlaylistUiAction
+    data object UpdatePlaylist : PlaylistUiAction
+    data object NavigateBack : PlaylistUiAction
+}
+
+sealed interface PlaylistUiEffect {
+    data object OnNavigateBack : PlaylistUiEffect
 }

@@ -7,16 +7,15 @@
 
 package com.mvproject.tinyiptvkmp.features.settings.playlist
 
+import androidx.compose.runtime.Immutable
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.mvproject.tinyiptvkmp.core.common.mvi.MVI
-import com.mvproject.tinyiptvkmp.core.common.mvi.mvi
+import com.mvproject.tinyiptvkmp.core.common.mvi.MviCore
+import com.mvproject.tinyiptvkmp.core.common.mvi.mviCore
+import com.mvproject.tinyiptvkmp.core.common.utils.CommonUtils.empty
 import com.mvproject.tinyiptvkmp.core.data.repository.PlaylistsRepository
 import com.mvproject.tinyiptvkmp.core.domain.model.Playlist
 import com.mvproject.tinyiptvkmp.core.domain.usecase.DeletePlaylistUseCase
-import com.mvproject.tinyiptvkmp.features.settings.playlist.SettingsPlaylistContract.UiAction
-import com.mvproject.tinyiptvkmp.features.settings.playlist.SettingsPlaylistContract.UiEffect
-import com.mvproject.tinyiptvkmp.features.settings.playlist.SettingsPlaylistContract.UiState
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.flowOn
 import kotlinx.coroutines.flow.launchIn
@@ -28,7 +27,9 @@ class SettingsPlaylistViewModel(
     private val playlistsRepository: PlaylistsRepository,
     private val deletePlaylistUseCase: DeletePlaylistUseCase,
 ) : ViewModel(),
-    MVI<UiState, UiAction, UiEffect> by mvi(UiState()) {
+    MviCore<SettingsPlaylistUiState, SettingsPlaylistUiAction, SettingsPlaylistUiEffect> by mviCore(
+        SettingsPlaylistUiState()
+    ) {
 
     init {
         playlistsRepository
@@ -42,9 +43,9 @@ class SettingsPlaylistViewModel(
             .onEach { lists ->
 
                 val playlistState = if (lists.isEmpty())
-                    PlaylistState.Empty
+                    SettingsPlaylistUiState.PlaylistState.Empty
                 else
-                    PlaylistState.Success(lists)
+                    SettingsPlaylistUiState.PlaylistState.Success(lists)
 
                 updateUiState {
                     copy(
@@ -55,12 +56,15 @@ class SettingsPlaylistViewModel(
             }.launchIn(viewModelScope)
     }
 
-    override fun onAction(uiAction: UiAction) {
+    override fun onAction(uiAction: SettingsPlaylistUiAction) {
         when (uiAction) {
-            is UiAction.DeletePlaylist -> deletePlaylist(playlist = uiAction.playlist)
-            UiAction.NavigateBack -> viewModelScope.postUiEffect(UiEffect.NavigateBack)
-            is UiAction.NavigateToPlaylist ->
-                viewModelScope.postUiEffect(UiEffect.NavigateToPlaylist(uiAction.id))
+            is SettingsPlaylistUiAction.DeletePlaylist -> deletePlaylist(playlist = uiAction.playlist)
+            SettingsPlaylistUiAction.NavigateBack -> viewModelScope.postUiEffect(
+                SettingsPlaylistUiEffect.OnNavigateBack
+            )
+
+            is SettingsPlaylistUiAction.NavigateToPlaylist ->
+                viewModelScope.postUiEffect(SettingsPlaylistUiEffect.OnNavigateToPlaylist(uiAction.id))
         }
     }
 
@@ -69,4 +73,26 @@ class SettingsPlaylistViewModel(
             deletePlaylistUseCase(playlist = playlist)
         }
     }
+}
+
+@Immutable
+data class SettingsPlaylistUiState(
+    val playlistState: PlaylistState = PlaylistState.Empty,
+    val isLoading: Boolean = true,
+) {
+    sealed interface PlaylistState {
+        data class Success(val playlists: List<Playlist>) : PlaylistState
+        data object Empty : PlaylistState
+    }
+}
+
+sealed interface SettingsPlaylistUiAction {
+    data class DeletePlaylist(val playlist: Playlist) : SettingsPlaylistUiAction
+    data class NavigateToPlaylist(val id: String = String.empty) : SettingsPlaylistUiAction
+    data object NavigateBack : SettingsPlaylistUiAction
+}
+
+sealed interface SettingsPlaylistUiEffect {
+    data class OnNavigateToPlaylist(val id: String) : SettingsPlaylistUiEffect
+    data object OnNavigateBack : SettingsPlaylistUiEffect
 }

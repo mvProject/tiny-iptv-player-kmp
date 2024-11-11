@@ -28,14 +28,11 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
-import com.mvproject.tinyiptvkmp.core.common.mvi.CollectSideEffect
+import com.mvproject.tinyiptvkmp.core.common.mvi.CollectUiEffect
 import com.mvproject.tinyiptvkmp.core.theme.dimens
 import com.mvproject.tinyiptvkmp.core.ui.indicators.LoadingIndicator
 import com.mvproject.tinyiptvkmp.core.ui.toolbars.AppBarWithBackNav
 import com.mvproject.tinyiptvkmp.core.ui.views.NoItemsView
-import com.mvproject.tinyiptvkmp.features.settings.playlist.SettingsPlaylistContract.UiAction
-import com.mvproject.tinyiptvkmp.features.settings.playlist.SettingsPlaylistContract.UiEffect
-import com.mvproject.tinyiptvkmp.features.settings.playlist.SettingsPlaylistContract.UiState
 import com.mvproject.tinyiptvkmp.features.settings.playlist.components.PlaylistItem
 import org.jetbrains.compose.resources.stringResource
 import tinyiptvkmp.composeapp.generated.resources.Res
@@ -52,10 +49,10 @@ internal fun SettingsPlaylistScreen(
 ) {
     val uiState by viewModel.uiState.collectAsState()
 
-    CollectSideEffect(viewModel.uiEffect) {
-        when (it) {
-            UiEffect.NavigateBack -> onNavigateBack()
-            is UiEffect.NavigateToPlaylist -> onNavigatePlaylist(it.id)
+    CollectUiEffect(viewModel.uiEffect) { effect ->
+        when (effect) {
+            SettingsPlaylistUiEffect.OnNavigateBack -> onNavigateBack()
+            is SettingsPlaylistUiEffect.OnNavigateToPlaylist -> onNavigatePlaylist(effect.id)
         }
     }
     SettingsPlaylistScreen(
@@ -66,8 +63,8 @@ internal fun SettingsPlaylistScreen(
 
 @Composable
 private fun SettingsPlaylistScreen(
-    uiState: UiState,
-    onAction: (UiAction) -> Unit,
+    uiState: SettingsPlaylistUiState,
+    onAction: (SettingsPlaylistUiAction) -> Unit,
 ) {
     Scaffold(
         modifier =
@@ -77,13 +74,13 @@ private fun SettingsPlaylistScreen(
         topBar = {
             AppBarWithBackNav(
                 appBarTitle = stringResource(Res.string.scr_playlist_settings_title),
-                onBackClick = { onAction(UiAction.NavigateBack) },
+                onBackClick = { onAction(SettingsPlaylistUiAction.NavigateBack) },
             )
         },
         bottomBar = {
             ElevatedButton(
                 onClick = {
-                    onAction(UiAction.NavigateToPlaylist())
+                    onAction(SettingsPlaylistUiAction.NavigateToPlaylist())
                 },
                 modifier =
                 Modifier
@@ -110,7 +107,7 @@ private fun SettingsPlaylistScreen(
                 .fillMaxSize(),
         ) {
             when (val playlistState = uiState.playlistState) {
-                PlaylistState.Empty -> {
+                SettingsPlaylistUiState.PlaylistState.Empty -> {
                     NoItemsView(
                         modifier = Modifier.fillMaxSize(),
                         title = stringResource(Res.string.msg_no_items_found),
@@ -118,7 +115,7 @@ private fun SettingsPlaylistScreen(
                     )
                 }
 
-                is PlaylistState.Success -> {
+                is SettingsPlaylistUiState.PlaylistState.Success -> {
                     LazyColumn(
                         modifier =
                         Modifier
@@ -135,10 +132,10 @@ private fun SettingsPlaylistScreen(
                                 modifier = Modifier.fillMaxSize(),
                                 item = item,
                                 onSelect = {
-                                    onAction(UiAction.NavigateToPlaylist(id = item.id.toString()))
+                                    onAction(SettingsPlaylistUiAction.NavigateToPlaylist(id = item.id.toString()))
                                 },
                                 onDelete = {
-                                    onAction(UiAction.DeletePlaylist(playlist = item))
+                                    onAction(SettingsPlaylistUiAction.DeletePlaylist(playlist = item))
                                 },
                             )
                         }

@@ -28,7 +28,7 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.lifecycle.compose.LifecycleResumeEffect
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
-import com.mvproject.tinyiptvkmp.core.common.mvi.CollectSideEffect
+import com.mvproject.tinyiptvkmp.core.common.mvi.CollectUiEffect
 import com.mvproject.tinyiptvkmp.core.common.utils.CommonUtils.empty
 import com.mvproject.tinyiptvkmp.core.domain.model.TvChannel
 import com.mvproject.tinyiptvkmp.core.theme.dimens
@@ -36,16 +36,13 @@ import com.mvproject.tinyiptvkmp.core.ui.epg.ChannelPrograms
 import com.mvproject.tinyiptvkmp.core.ui.indicators.LoadingIndicator
 import com.mvproject.tinyiptvkmp.core.ui.overlay.OverlayContent
 import com.mvproject.tinyiptvkmp.core.ui.toolbars.AppBarWithSearch
-import com.mvproject.tinyiptvkmp.features.channels.GroupChannelsContract.UiAction
-import com.mvproject.tinyiptvkmp.features.channels.GroupChannelsContract.UiEffect
-import com.mvproject.tinyiptvkmp.features.channels.GroupChannelsContract.UiState
 import com.mvproject.tinyiptvkmp.features.channels.components.ChannelView
 import com.mvproject.tinyiptvkmp.features.channels.components.OverlayChannelOptions
 
 @Composable
 internal fun GroupChannelsScreen(
     viewModel: GroupChannelsViewModel,
-    onNavigateSelected: (String, String, String) -> Unit,
+    onNavigateToPlayer: (String, String, String) -> Unit,
     onNavigateBack: () -> Unit,
 ) {
     LifecycleResumeEffect(Unit) {
@@ -56,11 +53,11 @@ internal fun GroupChannelsScreen(
 
     val uiState by viewModel.uiState.collectAsStateWithLifecycle()
 
-    CollectSideEffect(viewModel.uiEffect) {
-        when (it) {
-            UiEffect.NavigateBack -> onNavigateBack()
-            is UiEffect.NavigateToSelected ->
-                onNavigateSelected(it.name, it.group, it.groupType)
+    CollectUiEffect(viewModel.uiEffect) { effect ->
+        when (effect) {
+            GroupChannelsUiEffect.OnNavigateBack -> onNavigateBack()
+            is GroupChannelsUiEffect.OnNavigateToPlayer ->
+                onNavigateToPlayer(effect.name, effect.group, effect.groupType)
         }
     }
 
@@ -72,8 +69,8 @@ internal fun GroupChannelsScreen(
 
 @Composable
 private fun GroupChannelsScreen(
-    uiState: UiState,
-    onAction: (UiAction) -> Unit,
+    uiState: GroupChannelsUiState,
+    onAction: (GroupChannelsUiAction) -> Unit,
 ) {
     var searchString by remember {
         mutableStateOf(String.empty)
@@ -89,10 +86,10 @@ private fun GroupChannelsScreen(
                 appBarTitle = uiState.currentGroup,
                 searchTextState = searchString,
                 onBackClick = {
-                    onAction(UiAction.NavigateBack)
+                    onAction(GroupChannelsUiAction.NavigateBack)
                 },
                 onViewTypeChange = { type ->
-                    onAction(UiAction.ViewTypeChange(type))
+                    onAction(GroupChannelsUiAction.ViewTypeChange(type))
                 },
                 onTextChange = { text ->
                     searchString = text
@@ -126,7 +123,7 @@ private fun GroupChannelsScreen(
                     items = filteredResults,
                     onChannelSelect = { selected ->
                         onAction(
-                            UiAction.NavigateToSelected(
+                            GroupChannelsUiAction.SelectChannel(
                                 name = selected.channelName,
                                 group = uiState.currentGroup
                             )
@@ -138,9 +135,9 @@ private fun GroupChannelsScreen(
                     },
                     onShowEpgClick = { selected ->
                         onAction(
-                            UiAction.ToggleEpgVisibility(
+                            GroupChannelsUiAction.ToggleEpgVisibility(
                                 name = selected.channelName,
-                                epgID = selected.programId
+                                programId = selected.programId
                             )
                         )
                     },
@@ -158,7 +155,7 @@ private fun GroupChannelsScreen(
                     favoriteType = selectedChannel.favoriteType,
                     onToggleFavorite = { favType ->
                         onAction(
-                            UiAction.ToggleFavourites(
+                            GroupChannelsUiAction.ToggleFavorite(
                                 channel = selectedChannel,
                                 type = favType
                             )
@@ -170,7 +167,7 @@ private fun GroupChannelsScreen(
 
             OverlayContent(
                 isVisible = uiState.selectedName.isNotBlank(),
-                onViewTap = { onAction(UiAction.ToggleEpgVisibility()) },
+                onViewTap = { onAction(GroupChannelsUiAction.ToggleEpgVisibility()) },
             ) {
                 ChannelPrograms(
                     modifier = Modifier

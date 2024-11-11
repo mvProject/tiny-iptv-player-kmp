@@ -17,24 +17,24 @@ import kotlin.coroutines.EmptyCoroutineContext
 
 @Stable
 @Composable
-fun <UiState, UiAction, SideEffect> MVI<UiState, UiAction, SideEffect>.unpack() =
+fun <UiState, UiAction, UiEffect> MviCore<UiState, UiAction, UiEffect>.unpack() =
     Triple(uiState.collectAsState().value, ::onAction, uiEffect)
 
 @Composable
-fun <SideEffect> CollectSideEffect(
-    sideEffect: Flow<SideEffect>,
+fun <UiEffect> CollectUiEffect(
+    effect: Flow<UiEffect>,
     lifecycleOwner: LifecycleOwner = LocalLifecycleOwner.current,
     minActiveState: Lifecycle.State = Lifecycle.State.STARTED,
     context: CoroutineContext = Dispatchers.Main.immediate,
-    onSideEffect: suspend CoroutineScope.(effect: SideEffect) -> Unit,
+    onUiEffect: suspend CoroutineScope.(effect: UiEffect) -> Unit,
 ) {
-    LaunchedEffect(sideEffect, lifecycleOwner) {
+    LaunchedEffect(effect, lifecycleOwner) {
         lifecycleOwner.lifecycle.repeatOnLifecycle(minActiveState) {
             if (context == EmptyCoroutineContext) {
-                sideEffect.collect { onSideEffect(it) }
+                effect.collect { onUiEffect(it) }
             } else {
                 withContext(context) {
-                    sideEffect.collect { onSideEffect(it) }
+                    effect.collect { onUiEffect(it) }
                 }
             }
         }

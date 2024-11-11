@@ -28,15 +28,12 @@ import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.window.core.layout.WindowHeightSizeClass
 import androidx.window.core.layout.WindowSizeClass
 import androidx.window.core.layout.WindowWidthSizeClass
-import com.mvproject.tinyiptvkmp.core.common.mvi.CollectSideEffect
+import com.mvproject.tinyiptvkmp.core.common.mvi.CollectUiEffect
 import com.mvproject.tinyiptvkmp.core.theme.dimens
 import com.mvproject.tinyiptvkmp.core.ui.epg.ChannelPrograms
 import com.mvproject.tinyiptvkmp.core.ui.indicators.LoadingIndicator
 import com.mvproject.tinyiptvkmp.core.ui.indicators.VolumeIndicator
 import com.mvproject.tinyiptvkmp.core.ui.overlay.OverlayContent
-import com.mvproject.tinyiptvkmp.features.player.PlayerContract.UiAction
-import com.mvproject.tinyiptvkmp.features.player.PlayerContract.UiEffect
-import com.mvproject.tinyiptvkmp.features.player.PlayerContract.UiState
 import com.mvproject.tinyiptvkmp.features.player.components.NoPlaybackView
 import com.mvproject.tinyiptvkmp.features.player.components.PlayerChannels
 import com.mvproject.tinyiptvkmp.features.player.components.PlayerContainer
@@ -61,9 +58,9 @@ internal fun PlayerScreen(
     onNavigateBack: () -> Unit = {},
 ) {
     val uiState by viewModel.uiState.collectAsStateWithLifecycle()
-    CollectSideEffect(viewModel.uiEffect) { event ->
-        when (event) {
-            UiEffect.OnNavigateBack -> onNavigateBack()
+    CollectUiEffect(viewModel.uiEffect) { effect ->
+        when (effect) {
+            PlayerUiEffect.OnNavigateBack -> onNavigateBack()
         }
     }
     PlayerScreen(
@@ -74,9 +71,9 @@ internal fun PlayerScreen(
 
 @Composable
 private fun PlayerScreen(
-    uiState: UiState,
+    uiState: PlayerUiState,
     windowSizeClass: WindowSizeClass = currentWindowAdaptiveInfo().windowSizeClass,
-    onUiAction: (UiAction) -> Unit
+    onUiAction: (PlayerUiAction) -> Unit
 ) {
     Box(
         modifier =
@@ -127,7 +124,7 @@ private fun PlayerScreen(
 
         OverlayContent(
             isVisible = uiState.isEpgVisible,
-            onViewTap = { onUiAction(UiAction.ToggleProgramsUi) }
+            onViewTap = { onUiAction(PlayerUiAction.ToggleProgramsUi) }
         ) {
             ChannelPrograms(
                 modifier =
@@ -149,20 +146,20 @@ private fun PlayerScreen(
 
         OverlayContent(
             isVisible = uiState.isChannelsVisible,
-            onViewTap = { onUiAction(UiAction.ToggleChannelsUi) },
+            onViewTap = { onUiAction(PlayerUiAction.ToggleChannelsUi) },
             contentAlpha = MaterialTheme.dimens.alpha90,
         ) {
             PlayerChannels(
                 channels = uiState.groupChannels,
                 current = uiState.channelIndex,
                 group = uiState.channelGroup,
-                onChannelSelect = { chn -> onUiAction(UiAction.SelectChannel(chn)) }
+                onChannelSelect = { chn -> onUiAction(PlayerUiAction.SelectChannel(chn)) }
             )
         }
 
         OverlayContent(
             isVisible = uiState.isChannelInfoVisible,
-            onViewTap = { onUiAction(UiAction.ToggleProgramInfoUi) },
+            onViewTap = { onUiAction(PlayerUiAction.ToggleProgramInfoUi) },
         ) {
             ProgramInfo(
                 channelName = uiState.currentChannel.channelName,
@@ -176,8 +173,8 @@ private fun PlayerScreen(
 @Composable
 private fun PlayerContent(
     modifier: Modifier = Modifier,
-    uiState: UiState,
-    onUiAction: (UiAction) -> Unit
+    uiState: PlayerUiState,
+    onUiAction: (PlayerUiAction) -> Unit
 ) {
     PlayerContainer(
         modifier = modifier

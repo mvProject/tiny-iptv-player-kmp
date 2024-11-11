@@ -29,7 +29,7 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import com.mvproject.tinyiptvkmp.core.common.mvi.CollectSideEffect
+import com.mvproject.tinyiptvkmp.core.common.mvi.CollectUiEffect
 import com.mvproject.tinyiptvkmp.core.domain.enums.RatioMode
 import com.mvproject.tinyiptvkmp.core.domain.enums.ResizeMode
 import com.mvproject.tinyiptvkmp.core.theme.dimens
@@ -38,9 +38,6 @@ import com.mvproject.tinyiptvkmp.core.ui.overlay.OverlayContent
 import com.mvproject.tinyiptvkmp.core.ui.overlay.OverlayOptionsMenu
 import com.mvproject.tinyiptvkmp.core.ui.selectors.OptionSelector
 import com.mvproject.tinyiptvkmp.core.ui.toolbars.AppBarWithBackNav
-import com.mvproject.tinyiptvkmp.features.settings.player.SettingsPlayerContract.UiAction
-import com.mvproject.tinyiptvkmp.features.settings.player.SettingsPlayerContract.UiEffect
-import com.mvproject.tinyiptvkmp.features.settings.player.SettingsPlayerContract.UiState
 import org.jetbrains.compose.resources.stringResource
 import tinyiptvkmp.composeapp.generated.resources.Res
 import tinyiptvkmp.composeapp.generated.resources.option_default_fullscreen_mode
@@ -55,9 +52,9 @@ internal fun SettingsPlayerScreen(
 ) {
     val state by viewModel.uiState.collectAsState()
 
-    CollectSideEffect(viewModel.uiEffect) {
-        when (it) {
-            UiEffect.NavigateBack -> onNavigateBack()
+    CollectUiEffect(viewModel.uiEffect) { effect ->
+        when (effect) {
+            SettingsPlayerUiEffect.OnNavigateBack -> onNavigateBack()
         }
     }
     SettingsPlayerScreen(
@@ -68,8 +65,8 @@ internal fun SettingsPlayerScreen(
 
 @Composable
 private fun SettingsPlayerScreen(
-    state: UiState,
-    onAction: (UiAction) -> Unit,
+    state: SettingsPlayerUiState,
+    onAction: (SettingsPlayerUiAction) -> Unit,
 ) {
     Scaffold(
         modifier =
@@ -79,7 +76,7 @@ private fun SettingsPlayerScreen(
         topBar = {
             AppBarWithBackNav(
                 appBarTitle = stringResource(Res.string.scr_player_settings_title),
-                onBackClick = { onAction(UiAction.NavigateBack) },
+                onBackClick = { onAction(SettingsPlayerUiAction.NavigateBack) },
             )
         },
     ) { paddingValues ->
@@ -122,7 +119,7 @@ private fun SettingsPlayerScreen(
                         uncheckedTrackColor = MaterialTheme.colorScheme.onSurface,
                     ),
                     onCheckedChange = { state ->
-                        onAction(UiAction.SetFullScreenMode(state = state))
+                        onAction(SettingsPlayerUiAction.SetFullScreenMode(state = state))
                     },
                 )
             }
@@ -162,7 +159,7 @@ private fun SettingsPlayerScreen(
                 selectedIndex = state.resizeMode,
                 options = ResizeMode.entries.map { stringResource(it.title) },
                 onItemSelected = { index ->
-                    onAction(UiAction.SetResizeMode(mode = index))
+                    onAction(SettingsPlayerUiAction.SetResizeMode(mode = index))
                     isSelectResizeModeOpen.value = false
                 },
             )
@@ -178,7 +175,7 @@ private fun SettingsPlayerScreen(
                 selectedIndex = state.ratioMode,
                 options = RatioMode.entries.map { stringResource(it.title) },
                 onItemSelected = { index ->
-                    onAction(UiAction.SetRatioMode(mode = index))
+                    onAction(SettingsPlayerUiAction.SetRatioMode(mode = index))
                     isSelectRatioModeOpen.value = false
                 },
             )
