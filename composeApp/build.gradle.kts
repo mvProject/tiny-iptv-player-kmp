@@ -44,6 +44,8 @@ kotlin {
             implementation(compose.ui)
             implementation(compose.material3)
             implementation(compose.materialIconsExtended)
+            implementation(compose.components.resources)
+            implementation(compose.components.uiToolingPreview)
 
             // Coroutines
             implementation(libs.kotlinx.coroutines.core)
@@ -80,13 +82,9 @@ kotlin {
             implementation(libs.bundles.coil)
 
             // Resources
-            implementation(compose.components.resources)
-
             implementation(libs.bundles.ksoup)
 
             implementation(libs.bundles.filekit)
-
-            implementation(compose.components.uiToolingPreview)
         }
 
         androidMain.dependencies {
@@ -215,6 +213,7 @@ compose.desktop {
 }
 
 dependencies {
+    debugImplementation(compose.uiTooling)
     add("kspAndroid", libs.androidx.room.compiler)
     add("kspDesktop", libs.androidx.room.compiler)
 }

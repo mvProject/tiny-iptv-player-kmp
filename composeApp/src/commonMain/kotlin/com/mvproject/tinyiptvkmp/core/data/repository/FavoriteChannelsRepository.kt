@@ -61,13 +61,13 @@ class FavoriteChannelsRepository(
     suspend fun loadSelectedFavoriteChannels(): List<FavoriteChannelEntity> =
         favoriteChannelDao.getSelectedFavoriteChannels()
 
-    suspend fun loadFavoriteChannelById(id: Long): List<FavoriteChannelEntity> =
+    suspend fun loadFavoriteChannelById(id: String): List<FavoriteChannelEntity> =
         favoriteChannelDao.getFavoriteChannelById(id = id)
 
     suspend fun loadFavoriteChannelUrls(): List<String> =
         favoriteChannelDao.getFavoriteChannelUrls()
 
-    suspend fun deletePlaylistFavoriteChannels(listId: Long) {
+    suspend fun deletePlaylistFavoriteChannels(listId: String) {
         favoriteChannelDao.deletePlaylistFavoriteChannelEntities(id = listId)
     }
 }

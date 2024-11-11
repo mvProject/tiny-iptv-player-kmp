@@ -10,13 +10,12 @@ package com.mvproject.tinyiptvkmp.features.playlist.navigation
 import androidx.navigation.NavGraphBuilder
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.composable
-import com.mvproject.tinyiptvkmp.core.common.utils.CommonUtils.empty
 import com.mvproject.tinyiptvkmp.features.playlist.PlaylistScreen
 import com.mvproject.tinyiptvkmp.features.playlist.PlaylistViewModel
 import com.mvproject.tinyiptvkmp.navigation.AppRoutes
 import org.koin.compose.viewmodel.koinViewModel
 
-fun NavHostController.navigateToPlaylistDetail(id: String = String.empty) {
+fun NavHostController.navigateToPlaylistDetail(id: String) {
     val route = AppRoutes.PlaylistDetail(id = id)
     this.navigate(route)
 }

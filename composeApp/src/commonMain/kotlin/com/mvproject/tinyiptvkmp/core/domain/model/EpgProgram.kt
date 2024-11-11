@@ -18,8 +18,6 @@ data class EpgProgram(
     val dateTimeStart: Long,
     val dateTimeEnd: Long,
 ) {
-    val key
-        get() = (dateTimeStart + dateTimeEnd).toString() + title
 
     val programProgress
         get() =

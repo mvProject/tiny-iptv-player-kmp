@@ -2,12 +2,15 @@ package com.mvproject.tinyiptvkmp.core.domain.usecase
 
 import com.mvproject.tinyiptvkmp.core.common.utils.TimeUtils
 import com.mvproject.tinyiptvkmp.core.data.repository.EpgProgramRepository
-import com.mvproject.tinyiptvkmp.core.domain.model.EpgProgram
+import com.mvproject.tinyiptvkmp.core.domain.utils.ChannelEpgMap
 
 class GetGroupChannelsEpgUseCase(
     private val epgProgramRepository: EpgProgramRepository,
 ) {
-    suspend operator fun invoke(channelsIds: List<String>): ChannelEpgMap {
+    suspend operator fun invoke(
+        channelsIds: List<String>,
+        programCount: Int = 1
+    ): ChannelEpgMap {
 
         val programsByIds =
             epgProgramRepository
@@ -18,9 +21,8 @@ class GetGroupChannelsEpgUseCase(
 
         val groupedProgramsByIds = programsByIds
             .groupBy { it.channelId }
-            .mapValues { (_, programs) -> programs.take(1) }
+            .mapValues { (_, programs) -> programs.take(programCount) }
 
         return groupedProgramsByIds
     }
 }
-typealias ChannelEpgMap = Map<String, List<EpgProgram>>

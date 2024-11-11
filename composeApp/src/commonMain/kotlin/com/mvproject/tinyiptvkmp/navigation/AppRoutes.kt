@@ -12,9 +12,10 @@ import kotlinx.serialization.Serializable
 @Serializable
 sealed interface AppRoutes {
     @Serializable
-    data class VideoView(
-        val mediaName: String,
-        val mediaGroup: String,
+    data class Player(
+        val channelName: String,
+        val group: String,
+        val groupType: String,
     ) : AppRoutes
 
     @Serializable

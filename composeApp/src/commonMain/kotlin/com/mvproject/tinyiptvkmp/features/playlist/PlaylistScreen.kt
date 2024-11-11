@@ -38,6 +38,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import com.mvproject.tinyiptvkmp.core.common.AppConstants.WEIGHT_1
+import com.mvproject.tinyiptvkmp.core.common.mvi.CollectUiEffect
 import com.mvproject.tinyiptvkmp.core.common.utils.CommonUtils.tmpFolder
 import com.mvproject.tinyiptvkmp.core.common.utils.CommonUtils.typeM3U
 import com.mvproject.tinyiptvkmp.core.common.utils.CommonUtils.typeM3U8
@@ -50,12 +51,12 @@ import com.mvproject.tinyiptvkmp.core.ui.overlay.OverlayContent
 import com.mvproject.tinyiptvkmp.core.ui.overlay.OverlayOptionsMenu
 import com.mvproject.tinyiptvkmp.core.ui.selectors.OptionSelector
 import com.mvproject.tinyiptvkmp.core.ui.toolbars.AppBarWithBackNav
-import com.mvproject.tinyiptvkmp.features.playlist.action.PlaylistAction
-import com.mvproject.tinyiptvkmp.features.playlist.state.PlaylistState
 import io.github.vinceglb.filekit.compose.rememberFilePickerLauncher
 import io.github.vinceglb.filekit.core.PickerMode
 import io.github.vinceglb.filekit.core.PickerType
 import kotlinx.coroutines.launch
+import okio.buffer
+import okio.sink
 import org.jetbrains.compose.resources.stringResource
 import tinyiptvkmp.composeapp.generated.resources.Res
 import tinyiptvkmp.composeapp.generated.resources.btn_add_local
@@ -66,33 +67,35 @@ import tinyiptvkmp.composeapp.generated.resources.hint_name
 import tinyiptvkmp.composeapp.generated.resources.hint_update_period
 import tinyiptvkmp.composeapp.generated.resources.label_or
 import tinyiptvkmp.composeapp.generated.resources.msg_playlist_details
-import java.io.FileOutputStream
 
 @Composable
 internal fun PlaylistScreen(
     viewModel: PlaylistViewModel,
     onNavigateBack: () -> Unit = {},
 ) {
-    val state by viewModel.state.collectAsState()
+    val uiState by viewModel.uiState.collectAsState()
 
+    CollectUiEffect(viewModel.uiEffect) { effect ->
+        when (effect) {
+            PlaylistUiEffect.OnNavigateBack -> onNavigateBack()
+        }
+    }
     PlaylistScreen(
-        state = state,
-        onPlaylistAction = viewModel::processAction,
-        onNavigateBack = onNavigateBack,
+        uiState = uiState,
+        onAction = viewModel::onAction,
     )
 }
 
 @Composable
 private fun PlaylistScreen(
-    state: PlaylistState,
-    onNavigateBack: () -> Unit = {},
-    onPlaylistAction: (PlaylistAction) -> Unit = {},
+    uiState: PlaylistUiState,
+    onAction: (PlaylistUiAction) -> Unit = {},
 ) {
     val scope = rememberCoroutineScope()
 
-    LaunchedEffect(state.isComplete) {
-        if (state.isComplete) {
-            onNavigateBack()
+    LaunchedEffect(uiState.isComplete) {
+        if (uiState.isComplete) {
+            onAction(PlaylistUiAction.NavigateBack)
         }
     }
 
@@ -114,16 +117,19 @@ private fun PlaylistScreen(
                 val fileTmp = folderFileTmp.toFile()
 
                 scope.launch {
-                    FileOutputStream(fileTmp).use {
-                        it.write(file.readBytes())
+                    //FileOutputStream(fileTmp).use {
+                    //    it.write(file.readBytes())
+                    //}
+                    fileTmp.sink().buffer().use { sink ->
+                        sink.write(file.readBytes())
                     }
                 }
 
-                onPlaylistAction(
-                    PlaylistAction.SetLocalUri(
+                onAction(
+                    PlaylistUiAction.SetLocalUri(
                         name = file.name,
                         uri = folderFileTmp.toString(),
-                    ),
+                    )
                 )
             }
         }
@@ -136,7 +142,7 @@ private fun PlaylistScreen(
         topBar = {
             AppBarWithBackNav(
                 appBarTitle = stringResource(Res.string.msg_playlist_details),
-                onBackClick = onNavigateBack,
+                onBackClick = { onAction(PlaylistUiAction.NavigateBack) },
             )
         },
     ) { paddingValues ->
@@ -157,9 +163,9 @@ private fun PlaylistScreen(
             ) {
                 TextField(
                     modifier = Modifier.fillMaxWidth(),
-                    value = state.playlistName,
+                    value = uiState.playlistName,
                     onValueChange = {
-                        onPlaylistAction(PlaylistAction.SetTitle(it))
+                        onAction(PlaylistUiAction.SetTitle(title = it))
                     },
                     placeholder = {
                         Text(
@@ -183,10 +189,10 @@ private fun PlaylistScreen(
 
                 TextField(
                     modifier = Modifier.fillMaxWidth(),
-                    enabled = state.playlistType == PlaylistType.REMOTE,
-                    value = if (state.playlistType == PlaylistType.LOCAL) state.playlistName else state.playlistSource,
+                    enabled = uiState.playlistType == PlaylistType.REMOTE,
+                    value = if (uiState.playlistType == PlaylistType.LOCAL) uiState.playlistName else uiState.playlistSource,
                     onValueChange = {
-                        onPlaylistAction(PlaylistAction.SetRemoteUrl(it))
+                        onAction(PlaylistUiAction.SetRemoteUrl(url = it))
                     },
                     placeholder = {
                         Text(
@@ -211,8 +217,8 @@ private fun PlaylistScreen(
                 OptionSelector(
                     modifier = Modifier.fillMaxWidth(),
                     title = stringResource(Res.string.hint_update_period),
-                    enabled = state.playlistType == PlaylistType.REMOTE,
-                    selectedItem = stringResource(UpdatePeriod.entries[state.updatePeriod].title),
+                    enabled = uiState.playlistType == PlaylistType.REMOTE,
+                    selectedItem = stringResource(UpdatePeriod.entries[uiState.updatePeriod].title),
                     isExpanded = isUpdateOptionOpen.value,
                     onClick = {
                         isUpdateOptionOpen.value = true
@@ -220,7 +226,7 @@ private fun PlaylistScreen(
                 )
 
                 SpacerHeight(height = MaterialTheme.dimens.size16)
-                if (!state.isEdit) {
+                if (!uiState.isEdit) {
                     Row(
                         modifier = Modifier.fillMaxWidth(),
                         horizontalArrangement =
@@ -268,12 +274,12 @@ private fun PlaylistScreen(
 
                 SpacerHeight(weight = MaterialTheme.dimens.weight1)
                 ElevatedButton(
-                    enabled = state.isReadyToSave,
+                    enabled = uiState.isReadyToSave,
                     onClick = {
-                        if (state.isEdit) {
-                            onPlaylistAction(PlaylistAction.UpdatePlaylist)
+                        if (uiState.isEdit) {
+                            onAction(PlaylistUiAction.UpdatePlaylist)
                         } else {
-                            onPlaylistAction(PlaylistAction.SavePlaylist)
+                            onAction(PlaylistUiAction.SavePlaylist)
                         }
                     },
                     modifier =
@@ -288,7 +294,7 @@ private fun PlaylistScreen(
                     shape = MaterialTheme.shapes.small,
                 ) {
                     val text =
-                        if (state.isEdit) {
+                        if (uiState.isEdit) {
                             Res.string.btn_update
                         } else {
                             Res.string.btn_save
@@ -303,7 +309,7 @@ private fun PlaylistScreen(
             }
 
             LoadingIndicator(
-                isVisible = state.isSaving,
+                isVisible = uiState.isSaving,
             )
 
             OverlayContent(
@@ -313,10 +319,10 @@ private fun PlaylistScreen(
             ) {
                 OverlayOptionsMenu(
                     title = stringResource(Res.string.hint_update_period),
-                    selectedIndex = state.updatePeriod,
+                    selectedIndex = uiState.updatePeriod,
                     options = UpdatePeriod.entries.map { stringResource(it.title) },
                     onItemSelected = { index ->
-                        onPlaylistAction(PlaylistAction.SetUpdatePeriod(index))
+                        onAction(PlaylistUiAction.SetUpdatePeriod(period = index))
                         isUpdateOptionOpen.value = false
                     },
                 )

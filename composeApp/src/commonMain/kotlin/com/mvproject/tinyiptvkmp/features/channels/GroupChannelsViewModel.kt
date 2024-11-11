@@ -7,28 +7,32 @@
 
 package com.mvproject.tinyiptvkmp.features.channels
 
+import androidx.compose.runtime.Immutable
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import androidx.navigation.toRoute
 import co.touchlab.kermit.Logger
+import com.mvproject.tinyiptvkmp.core.common.mvi.MviCore
+import com.mvproject.tinyiptvkmp.core.common.mvi.mviCore
+import com.mvproject.tinyiptvkmp.core.common.utils.CommonUtils.empty
 import com.mvproject.tinyiptvkmp.core.common.utils.TimeUtils
 import com.mvproject.tinyiptvkmp.core.datastore.repository.PreferenceRepository
 import com.mvproject.tinyiptvkmp.core.domain.enums.ChannelsViewType
 import com.mvproject.tinyiptvkmp.core.domain.enums.ChannelsViewType.Companion.mapViewType
 import com.mvproject.tinyiptvkmp.core.domain.enums.FavoriteType
+import com.mvproject.tinyiptvkmp.core.domain.model.EpgProgram
 import com.mvproject.tinyiptvkmp.core.domain.model.TvChannel
 import com.mvproject.tinyiptvkmp.core.domain.usecase.GetChannelsEpgUseCase
 import com.mvproject.tinyiptvkmp.core.domain.usecase.GetGroupChannelsEpgUseCase
 import com.mvproject.tinyiptvkmp.core.domain.usecase.GetGroupChannelsUseCase
 import com.mvproject.tinyiptvkmp.core.domain.usecase.ToggleFavoriteChannelUseCase
-import com.mvproject.tinyiptvkmp.features.channels.action.GroupChannelsAction
-import com.mvproject.tinyiptvkmp.features.channels.state.GroupChannelsState
+import com.mvproject.tinyiptvkmp.core.domain.utils.ChannelsUtils.mapProgramIds
+import com.mvproject.tinyiptvkmp.core.domain.utils.ChannelsUtils.mapPrograms
+import com.mvproject.tinyiptvkmp.core.domain.utils.ChannelsUtils.replaceUpdated
+import com.mvproject.tinyiptvkmp.core.domain.utils.ChannelsUtils.toggleFavorite
 import com.mvproject.tinyiptvkmp.navigation.AppRoutes
 import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.flow.MutableStateFlow
-import kotlinx.coroutines.flow.StateFlow
-import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 import kotlin.time.Duration.Companion.minutes
 
@@ -39,9 +43,10 @@ class GroupChannelsViewModel(
     private val getGroupChannelsEpgUseCase: GetGroupChannelsEpgUseCase,
     private val toggleFavoriteChannelUseCase: ToggleFavoriteChannelUseCase,
     private val preferenceRepository: PreferenceRepository,
-) : ViewModel() {
-    private val _groupChannelsState = MutableStateFlow(GroupChannelsState())
-    val groupChannelsState: StateFlow<GroupChannelsState> = _groupChannelsState
+) : ViewModel(),
+    MviCore<GroupChannelsUiState, GroupChannelsUiAction, GroupChannelsUiEffect> by mviCore(
+        GroupChannelsUiState()
+    ) {
 
     private val args = savedStateHandle.toRoute<AppRoutes.TvPlaylistChannels>()
 
@@ -53,11 +58,10 @@ class GroupChannelsViewModel(
     init {
         viewModelScope.launch {
             val groupChannels = getGroupChannelsUseCase(group = group, groupType = type)
-
             val viewType = preferenceRepository.getChannelsViewType().mapViewType()
 
-            _groupChannelsState.update { state ->
-                state.copy(
+            updateUiState {
+                copy(
                     viewType = viewType,
                     currentGroup = group,
                     channels = groupChannels
@@ -66,26 +70,31 @@ class GroupChannelsViewModel(
         }
     }
 
-    fun processAction(action: GroupChannelsAction) {
-        when (action) {
-            is GroupChannelsAction.SearchTextChange -> {
-                searchTextChange(text = action.text)
-            }
+    override fun onAction(uiAction: GroupChannelsUiAction) {
+        when (uiAction) {
+            GroupChannelsUiAction.NavigateBack -> viewModelScope.postUiEffect(GroupChannelsUiEffect.OnNavigateBack)
+            is GroupChannelsUiAction.SelectChannel -> viewModelScope.postUiEffect(
+                GroupChannelsUiEffect.OnNavigateToPlayer(
+                    name = uiAction.name,
+                    group = uiAction.group,
+                    groupType = type
+                )
+            )
 
-            is GroupChannelsAction.ToggleEpgVisibility -> {
-                toggleEpgVisibility(name = action.name, epgId = action.epgID)
-            }
+            is GroupChannelsUiAction.SearchTextChange -> searchTextChange(text = uiAction.text)
+            is GroupChannelsUiAction.ToggleEpgVisibility -> toggleEpgVisibility(
+                name = uiAction.name,
+                epgId = uiAction.programId
+            )
 
-            is GroupChannelsAction.ToggleFavourites -> {
-                toggleFavorites(channel = action.channel, type = action.type)
-            }
+            is GroupChannelsUiAction.ToggleFavorite -> toggleFavorites(
+                channel = uiAction.channel,
+                type = uiAction.type
+            )
 
-            is GroupChannelsAction.ViewTypeChange -> {
-                viewTypeChange(type = action.type)
-            }
+            is GroupChannelsUiAction.ViewTypeChange -> viewTypeChange(type = uiAction.type)
         }
     }
-
 
     fun loadChannelsByGroups() {
         viewModelScope.launch(Dispatchers.IO) {
@@ -95,22 +104,14 @@ class GroupChannelsViewModel(
 
     private suspend fun refreshEpgPrograms() {
         if (TimeUtils.actualDate - lastRefresh > 1.minutes.inWholeMilliseconds) {
-            val channels = groupChannelsState.value.channels
-            if (channels.isNotEmpty()) {
-                val channelsIds =
-                    channels
-                        .map { it.epgId }
-                        .filter { it.isNotBlank() }
-
+            val channels = uiState.value.channels
+            val channelsIds = channels.mapProgramIds()
+            if (channelsIds.isNotEmpty()) {
                 val channelsEpgData = getGroupChannelsEpgUseCase(channelsIds = channelsIds)
+                val channelsWithPrograms = channels.mapPrograms(channelEpgMap = channelsEpgData)
 
-                val channelsWithPrograms = channels.map { ch ->
-                    val programs = channelsEpgData[ch.epgId] ?: emptyList()
-                    ch.copy(programs = programs)
-                }
-
-                _groupChannelsState.update { state ->
-                    state.copy(channels = channelsWithPrograms)
+                updateUiState {
+                    copy(channels = channelsWithPrograms)
                 }
 
                 lastRefresh = TimeUtils.actualDate
@@ -119,8 +120,8 @@ class GroupChannelsViewModel(
     }
 
     private fun searchTextChange(text: String) {
-        _groupChannelsState.update { current ->
-            current.copy(searchString = text)
+        updateUiState {
+            copy(searchString = text)
         }
     }
 
@@ -132,8 +133,9 @@ class GroupChannelsViewModel(
             } else {
                 emptyList()
             }
-            _groupChannelsState.update { state ->
-                state.copy(
+
+            updateUiState {
+                copy(
                     selectedName = name,
                     selectedPrograms = programs
                 )
@@ -142,12 +144,12 @@ class GroupChannelsViewModel(
     }
 
     private fun viewTypeChange(type: ChannelsViewType) {
-        if (groupChannelsState.value.viewType != type) {
+        if (uiState.value.viewType != type) {
             viewModelScope.launch {
-                _groupChannelsState.update { current ->
-                    current.copy(viewType = type)
-                }
                 preferenceRepository.setChannelsViewType(type = type.name)
+                updateUiState {
+                    copy(viewType = type)
+                }
             }
         }
     }
@@ -159,38 +161,50 @@ class GroupChannelsViewModel(
         viewModelScope.launch(Dispatchers.IO) {
             Logger.w("testing toggleFavorites type $type")
 
-            val channelWithEpg = channel.toggleFavorite(type = type)
+            val updatedChannel = channel.toggleFavorite(type = type)
 
-            val updatedChannels = groupChannelsState.value.channels
-                .replaceUpdated(channel = channelWithEpg)
+            val updatedChannels = uiState.value.channels
+                .replaceUpdated(channel = updatedChannel)
 
-            _groupChannelsState.update { state ->
-                state.copy(channels = updatedChannels)
+            updateUiState {
+                copy(channels = updatedChannels)
             }
 
-            toggleFavoriteChannelUseCase(
-                channel = channel,
-                favoriteType = channelWithEpg.favoriteType
-            )
+            toggleFavoriteChannelUseCase(channel = channel)
         }
     }
+}
 
-    private fun TvChannel.toggleFavorite(
-        type: FavoriteType
-    ): TvChannel {
-        val favType =
-            if (this.favoriteType == type) {
-                FavoriteType.NONE
-            } else {
-                type
-            }
-        return this.copy(favoriteType = favType)
-    }
+@Immutable
+data class GroupChannelsUiState(
+    val currentGroup: String = String.empty,
+    val isLoading: Boolean = false,
+    val isEpgVisible: Boolean = false,
+    val searchString: String = String.empty,
+    val viewType: ChannelsViewType = ChannelsViewType.LIST,
+    val channels: List<TvChannel> = emptyList(),
+    val selectedName: String = String.empty,
+    val selectedPrograms: List<EpgProgram> = emptyList()
+)
 
-    private fun List<TvChannel>.replaceUpdated(
-        channel: TvChannel
-    ): List<TvChannel> {
-        val index = this.indexOfFirst { it.channelName == channel.channelName }
-        return this.toMutableList().apply { set(index, channel) }
-    }
+sealed interface GroupChannelsUiAction {
+    data class ToggleFavorite(val channel: TvChannel, val type: FavoriteType) :
+        GroupChannelsUiAction
+
+    data class SearchTextChange(val text: String) : GroupChannelsUiAction
+    data class ViewTypeChange(val type: ChannelsViewType) : GroupChannelsUiAction
+    data class ToggleEpgVisibility(
+        val name: String = String.empty,
+        val programId: String = String.empty
+    ) : GroupChannelsUiAction
+
+    data class SelectChannel(val name: String, val group: String) : GroupChannelsUiAction
+    data object NavigateBack : GroupChannelsUiAction
+}
+
+sealed interface GroupChannelsUiEffect {
+    data class OnNavigateToPlayer(val name: String, val group: String, val groupType: String) :
+        GroupChannelsUiEffect
+
+    data object OnNavigateBack : GroupChannelsUiEffect
 }

@@ -13,7 +13,7 @@ import androidx.room.PrimaryKey
 @Entity(tableName = "playlists")
 data class PlaylistEntity(
     @PrimaryKey
-    val id: Long,
+    val id: String,
     val playlistName: String,
     val playlistSource: String,
     val playlistType: String,

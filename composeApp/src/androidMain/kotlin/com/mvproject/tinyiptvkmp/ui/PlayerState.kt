@@ -11,11 +11,10 @@ import android.content.Context
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.remember
 import androidx.compose.ui.platform.LocalContext
-import androidx.media3.common.MediaItem
 import androidx.media3.common.Player
 import androidx.media3.common.VideoSize
 import androidx.media3.exoplayer.ExoPlayer
-import com.mvproject.tinyiptvkmp.features.player.action.PlaybackStateActions
+import com.mvproject.tinyiptvkmp.features.player.PlayerUiAction
 import com.mvproject.tinyiptvkmp.utils.ExoPlayerUtils.createMediaItem
 import com.mvproject.tinyiptvkmp.utils.ExoPlayerUtils.createVideoPlayer
 import com.mvproject.tinyiptvkmp.utils.ExoPlayerUtils.mapToVideoPlaybackState
@@ -28,11 +27,11 @@ import com.mvproject.tinyiptvkmp.utils.ExoPlayerUtils.mapToVideoPlaybackState
 @Composable
 internal fun rememberPlayerState(
     context: Context = LocalContext.current,
-    onPlaybackStateAction: (PlaybackStateActions) -> Unit = {},
+    onPlaybackAction: (PlayerUiAction) -> Unit = {},
 ) = remember {
     PlayerStateImpl(
         player = createVideoPlayer(context),
-        onPlaybackStateAction = onPlaybackStateAction,
+        onPlaybackAction = onPlaybackAction,
     ).also { playerState ->
         playerState.player.apply {
             addListener(playerState)
@@ -42,28 +41,28 @@ internal fun rememberPlayerState(
 
 class PlayerStateImpl(
     val player: ExoPlayer,
-    private val onPlaybackStateAction: (PlaybackStateActions) -> Unit = {},
+    private val onPlaybackAction: (PlayerUiAction) -> Unit = {},
 ) : PlayerState, Player.Listener {
     override fun setVolume(value: Float) {
         player.volume = value
     }
 
-    override fun onMediaItemTransition(
-        mediaItem: MediaItem?,
-        reason: Int,
-    ) {
-        val data = mediaItem?.mediaMetadata?.displayTitle.toString()
-        onPlaybackStateAction(
-            PlaybackStateActions.OnMediaItemTransition(
-                mediaTitle = data,
-                index = player.currentMediaItemIndex,
-            ),
-        )
-    }
+    /*    override fun onMediaItemTransition(
+            mediaItem: MediaItem?,
+            reason: Int,
+        ) {
+            val data = mediaItem?.mediaMetadata?.displayTitle.toString()
+            onPlaybackStateAction(
+                PlaybackStateActions.OnMediaItemTransition(
+                    mediaTitle = data,
+                    index = player.currentMediaItemIndex,
+                ),
+            )
+        }*/
 
     override fun onIsPlayingChanged(isPlaying: Boolean) {
-        onPlaybackStateAction(
-            PlaybackStateActions.OnIsPlayingChanged(isPlaying),
+        onPlaybackAction(
+            PlayerUiAction.OnIsPlayingChanged(isPlaying),
         )
     }
 
@@ -74,14 +73,14 @@ class PlayerStateImpl(
                 errorCode = player.playerError?.errorCode,
             )
 
-        onPlaybackStateAction(
-            PlaybackStateActions.OnPlaybackStateChanged(state),
+        onPlaybackAction(
+            PlayerUiAction.OnPlaybackStateChanged(state),
         )
     }
 
     override fun onVideoSizeChanged(videoSize: VideoSize) {
-        onPlaybackStateAction(
-            PlaybackStateActions.OnVideoSizeChanged(
+        onPlaybackAction(
+            PlayerUiAction.OnVideoSizeChanged(
                 videoSize.height,
                 videoSize.width,
                 videoSize.pixelWidthHeightRatio,
@@ -114,12 +113,9 @@ class PlayerStateImpl(
         }
     }
 
-    override fun setPlayerChannel(
-        channelName: String,
-        channelUrl: String,
-    ) {
+    override fun setPlayerChannel(channelUrl: String) {
         this.player.apply {
-            setMediaItem(createMediaItem(title = channelName, url = channelUrl))
+            setMediaItem(createMediaItem(url = channelUrl))
             prepare()
             playWhenReady = true
         }
@@ -137,8 +133,5 @@ interface PlayerState {
 
     fun restartPlayer()
 
-    fun setPlayerChannel(
-        channelName: String,
-        channelUrl: String,
-    )
+    fun setPlayerChannel(channelUrl: String)
 }

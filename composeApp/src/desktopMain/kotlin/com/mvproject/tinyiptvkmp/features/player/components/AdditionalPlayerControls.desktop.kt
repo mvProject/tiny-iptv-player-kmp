@@ -18,13 +18,11 @@ import androidx.compose.ui.Modifier
 import com.mvproject.tinyiptvkmp.core.theme.dimens
 import com.mvproject.tinyiptvkmp.core.ui.buttons.ControlButton
 import com.mvproject.tinyiptvkmp.core.ui.modifiers.SpacerWidth
-import com.mvproject.tinyiptvkmp.features.player.action.PlaybackActions
 
 @Composable
 actual fun AdditionalPlayerControls(
     modifier: Modifier,
-    action: () -> Unit,
-    onPlaybackAction: (PlaybackActions) -> Unit,
+    onClick: (PlayerUiAction) -> Unit
 ) {
     Row(
         modifier = modifier,
@@ -33,49 +31,49 @@ actual fun AdditionalPlayerControls(
     ) {
         ControlButton(
             imageVector = Icons.Rounded.Close,
-            onClick = action,
+            onClick = { onClick(PlayerUiAction.NavigateBack) },
         )
 
         SpacerWidth(width = MaterialTheme.dimens.size32)
         ControlButton(
             imageVector = Icons.AutoMirrored.Rounded.VolumeDown,
-            onClick = { onPlaybackAction(PlaybackActions.OnVolumeDown) },
+            onClick = { onClick(PlayerUiAction.VolumeDown) },
         )
 
         SpacerWidth(width = MaterialTheme.dimens.size8)
         ControlButton(
             imageVector = Icons.AutoMirrored.Rounded.VolumeUp,
-            onClick = { onPlaybackAction(PlaybackActions.OnVolumeUp) },
+            onClick = { onClick(PlayerUiAction.VolumeUp) },
         )
 
         SpacerWidth(width = MaterialTheme.dimens.size24)
         ControlButton(
             imageVector = Icons.Rounded.SkipPrevious,
-            onClick = { onPlaybackAction(PlaybackActions.OnPreviousSelected) },
+            onClick = { onClick(PlayerUiAction.SelectPrevious) },
         )
 
         SpacerWidth(width = MaterialTheme.dimens.size8)
         ControlButton(
             imageVector = Icons.Rounded.SkipNext,
-            onClick = { onPlaybackAction(PlaybackActions.OnNextSelected) },
+            onClick = { onClick(PlayerUiAction.SelectNext) },
         )
 
         SpacerWidth(width = MaterialTheme.dimens.size24)
         ControlButton(
             imageVector = Icons.AutoMirrored.Rounded.ViewList,
-            onClick = { onPlaybackAction(PlaybackActions.OnEpgUiToggle) },
+            onClick = { onClick(PlayerUiAction.ToggleProgramsUi) },
         )
 
         SpacerWidth(width = MaterialTheme.dimens.size8)
         ControlButton(
             imageVector = Icons.AutoMirrored.Rounded.FeaturedPlayList,
-            onClick = { onPlaybackAction(PlaybackActions.OnChannelsUiToggle) },
+            onClick = { onClick(PlayerUiAction.ToggleChannelsUi) },
         )
 
         SpacerWidth(width = MaterialTheme.dimens.size8)
         ControlButton(
             imageVector = Icons.Rounded.Info,
-            onClick = { onPlaybackAction(PlaybackActions.OnChannelInfoUiToggle) },
+            onClick = { onClick(PlayerUiAction.ToggleProgramInfoUi) },
         )
 
         SpacerWidth(width = MaterialTheme.dimens.size24)

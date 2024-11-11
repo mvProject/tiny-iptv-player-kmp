@@ -31,7 +31,7 @@ interface FavoriteChannelDao {
     suspend fun getSelectedFavoriteChannels(): List<FavoriteChannelEntity>
 
     @Query("SELECT * FROM favoriteChannels WHERE parentListId == :id")
-    suspend fun getFavoriteChannelById(id: Long): List<FavoriteChannelEntity>
+    suspend fun getFavoriteChannelById(id: String): List<FavoriteChannelEntity>
 
     @Query("SELECT channelUrl FROM favoriteChannels")
     suspend fun getFavoriteChannelUrls(): List<String>
@@ -42,5 +42,5 @@ interface FavoriteChannelDao {
     suspend fun deleteChannelFromFavorite(channelUrl: String)
 
     @Query("DELETE FROM favoriteChannels WHERE parentListId = :id")
-    suspend fun deletePlaylistFavoriteChannelEntities(id: Long)
+    suspend fun deletePlaylistFavoriteChannelEntities(id: String)
 }

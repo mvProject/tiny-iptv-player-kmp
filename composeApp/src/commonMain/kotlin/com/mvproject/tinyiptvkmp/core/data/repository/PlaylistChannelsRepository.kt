@@ -56,7 +56,7 @@ class PlaylistChannelsRepository(
             .getChannelsByPlaylistGroup(group = group)
             .map { it.toPlaylistChannel() }
 
-    suspend fun deletePlaylistChannels(listId: Long) {
+    suspend fun deletePlaylistChannels(listId: String) {
         playlistChannelDao.deletePlaylistChannels(id = listId)
     }
 }

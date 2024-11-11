@@ -18,11 +18,11 @@ import com.mvproject.tinyiptvkmp.features.player.navigation.navigateToPlayer
 import com.mvproject.tinyiptvkmp.features.player.navigation.player
 import com.mvproject.tinyiptvkmp.features.playlist.navigation.navigateToPlaylistDetail
 import com.mvproject.tinyiptvkmp.features.playlist.navigation.playlistDetail
-import com.mvproject.tinyiptvkmp.features.settings.general.navigation.navigateToSettingsGeneral
+import com.mvproject.tinyiptvkmp.features.settings.general.navigation.navigateToGeneralSettings
 import com.mvproject.tinyiptvkmp.features.settings.general.navigation.settingsGeneral
-import com.mvproject.tinyiptvkmp.features.settings.player.navigation.navigateToSettingsPlayer
+import com.mvproject.tinyiptvkmp.features.settings.player.navigation.navigateToPlayerSettings
 import com.mvproject.tinyiptvkmp.features.settings.player.navigation.settingsPlayer
-import com.mvproject.tinyiptvkmp.features.settings.playlist.navigation.navigateToSettingsPlaylist
+import com.mvproject.tinyiptvkmp.features.settings.playlist.navigation.navigateToPlaylistSettings
 import com.mvproject.tinyiptvkmp.features.settings.playlist.navigation.settingsPlaylist
 
 @Composable
@@ -39,13 +39,13 @@ fun NavigationHost(
     ) {
 
         playlistGroups(
-            onNavigateToSettings = navController::navigateToSettingsGeneral,
+            onNavigateToSettings = navController::navigateToGeneralSettings,
             onNavigateToGroup = navController::navigateToGroupChannels
         )
 
         groupChannels(
             onNavigateBack = navController::navigateUp,
-            onNavigateSelected = navController::navigateToPlayer
+            onNavigateToPlayer = navController::navigateToPlayer
         )
 
         playlistDetail(
@@ -58,8 +58,8 @@ fun NavigationHost(
 
         settingsGeneral(
             onNavigateBack = navController::navigateUp,
-            onNavigatePlaylistSettings = navController::navigateToSettingsPlaylist,
-            onNavigatePlayerSettings = navController::navigateToSettingsPlayer
+            onNavigateToPlaylistSettings = navController::navigateToPlaylistSettings,
+            onNavigateToPlayerSettings = navController::navigateToPlayerSettings
         )
 
         settingsPlaylist(

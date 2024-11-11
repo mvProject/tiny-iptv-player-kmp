@@ -2,7 +2,7 @@
   "formatVersion": 1,
   "database": {
     "version": 1,
-    "identityHash": "1374b2db5f304d303c9d0e5f7499f37a",
+    "identityHash": "f4713b2a871a38bd2b9fa50e03f1cf3e",
     "entities": [
       {
         "tableName": "epgChannels",
@@ -90,7 +90,7 @@
       },
       {
         "tableName": "favoriteChannels",
-        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`channelName` TEXT NOT NULL, `channelUrl` TEXT NOT NULL, `channelOrder` INTEGER NOT NULL, `favoriteType` TEXT NOT NULL, `parentListId` INTEGER NOT NULL, PRIMARY KEY(`channelName`, `parentListId`))",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`channelName` TEXT NOT NULL, `channelUrl` TEXT NOT NULL, `channelOrder` INTEGER NOT NULL, `favoriteType` TEXT NOT NULL, `parentListId` TEXT NOT NULL, PRIMARY KEY(`channelName`, `parentListId`))",
         "fields": [
           {
             "fieldPath": "channelName",
@@ -119,7 +119,7 @@
           {
             "fieldPath": "parentListId",
             "columnName": "parentListId",
-            "affinity": "INTEGER",
+            "affinity": "TEXT",
             "notNull": true
           }
         ],
@@ -133,12 +133,12 @@
       },
       {
         "tableName": "playlists",
-        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`id` INTEGER NOT NULL, `playlistName` TEXT NOT NULL, `playlistSource` TEXT NOT NULL, `playlistType` TEXT NOT NULL, `lastUpdateDate` INTEGER NOT NULL, `updatePeriod` INTEGER NOT NULL, `isSelected` INTEGER NOT NULL, PRIMARY KEY(`id`))",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`id` TEXT NOT NULL, `playlistName` TEXT NOT NULL, `playlistSource` TEXT NOT NULL, `playlistType` TEXT NOT NULL, `lastUpdateDate` INTEGER NOT NULL, `updatePeriod` INTEGER NOT NULL, `isSelected` INTEGER NOT NULL, PRIMARY KEY(`id`))",
         "fields": [
           {
             "fieldPath": "id",
             "columnName": "id",
-            "affinity": "INTEGER",
+            "affinity": "TEXT",
             "notNull": true
           },
           {
@@ -187,7 +187,7 @@
       },
       {
         "tableName": "playlistChannels",
-        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`channelUrl` TEXT NOT NULL, `channelName` TEXT NOT NULL, `channelLogo` TEXT NOT NULL, `channelGroup` TEXT NOT NULL, `epgId` TEXT NOT NULL, `parentListId` INTEGER NOT NULL, PRIMARY KEY(`channelUrl`, `parentListId`))",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`channelUrl` TEXT NOT NULL, `channelName` TEXT NOT NULL, `channelLogo` TEXT NOT NULL, `channelGroup` TEXT NOT NULL, `programId` TEXT NOT NULL, `parentListId` TEXT NOT NULL, PRIMARY KEY(`channelUrl`, `parentListId`))",
         "fields": [
           {
             "fieldPath": "channelUrl",
@@ -214,15 +214,15 @@
             "notNull": true
           },
           {
-            "fieldPath": "epgId",
-            "columnName": "epgId",
+            "fieldPath": "programId",
+            "columnName": "programId",
             "affinity": "TEXT",
             "notNull": true
           },
           {
             "fieldPath": "parentListId",
             "columnName": "parentListId",
-            "affinity": "INTEGER",
+            "affinity": "TEXT",
             "notNull": true
           }
         ],
@@ -237,7 +237,7 @@
     ],
     "setupQueries": [
       "CREATE TABLE IF NOT EXISTS room_master_table (id INTEGER PRIMARY KEY,identity_hash TEXT)",
-      "INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, '1374b2db5f304d303c9d0e5f7499f37a')"
+      "INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, 'f4713b2a871a38bd2b9fa50e03f1cf3e')"
     ]
   }
 }

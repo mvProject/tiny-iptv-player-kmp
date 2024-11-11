@@ -45,5 +45,5 @@ interface PlaylistChannelDao {
     suspend fun getPlaylistChannelsGroups(): List<String>
 
     @Query("DELETE FROM playlistChannels WHERE parentListId = :id")
-    suspend fun deletePlaylistChannels(id: Long)
+    suspend fun deletePlaylistChannels(id: String)
 }

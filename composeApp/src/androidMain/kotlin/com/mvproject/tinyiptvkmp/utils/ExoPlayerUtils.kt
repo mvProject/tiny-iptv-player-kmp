@@ -12,7 +12,6 @@ import androidx.annotation.OptIn
 import androidx.media3.common.AudioAttributes
 import androidx.media3.common.C
 import androidx.media3.common.MediaItem
-import androidx.media3.common.MediaMetadata
 import androidx.media3.common.Player
 import androidx.media3.common.util.UnstableApi
 import androidx.media3.datasource.DefaultHttpDataSource
@@ -22,7 +21,7 @@ import androidx.media3.exoplayer.hls.HlsMediaSource
 import androidx.media3.exoplayer.trackselection.AdaptiveTrackSelection
 import androidx.media3.exoplayer.trackselection.DefaultTrackSelector
 import androidx.media3.exoplayer.upstream.DefaultBandwidthMeter
-import com.mvproject.tinyiptvkmp.features.player.state.PlaybackState
+import com.mvproject.tinyiptvkmp.features.player.PlayerUiState
 import io.github.anilbeesetti.nextlib.media3ext.ffdecoder.NextRenderersFactory
 
 object ExoPlayerUtils {
@@ -97,28 +96,20 @@ object ExoPlayerUtils {
     fun mapToVideoPlaybackState(
         playbackState: Int,
         errorCode: Int? = null,
-    ): PlaybackState =
+    ): PlayerUiState.PlayerPlaybackState =
         when (playbackState) {
             Player.STATE_IDLE -> {
-                PlaybackState.PlaybackIdle(errorCode = errorCode)
+                PlayerUiState.PlayerPlaybackState.PlaybackIdle(errorCode = errorCode)
             }
 
-            Player.STATE_BUFFERING -> PlaybackState.PlaybackBuffering
-            Player.STATE_ENDED -> PlaybackState.PlaybackEnded
-            else -> PlaybackState.PlaybackReady
+            Player.STATE_BUFFERING -> PlayerUiState.PlayerPlaybackState.PlaybackBuffering
+            Player.STATE_ENDED -> PlayerUiState.PlayerPlaybackState.PlaybackEnded
+            else -> PlayerUiState.PlayerPlaybackState.PlaybackReady
         }
 
-    fun createMediaItem(
-        title: String,
-        url: String,
-    ): MediaItem =
+    fun createMediaItem(url: String): MediaItem =
         MediaItem
             .Builder()
             .setUri(url)
-            .setMediaMetadata(
-                MediaMetadata
-                    .Builder()
-                    .setDisplayTitle(title)
-                    .build(),
-            ).build()
+            .build()
 }

@@ -28,13 +28,12 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
-import com.mvproject.tinyiptvkmp.core.common.utils.CommonUtils.empty
+import com.mvproject.tinyiptvkmp.core.common.mvi.CollectUiEffect
 import com.mvproject.tinyiptvkmp.core.theme.dimens
+import com.mvproject.tinyiptvkmp.core.ui.indicators.LoadingIndicator
 import com.mvproject.tinyiptvkmp.core.ui.toolbars.AppBarWithBackNav
 import com.mvproject.tinyiptvkmp.core.ui.views.NoItemsView
-import com.mvproject.tinyiptvkmp.features.settings.playlist.action.SettingsPlaylistAction
 import com.mvproject.tinyiptvkmp.features.settings.playlist.components.PlaylistItem
-import com.mvproject.tinyiptvkmp.features.settings.playlist.state.SettingsPlaylistState
 import org.jetbrains.compose.resources.stringResource
 import tinyiptvkmp.composeapp.generated.resources.Res
 import tinyiptvkmp.composeapp.generated.resources.btn_add_new
@@ -48,22 +47,24 @@ internal fun SettingsPlaylistScreen(
     onNavigateBack: () -> Unit = {},
     onNavigatePlaylist: (String) -> Unit = {},
 ) {
-    val playlistDataState by viewModel.playlistDataState.collectAsState()
+    val uiState by viewModel.uiState.collectAsState()
 
+    CollectUiEffect(viewModel.uiEffect) { effect ->
+        when (effect) {
+            SettingsPlaylistUiEffect.OnNavigateBack -> onNavigateBack()
+            is SettingsPlaylistUiEffect.OnNavigateToPlaylist -> onNavigatePlaylist(effect.id)
+        }
+    }
     SettingsPlaylistScreen(
-        state = playlistDataState,
-        onPlaylistAction = viewModel::processAction,
-        onNavigateBack = onNavigateBack,
-        onNavigatePlaylist = onNavigatePlaylist
+        uiState = uiState,
+        onAction = viewModel::onAction
     )
 }
 
 @Composable
 private fun SettingsPlaylistScreen(
-    state: SettingsPlaylistState,
-    onNavigateBack: () -> Unit = {},
-    onNavigatePlaylist: (String) -> Unit = {},
-    onPlaylistAction: (SettingsPlaylistAction) -> Unit = {},
+    uiState: SettingsPlaylistUiState,
+    onAction: (SettingsPlaylistUiAction) -> Unit,
 ) {
     Scaffold(
         modifier =
@@ -73,13 +74,13 @@ private fun SettingsPlaylistScreen(
         topBar = {
             AppBarWithBackNav(
                 appBarTitle = stringResource(Res.string.scr_playlist_settings_title),
-                onBackClick = onNavigateBack,
+                onBackClick = { onAction(SettingsPlaylistUiAction.NavigateBack) },
             )
         },
         bottomBar = {
             ElevatedButton(
                 onClick = {
-                    onNavigatePlaylist(String.empty)
+                    onAction(SettingsPlaylistUiAction.NavigateToPlaylist())
                 },
                 modifier =
                 Modifier
@@ -105,38 +106,44 @@ private fun SettingsPlaylistScreen(
                 .padding(paddingValues)
                 .fillMaxSize(),
         ) {
-            LazyColumn(
-                modifier =
-                Modifier
-                    .fillMaxSize(),
-                state = rememberLazyListState(),
-                verticalArrangement = Arrangement.spacedBy(MaterialTheme.dimens.size4),
-                contentPadding = PaddingValues(MaterialTheme.dimens.size8),
-            ) {
-                items(
-                    state.playlists,
-                    key = { it.id },
-                ) { item ->
-                    PlaylistItem(
+            when (val playlistState = uiState.playlistState) {
+                SettingsPlaylistUiState.PlaylistState.Empty -> {
+                    NoItemsView(
                         modifier = Modifier.fillMaxSize(),
-                        item = item,
-                        onSelect = {
-                            onNavigatePlaylist(item.id.toString())
-                        },
-                        onDelete = {
-                            onPlaylistAction(SettingsPlaylistAction.DeletePlaylist(item))
-                        },
+                        title = stringResource(Res.string.msg_no_items_found),
+                        navigateTitle = stringResource(Res.string.msg_no_playlist),
                     )
+                }
+
+                is SettingsPlaylistUiState.PlaylistState.Success -> {
+                    LazyColumn(
+                        modifier =
+                        Modifier
+                            .fillMaxSize(),
+                        state = rememberLazyListState(),
+                        verticalArrangement = Arrangement.spacedBy(MaterialTheme.dimens.size4),
+                        contentPadding = PaddingValues(MaterialTheme.dimens.size8),
+                    ) {
+                        items(
+                            playlistState.playlists,
+                            key = { it.id },
+                        ) { item ->
+                            PlaylistItem(
+                                modifier = Modifier.fillMaxSize(),
+                                item = item,
+                                onSelect = {
+                                    onAction(SettingsPlaylistUiAction.NavigateToPlaylist(id = item.id.toString()))
+                                },
+                                onDelete = {
+                                    onAction(SettingsPlaylistUiAction.DeletePlaylist(playlist = item))
+                                },
+                            )
+                        }
+                    }
                 }
             }
 
-            if (state.dataIsEmpty) {
-                NoItemsView(
-                    modifier = Modifier.fillMaxSize(),
-                    title = stringResource(Res.string.msg_no_items_found),
-                    navigateTitle = stringResource(Res.string.msg_no_playlist),
-                )
-            }
+            LoadingIndicator(isVisible = uiState.isLoading)
         }
     }
 }

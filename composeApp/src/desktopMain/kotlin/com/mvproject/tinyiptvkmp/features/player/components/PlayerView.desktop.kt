@@ -17,18 +17,14 @@ import androidx.compose.ui.graphics.ImageBitmap
 import androidx.compose.ui.graphics.asComposeImageBitmap
 import androidx.compose.ui.unit.IntOffset
 import androidx.compose.ui.unit.IntSize
-import com.mvproject.tinyiptvkmp.core.common.AppConstants
+import co.touchlab.kermit.Logger
 import com.mvproject.tinyiptvkmp.core.common.AppConstants.FLOAT_VALUE_1
 import com.mvproject.tinyiptvkmp.core.common.AppConstants.INT_NO_VALUE
 import com.mvproject.tinyiptvkmp.core.common.AppConstants.INT_VALUE_2
 import com.mvproject.tinyiptvkmp.core.common.AppConstants.INT_VALUE_4
 import com.mvproject.tinyiptvkmp.core.common.AppConstants.INT_VALUE_ZERO
 import com.mvproject.tinyiptvkmp.core.common.AppConstants.LONG_VALUE_ZERO
-import com.mvproject.tinyiptvkmp.features.player.action.PlaybackActions
-import com.mvproject.tinyiptvkmp.features.player.action.PlaybackStateActions
-import com.mvproject.tinyiptvkmp.features.player.state.PlaybackState
-import com.mvproject.tinyiptvkmp.features.player.state.TvPlayerState
-import com.mvproject.tinyiptvkmp.utils.KLog
+import com.mvproject.tinyiptvkmp.features.player.PlayerPlaybackState
 import org.jetbrains.skia.Bitmap
 import uk.co.caprica.vlcj.factory.discovery.NativeDiscovery
 import uk.co.caprica.vlcj.media.MediaRef
@@ -44,41 +40,40 @@ import java.nio.ByteBuffer
 @Composable
 actual fun PlayerView(
     modifier: Modifier,
-    tvPlayerState: TvPlayerState,
-    onPlaybackAction: (PlaybackActions) -> Unit,
-    onPlaybackStateAction: (PlaybackStateActions) -> Unit,
+    uiState: PlayerUiState,
+    onUiAction: (PlayerUiAction) -> Unit,
 ) {
     // todo network Available check
 
     val videoPlayerState = remember { VideoPlayerStateImpl() }
 
-    LaunchedEffect(tvPlayerState.isRestartRequired) {
-        if (tvPlayerState.isRestartRequired) {
-            // todo player restart
-            videoPlayerState.restartPlayer()
-            onPlaybackAction(PlaybackActions.OnRestarted)
-        }
-    }
+    /*    LaunchedEffect(tvPlayerState.isRestartRequired) {
+            if (tvPlayerState.isRestartRequired) {
+                // todo player restart
+                videoPlayerState.restartPlayer()
+                onPlaybackAction(UiActions.Restart)
+            }
+        }*/
 
-    LaunchedEffect(tvPlayerState.isFullscreen) {
+    LaunchedEffect(uiState.isFullscreen) {
         // todo handle fullscreen state
     }
 
-    LaunchedEffect(tvPlayerState.currentVolume) {
-        videoPlayerState.setVolume(tvPlayerState.currentVolume)
+    LaunchedEffect(uiState.currentVolume) {
+        videoPlayerState.setVolume(uiState.currentVolume)
     }
 
-    LaunchedEffect(tvPlayerState.mediaPosition) {
-        if (tvPlayerState.mediaPosition > INT_NO_VALUE) {
+    LaunchedEffect(uiState.channelIndex) {
+        if (uiState.channelIndex > INT_NO_VALUE) {
             videoPlayerState.setPlayerChannel(
-                channelName = tvPlayerState.currentChannel.channelName,
-                channelUrl = tvPlayerState.currentChannel.channelUrl
+                channelName = uiState.currentChannel.channelName,
+                channelUrl = uiState.currentChannel.channelUrl
             )
         }
     }
 
-    LaunchedEffect(tvPlayerState.isPlaying) {
-        videoPlayerState.setPlayingState(tvPlayerState.isPlaying)
+    LaunchedEffect(uiState.isPlaying) {
+        videoPlayerState.setPlayingState(uiState.isPlaying)
     }
 
     VideoPlayerDirect(
@@ -86,8 +81,8 @@ actual fun PlayerView(
             .fillMaxSize()
             .aspectRatio(videoPlayerState.aspectRatio),
         state = videoPlayerState,
-        url = tvPlayerState.currentChannel.channelUrl,
-        onPlaybackStateAction = onPlaybackStateAction
+        url = uiState.currentChannel.channelUrl,
+        onPlaybackAction = onUiAction
     )
 
 
@@ -151,7 +146,7 @@ class VideoPlayerStateImpl : VideoPlayerState {
     }
 
     init {
-        KLog.w("init VideoPlayerStateImpl")
+        Logger.w("init VideoPlayerStateImpl")
     }
 }
 
@@ -160,33 +155,33 @@ fun VideoPlayerDirect(
     modifier: Modifier = Modifier,
     state: VideoPlayerStateImpl = remember { VideoPlayerStateImpl() },
     url: String,
-    onPlaybackStateAction: (PlaybackStateActions) -> Unit = {}
+    onPlaybackAction: (PlayerUiAction) -> Unit
 ) {
     NativeDiscovery().discover()
 
     DisposableEffect(state) {
         val eventListener = object : MediaPlayerEventAdapter() {
             override fun error(mediaPlayer: MediaPlayer) {
-                KLog.e("testing mediaPlayer error")
+                Logger.e("testing mediaPlayer error")
             }
 
             override fun mediaPlayerReady(mediaPlayer: MediaPlayer) {
                 mediaPlayer.media().info().audioTracks().forEach { info ->
-                    KLog.i("testing audioTrack info: $info")
+                    Logger.i("testing audioTrack info: $info")
                 }
 
-                onPlaybackStateAction(
-                    PlaybackStateActions.OnPlaybackStateChanged(PlaybackState.PlaybackReady)
+                onPlaybackAction(
+                    PlayerUiAction.OnPlaybackStateChanged(PlayerPlaybackState.PlaybackReady)
                 )
             }
 
             override fun mediaChanged(mediaPlayer: MediaPlayer, media: MediaRef?) {
-                onPlaybackStateAction(
-                    PlaybackStateActions.OnMediaItemTransition(
-                        mediaTitle = "",
-                        index = 1
-                    )
-                )
+                //onAction(
+                //    UiActions.OnMediaItemTransition(
+                //        mediaTitle = "",
+                //        index = 1
+                //    )
+                //)
             }
 
             override fun buffering(mediaPlayer: MediaPlayer, newCache: Float) {
@@ -200,23 +195,23 @@ fun VideoPlayerDirect(
 
             override fun playing(mediaPlayer: MediaPlayer) {
                 mediaPlayer.status().isPlaying.let { isPlaying ->
-                    onPlaybackStateAction(
-                        PlaybackStateActions.OnIsPlayingChanged(isPlaying)
+                    onPlaybackAction(
+                        PlayerUiAction.OnIsPlayingChanged(isPlaying)
                     )
                 }
             }
 
             override fun paused(mediaPlayer: MediaPlayer) {
                 mediaPlayer.status().isPlaying.let { isPlaying ->
-                    onPlaybackStateAction(
-                        PlaybackStateActions.OnIsPlayingChanged(isPlaying)
+                    onPlaybackAction(
+                        PlayerUiAction.OnIsPlayingChanged(isPlaying)
                     )
                 }
             }
 
             override fun stopped(mediaPlayer: MediaPlayer) {
-                onPlaybackStateAction(
-                    PlaybackStateActions.OnPlaybackStateChanged(PlaybackState.PlaybackEnded)
+                onPlaybackAction(
+                    PlayerUiAction.OnPlaybackStateChanged(PlayerPlaybackState.PlaybackEnded)
                 )
             }
         }
@@ -232,7 +227,7 @@ fun VideoPlayerDirect(
     var frameTime: Long by remember { mutableStateOf(LONG_VALUE_ZERO) }
 
     LaunchedEffect(url) {
-        KLog.w("testing LaunchedEffect started")
+        Logger.w("testing LaunchedEffect started")
         state.mediaPlayer.media()?.start(url)
         state.mediaPlayer.subpictures().setTrack(INT_NO_VALUE)
         while (true) {
@@ -271,7 +266,7 @@ internal class RenderState {
     private var composeImage: ImageBitmap? = null
 
     init {
-        KLog.w("init RenderState")
+        Logger.w("init RenderState")
     }
 
     fun updateComposeImage(frameTime: Long): ImageBitmap? {
@@ -283,7 +278,7 @@ internal class RenderState {
                 return composeImage
             }
         } catch (ex: Exception) {
-            KLog.e("updateComposeImage exception ${ex.localizedMessage}")
+            Logger.e("updateComposeImage exception ${ex.localizedMessage}")
         }
 
         return null
