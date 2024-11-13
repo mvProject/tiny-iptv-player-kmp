@@ -14,6 +14,7 @@ import com.mvproject.tinyiptvkmp.core.common.AppConstants
 import com.mvproject.tinyiptvkmp.core.common.mvi.MviCore
 import com.mvproject.tinyiptvkmp.core.common.mvi.mviCore
 import com.mvproject.tinyiptvkmp.core.datastore.repository.PreferenceRepository
+import com.mvproject.tinyiptvkmp.features.settings.general.SettingsGeneralUiState.OsdType
 import kotlinx.coroutines.launch
 
 class SettingsGeneralViewModel(
@@ -52,6 +53,20 @@ class SettingsGeneralViewModel(
 
             is SettingsGeneralUiAction.SetEpgUpdatePeriod -> setUpdateEpgProgramsPeriod(type = uiAction.type)
             is SettingsGeneralUiAction.SetInfoUpdatePeriod -> setUpdateInfoPeriod(type = uiAction.type)
+            SettingsGeneralUiAction.CloseOsd -> closeOsd()
+            is SettingsGeneralUiAction.OpenOsd -> openOsd(type = uiAction.type)
+        }
+    }
+
+    private fun openOsd(type: OsdType) {
+        updateUiState {
+            copy(osdType = type)
+        }
+    }
+
+    private fun closeOsd() {
+        updateUiState {
+            copy(osdType = null)
         }
     }
 
@@ -59,7 +74,7 @@ class SettingsGeneralViewModel(
         viewModelScope.launch {
             preferenceRepository.setEpgInfoUpdatePeriod(type = type)
             updateUiState {
-                copy(infoUpdatePeriod = type)
+                copy(infoUpdatePeriod = type, osdType = null)
             }
         }
     }
@@ -68,7 +83,7 @@ class SettingsGeneralViewModel(
         viewModelScope.launch {
             preferenceRepository.setMainEpgUpdatePeriod(type = type)
             updateUiState {
-                copy(epgUpdatePeriod = type)
+                copy(epgUpdatePeriod = type, osdType = null)
             }
         }
     }
@@ -78,11 +93,19 @@ class SettingsGeneralViewModel(
 data class SettingsGeneralUiState(
     val infoUpdatePeriod: Int = AppConstants.INT_VALUE_ZERO,
     val epgUpdatePeriod: Int = AppConstants.INT_VALUE_ZERO,
-)
+    val osdType: OsdType? = null,
+) {
+    sealed interface OsdType {
+        data object InfoUpdate : OsdType
+        data object ProgramsUpdate : OsdType
+    }
+}
 
 sealed interface SettingsGeneralUiAction {
     data class SetInfoUpdatePeriod(val type: Int) : SettingsGeneralUiAction
     data class SetEpgUpdatePeriod(val type: Int) : SettingsGeneralUiAction
+    data class OpenOsd(val type: OsdType) : SettingsGeneralUiAction
+    data object CloseOsd : SettingsGeneralUiAction
     data object NavigateBack : SettingsGeneralUiAction
     data object NavigateToPlayerSettings : SettingsGeneralUiAction
     data object NavigateToPlaylistSettings : SettingsGeneralUiAction

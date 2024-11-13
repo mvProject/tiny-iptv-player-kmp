@@ -27,8 +27,6 @@ import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -89,8 +87,8 @@ private fun SettingsGeneralScreen(
         },
     ) { paddingValues ->
 
-        val isSelectInfoUpdateOpen = remember { mutableStateOf(false) }
-        val isSelectEpgUpdateOpen = remember { mutableStateOf(false) }
+        /*       val isSelectInfoUpdateOpen = remember { mutableStateOf(false) }
+               val isSelectEpgUpdateOpen = remember { mutableStateOf(false) }*/
 
         Column(
             modifier = Modifier
@@ -217,9 +215,9 @@ private fun SettingsGeneralScreen(
                     .padding(horizontal = MaterialTheme.dimens.size8),
                 title = stringResource(Res.string.option_update_epg_info),
                 selectedItem = stringResource(UpdatePeriod.entries[uiState.infoUpdatePeriod].title),
-                isExpanded = isSelectInfoUpdateOpen.value,
+                isExpanded = uiState.osdType == SettingsGeneralUiState.OsdType.InfoUpdate,
                 onClick = {
-                    isSelectInfoUpdateOpen.value = true
+                    onAction(SettingsGeneralUiAction.OpenOsd(SettingsGeneralUiState.OsdType.InfoUpdate))
                 },
             )
 
@@ -230,43 +228,43 @@ private fun SettingsGeneralScreen(
                     .padding(horizontal = MaterialTheme.dimens.size8),
                 title = stringResource(Res.string.option_update_epg_data),
                 selectedItem = stringResource(UpdatePeriod.entries[uiState.epgUpdatePeriod].title),
-                isExpanded = isSelectEpgUpdateOpen.value,
+                isExpanded = uiState.osdType == SettingsGeneralUiState.OsdType.ProgramsUpdate,
                 onClick = {
-                    isSelectEpgUpdateOpen.value = true
+                    onAction(SettingsGeneralUiAction.OpenOsd(SettingsGeneralUiState.OsdType.ProgramsUpdate))
                 },
             )
         }
 
         OverlayContent(
-            isVisible = isSelectInfoUpdateOpen.value,
+            isVisible = uiState.osdType != null,
             contentAlpha = MaterialTheme.dimens.alpha90,
-            onViewTap = { isSelectInfoUpdateOpen.value = false },
+            onViewTap = { onAction(SettingsGeneralUiAction.CloseOsd) },
         ) {
-            OverlayOptionsMenu(
-                title = stringResource(Res.string.hint_update_period),
-                selectedIndex = uiState.infoUpdatePeriod,
-                options = UpdatePeriod.entries.map { stringResource(it.title) },
-                onItemSelected = { index ->
-                    onAction(SettingsGeneralUiAction.SetInfoUpdatePeriod(type = index))
-                    isSelectInfoUpdateOpen.value = false
-                },
-            )
-        }
+            uiState.osdType?.let { osdType ->
+                when (osdType) {
+                    SettingsGeneralUiState.OsdType.InfoUpdate -> {
+                        OverlayOptionsMenu(
+                            title = stringResource(Res.string.hint_update_period),
+                            selectedIndex = uiState.infoUpdatePeriod,
+                            options = UpdatePeriod.entries.map { stringResource(it.title) },
+                            onItemSelected = { index ->
+                                onAction(SettingsGeneralUiAction.SetInfoUpdatePeriod(type = index))
+                            },
+                        )
+                    }
 
-        OverlayContent(
-            isVisible = isSelectEpgUpdateOpen.value,
-            contentAlpha = MaterialTheme.dimens.alpha90,
-            onViewTap = { isSelectEpgUpdateOpen.value = false },
-        ) {
-            OverlayOptionsMenu(
-                title = stringResource(Res.string.hint_update_period),
-                selectedIndex = uiState.epgUpdatePeriod,
-                options = UpdatePeriod.entries.map { stringResource(it.title) },
-                onItemSelected = { index ->
-                    onAction(SettingsGeneralUiAction.SetEpgUpdatePeriod(type = index))
-                    isSelectEpgUpdateOpen.value = false
-                },
-            )
+                    SettingsGeneralUiState.OsdType.ProgramsUpdate -> {
+                        OverlayOptionsMenu(
+                            title = stringResource(Res.string.hint_update_period),
+                            selectedIndex = uiState.epgUpdatePeriod,
+                            options = UpdatePeriod.entries.map { stringResource(it.title) },
+                            onItemSelected = { index ->
+                                onAction(SettingsGeneralUiAction.SetEpgUpdatePeriod(type = index))
+                            },
+                        )
+                    }
+                }
+            }
         }
     }
 }

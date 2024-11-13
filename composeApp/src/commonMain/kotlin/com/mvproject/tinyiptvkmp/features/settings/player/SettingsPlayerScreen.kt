@@ -25,8 +25,6 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import com.mvproject.tinyiptvkmp.core.common.mvi.CollectUiEffect
@@ -50,7 +48,7 @@ internal fun SettingsPlayerScreen(
     viewModel: SettingsPlayerViewModel,
     onNavigateBack: () -> Unit
 ) {
-    val state by viewModel.uiState.collectAsState()
+    val uiState by viewModel.uiState.collectAsState()
 
     CollectUiEffect(viewModel.uiEffect) { effect ->
         when (effect) {
@@ -58,14 +56,14 @@ internal fun SettingsPlayerScreen(
         }
     }
     SettingsPlayerScreen(
-        state = state,
+        uiState = uiState,
         onAction = viewModel::onAction,
     )
 }
 
 @Composable
 private fun SettingsPlayerScreen(
-    state: SettingsPlayerUiState,
+    uiState: SettingsPlayerUiState,
     onAction: (SettingsPlayerUiAction) -> Unit,
 ) {
     Scaffold(
@@ -81,8 +79,8 @@ private fun SettingsPlayerScreen(
         },
     ) { paddingValues ->
 
-        val isSelectResizeModeOpen = remember { mutableStateOf(false) }
-        val isSelectRatioModeOpen = remember { mutableStateOf(false) }
+/*        val isSelectResizeModeOpen = remember { mutableStateOf(false) }
+        val isSelectRatioModeOpen = remember { mutableStateOf(false) }*/
 
         Column(
             modifier =
@@ -108,7 +106,7 @@ private fun SettingsPlayerScreen(
 
                 Switch(
                     modifier = Modifier.width(MaterialTheme.dimens.size82),
-                    checked = state.isFullscreenEnabled,
+                    checked = uiState.isFullscreenEnabled,
                     colors =
                     SwitchDefaults.colors(
                         checkedThumbColor = MaterialTheme.colorScheme.primary,
@@ -129,10 +127,10 @@ private fun SettingsPlayerScreen(
             OptionSelector(
                 modifier = Modifier.fillMaxWidth(),
                 title = stringResource(Res.string.option_default_resize_mode),
-                selectedItem = stringResource(ResizeMode.entries[state.resizeMode].title),
-                isExpanded = isSelectResizeModeOpen.value,
+                selectedItem = stringResource(ResizeMode.entries[uiState.resizeMode].title),
+                isExpanded = uiState.osdType == SettingsPlayerUiState.OsdType.ResizeMode,
                 onClick = {
-                    isSelectResizeModeOpen.value = true
+                    onAction(SettingsPlayerUiAction.OpenOsd(SettingsPlayerUiState.OsdType.ResizeMode))
                 },
             )
 
@@ -141,45 +139,78 @@ private fun SettingsPlayerScreen(
             OptionSelector(
                 modifier = Modifier.fillMaxWidth(),
                 title = stringResource(Res.string.option_default_ratio_mode),
-                selectedItem = stringResource(RatioMode.entries[state.ratioMode].title),
-                isExpanded = isSelectRatioModeOpen.value,
+                selectedItem = stringResource(RatioMode.entries[uiState.ratioMode].title),
+                isExpanded = uiState.osdType == SettingsPlayerUiState.OsdType.RatioMode,
                 onClick = {
-                    isSelectRatioModeOpen.value = true
+                    onAction(SettingsPlayerUiAction.OpenOsd(SettingsPlayerUiState.OsdType.RatioMode))
                 },
             )
+        }
+        OverlayContent(
+            isVisible = uiState.osdType != null,
+            contentAlpha = MaterialTheme.dimens.alpha90,
+            onViewTap = { onAction(SettingsPlayerUiAction.CloseOsd) },
+        ) {
+            uiState.osdType?.let { osdType ->
+                when (osdType) {
+                    SettingsPlayerUiState.OsdType.RatioMode -> {
+                        OverlayOptionsMenu(
+                            title = stringResource(Res.string.option_default_ratio_mode),
+                            selectedIndex = uiState.ratioMode,
+                            options = RatioMode.entries.map { stringResource(it.title) },
+                            onItemSelected = { index ->
+                                onAction(SettingsPlayerUiAction.SetRatioMode(mode = index))
+                            },
+                        )
+                    }
+
+                    SettingsPlayerUiState.OsdType.ResizeMode -> {
+                        OverlayOptionsMenu(
+                            title = stringResource(Res.string.option_default_resize_mode),
+                            selectedIndex = uiState.resizeMode,
+                            options = ResizeMode.entries.map { stringResource(it.title) },
+                            onItemSelected = { index ->
+                                onAction(SettingsPlayerUiAction.SetResizeMode(mode = index))
+                            },
+                        )
+                    }
+                }
+            }
+
         }
 
-        OverlayContent(
-            isVisible = isSelectResizeModeOpen.value,
-            contentAlpha = MaterialTheme.dimens.alpha90,
-            onViewTap = { isSelectResizeModeOpen.value = false },
-        ) {
-            OverlayOptionsMenu(
-                title = stringResource(Res.string.option_default_resize_mode),
-                selectedIndex = state.resizeMode,
-                options = ResizeMode.entries.map { stringResource(it.title) },
-                onItemSelected = { index ->
-                    onAction(SettingsPlayerUiAction.SetResizeMode(mode = index))
-                    isSelectResizeModeOpen.value = false
-                },
-            )
-        }
+        /*
+                OverlayContent(
+                    isVisible = isSelectResizeModeOpen.value,
+                    contentAlpha = MaterialTheme.dimens.alpha90,
+                    onViewTap = { isSelectResizeModeOpen.value = false },
+                ) {
+                    OverlayOptionsMenu(
+                        title = stringResource(Res.string.option_default_resize_mode),
+                        selectedIndex = uiState.resizeMode,
+                        options = ResizeMode.entries.map { stringResource(it.title) },
+                        onItemSelected = { index ->
+                            onAction(SettingsPlayerUiAction.SetResizeMode(mode = index))
+                            isSelectResizeModeOpen.value = false
+                        },
+                    )
+                }
 
-        OverlayContent(
-            isVisible = isSelectRatioModeOpen.value,
-            contentAlpha = MaterialTheme.dimens.alpha90,
-            onViewTap = { isSelectRatioModeOpen.value = false },
-        ) {
-            OverlayOptionsMenu(
-                title = stringResource(Res.string.option_default_ratio_mode),
-                selectedIndex = state.ratioMode,
-                options = RatioMode.entries.map { stringResource(it.title) },
-                onItemSelected = { index ->
-                    onAction(SettingsPlayerUiAction.SetRatioMode(mode = index))
-                    isSelectRatioModeOpen.value = false
-                },
-            )
-        }
+                OverlayContent(
+                    isVisible = isSelectRatioModeOpen.value,
+                    contentAlpha = MaterialTheme.dimens.alpha90,
+                    onViewTap = { isSelectRatioModeOpen.value = false },
+                ) {
+                    OverlayOptionsMenu(
+                        title = stringResource(Res.string.option_default_ratio_mode),
+                        selectedIndex = uiState.ratioMode,
+                        options = RatioMode.entries.map { stringResource(it.title) },
+                        onItemSelected = { index ->
+                            onAction(SettingsPlayerUiAction.SetRatioMode(mode = index))
+                            isSelectRatioModeOpen.value = false
+                        },
+                    )
+                }*/
     }
 }
 

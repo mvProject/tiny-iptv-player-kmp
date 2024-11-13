@@ -15,6 +15,7 @@ import com.mvproject.tinyiptvkmp.core.common.mvi.mviCore
 import com.mvproject.tinyiptvkmp.core.datastore.repository.PreferenceRepository
 import com.mvproject.tinyiptvkmp.core.domain.enums.RatioMode
 import com.mvproject.tinyiptvkmp.core.domain.enums.ResizeMode
+import com.mvproject.tinyiptvkmp.features.settings.player.SettingsPlayerUiState.OsdType
 import kotlinx.coroutines.launch
 
 class SettingsPlayerViewModel(
@@ -49,6 +50,20 @@ class SettingsPlayerViewModel(
             is SettingsPlayerUiAction.SetFullScreenMode -> setFullscreenMode(state = uiAction.state)
             is SettingsPlayerUiAction.SetRatioMode -> setRatioMode(mode = uiAction.mode)
             is SettingsPlayerUiAction.SetResizeMode -> setResizeMode(mode = uiAction.mode)
+            SettingsPlayerUiAction.CloseOsd -> closeOsd()
+            is SettingsPlayerUiAction.OpenOsd -> openOsd(type = uiAction.type)
+        }
+    }
+
+    private fun openOsd(type: OsdType) {
+        updateUiState {
+            copy(osdType = type)
+        }
+    }
+
+    private fun closeOsd() {
+        updateUiState {
+            copy(osdType = null)
         }
     }
 
@@ -65,7 +80,7 @@ class SettingsPlayerViewModel(
         viewModelScope.launch {
             preferenceRepository.setDefaultResizeMode(mode = mode)
             updateUiState {
-                copy(resizeMode = mode)
+                copy(resizeMode = mode, osdType = null)
             }
         }
     }
@@ -74,7 +89,7 @@ class SettingsPlayerViewModel(
         viewModelScope.launch {
             preferenceRepository.setDefaultRatioMode(mode = mode)
             updateUiState {
-                copy(ratioMode = mode)
+                copy(ratioMode = mode, osdType = null)
             }
         }
     }
@@ -85,12 +100,20 @@ data class SettingsPlayerUiState(
     val resizeMode: Int = ResizeMode.Fill.value,
     val ratioMode: Int = RatioMode.WideScreen.value,
     val isFullscreenEnabled: Boolean = true,
-)
+    val osdType: OsdType? = null,
+) {
+    sealed interface OsdType {
+        data object ResizeMode : OsdType
+        data object RatioMode : OsdType
+    }
+}
 
 sealed interface SettingsPlayerUiAction {
     data class SetResizeMode(val mode: Int) : SettingsPlayerUiAction
     data class SetRatioMode(val mode: Int) : SettingsPlayerUiAction
     data class SetFullScreenMode(val state: Boolean) : SettingsPlayerUiAction
+    data class OpenOsd(val type: OsdType) : SettingsPlayerUiAction
+    data object CloseOsd : SettingsPlayerUiAction
     data object NavigateBack : SettingsPlayerUiAction
 
 }
