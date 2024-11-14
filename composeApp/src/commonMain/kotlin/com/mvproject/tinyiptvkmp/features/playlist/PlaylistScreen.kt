@@ -314,7 +314,6 @@ private fun PlaylistScreen(
 
             OverlayContent(
                 isVisible = isUpdateOptionOpen.value,
-                contentAlpha = MaterialTheme.dimens.alpha90,
                 onViewTap = { isUpdateOptionOpen.value = false },
             ) {
                 OverlayOptionsMenu(

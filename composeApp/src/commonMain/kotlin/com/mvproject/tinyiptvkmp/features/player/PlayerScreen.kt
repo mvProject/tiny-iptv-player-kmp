@@ -34,6 +34,8 @@ import com.mvproject.tinyiptvkmp.core.ui.epg.ChannelPrograms
 import com.mvproject.tinyiptvkmp.core.ui.indicators.LoadingIndicator
 import com.mvproject.tinyiptvkmp.core.ui.indicators.VolumeIndicator
 import com.mvproject.tinyiptvkmp.core.ui.overlay.OverlayContent
+import com.mvproject.tinyiptvkmp.features.channels.components.OverlayChannelOptions
+import com.mvproject.tinyiptvkmp.features.player.PlayerUiState.PlayerOSD
 import com.mvproject.tinyiptvkmp.features.player.components.NoPlaybackView
 import com.mvproject.tinyiptvkmp.features.player.components.PlayerChannels
 import com.mvproject.tinyiptvkmp.features.player.components.PlayerContainer
@@ -123,49 +125,57 @@ private fun PlayerScreen(
         }
 
         OverlayContent(
-            isVisible = uiState.isEpgVisible,
-            onViewTap = { onUiAction(PlayerUiAction.ToggleProgramsUi) }
+            isVisible = uiState.osdType != null,
+            onViewTap = { onUiAction(PlayerUiAction.CloseOsd) }
         ) {
-            ChannelPrograms(
-                modifier =
-                Modifier
-                    .fillMaxHeight(MaterialTheme.dimens.fraction90)
-                    .fillMaxWidth(MaterialTheme.dimens.fraction80)
-                    .background(
-                        color = MaterialTheme.colorScheme.primary,
-                        shape =
-                        RoundedCornerShape(
-                            bottomStart = MaterialTheme.dimens.size8,
-                            bottomEnd = MaterialTheme.dimens.size8,
-                        ),
-                    ),
-                title = uiState.currentChannel.channelName,
-                programs = uiState.currentChannel.programs,
-            )
-        }
+            uiState.osdType?.let { osdType ->
+                when (osdType) {
+                    PlayerOSD.ChannelPrograms -> {
+                        ChannelPrograms(
+                            modifier =
+                            Modifier
+                                .fillMaxHeight(MaterialTheme.dimens.fraction90)
+                                .fillMaxWidth(MaterialTheme.dimens.fraction80)
+                                .background(
+                                    color = MaterialTheme.colorScheme.primary,
+                                    shape =
+                                    RoundedCornerShape(
+                                        bottomStart = MaterialTheme.dimens.size8,
+                                        bottomEnd = MaterialTheme.dimens.size8,
+                                    ),
+                                ),
+                            title = uiState.currentChannel.channelName,
+                            programs = uiState.currentChannel.programs,
+                        )
+                    }
 
-        OverlayContent(
-            isVisible = uiState.isChannelsVisible,
-            onViewTap = { onUiAction(PlayerUiAction.ToggleChannelsUi) },
-            contentAlpha = MaterialTheme.dimens.alpha90,
-        ) {
-            PlayerChannels(
-                channels = uiState.groupChannels,
-                current = uiState.channelIndex,
-                group = uiState.channelGroup,
-                onChannelSelect = { chn -> onUiAction(PlayerUiAction.SelectChannel(chn)) }
-            )
-        }
+                    PlayerOSD.GroupChannels -> {
+                        PlayerChannels(
+                            channels = uiState.groupChannels,
+                            current = uiState.channelIndex,
+                            group = uiState.channelGroup,
+                            onChannelSelect = { chn -> onUiAction(PlayerUiAction.SelectChannel(chn)) }
+                        )
+                    }
 
-        OverlayContent(
-            isVisible = uiState.isChannelInfoVisible,
-            onViewTap = { onUiAction(PlayerUiAction.ToggleProgramInfoUi) },
-        ) {
-            ProgramInfo(
-                channelName = uiState.currentChannel.channelName,
-                programName = uiState.currentChannel.programTitle,
-                description = uiState.currentChannel.programDescription,
-            )
+                    PlayerOSD.ProgramInfo -> {
+                        ProgramInfo(
+                            channelName = uiState.currentChannel.channelName,
+                            programName = uiState.currentChannel.programTitle,
+                            description = uiState.currentChannel.programDescription,
+                        )
+                    }
+
+                    PlayerOSD.ChannelFavorites -> {
+                        OverlayChannelOptions(
+                            favoriteType = uiState.currentChannel.favoriteType,
+                            onToggleFavorite = { favType ->
+                                onUiAction(PlayerUiAction.UpdateFavorite(favType))
+                            }
+                        )
+                    }
+                }
+            }
         }
     }
 }

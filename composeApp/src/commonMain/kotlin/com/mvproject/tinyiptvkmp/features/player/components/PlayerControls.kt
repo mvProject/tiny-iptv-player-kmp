@@ -26,6 +26,7 @@ import com.mvproject.tinyiptvkmp.core.theme.dimens
 import com.mvproject.tinyiptvkmp.core.ui.buttons.ControlButton
 import com.mvproject.tinyiptvkmp.core.ui.modifiers.SpacerWidth
 import com.mvproject.tinyiptvkmp.features.player.PlayerUiAction
+import com.mvproject.tinyiptvkmp.features.player.PlayerUiState
 
 @Composable
 fun PlayerControls(
@@ -57,7 +58,7 @@ fun PlayerControls(
         ) {
             ControlButton(
                 imageVector = if (isFavorite) Icons.Rounded.Favorite else Icons.Rounded.FavoriteBorder,
-                onClick = { onAction(PlayerUiAction.ToggleChannelFavorite) },
+                onClick = { onAction(PlayerUiAction.OpenOsd(PlayerUiState.PlayerOSD.ChannelFavorites)) },
             )
 
             SpacerWidth(width = MaterialTheme.dimens.size8)

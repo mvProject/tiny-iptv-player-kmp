@@ -9,7 +9,7 @@ package com.mvproject.tinyiptvkmp.core.database.entity
 
 import androidx.room.Entity
 
-@Entity(tableName = "favoriteChannels", primaryKeys = ["channelName", "parentListId"])
+@Entity(tableName = "favoriteChannels", primaryKeys = ["channelUrl", "parentListId"])
 data class FavoriteChannelEntity(
     val channelName: String,
     val channelUrl: String,

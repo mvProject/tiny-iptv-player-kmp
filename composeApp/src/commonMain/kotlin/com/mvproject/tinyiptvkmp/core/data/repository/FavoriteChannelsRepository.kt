@@ -7,6 +7,7 @@
 
 package com.mvproject.tinyiptvkmp.core.data.repository
 
+import co.touchlab.kermit.Logger
 import com.mvproject.tinyiptvkmp.core.common.AppConstants.INT_VALUE_1
 import com.mvproject.tinyiptvkmp.core.database.db.AppDatabase
 import com.mvproject.tinyiptvkmp.core.database.entity.FavoriteChannelEntity
@@ -28,7 +29,8 @@ class FavoriteChannelsRepository(
         withContext(Dispatchers.IO) {
             val favoriteCount = favoriteChannelDao.getFavoriteChannelCount()
             val playlistId = playlistDao.getSelectedPlaylistId()
-
+            Logger.e("testing FavoriteChannelsRepository addChannelToFavorite favoriteCount:$favoriteCount")
+            Logger.e("testing FavoriteChannelsRepository addChannelToFavorite favoriteCount:$playlistId")
             val order = (favoriteCount + INT_VALUE_1).toLong()
 
             favoriteChannelDao.insertFavoriteChannel(

@@ -39,6 +39,7 @@ import com.mvproject.tinyiptvkmp.core.ui.overlay.OverlayContent
 import com.mvproject.tinyiptvkmp.core.ui.overlay.OverlayOptionsMenu
 import com.mvproject.tinyiptvkmp.core.ui.selectors.OptionSelector
 import com.mvproject.tinyiptvkmp.core.ui.toolbars.AppBarWithBackNav
+import com.mvproject.tinyiptvkmp.features.settings.general.SettingsGeneralUiState.SettingsGeneralOSD
 import org.jetbrains.compose.resources.stringResource
 import tinyiptvkmp.composeapp.generated.resources.Res
 import tinyiptvkmp.composeapp.generated.resources.hint_update_period
@@ -86,9 +87,6 @@ private fun SettingsGeneralScreen(
             )
         },
     ) { paddingValues ->
-
-        /*       val isSelectInfoUpdateOpen = remember { mutableStateOf(false) }
-               val isSelectEpgUpdateOpen = remember { mutableStateOf(false) }*/
 
         Column(
             modifier = Modifier
@@ -215,9 +213,9 @@ private fun SettingsGeneralScreen(
                     .padding(horizontal = MaterialTheme.dimens.size8),
                 title = stringResource(Res.string.option_update_epg_info),
                 selectedItem = stringResource(UpdatePeriod.entries[uiState.infoUpdatePeriod].title),
-                isExpanded = uiState.osdType == SettingsGeneralUiState.OsdType.InfoUpdate,
+                isExpanded = uiState.osdType == SettingsGeneralOSD.InfoUpdate,
                 onClick = {
-                    onAction(SettingsGeneralUiAction.OpenOsd(SettingsGeneralUiState.OsdType.InfoUpdate))
+                    onAction(SettingsGeneralUiAction.OpenOsd(SettingsGeneralOSD.InfoUpdate))
                 },
             )
 
@@ -228,21 +226,20 @@ private fun SettingsGeneralScreen(
                     .padding(horizontal = MaterialTheme.dimens.size8),
                 title = stringResource(Res.string.option_update_epg_data),
                 selectedItem = stringResource(UpdatePeriod.entries[uiState.epgUpdatePeriod].title),
-                isExpanded = uiState.osdType == SettingsGeneralUiState.OsdType.ProgramsUpdate,
+                isExpanded = uiState.osdType == SettingsGeneralOSD.ProgramsUpdate,
                 onClick = {
-                    onAction(SettingsGeneralUiAction.OpenOsd(SettingsGeneralUiState.OsdType.ProgramsUpdate))
+                    onAction(SettingsGeneralUiAction.OpenOsd(SettingsGeneralOSD.ProgramsUpdate))
                 },
             )
         }
 
         OverlayContent(
             isVisible = uiState.osdType != null,
-            contentAlpha = MaterialTheme.dimens.alpha90,
             onViewTap = { onAction(SettingsGeneralUiAction.CloseOsd) },
         ) {
             uiState.osdType?.let { osdType ->
                 when (osdType) {
-                    SettingsGeneralUiState.OsdType.InfoUpdate -> {
+                    SettingsGeneralOSD.InfoUpdate -> {
                         OverlayOptionsMenu(
                             title = stringResource(Res.string.hint_update_period),
                             selectedIndex = uiState.infoUpdatePeriod,
@@ -253,7 +250,7 @@ private fun SettingsGeneralScreen(
                         )
                     }
 
-                    SettingsGeneralUiState.OsdType.ProgramsUpdate -> {
+                    SettingsGeneralOSD.ProgramsUpdate -> {
                         OverlayOptionsMenu(
                             title = stringResource(Res.string.hint_update_period),
                             selectedIndex = uiState.epgUpdatePeriod,

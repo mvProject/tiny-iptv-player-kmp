@@ -15,7 +15,7 @@ import com.mvproject.tinyiptvkmp.core.common.mvi.mviCore
 import com.mvproject.tinyiptvkmp.core.datastore.repository.PreferenceRepository
 import com.mvproject.tinyiptvkmp.core.domain.enums.RatioMode
 import com.mvproject.tinyiptvkmp.core.domain.enums.ResizeMode
-import com.mvproject.tinyiptvkmp.features.settings.player.SettingsPlayerUiState.OsdType
+import com.mvproject.tinyiptvkmp.features.settings.player.SettingsPlayerUiState.SettingsPlayerOSD
 import kotlinx.coroutines.launch
 
 class SettingsPlayerViewModel(
@@ -55,7 +55,7 @@ class SettingsPlayerViewModel(
         }
     }
 
-    private fun openOsd(type: OsdType) {
+    private fun openOsd(type: SettingsPlayerOSD) {
         updateUiState {
             copy(osdType = type)
         }
@@ -100,11 +100,11 @@ data class SettingsPlayerUiState(
     val resizeMode: Int = ResizeMode.Fill.value,
     val ratioMode: Int = RatioMode.WideScreen.value,
     val isFullscreenEnabled: Boolean = true,
-    val osdType: OsdType? = null,
+    val osdType: SettingsPlayerOSD? = null,
 ) {
-    sealed interface OsdType {
-        data object ResizeMode : OsdType
-        data object RatioMode : OsdType
+    sealed interface SettingsPlayerOSD {
+        data object ResizeMode : SettingsPlayerOSD
+        data object RatioMode : SettingsPlayerOSD
     }
 }
 
@@ -112,7 +112,7 @@ sealed interface SettingsPlayerUiAction {
     data class SetResizeMode(val mode: Int) : SettingsPlayerUiAction
     data class SetRatioMode(val mode: Int) : SettingsPlayerUiAction
     data class SetFullScreenMode(val state: Boolean) : SettingsPlayerUiAction
-    data class OpenOsd(val type: OsdType) : SettingsPlayerUiAction
+    data class OpenOsd(val type: SettingsPlayerOSD) : SettingsPlayerUiAction
     data object CloseOsd : SettingsPlayerUiAction
     data object NavigateBack : SettingsPlayerUiAction
 

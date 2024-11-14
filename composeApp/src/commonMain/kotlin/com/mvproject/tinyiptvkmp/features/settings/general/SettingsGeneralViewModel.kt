@@ -14,7 +14,7 @@ import com.mvproject.tinyiptvkmp.core.common.AppConstants
 import com.mvproject.tinyiptvkmp.core.common.mvi.MviCore
 import com.mvproject.tinyiptvkmp.core.common.mvi.mviCore
 import com.mvproject.tinyiptvkmp.core.datastore.repository.PreferenceRepository
-import com.mvproject.tinyiptvkmp.features.settings.general.SettingsGeneralUiState.OsdType
+import com.mvproject.tinyiptvkmp.features.settings.general.SettingsGeneralUiState.SettingsGeneralOSD
 import kotlinx.coroutines.launch
 
 class SettingsGeneralViewModel(
@@ -58,7 +58,7 @@ class SettingsGeneralViewModel(
         }
     }
 
-    private fun openOsd(type: OsdType) {
+    private fun openOsd(type: SettingsGeneralOSD) {
         updateUiState {
             copy(osdType = type)
         }
@@ -93,18 +93,18 @@ class SettingsGeneralViewModel(
 data class SettingsGeneralUiState(
     val infoUpdatePeriod: Int = AppConstants.INT_VALUE_ZERO,
     val epgUpdatePeriod: Int = AppConstants.INT_VALUE_ZERO,
-    val osdType: OsdType? = null,
+    val osdType: SettingsGeneralOSD? = null,
 ) {
-    sealed interface OsdType {
-        data object InfoUpdate : OsdType
-        data object ProgramsUpdate : OsdType
+    sealed interface SettingsGeneralOSD {
+        data object InfoUpdate : SettingsGeneralOSD
+        data object ProgramsUpdate : SettingsGeneralOSD
     }
 }
 
 sealed interface SettingsGeneralUiAction {
     data class SetInfoUpdatePeriod(val type: Int) : SettingsGeneralUiAction
     data class SetEpgUpdatePeriod(val type: Int) : SettingsGeneralUiAction
-    data class OpenOsd(val type: OsdType) : SettingsGeneralUiAction
+    data class OpenOsd(val type: SettingsGeneralOSD) : SettingsGeneralUiAction
     data object CloseOsd : SettingsGeneralUiAction
     data object NavigateBack : SettingsGeneralUiAction
     data object NavigateToPlayerSettings : SettingsGeneralUiAction

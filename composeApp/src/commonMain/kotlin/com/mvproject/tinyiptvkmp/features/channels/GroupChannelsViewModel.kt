@@ -55,11 +55,12 @@ class GroupChannelsViewModel(
 
     private var lastRefresh: Long = 0
 
+    // todo refresh after return from playback
+
     init {
         viewModelScope.launch {
-            val groupChannels = getGroupChannelsUseCase(group = group, groupType = type)
             val viewType = preferenceRepository.getChannelsViewType().mapViewType()
-
+            val groupChannels = getGroupChannelsUseCase(group = group, groupType = type)
             updateUiState {
                 copy(
                     viewType = viewType,
@@ -170,7 +171,7 @@ class GroupChannelsViewModel(
                 copy(channels = updatedChannels)
             }
 
-            toggleFavoriteChannelUseCase(channel = channel)
+            toggleFavoriteChannelUseCase(channel = channel, type = type)
         }
     }
 }

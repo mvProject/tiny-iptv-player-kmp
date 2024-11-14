@@ -20,6 +20,7 @@ import com.mvproject.tinyiptvkmp.core.common.AppConstants.SCREEN_PERCENTAGE_30
 import com.mvproject.tinyiptvkmp.core.common.AppConstants.SCREEN_PERCENTAGE_40
 import com.mvproject.tinyiptvkmp.core.common.AppConstants.SCREEN_PERCENTAGE_75
 import com.mvproject.tinyiptvkmp.features.player.PlayerUiAction
+import com.mvproject.tinyiptvkmp.features.player.PlayerUiState
 import kotlinx.coroutines.coroutineScope
 import kotlin.math.abs
 
@@ -29,7 +30,7 @@ fun Modifier.handleTapGestures(
     detectTapGestures(
         onDoubleTap = { onAction(PlayerUiAction.ToggleFullScreen) },
         onTap = { onAction(PlayerUiAction.TogglePlayerUi) },
-        onLongPress = { onAction(PlayerUiAction.ToggleProgramsUi) }
+        onLongPress = { onAction(PlayerUiAction.OpenOsd(PlayerUiState.PlayerOSD.ChannelPrograms)) }
     )
 }
 
@@ -55,9 +56,9 @@ fun Modifier.handleVerticalGestures(
                 if (startX.toInt() in screenMiddlePart) {
                     if (abs(totalDrag) > dragThreshold) {
                         val action = if (totalDrag > 0) {
-                            PlayerUiAction.ToggleChannelsUi
+                            PlayerUiAction.OpenOsd(PlayerUiState.PlayerOSD.GroupChannels)
                         } else {
-                            PlayerUiAction.ToggleProgramInfoUi
+                            PlayerUiAction.OpenOsd(PlayerUiState.PlayerOSD.ProgramInfo)
                         }
                         onAction(action)
                     }

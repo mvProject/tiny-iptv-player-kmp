@@ -36,6 +36,7 @@ import com.mvproject.tinyiptvkmp.core.ui.overlay.OverlayContent
 import com.mvproject.tinyiptvkmp.core.ui.overlay.OverlayOptionsMenu
 import com.mvproject.tinyiptvkmp.core.ui.selectors.OptionSelector
 import com.mvproject.tinyiptvkmp.core.ui.toolbars.AppBarWithBackNav
+import com.mvproject.tinyiptvkmp.features.settings.player.SettingsPlayerUiState.SettingsPlayerOSD
 import org.jetbrains.compose.resources.stringResource
 import tinyiptvkmp.composeapp.generated.resources.Res
 import tinyiptvkmp.composeapp.generated.resources.option_default_fullscreen_mode
@@ -78,9 +79,6 @@ private fun SettingsPlayerScreen(
             )
         },
     ) { paddingValues ->
-
-/*        val isSelectResizeModeOpen = remember { mutableStateOf(false) }
-        val isSelectRatioModeOpen = remember { mutableStateOf(false) }*/
 
         Column(
             modifier =
@@ -128,9 +126,9 @@ private fun SettingsPlayerScreen(
                 modifier = Modifier.fillMaxWidth(),
                 title = stringResource(Res.string.option_default_resize_mode),
                 selectedItem = stringResource(ResizeMode.entries[uiState.resizeMode].title),
-                isExpanded = uiState.osdType == SettingsPlayerUiState.OsdType.ResizeMode,
+                isExpanded = uiState.osdType == SettingsPlayerOSD.ResizeMode,
                 onClick = {
-                    onAction(SettingsPlayerUiAction.OpenOsd(SettingsPlayerUiState.OsdType.ResizeMode))
+                    onAction(SettingsPlayerUiAction.OpenOsd(SettingsPlayerOSD.ResizeMode))
                 },
             )
 
@@ -140,20 +138,19 @@ private fun SettingsPlayerScreen(
                 modifier = Modifier.fillMaxWidth(),
                 title = stringResource(Res.string.option_default_ratio_mode),
                 selectedItem = stringResource(RatioMode.entries[uiState.ratioMode].title),
-                isExpanded = uiState.osdType == SettingsPlayerUiState.OsdType.RatioMode,
+                isExpanded = uiState.osdType == SettingsPlayerOSD.RatioMode,
                 onClick = {
-                    onAction(SettingsPlayerUiAction.OpenOsd(SettingsPlayerUiState.OsdType.RatioMode))
+                    onAction(SettingsPlayerUiAction.OpenOsd(SettingsPlayerOSD.RatioMode))
                 },
             )
         }
         OverlayContent(
             isVisible = uiState.osdType != null,
-            contentAlpha = MaterialTheme.dimens.alpha90,
             onViewTap = { onAction(SettingsPlayerUiAction.CloseOsd) },
         ) {
             uiState.osdType?.let { osdType ->
                 when (osdType) {
-                    SettingsPlayerUiState.OsdType.RatioMode -> {
+                    SettingsPlayerOSD.RatioMode -> {
                         OverlayOptionsMenu(
                             title = stringResource(Res.string.option_default_ratio_mode),
                             selectedIndex = uiState.ratioMode,
@@ -164,7 +161,7 @@ private fun SettingsPlayerScreen(
                         )
                     }
 
-                    SettingsPlayerUiState.OsdType.ResizeMode -> {
+                    SettingsPlayerOSD.ResizeMode -> {
                         OverlayOptionsMenu(
                             title = stringResource(Res.string.option_default_resize_mode),
                             selectedIndex = uiState.resizeMode,

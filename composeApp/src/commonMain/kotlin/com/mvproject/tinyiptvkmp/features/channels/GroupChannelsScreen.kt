@@ -148,7 +148,6 @@ private fun GroupChannelsScreen(
 
             OverlayContent(
                 isVisible = isChannelOptionOpen.value,
-                contentAlpha = MaterialTheme.dimens.alpha90,
                 onViewTap = { isChannelOptionOpen.value = false },
             ) {
                 OverlayChannelOptions(
@@ -161,7 +160,7 @@ private fun GroupChannelsScreen(
                             )
                         )
                         isChannelOptionOpen.value = false
-                    },
+                    }
                 )
             }
 
