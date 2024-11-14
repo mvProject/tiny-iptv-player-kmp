@@ -34,7 +34,7 @@ import com.mvproject.tinyiptvkmp.core.ui.epg.ChannelPrograms
 import com.mvproject.tinyiptvkmp.core.ui.indicators.LoadingIndicator
 import com.mvproject.tinyiptvkmp.core.ui.indicators.VolumeIndicator
 import com.mvproject.tinyiptvkmp.core.ui.overlay.OverlayContent
-import com.mvproject.tinyiptvkmp.features.channels.components.OverlayChannelOptions
+import com.mvproject.tinyiptvkmp.features.channels.components.ChannelFavoriteSelector
 import com.mvproject.tinyiptvkmp.features.player.PlayerUiState.PlayerOSD
 import com.mvproject.tinyiptvkmp.features.player.components.NoPlaybackView
 import com.mvproject.tinyiptvkmp.features.player.components.PlayerChannels
@@ -167,9 +167,9 @@ private fun PlayerScreen(
                     }
 
                     PlayerOSD.ChannelFavorites -> {
-                        OverlayChannelOptions(
+                        ChannelFavoriteSelector(
                             favoriteType = uiState.currentChannel.favoriteType,
-                            onToggleFavorite = { favType ->
+                            onSelectFavorite = { favType ->
                                 onUiAction(PlayerUiAction.UpdateFavorite(favType))
                             }
                         )

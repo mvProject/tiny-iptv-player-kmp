@@ -12,7 +12,6 @@ import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import androidx.navigation.toRoute
-import co.touchlab.kermit.Logger
 import com.mvproject.tinyiptvkmp.core.common.mvi.MviCore
 import com.mvproject.tinyiptvkmp.core.common.mvi.mviCore
 import com.mvproject.tinyiptvkmp.core.common.utils.CommonUtils.empty
@@ -31,6 +30,7 @@ import com.mvproject.tinyiptvkmp.core.domain.utils.ChannelsUtils.mapProgramIds
 import com.mvproject.tinyiptvkmp.core.domain.utils.ChannelsUtils.mapPrograms
 import com.mvproject.tinyiptvkmp.core.domain.utils.ChannelsUtils.replaceUpdated
 import com.mvproject.tinyiptvkmp.core.domain.utils.ChannelsUtils.toggleFavorite
+import com.mvproject.tinyiptvkmp.features.channels.GroupChannelsUiState.GroupChannelsOSD
 import com.mvproject.tinyiptvkmp.navigation.AppRoutes
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
@@ -83,23 +83,38 @@ class GroupChannelsViewModel(
             )
 
             is GroupChannelsUiAction.SearchTextChange -> searchTextChange(text = uiAction.text)
-            is GroupChannelsUiAction.ToggleEpgVisibility -> toggleEpgVisibility(
-                name = uiAction.name,
-                epgId = uiAction.programId
-            )
-
             is GroupChannelsUiAction.ToggleFavorite -> toggleFavorites(
                 channel = uiAction.channel,
                 type = uiAction.type
             )
 
             is GroupChannelsUiAction.ViewTypeChange -> viewTypeChange(type = uiAction.type)
+            GroupChannelsUiAction.CloseOsd -> closeOsd()
+            is GroupChannelsUiAction.OpenOsd -> openOsd(type = uiAction.type)
         }
     }
 
     fun loadChannelsByGroups() {
         viewModelScope.launch(Dispatchers.IO) {
             refreshEpgPrograms()
+        }
+    }
+
+    private fun openOsd(type: GroupChannelsOSD) {
+        if (type is GroupChannelsOSD.ChannelPrograms) {
+            toggleProgramVisibility(
+                name = type.channel.channelName,
+                programId = type.channel.programId
+            )
+        }
+        updateUiState {
+            copy(osdType = type)
+        }
+    }
+
+    private fun closeOsd() {
+        updateUiState {
+            copy(osdType = null)
         }
     }
 
@@ -126,11 +141,10 @@ class GroupChannelsViewModel(
         }
     }
 
-    private fun toggleEpgVisibility(name: String, epgId: String) {
-        Logger.w("testing name:$name,epgId:$epgId")
+    private fun toggleProgramVisibility(name: String, programId: String) {
         viewModelScope.launch(Dispatchers.IO) {
-            val programs = if (epgId.isNotBlank()) {
-                getChannelsEpgUseCase(channelId = epgId)
+            val programs = if (programId.isNotBlank()) {
+                getChannelsEpgUseCase(channelId = programId)
             } else {
                 emptyList()
             }
@@ -160,15 +174,13 @@ class GroupChannelsViewModel(
         type: FavoriteType,
     ) {
         viewModelScope.launch(Dispatchers.IO) {
-            Logger.w("testing toggleFavorites type $type")
-
             val updatedChannel = channel.toggleFavorite(type = type)
 
             val updatedChannels = uiState.value.channels
                 .replaceUpdated(channel = updatedChannel)
 
             updateUiState {
-                copy(channels = updatedChannels)
+                copy(channels = updatedChannels, osdType = null)
             }
 
             toggleFavoriteChannelUseCase(channel = channel, type = type)
@@ -180,32 +192,43 @@ class GroupChannelsViewModel(
 data class GroupChannelsUiState(
     val currentGroup: String = String.empty,
     val isLoading: Boolean = false,
-    val isEpgVisible: Boolean = false,
     val searchString: String = String.empty,
     val viewType: ChannelsViewType = ChannelsViewType.LIST,
     val channels: List<TvChannel> = emptyList(),
     val selectedName: String = String.empty,
-    val selectedPrograms: List<EpgProgram> = emptyList()
-)
+    val selectedPrograms: List<EpgProgram> = emptyList(),
+    val osdType: GroupChannelsOSD? = null
+) {
+    sealed interface GroupChannelsOSD {
+        data class ChannelPrograms(val channel: TvChannel) : GroupChannelsOSD
+        data class ChannelFavorites(val channel: TvChannel) : GroupChannelsOSD
+    }
+}
 
 sealed interface GroupChannelsUiAction {
-    data class ToggleFavorite(val channel: TvChannel, val type: FavoriteType) :
-        GroupChannelsUiAction
+    data class ToggleFavorite(
+        val channel: TvChannel,
+        val type: FavoriteType
+    ) : GroupChannelsUiAction
 
     data class SearchTextChange(val text: String) : GroupChannelsUiAction
     data class ViewTypeChange(val type: ChannelsViewType) : GroupChannelsUiAction
-    data class ToggleEpgVisibility(
-        val name: String = String.empty,
-        val programId: String = String.empty
+    data class SelectChannel(
+        val name: String,
+        val group: String
     ) : GroupChannelsUiAction
 
-    data class SelectChannel(val name: String, val group: String) : GroupChannelsUiAction
     data object NavigateBack : GroupChannelsUiAction
+    data class OpenOsd(val type: GroupChannelsOSD) : GroupChannelsUiAction
+    data object CloseOsd : GroupChannelsUiAction
 }
 
 sealed interface GroupChannelsUiEffect {
-    data class OnNavigateToPlayer(val name: String, val group: String, val groupType: String) :
-        GroupChannelsUiEffect
+    data class OnNavigateToPlayer(
+        val name: String,
+        val group: String,
+        val groupType: String
+    ) : GroupChannelsUiEffect
 
     data object OnNavigateBack : GroupChannelsUiEffect
 }

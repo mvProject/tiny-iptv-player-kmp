@@ -449,10 +449,7 @@ sealed interface PlayerUiAction {
     data object ChangeVideoSize : PlayerUiAction
     data object ChangeVideoRatio : PlayerUiAction
     data object ToggleFullScreen : PlayerUiAction
-
-    // data object ToggleChannelFavorite : PlayerUiAction
     data object TogglePlayerUi : PlayerUiAction
-
     data object SelectNext : PlayerUiAction
     data object SelectPrevious : PlayerUiAction
     data object VolumeUp : PlayerUiAction

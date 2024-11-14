@@ -32,7 +32,7 @@ fun ChannelView(
     items: List<TvChannel>,
     onChannelSelect: (TvChannel) -> Unit = {},
     onFavoriteClick: (TvChannel) -> Unit = {},
-    onShowEpgClick: (TvChannel) -> Unit = {},
+    onShowProgramsClick: (TvChannel) -> Unit = {},
 ) {
 
     // todo adaptive size depend on windowSizeClass
@@ -63,7 +63,7 @@ fun ChannelView(
                             channel = item,
                             onChannelSelect = { onChannelSelect(item) },
                             onFavoriteClick = { onFavoriteClick(item) },
-                            onShowEpgClick = { onShowEpgClick(item) },
+                            onShowEpgClick = { onShowProgramsClick(item) },
                         )
                     }
 
@@ -73,7 +73,7 @@ fun ChannelView(
                             channel = item,
                             onChannelSelect = { onChannelSelect(item) },
                             onFavoriteClick = { onFavoriteClick(item) },
-                            onShowEpgClick = { onShowEpgClick(item) },
+                            onShowEpgClick = { onShowProgramsClick(item) },
                         )
                     }
 
@@ -83,7 +83,7 @@ fun ChannelView(
                             channel = item,
                             onChannelSelect = { onChannelSelect(item) },
                             onFavoriteClick = { onFavoriteClick(item) },
-                            onShowEpgClick = { onShowEpgClick(item) },
+                            onShowEpgClick = { onShowProgramsClick(item) },
                         )
                     }
                 }
