@@ -33,7 +33,7 @@ import com.mvproject.tinyiptvkmp.core.theme.dimens
 import com.mvproject.tinyiptvkmp.core.ui.indicators.LoadingIndicator
 import com.mvproject.tinyiptvkmp.core.ui.toolbars.AppBarWithBackNav
 import com.mvproject.tinyiptvkmp.core.ui.views.NoItemsView
-import com.mvproject.tinyiptvkmp.features.settings.playlist.components.PlaylistItem
+import com.mvproject.tinyiptvkmp.features.settings.components.PlaylistItem
 import org.jetbrains.compose.resources.stringResource
 import tinyiptvkmp.composeapp.generated.resources.Res
 import tinyiptvkmp.composeapp.generated.resources.btn_add_new

@@ -31,8 +31,6 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -43,13 +41,9 @@ import com.mvproject.tinyiptvkmp.core.common.utils.CommonUtils.tmpFolder
 import com.mvproject.tinyiptvkmp.core.common.utils.CommonUtils.typeM3U
 import com.mvproject.tinyiptvkmp.core.common.utils.CommonUtils.typeM3U8
 import com.mvproject.tinyiptvkmp.core.domain.enums.PlaylistType
-import com.mvproject.tinyiptvkmp.core.domain.enums.UpdatePeriod
 import com.mvproject.tinyiptvkmp.core.theme.dimens
 import com.mvproject.tinyiptvkmp.core.ui.indicators.LoadingIndicator
 import com.mvproject.tinyiptvkmp.core.ui.modifiers.SpacerHeight
-import com.mvproject.tinyiptvkmp.core.ui.overlay.OverlayContent
-import com.mvproject.tinyiptvkmp.core.ui.overlay.OverlayOptionsMenu
-import com.mvproject.tinyiptvkmp.core.ui.selectors.OptionSelector
 import com.mvproject.tinyiptvkmp.core.ui.toolbars.AppBarWithBackNav
 import io.github.vinceglb.filekit.compose.rememberFilePickerLauncher
 import io.github.vinceglb.filekit.core.PickerMode
@@ -64,7 +58,6 @@ import tinyiptvkmp.composeapp.generated.resources.btn_save
 import tinyiptvkmp.composeapp.generated.resources.btn_update
 import tinyiptvkmp.composeapp.generated.resources.hint_address
 import tinyiptvkmp.composeapp.generated.resources.hint_name
-import tinyiptvkmp.composeapp.generated.resources.hint_update_period
 import tinyiptvkmp.composeapp.generated.resources.label_or
 import tinyiptvkmp.composeapp.generated.resources.msg_playlist_details
 
@@ -117,9 +110,6 @@ private fun PlaylistScreen(
                 val fileTmp = folderFileTmp.toFile()
 
                 scope.launch {
-                    //FileOutputStream(fileTmp).use {
-                    //    it.write(file.readBytes())
-                    //}
                     fileTmp.sink().buffer().use { sink ->
                         sink.write(file.readBytes())
                     }
@@ -152,8 +142,6 @@ private fun PlaylistScreen(
                 .fillMaxSize()
                 .padding(paddingValues),
         ) {
-            val isUpdateOptionOpen = remember { mutableStateOf(false) }
-
             Column(
                 modifier =
                 Modifier
@@ -213,19 +201,15 @@ private fun PlaylistScreen(
                     ),
                 )
 
-                SpacerHeight(height = MaterialTheme.dimens.size8)
-                OptionSelector(
-                    modifier = Modifier.fillMaxWidth(),
-                    title = stringResource(Res.string.hint_update_period),
-                    enabled = uiState.playlistType == PlaylistType.REMOTE,
-                    selectedItem = stringResource(UpdatePeriod.entries[uiState.updatePeriod].title),
-                    isExpanded = isUpdateOptionOpen.value,
-                    onClick = {
-                        isUpdateOptionOpen.value = true
-                    },
+                SpacerHeight(height = MaterialTheme.dimens.size16)
+
+                PlaylistUpdateSelector(
+                    uiState = uiState,
+                    onAction = onAction
                 )
 
                 SpacerHeight(height = MaterialTheme.dimens.size16)
+
                 if (!uiState.isEdit) {
                     Row(
                         modifier = Modifier.fillMaxWidth(),
@@ -253,6 +237,7 @@ private fun PlaylistScreen(
                     }
 
                     SpacerHeight(height = MaterialTheme.dimens.size16)
+
                     OutlinedButton(
                         onClick = {
                             launcher.launch()
@@ -273,6 +258,7 @@ private fun PlaylistScreen(
                 }
 
                 SpacerHeight(weight = MaterialTheme.dimens.weight1)
+
                 ElevatedButton(
                     enabled = uiState.isReadyToSave,
                     onClick = {
@@ -311,21 +297,6 @@ private fun PlaylistScreen(
             LoadingIndicator(
                 isVisible = uiState.isSaving,
             )
-
-            OverlayContent(
-                isVisible = isUpdateOptionOpen.value,
-                onViewTap = { isUpdateOptionOpen.value = false },
-            ) {
-                OverlayOptionsMenu(
-                    title = stringResource(Res.string.hint_update_period),
-                    selectedIndex = uiState.updatePeriod,
-                    options = UpdatePeriod.entries.map { stringResource(it.title) },
-                    onItemSelected = { index ->
-                        onAction(PlaylistUiAction.SetUpdatePeriod(period = index))
-                        isUpdateOptionOpen.value = false
-                    },
-                )
-            }
         }
     }
 }

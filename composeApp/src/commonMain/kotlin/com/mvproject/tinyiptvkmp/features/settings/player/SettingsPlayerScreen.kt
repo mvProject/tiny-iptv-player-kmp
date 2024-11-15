@@ -9,14 +9,12 @@ package com.mvproject.tinyiptvkmp.features.settings.player
 
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.WindowInsets
 import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.navigationBars
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.layout.windowInsetsPadding
+import androidx.compose.material3.ListItem
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Switch
@@ -25,18 +23,14 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
-import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import com.mvproject.tinyiptvkmp.core.common.mvi.CollectUiEffect
 import com.mvproject.tinyiptvkmp.core.domain.enums.RatioMode
 import com.mvproject.tinyiptvkmp.core.domain.enums.ResizeMode
 import com.mvproject.tinyiptvkmp.core.theme.dimens
-import com.mvproject.tinyiptvkmp.core.ui.modifiers.SpacerHeight
-import com.mvproject.tinyiptvkmp.core.ui.overlay.OverlayContent
-import com.mvproject.tinyiptvkmp.core.ui.overlay.OverlayOptionsMenu
-import com.mvproject.tinyiptvkmp.core.ui.selectors.OptionSelector
 import com.mvproject.tinyiptvkmp.core.ui.toolbars.AppBarWithBackNav
-import com.mvproject.tinyiptvkmp.features.settings.player.SettingsPlayerUiState.SettingsPlayerOSD
+import com.mvproject.tinyiptvkmp.features.settings.components.SettingsSelector
+import com.mvproject.tinyiptvkmp.features.settings.player.SettingsPlayerUiState.SettingsPlayer
 import org.jetbrains.compose.resources.stringResource
 import tinyiptvkmp.composeapp.generated.resources.Res
 import tinyiptvkmp.composeapp.generated.resources.option_default_fullscreen_mode
@@ -86,128 +80,61 @@ private fun SettingsPlayerScreen(
                 .padding(paddingValues)
                 .fillMaxSize()
                 .padding(MaterialTheme.dimens.size12),
+            verticalArrangement = Arrangement.spacedBy(MaterialTheme.dimens.size12)
         ) {
-            Row(
-                modifier = Modifier.fillMaxWidth(),
-                verticalAlignment = Alignment.CenterVertically,
-                horizontalArrangement = Arrangement.SpaceBetween,
-            ) {
-                Text(
-                    modifier =
-                    Modifier
-                        .weight(MaterialTheme.dimens.weight6)
-                        .padding(horizontal = MaterialTheme.dimens.size8),
-                    text = stringResource(Res.string.option_default_fullscreen_mode),
-                    style = MaterialTheme.typography.bodyMedium,
-                    color = MaterialTheme.colorScheme.onPrimary,
-                )
+            ListItem(
+                headlineContent = {
+                    Text(
+                        text = stringResource(Res.string.option_default_fullscreen_mode),
+                        style = MaterialTheme.typography.bodyMedium,
+                        color = MaterialTheme.colorScheme.onPrimary,
+                    )
+                },
+                trailingContent = {
+                    Switch(
+                        checked = uiState.isFullscreenEnabled,
+                        colors =
+                        SwitchDefaults.colors(
+                            checkedThumbColor = MaterialTheme.colorScheme.primary,
+                            uncheckedThumbColor =
+                            MaterialTheme.colorScheme.primary
+                                .copy(alpha = MaterialTheme.dimens.alpha50),
+                            checkedTrackColor = MaterialTheme.colorScheme.onSurfaceVariant,
+                            uncheckedTrackColor = MaterialTheme.colorScheme.onSurface,
+                        ),
+                        onCheckedChange = { state ->
+                            onAction(SettingsPlayerUiAction.SetFullScreenMode(state = state))
+                        },
+                    )
+                }
+            )
 
-                Switch(
-                    modifier = Modifier.width(MaterialTheme.dimens.size82),
-                    checked = uiState.isFullscreenEnabled,
-                    colors =
-                    SwitchDefaults.colors(
-                        checkedThumbColor = MaterialTheme.colorScheme.primary,
-                        uncheckedThumbColor =
-                        MaterialTheme.colorScheme.primary
-                            .copy(alpha = MaterialTheme.dimens.alpha50),
-                        checkedTrackColor = MaterialTheme.colorScheme.onSurfaceVariant,
-                        uncheckedTrackColor = MaterialTheme.colorScheme.onSurface,
-                    ),
-                    onCheckedChange = { state ->
-                        onAction(SettingsPlayerUiAction.SetFullScreenMode(state = state))
-                    },
-                )
-            }
-
-            SpacerHeight(MaterialTheme.dimens.size12)
-
-            OptionSelector(
-                modifier = Modifier.fillMaxWidth(),
+            SettingsSelector(
                 title = stringResource(Res.string.option_default_resize_mode),
-                selectedItem = stringResource(ResizeMode.entries[uiState.resizeMode].title),
-                isExpanded = uiState.osdType == SettingsPlayerOSD.ResizeMode,
+                selectedIndex = uiState.resizeMode,
+                isExpanded = uiState.settingsType == SettingsPlayer.ResizeMode,
+                options = ResizeMode.entries.map { stringResource(it.title) },
                 onClick = {
-                    onAction(SettingsPlayerUiAction.OpenOsd(SettingsPlayerOSD.ResizeMode))
+                    onAction(SettingsPlayerUiAction.ToggleOption(SettingsPlayer.ResizeMode))
                 },
+                onSelect = {
+                    onAction(SettingsPlayerUiAction.SetResizeMode(mode = it))
+                }
             )
 
-            SpacerHeight(MaterialTheme.dimens.size12)
-
-            OptionSelector(
-                modifier = Modifier.fillMaxWidth(),
+            SettingsSelector(
                 title = stringResource(Res.string.option_default_ratio_mode),
-                selectedItem = stringResource(RatioMode.entries[uiState.ratioMode].title),
-                isExpanded = uiState.osdType == SettingsPlayerOSD.RatioMode,
+                selectedIndex = uiState.ratioMode,
+                isExpanded = uiState.settingsType == SettingsPlayer.RatioMode,
+                options = RatioMode.entries.map { stringResource(it.title) },
                 onClick = {
-                    onAction(SettingsPlayerUiAction.OpenOsd(SettingsPlayerOSD.RatioMode))
+                    onAction(SettingsPlayerUiAction.ToggleOption(SettingsPlayer.RatioMode))
                 },
+                onSelect = {
+                    onAction(SettingsPlayerUiAction.SetRatioMode(mode = it))
+                }
             )
         }
-        OverlayContent(
-            isVisible = uiState.osdType != null,
-            onViewTap = { onAction(SettingsPlayerUiAction.CloseOsd) },
-        ) {
-            uiState.osdType?.let { osdType ->
-                when (osdType) {
-                    SettingsPlayerOSD.RatioMode -> {
-                        OverlayOptionsMenu(
-                            title = stringResource(Res.string.option_default_ratio_mode),
-                            selectedIndex = uiState.ratioMode,
-                            options = RatioMode.entries.map { stringResource(it.title) },
-                            onItemSelected = { index ->
-                                onAction(SettingsPlayerUiAction.SetRatioMode(mode = index))
-                            },
-                        )
-                    }
-
-                    SettingsPlayerOSD.ResizeMode -> {
-                        OverlayOptionsMenu(
-                            title = stringResource(Res.string.option_default_resize_mode),
-                            selectedIndex = uiState.resizeMode,
-                            options = ResizeMode.entries.map { stringResource(it.title) },
-                            onItemSelected = { index ->
-                                onAction(SettingsPlayerUiAction.SetResizeMode(mode = index))
-                            },
-                        )
-                    }
-                }
-            }
-
-        }
-
-        /*
-                OverlayContent(
-                    isVisible = isSelectResizeModeOpen.value,
-                    contentAlpha = MaterialTheme.dimens.alpha90,
-                    onViewTap = { isSelectResizeModeOpen.value = false },
-                ) {
-                    OverlayOptionsMenu(
-                        title = stringResource(Res.string.option_default_resize_mode),
-                        selectedIndex = uiState.resizeMode,
-                        options = ResizeMode.entries.map { stringResource(it.title) },
-                        onItemSelected = { index ->
-                            onAction(SettingsPlayerUiAction.SetResizeMode(mode = index))
-                            isSelectResizeModeOpen.value = false
-                        },
-                    )
-                }
-
-                OverlayContent(
-                    isVisible = isSelectRatioModeOpen.value,
-                    contentAlpha = MaterialTheme.dimens.alpha90,
-                    onViewTap = { isSelectRatioModeOpen.value = false },
-                ) {
-                    OverlayOptionsMenu(
-                        title = stringResource(Res.string.option_default_ratio_mode),
-                        selectedIndex = uiState.ratioMode,
-                        options = RatioMode.entries.map { stringResource(it.title) },
-                        onItemSelected = { index ->
-                            onAction(SettingsPlayerUiAction.SetRatioMode(mode = index))
-                            isSelectRatioModeOpen.value = false
-                        },
-                    )
-                }*/
     }
 }
 

@@ -33,7 +33,7 @@ import com.mvproject.tinyiptvkmp.core.theme.dimens
 import com.mvproject.tinyiptvkmp.core.ui.epg.ChannelPrograms
 import com.mvproject.tinyiptvkmp.core.ui.indicators.LoadingIndicator
 import com.mvproject.tinyiptvkmp.core.ui.indicators.VolumeIndicator
-import com.mvproject.tinyiptvkmp.core.ui.overlay.OverlayContent
+import com.mvproject.tinyiptvkmp.core.ui.overlay.OnScreenDisplay
 import com.mvproject.tinyiptvkmp.features.channels.components.ChannelFavoriteSelector
 import com.mvproject.tinyiptvkmp.features.player.PlayerUiState.PlayerOSD
 import com.mvproject.tinyiptvkmp.features.player.components.NoPlaybackView
@@ -67,7 +67,7 @@ internal fun PlayerScreen(
     }
     PlayerScreen(
         uiState = uiState,
-        onUiAction = viewModel::onAction
+        onAction = viewModel::onAction
     )
 }
 
@@ -75,7 +75,7 @@ internal fun PlayerScreen(
 private fun PlayerScreen(
     uiState: PlayerUiState,
     windowSizeClass: WindowSizeClass = currentWindowAdaptiveInfo().windowSizeClass,
-    onUiAction: (PlayerUiAction) -> Unit
+    onAction: (PlayerUiAction) -> Unit
 ) {
     Box(
         modifier =
@@ -93,7 +93,7 @@ private fun PlayerScreen(
                 PlayerContent(
                     modifier = Modifier.weight(MaterialTheme.dimens.weight2),
                     uiState = uiState,
-                    onUiAction = onUiAction
+                    onAction = onAction
                 )
 
                 if (!uiState.isFullscreen) {
@@ -110,7 +110,7 @@ private fun PlayerScreen(
                 PlayerContent(
                     modifier = Modifier.weight(MaterialTheme.dimens.weight2),
                     uiState = uiState,
-                    onUiAction = onUiAction
+                    onAction = onAction
                 )
 
                 if (!uiState.isFullscreen) {
@@ -124,9 +124,9 @@ private fun PlayerScreen(
             }
         }
 
-        OverlayContent(
+        OnScreenDisplay(
             isVisible = uiState.osdType != null,
-            onViewTap = { onUiAction(PlayerUiAction.CloseOsd) }
+            onViewTap = { onAction(PlayerUiAction.CloseOsd) }
         ) {
             uiState.osdType?.let { osdType ->
                 when (osdType) {
@@ -154,7 +154,7 @@ private fun PlayerScreen(
                             channels = uiState.groupChannels,
                             current = uiState.channelIndex,
                             group = uiState.channelGroup,
-                            onChannelSelect = { chn -> onUiAction(PlayerUiAction.SelectChannel(chn)) }
+                            onChannelSelect = { chn -> onAction(PlayerUiAction.SelectChannel(chn)) }
                         )
                     }
 
@@ -170,7 +170,7 @@ private fun PlayerScreen(
                         ChannelFavoriteSelector(
                             favoriteType = uiState.currentChannel.favoriteType,
                             onSelectFavorite = { favType ->
-                                onUiAction(PlayerUiAction.UpdateFavorite(favType))
+                                onAction(PlayerUiAction.UpdateFavorite(favType))
                             }
                         )
                     }
@@ -184,15 +184,15 @@ private fun PlayerScreen(
 private fun PlayerContent(
     modifier: Modifier = Modifier,
     uiState: PlayerUiState,
-    onUiAction: (PlayerUiAction) -> Unit
+    onAction: (PlayerUiAction) -> Unit
 ) {
     PlayerContainer(
         modifier = modifier
-            .handleHorizontalGestures(onAction = onUiAction)
-            .handleVerticalGestures(onAction = onUiAction)
-            .handleTapGestures(onAction = onUiAction),
+            .handleHorizontalGestures(onAction = onAction)
+            .handleVerticalGestures(onAction = onAction)
+            .handleTapGestures(onAction = onAction),
         uiState = uiState,
-        onUiAction = onUiAction,
+        onAction = onAction,
     ) {
 
         NoPlaybackView(
@@ -221,7 +221,7 @@ private fun PlayerContent(
             currentChannel = uiState.currentChannel,
             isPlaying = uiState.isPlaying,
             isFullScreen = true,
-            onAction = onUiAction
+            onAction = onAction
         )
     }
 }

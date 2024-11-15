@@ -18,6 +18,8 @@ import androidx.compose.ui.Modifier
 import com.mvproject.tinyiptvkmp.core.theme.dimens
 import com.mvproject.tinyiptvkmp.core.ui.buttons.ControlButton
 import com.mvproject.tinyiptvkmp.core.ui.modifiers.SpacerWidth
+import com.mvproject.tinyiptvkmp.features.player.PlayerUiAction
+import com.mvproject.tinyiptvkmp.features.player.PlayerUiState
 
 @Composable
 actual fun AdditionalPlayerControls(
@@ -61,19 +63,19 @@ actual fun AdditionalPlayerControls(
         SpacerWidth(width = MaterialTheme.dimens.size24)
         ControlButton(
             imageVector = Icons.AutoMirrored.Rounded.ViewList,
-            onClick = { onClick(PlayerUiAction.ToggleProgramsUi) },
+            onClick = { onClick(PlayerUiAction.OpenOsd(PlayerUiState.PlayerOSD.ChannelPrograms)) },
         )
 
         SpacerWidth(width = MaterialTheme.dimens.size8)
         ControlButton(
             imageVector = Icons.AutoMirrored.Rounded.FeaturedPlayList,
-            onClick = { onClick(PlayerUiAction.ToggleChannelsUi) },
+            onClick = { onClick(PlayerUiAction.OpenOsd(PlayerUiState.PlayerOSD.GroupChannels)) },
         )
 
         SpacerWidth(width = MaterialTheme.dimens.size8)
         ControlButton(
             imageVector = Icons.Rounded.Info,
-            onClick = { onClick(PlayerUiAction.ToggleProgramInfoUi) },
+            onClick = { onClick(PlayerUiAction.OpenOsd(PlayerUiState.PlayerOSD.ProgramInfo)) },
         )
 
         SpacerWidth(width = MaterialTheme.dimens.size24)

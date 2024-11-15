@@ -33,7 +33,7 @@ import com.mvproject.tinyiptvkmp.core.common.utils.CommonUtils.empty
 import com.mvproject.tinyiptvkmp.core.theme.dimens
 import com.mvproject.tinyiptvkmp.core.ui.epg.ChannelPrograms
 import com.mvproject.tinyiptvkmp.core.ui.indicators.LoadingIndicator
-import com.mvproject.tinyiptvkmp.core.ui.overlay.OverlayContent
+import com.mvproject.tinyiptvkmp.core.ui.overlay.OnScreenDisplay
 import com.mvproject.tinyiptvkmp.core.ui.toolbars.AppBarWithSearch
 import com.mvproject.tinyiptvkmp.features.channels.GroupChannelsUiState.GroupChannelsOSD
 import com.mvproject.tinyiptvkmp.features.channels.components.ChannelFavoriteSelector
@@ -142,7 +142,7 @@ private fun GroupChannelsScreen(
 
             LoadingIndicator(isVisible = uiState.isLoading)
 
-            OverlayContent(
+            OnScreenDisplay(
                 isVisible = uiState.osdType != null,
                 onViewTap = { onAction(GroupChannelsUiAction.CloseOsd) },
             ) {

@@ -26,7 +26,7 @@ import androidx.compose.ui.draw.alpha
 import com.mvproject.tinyiptvkmp.core.theme.dimens
 
 @Composable
-fun OverlayContent(
+fun OnScreenDisplay(
     isVisible: Boolean = false,
     onViewTap: () -> Unit = {},
     contentAlpha: Float = MaterialTheme.dimens.alpha90,

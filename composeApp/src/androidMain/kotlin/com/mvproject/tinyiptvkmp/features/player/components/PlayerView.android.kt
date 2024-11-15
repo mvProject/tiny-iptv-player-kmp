@@ -16,7 +16,7 @@ import com.mvproject.tinyiptvkmp.ui.rememberPlayerState
 actual fun PlayerView(
     modifier: Modifier,
     uiState: PlayerUiState,
-    onUiAction: (PlayerUiAction) -> Unit
+    onAction: (PlayerUiAction) -> Unit
 ) {
     // todo network Available check
     // val connection by networkConnectionState()
@@ -29,7 +29,7 @@ actual fun PlayerView(
     // }
 
     val playerState = rememberPlayerState(
-        onPlaybackAction = onUiAction,
+        onPlaybackAction = onAction,
     )
 
     //LaunchedEffect(tvPlayerState.isRestartRequired) {
