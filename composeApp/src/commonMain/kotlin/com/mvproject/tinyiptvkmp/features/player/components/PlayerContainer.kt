@@ -12,7 +12,7 @@ import com.mvproject.tinyiptvkmp.features.player.PlayerUiState
 fun PlayerContainer(
     modifier: Modifier,
     uiState: PlayerUiState,
-    onUiAction: (PlayerUiAction) -> Unit,
+    onAction: (PlayerUiAction) -> Unit,
     toolbar: @Composable () -> Unit,
 ) {
     Box(
@@ -25,7 +25,7 @@ fun PlayerContainer(
         ) {
             PlayerView(
                 uiState = uiState,
-                onUiAction = onUiAction
+                onAction = onAction
             )
         }
 

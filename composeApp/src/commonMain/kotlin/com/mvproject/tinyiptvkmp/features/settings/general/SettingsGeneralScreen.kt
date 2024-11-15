@@ -27,8 +27,6 @@ import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -37,13 +35,11 @@ import com.mvproject.tinyiptvkmp.core.common.AppConstants.WEIGHT_1
 import com.mvproject.tinyiptvkmp.core.common.mvi.CollectUiEffect
 import com.mvproject.tinyiptvkmp.core.domain.enums.UpdatePeriod
 import com.mvproject.tinyiptvkmp.core.theme.dimens
-import com.mvproject.tinyiptvkmp.core.ui.overlay.OverlayContent
-import com.mvproject.tinyiptvkmp.core.ui.overlay.OverlayOptionsMenu
-import com.mvproject.tinyiptvkmp.core.ui.selectors.OptionSelector
 import com.mvproject.tinyiptvkmp.core.ui.toolbars.AppBarWithBackNav
+import com.mvproject.tinyiptvkmp.features.settings.components.SettingsSelector
+import com.mvproject.tinyiptvkmp.features.settings.general.SettingsGeneralUiState.SettingsGeneral
 import org.jetbrains.compose.resources.stringResource
 import tinyiptvkmp.composeapp.generated.resources.Res
-import tinyiptvkmp.composeapp.generated.resources.hint_update_period
 import tinyiptvkmp.composeapp.generated.resources.option_update_epg_data
 import tinyiptvkmp.composeapp.generated.resources.option_update_epg_info
 import tinyiptvkmp.composeapp.generated.resources.option_update_title
@@ -88,9 +84,6 @@ private fun SettingsGeneralScreen(
             )
         },
     ) { paddingValues ->
-
-        val isSelectInfoUpdateOpen = remember { mutableStateOf(false) }
-        val isSelectEpgUpdateOpen = remember { mutableStateOf(false) }
 
         Column(
             modifier = Modifier
@@ -210,64 +203,89 @@ private fun SettingsGeneralScreen(
                 )
             }
 
-            OptionSelector(
-                modifier =
-                Modifier
-                    .fillMaxWidth()
-                    .padding(horizontal = MaterialTheme.dimens.size8),
+            SettingsSelector(
                 title = stringResource(Res.string.option_update_epg_info),
-                selectedItem = stringResource(UpdatePeriod.entries[uiState.infoUpdatePeriod].title),
-                isExpanded = isSelectInfoUpdateOpen.value,
-                onClick = {
-                    isSelectInfoUpdateOpen.value = true
-                },
-            )
-
-            OptionSelector(
-                modifier =
-                Modifier
-                    .fillMaxWidth()
-                    .padding(horizontal = MaterialTheme.dimens.size8),
-                title = stringResource(Res.string.option_update_epg_data),
-                selectedItem = stringResource(UpdatePeriod.entries[uiState.epgUpdatePeriod].title),
-                isExpanded = isSelectEpgUpdateOpen.value,
-                onClick = {
-                    isSelectEpgUpdateOpen.value = true
-                },
-            )
-        }
-
-        OverlayContent(
-            isVisible = isSelectInfoUpdateOpen.value,
-            contentAlpha = MaterialTheme.dimens.alpha90,
-            onViewTap = { isSelectInfoUpdateOpen.value = false },
-        ) {
-            OverlayOptionsMenu(
-                title = stringResource(Res.string.hint_update_period),
                 selectedIndex = uiState.infoUpdatePeriod,
+                isExpanded = uiState.settingsType == SettingsGeneral.InfoUpdate,
                 options = UpdatePeriod.entries.map { stringResource(it.title) },
-                onItemSelected = { index ->
-                    onAction(SettingsGeneralUiAction.SetInfoUpdatePeriod(type = index))
-                    isSelectInfoUpdateOpen.value = false
+                onClick = {
+                    onAction(SettingsGeneralUiAction.ToggleOption(SettingsGeneral.InfoUpdate))
                 },
+                onSelect = {
+                    onAction(SettingsGeneralUiAction.SetInfoUpdatePeriod(type = it))
+                }
             )
+
+            SettingsSelector(
+                title = stringResource(Res.string.option_update_epg_data),
+                selectedIndex = uiState.epgUpdatePeriod,
+                isExpanded = uiState.settingsType == SettingsGeneral.ProgramsUpdate,
+                options = UpdatePeriod.entries.map { stringResource(it.title) },
+                onClick = {
+                    onAction(SettingsGeneralUiAction.ToggleOption(SettingsGeneral.ProgramsUpdate))
+                },
+                onSelect = {
+                    onAction(SettingsGeneralUiAction.SetEpgUpdatePeriod(type = it))
+                }
+            )
+
+            /* OptionSelector(
+                 modifier =
+                 Modifier
+                     .fillMaxWidth()
+                     .padding(horizontal = MaterialTheme.dimens.size8),
+                 title = stringResource(Res.string.option_update_epg_info),
+                 selectedItem = stringResource(UpdatePeriod.entries[uiState.infoUpdatePeriod].title),
+                 isExpanded = uiState.osdType == SettingsGeneralOSD.InfoUpdate,
+                 onClick = {
+                     onAction(SettingsGeneralUiAction.SetInfoUpdatePeriod(type = it))
+                 },
+             )
+
+             OptionSelector(
+                 modifier =
+                 Modifier
+                     .fillMaxWidth()
+                     .padding(horizontal = MaterialTheme.dimens.size8),
+                 title = stringResource(Res.string.option_update_epg_data),
+                 selectedItem = stringResource(UpdatePeriod.entries[uiState.epgUpdatePeriod].title),
+                 isExpanded = uiState.osdType == SettingsGeneralOSD.ProgramsUpdate,
+                 onClick = {
+                     onAction(SettingsGeneralUiAction.OpenOsd(SettingsGeneralOSD.ProgramsUpdate))
+                 },
+             )*/
         }
 
-        OverlayContent(
-            isVisible = isSelectEpgUpdateOpen.value,
-            contentAlpha = MaterialTheme.dimens.alpha90,
-            onViewTap = { isSelectEpgUpdateOpen.value = false },
+        /*OverlayContent(
+            isVisible = uiState.osdType != null,
+            onViewTap = { onAction(SettingsGeneralUiAction.CloseOsd) },
         ) {
-            OverlayOptionsMenu(
-                title = stringResource(Res.string.hint_update_period),
-                selectedIndex = uiState.epgUpdatePeriod,
-                options = UpdatePeriod.entries.map { stringResource(it.title) },
-                onItemSelected = { index ->
-                    onAction(SettingsGeneralUiAction.SetEpgUpdatePeriod(type = index))
-                    isSelectEpgUpdateOpen.value = false
-                },
-            )
-        }
+            uiState.osdType?.let { osdType ->
+                when (osdType) {
+                    SettingsGeneralOSD.InfoUpdate -> {
+                        OverlayOptionsMenu(
+                            title = stringResource(Res.string.hint_update_period),
+                            selectedIndex = uiState.infoUpdatePeriod,
+                            options = UpdatePeriod.entries.map { stringResource(it.title) },
+                            onItemSelected = { index ->
+                                onAction(SettingsGeneralUiAction.SetInfoUpdatePeriod(type = index))
+                            },
+                        )
+                    }
+
+                    SettingsGeneralOSD.ProgramsUpdate -> {
+                        OverlayOptionsMenu(
+                            title = stringResource(Res.string.hint_update_period),
+                            selectedIndex = uiState.epgUpdatePeriod,
+                            options = UpdatePeriod.entries.map { stringResource(it.title) },
+                            onItemSelected = { index ->
+                                onAction(SettingsGeneralUiAction.SetEpgUpdatePeriod(type = index))
+                            },
+                        )
+                    }
+                }
+            }
+        }*/
     }
 }
 // todo replace preview

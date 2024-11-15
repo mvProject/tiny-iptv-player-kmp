@@ -26,10 +26,10 @@ import com.mvproject.tinyiptvkmp.core.domain.enums.FavoriteType
 import com.mvproject.tinyiptvkmp.core.theme.dimens
 
 @Composable
-fun OverlayChannelOptions(
+fun ChannelFavoriteSelector(
     modifier: Modifier = Modifier,
     favoriteType: FavoriteType = FavoriteType.NONE,
-    onToggleFavorite: (FavoriteType) -> Unit = {},
+    onSelectFavorite: (FavoriteType) -> Unit = {},
 ) {
     Surface(
         modifier =
@@ -67,7 +67,7 @@ fun OverlayChannelOptions(
                             color = MaterialTheme.colorScheme.outline,
                         ),
                     contentPadding = PaddingValues(),
-                    onClick = { onToggleFavorite(fav) },
+                    onClick = { onSelectFavorite(fav) },
                 ) {
                     Text(
                         text = fav.name,

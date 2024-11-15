@@ -2,7 +2,7 @@
   "formatVersion": 1,
   "database": {
     "version": 1,
-    "identityHash": "f4713b2a871a38bd2b9fa50e03f1cf3e",
+    "identityHash": "1b51677be48e18f7f45848ceab8fa54c",
     "entities": [
       {
         "tableName": "epgChannels",
@@ -90,7 +90,7 @@
       },
       {
         "tableName": "favoriteChannels",
-        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`channelName` TEXT NOT NULL, `channelUrl` TEXT NOT NULL, `channelOrder` INTEGER NOT NULL, `favoriteType` TEXT NOT NULL, `parentListId` TEXT NOT NULL, PRIMARY KEY(`channelName`, `parentListId`))",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`channelName` TEXT NOT NULL, `channelUrl` TEXT NOT NULL, `channelOrder` INTEGER NOT NULL, `favoriteType` TEXT NOT NULL, `parentListId` TEXT NOT NULL, PRIMARY KEY(`channelUrl`, `parentListId`))",
         "fields": [
           {
             "fieldPath": "channelName",
@@ -126,7 +126,7 @@
         "primaryKey": {
           "autoGenerate": false,
           "columnNames": [
-            "channelName",
+            "channelUrl",
             "parentListId"
           ]
         }
@@ -237,7 +237,7 @@
     ],
     "setupQueries": [
       "CREATE TABLE IF NOT EXISTS room_master_table (id INTEGER PRIMARY KEY,identity_hash TEXT)",
-      "INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, 'f4713b2a871a38bd2b9fa50e03f1cf3e')"
+      "INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, '1b51677be48e18f7f45848ceab8fa54c')"
     ]
   }
 }

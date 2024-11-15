@@ -33,7 +33,9 @@ import com.mvproject.tinyiptvkmp.core.theme.dimens
 import com.mvproject.tinyiptvkmp.core.ui.epg.ChannelPrograms
 import com.mvproject.tinyiptvkmp.core.ui.indicators.LoadingIndicator
 import com.mvproject.tinyiptvkmp.core.ui.indicators.VolumeIndicator
-import com.mvproject.tinyiptvkmp.core.ui.overlay.OverlayContent
+import com.mvproject.tinyiptvkmp.core.ui.overlay.OnScreenDisplay
+import com.mvproject.tinyiptvkmp.features.channels.components.ChannelFavoriteSelector
+import com.mvproject.tinyiptvkmp.features.player.PlayerUiState.PlayerOSD
 import com.mvproject.tinyiptvkmp.features.player.components.NoPlaybackView
 import com.mvproject.tinyiptvkmp.features.player.components.PlayerChannels
 import com.mvproject.tinyiptvkmp.features.player.components.PlayerContainer
@@ -65,7 +67,7 @@ internal fun PlayerScreen(
     }
     PlayerScreen(
         uiState = uiState,
-        onUiAction = viewModel::onAction
+        onAction = viewModel::onAction
     )
 }
 
@@ -73,7 +75,7 @@ internal fun PlayerScreen(
 private fun PlayerScreen(
     uiState: PlayerUiState,
     windowSizeClass: WindowSizeClass = currentWindowAdaptiveInfo().windowSizeClass,
-    onUiAction: (PlayerUiAction) -> Unit
+    onAction: (PlayerUiAction) -> Unit
 ) {
     Box(
         modifier =
@@ -91,7 +93,7 @@ private fun PlayerScreen(
                 PlayerContent(
                     modifier = Modifier.weight(MaterialTheme.dimens.weight2),
                     uiState = uiState,
-                    onUiAction = onUiAction
+                    onAction = onAction
                 )
 
                 if (!uiState.isFullscreen) {
@@ -108,7 +110,7 @@ private fun PlayerScreen(
                 PlayerContent(
                     modifier = Modifier.weight(MaterialTheme.dimens.weight2),
                     uiState = uiState,
-                    onUiAction = onUiAction
+                    onAction = onAction
                 )
 
                 if (!uiState.isFullscreen) {
@@ -122,50 +124,58 @@ private fun PlayerScreen(
             }
         }
 
-        OverlayContent(
-            isVisible = uiState.isEpgVisible,
-            onViewTap = { onUiAction(PlayerUiAction.ToggleProgramsUi) }
+        OnScreenDisplay(
+            isVisible = uiState.osdType != null,
+            onViewTap = { onAction(PlayerUiAction.CloseOsd) }
         ) {
-            ChannelPrograms(
-                modifier =
-                Modifier
-                    .fillMaxHeight(MaterialTheme.dimens.fraction90)
-                    .fillMaxWidth(MaterialTheme.dimens.fraction80)
-                    .background(
-                        color = MaterialTheme.colorScheme.primary,
-                        shape =
-                        RoundedCornerShape(
-                            bottomStart = MaterialTheme.dimens.size8,
-                            bottomEnd = MaterialTheme.dimens.size8,
-                        ),
-                    ),
-                title = uiState.currentChannel.channelName,
-                programs = uiState.currentChannel.programs,
-            )
-        }
+            uiState.osdType?.let { osdType ->
+                when (osdType) {
+                    PlayerOSD.ChannelPrograms -> {
+                        ChannelPrograms(
+                            modifier =
+                            Modifier
+                                .fillMaxHeight(MaterialTheme.dimens.fraction90)
+                                .fillMaxWidth(MaterialTheme.dimens.fraction80)
+                                .background(
+                                    color = MaterialTheme.colorScheme.primary,
+                                    shape =
+                                    RoundedCornerShape(
+                                        bottomStart = MaterialTheme.dimens.size8,
+                                        bottomEnd = MaterialTheme.dimens.size8,
+                                    ),
+                                ),
+                            title = uiState.currentChannel.channelName,
+                            programs = uiState.currentChannel.programs,
+                        )
+                    }
 
-        OverlayContent(
-            isVisible = uiState.isChannelsVisible,
-            onViewTap = { onUiAction(PlayerUiAction.ToggleChannelsUi) },
-            contentAlpha = MaterialTheme.dimens.alpha90,
-        ) {
-            PlayerChannels(
-                channels = uiState.groupChannels,
-                current = uiState.channelIndex,
-                group = uiState.channelGroup,
-                onChannelSelect = { chn -> onUiAction(PlayerUiAction.SelectChannel(chn)) }
-            )
-        }
+                    PlayerOSD.GroupChannels -> {
+                        PlayerChannels(
+                            channels = uiState.groupChannels,
+                            current = uiState.channelIndex,
+                            group = uiState.channelGroup,
+                            onChannelSelect = { chn -> onAction(PlayerUiAction.SelectChannel(chn)) }
+                        )
+                    }
 
-        OverlayContent(
-            isVisible = uiState.isChannelInfoVisible,
-            onViewTap = { onUiAction(PlayerUiAction.ToggleProgramInfoUi) },
-        ) {
-            ProgramInfo(
-                channelName = uiState.currentChannel.channelName,
-                programName = uiState.currentChannel.programTitle,
-                description = uiState.currentChannel.programDescription,
-            )
+                    PlayerOSD.ProgramInfo -> {
+                        ProgramInfo(
+                            channelName = uiState.currentChannel.channelName,
+                            programName = uiState.currentChannel.programTitle,
+                            description = uiState.currentChannel.programDescription,
+                        )
+                    }
+
+                    PlayerOSD.ChannelFavorites -> {
+                        ChannelFavoriteSelector(
+                            favoriteType = uiState.currentChannel.favoriteType,
+                            onSelectFavorite = { favType ->
+                                onAction(PlayerUiAction.UpdateFavorite(favType))
+                            }
+                        )
+                    }
+                }
+            }
         }
     }
 }
@@ -174,15 +184,15 @@ private fun PlayerScreen(
 private fun PlayerContent(
     modifier: Modifier = Modifier,
     uiState: PlayerUiState,
-    onUiAction: (PlayerUiAction) -> Unit
+    onAction: (PlayerUiAction) -> Unit
 ) {
     PlayerContainer(
         modifier = modifier
-            .handleHorizontalGestures(onAction = onUiAction)
-            .handleVerticalGestures(onAction = onUiAction)
-            .handleTapGestures(onAction = onUiAction),
+            .handleHorizontalGestures(onAction = onAction)
+            .handleVerticalGestures(onAction = onAction)
+            .handleTapGestures(onAction = onAction),
         uiState = uiState,
-        onUiAction = onUiAction,
+        onAction = onAction,
     ) {
 
         NoPlaybackView(
@@ -211,7 +221,7 @@ private fun PlayerContent(
             currentChannel = uiState.currentChannel,
             isPlaying = uiState.isPlaying,
             isFullScreen = true,
-            onAction = onUiAction
+            onAction = onAction
         )
     }
 }

@@ -26,6 +26,7 @@ import com.mvproject.tinyiptvkmp.core.common.mvi.MviCore
 import com.mvproject.tinyiptvkmp.core.common.mvi.mviCore
 import com.mvproject.tinyiptvkmp.core.common.utils.CommonUtils.empty
 import com.mvproject.tinyiptvkmp.core.datastore.repository.PreferenceRepository
+import com.mvproject.tinyiptvkmp.core.domain.enums.FavoriteType
 import com.mvproject.tinyiptvkmp.core.domain.enums.RatioMode
 import com.mvproject.tinyiptvkmp.core.domain.enums.ResizeMode
 import com.mvproject.tinyiptvkmp.core.domain.model.TvChannel
@@ -36,6 +37,7 @@ import com.mvproject.tinyiptvkmp.core.domain.usecase.ToggleFavoriteChannelUseCas
 import com.mvproject.tinyiptvkmp.core.domain.utils.ChannelsUtils.mapProgramIds
 import com.mvproject.tinyiptvkmp.core.domain.utils.ChannelsUtils.mapPrograms
 import com.mvproject.tinyiptvkmp.core.domain.utils.ChannelsUtils.replaceUpdated
+import com.mvproject.tinyiptvkmp.features.player.PlayerUiState.PlayerOSD
 import com.mvproject.tinyiptvkmp.features.player.components.isMediaPlayable
 import com.mvproject.tinyiptvkmp.navigation.AppRoutes
 import kotlinx.coroutines.Dispatchers
@@ -121,13 +123,9 @@ class PlayerViewModel(
         when (uiAction) {
             PlayerUiAction.SelectNext -> switchToNextChannel()
             PlayerUiAction.SelectPrevious -> switchToPreviousChannel()
-            PlayerUiAction.ToggleChannelsUi -> toggleChannelsVisibility()
-            PlayerUiAction.ToggleProgramsUi -> toggleEpgVisibility()
             PlayerUiAction.ToggleFullScreen -> toggleFullScreen()
             PlayerUiAction.ChangeVideoSize -> toggleVideoResizeMode()
             PlayerUiAction.ChangeVideoRatio -> toggleVideoRatioMode()
-            PlayerUiAction.ToggleProgramInfoUi -> toggleChannelInfoVisibility()
-            PlayerUiAction.ToggleChannelFavorite -> toggleChannelFavorite()
             PlayerUiAction.TogglePlayback -> togglePlayingState()
             PlayerUiAction.TogglePlayerUi -> toggleControlUiState()
             PlayerUiAction.VolumeDown -> decreaseVolume()
@@ -137,6 +135,24 @@ class PlayerViewModel(
             is PlayerUiAction.OnIsPlayingChanged -> changePlayingState(state = uiAction.state)
             is PlayerUiAction.OnPlaybackStateChanged -> changePlaybackState(state = uiAction.state)
             PlayerUiAction.NavigateBack -> viewModelScope.postUiEffect(PlayerUiEffect.OnNavigateBack)
+            is PlayerUiAction.OpenOsd -> openOsd(type = uiAction.type)
+            PlayerUiAction.CloseOsd -> closeOsd()
+            is PlayerUiAction.UpdateFavorite -> toggleChannelFavorite(type = uiAction.type)
+        }
+    }
+
+    private fun openOsd(type: PlayerOSD) {
+        if (type == PlayerOSD.ChannelPrograms && !uiState.value.isFullscreen) {
+            return
+        }
+        updateUiState {
+            copy(osdType = type)
+        }
+    }
+
+    private fun closeOsd() {
+        updateUiState {
+            copy(osdType = null)
         }
     }
 
@@ -285,60 +301,33 @@ class PlayerViewModel(
             copy(
                 channelIndex = channelIndex,
                 currentChannel = currentChannel,
-                isChannelsVisible = false,
+                osdType = null
             )
         }
 
         loadSelectedChannelEpg()
     }
 
-    private fun toggleChannelFavorite() {
+    private fun toggleChannelFavorite(type: FavoriteType) {
         val currentChannel = uiState.value.currentChannel
 
-        // todo
-        val updatedChannel =
-            currentChannel.copy(
-                // isInFavorites = !currentChannel.isInFavorites,
-            )
+        if (currentChannel.favoriteType != type) {
 
+            val updatedChannel = currentChannel.copy(favoriteType = type)
 
-        // val channelWithEpg = currentChannel.toggleFavorite(type = type)
+            val updatedChannels = uiState.value.groupChannels
+                .replaceUpdated(channel = updatedChannel)
 
-        val updatedChannels = uiState.value.groupChannels
-            .replaceUpdated(channel = updatedChannel)
-
-        viewModelScope.launch {
-            updateUiState {
-                copy(
-                    currentChannel = updatedChannel,
-                    groupChannels = updatedChannels,
-                )
+            viewModelScope.launch {
+                updateUiState {
+                    copy(
+                        currentChannel = updatedChannel,
+                        groupChannels = updatedChannels,
+                        osdType = null
+                    )
+                }
+                toggleFavoriteChannelUseCase(channel = currentChannel, type = type)
             }
-
-            toggleFavoriteChannelUseCase(channel = updatedChannel)
-        }
-    }
-
-    private fun toggleEpgVisibility() {
-        if (uiState.value.isFullscreen) {
-            val currentEpgVisibleState = uiState.value.isEpgVisible
-            updateUiState {
-                copy(isEpgVisible = !currentEpgVisibleState)
-            }
-        }
-    }
-
-    private fun toggleChannelsVisibility() {
-        val currentChannelsVisibleState = uiState.value.isChannelsVisible
-        updateUiState {
-            copy(isChannelsVisible = !currentChannelsVisibleState)
-        }
-    }
-
-    private fun toggleChannelInfoVisibility() {
-        val currentChannelInfoVisibleState = uiState.value.isChannelInfoVisible
-        updateUiState {
-            copy(isChannelInfoVisible = !currentChannelInfoVisibleState)
         }
     }
 
@@ -426,9 +415,6 @@ data class PlayerUiState(
     val currentChannel: TvChannel = TvChannel(),
     val isControlUiVisible: Boolean = false,
     val isVolumeUiVisible: Boolean = false,
-    val isEpgVisible: Boolean = false,
-    val isChannelsVisible: Boolean = false,
-    val isChannelInfoVisible: Boolean = false,
     val isFullscreen: Boolean = false,
     val isPlaying: Boolean = false,
     val currentVolume: Float = 0.5f,
@@ -440,12 +426,20 @@ data class PlayerUiState(
     val videoResizeMode: ResizeMode = ResizeMode.Fit,
     val channelIndex: Int = AppConstants.INT_NO_VALUE,
     val groupChannels: List<TvChannel> = emptyList(),
+    val osdType: PlayerOSD? = null,
 ) {
     sealed interface PlayerPlaybackState {
         data object PlaybackReady : PlayerPlaybackState
         data object PlaybackEnded : PlayerPlaybackState
         data object PlaybackBuffering : PlayerPlaybackState
         data class PlaybackIdle(val errorCode: Int?) : PlayerPlaybackState
+    }
+
+    sealed interface PlayerOSD {
+        data object GroupChannels : PlayerOSD
+        data object ChannelPrograms : PlayerOSD
+        data object ProgramInfo : PlayerOSD
+        data object ChannelFavorites : PlayerOSD
     }
 }
 
@@ -455,11 +449,7 @@ sealed interface PlayerUiAction {
     data object ChangeVideoSize : PlayerUiAction
     data object ChangeVideoRatio : PlayerUiAction
     data object ToggleFullScreen : PlayerUiAction
-    data object ToggleChannelFavorite : PlayerUiAction
     data object TogglePlayerUi : PlayerUiAction
-    data object ToggleProgramsUi : PlayerUiAction
-    data object ToggleChannelsUi : PlayerUiAction
-    data object ToggleProgramInfoUi : PlayerUiAction
     data object SelectNext : PlayerUiAction
     data object SelectPrevious : PlayerUiAction
     data object VolumeUp : PlayerUiAction
@@ -471,6 +461,10 @@ sealed interface PlayerUiAction {
 
     data class OnIsPlayingChanged(val state: Boolean) : PlayerUiAction
     data class OnPlaybackStateChanged(val state: PlayerUiState.PlayerPlaybackState) : PlayerUiAction
+
+    data class UpdateFavorite(val type: FavoriteType) : PlayerUiAction
+    data class OpenOsd(val type: PlayerOSD) : PlayerUiAction
+    data object CloseOsd : PlayerUiAction
 }
 
 sealed interface PlayerUiEffect {

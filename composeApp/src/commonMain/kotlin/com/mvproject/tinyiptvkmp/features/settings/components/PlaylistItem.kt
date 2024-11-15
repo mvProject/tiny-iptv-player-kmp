@@ -5,7 +5,7 @@
  *
  */
 
-package com.mvproject.tinyiptvkmp.features.settings.playlist.components
+package com.mvproject.tinyiptvkmp.features.settings.components
 
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.clickable

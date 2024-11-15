@@ -14,6 +14,7 @@ import com.mvproject.tinyiptvkmp.core.common.AppConstants
 import com.mvproject.tinyiptvkmp.core.common.mvi.MviCore
 import com.mvproject.tinyiptvkmp.core.common.mvi.mviCore
 import com.mvproject.tinyiptvkmp.core.datastore.repository.PreferenceRepository
+import com.mvproject.tinyiptvkmp.features.settings.general.SettingsGeneralUiState.SettingsGeneral
 import kotlinx.coroutines.launch
 
 class SettingsGeneralViewModel(
@@ -52,6 +53,14 @@ class SettingsGeneralViewModel(
 
             is SettingsGeneralUiAction.SetEpgUpdatePeriod -> setUpdateEpgProgramsPeriod(type = uiAction.type)
             is SettingsGeneralUiAction.SetInfoUpdatePeriod -> setUpdateInfoPeriod(type = uiAction.type)
+            is SettingsGeneralUiAction.ToggleOption -> toggleOption(type = uiAction.type)
+        }
+    }
+
+    private fun toggleOption(type: SettingsGeneral) {
+        val settingsType = if (uiState.value.settingsType == type) null else type
+        updateUiState {
+            copy(settingsType = settingsType)
         }
     }
 
@@ -59,7 +68,7 @@ class SettingsGeneralViewModel(
         viewModelScope.launch {
             preferenceRepository.setEpgInfoUpdatePeriod(type = type)
             updateUiState {
-                copy(infoUpdatePeriod = type)
+                copy(infoUpdatePeriod = type, settingsType = null)
             }
         }
     }
@@ -68,7 +77,7 @@ class SettingsGeneralViewModel(
         viewModelScope.launch {
             preferenceRepository.setMainEpgUpdatePeriod(type = type)
             updateUiState {
-                copy(epgUpdatePeriod = type)
+                copy(epgUpdatePeriod = type, settingsType = null)
             }
         }
     }
@@ -78,11 +87,18 @@ class SettingsGeneralViewModel(
 data class SettingsGeneralUiState(
     val infoUpdatePeriod: Int = AppConstants.INT_VALUE_ZERO,
     val epgUpdatePeriod: Int = AppConstants.INT_VALUE_ZERO,
-)
+    val settingsType: SettingsGeneral? = null,
+) {
+    sealed interface SettingsGeneral {
+        data object InfoUpdate : SettingsGeneral
+        data object ProgramsUpdate : SettingsGeneral
+    }
+}
 
 sealed interface SettingsGeneralUiAction {
     data class SetInfoUpdatePeriod(val type: Int) : SettingsGeneralUiAction
     data class SetEpgUpdatePeriod(val type: Int) : SettingsGeneralUiAction
+    data class ToggleOption(val type: SettingsGeneral) : SettingsGeneralUiAction
     data object NavigateBack : SettingsGeneralUiAction
     data object NavigateToPlayerSettings : SettingsGeneralUiAction
     data object NavigateToPlaylistSettings : SettingsGeneralUiAction

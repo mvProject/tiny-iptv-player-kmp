@@ -30,14 +30,14 @@ import androidx.lifecycle.compose.LifecycleResumeEffect
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.mvproject.tinyiptvkmp.core.common.mvi.CollectUiEffect
 import com.mvproject.tinyiptvkmp.core.common.utils.CommonUtils.empty
-import com.mvproject.tinyiptvkmp.core.domain.model.TvChannel
 import com.mvproject.tinyiptvkmp.core.theme.dimens
 import com.mvproject.tinyiptvkmp.core.ui.epg.ChannelPrograms
 import com.mvproject.tinyiptvkmp.core.ui.indicators.LoadingIndicator
-import com.mvproject.tinyiptvkmp.core.ui.overlay.OverlayContent
+import com.mvproject.tinyiptvkmp.core.ui.overlay.OnScreenDisplay
 import com.mvproject.tinyiptvkmp.core.ui.toolbars.AppBarWithSearch
+import com.mvproject.tinyiptvkmp.features.channels.GroupChannelsUiState.GroupChannelsOSD
+import com.mvproject.tinyiptvkmp.features.channels.components.ChannelFavoriteSelector
 import com.mvproject.tinyiptvkmp.features.channels.components.ChannelView
-import com.mvproject.tinyiptvkmp.features.channels.components.OverlayChannelOptions
 
 @Composable
 internal fun GroupChannelsScreen(
@@ -98,12 +98,6 @@ private fun GroupChannelsScreen(
         },
     ) { paddingValues ->
 
-        val isChannelOptionOpen = remember { mutableStateOf(false) }
-
-        var selectedChannel by remember {
-            mutableStateOf(TvChannel())
-        }
-
         Box(
             modifier = Modifier
                 .fillMaxSize()
@@ -130,14 +124,16 @@ private fun GroupChannelsScreen(
                         )
                     },
                     onFavoriteClick = { selected ->
-                        selectedChannel = selected
-                        isChannelOptionOpen.value = true
-                    },
-                    onShowEpgClick = { selected ->
                         onAction(
-                            GroupChannelsUiAction.ToggleEpgVisibility(
-                                name = selected.channelName,
-                                programId = selected.programId
+                            GroupChannelsUiAction.OpenOsd(
+                                GroupChannelsOSD.ChannelFavorites(channel = selected)
+                            )
+                        )
+                    },
+                    onShowProgramsClick = { selected ->
+                        onAction(
+                            GroupChannelsUiAction.OpenOsd(
+                                GroupChannelsOSD.ChannelPrograms(channel = selected)
                             )
                         )
                     },
@@ -146,44 +142,45 @@ private fun GroupChannelsScreen(
 
             LoadingIndicator(isVisible = uiState.isLoading)
 
-            OverlayContent(
-                isVisible = isChannelOptionOpen.value,
-                contentAlpha = MaterialTheme.dimens.alpha90,
-                onViewTap = { isChannelOptionOpen.value = false },
+            OnScreenDisplay(
+                isVisible = uiState.osdType != null,
+                onViewTap = { onAction(GroupChannelsUiAction.CloseOsd) },
             ) {
-                OverlayChannelOptions(
-                    favoriteType = selectedChannel.favoriteType,
-                    onToggleFavorite = { favType ->
-                        onAction(
-                            GroupChannelsUiAction.ToggleFavorite(
-                                channel = selectedChannel,
-                                type = favType
+                uiState.osdType?.let { osdType ->
+                    when (osdType) {
+                        is GroupChannelsOSD.ChannelFavorites -> {
+                            ChannelFavoriteSelector(
+                                favoriteType = osdType.channel.favoriteType,
+                                onSelectFavorite = { favType ->
+                                    onAction(
+                                        GroupChannelsUiAction.ToggleFavorite(
+                                            channel = osdType.channel,
+                                            type = favType
+                                        )
+                                    )
+                                }
                             )
-                        )
-                        isChannelOptionOpen.value = false
-                    },
-                )
-            }
+                        }
 
-            OverlayContent(
-                isVisible = uiState.selectedName.isNotBlank(),
-                onViewTap = { onAction(GroupChannelsUiAction.ToggleEpgVisibility()) },
-            ) {
-                ChannelPrograms(
-                    modifier = Modifier
-                        .fillMaxHeight(MaterialTheme.dimens.fraction90)
-                        .fillMaxWidth(MaterialTheme.dimens.fraction80)
-                        .background(
-                            color = MaterialTheme.colorScheme.primary,
-                            shape =
-                            RoundedCornerShape(
-                                bottomStart = MaterialTheme.dimens.size8,
-                                bottomEnd = MaterialTheme.dimens.size8,
-                            ),
-                        ),
-                    title = uiState.selectedName,
-                    programs = uiState.selectedPrograms,
-                )
+                        is GroupChannelsOSD.ChannelPrograms -> {
+                            ChannelPrograms(
+                                modifier = Modifier
+                                    .fillMaxHeight(MaterialTheme.dimens.fraction90)
+                                    .fillMaxWidth(MaterialTheme.dimens.fraction80)
+                                    .background(
+                                        color = MaterialTheme.colorScheme.primary,
+                                        shape =
+                                        RoundedCornerShape(
+                                            bottomStart = MaterialTheme.dimens.size8,
+                                            bottomEnd = MaterialTheme.dimens.size8,
+                                        ),
+                                    ),
+                                title = uiState.selectedName,
+                                programs = uiState.selectedPrograms,
+                            )
+                        }
+                    }
+                }
             }
         }
     }

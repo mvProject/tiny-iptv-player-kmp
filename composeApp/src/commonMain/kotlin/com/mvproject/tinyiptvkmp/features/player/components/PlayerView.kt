@@ -9,6 +9,6 @@ import com.mvproject.tinyiptvkmp.features.player.PlayerUiState
 expect fun PlayerView(
     modifier: Modifier = Modifier,
     uiState: PlayerUiState,
-    onUiAction: (PlayerUiAction) -> Unit = {},
+    onAction: (PlayerUiAction) -> Unit = {},
 )
 

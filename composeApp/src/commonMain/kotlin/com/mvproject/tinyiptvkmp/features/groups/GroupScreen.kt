@@ -20,8 +20,6 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clipToBounds
@@ -30,16 +28,13 @@ import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.mvproject.tinyiptvkmp.core.common.mvi.CollectUiEffect
 import com.mvproject.tinyiptvkmp.core.theme.dimens
 import com.mvproject.tinyiptvkmp.core.ui.indicators.LoadingIndicator
-import com.mvproject.tinyiptvkmp.core.ui.modifiers.SpacerHeight
-import com.mvproject.tinyiptvkmp.core.ui.selectors.OptionSelector
 import com.mvproject.tinyiptvkmp.core.ui.toolbars.AppBarWithSettings
 import com.mvproject.tinyiptvkmp.core.ui.views.NoItemsView
 import com.mvproject.tinyiptvkmp.features.groups.components.PlaylistGroupItem
-import com.mvproject.tinyiptvkmp.features.groups.components.PlaylistSelectDialog
+import com.mvproject.tinyiptvkmp.features.groups.components.PlaylistSelector
 import org.jetbrains.compose.resources.stringResource
 import tinyiptvkmp.composeapp.generated.resources.Res
 import tinyiptvkmp.composeapp.generated.resources.btn_add_first_playlist
-import tinyiptvkmp.composeapp.generated.resources.hint_current_playlist
 import tinyiptvkmp.composeapp.generated.resources.msg_no_items_found
 
 
@@ -60,17 +55,17 @@ internal fun GroupScreen(
 
     GroupScreen(
         uiState = uiState,
-        onUiAction = viewModel::onAction,
+        onAction = viewModel::onAction,
     )
 }
 
 @Composable
 private fun GroupScreen(
     uiState: GroupUiState,
-    onUiAction: (GroupUiAction) -> Unit = {},
+    onAction: (GroupUiAction) -> Unit = {},
 ) {
     LifecycleResumeEffect(Unit) {
-        onUiAction(GroupUiAction.RefreshPlaylist)
+        onAction(GroupUiAction.RefreshPlaylist)
 
         onPauseOrDispose { }
     }
@@ -78,7 +73,7 @@ private fun GroupScreen(
     Scaffold(
         modifier = Modifier.fillMaxSize(),
         topBar = {
-            AppBarWithSettings(onSettingsClicked = { onUiAction(GroupUiAction.NavigateToSettings) })
+            AppBarWithSettings(onSettingsClicked = { onAction(GroupUiAction.NavigateToSettings) })
         },
     ) { paddingValues ->
         Box(
@@ -95,37 +90,18 @@ private fun GroupScreen(
                 horizontalAlignment = Alignment.CenterHorizontally,
                 verticalArrangement = Arrangement.Center,
             ) {
-                if (uiState.isPlaylistSelectorVisible) {
-                    val isSelectPlaylistOpen = remember { mutableStateOf(false) }
 
-                    OptionSelector(
-                        modifier = Modifier.fillMaxWidth(),
-                        title = stringResource(Res.string.hint_current_playlist),
-                        selectedItem = uiState.selectedPlaylist.playlistName,
-                        isExpanded = isSelectPlaylistOpen.value,
-                        onClick = {
-                            isSelectPlaylistOpen.value = true
-                        },
-                    )
+                PlaylistSelector(
+                    uiState = uiState,
+                    onAction = onAction
+                )
 
-                    PlaylistSelectDialog(
-                        isDialogOpen = isSelectPlaylistOpen,
-                        title = stringResource(Res.string.hint_current_playlist),
-                        playlists = uiState.playlists,
-                        onItemSelected = { item ->
-                            isSelectPlaylistOpen.value = false
-                            onUiAction(GroupUiAction.SelectPlaylist(item))
-                        },
-                    )
-
-                    SpacerHeight(height = MaterialTheme.dimens.size8)
-                }
                 when (val groupState = uiState.groupState) {
                     GroupUiState.GroupState.Empty -> NoItemsView(
                         modifier = Modifier.fillMaxSize(),
                         title = stringResource(Res.string.msg_no_items_found),
                         navigateTitle = stringResource(Res.string.btn_add_first_playlist),
-                        onNavigateClick = { onUiAction(GroupUiAction.NavigateToSettings) },
+                        onNavigateClick = { onAction(GroupUiAction.NavigateToSettings) },
                     )
 
                     is GroupUiState.GroupState.Success -> {
@@ -148,7 +124,7 @@ private fun GroupScreen(
                                     PlaylistGroupItem(
                                         modifier = Modifier.fillMaxWidth().animateItem(),
                                         group = item,
-                                        onUiAction = onUiAction
+                                        onUiAction = onAction
                                     )
                                 }
                             }

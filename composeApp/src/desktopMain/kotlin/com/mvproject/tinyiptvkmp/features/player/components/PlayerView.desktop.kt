@@ -24,7 +24,8 @@ import com.mvproject.tinyiptvkmp.core.common.AppConstants.INT_VALUE_2
 import com.mvproject.tinyiptvkmp.core.common.AppConstants.INT_VALUE_4
 import com.mvproject.tinyiptvkmp.core.common.AppConstants.INT_VALUE_ZERO
 import com.mvproject.tinyiptvkmp.core.common.AppConstants.LONG_VALUE_ZERO
-import com.mvproject.tinyiptvkmp.features.player.PlayerPlaybackState
+import com.mvproject.tinyiptvkmp.features.player.PlayerUiAction
+import com.mvproject.tinyiptvkmp.features.player.PlayerUiState
 import org.jetbrains.skia.Bitmap
 import uk.co.caprica.vlcj.factory.discovery.NativeDiscovery
 import uk.co.caprica.vlcj.media.MediaRef
@@ -41,7 +42,7 @@ import java.nio.ByteBuffer
 actual fun PlayerView(
     modifier: Modifier,
     uiState: PlayerUiState,
-    onUiAction: (PlayerUiAction) -> Unit,
+    onAction: (PlayerUiAction) -> Unit,
 ) {
     // todo network Available check
 
@@ -82,7 +83,7 @@ actual fun PlayerView(
             .aspectRatio(videoPlayerState.aspectRatio),
         state = videoPlayerState,
         url = uiState.currentChannel.channelUrl,
-        onPlaybackAction = onUiAction
+        onPlaybackAction = onAction
     )
 
 
@@ -171,7 +172,7 @@ fun VideoPlayerDirect(
                 }
 
                 onPlaybackAction(
-                    PlayerUiAction.OnPlaybackStateChanged(PlayerPlaybackState.PlaybackReady)
+                    PlayerUiAction.OnPlaybackStateChanged(PlayerUiState.PlayerPlaybackState.PlaybackReady)
                 )
             }
 
@@ -211,7 +212,7 @@ fun VideoPlayerDirect(
 
             override fun stopped(mediaPlayer: MediaPlayer) {
                 onPlaybackAction(
-                    PlayerUiAction.OnPlaybackStateChanged(PlayerPlaybackState.PlaybackEnded)
+                    PlayerUiAction.OnPlaybackStateChanged(PlayerUiState.PlayerPlaybackState.PlaybackEnded)
                 )
             }
         }

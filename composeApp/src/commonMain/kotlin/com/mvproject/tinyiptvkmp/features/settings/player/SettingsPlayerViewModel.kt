@@ -15,6 +15,7 @@ import com.mvproject.tinyiptvkmp.core.common.mvi.mviCore
 import com.mvproject.tinyiptvkmp.core.datastore.repository.PreferenceRepository
 import com.mvproject.tinyiptvkmp.core.domain.enums.RatioMode
 import com.mvproject.tinyiptvkmp.core.domain.enums.ResizeMode
+import com.mvproject.tinyiptvkmp.features.settings.player.SettingsPlayerUiState.SettingsPlayer
 import kotlinx.coroutines.launch
 
 class SettingsPlayerViewModel(
@@ -49,6 +50,14 @@ class SettingsPlayerViewModel(
             is SettingsPlayerUiAction.SetFullScreenMode -> setFullscreenMode(state = uiAction.state)
             is SettingsPlayerUiAction.SetRatioMode -> setRatioMode(mode = uiAction.mode)
             is SettingsPlayerUiAction.SetResizeMode -> setResizeMode(mode = uiAction.mode)
+            is SettingsPlayerUiAction.ToggleOption -> toggleOption(type = uiAction.type)
+        }
+    }
+
+    private fun toggleOption(type: SettingsPlayer) {
+        val settingsType = if (uiState.value.settingsType == type) null else type
+        updateUiState {
+            copy(settingsType = settingsType)
         }
     }
 
@@ -65,7 +74,7 @@ class SettingsPlayerViewModel(
         viewModelScope.launch {
             preferenceRepository.setDefaultResizeMode(mode = mode)
             updateUiState {
-                copy(resizeMode = mode)
+                copy(resizeMode = mode, settingsType = null)
             }
         }
     }
@@ -74,7 +83,7 @@ class SettingsPlayerViewModel(
         viewModelScope.launch {
             preferenceRepository.setDefaultRatioMode(mode = mode)
             updateUiState {
-                copy(ratioMode = mode)
+                copy(ratioMode = mode, settingsType = null)
             }
         }
     }
@@ -85,12 +94,19 @@ data class SettingsPlayerUiState(
     val resizeMode: Int = ResizeMode.Fill.value,
     val ratioMode: Int = RatioMode.WideScreen.value,
     val isFullscreenEnabled: Boolean = true,
-)
+    val settingsType: SettingsPlayer? = null,
+) {
+    sealed interface SettingsPlayer {
+        data object ResizeMode : SettingsPlayer
+        data object RatioMode : SettingsPlayer
+    }
+}
 
 sealed interface SettingsPlayerUiAction {
     data class SetResizeMode(val mode: Int) : SettingsPlayerUiAction
     data class SetRatioMode(val mode: Int) : SettingsPlayerUiAction
     data class SetFullScreenMode(val state: Boolean) : SettingsPlayerUiAction
+    data class ToggleOption(val type: SettingsPlayer) : SettingsPlayerUiAction
     data object NavigateBack : SettingsPlayerUiAction
 
 }
