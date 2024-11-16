@@ -22,8 +22,8 @@ import androidx.compose.ui.Modifier
 import com.mvproject.tinyiptvkmp.core.domain.PreviewTestData
 import com.mvproject.tinyiptvkmp.core.domain.enums.FavoriteType
 import com.mvproject.tinyiptvkmp.core.domain.model.TvChannel
-import com.mvproject.tinyiptvkmp.core.theme.VideoAppTheme
-import com.mvproject.tinyiptvkmp.core.theme.dimens
+import com.mvproject.tinyiptvkmp.core.theme.AppTheme
+import com.mvproject.tinyiptvkmp.core.theme.dimensionSize
 import com.mvproject.tinyiptvkmp.core.ui.buttons.FavoriteButton
 import com.mvproject.tinyiptvkmp.core.ui.texts.ChannelTitleLarge
 import org.jetbrains.compose.ui.tooling.preview.Preview
@@ -40,7 +40,7 @@ fun ChannelCardView(
     ElevatedCard(
         modifier =
         modifier
-            .height(MaterialTheme.dimens.size200)
+            .height(MaterialTheme.dimensionSize.size200)
             .combinedClickable(
                 onClick = onChannelSelect,
                 onLongClick = onShowEpgClick,
@@ -53,17 +53,17 @@ fun ChannelCardView(
         Box(modifier = Modifier.fillMaxSize()) {
             ChannelLogo(
                 modifier = Modifier
-                    .padding(top = MaterialTheme.dimens.size8)
+                    .padding(top = MaterialTheme.dimensionSize.size8)
                     .align(Alignment.TopCenter),
                 channelLogo = channel.channelLogo,
                 channelName = channel.channelName,
-                imageSize = MaterialTheme.dimens.size96,
+                imageSize = MaterialTheme.dimensionSize.size96,
             )
 
             ChannelTitleLarge(
                 modifier = Modifier
-                    .padding(bottom = MaterialTheme.dimens.size8)
-                    .padding(horizontal = MaterialTheme.dimens.size8)
+                    .padding(bottom = MaterialTheme.dimensionSize.size8)
+                    .padding(horizontal = MaterialTheme.dimensionSize.size8)
                     .align(Alignment.BottomCenter),
                 title = channel.channelName,
                 isFavorite = channel.favoriteType != FavoriteType.NONE
@@ -81,7 +81,7 @@ fun ChannelCardView(
 @Composable
 @Preview
 private fun PreviewChannelCardViewFavorite() {
-    VideoAppTheme {
+    AppTheme {
         ChannelCardView(channel = PreviewTestData.testProgram)
     }
 }

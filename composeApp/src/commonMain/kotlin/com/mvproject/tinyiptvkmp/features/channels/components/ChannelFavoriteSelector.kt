@@ -23,7 +23,8 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import com.mvproject.tinyiptvkmp.core.domain.enums.FavoriteType
-import com.mvproject.tinyiptvkmp.core.theme.dimens
+import com.mvproject.tinyiptvkmp.core.theme.colorSchemeExtended
+import com.mvproject.tinyiptvkmp.core.theme.dimensionSize
 
 @Composable
 fun ChannelFavoriteSelector(
@@ -35,15 +36,15 @@ fun ChannelFavoriteSelector(
         modifier =
             modifier
                 .wrapContentHeight()
-                .width(MaterialTheme.dimens.size310)
-                .padding(MaterialTheme.dimens.size8),
+                .width(MaterialTheme.dimensionSize.size310)
+                .padding(MaterialTheme.dimensionSize.size8),
         shape = MaterialTheme.shapes.medium,
-        shadowElevation = MaterialTheme.dimens.size8,
+        shadowElevation = MaterialTheme.dimensionSize.size8,
     ) {
         Column(
             modifier =
                 Modifier
-                    .padding(MaterialTheme.dimens.size24),
+                    .padding(MaterialTheme.dimensionSize.size24),
             horizontalAlignment = Alignment.CenterHorizontally,
             verticalArrangement = Arrangement.Center,
         ) {
@@ -63,8 +64,8 @@ fun ChannelFavoriteSelector(
                     shape = MaterialTheme.shapes.small,
                     border =
                         BorderStroke(
-                            width = MaterialTheme.dimens.size1,
-                            color = MaterialTheme.colorScheme.outline,
+                            width = MaterialTheme.dimensionSize.size1,
+                            color = MaterialTheme.colorSchemeExtended.activeInput,
                         ),
                     contentPadding = PaddingValues(),
                     onClick = { onSelectFavorite(fav) },

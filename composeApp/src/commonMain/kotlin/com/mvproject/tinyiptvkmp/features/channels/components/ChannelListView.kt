@@ -22,8 +22,9 @@ import androidx.compose.ui.draw.clip
 import com.mvproject.tinyiptvkmp.core.domain.PreviewTestData
 import com.mvproject.tinyiptvkmp.core.domain.enums.FavoriteType
 import com.mvproject.tinyiptvkmp.core.domain.model.TvChannel
-import com.mvproject.tinyiptvkmp.core.theme.VideoAppTheme
-import com.mvproject.tinyiptvkmp.core.theme.dimens
+import com.mvproject.tinyiptvkmp.core.theme.AppTheme
+import com.mvproject.tinyiptvkmp.core.theme.dimensionSize
+import com.mvproject.tinyiptvkmp.core.theme.dimensionWeight
 import com.mvproject.tinyiptvkmp.core.ui.buttons.FavoriteButton
 import com.mvproject.tinyiptvkmp.core.ui.indicators.ProgramProgressIndicator
 import com.mvproject.tinyiptvkmp.core.ui.texts.ChannelTitle
@@ -50,17 +51,17 @@ fun ChannelListView(
             .clip(MaterialTheme.shapes.extraSmall),
     ) {
         Row(
-            modifier = Modifier.padding(MaterialTheme.dimens.size8),
+            modifier = Modifier.padding(MaterialTheme.dimensionSize.size8),
             verticalAlignment = Alignment.CenterVertically,
-            horizontalArrangement = Arrangement.spacedBy(MaterialTheme.dimens.size8)
+            horizontalArrangement = Arrangement.spacedBy(MaterialTheme.dimensionSize.size8)
         ) {
             ChannelLogo(
                 channelLogo = channel.channelLogo,
                 channelName = channel.channelName,
             )
             Column(
-                modifier = Modifier.weight(MaterialTheme.dimens.weight1),
-                verticalArrangement = Arrangement.spacedBy(MaterialTheme.dimens.size4)
+                modifier = Modifier.weight(MaterialTheme.dimensionWeight.weight1),
+                verticalArrangement = Arrangement.spacedBy(MaterialTheme.dimensionSize.size4)
             ) {
                 ChannelTitle(
                     title = channel.channelName,
@@ -87,7 +88,7 @@ fun ChannelListView(
 @Preview
 @Composable
 private fun ChannelListViewPreview() {
-    VideoAppTheme {
+    AppTheme {
         ChannelListView(channel = PreviewTestData.testProgram.copy(programs = PreviewTestData.testEpgPrograms))
     }
 }

@@ -10,7 +10,7 @@ package com.mvproject.tinyiptvkmp
 import androidx.compose.runtime.Composable
 import coil3.compose.setSingletonImageLoaderFactory
 import com.mvproject.tinyiptvkmp.core.common.utils.ImageUtils.getAsyncImageLoader
-import com.mvproject.tinyiptvkmp.core.theme.VideoAppTheme
+import com.mvproject.tinyiptvkmp.core.theme.AppTheme
 import com.mvproject.tinyiptvkmp.navigation.AppRoutes
 import com.mvproject.tinyiptvkmp.navigation.NavigationHost
 import org.koin.compose.KoinContext
@@ -21,7 +21,7 @@ fun TinyIptvApp() {
         getAsyncImageLoader(context)
     }
     KoinContext {
-        VideoAppTheme {
+        AppTheme {
             NavigationHost(
                 startDestination = AppRoutes.PlaylistGroup,
             )

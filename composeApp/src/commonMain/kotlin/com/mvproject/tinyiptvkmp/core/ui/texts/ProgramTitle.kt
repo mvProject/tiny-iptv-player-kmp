@@ -8,12 +8,13 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.style.TextOverflow
+import com.mvproject.tinyiptvkmp.core.theme.colorSchemeExtended
 
 @Composable
 fun ProgramTitle(
     modifier: Modifier = Modifier,
     title: String,
-    color: Color = MaterialTheme.colorScheme.onSurface,
+    color: Color = MaterialTheme.colorSchemeExtended.programTitle,
     style: TextStyle = MaterialTheme.typography.labelMedium,
     lines: Int = 2
 ) {
@@ -24,6 +25,6 @@ fun ProgramTitle(
         color = color,
         overflow = TextOverflow.Ellipsis,
         maxLines = lines,
-        minLines = lines,
+        minLines = 1,
     )
 }

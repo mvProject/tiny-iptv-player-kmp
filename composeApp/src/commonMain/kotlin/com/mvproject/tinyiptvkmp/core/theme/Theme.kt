@@ -14,47 +14,50 @@ import androidx.compose.material3.lightColorScheme
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.CompositionLocalProvider
 
-private val videoAppDarkColorScheme = darkColorScheme(
-    primary = videoAppDarkPrimary,
-    onPrimary = videoAppDarkOnPrimary,
-    background = videoAppDarkBackground,
-    surface = videoAppDarkSurface,
-    inverseSurface = videoAppDarkInverseSurface,
-    tertiary = videoAppDarkTertiary,
-    onTertiary = videoAppDarkOnTertiary,
-    onSurface = videoAppDarkOnSurface,
-    onSurfaceVariant = videoAppDarkOnSurfaceVariant,
-    outline = videoAppDarkOutline
+private val darkColorScheme = darkColorScheme(
+    primary = blackCarbor,
+    onPrimary = porce,
+    background = blackCarbor,
+    onBackground = porce,
+    surface = blackOil,
+    onSurface = whiteDuck
 )
 
-private val videoAppLightColorScheme = lightColorScheme(
-    primary = videoAppLightPrimary,
-    onPrimary = videoAppLightOnPrimary,
-    background = videoAppLightBackground,
-    inverseSurface = videoAppLightInverseSurface,
-    surface = videoAppLightSurface,
-    tertiary = videoAppLightTertiary,
-    onTertiary = videoAppLightOnTertiary,
-    onSurface = videoAppLightOnSurface,
-    onSurfaceVariant = videoAppLightOnSurfaceVariant,
-    outline = videoAppLightOutline,
+private val lightColorScheme = lightColorScheme(
+    primary = blackCarbor,
+    onPrimary = porce,
+    background = blackCarbor,
+    onBackground = porce,
+    surface = blackOil,
+    onSurface = whiteDuck
 )
 
 @Composable
-fun VideoAppTheme(
+fun AppTheme(
     darkTheme: Boolean = isSystemInDarkTheme(),
     content: @Composable () -> Unit
 ) {
-    val videoAppColorScheme = if (darkTheme)
-        videoAppDarkColorScheme
-    else videoAppLightColorScheme
+    val colorScheme = if (darkTheme)
+        darkColorScheme
+    else
+        lightColorScheme
 
+    val colorSchemeExtended = if (darkTheme)
+        darkColorSchemeExtended
+    else
+        lightColorSchemeExtended
 
     CompositionLocalProvider(
-        LocalDimens provides Dimens(),
+        LocalDimensionSize provides DimensionSize(),
+        LocalDimensionFraction provides DimensionFraction(),
+        LocalDimensionOpacity provides DimensionOpacity(),
+        LocalDimensionSpacing provides DimensionSpacing(),
+        LocalDimensionWeight provides DimensionWeight(),
+        LocalDimensionText provides DimensionText(),
+        LocalColorSchemeExtended provides colorSchemeExtended,
     ) {
         MaterialTheme(
-            colorScheme = videoAppColorScheme,
+            colorScheme = colorScheme,
             typography = getTypography(),
             shapes = shapes,
             content = content

@@ -8,15 +8,14 @@
 package com.mvproject.tinyiptvkmp.core.ui.toolbars
 
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.outlined.Settings
+import androidx.compose.material.icons.filled.Settings
 import androidx.compose.material3.CenterAlignedTopAppBar
 import androidx.compose.material3.ExperimentalMaterial3Api
-import androidx.compose.material3.Icon
-import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.Composable
+import com.mvproject.tinyiptvkmp.core.ui.buttons.MenuButton
 import org.jetbrains.compose.resources.stringResource
 import tinyiptvkmp.composeapp.generated.resources.Res
 import tinyiptvkmp.composeapp.generated.resources.app_name
@@ -33,20 +32,15 @@ fun AppBarWithSettings(onSettingsClicked: () -> Unit = {}) {
             )
         },
         actions = {
-            IconButton(
-                onClick = onSettingsClicked,
-            ) {
-                Icon(
-                    imageVector = Icons.Outlined.Settings,
-                    contentDescription = "Settings Icon",
-                    tint = MaterialTheme.colorScheme.onPrimary,
-                )
-            }
+            MenuButton(
+                imageVector = Icons.Default.Settings,
+                onClick = onSettingsClicked
+            )
         },
         colors =
-            TopAppBarDefaults.centerAlignedTopAppBarColors(
-                containerColor = MaterialTheme.colorScheme.primary,
-            ),
+        TopAppBarDefaults.centerAlignedTopAppBarColors(
+            containerColor = MaterialTheme.colorScheme.primary,
+        ),
     )
 }
 

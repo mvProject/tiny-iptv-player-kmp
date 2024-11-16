@@ -26,7 +26,7 @@ import androidx.compose.ui.draw.clipToBounds
 import androidx.lifecycle.compose.LifecycleResumeEffect
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.mvproject.tinyiptvkmp.core.common.mvi.CollectUiEffect
-import com.mvproject.tinyiptvkmp.core.theme.dimens
+import com.mvproject.tinyiptvkmp.core.theme.dimensionSize
 import com.mvproject.tinyiptvkmp.core.ui.indicators.LoadingIndicator
 import com.mvproject.tinyiptvkmp.core.ui.toolbars.AppBarWithSettings
 import com.mvproject.tinyiptvkmp.core.ui.views.NoItemsView
@@ -86,7 +86,7 @@ private fun GroupScreen(
                 modifier =
                 Modifier
                     .fillMaxSize()
-                    .padding(MaterialTheme.dimens.size8),
+                    .padding(MaterialTheme.dimensionSize.size8),
                 horizontalAlignment = Alignment.CenterHorizontally,
                 verticalArrangement = Arrangement.Center,
             ) {
@@ -109,13 +109,13 @@ private fun GroupScreen(
                             modifier =
                             Modifier
                                 .fillMaxSize()
-                                .padding(vertical = MaterialTheme.dimens.size8),
+                                .padding(vertical = MaterialTheme.dimensionSize.size8),
                             horizontalAlignment = Alignment.CenterHorizontally,
                             verticalArrangement = Arrangement.Center,
                         ) {
                             LazyColumn(
                                 modifier = Modifier.fillMaxHeight().clipToBounds(),
-                                verticalArrangement = Arrangement.spacedBy(MaterialTheme.dimens.size4),
+                                verticalArrangement = Arrangement.spacedBy(MaterialTheme.dimensionSize.size4),
                             ) {
                                 items(
                                     items = groupState.groups,

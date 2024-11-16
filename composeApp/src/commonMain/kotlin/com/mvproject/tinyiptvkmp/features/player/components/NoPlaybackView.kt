@@ -27,7 +27,9 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.painter.Painter
 import androidx.compose.ui.text.style.TextAlign
-import com.mvproject.tinyiptvkmp.core.theme.dimens
+import com.mvproject.tinyiptvkmp.core.theme.colorSchemeExtended
+import com.mvproject.tinyiptvkmp.core.theme.dimensionFraction
+import com.mvproject.tinyiptvkmp.core.theme.dimensionSize
 import com.mvproject.tinyiptvkmp.core.ui.modifiers.SpacerHeight
 
 @Composable
@@ -48,7 +50,7 @@ fun NoPlaybackView(
         ) {
             Column(
                 modifier = Modifier
-                    .fillMaxSize(MaterialTheme.dimens.fraction70),
+                    .fillMaxSize(MaterialTheme.dimensionFraction.fraction70),
                 verticalArrangement = Arrangement.Center,
                 horizontalAlignment = Alignment.CenterHorizontally
             ) {
@@ -56,20 +58,20 @@ fun NoPlaybackView(
                 Image(
                     painter = logo,
                     modifier = Modifier
-                        .size(MaterialTheme.dimens.size96)
+                        .size(MaterialTheme.dimensionSize.size96)
                         .clip(CircleShape)
                         .background(
-                            color = MaterialTheme.colorScheme.onSurfaceVariant
+                            color = MaterialTheme.colorSchemeExtended.emptyProgramTitle
                         )
-                        .padding(MaterialTheme.dimens.size12),
+                        .padding(MaterialTheme.dimensionSize.size12),
                     contentDescription = text
                 )
 
-                SpacerHeight(height = MaterialTheme.dimens.size16)
+                SpacerHeight(height = MaterialTheme.dimensionSize.size16)
                 Text(
                     text = text,
                     style = MaterialTheme.typography.headlineMedium,
-                    color = MaterialTheme.colorScheme.onSurfaceVariant,
+                    color = MaterialTheme.colorSchemeExtended.emptyProgramTitle,
                     textAlign = TextAlign.Center
                 )
             }

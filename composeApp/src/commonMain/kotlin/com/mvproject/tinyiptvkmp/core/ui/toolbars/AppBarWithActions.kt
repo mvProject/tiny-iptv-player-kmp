@@ -11,18 +11,14 @@ import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.automirrored.filled.NavigateBefore
+import androidx.compose.material.icons.automirrored.filled.ArrowBack
 import androidx.compose.material.icons.automirrored.outlined.ViewList
 import androidx.compose.material.icons.outlined.Search
 import androidx.compose.material3.CenterAlignedTopAppBar
 import androidx.compose.material3.DropdownMenu
 import androidx.compose.material3.DropdownMenuItem
 import androidx.compose.material3.ExperimentalMaterial3Api
-import androidx.compose.material3.FilledIconButton
 import androidx.compose.material3.HorizontalDivider
-import androidx.compose.material3.Icon
-import androidx.compose.material3.IconButton
-import androidx.compose.material3.IconButtonDefaults
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.MenuDefaults
 import androidx.compose.material3.Text
@@ -36,7 +32,9 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.style.TextOverflow
 import com.mvproject.tinyiptvkmp.core.common.AppConstants.INT_VALUE_1
 import com.mvproject.tinyiptvkmp.core.domain.enums.ChannelsViewType
-import com.mvproject.tinyiptvkmp.core.theme.dimens
+import com.mvproject.tinyiptvkmp.core.theme.colorSchemeExtended
+import com.mvproject.tinyiptvkmp.core.theme.dimensionSize
+import com.mvproject.tinyiptvkmp.core.ui.buttons.MenuButton
 import org.jetbrains.compose.resources.stringResource
 import tinyiptvkmp.composeapp.generated.resources.Res
 import tinyiptvkmp.composeapp.generated.resources.menu_view_type_card
@@ -64,41 +62,21 @@ fun AppBarWithActions(
             )
         },
         navigationIcon = {
-            FilledIconButton(
-                onClick = onBackClick,
-                modifier = Modifier.padding(MaterialTheme.dimens.size8),
-                colors =
-                    IconButtonDefaults.filledIconButtonColors(
-                        containerColor = MaterialTheme.colorScheme.onPrimary,
-                        contentColor = MaterialTheme.colorScheme.primary,
-                    ),
-            ) {
-                Icon(
-                    imageVector = Icons.AutoMirrored.Filled.NavigateBefore,
-                    contentDescription = "Back",
-                )
-            }
+            MenuButton(
+                imageVector = Icons.AutoMirrored.Filled.ArrowBack,
+                onClick = onBackClick
+            )
         },
         actions = {
-            IconButton(
-                onClick = { onSearchClicked() },
-            ) {
-                Icon(
-                    imageVector = Icons.Outlined.Search,
-                    contentDescription = "Search Icon",
-                    tint = MaterialTheme.colorScheme.onPrimary,
-                )
-            }
+            MenuButton(
+                imageVector = Icons.Outlined.Search,
+                onClick = onSearchClicked
+            )
 
-            IconButton(
-                onClick = { isMenuOpen = !isMenuOpen },
-            ) {
-                Icon(
-                    imageVector = Icons.AutoMirrored.Outlined.ViewList,
-                    contentDescription = "Change Grid",
-                    tint = MaterialTheme.colorScheme.onPrimary,
-                )
-            }
+            MenuButton(
+                imageVector = Icons.AutoMirrored.Outlined.ViewList,
+                onClick = { isMenuOpen = !isMenuOpen }
+            )
 
             DropdownMenu(
                 modifier =
@@ -129,8 +107,8 @@ fun AppBarWithActions(
                     modifier =
                         Modifier
                             .fillMaxWidth()
-                            .padding(horizontal = MaterialTheme.dimens.size8),
-                    color = MaterialTheme.colorScheme.onSurfaceVariant,
+                            .padding(horizontal = MaterialTheme.dimensionSize.size8),
+                    color = MaterialTheme.colorSchemeExtended.divider,
                 )
                 DropdownMenuItem(
                     text = {
@@ -152,8 +130,8 @@ fun AppBarWithActions(
                     modifier =
                         Modifier
                             .fillMaxWidth()
-                            .padding(horizontal = MaterialTheme.dimens.size8),
-                    color = MaterialTheme.colorScheme.onSurfaceVariant,
+                            .padding(horizontal = MaterialTheme.dimensionSize.size8),
+                    color = MaterialTheme.colorSchemeExtended.divider,
                 )
                 DropdownMenuItem(
                     text = {

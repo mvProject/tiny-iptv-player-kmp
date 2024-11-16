@@ -16,21 +16,21 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.sp
 import org.jetbrains.compose.resources.Font
 import tinyiptvkmp.composeapp.generated.resources.Res
-import tinyiptvkmp.composeapp.generated.resources.montserrat_bold
-import tinyiptvkmp.composeapp.generated.resources.montserrat_extrabold
-import tinyiptvkmp.composeapp.generated.resources.montserrat_medium
-import tinyiptvkmp.composeapp.generated.resources.montserrat_regular
-import tinyiptvkmp.composeapp.generated.resources.montserrat_semibold
+import tinyiptvkmp.composeapp.generated.resources.prompt_bold
+import tinyiptvkmp.composeapp.generated.resources.prompt_extrabold
+import tinyiptvkmp.composeapp.generated.resources.prompt_medium
+import tinyiptvkmp.composeapp.generated.resources.prompt_regular
+import tinyiptvkmp.composeapp.generated.resources.prompt_semibold
 
 @Composable
 fun getTypography(): Typography {
     val fonts =
         FontFamily(
-            Font(Res.font.montserrat_regular, FontWeight.Normal, FontStyle.Normal),
-            Font(Res.font.montserrat_medium, FontWeight.Medium, FontStyle.Normal),
-            Font(Res.font.montserrat_semibold, FontWeight.SemiBold, FontStyle.Normal),
-            Font(Res.font.montserrat_bold, FontWeight.Bold, FontStyle.Normal),
-            Font(Res.font.montserrat_extrabold, FontWeight.ExtraBold, FontStyle.Normal),
+            Font(Res.font.prompt_regular, FontWeight.Normal, FontStyle.Normal),
+            Font(Res.font.prompt_medium, FontWeight.Medium, FontStyle.Normal),
+            Font(Res.font.prompt_semibold, FontWeight.SemiBold, FontStyle.Normal),
+            Font(Res.font.prompt_bold, FontWeight.Bold, FontStyle.Normal),
+            Font(Res.font.prompt_extrabold, FontWeight.ExtraBold, FontStyle.Normal),
         )
 
     return Typography(

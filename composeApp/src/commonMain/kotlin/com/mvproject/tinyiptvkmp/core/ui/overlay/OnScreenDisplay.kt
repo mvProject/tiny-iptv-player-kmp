@@ -23,13 +23,13 @@ import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.alpha
-import com.mvproject.tinyiptvkmp.core.theme.dimens
+import com.mvproject.tinyiptvkmp.core.theme.dimensionOpacity
 
 @Composable
 fun OnScreenDisplay(
     isVisible: Boolean = false,
     onViewTap: () -> Unit = {},
-    contentAlpha: Float = MaterialTheme.dimens.alpha90,
+    contentAlpha: Float = MaterialTheme.dimensionOpacity.opacity90,
     content: @Composable BoxScope.() -> Unit,
 ) {
     AnimatedVisibility(

@@ -24,7 +24,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import com.mvproject.tinyiptvkmp.core.domain.enums.PlaylistType
 import com.mvproject.tinyiptvkmp.core.domain.model.Playlist
-import com.mvproject.tinyiptvkmp.core.theme.dimens
+import com.mvproject.tinyiptvkmp.core.theme.dimensionSize
 
 @Composable
 fun PlaylistItem(
@@ -38,7 +38,7 @@ fun PlaylistItem(
         shape = MaterialTheme.shapes.small,
         border =
             BorderStroke(
-                width = MaterialTheme.dimens.size1,
+                width = MaterialTheme.dimensionSize.size1,
                 color = MaterialTheme.colorScheme.onSurface,
             ),
         colors =
@@ -71,7 +71,7 @@ fun PlaylistItem(
             trailingContent = {
                 FilledIconButton(
                     onClick = onDelete,
-                    modifier = Modifier.padding(MaterialTheme.dimens.size8),
+                    modifier = Modifier.padding(MaterialTheme.dimensionSize.size8),
                     colors =
                         IconButtonDefaults.filledIconButtonColors(
                             containerColor = MaterialTheme.colorScheme.onSurface,

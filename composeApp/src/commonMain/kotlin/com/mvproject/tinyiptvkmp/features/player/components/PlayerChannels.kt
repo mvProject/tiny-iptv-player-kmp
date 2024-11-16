@@ -23,7 +23,8 @@ import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.style.TextAlign
 import com.mvproject.tinyiptvkmp.core.domain.model.TvChannel
-import com.mvproject.tinyiptvkmp.core.theme.dimens
+import com.mvproject.tinyiptvkmp.core.theme.dimensionFraction
+import com.mvproject.tinyiptvkmp.core.theme.dimensionSize
 import com.mvproject.tinyiptvkmp.core.ui.modifiers.roundedHeader
 import com.mvproject.tinyiptvkmp.features.channels.components.ChannelListView
 
@@ -42,8 +43,8 @@ fun PlayerChannels(
     Column(
         modifier =
             Modifier
-                .fillMaxHeight(MaterialTheme.dimens.fraction90)
-                .fillMaxWidth(MaterialTheme.dimens.fraction80)
+                .fillMaxHeight(MaterialTheme.dimensionFraction.fraction90)
+                .fillMaxWidth(MaterialTheme.dimensionFraction.fraction80)
                 .background(
                     color = MaterialTheme.colorScheme.primary,
                     shape = MaterialTheme.shapes.small,
@@ -63,7 +64,7 @@ fun PlayerChannels(
         LazyColumn(
             modifier = Modifier.fillMaxSize(),
             state = listState,
-            verticalArrangement = Arrangement.spacedBy(MaterialTheme.dimens.size2),
+            verticalArrangement = Arrangement.spacedBy(MaterialTheme.dimensionSize.size2),
             content = {
                 items(
                     items = channels,

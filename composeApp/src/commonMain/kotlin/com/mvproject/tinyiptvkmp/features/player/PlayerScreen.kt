@@ -29,7 +29,9 @@ import androidx.window.core.layout.WindowHeightSizeClass
 import androidx.window.core.layout.WindowSizeClass
 import androidx.window.core.layout.WindowWidthSizeClass
 import com.mvproject.tinyiptvkmp.core.common.mvi.CollectUiEffect
-import com.mvproject.tinyiptvkmp.core.theme.dimens
+import com.mvproject.tinyiptvkmp.core.theme.dimensionFraction
+import com.mvproject.tinyiptvkmp.core.theme.dimensionSize
+import com.mvproject.tinyiptvkmp.core.theme.dimensionWeight
 import com.mvproject.tinyiptvkmp.core.ui.epg.ChannelPrograms
 import com.mvproject.tinyiptvkmp.core.ui.indicators.LoadingIndicator
 import com.mvproject.tinyiptvkmp.core.ui.indicators.VolumeIndicator
@@ -91,7 +93,7 @@ private fun PlayerScreen(
         ) {
             Row {
                 PlayerContent(
-                    modifier = Modifier.weight(MaterialTheme.dimens.weight2),
+                    modifier = Modifier.weight(MaterialTheme.dimensionWeight.weight2),
                     uiState = uiState,
                     onAction = onAction
                 )
@@ -99,7 +101,7 @@ private fun PlayerScreen(
                 if (!uiState.isFullscreen) {
                     ChannelPrograms(
                         modifier = Modifier
-                            .weight(MaterialTheme.dimens.weight1)
+                            .weight(MaterialTheme.dimensionWeight.weight1)
                             .background(color = MaterialTheme.colorScheme.primary),
                         programs = uiState.currentChannel.programs,
                     )
@@ -108,7 +110,7 @@ private fun PlayerScreen(
         } else {
             Column {
                 PlayerContent(
-                    modifier = Modifier.weight(MaterialTheme.dimens.weight2),
+                    modifier = Modifier.weight(MaterialTheme.dimensionWeight.weight2),
                     uiState = uiState,
                     onAction = onAction
                 )
@@ -116,7 +118,7 @@ private fun PlayerScreen(
                 if (!uiState.isFullscreen) {
                     ChannelPrograms(
                         modifier = Modifier
-                            .weight(MaterialTheme.dimens.weight1)
+                            .weight(MaterialTheme.dimensionWeight.weight1)
                             .background(color = MaterialTheme.colorScheme.primary),
                         programs = uiState.currentChannel.programs,
                     )
@@ -134,14 +136,14 @@ private fun PlayerScreen(
                         ChannelPrograms(
                             modifier =
                             Modifier
-                                .fillMaxHeight(MaterialTheme.dimens.fraction90)
-                                .fillMaxWidth(MaterialTheme.dimens.fraction80)
+                                .fillMaxHeight(MaterialTheme.dimensionFraction.fraction90)
+                                .fillMaxWidth(MaterialTheme.dimensionFraction.fraction80)
                                 .background(
                                     color = MaterialTheme.colorScheme.primary,
                                     shape =
                                     RoundedCornerShape(
-                                        bottomStart = MaterialTheme.dimens.size8,
-                                        bottomEnd = MaterialTheme.dimens.size8,
+                                        bottomStart = MaterialTheme.dimensionSize.size8,
+                                        bottomEnd = MaterialTheme.dimensionSize.size8,
                                     ),
                                 ),
                             title = uiState.currentChannel.channelName,

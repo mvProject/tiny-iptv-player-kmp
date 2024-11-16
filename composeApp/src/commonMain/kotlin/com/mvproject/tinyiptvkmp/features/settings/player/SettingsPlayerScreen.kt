@@ -27,7 +27,9 @@ import androidx.compose.ui.Modifier
 import com.mvproject.tinyiptvkmp.core.common.mvi.CollectUiEffect
 import com.mvproject.tinyiptvkmp.core.domain.enums.RatioMode
 import com.mvproject.tinyiptvkmp.core.domain.enums.ResizeMode
-import com.mvproject.tinyiptvkmp.core.theme.dimens
+import com.mvproject.tinyiptvkmp.core.theme.colorSchemeExtended
+import com.mvproject.tinyiptvkmp.core.theme.dimensionOpacity
+import com.mvproject.tinyiptvkmp.core.theme.dimensionSize
 import com.mvproject.tinyiptvkmp.core.ui.toolbars.AppBarWithBackNav
 import com.mvproject.tinyiptvkmp.features.settings.components.SettingsSelector
 import com.mvproject.tinyiptvkmp.features.settings.player.SettingsPlayerUiState.SettingsPlayer
@@ -79,8 +81,8 @@ private fun SettingsPlayerScreen(
             Modifier
                 .padding(paddingValues)
                 .fillMaxSize()
-                .padding(MaterialTheme.dimens.size12),
-            verticalArrangement = Arrangement.spacedBy(MaterialTheme.dimens.size12)
+                .padding(MaterialTheme.dimensionSize.size12),
+            verticalArrangement = Arrangement.spacedBy(MaterialTheme.dimensionSize.size12)
         ) {
             ListItem(
                 headlineContent = {
@@ -98,8 +100,8 @@ private fun SettingsPlayerScreen(
                             checkedThumbColor = MaterialTheme.colorScheme.primary,
                             uncheckedThumbColor =
                             MaterialTheme.colorScheme.primary
-                                .copy(alpha = MaterialTheme.dimens.alpha50),
-                            checkedTrackColor = MaterialTheme.colorScheme.onSurfaceVariant,
+                                .copy(alpha = MaterialTheme.dimensionOpacity.opacity50),
+                            checkedTrackColor = MaterialTheme.colorSchemeExtended.activeInput,
                             uncheckedTrackColor = MaterialTheme.colorScheme.onSurface,
                         ),
                         onCheckedChange = { state ->

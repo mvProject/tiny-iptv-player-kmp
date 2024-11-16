@@ -25,7 +25,8 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.style.TextAlign
 import com.mvproject.tinyiptvkmp.core.common.utils.CommonUtils.empty
-import com.mvproject.tinyiptvkmp.core.theme.dimens
+import com.mvproject.tinyiptvkmp.core.theme.colorSchemeExtended
+import com.mvproject.tinyiptvkmp.core.theme.dimensionSize
 
 @Composable
 fun NoItemsView(
@@ -45,9 +46,9 @@ fun NoItemsView(
             Icon(
                 modifier =
                     Modifier
-                        .size(MaterialTheme.dimens.size96),
+                        .size(MaterialTheme.dimensionSize.size96),
                 imageVector = Icons.Filled.Info,
-                tint = MaterialTheme.colorScheme.onSurfaceVariant,
+                tint = MaterialTheme.colorSchemeExtended.emptyProgramTitle,
                 contentDescription = title,
             )
 
@@ -56,12 +57,12 @@ fun NoItemsView(
                     Modifier
                         .fillMaxWidth()
                         .padding(
-                            top = MaterialTheme.dimens.size16,
-                            bottom = MaterialTheme.dimens.size24,
+                            top = MaterialTheme.dimensionSize.size16,
+                            bottom = MaterialTheme.dimensionSize.size24,
                         ),
                 text = title,
                 style = MaterialTheme.typography.headlineLarge,
-                color = MaterialTheme.colorScheme.onSurfaceVariant,
+                color = MaterialTheme.colorSchemeExtended.emptyProgramTitle,
                 textAlign = TextAlign.Center,
             )
 
@@ -71,8 +72,8 @@ fun NoItemsView(
                         Modifier
                             .fillMaxWidth()
                             .padding(
-                                top = MaterialTheme.dimens.size16,
-                                bottom = MaterialTheme.dimens.size24,
+                                top = MaterialTheme.dimensionSize.size16,
+                                bottom = MaterialTheme.dimensionSize.size24,
                             ).clickable { onNavigateClick() },
                     text = navigateTitle,
                     style = MaterialTheme.typography.displaySmall,

@@ -23,7 +23,9 @@ import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import com.mvproject.tinyiptvkmp.core.common.AppConstants
-import com.mvproject.tinyiptvkmp.core.theme.dimens
+import com.mvproject.tinyiptvkmp.core.theme.colorSchemeExtended
+import com.mvproject.tinyiptvkmp.core.theme.dimensionSize
+import com.mvproject.tinyiptvkmp.core.theme.dimensionText
 
 @Composable
 fun SettingsSelector(
@@ -34,10 +36,15 @@ fun SettingsSelector(
     onClick: () -> Unit,
     onSelect: (Int) -> Unit,
 ) {
+    val borderColor = if (isExpanded)
+        MaterialTheme.colorSchemeExtended.activeBorder
+    else
+        MaterialTheme.colorSchemeExtended.inactiveBorder
+
     Column(
         modifier = Modifier.fillMaxWidth().border(
-            width = MaterialTheme.dimens.size1,
-            color = MaterialTheme.colorScheme.onSurface,
+            width = MaterialTheme.dimensionSize.size1,
+            color = borderColor,
             shape = MaterialTheme.shapes.extraSmall
         )
     ) {
@@ -48,7 +55,7 @@ fun SettingsSelector(
                     text = title,
                     style = MaterialTheme.typography.labelSmall,
                     color = MaterialTheme.colorScheme.onPrimary,
-                    fontSize = MaterialTheme.dimens.font10,
+                    fontSize = MaterialTheme.dimensionText.font10,
                 )
             },
             headlineContent = {
@@ -101,7 +108,7 @@ fun SettingsSelector(
                                 style = MaterialTheme.typography.titleSmall,
                                 color =
                                 if (isSelected) {
-                                    MaterialTheme.colorScheme.onSurfaceVariant
+                                    MaterialTheme.colorSchemeExtended.activeInput
                                 } else {
                                     MaterialTheme.colorScheme.onSurface
                                 },
@@ -113,7 +120,7 @@ fun SettingsSelector(
                                 modifier =
                                 Modifier
                                     .fillMaxWidth()
-                                    .padding(horizontal = MaterialTheme.dimens.size16),
+                                    .padding(horizontal = MaterialTheme.dimensionSize.size16),
                                 color = MaterialTheme.colorScheme.onSurface,
                             )
                         }

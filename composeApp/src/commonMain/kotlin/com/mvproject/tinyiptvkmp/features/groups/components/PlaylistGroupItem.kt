@@ -23,7 +23,7 @@ import androidx.compose.ui.text.style.TextAlign
 import com.mvproject.tinyiptvkmp.core.common.AppConstants
 import com.mvproject.tinyiptvkmp.core.domain.enums.GroupType
 import com.mvproject.tinyiptvkmp.core.domain.model.ChannelsGroup
-import com.mvproject.tinyiptvkmp.core.theme.dimens
+import com.mvproject.tinyiptvkmp.core.theme.dimensionSize
 import com.mvproject.tinyiptvkmp.features.groups.GroupUiAction
 import org.jetbrains.compose.resources.stringResource
 import tinyiptvkmp.composeapp.generated.resources.Res
@@ -57,7 +57,7 @@ fun PlaylistGroupItem(
             Icon(
                 modifier =
                 Modifier
-                    .size(MaterialTheme.dimens.size42)
+                    .size(MaterialTheme.dimensionSize.size42)
                     .clip(MaterialTheme.shapes.small),
                 imageVector = Icons.Filled.Folder,
                 contentDescription = group.groupName,
@@ -74,7 +74,7 @@ fun PlaylistGroupItem(
         trailingContent = {
             if (group.groupContentCount > AppConstants.INT_VALUE_ZERO) {
                 Text(
-                    modifier = Modifier.width(MaterialTheme.dimens.size78),
+                    modifier = Modifier.width(MaterialTheme.dimensionSize.size78),
                     text = group.groupContentCount.toString(),
                     style = MaterialTheme.typography.titleMedium,
                     color = MaterialTheme.colorScheme.onPrimary,

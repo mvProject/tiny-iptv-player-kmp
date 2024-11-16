@@ -16,10 +16,7 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.ArrowRight
-import androidx.compose.material3.FilledIconButton
 import androidx.compose.material3.HorizontalDivider
-import androidx.compose.material3.Icon
-import androidx.compose.material3.IconButtonDefaults
 import androidx.compose.material3.ListItem
 import androidx.compose.material3.ListItemDefaults
 import androidx.compose.material3.MaterialTheme
@@ -34,7 +31,8 @@ import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.mvproject.tinyiptvkmp.core.common.AppConstants.WEIGHT_1
 import com.mvproject.tinyiptvkmp.core.common.mvi.CollectUiEffect
 import com.mvproject.tinyiptvkmp.core.domain.enums.UpdatePeriod
-import com.mvproject.tinyiptvkmp.core.theme.dimens
+import com.mvproject.tinyiptvkmp.core.theme.dimensionSize
+import com.mvproject.tinyiptvkmp.core.ui.buttons.MenuButton
 import com.mvproject.tinyiptvkmp.core.ui.toolbars.AppBarWithBackNav
 import com.mvproject.tinyiptvkmp.features.settings.components.SettingsSelector
 import com.mvproject.tinyiptvkmp.features.settings.general.SettingsGeneralUiState.SettingsGeneral
@@ -89,8 +87,8 @@ private fun SettingsGeneralScreen(
             modifier = Modifier
                 .padding(paddingValues)
                 .fillMaxSize()
-                .padding(MaterialTheme.dimens.size8),
-            verticalArrangement = Arrangement.spacedBy(MaterialTheme.dimens.size12),
+                .padding(MaterialTheme.dimensionSize.size8),
+            verticalArrangement = Arrangement.spacedBy(MaterialTheme.dimensionSize.size12),
         ) {
             Column {
                 ListItem(
@@ -110,25 +108,18 @@ private fun SettingsGeneralScreen(
                         )
                     },
                     trailingContent = {
-                        FilledIconButton(
-                            onClick = { onAction(SettingsGeneralUiAction.NavigateToPlaylistSettings) },
-                            colors =
-                            IconButtonDefaults.filledIconButtonColors(
-                                containerColor = MaterialTheme.colorScheme.onPrimary,
-                                contentColor = MaterialTheme.colorScheme.primary,
-                            ),
-                        ) {
-                            Icon(
-                                imageVector = Icons.AutoMirrored.Filled.ArrowRight,
-                                contentDescription = stringResource(Res.string.scr_playlist_settings_title),
-                            )
-                        }
+                        MenuButton(
+                            imageVector = Icons.AutoMirrored.Filled.ArrowRight,
+                            onClick = {
+                                onAction(SettingsGeneralUiAction.NavigateToPlaylistSettings)
+                            }
+                        )
                     },
                 )
                 HorizontalDivider(
                     modifier =
                     Modifier
-                        .padding(horizontal = MaterialTheme.dimens.size8),
+                        .padding(horizontal = MaterialTheme.dimensionSize.size8),
                     color = MaterialTheme.colorScheme.onPrimary,
                 )
             }
@@ -151,26 +142,19 @@ private fun SettingsGeneralScreen(
                         )
                     },
                     trailingContent = {
-                        FilledIconButton(
-                            onClick = { onAction(SettingsGeneralUiAction.NavigateToPlayerSettings) },
-                            colors =
-                            IconButtonDefaults.filledIconButtonColors(
-                                containerColor = MaterialTheme.colorScheme.onPrimary,
-                                contentColor = MaterialTheme.colorScheme.primary,
-                            ),
-                        ) {
-                            Icon(
-                                imageVector = Icons.AutoMirrored.Filled.ArrowRight,
-                                contentDescription = stringResource(Res.string.scr_playlist_settings_title),
-                            )
-                        }
+                        MenuButton(
+                            imageVector = Icons.AutoMirrored.Filled.ArrowRight,
+                            onClick = {
+                                onAction(SettingsGeneralUiAction.NavigateToPlayerSettings)
+                            }
+                        )
                     },
                 )
 
                 HorizontalDivider(
                     modifier =
                     Modifier
-                        .padding(horizontal = MaterialTheme.dimens.size8),
+                        .padding(horizontal = MaterialTheme.dimensionSize.size8),
                     color = MaterialTheme.colorScheme.onPrimary,
                 )
             }
@@ -179,10 +163,10 @@ private fun SettingsGeneralScreen(
                 modifier =
                 Modifier
                     .fillMaxWidth()
-                    .padding(horizontal = MaterialTheme.dimens.size8),
+                    .padding(horizontal = MaterialTheme.dimensionSize.size8),
                 horizontalArrangement =
                 Arrangement.spacedBy(
-                    space = MaterialTheme.dimens.size8,
+                    space = MaterialTheme.dimensionSize.size8,
                 ),
                 verticalAlignment = Alignment.CenterVertically,
             ) {

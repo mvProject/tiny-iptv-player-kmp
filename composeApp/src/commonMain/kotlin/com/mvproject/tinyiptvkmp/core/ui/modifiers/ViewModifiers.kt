@@ -21,13 +21,13 @@ import androidx.compose.runtime.NonRestartableComposable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.Dp
-import com.mvproject.tinyiptvkmp.core.theme.dimens
+import com.mvproject.tinyiptvkmp.core.theme.dimensionSize
 
 @Composable
 fun Modifier.roundedHeader(
     color: Color = MaterialTheme.colorScheme.onSurface,
-    size: Dp = MaterialTheme.dimens.size8,
-    padding: Dp = MaterialTheme.dimens.size8
+    size: Dp = MaterialTheme.dimensionSize.size8,
+    padding: Dp = MaterialTheme.dimensionSize.size8
 ) = this then Modifier
     .background(
         color = color,

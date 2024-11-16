@@ -22,7 +22,7 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import com.mvproject.tinyiptvkmp.core.theme.dimens
+import com.mvproject.tinyiptvkmp.core.theme.dimensionSize
 import com.mvproject.tinyiptvkmp.core.ui.buttons.ControlButton
 import com.mvproject.tinyiptvkmp.core.ui.modifiers.SpacerWidth
 import com.mvproject.tinyiptvkmp.features.player.PlayerUiAction
@@ -61,19 +61,19 @@ fun PlayerControls(
                 onClick = { onAction(PlayerUiAction.OpenOsd(PlayerUiState.PlayerOSD.ChannelFavorites)) },
             )
 
-            SpacerWidth(width = MaterialTheme.dimens.size8)
+            SpacerWidth(width = MaterialTheme.dimensionSize.size8)
             ControlButton(
                 imageVector = Icons.Rounded.AspectRatio,
                 onClick = { onAction(PlayerUiAction.ChangeVideoRatio) },
             )
 
-            SpacerWidth(width = MaterialTheme.dimens.size8)
+            SpacerWidth(width = MaterialTheme.dimensionSize.size8)
             ControlButton(
                 imageVector = Icons.Rounded.Crop,
                 onClick = { onAction(PlayerUiAction.ChangeVideoSize) },
             )
 
-            SpacerWidth(width = MaterialTheme.dimens.size8)
+            SpacerWidth(width = MaterialTheme.dimensionSize.size8)
             ControlButton(
                 imageVector = if (isFullScreen) Icons.Rounded.FullscreenExit else Icons.Rounded.Fullscreen,
                 onClick = { onAction(PlayerUiAction.ToggleFullScreen) },

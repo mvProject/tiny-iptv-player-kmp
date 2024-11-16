@@ -21,7 +21,7 @@ import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.style.TextAlign
 import com.mvproject.tinyiptvkmp.core.common.utils.CommonUtils.delimiterTime
 import com.mvproject.tinyiptvkmp.core.common.utils.TimeUtils.convertToTime
-import com.mvproject.tinyiptvkmp.core.theme.dimens
+import com.mvproject.tinyiptvkmp.core.theme.dimensionSize
 
 @Composable
 fun TimeItem(
@@ -38,7 +38,7 @@ fun TimeItem(
         verticalAlignment = Alignment.CenterVertically,
     ) {
         Text(
-            modifier = Modifier.width(MaterialTheme.dimens.size22),
+            modifier = Modifier.width(MaterialTheme.dimensionSize.size22),
             text = hour,
             textAlign = TextAlign.Center,
             style = timeStyle,
@@ -50,7 +50,7 @@ fun TimeItem(
             color = timeColor,
         )
         Text(
-            modifier = Modifier.width(MaterialTheme.dimens.size22),
+            modifier = Modifier.width(MaterialTheme.dimensionSize.size22),
             text = minute,
             textAlign = TextAlign.Center,
             style = MaterialTheme.typography.bodyMedium,

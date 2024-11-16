@@ -37,8 +37,10 @@ import com.mvproject.tinyiptvkmp.core.common.utils.CommonUtils.space
 import com.mvproject.tinyiptvkmp.core.common.utils.TimeUtils.calculateDuration
 import com.mvproject.tinyiptvkmp.core.domain.PreviewTestData
 import com.mvproject.tinyiptvkmp.core.domain.model.EpgProgram
-import com.mvproject.tinyiptvkmp.core.theme.VideoAppTheme
-import com.mvproject.tinyiptvkmp.core.theme.dimens
+import com.mvproject.tinyiptvkmp.core.theme.AppTheme
+import com.mvproject.tinyiptvkmp.core.theme.colorSchemeExtended
+import com.mvproject.tinyiptvkmp.core.theme.dimensionSize
+import com.mvproject.tinyiptvkmp.core.theme.dimensionWeight
 import com.mvproject.tinyiptvkmp.core.ui.indicators.ProgramProgressIndicator
 import com.mvproject.tinyiptvkmp.core.ui.modifiers.SpacerHeight
 import com.mvproject.tinyiptvkmp.core.ui.modifiers.SpacerWidth
@@ -77,7 +79,7 @@ internal fun ChannelPrograms(
         LazyColumn(
             modifier = Modifier.fillMaxSize(),
             state = rememberLazyListState(),
-            verticalArrangement = Arrangement.spacedBy(MaterialTheme.dimens.size2)
+            verticalArrangement = Arrangement.spacedBy(MaterialTheme.dimensionSize.size2)
         ) {
             items(
                 items = programs,
@@ -103,9 +105,9 @@ private fun ChannelProgramItem(
 
     val contentColor =
         if (isProgramProgressShow) {
-            MaterialTheme.colorScheme.onSurfaceVariant
+            MaterialTheme.colorSchemeExtended.activeProgramTitle
         } else {
-            MaterialTheme.colorScheme.onSurface
+            MaterialTheme.colorSchemeExtended.programTitle
         }
 
     Column(
@@ -113,8 +115,8 @@ private fun ChannelProgramItem(
     ) {
         ProgramTitle(
             modifier = Modifier
-                .padding(top = MaterialTheme.dimens.size8)
-                .padding(horizontal = MaterialTheme.dimens.size8),
+                .padding(top = MaterialTheme.dimensionSize.size8)
+                .padding(horizontal = MaterialTheme.dimensionSize.size8),
             title = program.title,
             color = contentColor,
             style = MaterialTheme.typography.bodyMedium
@@ -122,8 +124,8 @@ private fun ChannelProgramItem(
 
         Row(
             modifier = Modifier
-                .padding(horizontal = MaterialTheme.dimens.size8)
-                .padding(bottom = MaterialTheme.dimens.size8),
+                .padding(horizontal = MaterialTheme.dimensionSize.size8)
+                .padding(bottom = MaterialTheme.dimensionSize.size8),
             verticalAlignment = Alignment.CenterVertically
         ) {
             TimeItem(
@@ -143,7 +145,7 @@ private fun ChannelProgramItem(
                 timeStyle = MaterialTheme.typography.labelMedium
             )
 
-            SpacerWidth(weight = MaterialTheme.dimens.weight1)
+            SpacerWidth(weight = MaterialTheme.dimensionWeight.weight1)
 
             ProgramDuration(
                 start = program.dateTimeStart,
@@ -154,7 +156,7 @@ private fun ChannelProgramItem(
         }
 
         if (isProgramProgressShow) {
-            SpacerHeight(MaterialTheme.dimens.size8)
+            SpacerHeight(MaterialTheme.dimensionSize.size8)
             ProgramProgressIndicator(progress = program.programProgress)
         }
     }
@@ -187,7 +189,7 @@ private fun ChannelProgramsEmpty(
     ) {
         Text(
             modifier = Modifier
-                .padding(horizontal = MaterialTheme.dimens.size12),
+                .padding(horizontal = MaterialTheme.dimensionSize.size12),
             text = title,
             style = MaterialTheme.typography.titleLarge,
             color = MaterialTheme.colorScheme.onSurface,
@@ -231,7 +233,7 @@ private fun ProgramDuration(
 @Composable
 @Preview
 private fun ChannelProgramsPreview() {
-    VideoAppTheme {
+    AppTheme {
         ChannelPrograms(programs = PreviewTestData.testEpgPrograms)
     }
 }

@@ -21,7 +21,7 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.unit.Dp
 import coil3.compose.AsyncImage
-import com.mvproject.tinyiptvkmp.core.theme.dimens
+import com.mvproject.tinyiptvkmp.core.theme.dimensionSize
 import org.jetbrains.compose.resources.painterResource
 import tinyiptvkmp.composeapp.generated.resources.Res
 import tinyiptvkmp.composeapp.generated.resources.no_channel_logo
@@ -31,7 +31,7 @@ fun ChannelLogo(
     modifier: Modifier = Modifier,
     channelLogo: String,
     channelName: String,
-    imageSize: Dp = MaterialTheme.dimens.size48
+    imageSize: Dp = MaterialTheme.dimensionSize.size48
 ) {
     var isLoading by remember {
         mutableStateOf(false)

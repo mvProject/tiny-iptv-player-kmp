@@ -8,8 +8,8 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
-import com.mvproject.tinyiptvkmp.core.theme.VideoAppTheme
-import com.mvproject.tinyiptvkmp.core.theme.dimens
+import com.mvproject.tinyiptvkmp.core.theme.AppTheme
+import com.mvproject.tinyiptvkmp.core.theme.dimensionSize
 import org.jetbrains.compose.resources.stringResource
 import org.jetbrains.compose.ui.tooling.preview.Preview
 import tinyiptvkmp.composeapp.generated.resources.Res
@@ -25,7 +25,7 @@ fun ActionButton(
         onClick = onClick,
         modifier =
             modifier
-                .padding(MaterialTheme.dimens.size8)
+                .padding(MaterialTheme.dimensionSize.size8)
                 .fillMaxWidth(),
         colors =
             ButtonDefaults
@@ -43,7 +43,7 @@ fun ActionButton(
 @Composable
 @Preview
 private fun ActionButtonPreview() {
-    VideoAppTheme {
+    AppTheme {
         ActionButton(
             title = stringResource(Res.string.app_name),
         )

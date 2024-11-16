@@ -29,7 +29,8 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import com.mvproject.tinyiptvkmp.core.theme.dimens
+import com.mvproject.tinyiptvkmp.core.theme.colorSchemeExtended
+import com.mvproject.tinyiptvkmp.core.theme.dimensionSize
 
 @Composable
 fun VolumeIndicator(
@@ -50,8 +51,8 @@ fun VolumeIndicator(
 
             Column(
                 modifier = Modifier
-                    .width(MaterialTheme.dimens.size78)
-                    .height(MaterialTheme.dimens.size78)
+                    .width(MaterialTheme.dimensionSize.size78)
+                    .height(MaterialTheme.dimensionSize.size78)
                     .background(
                         MaterialTheme.colorScheme.primary,
                         shape = MaterialTheme.shapes.small
@@ -61,16 +62,16 @@ fun VolumeIndicator(
             ) {
 
                 Icon(
-                    modifier = Modifier.size(MaterialTheme.dimens.size48),
+                    modifier = Modifier.size(MaterialTheme.dimensionSize.size48),
                     imageVector = getProperVolumeIcon(volumeDisplay),
-                    tint = MaterialTheme.colorScheme.onSurfaceVariant,
+                    tint = MaterialTheme.colorSchemeExtended.volumeIndicator,
                     contentDescription = null
                 )
 
                 Text(
                     text = "$volumeDisplay %",
                     style = MaterialTheme.typography.bodyLarge,
-                    color = MaterialTheme.colorScheme.onSurfaceVariant
+                    color = MaterialTheme.colorSchemeExtended.volumeIndicator
                 )
             }
         }

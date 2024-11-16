@@ -7,7 +7,7 @@ import androidx.compose.material3.OutlinedButton
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
-import com.mvproject.tinyiptvkmp.core.theme.VideoAppTheme
+import com.mvproject.tinyiptvkmp.core.theme.AppTheme
 import org.jetbrains.compose.resources.stringResource
 import org.jetbrains.compose.ui.tooling.preview.Preview
 import tinyiptvkmp.composeapp.generated.resources.Res
@@ -38,7 +38,7 @@ fun SelectButton(
 @Composable
 @Preview
 private fun SelectButtonPreview() {
-    VideoAppTheme {
+    AppTheme {
         SelectButton(
             title = stringResource(Res.string.app_name),
         )

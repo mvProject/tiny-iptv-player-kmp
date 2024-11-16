@@ -119,19 +119,23 @@ class GroupChannelsViewModel(
     }
 
     private suspend fun refreshEpgPrograms() {
-        if (TimeUtils.actualDate - lastRefresh > 1.minutes.inWholeMilliseconds) {
-            val channels = uiState.value.channels
-            val channelsIds = channels.mapProgramIds()
-            if (channelsIds.isNotEmpty()) {
-                val channelsEpgData = getGroupChannelsEpgUseCase(channelsIds = channelsIds)
+        if (TimeUtils.actualDate - lastRefresh < 1.minutes.inWholeMilliseconds) {
+            return
+        }
+        val channels = uiState.value.channels
+        val channelsIds = channels.mapProgramIds()
+
+        if (channelsIds.isNotEmpty()) {
+            val channelsEpgData = getGroupChannelsEpgUseCase(channelsIds = channelsIds)
+            if (channelsEpgData.entries.isNotEmpty()) {
                 val channelsWithPrograms = channels.mapPrograms(channelEpgMap = channelsEpgData)
 
                 updateUiState {
                     copy(channels = channelsWithPrograms)
                 }
-
-                lastRefresh = TimeUtils.actualDate
             }
+
+            lastRefresh = TimeUtils.actualDate
         }
     }
 

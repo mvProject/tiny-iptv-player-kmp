@@ -41,7 +41,9 @@ import com.mvproject.tinyiptvkmp.core.common.utils.CommonUtils.tmpFolder
 import com.mvproject.tinyiptvkmp.core.common.utils.CommonUtils.typeM3U
 import com.mvproject.tinyiptvkmp.core.common.utils.CommonUtils.typeM3U8
 import com.mvproject.tinyiptvkmp.core.domain.enums.PlaylistType
-import com.mvproject.tinyiptvkmp.core.theme.dimens
+import com.mvproject.tinyiptvkmp.core.theme.colorSchemeExtended
+import com.mvproject.tinyiptvkmp.core.theme.dimensionSize
+import com.mvproject.tinyiptvkmp.core.theme.dimensionWeight
 import com.mvproject.tinyiptvkmp.core.ui.indicators.LoadingIndicator
 import com.mvproject.tinyiptvkmp.core.ui.modifiers.SpacerHeight
 import com.mvproject.tinyiptvkmp.core.ui.toolbars.AppBarWithBackNav
@@ -146,7 +148,7 @@ private fun PlaylistScreen(
                 modifier =
                 Modifier
                     .fillMaxSize()
-                    .padding(MaterialTheme.dimens.size12),
+                    .padding(MaterialTheme.dimensionSize.size12),
                 horizontalAlignment = Alignment.CenterHorizontally,
             ) {
                 TextField(
@@ -159,7 +161,7 @@ private fun PlaylistScreen(
                         Text(
                             text = stringResource(Res.string.hint_name),
                             style = MaterialTheme.typography.labelSmall,
-                            color = MaterialTheme.colorScheme.outline,
+                            color = MaterialTheme.colorSchemeExtended.activeInput,
                         )
                     },
                     textStyle = MaterialTheme.typography.labelMedium,
@@ -168,12 +170,12 @@ private fun PlaylistScreen(
                         focusedTextColor = MaterialTheme.colorScheme.onSurface,
                         focusedContainerColor = Color.Transparent,
                         unfocusedContainerColor = Color.Transparent,
-                        cursorColor = MaterialTheme.colorScheme.onSurfaceVariant,
-                        focusedIndicatorColor = MaterialTheme.colorScheme.onSurfaceVariant,
+                        cursorColor = MaterialTheme.colorSchemeExtended.activeInput,
+                        focusedIndicatorColor = MaterialTheme.colorSchemeExtended.activeInput,
                     ),
                 )
 
-                SpacerHeight(height = MaterialTheme.dimens.size8)
+                SpacerHeight(height = MaterialTheme.dimensionSize.size8)
 
                 TextField(
                     modifier = Modifier.fillMaxWidth(),
@@ -186,7 +188,7 @@ private fun PlaylistScreen(
                         Text(
                             text = stringResource(Res.string.hint_address),
                             style = MaterialTheme.typography.labelSmall,
-                            color = MaterialTheme.colorScheme.outline,
+                            color = MaterialTheme.colorSchemeExtended.activeInput,
                         )
                     },
                     textStyle = MaterialTheme.typography.labelMedium,
@@ -196,26 +198,20 @@ private fun PlaylistScreen(
                         focusedContainerColor = Color.Transparent,
                         unfocusedContainerColor = Color.Transparent,
                         disabledContainerColor = Color.DarkGray,
-                        cursorColor = MaterialTheme.colorScheme.onSurfaceVariant,
-                        focusedIndicatorColor = MaterialTheme.colorScheme.onSurfaceVariant,
+                        cursorColor = MaterialTheme.colorSchemeExtended.activeInput,
+                        focusedIndicatorColor = MaterialTheme.colorSchemeExtended.activeInput,
                     ),
                 )
 
-                SpacerHeight(height = MaterialTheme.dimens.size16)
-
-                PlaylistUpdateSelector(
-                    uiState = uiState,
-                    onAction = onAction
-                )
-
-                SpacerHeight(height = MaterialTheme.dimens.size16)
-
                 if (!uiState.isEdit) {
+
+                    SpacerHeight(height = MaterialTheme.dimensionSize.size16)
+
                     Row(
                         modifier = Modifier.fillMaxWidth(),
                         horizontalArrangement =
                         Arrangement.spacedBy(
-                            space = MaterialTheme.dimens.size8,
+                            space = MaterialTheme.dimensionSize.size8,
                         ),
                         verticalAlignment = Alignment.CenterVertically,
                     ) {
@@ -236,7 +232,7 @@ private fun PlaylistScreen(
                         )
                     }
 
-                    SpacerHeight(height = MaterialTheme.dimens.size16)
+                    SpacerHeight(height = MaterialTheme.dimensionSize.size16)
 
                     OutlinedButton(
                         onClick = {
@@ -257,7 +253,14 @@ private fun PlaylistScreen(
                     }
                 }
 
-                SpacerHeight(weight = MaterialTheme.dimens.weight1)
+                SpacerHeight(height = MaterialTheme.dimensionSize.size16)
+
+                PlaylistUpdateSelector(
+                    uiState = uiState,
+                    onAction = onAction
+                )
+
+                SpacerHeight(weight = MaterialTheme.dimensionWeight.weight1)
 
                 ElevatedButton(
                     enabled = uiState.isReadyToSave,
@@ -270,7 +273,7 @@ private fun PlaylistScreen(
                     },
                     modifier =
                     Modifier
-                        .padding(vertical = MaterialTheme.dimens.size8)
+                        .padding(vertical = MaterialTheme.dimensionSize.size8)
                         .fillMaxWidth()
                         .windowInsetsPadding(WindowInsets.ime),
                     colors =

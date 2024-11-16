@@ -15,8 +15,9 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.StrokeCap
-import com.mvproject.tinyiptvkmp.core.theme.VideoAppTheme
-import com.mvproject.tinyiptvkmp.core.theme.dimens
+import com.mvproject.tinyiptvkmp.core.theme.AppTheme
+import com.mvproject.tinyiptvkmp.core.theme.colorSchemeExtended
+import com.mvproject.tinyiptvkmp.core.theme.dimensionSize
 import org.jetbrains.compose.ui.tooling.preview.Preview
 
 @Composable
@@ -24,11 +25,11 @@ fun ProgramProgressIndicator(
     modifier: Modifier = Modifier,
     progress: Float,
     trackColor: Color = MaterialTheme.colorScheme.primary,
-    durationColor: Color = MaterialTheme.colorScheme.onSurfaceVariant,
+    durationColor: Color = MaterialTheme.colorSchemeExtended.progress,
 ) {
     LinearProgressIndicator(
         progress = { progress },
-        modifier = modifier.fillMaxWidth().height(MaterialTheme.dimens.size1),
+        modifier = modifier.fillMaxWidth().height(MaterialTheme.dimensionSize.size1),
         color = durationColor,
         trackColor = trackColor,
         strokeCap = StrokeCap.Butt,
@@ -39,7 +40,7 @@ fun ProgramProgressIndicator(
 @Preview
 @Composable
 private fun ProgramProgressIndicatorPreview() {
-    VideoAppTheme {
+    AppTheme {
         ProgramProgressIndicator(progress = 0.5f)
     }
 }

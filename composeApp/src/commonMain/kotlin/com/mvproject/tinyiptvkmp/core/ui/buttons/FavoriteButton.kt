@@ -8,7 +8,7 @@ import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
-import com.mvproject.tinyiptvkmp.core.theme.VideoAppTheme
+import com.mvproject.tinyiptvkmp.core.theme.AppTheme
 import org.jetbrains.compose.ui.tooling.preview.Preview
 
 @Composable
@@ -17,8 +17,10 @@ fun FavoriteButton(
     isFavorite: Boolean = false,
     onClick: () -> Unit = {},
 ) {
-    val icon = if (isFavorite) Icons.Rounded.Favorite
-    else Icons.Rounded.FavoriteBorder
+    val icon = if (isFavorite)
+        Icons.Rounded.Favorite
+    else
+        Icons.Rounded.FavoriteBorder
 
     IconButton(
         modifier = modifier,
@@ -26,7 +28,7 @@ fun FavoriteButton(
     ) {
         Icon(
             imageVector = icon,
-            contentDescription = "FavoriteButton",
+            contentDescription = icon.name,
             tint = MaterialTheme.colorScheme.onSurface,
         )
     }
@@ -35,7 +37,7 @@ fun FavoriteButton(
 @Composable
 @Preview
 private fun FavoritePreview() {
-    VideoAppTheme {
+    AppTheme {
         FavoriteButton()
     }
 }

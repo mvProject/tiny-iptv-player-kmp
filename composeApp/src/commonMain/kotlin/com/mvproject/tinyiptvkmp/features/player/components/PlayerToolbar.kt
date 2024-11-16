@@ -28,7 +28,10 @@ import androidx.compose.ui.text.style.TextAlign
 import com.mvproject.tinyiptvkmp.core.domain.enums.FavoriteType
 import com.mvproject.tinyiptvkmp.core.domain.model.EpgProgram
 import com.mvproject.tinyiptvkmp.core.domain.model.TvChannel
-import com.mvproject.tinyiptvkmp.core.theme.dimens
+import com.mvproject.tinyiptvkmp.core.theme.colorSchemeExtended
+import com.mvproject.tinyiptvkmp.core.theme.dimensionOpacity
+import com.mvproject.tinyiptvkmp.core.theme.dimensionSize
+import com.mvproject.tinyiptvkmp.core.theme.dimensionWeight
 import com.mvproject.tinyiptvkmp.core.ui.indicators.ProgramProgressIndicator
 import com.mvproject.tinyiptvkmp.core.ui.modifiers.roundedHeader
 import com.mvproject.tinyiptvkmp.core.ui.views.TimeItem
@@ -52,7 +55,7 @@ fun PlayerToolbar(
         Box(
             modifier =
             modifier
-                .alpha(MaterialTheme.dimens.alpha80),
+                .alpha(MaterialTheme.dimensionOpacity.opacity80),
         ) {
             Column(
                 modifier =
@@ -61,7 +64,7 @@ fun PlayerToolbar(
                     .wrapContentHeight()
                     .roundedHeader(color = MaterialTheme.colorScheme.primary)
                     .align(Alignment.BottomCenter),
-                verticalArrangement = Arrangement.spacedBy(MaterialTheme.dimens.size8),
+                verticalArrangement = Arrangement.spacedBy(MaterialTheme.dimensionSize.size8),
             ) {
 
                 PlayerChannel(
@@ -110,9 +113,9 @@ private fun PlayerChannel(
 private fun PlayerPrograms(programs: List<EpgProgram>) {
     programs.forEachIndexed { index, program ->
         val color = if (index == 0) {
-            MaterialTheme.colorScheme.onSurfaceVariant
+            MaterialTheme.colorSchemeExtended.activeProgramTitle
         } else {
-            MaterialTheme.colorScheme.onSurface
+            MaterialTheme.colorSchemeExtended.programTitle
         }
 
         Text(
@@ -133,21 +136,21 @@ private fun PlayerProgress(
     Row(
         modifier = modifier,
         verticalAlignment = Alignment.CenterVertically,
-        horizontalArrangement = Arrangement.spacedBy(MaterialTheme.dimens.size8)
+        horizontalArrangement = Arrangement.spacedBy(MaterialTheme.dimensionSize.size8)
     ) {
         TimeItem(
             timeStamp = programStart,
-            timeColor = MaterialTheme.colorScheme.onSurfaceVariant
+            timeColor = MaterialTheme.colorSchemeExtended.timeColor
         )
 
         ProgramProgressIndicator(
-            modifier = Modifier.weight(MaterialTheme.dimens.weight1),
+            modifier = Modifier.weight(MaterialTheme.dimensionWeight.weight1),
             progress = programProgress
         )
 
         TimeItem(
             timeStamp = programEnd,
-            timeColor = MaterialTheme.colorScheme.onSurfaceVariant
+            timeColor = MaterialTheme.colorSchemeExtended.timeColor
         )
     }
 }

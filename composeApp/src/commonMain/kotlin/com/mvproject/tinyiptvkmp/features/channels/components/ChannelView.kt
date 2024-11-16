@@ -23,7 +23,7 @@ import androidx.compose.ui.unit.dp
 import com.mvproject.tinyiptvkmp.core.common.AppConstants.INT_VALUE_1
 import com.mvproject.tinyiptvkmp.core.domain.enums.ChannelsViewType
 import com.mvproject.tinyiptvkmp.core.domain.model.TvChannel
-import com.mvproject.tinyiptvkmp.core.theme.dimens
+import com.mvproject.tinyiptvkmp.core.theme.dimensionSize
 
 @Composable
 fun ChannelView(
@@ -48,9 +48,9 @@ fun ChannelView(
         modifier = modifier.clipToBounds(),
         columns = columns,
         state = rememberLazyGridState(),
-        verticalArrangement = Arrangement.spacedBy(MaterialTheme.dimens.size4),
-        horizontalArrangement = Arrangement.spacedBy(MaterialTheme.dimens.size4),
-        contentPadding = PaddingValues(vertical = MaterialTheme.dimens.size4),
+        verticalArrangement = Arrangement.spacedBy(MaterialTheme.dimensionSize.size4),
+        horizontalArrangement = Arrangement.spacedBy(MaterialTheme.dimensionSize.size4),
+        contentPadding = PaddingValues(vertical = MaterialTheme.dimensionSize.size4),
         content = {
             items(
                 items = items,

@@ -24,8 +24,9 @@ import androidx.compose.ui.draw.clip
 import com.mvproject.tinyiptvkmp.core.domain.PreviewTestData
 import com.mvproject.tinyiptvkmp.core.domain.enums.FavoriteType
 import com.mvproject.tinyiptvkmp.core.domain.model.TvChannel
-import com.mvproject.tinyiptvkmp.core.theme.VideoAppTheme
-import com.mvproject.tinyiptvkmp.core.theme.dimens
+import com.mvproject.tinyiptvkmp.core.theme.AppTheme
+import com.mvproject.tinyiptvkmp.core.theme.dimensionSize
+import com.mvproject.tinyiptvkmp.core.theme.dimensionWeight
 import com.mvproject.tinyiptvkmp.core.ui.buttons.FavoriteButton
 import com.mvproject.tinyiptvkmp.core.ui.indicators.ProgramProgressIndicator
 import com.mvproject.tinyiptvkmp.core.ui.modifiers.SpacerHeight
@@ -46,7 +47,7 @@ fun ChannelGridView(
     ElevatedCard(
         modifier =
         modifier
-            .height(MaterialTheme.dimens.size140)
+            .height(MaterialTheme.dimensionSize.size140)
             .combinedClickable(
                 onClick = onChannelSelect,
                 onLongClick = onShowEpgClick,
@@ -65,16 +66,16 @@ fun ChannelGridView(
                 .clip(MaterialTheme.shapes.extraSmall)
         ) {
             Row(
-                modifier = Modifier.padding(MaterialTheme.dimens.size8),
+                modifier = Modifier.padding(MaterialTheme.dimensionSize.size8),
                 verticalAlignment = Alignment.CenterVertically,
-                horizontalArrangement = Arrangement.spacedBy(MaterialTheme.dimens.size4)
+                horizontalArrangement = Arrangement.spacedBy(MaterialTheme.dimensionSize.size4)
             ) {
                 ChannelLogo(
                     channelLogo = channel.channelLogo,
                     channelName = channel.channelName,
                 )
                 ChannelTitle(
-                    modifier = Modifier.weight(MaterialTheme.dimens.weight1),
+                    modifier = Modifier.weight(MaterialTheme.dimensionWeight.weight1),
                     title = channel.channelName,
                     isFavorite = channel.favoriteType != FavoriteType.NONE,
                     lines = 2
@@ -85,20 +86,20 @@ fun ChannelGridView(
                 )
             }
 
-            SpacerHeight(MaterialTheme.dimens.weight1)
+            SpacerHeight(MaterialTheme.dimensionWeight.weight1)
 
             if (channel.programs.isEmpty()) {
                 EmptyProgramTitle(
-                    modifier = Modifier.padding(horizontal = MaterialTheme.dimens.size8)
+                    modifier = Modifier.padding(horizontal = MaterialTheme.dimensionSize.size8)
                 )
             } else {
                 ProgramTitle(
-                    modifier = Modifier.padding(horizontal = MaterialTheme.dimens.size8),
+                    modifier = Modifier.padding(horizontal = MaterialTheme.dimensionSize.size8),
                     title = channel.programs.first().title
                 )
             }
 
-            SpacerHeight(MaterialTheme.dimens.weight1)
+            SpacerHeight(MaterialTheme.dimensionWeight.weight1)
 
             if (channel.programs.isNotEmpty()) {
                 ProgramProgressIndicator(progress = channel.programs.first().programProgress)
@@ -110,7 +111,7 @@ fun ChannelGridView(
 @Preview
 @Composable
 private fun PreviewChannelGridViewFavorite() {
-    VideoAppTheme {
+    AppTheme {
         ChannelGridView(channel = PreviewTestData.testProgram)
     }
 }

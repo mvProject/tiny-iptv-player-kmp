@@ -29,7 +29,7 @@ import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
 import com.mvproject.tinyiptvkmp.core.common.mvi.CollectUiEffect
-import com.mvproject.tinyiptvkmp.core.theme.dimens
+import com.mvproject.tinyiptvkmp.core.theme.dimensionSize
 import com.mvproject.tinyiptvkmp.core.ui.indicators.LoadingIndicator
 import com.mvproject.tinyiptvkmp.core.ui.toolbars.AppBarWithBackNav
 import com.mvproject.tinyiptvkmp.core.ui.views.NoItemsView
@@ -84,7 +84,7 @@ private fun SettingsPlaylistScreen(
                 },
                 modifier =
                 Modifier
-                    .padding(MaterialTheme.dimens.size8)
+                    .padding(MaterialTheme.dimensionSize.size8)
                     .fillMaxWidth(),
                 colors =
                 ButtonDefaults.buttonColors(
@@ -121,8 +121,8 @@ private fun SettingsPlaylistScreen(
                         Modifier
                             .fillMaxSize(),
                         state = rememberLazyListState(),
-                        verticalArrangement = Arrangement.spacedBy(MaterialTheme.dimens.size4),
-                        contentPadding = PaddingValues(MaterialTheme.dimens.size8),
+                        verticalArrangement = Arrangement.spacedBy(MaterialTheme.dimensionSize.size4),
+                        contentPadding = PaddingValues(MaterialTheme.dimensionSize.size8),
                     ) {
                         items(
                             playlistState.playlists,

@@ -30,7 +30,8 @@ import androidx.lifecycle.compose.LifecycleResumeEffect
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.mvproject.tinyiptvkmp.core.common.mvi.CollectUiEffect
 import com.mvproject.tinyiptvkmp.core.common.utils.CommonUtils.empty
-import com.mvproject.tinyiptvkmp.core.theme.dimens
+import com.mvproject.tinyiptvkmp.core.theme.dimensionFraction
+import com.mvproject.tinyiptvkmp.core.theme.dimensionSize
 import com.mvproject.tinyiptvkmp.core.ui.epg.ChannelPrograms
 import com.mvproject.tinyiptvkmp.core.ui.indicators.LoadingIndicator
 import com.mvproject.tinyiptvkmp.core.ui.overlay.OnScreenDisplay
@@ -165,14 +166,14 @@ private fun GroupChannelsScreen(
                         is GroupChannelsOSD.ChannelPrograms -> {
                             ChannelPrograms(
                                 modifier = Modifier
-                                    .fillMaxHeight(MaterialTheme.dimens.fraction90)
-                                    .fillMaxWidth(MaterialTheme.dimens.fraction80)
+                                    .fillMaxHeight(MaterialTheme.dimensionFraction.fraction90)
+                                    .fillMaxWidth(MaterialTheme.dimensionFraction.fraction80)
                                     .background(
                                         color = MaterialTheme.colorScheme.primary,
                                         shape =
                                         RoundedCornerShape(
-                                            bottomStart = MaterialTheme.dimens.size8,
-                                            bottomEnd = MaterialTheme.dimens.size8,
+                                            bottomStart = MaterialTheme.dimensionSize.size8,
+                                            bottomEnd = MaterialTheme.dimensionSize.size8,
                                         ),
                                     ),
                                 title = uiState.selectedName,

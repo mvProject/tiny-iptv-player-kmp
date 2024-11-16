@@ -21,7 +21,8 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.style.TextAlign
 import com.mvproject.tinyiptvkmp.core.common.utils.CommonUtils.empty
-import com.mvproject.tinyiptvkmp.core.theme.dimens
+import com.mvproject.tinyiptvkmp.core.theme.dimensionFraction
+import com.mvproject.tinyiptvkmp.core.theme.dimensionSize
 import com.mvproject.tinyiptvkmp.core.ui.modifiers.roundedHeader
 import org.jetbrains.compose.resources.stringResource
 import tinyiptvkmp.composeapp.generated.resources.Res
@@ -37,7 +38,7 @@ fun ProgramInfo(
         modifier =
         Modifier
             .wrapContentHeight()
-            .fillMaxWidth(MaterialTheme.dimens.fraction80)
+            .fillMaxWidth(MaterialTheme.dimensionFraction.fraction80)
             .background(
                 color = MaterialTheme.colorScheme.primary,
                 shape = MaterialTheme.shapes.small,
@@ -50,12 +51,12 @@ fun ProgramInfo(
 
         if (description.isEmpty()) {
             ProgramDescriptionEmpty(
-                modifier = Modifier.height(MaterialTheme.dimens.size180),
+                modifier = Modifier.height(MaterialTheme.dimensionSize.size180),
                 title = stringResource(Res.string.msg_no_epg_found)
             )
         } else {
             ProgramDescription(
-                modifier = Modifier.padding(all = MaterialTheme.dimens.size16),
+                modifier = Modifier.padding(all = MaterialTheme.dimensionSize.size16),
                 title = description
             )
         }
@@ -100,7 +101,7 @@ private fun ProgramDescriptionEmpty(
     ) {
         Text(
             modifier = Modifier
-                .padding(horizontal = MaterialTheme.dimens.size12),
+                .padding(horizontal = MaterialTheme.dimensionSize.size12),
             text = title,
             style = MaterialTheme.typography.titleLarge,
             color = MaterialTheme.colorScheme.onSurface,

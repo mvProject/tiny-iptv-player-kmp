@@ -6,6 +6,7 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.style.TextOverflow
+import com.mvproject.tinyiptvkmp.core.theme.colorSchemeExtended
 
 @Composable
 fun ChannelTitle(
@@ -15,7 +16,7 @@ fun ChannelTitle(
     lines: Int = 1
 ) {
     val color = if (isFavorite) {
-        MaterialTheme.colorScheme.onSurfaceVariant
+        MaterialTheme.colorSchemeExtended.activeProgramTitle
     } else {
         MaterialTheme.colorScheme.onPrimary
     }
@@ -27,6 +28,6 @@ fun ChannelTitle(
         color = color,
         overflow = TextOverflow.Ellipsis,
         maxLines = lines,
-        minLines = lines,
+        minLines = 1,
     )
 }

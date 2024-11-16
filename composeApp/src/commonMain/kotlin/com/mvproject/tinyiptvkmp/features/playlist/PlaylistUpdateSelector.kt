@@ -28,7 +28,9 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import com.mvproject.tinyiptvkmp.core.domain.enums.PlaylistType
 import com.mvproject.tinyiptvkmp.core.domain.enums.UpdatePeriod
-import com.mvproject.tinyiptvkmp.core.theme.dimens
+import com.mvproject.tinyiptvkmp.core.theme.colorSchemeExtended
+import com.mvproject.tinyiptvkmp.core.theme.dimensionSize
+import com.mvproject.tinyiptvkmp.core.theme.dimensionText
 import org.jetbrains.compose.resources.stringResource
 import tinyiptvkmp.composeapp.generated.resources.Res
 import tinyiptvkmp.composeapp.generated.resources.hint_update_period
@@ -40,7 +42,7 @@ fun PlaylistUpdateSelector(
 ) {
     Column(
         modifier = Modifier.fillMaxWidth().border(
-            width = MaterialTheme.dimens.size1,
+            width = MaterialTheme.dimensionSize.size1,
             color = MaterialTheme.colorScheme.onSurface,
             shape = MaterialTheme.shapes.extraSmall
         )
@@ -59,7 +61,7 @@ fun PlaylistUpdateSelector(
                         text = stringResource(Res.string.hint_update_period),
                         style = MaterialTheme.typography.labelSmall,
                         color = MaterialTheme.colorScheme.onPrimary,
-                        fontSize = MaterialTheme.dimens.font10,
+                        fontSize = MaterialTheme.dimensionText.font10,
                     )
                 },
                 headlineContent = {
@@ -112,7 +114,7 @@ fun PlaylistUpdateSelector(
                                     style = MaterialTheme.typography.titleSmall,
                                     color =
                                     if (isSelected) {
-                                        MaterialTheme.colorScheme.onSurfaceVariant
+                                        MaterialTheme.colorSchemeExtended.activeInput
                                     } else {
                                         MaterialTheme.colorScheme.onSurface
                                     },
@@ -124,7 +126,7 @@ fun PlaylistUpdateSelector(
                                     modifier =
                                     Modifier
                                         .fillMaxWidth()
-                                        .padding(horizontal = MaterialTheme.dimens.size16),
+                                        .padding(horizontal = MaterialTheme.dimensionSize.size16),
                                     color = MaterialTheme.colorScheme.onSurface,
                                 )
                             }
