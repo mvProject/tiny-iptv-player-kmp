@@ -19,7 +19,6 @@ class SavePlaylistContentUseCase(
 ) {
     suspend operator fun invoke(playlistId: String) {
         val playlist = playlistsRepository.getPlaylistById(id = playlistId)
-
         val parsedChannels =
             when (playlist.playlistType) {
                 PlaylistType.LOCAL ->
@@ -32,7 +31,6 @@ class SavePlaylistContentUseCase(
                         url = playlist.playlistSource,
                     )
             }
-
         if (parsedChannels.isEmpty()) {
             Logger.e("SavePlaylistContentUseCase channels is empty")
             return

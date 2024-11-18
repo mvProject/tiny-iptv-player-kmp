@@ -28,6 +28,7 @@ import com.mvproject.tinyiptvkmp.core.domain.usecase.SelectPlaylistUseCase
 import com.mvproject.tinyiptvkmp.core.domain.usecase.UpdateChannelsEpgInfoUseCase
 import com.mvproject.tinyiptvkmp.core.domain.usecase.UpdateRemotePlaylistChannelsUseCase
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.flow.flowOn
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
@@ -61,39 +62,28 @@ class GroupViewModel(
                 refreshGroups()
             }.launchIn(viewModelScope)
 
-        preferenceRepository
-            .isChannelsEpgInfoUpdateRequired()
-            .flowOn(Dispatchers.IO)
-            .onEach { isRequired ->
-                Logger.w("testing isChannelsEpgInfoUpdateRequired isRequired=$isRequired")
-                if (isRequired) {
-                    updateChannelsEpgInfoUseCase()
-                }
-            }.launchIn(viewModelScope)
-
-        preferenceRepository
-            .idForPlaylistContentLoad()
-            .flowOn(Dispatchers.IO)
-            .onEach { id ->
-                if (id.isNotBlank()) {
-                    savePlaylistContentUseCase(playlistId = id)
-                }
-            }.launchIn(viewModelScope)
-
-        viewModelScope.launch(Dispatchers.IO) {
-            refreshEpgProgramsUseCase()
-        }
-
-        viewModelScope.launch(Dispatchers.IO) {
-            refreshEpgChannelsUseCase()
-        }
+        combine(
+            preferenceRepository.isChannelsEpgInfoUpdateRequired(),
+            preferenceRepository.idForPlaylistContentLoad()
+        ) { isRequired, id ->
+            Logger.w("testing isChannelsEpgInfoUpdateRequired isRequired=$isRequired")
+            if (isRequired) {
+                updateChannelsEpgInfoUseCase()
+            }
+            Logger.w("testing idForPlaylistContentLoad id=$id")
+            if (id.isNotBlank()) {
+                savePlaylistContentUseCase(playlistId = id)
+            }
+        }.launchIn(viewModelScope)
 
         viewModelScope.launch(Dispatchers.IO) {
             updateRemotePlaylistChannelsUseCase()
-        }
 
-        viewModelScope.launch(Dispatchers.IO) {
+            refreshEpgChannelsUseCase()
+
             cleanProgramsUseCase()
+
+            refreshEpgProgramsUseCase()
         }
     }
 

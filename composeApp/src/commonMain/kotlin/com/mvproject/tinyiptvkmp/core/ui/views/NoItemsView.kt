@@ -45,8 +45,8 @@ fun NoItemsView(
         ) {
             Icon(
                 modifier =
-                    Modifier
-                        .size(MaterialTheme.dimensionSize.size96),
+                Modifier
+                    .size(MaterialTheme.dimensionSize.size96),
                 imageVector = Icons.Filled.Info,
                 tint = MaterialTheme.colorSchemeExtended.emptyProgramTitle,
                 contentDescription = title,
@@ -54,12 +54,12 @@ fun NoItemsView(
 
             Text(
                 modifier =
-                    Modifier
-                        .fillMaxWidth()
-                        .padding(
-                            top = MaterialTheme.dimensionSize.size16,
-                            bottom = MaterialTheme.dimensionSize.size24,
-                        ),
+                Modifier
+                    .fillMaxWidth()
+                    .padding(
+                        top = MaterialTheme.dimensionSize.size16,
+                        bottom = MaterialTheme.dimensionSize.size24,
+                    ),
                 text = title,
                 style = MaterialTheme.typography.headlineLarge,
                 color = MaterialTheme.colorSchemeExtended.emptyProgramTitle,
@@ -69,12 +69,13 @@ fun NoItemsView(
             if (navigateTitle.isNotEmpty()) {
                 Text(
                     modifier =
-                        Modifier
-                            .fillMaxWidth()
-                            .padding(
-                                top = MaterialTheme.dimensionSize.size16,
-                                bottom = MaterialTheme.dimensionSize.size24,
-                            ).clickable { onNavigateClick() },
+                    Modifier
+                        .fillMaxWidth()
+                        .padding(
+                            top = MaterialTheme.dimensionSize.size16,
+                            bottom = MaterialTheme.dimensionSize.size24,
+                        )
+                        .clickable(onClick = onNavigateClick),
                     text = navigateTitle,
                     style = MaterialTheme.typography.displaySmall,
                     color = MaterialTheme.colorScheme.onSurface,
