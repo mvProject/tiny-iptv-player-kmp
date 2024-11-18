@@ -51,8 +51,9 @@ import io.github.vinceglb.filekit.compose.rememberFilePickerLauncher
 import io.github.vinceglb.filekit.core.PickerMode
 import io.github.vinceglb.filekit.core.PickerType
 import kotlinx.coroutines.launch
+import okio.FileSystem
 import okio.buffer
-import okio.sink
+import okio.use
 import org.jetbrains.compose.resources.stringResource
 import tinyiptvkmp.composeapp.generated.resources.Res
 import tinyiptvkmp.composeapp.generated.resources.btn_add_local
@@ -109,10 +110,9 @@ private fun PlaylistScreen(
         ) { selectedFile ->
             selectedFile?.let { file ->
                 val folderFileTmp = tmpFolder / file.name
-                val fileTmp = folderFileTmp.toFile()
-
+                val fileTmp = FileSystem.SYSTEM.sink(folderFileTmp)
                 scope.launch {
-                    fileTmp.sink().buffer().use { sink ->
+                    fileTmp.buffer().use { sink ->
                         sink.write(file.readBytes())
                     }
                 }

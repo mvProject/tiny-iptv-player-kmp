@@ -41,6 +41,10 @@ object TimeUtils {
             minute()
         }
 
+    private fun Int.pad(length: Int): String = this
+        .toString()
+        .padStart(length, '0')
+
     val sourceActualDate
         get() = Instant.fromEpochMilliseconds(Clock.System.now().toEpochMilliseconds())
             .toLocalDateTime(tzCurrent)
@@ -114,13 +118,13 @@ object TimeUtils {
         val year = input.substring(0, 4).toInt()
         val month = input.substring(4, 6).toInt()
         val day = input.substring(6, 8).toInt()
-        return String.format("%02d/%02d/%04d", day, month, year)
+        return "${day.pad(2)}/${month.pad(2)}/${year.pad(4)}"
     }
 
     private fun extractTime(input: String): String {
         val hour = input.substring(8, 10).toInt()
         val minute = input.substring(10, 12).toInt()
-        return String.format("%02d:%02d", hour, minute)
+        return "${hour.pad(2)}:${minute.pad(2)}"
     }
 
     private fun roundTimeString(time: String): String {
@@ -130,10 +134,8 @@ object TimeUtils {
             throw IllegalArgumentException()
         } else {
             if (minute >= 57) {
-                return String.format(
-                    "%02d:00",
-                    (hour + 1) % 24,
-                ) // Edge case for 57, 58, and 59 minutes
+                // Edge case for 57, 58, and 59 minutes
+                return "${((hour + 1) % 24).pad(2)}:00"
             }
 
             val roundedMinute =
@@ -145,7 +147,7 @@ object TimeUtils {
                 }
 
             // Ensure the rounded minute is formatted properly with leading zero if needed
-            return String.format("%02d:%02d", hour, roundedMinute)
+            return "${hour.pad(2)}:${roundedMinute.pad(2)}"
         }
     }
 
@@ -176,8 +178,8 @@ object TimeUtils {
             Instant.fromEpochMilliseconds(this)
                 .toLocalDateTime(tzCurrent)
 
-        val hour = String.format("%02d", local.hour)
-        val minute = String.format("%02d", local.minute)
+        val hour = local.hour.pad(2)
+        val minute = local.minute.pad(2)
         return Pair(hour, minute)
     }
 }
