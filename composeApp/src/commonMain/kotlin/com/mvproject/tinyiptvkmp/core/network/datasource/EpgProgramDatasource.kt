@@ -8,12 +8,12 @@ import io.ktor.client.request.prepareGet
 import io.ktor.client.statement.bodyAsChannel
 import io.ktor.http.contentLength
 import io.ktor.utils.io.ByteReadChannel
-import io.ktor.utils.io.jvm.javaio.toInputStream
+import io.ktor.utils.io.readAvailable
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.runBlocking
 import kotlinx.coroutines.withContext
 import okio.GzipSource
 import okio.buffer
-import okio.source
 import okio.use
 
 class EpgProgramDatasource(
@@ -42,8 +42,28 @@ class EpgProgramDatasource(
         onProgrammeParsed: suspend (ProgramParsed) -> Unit,
     ) = withContext(Dispatchers.Default) {
         Logger.i("testing start parsing programmes")
-        val inputStream = channel.toInputStream()
-        GzipSource(inputStream.source()).buffer().use { bufferedSource ->
+
+        val buffer = ByteArray(8192) // 8KB buffer
+        val gzipSource = GzipSource(object : okio.Source {
+            override fun read(sink: okio.Buffer, byteCount: Long): Long {
+                return runBlocking {
+                    val bytesRead = channel.readAvailable(
+                        buffer,
+                        0,
+                        buffer.size.coerceAtMost(byteCount.toInt())
+                    )
+                    if (bytesRead > 0) {
+                        sink.write(buffer, 0, bytesRead)
+                    }
+                    if (bytesRead == -1) -1 else bytesRead.toLong()
+                }
+            }
+
+            override fun timeout() = okio.Timeout.NONE
+            override fun close() {}
+        })
+
+        gzipSource.buffer().use { bufferedSource ->
             var currentProgram: ProgramParsed? = null
             var currentElement = String.empty
             var line: String?
