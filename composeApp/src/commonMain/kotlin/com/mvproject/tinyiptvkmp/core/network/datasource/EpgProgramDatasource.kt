@@ -30,11 +30,6 @@ class EpgProgramDatasource(
                     val channel = response.bodyAsChannel()
                     parseGzippedXml(channel, onProgrammeParsed)
                 }
-
-              //  val response: HttpResponse = service.get(url)
-              //  KLog.i("testing File download started. Content length: ${response.contentLength()}")
-              //  val channel = response.bodyAsChannel()
-              //  parseGzippedXml(channel, onProgrammeParsed)
             }
         } catch (ex: Exception) {
             client.close()

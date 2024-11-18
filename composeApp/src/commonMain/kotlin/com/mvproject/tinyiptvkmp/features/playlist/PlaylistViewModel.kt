@@ -135,7 +135,7 @@ class PlaylistViewModel(
                         isUpdate = isUpdate
                     )
                 }.onFailure {
-                    Logger.e("testing saveOrUpdatePlayList isUpdate=$isUpdate, failure ${it.localizedMessage}")
+                    Logger.e("testing saveOrUpdatePlayList isUpdate=$isUpdate, failure ${it.message}")
                 }
 
             updateUiState {
