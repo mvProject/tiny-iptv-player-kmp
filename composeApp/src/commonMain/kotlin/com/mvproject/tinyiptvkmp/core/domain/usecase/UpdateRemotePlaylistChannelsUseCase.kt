@@ -12,6 +12,7 @@ import com.mvproject.tinyiptvkmp.core.domain.enums.PlaylistType
 import com.mvproject.tinyiptvkmp.core.domain.mappers.Mapper.toFavType
 import com.mvproject.tinyiptvkmp.core.domain.mappers.Mapper.toPlaylistChannel
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.IO
 import kotlinx.coroutines.withContext
 
 class UpdateRemotePlaylistChannelsUseCase(

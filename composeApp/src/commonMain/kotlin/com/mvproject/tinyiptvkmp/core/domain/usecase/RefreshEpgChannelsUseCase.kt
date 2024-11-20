@@ -7,6 +7,7 @@ import com.mvproject.tinyiptvkmp.core.data.repository.EpgChannelRepository
 import com.mvproject.tinyiptvkmp.core.datastore.repository.PreferenceRepository
 import com.mvproject.tinyiptvkmp.core.network.datasource.EpgChannelDatasource
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.IO
 import kotlinx.coroutines.withContext
 
 class RefreshEpgChannelsUseCase(

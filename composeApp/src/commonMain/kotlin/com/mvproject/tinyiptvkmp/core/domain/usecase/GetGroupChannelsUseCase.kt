@@ -8,6 +8,7 @@ import com.mvproject.tinyiptvkmp.core.domain.enums.GroupType
 import com.mvproject.tinyiptvkmp.core.domain.mappers.Mapper.toFavType
 import com.mvproject.tinyiptvkmp.core.domain.mappers.Mapper.toTvChannel
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.IO
 import kotlinx.coroutines.withContext
 
 class GetGroupChannelsUseCase(

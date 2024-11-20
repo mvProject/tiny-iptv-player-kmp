@@ -13,6 +13,7 @@ import com.mvproject.tinyiptvkmp.core.database.db.AppDatabase
 import com.mvproject.tinyiptvkmp.core.database.entity.FavoriteChannelEntity
 import com.mvproject.tinyiptvkmp.core.domain.enums.FavoriteType
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.IO
 import kotlinx.coroutines.withContext
 
 class FavoriteChannelsRepository(

@@ -20,6 +20,18 @@ kotlin {
         }
     }
 
+    listOf(
+        iosX64(),
+        iosArm64(),
+        iosSimulatorArm64()
+    ).forEach { iosTarget ->
+        iosTarget.binaries.framework {
+            baseName = "ComposeApp"
+            isStatic = true
+            //  binaryOption("bundleId", "com.mvproject.tinyiptvkmp")
+        }
+    }
+
     targets.configureEach {
         compilations.configureEach {
             compileTaskProvider.configure {
@@ -124,6 +136,10 @@ kotlin {
             // Vlc player
             implementation(libs.caprica.vlcj)
         }
+
+        nativeMain.dependencies {
+            implementation(libs.ktor.client.darwin)
+        }
     }
 }
 
@@ -216,6 +232,9 @@ dependencies {
     debugImplementation(compose.uiTooling)
     add("kspAndroid", libs.androidx.room.compiler)
     add("kspDesktop", libs.androidx.room.compiler)
+    add("kspIosX64", libs.androidx.room.compiler)
+    add("kspIosArm64", libs.androidx.room.compiler)
+    add("kspIosSimulatorArm64", libs.androidx.room.compiler)
 }
 
 /*room {

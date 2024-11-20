@@ -8,13 +8,14 @@ import io.ktor.client.request.prepareGet
 import io.ktor.client.statement.bodyAsChannel
 import io.ktor.http.contentLength
 import io.ktor.utils.io.ByteReadChannel
+import io.ktor.utils.io.core.use
 import io.ktor.utils.io.readAvailable
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.runBlocking
 import kotlinx.coroutines.withContext
 import okio.GzipSource
 import okio.buffer
-import okio.use
+import okio.use as okiouse
 
 class EpgProgramDatasource(
     private val client: HttpClient,
@@ -63,7 +64,7 @@ class EpgProgramDatasource(
             override fun close() {}
         })
 
-        gzipSource.buffer().use { bufferedSource ->
+        gzipSource.buffer().okiouse { bufferedSource ->
             var currentProgram: ProgramParsed? = null
             var currentElement = String.empty
             var line: String?

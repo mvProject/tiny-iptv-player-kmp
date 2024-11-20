@@ -33,6 +33,7 @@ import com.mvproject.tinyiptvkmp.core.domain.utils.ChannelsUtils.toggleFavorite
 import com.mvproject.tinyiptvkmp.features.channels.GroupChannelsUiState.GroupChannelsOSD
 import com.mvproject.tinyiptvkmp.navigation.AppRoutes
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.IO
 import kotlinx.coroutines.launch
 import kotlin.time.Duration.Companion.minutes
 

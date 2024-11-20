@@ -1,7 +1,6 @@
 package com.mvproject.tinyiptvkmp.features.player.components
 
 import androidx.compose.foundation.Canvas
-import androidx.compose.foundation.layout.aspectRatio
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.DisposableEffect
@@ -78,15 +77,11 @@ actual fun PlayerView(
     }
 
     VideoPlayerDirect(
-        modifier = modifier
-            .fillMaxSize()
-            .aspectRatio(videoPlayerState.aspectRatio),
+        modifier = modifier.fillMaxSize(),
         state = videoPlayerState,
         url = uiState.currentChannel.channelUrl,
         onPlaybackAction = onAction
     )
-
-
 }
 
 interface VideoPlayerState {
