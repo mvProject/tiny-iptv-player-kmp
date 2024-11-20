@@ -10,6 +10,7 @@ package com.mvproject.tinyiptvkmp.core.database.di
 import androidx.room.RoomDatabase
 import com.mvproject.tinyiptvkmp.core.database.db.AppDatabase
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.IO
 import org.koin.dsl.module
 
 val databaseModule =
