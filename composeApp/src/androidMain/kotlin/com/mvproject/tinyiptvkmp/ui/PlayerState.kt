@@ -15,6 +15,7 @@ import androidx.media3.common.Player
 import androidx.media3.common.VideoSize
 import androidx.media3.exoplayer.ExoPlayer
 import com.mvproject.tinyiptvkmp.features.player.PlayerUiAction
+import com.mvproject.tinyiptvkmp.features.player.components.PlayerState
 import com.mvproject.tinyiptvkmp.utils.ExoPlayerUtils.createMediaItem
 import com.mvproject.tinyiptvkmp.utils.ExoPlayerUtils.createVideoPlayer
 import com.mvproject.tinyiptvkmp.utils.ExoPlayerUtils.mapToVideoPlaybackState
@@ -120,18 +121,4 @@ class PlayerStateImpl(
             playWhenReady = true
         }
     }
-}
-
-interface PlayerState {
-    fun play()
-
-    fun pause()
-
-    fun setVolume(value: Float)
-
-    fun setPlayingState(value: Boolean)
-
-    fun restartPlayer()
-
-    fun setPlayerChannel(channelUrl: String)
 }
