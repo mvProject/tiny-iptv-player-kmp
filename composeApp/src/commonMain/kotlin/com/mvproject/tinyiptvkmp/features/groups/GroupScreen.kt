@@ -7,6 +7,7 @@
 
 package com.mvproject.tinyiptvkmp.features.groups
 
+import androidx.compose.animation.AnimatedContent
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -16,6 +17,7 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
+import androidx.compose.material3.LinearProgressIndicator
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.runtime.Composable
@@ -26,6 +28,7 @@ import androidx.compose.ui.draw.clipToBounds
 import androidx.lifecycle.compose.LifecycleResumeEffect
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.mvproject.tinyiptvkmp.core.common.mvi.CollectUiEffect
+import com.mvproject.tinyiptvkmp.core.theme.colorSchemeExtended
 import com.mvproject.tinyiptvkmp.core.theme.dimensionSize
 import com.mvproject.tinyiptvkmp.core.ui.indicators.LoadingIndicator
 import com.mvproject.tinyiptvkmp.core.ui.toolbars.AppBarWithSettings
@@ -90,6 +93,20 @@ private fun GroupScreen(
                 horizontalAlignment = Alignment.CenterHorizontally,
                 verticalArrangement = Arrangement.Center,
             ) {
+
+                AnimatedContent(targetState = uiState.isUpdating) { isUpdating ->
+                    if (isUpdating) {
+                        LinearProgressIndicator(
+                            modifier = Modifier
+                                .padding(vertical = MaterialTheme.dimensionSize.size8)
+                                .fillMaxWidth(),
+                            progress = { uiState.progress },
+                            trackColor = MaterialTheme.colorScheme.primary,
+                            color = MaterialTheme.colorSchemeExtended.progress,
+                            drawStopIndicator = {}
+                        )
+                    }
+                }
 
                 PlaylistSelector(
                     uiState = uiState,

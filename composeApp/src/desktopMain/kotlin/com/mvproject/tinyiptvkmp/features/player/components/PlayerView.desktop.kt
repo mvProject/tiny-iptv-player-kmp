@@ -17,7 +17,6 @@ import androidx.compose.ui.graphics.asComposeImageBitmap
 import androidx.compose.ui.unit.IntOffset
 import androidx.compose.ui.unit.IntSize
 import co.touchlab.kermit.Logger
-import com.mvproject.tinyiptvkmp.core.common.AppConstants.FLOAT_VALUE_1
 import com.mvproject.tinyiptvkmp.core.common.AppConstants.INT_NO_VALUE
 import com.mvproject.tinyiptvkmp.core.common.AppConstants.INT_VALUE_2
 import com.mvproject.tinyiptvkmp.core.common.AppConstants.INT_VALUE_4
@@ -85,10 +84,9 @@ actual fun PlayerView(
 
 class VideoPlayerStateImpl : PlayerState {
     internal val internalState = RenderState()
+
     val mediaPlayer: MediaPlayer
         get() = internalState.mediaPlayerComponent.mediaPlayer()
-    val aspectRatio: Float
-        get() = internalState.aspectRatio
 
     override fun setVolume(value: Float) {
         val volumeValue = (value * 100).toInt()
@@ -235,9 +233,6 @@ fun VideoPlayerDirect(
 }
 
 internal class RenderState {
-    var aspectRatio: Float by mutableStateOf(FLOAT_VALUE_1)
-        private set
-
     var currentBuffer: ByteBuffer? = null
 
     private var buffer: ByteArray = ByteArray(INT_VALUE_ZERO)
@@ -266,20 +261,13 @@ internal class RenderState {
     private val bufferFormatCallback = object : BufferFormatCallback {
         override fun getBufferFormat(sourceWidth: Int, sourceHeight: Int): BufferFormat {
 
+            buffer = ByteArray(sourceWidth * sourceHeight * INT_VALUE_4)
+
             bufferBitmap = Bitmap().also {
                 it.allocN32Pixels(sourceWidth, sourceHeight, true)
             }
 
             composeImage = bufferBitmap.asComposeImageBitmap()
-
-            buffer = ByteArray(sourceWidth * sourceHeight * INT_VALUE_4)
-
-            with(bufferBitmap) {
-                aspectRatio = if (width <= INT_VALUE_ZERO || height <= INT_VALUE_ZERO)
-                    FLOAT_VALUE_1
-                else
-                    width.toFloat() / height.toFloat()
-            }
 
             return RV32BufferFormat(sourceWidth, sourceHeight)
         }
@@ -302,189 +290,3 @@ internal class RenderState {
         null
     )
 }
-
-
-/*
-@Composable
-actual fun PlayerView(
-    modifier: Modifier,
-    uiState: PlayerUiState,
-    onAction: (PlayerUiAction) -> Unit,
-) {
-    // todo network Available check
-
-    val playerState = rememberPlayerStateSwing(
-        onPlaybackStateAction = onAction
-    )
-*/
-/*
-
-    LaunchedEffect(uiState.isRestartRequired) {
-        if (uiState.isRestartRequired) {
-            // todo player restart
-            playerState.restartPlayer()
-            onPlaybackAction(PlaybackActions.OnRestarted)
-        }
-    }
-*//*
-
-
-    LaunchedEffect(uiState.isFullscreen) {
-        // todo handle fullscreen state
-    }
-
-    LaunchedEffect(uiState.currentVolume) {
-        playerState.setVolume(uiState.currentVolume)
-    }
-
-    LaunchedEffect(uiState.channelIndex) {
-        if (uiState.channelIndex > INT_NO_VALUE) {
-            playerState.setPlayerChannel(
-                channelUrl = uiState.currentChannel.channelUrl,
-            )
-            //playerState.restartPlayer()
-        }
-    }
-
-    LaunchedEffect(uiState.isPlaying) {
-        playerState.setPlayingState(uiState.isPlaying)
-        w {
-            "testing isPlaying:${uiState.isPlaying}"
-        }
-    }
-
-    //NativeLibrary.addSearchPath(
-    //    RuntimeUtil.getLibVlcLibraryName(),
-    //    "C:/Program Files/VideoLAN/VLC"
-    //)
-    //Native.loadLibrary(RuntimeUtil.getLibVlcLibraryName(), LibVlc::class.java)
-
-    NativeDiscovery().discover()
-
-    SwingPanel(
-        factory = { playerState.playerComponent },
-        background = Color.Transparent,
-        modifier = modifier.fillMaxSize().background(Color.Yellow),
-    )
-
-    DisposableEffect(playerState) {
-        onDispose {
-            playerState.closePlayer()
-        }
-    }
-}
-
-@Composable
-internal fun rememberPlayerStateSwing(
-    onPlaybackStateAction: (PlayerUiAction) -> Unit = {}
-) = remember {
-    PlayerStateSwingImpl(
-        playerComponent = CallbackMediaPlayerComponent(),
-        onPlaybackStateAction = onPlaybackStateAction
-    ).also { playerState ->
-        playerState.playerComponent.apply {
-            mediaPlayer().events().addMediaPlayerEventListener(playerState)
-        }
-    }
-}
-
-class PlayerStateSwingImpl(
-    val playerComponent: CallbackMediaPlayerComponent,
-    private val onPlaybackStateAction: (PlayerUiAction) -> Unit = {}
-) : PlayerState, MediaPlayerEventAdapter() {
-
-    override fun setVolume(value: Float) {
-        val volumeValue = (value * 100).toInt()
-        playerComponent.mediaPlayer().audio().setVolume(volumeValue)
-    }
-
-    override fun setPlayingState(value: Boolean) {
-        if (value) {
-            play()
-        } else {
-            pause()
-        }
-    }
-
-    override fun play() {
-        playerComponent.mediaPlayer().controls().play()
-    }
-
-    override fun pause() {
-        playerComponent.mediaPlayer().controls().pause()
-    }
-
-    override fun restartPlayer() {
-        */
-/*        if (this.player.playbackState == Player.STATE_IDLE) {
-                    this.player.apply {
-                        prepare()
-                        playWhenReady = true
-                    }
-                }*//*
-
-    }
-
-    override fun setPlayerChannel(channelUrl: String) {
-        playerComponent.mediaPlayer().media().play(channelUrl)
-    }
-
-    fun closePlayer(
-    ) {
-        playerComponent.mediaPlayer().controls().stop()
-        playerComponent.mediaPlayer().events().removeMediaPlayerEventListener(this)
-        playerComponent.mediaPlayer()::release
-    }
-
-    override fun error(mediaPlayer: MediaPlayer?) {}
-
-    override fun mediaPlayerReady(mediaPlayer: MediaPlayer?) {
-       // onPlaybackStateAction(
-       //     PlayerUiAction.OnPlaybackStateChanged(VideoPlaybackState.VideoPlaybackReady)
-       // )
-    }
-
-*/
-/*    override fun mediaChanged(mediaPlayer: MediaPlayer?, media: MediaRef?) {
-        onPlaybackStateAction(
-            PlayerUiAction.OnMediaItemTransition(
-                mediaTitle = "",
-                index = 1
-            )
-        )
-    }*//*
-
-
-    override fun buffering(mediaPlayer: MediaPlayer?, newCache: Float) {
-        val isPlaying = mediaPlayer?.status()?.isPlaying
-        if (isPlaying == false) {
-            println("buffering isPlaying:$isPlaying")
-            // onPlaybackStateAction(
-            //     PlaybackStateActions.OnPlaybackStateChanged(VideoPlaybackState.VideoPlaybackBuffering)
-            // )
-        }
-    }
-
-    override fun playing(mediaPlayer: MediaPlayer?) {
-        mediaPlayer?.status()?.isPlaying?.let { isPlaying ->
-            onPlaybackStateAction(
-                PlayerUiAction.OnIsPlayingChanged(isPlaying)
-            )
-        }
-    }
-
-    override fun paused(mediaPlayer: MediaPlayer?) {
-        mediaPlayer?.status()?.isPlaying?.let { isPlaying ->
-            onPlaybackStateAction(
-                PlayerUiAction.OnIsPlayingChanged(isPlaying)
-            )
-        }
-    }
-
-    override fun stopped(mediaPlayer: MediaPlayer?) {
-        println("stopped")
-       // onPlaybackStateAction(
-       //     PlayerUiAction.OnPlaybackStateChanged(VideoPlaybackState.VideoPlaybackEnded)
-       // )
-    }
-}*/
