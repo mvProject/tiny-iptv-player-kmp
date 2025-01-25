@@ -16,16 +16,14 @@ fun PlayerContainer(
     toolbar: @Composable () -> Unit,
 ) {
     Box(modifier = modifier.fillMaxSize()) {
-        Box(modifier = Modifier.fillMaxSize()) {
-            Box(
-                modifier = Modifier
-                    .adaptiveLayout(videoSize = uiState.videoSize)
-            ) {
-                PlayerView(
-                    uiState = uiState,
-                    onAction = onAction
-                )
-            }
+        Box(
+            modifier = Modifier
+                .adaptiveLayout(videoSize = uiState.videoSize)
+        ) {
+            PlayerView(
+                uiState = uiState,
+                onAction = onAction
+            )
         }
 
         toolbar()

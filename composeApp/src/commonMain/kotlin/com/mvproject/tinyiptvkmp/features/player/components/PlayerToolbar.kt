@@ -54,16 +54,13 @@ fun PlayerToolbar(
         enter = scaleIn() + fadeIn(),
         exit = scaleOut() + fadeOut(),
     ) {
-        Box(
-            modifier =
-            modifier
-                .alpha(MaterialTheme.dimensionOpacity.opacity80),
-        ) {
+        Box(modifier = modifier) {
             Column(
                 modifier =
                 Modifier
                     .fillMaxWidth()
                     .wrapContentHeight()
+                    .alpha(MaterialTheme.dimensionOpacity.opacity80)
                     .roundedHeader(color = MaterialTheme.colorScheme.primary)
                     .align(Alignment.BottomCenter),
                 verticalArrangement = Arrangement.spacedBy(MaterialTheme.dimensionSize.size8),
@@ -134,8 +131,8 @@ private fun PlayerProgress(
     modifier: Modifier = Modifier,
     programStart: Long,
     programEnd: Long,
-    programProgress: Float
-,) {
+    programProgress: Float,
+) {
     Row(
         modifier = modifier,
         verticalAlignment = Alignment.CenterVertically,
