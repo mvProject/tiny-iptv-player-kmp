@@ -22,7 +22,7 @@ import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
-import com.mvproject.tinyiptvkmp.core.common.AppConstants
+import com.mvproject.tinyiptvkmp.core.common.INT_NO_VALUE
 import com.mvproject.tinyiptvkmp.core.theme.colorSchemeExtended
 import com.mvproject.tinyiptvkmp.core.theme.dimensionSize
 import com.mvproject.tinyiptvkmp.core.theme.dimensionText
@@ -31,7 +31,7 @@ import com.mvproject.tinyiptvkmp.core.theme.dimensionText
 fun SettingsSelector(
     title: String,
     options: List<String> = emptyList(),
-    selectedIndex: Int = AppConstants.INT_NO_VALUE,
+    selectedIndex: Int = INT_NO_VALUE,
     isExpanded: Boolean = false,
     onClick: () -> Unit,
     onSelect: (Int) -> Unit,

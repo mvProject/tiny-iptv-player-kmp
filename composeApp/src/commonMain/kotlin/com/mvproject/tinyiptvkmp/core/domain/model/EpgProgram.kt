@@ -8,7 +8,7 @@
 package com.mvproject.tinyiptvkmp.core.domain.model
 
 import com.mvproject.tinyiptvkmp.core.common.utils.CommonUtils.empty
-import com.mvproject.tinyiptvkmp.core.common.utils.TimeUtils.calculateProgramProgress
+import com.mvproject.tinyiptvkmp.core.common.utils.calculateProgramProgress
 
 data class EpgProgram(
     val programId: String,

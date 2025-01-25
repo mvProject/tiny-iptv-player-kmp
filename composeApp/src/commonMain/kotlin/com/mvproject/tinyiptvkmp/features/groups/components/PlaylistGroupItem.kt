@@ -20,7 +20,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.text.style.TextAlign
-import com.mvproject.tinyiptvkmp.core.common.AppConstants
+import com.mvproject.tinyiptvkmp.core.common.INT_VALUE_ZERO
 import com.mvproject.tinyiptvkmp.core.domain.enums.GroupType
 import com.mvproject.tinyiptvkmp.core.domain.model.ChannelsGroup
 import com.mvproject.tinyiptvkmp.core.theme.dimensionSize
@@ -72,7 +72,7 @@ fun PlaylistGroupItem(
             )
         },
         trailingContent = {
-            if (group.groupContentCount > AppConstants.INT_VALUE_ZERO) {
+            if (group.groupContentCount > INT_VALUE_ZERO) {
                 Text(
                     modifier = Modifier.width(MaterialTheme.dimensionSize.size78),
                     text = group.groupContentCount.toString(),

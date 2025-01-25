@@ -14,11 +14,11 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.input.pointer.pointerInput
 import androidx.compose.ui.input.pointer.positionChange
-import com.mvproject.tinyiptvkmp.core.common.AppConstants.FLOAT_VALUE_ZERO
-import com.mvproject.tinyiptvkmp.core.common.AppConstants.SCREEN_PERCENTAGE_25
-import com.mvproject.tinyiptvkmp.core.common.AppConstants.SCREEN_PERCENTAGE_30
-import com.mvproject.tinyiptvkmp.core.common.AppConstants.SCREEN_PERCENTAGE_40
-import com.mvproject.tinyiptvkmp.core.common.AppConstants.SCREEN_PERCENTAGE_75
+import com.mvproject.tinyiptvkmp.core.common.FLOAT_VALUE_ZERO
+import com.mvproject.tinyiptvkmp.core.common.SCREEN_PERCENTAGE_25
+import com.mvproject.tinyiptvkmp.core.common.SCREEN_PERCENTAGE_30
+import com.mvproject.tinyiptvkmp.core.common.SCREEN_PERCENTAGE_40
+import com.mvproject.tinyiptvkmp.core.common.SCREEN_PERCENTAGE_75
 import com.mvproject.tinyiptvkmp.features.player.PlayerUiAction
 import com.mvproject.tinyiptvkmp.features.player.PlayerUiState
 import kotlinx.coroutines.coroutineScope

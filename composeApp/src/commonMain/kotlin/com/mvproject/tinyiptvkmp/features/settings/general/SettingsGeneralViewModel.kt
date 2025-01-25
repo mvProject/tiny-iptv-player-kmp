@@ -10,7 +10,7 @@ package com.mvproject.tinyiptvkmp.features.settings.general
 import androidx.compose.runtime.Immutable
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.mvproject.tinyiptvkmp.core.common.AppConstants
+import com.mvproject.tinyiptvkmp.core.common.INT_VALUE_ZERO
 import com.mvproject.tinyiptvkmp.core.common.mvi.MviCore
 import com.mvproject.tinyiptvkmp.core.common.mvi.mviCore
 import com.mvproject.tinyiptvkmp.core.datastore.repository.PreferenceRepository
@@ -85,8 +85,8 @@ class SettingsGeneralViewModel(
 
 @Immutable
 data class SettingsGeneralUiState(
-    val infoUpdatePeriod: Int = AppConstants.INT_VALUE_ZERO,
-    val epgUpdatePeriod: Int = AppConstants.INT_VALUE_ZERO,
+    val infoUpdatePeriod: Int = INT_VALUE_ZERO,
+    val epgUpdatePeriod: Int = INT_VALUE_ZERO,
     val settingsType: SettingsGeneral? = null,
 ) {
     sealed interface SettingsGeneral {

@@ -10,8 +10,6 @@ package com.mvproject.tinyiptvkmp.features.player.components
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Row
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.rounded.AspectRatio
-import androidx.compose.material.icons.rounded.Crop
 import androidx.compose.material.icons.rounded.Favorite
 import androidx.compose.material.icons.rounded.FavoriteBorder
 import androidx.compose.material.icons.rounded.Fullscreen
@@ -22,6 +20,8 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import com.mvproject.tinyiptvkmp.core.domain.enums.VideoSize
+import com.mvproject.tinyiptvkmp.core.domain.enums.VideoSize.Companion.mapToIcon
 import com.mvproject.tinyiptvkmp.core.theme.dimensionSize
 import com.mvproject.tinyiptvkmp.core.ui.buttons.ControlButton
 import com.mvproject.tinyiptvkmp.core.ui.modifiers.SpacerWidth
@@ -31,6 +31,7 @@ import com.mvproject.tinyiptvkmp.features.player.PlayerUiState
 @Composable
 fun PlayerControls(
     modifier: Modifier = Modifier,
+    videoSize: VideoSize,
     isFavorite: Boolean,
     isPlaying: Boolean,
     isFullScreen: Boolean,
@@ -63,13 +64,7 @@ fun PlayerControls(
 
             SpacerWidth(width = MaterialTheme.dimensionSize.size8)
             ControlButton(
-                imageVector = Icons.Rounded.AspectRatio,
-                onClick = { onAction(PlayerUiAction.ChangeVideoRatio) },
-            )
-
-            SpacerWidth(width = MaterialTheme.dimensionSize.size8)
-            ControlButton(
-                imageVector = Icons.Rounded.Crop,
+                imageVector = videoSize.mapToIcon(),
                 onClick = { onAction(PlayerUiAction.ChangeVideoSize) },
             )
 

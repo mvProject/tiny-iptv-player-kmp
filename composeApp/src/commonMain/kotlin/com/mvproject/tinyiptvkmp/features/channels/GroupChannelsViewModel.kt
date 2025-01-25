@@ -15,7 +15,7 @@ import androidx.navigation.toRoute
 import com.mvproject.tinyiptvkmp.core.common.mvi.MviCore
 import com.mvproject.tinyiptvkmp.core.common.mvi.mviCore
 import com.mvproject.tinyiptvkmp.core.common.utils.CommonUtils.empty
-import com.mvproject.tinyiptvkmp.core.common.utils.TimeUtils
+import com.mvproject.tinyiptvkmp.core.common.utils.actualDate
 import com.mvproject.tinyiptvkmp.core.datastore.repository.PreferenceRepository
 import com.mvproject.tinyiptvkmp.core.domain.enums.ChannelsViewType
 import com.mvproject.tinyiptvkmp.core.domain.enums.ChannelsViewType.Companion.mapViewType
@@ -26,10 +26,10 @@ import com.mvproject.tinyiptvkmp.core.domain.usecase.GetChannelsEpgUseCase
 import com.mvproject.tinyiptvkmp.core.domain.usecase.GetGroupChannelsEpgUseCase
 import com.mvproject.tinyiptvkmp.core.domain.usecase.GetGroupChannelsUseCase
 import com.mvproject.tinyiptvkmp.core.domain.usecase.ToggleFavoriteChannelUseCase
-import com.mvproject.tinyiptvkmp.core.domain.utils.ChannelsUtils.mapProgramIds
-import com.mvproject.tinyiptvkmp.core.domain.utils.ChannelsUtils.mapPrograms
-import com.mvproject.tinyiptvkmp.core.domain.utils.ChannelsUtils.replaceUpdated
-import com.mvproject.tinyiptvkmp.core.domain.utils.ChannelsUtils.toggleFavorite
+import com.mvproject.tinyiptvkmp.core.domain.utils.mapProgramIds
+import com.mvproject.tinyiptvkmp.core.domain.utils.mapPrograms
+import com.mvproject.tinyiptvkmp.core.domain.utils.replaceUpdated
+import com.mvproject.tinyiptvkmp.core.domain.utils.toggleFavorite
 import com.mvproject.tinyiptvkmp.features.channels.GroupChannelsUiState.GroupChannelsOSD
 import com.mvproject.tinyiptvkmp.navigation.AppRoutes
 import kotlinx.coroutines.Dispatchers
@@ -120,7 +120,7 @@ class GroupChannelsViewModel(
     }
 
     private suspend fun refreshEpgPrograms() {
-        if (TimeUtils.actualDate - lastRefresh < 1.minutes.inWholeMilliseconds) {
+        if (actualDate - lastRefresh < 1.minutes.inWholeMilliseconds) {
             return
         }
         val channels = uiState.value.channels
@@ -136,7 +136,7 @@ class GroupChannelsViewModel(
                 }
             }
 
-            lastRefresh = TimeUtils.actualDate
+            lastRefresh = actualDate
         }
     }
 

@@ -1,6 +1,6 @@
 package com.mvproject.tinyiptvkmp.core.domain.usecase
 
-import com.mvproject.tinyiptvkmp.core.common.AppConstants
+import com.mvproject.tinyiptvkmp.core.common.INT_VALUE_ZERO
 import com.mvproject.tinyiptvkmp.core.data.repository.FavoriteChannelsRepository
 import com.mvproject.tinyiptvkmp.core.data.repository.PlaylistChannelsRepository
 import com.mvproject.tinyiptvkmp.core.domain.enums.FavoriteType
@@ -41,7 +41,7 @@ class GetPlaylistGroupUseCase(
                                     groupContentCount = favCount,
                                 ),
                             )
-                        } else if (favCount > AppConstants.INT_VALUE_ZERO) {
+                        } else if (favCount > INT_VALUE_ZERO) {
                             add(
                                 ChannelsGroup(
                                     groupType = GroupType.FAVORITE,

@@ -29,12 +29,12 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.style.TextAlign
-import com.mvproject.tinyiptvkmp.core.common.AppConstants.COUNT_ZERO_FLOAT
-import com.mvproject.tinyiptvkmp.core.common.AppConstants.PROGRESS_STATE_COMPLETE
+import com.mvproject.tinyiptvkmp.core.common.COUNT_ZERO_FLOAT
+import com.mvproject.tinyiptvkmp.core.common.PROGRESS_STATE_COMPLETE
 import com.mvproject.tinyiptvkmp.core.common.utils.CommonUtils.delimiterDash
 import com.mvproject.tinyiptvkmp.core.common.utils.CommonUtils.empty
 import com.mvproject.tinyiptvkmp.core.common.utils.CommonUtils.space
-import com.mvproject.tinyiptvkmp.core.common.utils.TimeUtils.calculateDuration
+import com.mvproject.tinyiptvkmp.core.common.utils.calculateDuration
 import com.mvproject.tinyiptvkmp.core.domain.PreviewTestData
 import com.mvproject.tinyiptvkmp.core.domain.model.EpgProgram
 import com.mvproject.tinyiptvkmp.core.theme.AppTheme

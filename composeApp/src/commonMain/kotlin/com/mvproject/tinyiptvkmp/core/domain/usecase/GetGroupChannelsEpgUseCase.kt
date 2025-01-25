@@ -1,6 +1,6 @@
 package com.mvproject.tinyiptvkmp.core.domain.usecase
 
-import com.mvproject.tinyiptvkmp.core.common.utils.TimeUtils
+import com.mvproject.tinyiptvkmp.core.common.utils.actualDate
 import com.mvproject.tinyiptvkmp.core.data.repository.EpgProgramRepository
 import com.mvproject.tinyiptvkmp.core.domain.utils.ChannelEpgMap
 
@@ -16,7 +16,7 @@ class GetGroupChannelsEpgUseCase(
             epgProgramRepository
                 .getEpgProgramsByIds(
                     channelIds = channelsIds,
-                    time = TimeUtils.actualDate,
+                    time = actualDate,
                 ).asSequence()
 
         val groupedProgramsByIds = programsByIds

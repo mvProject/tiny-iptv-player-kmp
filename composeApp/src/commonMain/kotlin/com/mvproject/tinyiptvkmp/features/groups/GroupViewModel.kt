@@ -11,9 +11,9 @@ import androidx.compose.runtime.Immutable
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import co.touchlab.kermit.Logger
-import com.mvproject.tinyiptvkmp.core.common.AppConstants.FLOAT_VALUE_ZERO
-import com.mvproject.tinyiptvkmp.core.common.AppConstants.INT_VALUE_1
-import com.mvproject.tinyiptvkmp.core.common.AppConstants.INT_VALUE_ZERO
+import com.mvproject.tinyiptvkmp.core.common.FLOAT_VALUE_ZERO
+import com.mvproject.tinyiptvkmp.core.common.INT_VALUE_1
+import com.mvproject.tinyiptvkmp.core.common.INT_VALUE_ZERO
 import com.mvproject.tinyiptvkmp.core.common.mvi.MviCore
 import com.mvproject.tinyiptvkmp.core.common.mvi.mviCore
 import com.mvproject.tinyiptvkmp.core.data.repository.PlaylistsRepository

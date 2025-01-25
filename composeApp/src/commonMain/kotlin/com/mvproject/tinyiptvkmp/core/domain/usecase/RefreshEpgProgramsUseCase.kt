@@ -1,10 +1,12 @@
 package com.mvproject.tinyiptvkmp.core.domain.usecase
 
-import com.mvproject.tinyiptvkmp.core.common.AppConstants
-import com.mvproject.tinyiptvkmp.core.common.AppConstants.INT_VALUE_1
-import com.mvproject.tinyiptvkmp.core.common.AppConstants.INT_VALUE_ZERO
+import com.mvproject.tinyiptvkmp.core.common.INT_VALUE_1
+import com.mvproject.tinyiptvkmp.core.common.INT_VALUE_ZERO
+import com.mvproject.tinyiptvkmp.core.common.PROGRAMS_SOURCE_URL
 import com.mvproject.tinyiptvkmp.core.common.utils.CommonUtils.empty
-import com.mvproject.tinyiptvkmp.core.common.utils.TimeUtils
+import com.mvproject.tinyiptvkmp.core.common.utils.actualDate
+import com.mvproject.tinyiptvkmp.core.common.utils.parseToInstant
+import com.mvproject.tinyiptvkmp.core.common.utils.typeToDuration
 import com.mvproject.tinyiptvkmp.core.data.repository.EpgProgramRepository
 import com.mvproject.tinyiptvkmp.core.datastore.repository.PreferenceRepository
 import com.mvproject.tinyiptvkmp.core.network.data.response.EpgProgramResponse
@@ -22,10 +24,10 @@ class RefreshEpgProgramsUseCase(
 ) {
     suspend operator fun invoke(onRefreshState: (RefreshState) -> Unit) {
         withContext(Dispatchers.IO) {
-            val currentDate = TimeUtils.actualDate
+            val currentDate = actualDate
             val lastUpdate = preferenceRepository.lastEpgUpdate()
             val periodUpdate =
-                TimeUtils.typeToDuration(preferenceRepository.getMainEpgUpdatePeriod())
+                typeToDuration(preferenceRepository.getMainEpgUpdatePeriod())
             val lastUpdateElapsed = currentDate - lastUpdate
             val isRequired = lastUpdateElapsed > periodUpdate
 
@@ -39,10 +41,10 @@ class RefreshEpgProgramsUseCase(
                 onRefreshState(RefreshState.Started)
 
                 epgProgramDatasource.downloadAndParseXml(
-                    url = AppConstants.PROGRAMS_SOURCE_URL,
+                    url = PROGRAMS_SOURCE_URL,
                     onProgrammeParsed = { programme ->
-                        val start = TimeUtils.parseToInstant(programme.start)
-                        val end = TimeUtils.parseToInstant(programme.stop)
+                        val start = parseToInstant(programme.start)
+                        val end = parseToInstant(programme.stop)
                         if (end >= currentDate) {
                             programmeCount++
                             val epgProgramResponse =

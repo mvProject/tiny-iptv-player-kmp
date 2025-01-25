@@ -7,7 +7,7 @@
 
 package com.mvproject.tinyiptvkmp.core.domain.model
 
-import com.mvproject.tinyiptvkmp.core.common.AppConstants.LONG_VALUE_ZERO
+import com.mvproject.tinyiptvkmp.core.common.LONG_VALUE_ZERO
 import com.mvproject.tinyiptvkmp.core.common.utils.CommonUtils.empty
 import com.mvproject.tinyiptvkmp.core.domain.enums.PlaylistType
 

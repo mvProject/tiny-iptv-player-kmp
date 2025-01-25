@@ -13,8 +13,7 @@ import androidx.lifecycle.viewModelScope
 import com.mvproject.tinyiptvkmp.core.common.mvi.MviCore
 import com.mvproject.tinyiptvkmp.core.common.mvi.mviCore
 import com.mvproject.tinyiptvkmp.core.datastore.repository.PreferenceRepository
-import com.mvproject.tinyiptvkmp.core.domain.enums.RatioMode
-import com.mvproject.tinyiptvkmp.core.domain.enums.ResizeMode
+import com.mvproject.tinyiptvkmp.core.domain.enums.VideoSize
 import com.mvproject.tinyiptvkmp.features.settings.player.SettingsPlayerUiState.SettingsPlayer
 import kotlinx.coroutines.launch
 
@@ -28,14 +27,12 @@ class SettingsPlayerViewModel(
     init {
         viewModelScope.launch {
             val isFullscreenEnabled = preferenceRepository.getDefaultFullscreenMode()
-            val resizeMode = preferenceRepository.getDefaultResizeMode()
-            val ratioMode = preferenceRepository.getDefaultRatioMode()
+            val videoSize = preferenceRepository.getDefaultVideoSizeMode()
 
             updateUiState {
                 copy(
                     isFullscreenEnabled = isFullscreenEnabled,
-                    resizeMode = resizeMode,
-                    ratioMode = ratioMode
+                    videoSize = videoSize
                 )
             }
         }
@@ -48,9 +45,8 @@ class SettingsPlayerViewModel(
             )
 
             is SettingsPlayerUiAction.SetFullScreenMode -> setFullscreenMode(state = uiAction.state)
-            is SettingsPlayerUiAction.SetRatioMode -> setRatioMode(mode = uiAction.mode)
-            is SettingsPlayerUiAction.SetResizeMode -> setResizeMode(mode = uiAction.mode)
             is SettingsPlayerUiAction.ToggleOption -> toggleOption(type = uiAction.type)
+            is SettingsPlayerUiAction.SetVideoSize -> setVideoSizeMode(mode = uiAction.mode)
         }
     }
 
@@ -70,20 +66,11 @@ class SettingsPlayerViewModel(
         }
     }
 
-    private fun setResizeMode(mode: Int) {
+    private fun setVideoSizeMode(mode: Int) {
         viewModelScope.launch {
-            preferenceRepository.setDefaultResizeMode(mode = mode)
+            preferenceRepository.setDefaultVideoSizeMode(mode = mode)
             updateUiState {
-                copy(resizeMode = mode, settingsType = null)
-            }
-        }
-    }
-
-    private fun setRatioMode(mode: Int) {
-        viewModelScope.launch {
-            preferenceRepository.setDefaultRatioMode(mode = mode)
-            updateUiState {
-                copy(ratioMode = mode, settingsType = null)
+                copy(videoSize = mode, settingsType = null)
             }
         }
     }
@@ -91,20 +78,17 @@ class SettingsPlayerViewModel(
 
 @Immutable
 data class SettingsPlayerUiState(
-    val resizeMode: Int = ResizeMode.Fill.value,
-    val ratioMode: Int = RatioMode.WideScreen.value,
+    val videoSize: Int = VideoSize.WideScreen.ordinal,
     val isFullscreenEnabled: Boolean = true,
     val settingsType: SettingsPlayer? = null,
 ) {
     sealed interface SettingsPlayer {
-        data object ResizeMode : SettingsPlayer
-        data object RatioMode : SettingsPlayer
+        data object VideoSize : SettingsPlayer
     }
 }
 
 sealed interface SettingsPlayerUiAction {
-    data class SetResizeMode(val mode: Int) : SettingsPlayerUiAction
-    data class SetRatioMode(val mode: Int) : SettingsPlayerUiAction
+    data class SetVideoSize(val mode: Int) : SettingsPlayerUiAction
     data class SetFullScreenMode(val state: Boolean) : SettingsPlayerUiAction
     data class ToggleOption(val type: SettingsPlayer) : SettingsPlayerUiAction
     data object NavigateBack : SettingsPlayerUiAction

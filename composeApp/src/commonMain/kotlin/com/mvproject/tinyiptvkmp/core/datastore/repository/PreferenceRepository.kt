@@ -15,11 +15,11 @@ import androidx.datastore.preferences.core.intPreferencesKey
 import androidx.datastore.preferences.core.longPreferencesKey
 import androidx.datastore.preferences.core.stringPreferencesKey
 import co.touchlab.kermit.Logger
-import com.mvproject.tinyiptvkmp.core.common.AppConstants.INT_VALUE_1
-import com.mvproject.tinyiptvkmp.core.common.AppConstants.INT_VALUE_5
-import com.mvproject.tinyiptvkmp.core.common.AppConstants.INT_VALUE_ZERO
-import com.mvproject.tinyiptvkmp.core.common.AppConstants.LONG_NO_VALUE
-import com.mvproject.tinyiptvkmp.core.common.AppConstants.LONG_VALUE_ZERO
+import com.mvproject.tinyiptvkmp.core.common.INT_VALUE_1
+import com.mvproject.tinyiptvkmp.core.common.INT_VALUE_5
+import com.mvproject.tinyiptvkmp.core.common.INT_VALUE_ZERO
+import com.mvproject.tinyiptvkmp.core.common.LONG_NO_VALUE
+import com.mvproject.tinyiptvkmp.core.common.LONG_VALUE_ZERO
 import com.mvproject.tinyiptvkmp.core.common.utils.CommonUtils.empty
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.map
@@ -73,6 +73,18 @@ class PreferenceRepository(
         dataStore.data
             .map { preferences ->
                 preferences[DEFAULT_RESIZE_MODE] ?: INT_VALUE_ZERO
+            }.first()
+
+    suspend fun setDefaultVideoSizeMode(mode: Int) {
+        dataStore.edit { settings ->
+            settings[DEFAULT_VIDEO_SIZE_MODE] = mode
+        }
+    }
+
+    suspend fun getDefaultVideoSizeMode() =
+        dataStore.data
+            .map { preferences ->
+                preferences[DEFAULT_VIDEO_SIZE_MODE] ?: INT_VALUE_ZERO
             }.first()
 
     suspend fun setDefaultRatioMode(mode: Int) {
@@ -178,6 +190,7 @@ class PreferenceRepository(
         val EPG_MAIN_LAST_UPDATE_PERIOD = intPreferencesKey("EpgMainLastUpdatePeriod")
 
         val DEFAULT_RESIZE_MODE = intPreferencesKey("DefaultResizeMode")
+        val DEFAULT_VIDEO_SIZE_MODE = intPreferencesKey("DefaultVideoSizeMode")
         val DEFAULT_RATIO_MODE = intPreferencesKey("DefaultRatioMode")
         val DEFAULT_FULLSCREEN_MODE = booleanPreferencesKey("DefaultFullscreenMode")
 
