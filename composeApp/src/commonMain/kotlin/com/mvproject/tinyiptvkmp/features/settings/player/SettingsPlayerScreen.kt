@@ -25,8 +25,9 @@ import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
 import com.mvproject.tinyiptvkmp.core.common.mvi.CollectUiEffect
-import com.mvproject.tinyiptvkmp.core.domain.enums.RatioMode
-import com.mvproject.tinyiptvkmp.core.domain.enums.ResizeMode
+import com.mvproject.tinyiptvkmp.core.domain.enums.VideoSize
+import com.mvproject.tinyiptvkmp.core.domain.enums.VideoSize.Companion.mapToString
+import com.mvproject.tinyiptvkmp.core.theme.AppTheme
 import com.mvproject.tinyiptvkmp.core.theme.colorSchemeExtended
 import com.mvproject.tinyiptvkmp.core.theme.dimensionOpacity
 import com.mvproject.tinyiptvkmp.core.theme.dimensionSize
@@ -34,9 +35,9 @@ import com.mvproject.tinyiptvkmp.core.ui.toolbars.AppBarWithBackNav
 import com.mvproject.tinyiptvkmp.features.settings.components.SettingsSelector
 import com.mvproject.tinyiptvkmp.features.settings.player.SettingsPlayerUiState.SettingsPlayer
 import org.jetbrains.compose.resources.stringResource
+import org.jetbrains.compose.ui.tooling.preview.Preview
 import tinyiptvkmp.composeapp.generated.resources.Res
 import tinyiptvkmp.composeapp.generated.resources.option_default_fullscreen_mode
-import tinyiptvkmp.composeapp.generated.resources.option_default_ratio_mode
 import tinyiptvkmp.composeapp.generated.resources.option_default_resize_mode
 import tinyiptvkmp.composeapp.generated.resources.scr_player_settings_title
 
@@ -113,27 +114,14 @@ private fun SettingsPlayerScreen(
 
             SettingsSelector(
                 title = stringResource(Res.string.option_default_resize_mode),
-                selectedIndex = uiState.resizeMode,
-                isExpanded = uiState.settingsType == SettingsPlayer.ResizeMode,
-                options = ResizeMode.entries.map { stringResource(it.title) },
+                selectedIndex = uiState.videoSize,
+                isExpanded = uiState.settingsType == SettingsPlayer.VideoSize,
+                options = VideoSize.entries.map { stringResource(it.mapToString()) },
                 onClick = {
-                    onAction(SettingsPlayerUiAction.ToggleOption(SettingsPlayer.ResizeMode))
+                    onAction(SettingsPlayerUiAction.ToggleOption(SettingsPlayer.VideoSize))
                 },
                 onSelect = {
-                    onAction(SettingsPlayerUiAction.SetResizeMode(mode = it))
-                }
-            )
-
-            SettingsSelector(
-                title = stringResource(Res.string.option_default_ratio_mode),
-                selectedIndex = uiState.ratioMode,
-                isExpanded = uiState.settingsType == SettingsPlayer.RatioMode,
-                options = RatioMode.entries.map { stringResource(it.title) },
-                onClick = {
-                    onAction(SettingsPlayerUiAction.ToggleOption(SettingsPlayer.RatioMode))
-                },
-                onSelect = {
-                    onAction(SettingsPlayerUiAction.SetRatioMode(mode = it))
+                    onAction(SettingsPlayerUiAction.SetVideoSize(mode = it))
                 }
             )
         }
@@ -141,12 +129,13 @@ private fun SettingsPlayerScreen(
 }
 
 // todo replace preview
-/*@Preview(showBackground = true, showSystemUi = true)
+@Preview
 @Composable
 fun PreviewDarkSettingsPlayerView() {
-    VideoAppTheme(darkTheme = true) {
-        SettingsPlayerView(
-            state = SettingsPlayerState()
+    AppTheme {
+        SettingsPlayerScreen(
+            uiState = SettingsPlayerUiState(),
+            onAction = {}
         )
     }
-}*/
+}

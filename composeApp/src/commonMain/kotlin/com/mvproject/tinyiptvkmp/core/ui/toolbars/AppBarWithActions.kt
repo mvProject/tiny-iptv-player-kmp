@@ -30,7 +30,7 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.style.TextOverflow
-import com.mvproject.tinyiptvkmp.core.common.AppConstants.INT_VALUE_1
+import com.mvproject.tinyiptvkmp.core.common.INT_VALUE_1
 import com.mvproject.tinyiptvkmp.core.domain.enums.ChannelsViewType
 import com.mvproject.tinyiptvkmp.core.theme.colorSchemeExtended
 import com.mvproject.tinyiptvkmp.core.theme.dimensionSize

@@ -8,7 +8,7 @@
 package com.mvproject.tinyiptvkmp.core.data.repository
 
 import co.touchlab.kermit.Logger
-import com.mvproject.tinyiptvkmp.core.common.AppConstants.INT_VALUE_1
+import com.mvproject.tinyiptvkmp.core.common.INT_VALUE_1
 import com.mvproject.tinyiptvkmp.core.database.db.AppDatabase
 import com.mvproject.tinyiptvkmp.core.database.entity.FavoriteChannelEntity
 import com.mvproject.tinyiptvkmp.core.domain.enums.FavoriteType

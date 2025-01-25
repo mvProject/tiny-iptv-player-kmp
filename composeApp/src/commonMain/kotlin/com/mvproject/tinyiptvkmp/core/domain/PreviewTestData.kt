@@ -7,7 +7,7 @@
 
 package com.mvproject.tinyiptvkmp.core.domain
 
-import com.mvproject.tinyiptvkmp.core.common.utils.TimeUtils.actualDate
+import com.mvproject.tinyiptvkmp.core.common.utils.actualDate
 import com.mvproject.tinyiptvkmp.core.domain.enums.GroupType
 import com.mvproject.tinyiptvkmp.core.domain.model.ChannelsGroup
 import com.mvproject.tinyiptvkmp.core.domain.model.EpgProgram

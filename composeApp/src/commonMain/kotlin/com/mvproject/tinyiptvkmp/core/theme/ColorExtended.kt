@@ -43,8 +43,14 @@ val darkColorSchemeExtended =
         activeBorder = videoAppLightOnSurface,
         inactiveBorder = whiteDuck,
         activeProgramTitle = videoAppLightOnSurface,
-        divider = videoAppLightOnSurface,
-        progress = videoAppLightOnSurface
+        emptyProgramTitle = offWhite,
+        programTitle = whiteDuck,
+        volumeIndicator = videoAppLightOnSurface,
+        timeColor = offWhite,
+        divider = whiteDuck,
+        progress = videoAppLightOnSurface,
+        toolbarTitle = whiteDuck,
+        activeInput = whiteDuck
     )
 
 val LocalColorSchemeExtended = staticCompositionLocalOf { ColorSchemeExtended() }

@@ -46,8 +46,8 @@ import com.mvproject.tinyiptvkmp.features.player.components.ProgramInfo
 import com.mvproject.tinyiptvkmp.features.player.components.handleHorizontalGestures
 import com.mvproject.tinyiptvkmp.features.player.components.handleTapGestures
 import com.mvproject.tinyiptvkmp.features.player.components.handleVerticalGestures
-import com.mvproject.tinyiptvkmp.features.player.utils.PlayerUtils.programDescription
-import com.mvproject.tinyiptvkmp.features.player.utils.PlayerUtils.programTitle
+import com.mvproject.tinyiptvkmp.features.player.utils.programDescription
+import com.mvproject.tinyiptvkmp.features.player.utils.programTitle
 import org.jetbrains.compose.resources.painterResource
 import org.jetbrains.compose.resources.stringResource
 import tinyiptvkmp.composeapp.generated.resources.Res
@@ -220,9 +220,10 @@ private fun PlayerContent(
         PlayerToolbar(
             modifier = Modifier.fillMaxSize(),
             isVisible = uiState.isControlUiVisible,
+            videoSize = uiState.videoSize,
             currentChannel = uiState.currentChannel,
             isPlaying = uiState.isPlaying,
-            isFullScreen = true,
+            isFullScreen = uiState.isFullscreen,
             onAction = onAction
         )
     }

@@ -26,6 +26,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.alpha
 import androidx.compose.ui.text.style.TextAlign
 import com.mvproject.tinyiptvkmp.core.domain.enums.FavoriteType
+import com.mvproject.tinyiptvkmp.core.domain.enums.VideoSize
 import com.mvproject.tinyiptvkmp.core.domain.model.EpgProgram
 import com.mvproject.tinyiptvkmp.core.domain.model.TvChannel
 import com.mvproject.tinyiptvkmp.core.theme.colorSchemeExtended
@@ -42,6 +43,7 @@ fun PlayerToolbar(
     modifier: Modifier = Modifier,
     currentChannel: TvChannel,
     programCount: Int = 2,
+    videoSize: VideoSize,
     isVisible: Boolean = false,
     isPlaying: Boolean = false,
     isFullScreen: Boolean = false,
@@ -88,6 +90,7 @@ fun PlayerToolbar(
                     isFavorite = currentChannel.favoriteType != FavoriteType.NONE,
                     isPlaying = isPlaying,
                     isFullScreen = isFullScreen,
+                    videoSize = videoSize,
                     onAction = onAction
                 )
             }

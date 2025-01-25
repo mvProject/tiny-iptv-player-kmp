@@ -1,8 +1,9 @@
 package com.mvproject.tinyiptvkmp.core.domain.usecase
 
 import co.touchlab.kermit.Logger
-import com.mvproject.tinyiptvkmp.core.common.AppConstants
-import com.mvproject.tinyiptvkmp.core.common.utils.TimeUtils
+import com.mvproject.tinyiptvkmp.core.common.LONG_VALUE_ZERO
+import com.mvproject.tinyiptvkmp.core.common.utils.actualDate
+import com.mvproject.tinyiptvkmp.core.common.utils.typeToDuration
 import com.mvproject.tinyiptvkmp.core.data.repository.FavoriteChannelsRepository
 import com.mvproject.tinyiptvkmp.core.data.repository.PlaylistChannelsRepository
 import com.mvproject.tinyiptvkmp.core.data.repository.PlaylistsRepository
@@ -26,7 +27,7 @@ class UpdateRemotePlaylistChannelsUseCase(
         withContext(Dispatchers.IO) {
             var isRefreshEpgIdRequired = false
 
-            val currentDate = TimeUtils.actualDate
+            val currentDate = actualDate
             val remote =
                 playlistsRepository
                     .getAllPlaylists()
@@ -35,8 +36,8 @@ class UpdateRemotePlaylistChannelsUseCase(
             val playlistUpdates =
                 buildList {
                     remote.forEach { playlist ->
-                        val updateDuration = TimeUtils.typeToDuration(playlist.updatePeriod.toInt())
-                        val isUpdateSet = updateDuration > AppConstants.LONG_VALUE_ZERO
+                        val updateDuration = typeToDuration(playlist.updatePeriod.toInt())
+                        val isUpdateSet = updateDuration > LONG_VALUE_ZERO
                         val isRequiredUpdate =
                             currentDate - playlist.lastUpdateDate > updateDuration
                         val isUpdateAllowed = isUpdateSet && isRequiredUpdate

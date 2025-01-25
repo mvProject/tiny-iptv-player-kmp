@@ -1,9 +1,12 @@
 package com.mvproject.tinyiptvkmp.core.domain.usecase
 
-import co.touchlab.kermit.Logger
-import com.mvproject.tinyiptvkmp.core.common.AppConstants
+import com.mvproject.tinyiptvkmp.core.common.INT_VALUE_1
+import com.mvproject.tinyiptvkmp.core.common.INT_VALUE_ZERO
+import com.mvproject.tinyiptvkmp.core.common.PROGRAMS_SOURCE_URL
 import com.mvproject.tinyiptvkmp.core.common.utils.CommonUtils.empty
-import com.mvproject.tinyiptvkmp.core.common.utils.TimeUtils
+import com.mvproject.tinyiptvkmp.core.common.utils.actualDate
+import com.mvproject.tinyiptvkmp.core.common.utils.parseToInstant
+import com.mvproject.tinyiptvkmp.core.common.utils.typeToDuration
 import com.mvproject.tinyiptvkmp.core.data.repository.EpgProgramRepository
 import com.mvproject.tinyiptvkmp.core.datastore.repository.PreferenceRepository
 import com.mvproject.tinyiptvkmp.core.network.data.response.EpgProgramResponse
@@ -19,26 +22,29 @@ class RefreshEpgProgramsUseCase(
     private val epgProgramRepository: EpgProgramRepository,
     private val epgProgramDatasource: EpgProgramDatasource,
 ) {
-    suspend operator fun invoke() {
+    suspend operator fun invoke(onRefreshState: (RefreshState) -> Unit) {
         withContext(Dispatchers.IO) {
-            val currentDate = TimeUtils.actualDate
+            val currentDate = actualDate
             val lastUpdate = preferenceRepository.lastEpgUpdate()
             val periodUpdate =
-                TimeUtils.typeToDuration(preferenceRepository.getMainEpgUpdatePeriod())
+                typeToDuration(preferenceRepository.getMainEpgUpdatePeriod())
             val lastUpdateElapsed = currentDate - lastUpdate
             val isRequired = lastUpdateElapsed > periodUpdate
-            Logger.d("testing RefreshEpgProgramsUseCase isRequired $isRequired")
+
             if (isRequired) {
-                delay(1.minutes)
-                var programmeCount = 0
+                delay(INT_VALUE_1.minutes)
+
+                var programmeCount = INT_VALUE_ZERO
                 val programsDto = mutableListOf<EpgProgramResponse>()
                 var currentId = String.empty
 
+                onRefreshState(RefreshState.Started)
+
                 epgProgramDatasource.downloadAndParseXml(
-                    url = AppConstants.PROGRAMS_SOURCE_URL,
+                    url = PROGRAMS_SOURCE_URL,
                     onProgrammeParsed = { programme ->
-                        val start = TimeUtils.parseToInstant(programme.start)
-                        val end = TimeUtils.parseToInstant(programme.stop)
+                        val start = parseToInstant(programme.start)
+                        val end = parseToInstant(programme.stop)
                         if (end >= currentDate) {
                             programmeCount++
                             val epgProgramResponse =
@@ -51,6 +57,7 @@ class RefreshEpgProgramsUseCase(
 
                             if (currentId.isBlank()) {
                                 currentId = programme.channel
+                                onRefreshState(RefreshState.Update)
                                 programsDto.add(epgProgramResponse)
                             } else {
                                 if (programme.channel == currentId) {
@@ -64,20 +71,25 @@ class RefreshEpgProgramsUseCase(
                                     }
                                     programsDto.clear()
                                     currentId = programme.channel
+                                    onRefreshState(RefreshState.Update)
                                     programsDto.add(epgProgramResponse)
                                 }
                             }
                         }
-                        if (programmeCount > 0 && programmeCount % 10000 == 0) {
-                            Logger.i("testing Parsed $programmeCount programmes")
-                        }
                     },
                 )
-                Logger.w("testing Parsed Complete $programmeCount programmes")
-                if (programmeCount != 0) {
+
+                if (programmeCount != INT_VALUE_ZERO) {
                     preferenceRepository.setEpgLastUpdate(timestamp = currentDate)
                 }
+                onRefreshState(RefreshState.Ended)
             }
         }
     }
+}
+
+sealed interface RefreshState {
+    data object Update : RefreshState
+    data object Started : RefreshState
+    data object Ended : RefreshState
 }

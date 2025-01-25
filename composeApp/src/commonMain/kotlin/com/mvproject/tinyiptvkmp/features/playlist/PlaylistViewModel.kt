@@ -13,7 +13,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import androidx.navigation.toRoute
 import co.touchlab.kermit.Logger
-import com.mvproject.tinyiptvkmp.core.common.AppConstants.LONG_VALUE_ZERO
+import com.mvproject.tinyiptvkmp.core.common.LONG_VALUE_ZERO
 import com.mvproject.tinyiptvkmp.core.common.mvi.MviCore
 import com.mvproject.tinyiptvkmp.core.common.mvi.mviCore
 import com.mvproject.tinyiptvkmp.core.common.utils.CommonUtils.empty

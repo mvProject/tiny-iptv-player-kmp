@@ -12,9 +12,9 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.remember
 import androidx.compose.ui.platform.LocalContext
 import androidx.media3.common.Player
-import androidx.media3.common.VideoSize
 import androidx.media3.exoplayer.ExoPlayer
 import com.mvproject.tinyiptvkmp.features.player.PlayerUiAction
+import com.mvproject.tinyiptvkmp.features.player.components.PlayerState
 import com.mvproject.tinyiptvkmp.utils.ExoPlayerUtils.createMediaItem
 import com.mvproject.tinyiptvkmp.utils.ExoPlayerUtils.createVideoPlayer
 import com.mvproject.tinyiptvkmp.utils.ExoPlayerUtils.mapToVideoPlaybackState
@@ -47,19 +47,6 @@ class PlayerStateImpl(
         player.volume = value
     }
 
-    /*    override fun onMediaItemTransition(
-            mediaItem: MediaItem?,
-            reason: Int,
-        ) {
-            val data = mediaItem?.mediaMetadata?.displayTitle.toString()
-            onPlaybackStateAction(
-                PlaybackStateActions.OnMediaItemTransition(
-                    mediaTitle = data,
-                    index = player.currentMediaItemIndex,
-                ),
-            )
-        }*/
-
     override fun onIsPlayingChanged(isPlaying: Boolean) {
         onPlaybackAction(
             PlayerUiAction.OnIsPlayingChanged(isPlaying),
@@ -75,16 +62,6 @@ class PlayerStateImpl(
 
         onPlaybackAction(
             PlayerUiAction.OnPlaybackStateChanged(state),
-        )
-    }
-
-    override fun onVideoSizeChanged(videoSize: VideoSize) {
-        onPlaybackAction(
-            PlayerUiAction.OnVideoSizeChanged(
-                videoSize.height,
-                videoSize.width,
-                videoSize.pixelWidthHeightRatio,
-            ),
         )
     }
 
@@ -120,18 +97,4 @@ class PlayerStateImpl(
             playWhenReady = true
         }
     }
-}
-
-interface PlayerState {
-    fun play()
-
-    fun pause()
-
-    fun setVolume(value: Float)
-
-    fun setPlayingState(value: Boolean)
-
-    fun restartPlayer()
-
-    fun setPlayerChannel(channelUrl: String)
 }

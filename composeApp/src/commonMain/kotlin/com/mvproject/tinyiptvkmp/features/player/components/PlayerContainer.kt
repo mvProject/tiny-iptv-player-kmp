@@ -4,7 +4,7 @@ import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
-import com.mvproject.tinyiptvkmp.core.common.utils.PlayerUtils.adaptiveLayout
+import com.mvproject.tinyiptvkmp.core.common.utils.adaptiveLayout
 import com.mvproject.tinyiptvkmp.features.player.PlayerUiAction
 import com.mvproject.tinyiptvkmp.features.player.PlayerUiState
 
@@ -19,10 +19,7 @@ fun PlayerContainer(
         Box(modifier = Modifier.fillMaxSize()) {
             Box(
                 modifier = Modifier
-                    .adaptiveLayout(
-                        aspectRatio = uiState.videoRatio,
-                        resizeMode = uiState.videoResizeMode,
-                    )
+                    .adaptiveLayout(videoSize = uiState.videoSize)
             ) {
                 PlayerView(
                     uiState = uiState,

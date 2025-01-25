@@ -11,7 +11,9 @@ import androidx.compose.runtime.Immutable
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import co.touchlab.kermit.Logger
-import com.mvproject.tinyiptvkmp.core.common.AppConstants.INT_VALUE_1
+import com.mvproject.tinyiptvkmp.core.common.FLOAT_VALUE_ZERO
+import com.mvproject.tinyiptvkmp.core.common.INT_VALUE_1
+import com.mvproject.tinyiptvkmp.core.common.INT_VALUE_ZERO
 import com.mvproject.tinyiptvkmp.core.common.mvi.MviCore
 import com.mvproject.tinyiptvkmp.core.common.mvi.mviCore
 import com.mvproject.tinyiptvkmp.core.data.repository.PlaylistsRepository
@@ -23,6 +25,7 @@ import com.mvproject.tinyiptvkmp.core.domain.usecase.CleanProgramsUseCase
 import com.mvproject.tinyiptvkmp.core.domain.usecase.GetPlaylistGroupUseCase
 import com.mvproject.tinyiptvkmp.core.domain.usecase.RefreshEpgChannelsUseCase
 import com.mvproject.tinyiptvkmp.core.domain.usecase.RefreshEpgProgramsUseCase
+import com.mvproject.tinyiptvkmp.core.domain.usecase.RefreshState
 import com.mvproject.tinyiptvkmp.core.domain.usecase.SavePlaylistContentUseCase
 import com.mvproject.tinyiptvkmp.core.domain.usecase.SelectPlaylistUseCase
 import com.mvproject.tinyiptvkmp.core.domain.usecase.UpdateChannelsEpgInfoUseCase
@@ -47,6 +50,9 @@ class GroupViewModel(
     private val updateChannelsEpgInfoUseCase: UpdateChannelsEpgInfoUseCase,
     private val cleanProgramsUseCase: CleanProgramsUseCase,
 ) : ViewModel(), MviCore<GroupUiState, GroupUiAction, GroupUiEffect> by mviCore(GroupUiState()) {
+
+    private val channelsCount = 2000
+    private var current = INT_VALUE_ZERO
 
     init {
         playlistsRepository
@@ -84,7 +90,21 @@ class GroupViewModel(
 
             cleanProgramsUseCase()
 
-            refreshEpgProgramsUseCase()
+            refreshEpgProgramsUseCase(
+                onRefreshState = { state ->
+                    when (state) {
+                        RefreshState.Update -> {
+                            current += INT_VALUE_1
+                            val progress = current / channelsCount.toFloat()
+                            updateUiState { copy(progress = progress) }
+                        }
+
+                        else -> {
+                            updateUiState { copy(isUpdating = state == RefreshState.Started) }
+                        }
+                    }
+                }
+            )
         }
     }
 
@@ -148,6 +168,8 @@ data class GroupUiState(
     val selectedPlaylist: Playlist = Playlist(),
     val isPlaylistSelectorVisible: Boolean = false,
     val isLoading: Boolean = false,
+    val isUpdating: Boolean = false,
+    val progress: Float = FLOAT_VALUE_ZERO,
 ) {
     sealed interface GroupState {
         data class Success(val groups: List<ChannelsGroup>) : GroupState

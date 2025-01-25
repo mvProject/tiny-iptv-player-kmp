@@ -17,7 +17,6 @@ import androidx.compose.ui.graphics.asComposeImageBitmap
 import androidx.compose.ui.unit.IntOffset
 import androidx.compose.ui.unit.IntSize
 import co.touchlab.kermit.Logger
-import com.mvproject.tinyiptvkmp.core.common.AppConstants.FLOAT_VALUE_1
 import com.mvproject.tinyiptvkmp.core.common.AppConstants.INT_NO_VALUE
 import com.mvproject.tinyiptvkmp.core.common.AppConstants.INT_VALUE_2
 import com.mvproject.tinyiptvkmp.core.common.AppConstants.INT_VALUE_4
@@ -66,7 +65,6 @@ actual fun PlayerView(
     LaunchedEffect(uiState.channelIndex) {
         if (uiState.channelIndex > INT_NO_VALUE) {
             videoPlayerState.setPlayerChannel(
-                channelName = uiState.currentChannel.channelName,
                 channelUrl = uiState.currentChannel.channelUrl
             )
         }
@@ -84,25 +82,11 @@ actual fun PlayerView(
     )
 }
 
-interface VideoPlayerState {
-    val aspectRatio: Float
-    fun play()
-    fun pause()
-    fun setVolume(value: Float)
-    fun setPlayingState(value: Boolean)
-    fun restartPlayer()
-    fun setPlayerChannel(
-        channelName: String,
-        channelUrl: String
-    )
-}
-
-class VideoPlayerStateImpl : VideoPlayerState {
+class VideoPlayerStateImpl : PlayerState {
     internal val internalState = RenderState()
+
     val mediaPlayer: MediaPlayer
         get() = internalState.mediaPlayerComponent.mediaPlayer()
-    override val aspectRatio: Float
-        get() = internalState.aspectRatio
 
     override fun setVolume(value: Float) {
         val volumeValue = (value * 100).toInt()
@@ -134,10 +118,7 @@ class VideoPlayerStateImpl : VideoPlayerState {
                 }*/
     }
 
-    override fun setPlayerChannel(
-        channelName: String,
-        channelUrl: String
-    ) {
+    override fun setPlayerChannel(channelUrl: String) {
         mediaPlayer.media().play(channelUrl)
     }
 
@@ -252,9 +233,6 @@ fun VideoPlayerDirect(
 }
 
 internal class RenderState {
-    var aspectRatio: Float by mutableStateOf(FLOAT_VALUE_1)
-        private set
-
     var currentBuffer: ByteBuffer? = null
 
     private var buffer: ByteArray = ByteArray(INT_VALUE_ZERO)
@@ -283,20 +261,13 @@ internal class RenderState {
     private val bufferFormatCallback = object : BufferFormatCallback {
         override fun getBufferFormat(sourceWidth: Int, sourceHeight: Int): BufferFormat {
 
+            buffer = ByteArray(sourceWidth * sourceHeight * INT_VALUE_4)
+
             bufferBitmap = Bitmap().also {
                 it.allocN32Pixels(sourceWidth, sourceHeight, true)
             }
 
             composeImage = bufferBitmap.asComposeImageBitmap()
-
-            buffer = ByteArray(sourceWidth * sourceHeight * INT_VALUE_4)
-
-            with(bufferBitmap) {
-                aspectRatio = if (width <= INT_VALUE_ZERO || height <= INT_VALUE_ZERO)
-                    FLOAT_VALUE_1
-                else
-                    width.toFloat() / height.toFloat()
-            }
 
             return RV32BufferFormat(sourceWidth, sourceHeight)
         }

@@ -68,7 +68,7 @@ fun PlayerChannels(
             content = {
                 items(
                     items = channels,
-                    key = { chn -> chn.hashCode() },
+                    key = { chn -> "${chn.channelName}${chn.channelUrl}" },
                 ) { chn ->
                     ChannelListView(
                         channel = chn,
