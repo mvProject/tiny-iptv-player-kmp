@@ -17,11 +17,11 @@ import androidx.compose.ui.graphics.asComposeImageBitmap
 import androidx.compose.ui.unit.IntOffset
 import androidx.compose.ui.unit.IntSize
 import co.touchlab.kermit.Logger
-import com.mvproject.tinyiptvkmp.core.common.AppConstants.INT_NO_VALUE
-import com.mvproject.tinyiptvkmp.core.common.AppConstants.INT_VALUE_2
-import com.mvproject.tinyiptvkmp.core.common.AppConstants.INT_VALUE_4
-import com.mvproject.tinyiptvkmp.core.common.AppConstants.INT_VALUE_ZERO
-import com.mvproject.tinyiptvkmp.core.common.AppConstants.LONG_VALUE_ZERO
+import com.mvproject.tinyiptvkmp.core.common.INT_NO_VALUE
+import com.mvproject.tinyiptvkmp.core.common.INT_VALUE_2
+import com.mvproject.tinyiptvkmp.core.common.INT_VALUE_4
+import com.mvproject.tinyiptvkmp.core.common.INT_VALUE_ZERO
+import com.mvproject.tinyiptvkmp.core.common.LONG_VALUE_ZERO
 import com.mvproject.tinyiptvkmp.features.player.PlayerUiAction
 import com.mvproject.tinyiptvkmp.features.player.PlayerUiState
 import org.jetbrains.skia.Bitmap

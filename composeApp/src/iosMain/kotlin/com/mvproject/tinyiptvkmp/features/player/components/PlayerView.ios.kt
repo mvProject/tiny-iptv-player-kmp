@@ -41,9 +41,6 @@ actual fun PlayerView(
 @OptIn(ExperimentalForeignApi::class)
 @Composable
 fun VideoPlayer(modifier: Modifier, url: String) {
-    val url1 = "rtmp://5.182.229.90//7261"
-    val url2 = "http://stream02.vnet.am/Kinokhit/tracks-v1a1/mono.m3u8"
-
     val density = LocalDensity.current
 
     val avPlayer = remember { AVPlayer() }
