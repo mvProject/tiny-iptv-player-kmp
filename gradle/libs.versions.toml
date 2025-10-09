@@ -1,23 +1,23 @@
 [versions]
 
-kotlin = "2.1.20"
-ksp = "2.1.20-2.0.1"
+kotlin = "2.2.0"
+ksp = "2.2.0-2.0.2"
 
 gradle = "8.6.1"
-compose = "1.7.1"
+compose = "1.8.2"
 
 compose-activity = "1.10.1"
 
-androidx-navigation = "2.8.0-alpha10"
-androidx-lifecycle = "2.8.4"
+androidx-navigation = "2.8.0-alpha13"
+androidx-lifecycle = "2.9.1"
 androidx-datastore = "1.1.4"
 androidx-annotation = "1.9.1"
-androidx-room = "2.7.1"
+androidx-room = "2.7.2"
 
-kotlinx-collections = "0.3.5"
+kotlinx-collections = "0.4.0"
 kotlinx-datetime = "0.6.1"
-kotlinx-coroutines-swing = "1.9.0"
-kotlinx-coroutines-core = "1.9.0"
+kotlinx-coroutines-swing = "1.10.2"
+kotlinx-coroutines-core = "1.10.2"
 
 ktor = "3.0.0"
 
@@ -25,21 +25,21 @@ koin = "4.0.0"
 
 media3 = "1.6.1"
 
-kermit = "2.0.4"
+kermit = "2.0.6"
 
 vlcjVersion = "4.8.1"
 
-sqlite = "2.5.0"
+sqlite = "2.5.2"
 
 ksoup = "0.1.5"
 
-coil3 = "3.0.0-rc01"
+coil3 = "3.3.0"
 
 filekit = "0.7.0"
 
-nextlib = "0.8.2"
+nextlib = "0.8.4"
 
-adaptive-version ="1.0.0"
+adaptive-version = "1.1.2"
 
 [plugins]
 compose-multiplatform = { id = "org.jetbrains.compose", version.ref = "compose" }

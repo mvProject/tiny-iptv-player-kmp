@@ -214,7 +214,7 @@ compose.desktop {
             packageVersion = "1.0.0"
             description = "Iptv player multiplatform App"
             copyright = "©2023 MvProject. All rights reserved."
-            targetFormats(TargetFormat.Exe)
+            targetFormats(TargetFormat.Exe, TargetFormat.Dmg)
 
             //  modules("java.base", "java.instrument", "java.management", "java.net.http", "java.sql", "jdk.unsupported", "jdk.xml.dom")
             includeAllModules = true

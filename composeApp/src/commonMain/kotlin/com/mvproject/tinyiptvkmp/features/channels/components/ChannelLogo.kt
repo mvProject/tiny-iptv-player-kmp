@@ -16,6 +16,7 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.layout.ContentScale
@@ -27,7 +28,7 @@ import tinyiptvkmp.composeapp.generated.resources.Res
 import tinyiptvkmp.composeapp.generated.resources.no_channel_logo
 
 @Composable
-fun ChannelLogo(
+internal fun ChannelLogo(
     modifier: Modifier = Modifier,
     channelLogo: String,
     channelName: String,
@@ -37,32 +38,37 @@ fun ChannelLogo(
         mutableStateOf(false)
     }
 
-    AsyncImage(
-        modifier =
-        modifier
-            .size(imageSize)
-            .clip(MaterialTheme.shapes.small),
-        model = channelLogo,
-        onLoading = {
-            isLoading = true
-        },
-        onError = {
-            isLoading = false
-        },
-        onSuccess = {
-            isLoading = false
-        },
-        contentScale = ContentScale.FillBounds,
-        contentDescription = channelName,
-        placeholder = painterResource(Res.drawable.no_channel_logo),
-        error = painterResource(Res.drawable.no_channel_logo),
-    )
+    Box(
+        modifier = modifier.size(imageSize),
+        contentAlignment = Alignment.Center
+    ) {
+        AsyncImage(
+            modifier =
+                modifier
+                    .size(imageSize)
+                    .clip(MaterialTheme.shapes.small),
+            model = channelLogo,
+            onLoading = {
+                isLoading = true
+            },
+            onError = {
+                isLoading = false
+            },
+            onSuccess = {
+                isLoading = false
+            },
+            contentScale = ContentScale.FillBounds,
+            contentDescription = channelName,
+            placeholder = painterResource(Res.drawable.no_channel_logo),
+            error = painterResource(Res.drawable.no_channel_logo),
+        )
 
-    if (isLoading) {
-        Box(modifier = modifier.size(imageSize)) {
+        if (isLoading) {
+            //  Box(modifier = modifier.size(imageSize)) {
             CircularProgressIndicator(
                 color = MaterialTheme.colorScheme.onSurface
             )
+            //  }
         }
     }
 }
