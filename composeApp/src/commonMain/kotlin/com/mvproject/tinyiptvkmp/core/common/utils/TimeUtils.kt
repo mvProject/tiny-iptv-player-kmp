@@ -5,8 +5,6 @@ import com.mvproject.tinyiptvkmp.core.common.LONG_VALUE_ZERO
 import com.mvproject.tinyiptvkmp.core.common.utils.CommonUtils.delimiterTime
 import com.mvproject.tinyiptvkmp.core.database.entity.EpgProgramEntity
 import com.mvproject.tinyiptvkmp.core.domain.enums.UpdatePeriod
-import kotlinx.datetime.Clock
-import kotlinx.datetime.Instant
 import kotlinx.datetime.LocalDate
 import kotlinx.datetime.LocalDateTime
 import kotlinx.datetime.LocalTime
@@ -14,9 +12,11 @@ import kotlinx.datetime.TimeZone
 import kotlinx.datetime.format.char
 import kotlinx.datetime.toInstant
 import kotlinx.datetime.toLocalDateTime
+import kotlin.time.Clock
 import kotlin.time.Duration.Companion.days
 import kotlin.time.Duration.Companion.hours
 import kotlin.time.Duration.Companion.milliseconds
+import kotlin.time.Instant
 
 private val tzSourceBerlin = TimeZone.of("Europe/Berlin")
 private val tzSourceMoscow = TimeZone.of("Europe/Moscow")
