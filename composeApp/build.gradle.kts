@@ -48,6 +48,9 @@ kotlin {
         val desktopMain by getting
 
         commonMain.dependencies {
+            implementation(project(":core:ui"))
+            implementation(project(":core:designsystem"))
+
             implementation(compose.runtime)
             implementation(compose.foundation)
             implementation(compose.ui)

@@ -33,7 +33,10 @@ import com.mvproject.tinyiptvkmp.core.ui.modifiers.SpacerHeight
 import com.mvproject.tinyiptvkmp.core.ui.texts.ChannelTitle
 import com.mvproject.tinyiptvkmp.core.ui.texts.EmptyProgramTitle
 import com.mvproject.tinyiptvkmp.core.ui.texts.ProgramTitle
+import org.jetbrains.compose.resources.stringResource
 import org.jetbrains.compose.ui.tooling.preview.Preview
+import tinyiptvkmp.composeapp.generated.resources.Res
+import tinyiptvkmp.composeapp.generated.resources.msg_no_epg_found
 
 @OptIn(ExperimentalFoundationApi::class)
 @Composable
@@ -90,7 +93,8 @@ fun ChannelGridView(
 
             if (channel.programs.isEmpty()) {
                 EmptyProgramTitle(
-                    modifier = Modifier.padding(horizontal = MaterialTheme.dimensionSize.size8)
+                    modifier = Modifier.padding(horizontal = MaterialTheme.dimensionSize.size8),
+                    title = stringResource(Res.string.msg_no_epg_found),
                 )
             } else {
                 ProgramTitle(

@@ -15,18 +15,20 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.Composable
+import com.mvproject.tinyiptvkmp.core.theme.AppTheme
 import com.mvproject.tinyiptvkmp.core.ui.buttons.MenuButton
-import org.jetbrains.compose.resources.stringResource
-import tinyiptvkmp.composeapp.generated.resources.Res
-import tinyiptvkmp.composeapp.generated.resources.app_name
+import org.jetbrains.compose.ui.tooling.preview.Preview
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun AppBarWithSettings(onSettingsClicked: () -> Unit = {}) {
+fun AppBarWithSettings(
+    appBarTitle: String,
+    onSettingsClicked: () -> Unit = {},
+) {
     CenterAlignedTopAppBar(
         title = {
             Text(
-                text = stringResource(Res.string.app_name),
+                text = appBarTitle,
                 style = MaterialTheme.typography.titleLarge,
                 color = MaterialTheme.colorScheme.onPrimary,
             )
@@ -38,18 +40,16 @@ fun AppBarWithSettings(onSettingsClicked: () -> Unit = {}) {
             )
         },
         colors =
-        TopAppBarDefaults.centerAlignedTopAppBarColors(
-            containerColor = MaterialTheme.colorScheme.primary,
-        ),
+            TopAppBarDefaults.topAppBarColors(
+                containerColor = MaterialTheme.colorScheme.primary,
+            ),
     )
 }
 
-// todo replace preview
-/*
 @Preview(showBackground = true)
 @Composable
-fun AppBarWithSettingsDarkPreview() {
-    VideoAppTheme(darkTheme = true) {
-        AppBarWithSettings()
+private fun AppBarWithSettingsPreview() {
+    AppTheme {
+        AppBarWithSettings(appBarTitle = "Tiny Iptv Player")
     }
-}*/
+}

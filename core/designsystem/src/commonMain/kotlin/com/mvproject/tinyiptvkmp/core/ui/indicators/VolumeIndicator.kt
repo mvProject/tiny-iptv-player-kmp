@@ -29,8 +29,10 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import com.mvproject.tinyiptvkmp.core.theme.AppTheme
 import com.mvproject.tinyiptvkmp.core.theme.colorSchemeExtended
 import com.mvproject.tinyiptvkmp.core.theme.dimensionSize
+import org.jetbrains.compose.ui.tooling.preview.Preview
 
 @Composable
 fun VolumeIndicator(
@@ -85,12 +87,13 @@ private fun getProperVolumeIcon(value: Int) = when {
     else -> Icons.AutoMirrored.Rounded.VolumeDown
 }
 
-// todo replace preview
-/*
-@Composable
 @Preview(showBackground = true)
-fun DarkPreviewVolumeProgressView() {
-    VideoAppTheme(darkTheme = true) {
-        VolumeProgressView(value = 0.8f)
+@Composable
+private fun VolumeIndicatorPreview() {
+    AppTheme {
+        VolumeIndicator(
+            isVisible = true,
+            value = 0.8f,
+        )
     }
-}*/
+}

@@ -8,10 +8,7 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import com.mvproject.tinyiptvkmp.core.theme.AppTheme
-import org.jetbrains.compose.resources.stringResource
 import org.jetbrains.compose.ui.tooling.preview.Preview
-import tinyiptvkmp.composeapp.generated.resources.Res
-import tinyiptvkmp.composeapp.generated.resources.app_name
 
 @Composable
 fun SelectButton(
@@ -40,7 +37,7 @@ fun SelectButton(
 private fun SelectButtonPreview() {
     AppTheme {
         SelectButton(
-            title = stringResource(Res.string.app_name),
+            title = "Current playlist",
         )
     }
 }

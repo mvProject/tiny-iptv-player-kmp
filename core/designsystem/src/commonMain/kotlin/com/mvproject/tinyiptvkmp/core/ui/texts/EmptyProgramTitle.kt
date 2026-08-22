@@ -5,26 +5,27 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.text.TextStyle
-import androidx.compose.ui.text.style.TextOverflow
+import com.mvproject.tinyiptvkmp.core.theme.AppTheme
 import com.mvproject.tinyiptvkmp.core.theme.colorSchemeExtended
+import org.jetbrains.compose.ui.tooling.preview.Preview
 
 @Composable
-fun ProgramTitle(
+fun EmptyProgramTitle(
     modifier: Modifier = Modifier,
     title: String,
-    color: Color = MaterialTheme.colorSchemeExtended.programTitle,
-    style: TextStyle = MaterialTheme.typography.labelMedium,
-    lines: Int = 2
 ) {
     Text(
         modifier = modifier.fillMaxWidth(),
         text = title,
-        style = style,
-        color = color,
-        overflow = TextOverflow.Ellipsis,
-        maxLines = lines,
-        minLines = 1,
+        style = MaterialTheme.typography.labelMedium,
+        color = MaterialTheme.colorSchemeExtended.emptyProgramTitle,
     )
+}
+
+@Preview
+@Composable
+private fun EmptyProgramTitlePreview() {
+    AppTheme {
+        EmptyProgramTitle(title = "epg not found")
+    }
 }

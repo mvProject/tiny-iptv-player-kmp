@@ -39,6 +39,7 @@ import com.mvproject.tinyiptvkmp.features.groups.components.PlaylistGroupItem
 import com.mvproject.tinyiptvkmp.features.groups.components.PlaylistSelector
 import org.jetbrains.compose.resources.stringResource
 import tinyiptvkmp.composeapp.generated.resources.Res
+import tinyiptvkmp.composeapp.generated.resources.app_name
 import tinyiptvkmp.composeapp.generated.resources.btn_add_first_playlist
 import tinyiptvkmp.composeapp.generated.resources.msg_no_items_found
 
@@ -80,7 +81,10 @@ private fun GroupScreen(
     Scaffold(
         modifier = Modifier.fillMaxSize(),
         topBar = {
-            AppBarWithSettings(onSettingsClicked = { onAction(GroupUiAction.NavigateToSettings) })
+            AppBarWithSettings(
+                appBarTitle = stringResource(Res.string.app_name),
+                onSettingsClicked = { onAction(GroupUiAction.NavigateToSettings) },
+            )
         },
     ) { paddingValues ->
         Box(

@@ -27,17 +27,16 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.input.KeyboardType
-import com.mvproject.tinyiptvkmp.core.common.utils.CommonUtils.empty
+import com.mvproject.tinyiptvkmp.core.theme.AppTheme
 import com.mvproject.tinyiptvkmp.core.theme.colorSchemeExtended
 import com.mvproject.tinyiptvkmp.core.theme.dimensionSize
-import org.jetbrains.compose.resources.stringResource
-import tinyiptvkmp.composeapp.generated.resources.Res
-import tinyiptvkmp.composeapp.generated.resources.hint_msg_search
+import org.jetbrains.compose.ui.tooling.preview.Preview
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun SearchAppBar(
     text: String,
+    placeholderText: String,
     onTextChange: (String) -> Unit = {},
     onCloseClicked: () -> Unit = {},
 ) {
@@ -53,7 +52,7 @@ fun SearchAppBar(
                 },
                 placeholder = {
                     Text(
-                        text = stringResource(Res.string.hint_msg_search),
+                        text = placeholderText,
                         style = MaterialTheme.typography.labelSmall,
                         color = MaterialTheme.colorScheme.onPrimary,
                     )
@@ -71,7 +70,7 @@ fun SearchAppBar(
                     FilledIconButton(
                         onClick = {
                             if (text.isNotEmpty()) {
-                                onTextChange(String.empty)
+                                onTextChange("")
                             } else {
                                 onCloseClicked()
                             }
@@ -104,20 +103,19 @@ fun SearchAppBar(
             )
         },
         colors =
-            TopAppBarDefaults.centerAlignedTopAppBarColors(
+            TopAppBarDefaults.topAppBarColors(
                 containerColor = MaterialTheme.colorScheme.primary,
             ),
     )
 }
 
-// todo replace preview
-/*
 @Preview(showBackground = true)
 @Composable
-fun PreviewDarkSearchAppBar() {
-    VideoAppTheme(darkTheme = true) {
+private fun SearchAppBarPreview() {
+    AppTheme {
         SearchAppBar(
-            text = stringResource(id = R.string.app_name)
+            text = "National Geographic",
+            placeholderText = "type here...",
         )
     }
-}*/
+}

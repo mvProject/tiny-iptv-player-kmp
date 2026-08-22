@@ -5,14 +5,17 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.text.style.TextAlign
+import androidx.compose.ui.text.style.TextOverflow
+import com.mvproject.tinyiptvkmp.core.theme.AppTheme
 import com.mvproject.tinyiptvkmp.core.theme.colorSchemeExtended
+import org.jetbrains.compose.ui.tooling.preview.Preview
 
 @Composable
-fun ChannelTitleLarge(
+fun ChannelTitle(
     modifier: Modifier = Modifier,
     title: String,
     isFavorite: Boolean = false,
+    lines: Int = 1
 ) {
     val color = if (isFavorite) {
         MaterialTheme.colorSchemeExtended.activeProgramTitle
@@ -23,8 +26,21 @@ fun ChannelTitleLarge(
     Text(
         modifier = modifier.fillMaxWidth(),
         text = title,
-        style = MaterialTheme.typography.headlineMedium,
+        style = MaterialTheme.typography.bodyMedium,
         color = color,
-        textAlign = TextAlign.Center
+        overflow = TextOverflow.Ellipsis,
+        maxLines = lines,
+        minLines = 1,
     )
+}
+
+@Preview
+@Composable
+private fun ChannelTitlePreview() {
+    AppTheme {
+        ChannelTitle(
+            title = "Discovery Channel",
+            isFavorite = true,
+        )
+    }
 }

@@ -30,7 +30,10 @@ import com.mvproject.tinyiptvkmp.core.ui.indicators.ProgramProgressIndicator
 import com.mvproject.tinyiptvkmp.core.ui.texts.ChannelTitle
 import com.mvproject.tinyiptvkmp.core.ui.texts.EmptyProgramTitle
 import com.mvproject.tinyiptvkmp.core.ui.texts.ProgramTitle
+import org.jetbrains.compose.resources.stringResource
 import org.jetbrains.compose.ui.tooling.preview.Preview
+import tinyiptvkmp.composeapp.generated.resources.Res
+import tinyiptvkmp.composeapp.generated.resources.msg_no_epg_found
 
 @OptIn(ExperimentalFoundationApi::class)
 @Composable
@@ -68,7 +71,7 @@ fun ChannelListView(
                     isFavorite = channel.favoriteType != FavoriteType.NONE
                 )
                 if (channel.programs.isEmpty()) {
-                    EmptyProgramTitle()
+                    EmptyProgramTitle(title = stringResource(Res.string.msg_no_epg_found))
                 } else {
                     ProgramTitle(title = channel.programs.first().title)
                 }

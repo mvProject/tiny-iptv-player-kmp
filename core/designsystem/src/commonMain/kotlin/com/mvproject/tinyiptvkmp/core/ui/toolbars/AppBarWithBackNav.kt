@@ -15,7 +15,9 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.Composable
+import com.mvproject.tinyiptvkmp.core.theme.AppTheme
 import com.mvproject.tinyiptvkmp.core.ui.buttons.MenuButton
+import org.jetbrains.compose.ui.tooling.preview.Preview
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -37,20 +39,18 @@ fun AppBarWithBackNav(
                 onClick = onBackClick
             )
         },
-        colors = TopAppBarDefaults.centerAlignedTopAppBarColors(
+        colors = TopAppBarDefaults.topAppBarColors(
             containerColor = MaterialTheme.colorScheme.primary
         )
     )
 }
 
-// todo replace preview
-/*
 @Preview(showBackground = true)
 @Composable
-fun PreviewDarkAppBarWithBackNav() {
-    VideoAppTheme(darkTheme = true) {
+private fun AppBarWithBackNavPreview() {
+    AppTheme {
         AppBarWithBackNav(
-            appBarTitle = stringResource(id = R.string.app_name)
+            appBarTitle = "Settings"
         )
     }
-}*/
+}

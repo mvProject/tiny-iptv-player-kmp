@@ -14,13 +14,13 @@ import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.text.font.FontStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.sp
+import com.mvproject.tinyiptvkmp.core.ui.generated.resources.Res
+import com.mvproject.tinyiptvkmp.core.ui.generated.resources.prompt_bold
+import com.mvproject.tinyiptvkmp.core.ui.generated.resources.prompt_extrabold
+import com.mvproject.tinyiptvkmp.core.ui.generated.resources.prompt_medium
+import com.mvproject.tinyiptvkmp.core.ui.generated.resources.prompt_regular
+import com.mvproject.tinyiptvkmp.core.ui.generated.resources.prompt_semibold
 import org.jetbrains.compose.resources.Font
-import tinyiptvkmp.composeapp.generated.resources.Res
-import tinyiptvkmp.composeapp.generated.resources.prompt_bold
-import tinyiptvkmp.composeapp.generated.resources.prompt_extrabold
-import tinyiptvkmp.composeapp.generated.resources.prompt_medium
-import tinyiptvkmp.composeapp.generated.resources.prompt_regular
-import tinyiptvkmp.composeapp.generated.resources.prompt_semibold
 
 @Composable
 fun getTypography(): Typography {

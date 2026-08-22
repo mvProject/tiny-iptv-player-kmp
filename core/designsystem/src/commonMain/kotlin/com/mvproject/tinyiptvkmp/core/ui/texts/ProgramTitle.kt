@@ -5,29 +5,36 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.style.TextOverflow
+import com.mvproject.tinyiptvkmp.core.theme.AppTheme
 import com.mvproject.tinyiptvkmp.core.theme.colorSchemeExtended
+import org.jetbrains.compose.ui.tooling.preview.Preview
 
 @Composable
-fun ChannelTitle(
+fun ProgramTitle(
     modifier: Modifier = Modifier,
     title: String,
-    isFavorite: Boolean = false,
-    lines: Int = 1
+    color: Color = MaterialTheme.colorSchemeExtended.programTitle,
+    style: TextStyle = MaterialTheme.typography.labelMedium,
+    lines: Int = 2
 ) {
-    val color = if (isFavorite) {
-        MaterialTheme.colorSchemeExtended.activeProgramTitle
-    } else {
-        MaterialTheme.colorScheme.onPrimary
-    }
-
     Text(
         modifier = modifier.fillMaxWidth(),
         text = title,
-        style = MaterialTheme.typography.bodyMedium,
+        style = style,
         color = color,
         overflow = TextOverflow.Ellipsis,
         maxLines = lines,
         minLines = 1,
     )
+}
+
+@Preview
+@Composable
+private fun ProgramTitlePreview() {
+    AppTheme {
+        ProgramTitle(title = "Live news and weather update")
+    }
 }

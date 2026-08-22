@@ -22,6 +22,7 @@ import com.mvproject.tinyiptvkmp.core.domain.enums.ChannelsViewType
 fun AppBarWithSearch(
     appBarTitle: String,
     searchTextState: String,
+    searchPlaceholderText: String,
     onBackClick: () -> Unit = {},
     onTextChange: (String) -> Unit = {},
     onViewTypeChange: (ChannelsViewType) -> Unit = {}
@@ -43,6 +44,7 @@ fun AppBarWithSearch(
         if (state) {
             SearchAppBar(
                 text = searchTextState,
+                placeholderText = searchPlaceholderText,
                 onTextChange = onTextChange,
                 onCloseClicked = {
                     isSearching = false
@@ -60,5 +62,4 @@ fun AppBarWithSearch(
         }
     }
 }
-
 
