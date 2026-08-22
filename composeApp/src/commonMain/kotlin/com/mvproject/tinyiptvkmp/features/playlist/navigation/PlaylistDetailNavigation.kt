@@ -7,22 +7,18 @@
 
 package com.mvproject.tinyiptvkmp.features.playlist.navigation
 
-import androidx.navigation.NavGraphBuilder
-import androidx.navigation.NavHostController
-import androidx.navigation.compose.composable
+import androidx.navigation3.runtime.EntryProviderScope
 import com.mvproject.tinyiptvkmp.features.playlist.PlaylistScreen
 import com.mvproject.tinyiptvkmp.features.playlist.PlaylistViewModel
 import com.mvproject.tinyiptvkmp.navigation.AppRoutes
 import org.koin.compose.viewmodel.koinViewModel
+import org.koin.core.parameter.parametersOf
 
-fun NavHostController.navigateToPlaylistDetail(id: String) {
-    val route = AppRoutes.PlaylistDetail(id = id)
-    this.navigate(route)
-}
-
-fun NavGraphBuilder.playlistDetail(onNavigateBack: () -> Unit) {
-    composable<AppRoutes.PlaylistDetail> {
-        val playlistViewModel = koinViewModel<PlaylistViewModel>()
+fun EntryProviderScope<AppRoutes>.playlistDetail(onNavigateBack: () -> Unit) {
+    entry<AppRoutes.PlaylistDetail> { key ->
+        val playlistViewModel = koinViewModel<PlaylistViewModel>(
+            parameters = { parametersOf(key) }
+        )
 
         PlaylistScreen(
             viewModel = playlistViewModel,

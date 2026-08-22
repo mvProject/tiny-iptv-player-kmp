@@ -8,10 +8,8 @@
 package com.mvproject.tinyiptvkmp.features.channels
 
 import androidx.compose.runtime.Immutable
-import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import androidx.navigation.toRoute
 import com.mvproject.tinyiptvkmp.core.common.mvi.MviCore
 import com.mvproject.tinyiptvkmp.core.common.mvi.mviCore
 import com.mvproject.tinyiptvkmp.core.common.utils.CommonUtils.empty
@@ -38,7 +36,7 @@ import kotlinx.coroutines.launch
 import kotlin.time.Duration.Companion.minutes
 
 class GroupChannelsViewModel(
-    savedStateHandle: SavedStateHandle,
+    args: AppRoutes.TvPlaylistChannels,
     private val getChannelsEpgUseCase: GetChannelsEpgUseCase,
     private val getGroupChannelsUseCase: GetGroupChannelsUseCase,
     private val getGroupChannelsEpgUseCase: GetGroupChannelsEpgUseCase,
@@ -48,8 +46,6 @@ class GroupChannelsViewModel(
     MviCore<GroupChannelsUiState, GroupChannelsUiAction, GroupChannelsUiEffect> by mviCore(
         GroupChannelsUiState()
     ) {
-
-    private val args = savedStateHandle.toRoute<AppRoutes.TvPlaylistChannels>()
 
     private val group = args.group
     private val type = args.groupType

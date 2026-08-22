@@ -8,10 +8,8 @@
 package com.mvproject.tinyiptvkmp.features.player
 
 import androidx.compose.runtime.Immutable
-import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import androidx.navigation.toRoute
 import co.touchlab.kermit.Logger
 import com.mvproject.tinyiptvkmp.core.common.DELAY_50
 import com.mvproject.tinyiptvkmp.core.common.DELAY_500
@@ -46,7 +44,7 @@ import kotlinx.coroutines.launch
 import kotlin.time.Duration.Companion.milliseconds
 
 class PlayerViewModel(
-    savedStateHandle: SavedStateHandle,
+    args: AppRoutes.Player,
     private val preferenceRepository: PreferenceRepository,
     private val getGroupChannelsUseCase: GetGroupChannelsUseCase,
     private val toggleFavoriteChannelUseCase: ToggleFavoriteChannelUseCase,
@@ -55,7 +53,6 @@ class PlayerViewModel(
 ) : ViewModel(),
     MviCore<PlayerUiState, PlayerUiAction, PlayerUiEffect> by mviCore(PlayerUiState()) {
 
-    private val args = savedStateHandle.toRoute<AppRoutes.Player>()
     private val media = args.channelName
     private val group = args.group
     private val groupType = args.groupType
