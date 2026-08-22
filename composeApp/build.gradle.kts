@@ -1,28 +1,16 @@
 import org.jetbrains.compose.desktop.application.dsl.TargetFormat
-import org.jetbrains.kotlin.gradle.dsl.JvmTarget
+import org.jetbrains.kotlin.gradle.plugin.mpp.KotlinNativeTarget
 import java.util.Properties
 
 plugins {
-    alias(libs.plugins.multiplatform)
-    alias(libs.plugins.android.application)
-    alias(libs.plugins.compose.multiplatform)
-    alias(libs.plugins.compose.compiler)
+    alias(libs.plugins.tinyiptv.kmp.application.compose)
     alias(libs.plugins.kotlinx.serialization.plugin)
     alias(libs.plugins.ksp)
 }
 
 kotlin {
-    androidTarget {
-        compilerOptions {
-            jvmTarget.set(JvmTarget.JVM_17)
-        }
-    }
-
-    listOf(
-        iosArm64(),
-        iosSimulatorArm64()
-    ).forEach { iosTarget ->
-        iosTarget.binaries.framework {
+    targets.withType<KotlinNativeTarget>().configureEach {
+        binaries.framework {
             baseName = "ComposeApp"
             isStatic = true
             //  binaryOption("bundleId", "com.mvproject.tinyiptvkmp")
@@ -42,33 +30,22 @@ kotlin {
         }
     }
 
-    jvm("desktop")
-
     sourceSets {
         val desktopMain by getting
 
         commonMain.dependencies {
-            implementation(project(":core:base"))
-            implementation(project(":core:database"))
-            implementation(project(":core:datastore"))
-            implementation(project(":core:network"))
-            implementation(project(":core:ui"))
-            implementation(project(":core:designsystem"))
-            implementation(project(":infrastructure:logging"))
-
-            implementation(compose.runtime)
-            implementation(compose.foundation)
-            implementation(compose.ui)
-            implementation(compose.material3)
-            implementation(compose.materialIconsExtended)
-            implementation(compose.components.resources)
-            implementation(libs.compose.ui.tooling.preview)
+            implementation(projects.core.base)
+            implementation(projects.core.database)
+            implementation(projects.core.datastore)
+            implementation(projects.core.network)
+            implementation(projects.core.ui)
+            implementation(projects.core.designsystem)
+            implementation(projects.infrastructure.logging)
 
             // Coroutines
             implementation(libs.kotlinx.coroutines.core)
 
             // DI
-            implementation(project.dependencies.platform(libs.koin.bom))
             implementation(libs.bundles.koin)
 
             // Navigation
@@ -93,8 +70,6 @@ kotlin {
         }
 
         androidMain.dependencies {
-            implementation(compose.preview)
-
             implementation(libs.androidx.compose.activity)
 
             // DI
@@ -112,7 +87,7 @@ kotlin {
         desktopMain.dependencies {
             implementation(compose.desktop.currentOs)
             // Core
-            implementation(compose.desktop.common)
+            implementation(libs.desktop)
 
             // DI
             implementation(libs.koin.core)
@@ -131,15 +106,12 @@ kotlin {
 
 android {
     namespace = "com.mvproject.tinyiptvkmp"
-    compileSdk = 36
 
     sourceSets["main"].manifest.srcFile("src/androidMain/AndroidManifest.xml")
     sourceSets["main"].res.srcDirs("src/androidMain/res")
 
     defaultConfig {
         applicationId = "com.mvproject.tinyiptvkmp"
-        minSdk = 26
-        targetSdk = 35
         versionCode = 1
         versionName = "1.0"
     }
@@ -181,17 +153,6 @@ android {
             )
         }
     }
-    compileOptions {
-        sourceCompatibility = JavaVersion.VERSION_17
-        targetCompatibility = JavaVersion.VERSION_17
-    }
-    buildFeatures {
-        compose = true
-    }
-    dependencies {
-        //     implementation(fileTree(mapOf("dir" to "libs", "include" to listOf("*.aar"))))
-        debugImplementation(libs.compose.ui.tooling)
-    }
 }
 
 compose.desktop {
@@ -215,7 +176,6 @@ compose.desktop {
 }
 
 dependencies {
-    debugImplementation(libs.compose.ui.tooling)
     add("kspAndroid", libs.androidx.room.compiler)
     add("kspDesktop", libs.androidx.room.compiler)
     add("kspIosArm64", libs.androidx.room.compiler)
