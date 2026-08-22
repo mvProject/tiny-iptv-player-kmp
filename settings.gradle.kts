@@ -4,7 +4,6 @@
  *  last modified : 30.01.24, 12:10
  *
  */
-enableFeaturePreview("TYPESAFE_PROJECT_ACCESSORS")
 
 pluginManagement {
     repositories {

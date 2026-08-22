@@ -3,7 +3,6 @@ package com.mvproject.tinyiptvkmp.core.common.utils
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.layout.layout
 import androidx.compose.ui.unit.Constraints
-import co.touchlab.kermit.Logger
 import com.mvproject.tinyiptvkmp.core.common.INT_VALUE_2
 import com.mvproject.tinyiptvkmp.core.domain.enums.VideoSize
 
@@ -13,8 +12,6 @@ private const val MAX_ASPECT_RATIO_DIFFERENCE_FRACTION = 0.01f
 fun Modifier.adaptiveLayout(
     videoSize: VideoSize
 ) = this then layout { measurable, constraints ->
-
-    Logger.e("testing adaptiveLayout2 videoSize $videoSize")
 
     val resizedConstraint = constraints.resizeForVideo(videoSize)
 

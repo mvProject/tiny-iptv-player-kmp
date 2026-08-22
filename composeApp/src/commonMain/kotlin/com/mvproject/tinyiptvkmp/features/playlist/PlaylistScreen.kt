@@ -12,6 +12,7 @@ import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.WindowInsets
+import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.ime
@@ -44,6 +45,8 @@ import com.mvproject.tinyiptvkmp.core.domain.enums.PlaylistType
 import com.mvproject.tinyiptvkmp.core.theme.colorSchemeExtended
 import com.mvproject.tinyiptvkmp.core.theme.dimensionSize
 import com.mvproject.tinyiptvkmp.core.theme.dimensionWeight
+import com.mvproject.tinyiptvkmp.core.ui.adaptive.adaptiveContentWidth
+import com.mvproject.tinyiptvkmp.core.ui.adaptive.rememberAdaptiveLayoutState
 import com.mvproject.tinyiptvkmp.core.ui.indicators.LoadingIndicator
 import com.mvproject.tinyiptvkmp.core.ui.modifiers.SpacerHeight
 import com.mvproject.tinyiptvkmp.core.ui.toolbars.AppBarWithBackNav
@@ -89,6 +92,7 @@ private fun PlaylistScreen(
     onAction: (PlaylistUiAction) -> Unit = {},
 ) {
     val scope = rememberCoroutineScope()
+    val adaptiveLayoutState = rememberAdaptiveLayoutState()
 
     LaunchedEffect(uiState.isComplete) {
         if (uiState.isComplete) {
@@ -144,12 +148,17 @@ private fun PlaylistScreen(
             Modifier
                 .fillMaxSize()
                 .padding(paddingValues),
+            contentAlignment = Alignment.TopCenter,
         ) {
             Column(
                 modifier =
                 Modifier
-                    .fillMaxSize()
-                    .padding(MaterialTheme.dimensionSize.size12),
+                    .fillMaxHeight()
+                    .adaptiveContentWidth(adaptiveLayoutState)
+                    .padding(
+                        horizontal = adaptiveLayoutState.contentHorizontalPadding,
+                        vertical = MaterialTheme.dimensionSize.size12,
+                    ),
                 horizontalAlignment = Alignment.CenterHorizontally,
             ) {
                 TextField(

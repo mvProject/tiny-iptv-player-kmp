@@ -19,19 +19,16 @@ import androidx.compose.foundation.layout.systemBars
 import androidx.compose.foundation.layout.windowInsetsPadding
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.adaptive.currentWindowAdaptiveInfo
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
-import androidx.window.core.layout.WindowHeightSizeClass
-import androidx.window.core.layout.WindowSizeClass
-import androidx.window.core.layout.WindowWidthSizeClass
 import com.mvproject.tinyiptvkmp.core.common.mvi.CollectUiEffect
-import com.mvproject.tinyiptvkmp.core.theme.dimensionFraction
 import com.mvproject.tinyiptvkmp.core.theme.dimensionSize
 import com.mvproject.tinyiptvkmp.core.theme.dimensionWeight
+import com.mvproject.tinyiptvkmp.core.ui.adaptive.PlayerProgramsPlacement
+import com.mvproject.tinyiptvkmp.core.ui.adaptive.rememberAdaptiveLayoutState
 import com.mvproject.tinyiptvkmp.core.ui.epg.ChannelPrograms
 import com.mvproject.tinyiptvkmp.core.ui.indicators.LoadingIndicator
 import com.mvproject.tinyiptvkmp.core.ui.indicators.VolumeIndicator
@@ -76,9 +73,10 @@ internal fun PlayerScreen(
 @Composable
 private fun PlayerScreen(
     uiState: PlayerUiState,
-    windowSizeClass: WindowSizeClass = currentWindowAdaptiveInfo().windowSizeClass,
     onAction: (PlayerUiAction) -> Unit
 ) {
+    val adaptiveLayoutState = rememberAdaptiveLayoutState()
+
     Box(
         modifier =
         Modifier
@@ -88,10 +86,8 @@ private fun PlayerScreen(
         contentAlignment = Alignment.TopCenter,
     ) {
 
-        if (windowSizeClass.windowWidthSizeClass != WindowWidthSizeClass.COMPACT
-            && windowSizeClass.windowHeightSizeClass == WindowHeightSizeClass.COMPACT
-        ) {
-            Row {
+        if (adaptiveLayoutState.playerProgramsPlacement == PlayerProgramsPlacement.Side) {
+            Row(modifier = Modifier.fillMaxSize()) {
                 PlayerContent(
                     modifier = Modifier.weight(MaterialTheme.dimensionWeight.weight2),
                     uiState = uiState,
@@ -108,7 +104,7 @@ private fun PlayerScreen(
                 }
             }
         } else {
-            Column {
+            Column(modifier = Modifier.fillMaxSize()) {
                 PlayerContent(
                     modifier = Modifier.weight(MaterialTheme.dimensionWeight.weight2),
                     uiState = uiState,
@@ -136,8 +132,8 @@ private fun PlayerScreen(
                         ChannelPrograms(
                             modifier =
                             Modifier
-                                .fillMaxHeight(MaterialTheme.dimensionFraction.fraction90)
-                                .fillMaxWidth(MaterialTheme.dimensionFraction.fraction80)
+                                .fillMaxHeight(adaptiveLayoutState.overlayHeightFraction)
+                                .fillMaxWidth(adaptiveLayoutState.overlayWidthFraction)
                                 .background(
                                     color = MaterialTheme.colorScheme.primary,
                                     shape =

@@ -8,8 +8,10 @@
 package com.mvproject.tinyiptvkmp.features.settings.player
 
 import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.WindowInsets
+import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.navigationBars
 import androidx.compose.foundation.layout.padding
@@ -23,6 +25,7 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import com.mvproject.tinyiptvkmp.core.common.mvi.CollectUiEffect
 import com.mvproject.tinyiptvkmp.core.domain.enums.VideoSize
@@ -31,6 +34,8 @@ import com.mvproject.tinyiptvkmp.core.theme.AppTheme
 import com.mvproject.tinyiptvkmp.core.theme.colorSchemeExtended
 import com.mvproject.tinyiptvkmp.core.theme.dimensionOpacity
 import com.mvproject.tinyiptvkmp.core.theme.dimensionSize
+import com.mvproject.tinyiptvkmp.core.ui.adaptive.adaptiveContentWidth
+import com.mvproject.tinyiptvkmp.core.ui.adaptive.rememberAdaptiveLayoutState
 import com.mvproject.tinyiptvkmp.core.ui.toolbars.AppBarWithBackNav
 import com.mvproject.tinyiptvkmp.features.settings.components.SettingsSelector
 import com.mvproject.tinyiptvkmp.features.settings.player.SettingsPlayerUiState.SettingsPlayer
@@ -64,6 +69,8 @@ private fun SettingsPlayerScreen(
     uiState: SettingsPlayerUiState,
     onAction: (SettingsPlayerUiAction) -> Unit,
 ) {
+    val adaptiveLayoutState = rememberAdaptiveLayoutState()
+
     Scaffold(
         modifier =
         Modifier
@@ -77,53 +84,64 @@ private fun SettingsPlayerScreen(
         },
     ) { paddingValues ->
 
-        Column(
+        Box(
             modifier =
-            Modifier
-                .padding(paddingValues)
-                .fillMaxSize()
-                .padding(MaterialTheme.dimensionSize.size12),
-            verticalArrangement = Arrangement.spacedBy(MaterialTheme.dimensionSize.size12)
+                Modifier
+                    .padding(paddingValues)
+                    .fillMaxSize(),
+            contentAlignment = Alignment.TopCenter,
         ) {
-            ListItem(
-                headlineContent = {
-                    Text(
-                        text = stringResource(Res.string.option_default_fullscreen_mode),
-                        style = MaterialTheme.typography.bodyMedium,
-                        color = MaterialTheme.colorScheme.onPrimary,
-                    )
-                },
-                trailingContent = {
-                    Switch(
-                        checked = uiState.isFullscreenEnabled,
-                        colors =
-                        SwitchDefaults.colors(
-                            checkedThumbColor = MaterialTheme.colorScheme.primary,
-                            uncheckedThumbColor =
-                            MaterialTheme.colorScheme.primary
-                                .copy(alpha = MaterialTheme.dimensionOpacity.opacity50),
-                            checkedTrackColor = MaterialTheme.colorSchemeExtended.activeInput,
-                            uncheckedTrackColor = MaterialTheme.colorScheme.onSurface,
+            Column(
+                modifier =
+                    Modifier
+                        .fillMaxHeight()
+                        .adaptiveContentWidth(adaptiveLayoutState)
+                        .padding(
+                            horizontal = adaptiveLayoutState.contentHorizontalPadding,
+                            vertical = MaterialTheme.dimensionSize.size12,
                         ),
-                        onCheckedChange = { state ->
-                            onAction(SettingsPlayerUiAction.SetFullScreenMode(state = state))
-                        },
-                    )
-                }
-            )
+                verticalArrangement = Arrangement.spacedBy(MaterialTheme.dimensionSize.size12)
+            ) {
+                ListItem(
+                    headlineContent = {
+                        Text(
+                            text = stringResource(Res.string.option_default_fullscreen_mode),
+                            style = MaterialTheme.typography.bodyMedium,
+                            color = MaterialTheme.colorScheme.onPrimary,
+                        )
+                    },
+                    trailingContent = {
+                        Switch(
+                            checked = uiState.isFullscreenEnabled,
+                            colors =
+                                SwitchDefaults.colors(
+                                    checkedThumbColor = MaterialTheme.colorScheme.primary,
+                                    uncheckedThumbColor =
+                                        MaterialTheme.colorScheme.primary
+                                            .copy(alpha = MaterialTheme.dimensionOpacity.opacity50),
+                                    checkedTrackColor = MaterialTheme.colorSchemeExtended.activeInput,
+                                    uncheckedTrackColor = MaterialTheme.colorScheme.onSurface,
+                                ),
+                            onCheckedChange = { state ->
+                                onAction(SettingsPlayerUiAction.SetFullScreenMode(state = state))
+                            },
+                        )
+                    }
+                )
 
-            SettingsSelector(
-                title = stringResource(Res.string.option_default_resize_mode),
-                selectedIndex = uiState.videoSize,
-                isExpanded = uiState.settingsType == SettingsPlayer.VideoSize,
-                options = VideoSize.entries.map { stringResource(it.mapToString()) },
-                onClick = {
-                    onAction(SettingsPlayerUiAction.ToggleOption(SettingsPlayer.VideoSize))
-                },
-                onSelect = {
-                    onAction(SettingsPlayerUiAction.SetVideoSize(mode = it))
-                }
-            )
+                SettingsSelector(
+                    title = stringResource(Res.string.option_default_resize_mode),
+                    selectedIndex = uiState.videoSize,
+                    isExpanded = uiState.settingsType == SettingsPlayer.VideoSize,
+                    options = VideoSize.entries.map { stringResource(it.mapToString()) },
+                    onClick = {
+                        onAction(SettingsPlayerUiAction.ToggleOption(SettingsPlayer.VideoSize))
+                    },
+                    onSelect = {
+                        onAction(SettingsPlayerUiAction.SetVideoSize(mode = it))
+                    }
+                )
+            }
         }
     }
 }

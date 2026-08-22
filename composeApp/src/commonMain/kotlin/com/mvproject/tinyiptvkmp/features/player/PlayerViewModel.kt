@@ -43,6 +43,7 @@ import com.mvproject.tinyiptvkmp.navigation.AppRoutes
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
+import kotlin.time.Duration.Companion.milliseconds
 
 class PlayerViewModel(
     savedStateHandle: SavedStateHandle,
@@ -195,7 +196,7 @@ class PlayerViewModel(
 
     private fun refreshGroupChannelsPrograms() {
         viewModelScope.launch {
-            delay(DELAY_500)
+            delay(DELAY_500.milliseconds)
             val currentChannels = uiState.value.groupChannels
             val channelsIds = currentChannels.mapProgramIds()
 
@@ -261,7 +262,7 @@ class PlayerViewModel(
             updateUiState {
                 copy(currentVolume = nextVolume)
             }
-            delay(DELAY_50)
+            delay(DELAY_50.milliseconds)
         }
     }
 
@@ -273,7 +274,7 @@ class PlayerViewModel(
             updateUiState {
                 copy(currentVolume = nextVolume)
             }
-            delay(DELAY_50)
+            delay(DELAY_50.milliseconds)
         }
     }
 
@@ -329,7 +330,7 @@ class PlayerViewModel(
                     copy(isControlUiVisible = true)
                 }
 
-                delay(UI_SHOW_DELAY)
+                delay(UI_SHOW_DELAY.milliseconds)
 
                 updateUiState {
                     copy(isControlUiVisible = false)
@@ -359,7 +360,7 @@ class PlayerViewModel(
         pollVolumeJob?.cancel()
         pollVolumeJob =
             viewModelScope.launch {
-                delay(hideVolumeAfterMs)
+                delay(hideVolumeAfterMs.milliseconds)
                 hideVolumeUi()
             }
     }
