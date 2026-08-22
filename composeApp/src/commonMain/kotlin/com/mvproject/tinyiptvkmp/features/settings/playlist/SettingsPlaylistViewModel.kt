@@ -10,8 +10,8 @@ package com.mvproject.tinyiptvkmp.features.settings.playlist
 import androidx.compose.runtime.Immutable
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.mvproject.tinyiptvkmp.core.common.mvi.MviCore
-import com.mvproject.tinyiptvkmp.core.common.mvi.mviCore
+import com.mvproject.tinyiptvkmp.core.base.mvi.MviCore
+import com.mvproject.tinyiptvkmp.core.base.mvi.mviCore
 import com.mvproject.tinyiptvkmp.core.common.utils.CommonUtils.empty
 import com.mvproject.tinyiptvkmp.core.data.repository.PlaylistsRepository
 import com.mvproject.tinyiptvkmp.core.domain.model.Playlist

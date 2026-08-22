@@ -30,7 +30,7 @@ import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import com.mvproject.tinyiptvkmp.core.common.mvi.CollectUiEffect
+import com.mvproject.tinyiptvkmp.core.base.mvi.CollectUiEffect
 import com.mvproject.tinyiptvkmp.core.theme.dimensionSize
 import com.mvproject.tinyiptvkmp.core.ui.adaptive.adaptiveContentWidth
 import com.mvproject.tinyiptvkmp.core.ui.adaptive.rememberAdaptiveLayoutState

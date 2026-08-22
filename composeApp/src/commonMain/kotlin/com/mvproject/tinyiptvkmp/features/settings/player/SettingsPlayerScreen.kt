@@ -28,7 +28,7 @@ import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
-import com.mvproject.tinyiptvkmp.core.common.mvi.CollectUiEffect
+import com.mvproject.tinyiptvkmp.core.base.mvi.CollectUiEffect
 import com.mvproject.tinyiptvkmp.core.domain.enums.VideoSize
 import com.mvproject.tinyiptvkmp.core.domain.enums.VideoSize.Companion.mapToString
 import com.mvproject.tinyiptvkmp.core.theme.AppTheme

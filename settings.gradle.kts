@@ -34,6 +34,8 @@ dependencyResolutionManagement {
 }
 rootProject.name = "TinyIptvKmp"
 include(":composeApp")
+include(":core:base")
+include(":core:network")
 include(":core:ui")
 include(":core:designsystem")
 include(":infrastructure:logging")

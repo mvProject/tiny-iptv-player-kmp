@@ -1,4 +1,4 @@
-package com.mvproject.tinyiptvkmp.core.common.mvi
+package com.mvproject.tinyiptvkmp.core.base.mvi
 
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.channels.Channel
@@ -8,7 +8,6 @@ import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.receiveAsFlow
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
-
 
 fun <UiState, UiAction, UiEffect> mviCore(
     initialUiState: UiState,

@@ -36,8 +36,8 @@ import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import com.mvproject.tinyiptvkmp.core.base.mvi.CollectUiEffect
 import com.mvproject.tinyiptvkmp.core.common.WEIGHT_1
-import com.mvproject.tinyiptvkmp.core.common.mvi.CollectUiEffect
 import com.mvproject.tinyiptvkmp.core.common.utils.CommonUtils.tmpFolder
 import com.mvproject.tinyiptvkmp.core.common.utils.CommonUtils.typeM3U
 import com.mvproject.tinyiptvkmp.core.common.utils.CommonUtils.typeM3U8

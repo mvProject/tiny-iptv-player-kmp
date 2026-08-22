@@ -1,4 +1,4 @@
-package com.mvproject.tinyiptvkmp.core.common.mvi
+package com.mvproject.tinyiptvkmp.core.base.mvi
 
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect

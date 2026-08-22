@@ -10,10 +10,10 @@ package com.mvproject.tinyiptvkmp.features.groups
 import androidx.compose.runtime.Immutable
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.mvproject.tinyiptvkmp.core.base.mvi.MviCore
+import com.mvproject.tinyiptvkmp.core.base.mvi.mviCore
 import com.mvproject.tinyiptvkmp.core.common.FLOAT_VALUE_ZERO
 import com.mvproject.tinyiptvkmp.core.common.INT_VALUE_1
-import com.mvproject.tinyiptvkmp.core.common.mvi.MviCore
-import com.mvproject.tinyiptvkmp.core.common.mvi.mviCore
 import com.mvproject.tinyiptvkmp.core.data.repository.PlaylistsRepository
 import com.mvproject.tinyiptvkmp.core.datastore.repository.PreferenceRepository
 import com.mvproject.tinyiptvkmp.core.domain.enums.GroupType

@@ -12,7 +12,7 @@ import kotlinx.serialization.json.Json
 
 expect fun createPlatformHttpClient(): HttpClient
 
-internal fun createHttpClient(): HttpClient =
+fun createHttpClient(): HttpClient =
     createPlatformHttpClient().config {
         install(Logging) {
             logger = ktorLogger()

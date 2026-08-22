@@ -29,7 +29,7 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.lifecycle.compose.LifecycleResumeEffect
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
-import com.mvproject.tinyiptvkmp.core.common.mvi.CollectUiEffect
+import com.mvproject.tinyiptvkmp.core.base.mvi.CollectUiEffect
 import com.mvproject.tinyiptvkmp.core.common.utils.CommonUtils.empty
 import com.mvproject.tinyiptvkmp.core.theme.dimensionSize
 import com.mvproject.tinyiptvkmp.core.ui.adaptive.rememberAdaptiveLayoutState

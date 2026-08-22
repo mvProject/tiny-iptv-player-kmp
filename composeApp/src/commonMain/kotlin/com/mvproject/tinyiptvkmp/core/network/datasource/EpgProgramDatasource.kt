@@ -8,7 +8,6 @@ import io.ktor.client.request.prepareGet
 import io.ktor.client.statement.bodyAsChannel
 import io.ktor.http.contentLength
 import io.ktor.utils.io.ByteReadChannel
-import io.ktor.utils.io.core.use
 import io.ktor.utils.io.readAvailable
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.runBlocking
@@ -28,15 +27,12 @@ class EpgProgramDatasource(
         onProgrammeParsed: suspend (ProgramParsed) -> Unit,
     ) {
         try {
-            client.use { service ->
-                service.prepareGet(url).execute { response ->
-                    logger.i { "testing File download started. Content length: ${response.contentLength()}" }
-                    val channel = response.bodyAsChannel()
-                    parseGzippedXml(channel, onProgrammeParsed)
-                }
+            client.prepareGet(url).execute { response ->
+                logger.i { "testing File download started. Content length: ${response.contentLength()}" }
+                val channel = response.bodyAsChannel()
+                parseGzippedXml(channel, onProgrammeParsed)
             }
         } catch (ex: Exception) {
-            client.close()
             logger.e(ex) { "testing Error downloading or parsing XML: ${ex.message}" }
         }
     }
@@ -70,55 +66,56 @@ class EpgProgramDatasource(
         gzipSource.buffer().okiouse { bufferedSource ->
             var currentProgram: ProgramParsed? = null
             var currentElement = String.empty
-            var line: String?
             val currentContent = StringBuilder()
 
-            while (bufferedSource.readUtf8Line().also { line = it } != null) {
+            while (true) {
+                val line = bufferedSource.readUtf8Line() ?: break
+
                 when {
-                    line!!.contains("<programme") -> {
+                    line.contains("<programme") -> {
                         currentProgram =
                             ProgramParsed(
-                                start = extractAttribute(line!!, "start"),
-                                stop = extractAttribute(line!!, "stop"),
-                                channel = extractAttribute(line!!, "channel"),
+                                start = extractAttribute(line, "start"),
+                                stop = extractAttribute(line, "stop"),
+                                channel = extractAttribute(line, "channel"),
                             )
                     }
 
-                    line!!.contains("<title") -> {
+                    line.contains("<title") -> {
                         currentElement = "title"
                         currentContent.clear()
-                        if (line!!.contains("</title>")) {
-                            currentProgram?.title = extractContent(line!!)
+                        if (line.contains("</title>")) {
+                            currentProgram?.title = extractContent(line)
                             currentElement = String.empty
                         }
                     }
 
-                    line!!.contains("<desc") -> {
+                    line.contains("<desc") -> {
                         currentElement = "desc"
                         currentContent.clear()
-                        if (line!!.contains("</desc>")) {
-                            currentProgram?.desc = extractContent(line!!)
+                        if (line.contains("</desc>")) {
+                            currentProgram?.desc = extractContent(line)
                             currentElement = String.empty
                         }
                     }
 
-                    line!!.contains("</title>") -> {
-                        currentContent.append(extractContent(line!!))
+                    line.contains("</title>") -> {
+                        currentContent.append(extractContent(line))
                         currentProgram?.title = currentContent.toString().trim()
                         currentElement = String.empty
                     }
 
-                    line!!.contains("</desc>") -> {
-                        currentContent.append(extractContent(line!!))
+                    line.contains("</desc>") -> {
+                        currentContent.append(extractContent(line))
                         currentProgram?.desc = currentContent.toString().trim()
                         currentElement = String.empty
                     }
 
                     currentElement.isNotEmpty() -> {
-                        currentContent.append(line!!.trim()).append(" ")
+                        currentContent.append(line.trim()).append(" ")
                     }
 
-                    line!!.contains("</programme>") -> {
+                    line.contains("</programme>") -> {
                         currentProgram?.let { onProgrammeParsed(it) }
                         currentProgram = null
                     }

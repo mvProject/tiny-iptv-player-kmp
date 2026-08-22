@@ -27,7 +27,7 @@ val actualDate
 
 private val dateFormat =
     LocalDate.Format {
-        dayOfMonth()
+        day()
         char('/')
         monthNumber()
         char('/')

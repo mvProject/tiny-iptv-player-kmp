@@ -10,6 +10,8 @@ package com.mvproject.tinyiptvkmp.features.player
 import androidx.compose.runtime.Immutable
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.mvproject.tinyiptvkmp.core.base.mvi.MviCore
+import com.mvproject.tinyiptvkmp.core.base.mvi.mviCore
 import com.mvproject.tinyiptvkmp.core.common.DELAY_50
 import com.mvproject.tinyiptvkmp.core.common.DELAY_500
 import com.mvproject.tinyiptvkmp.core.common.FLOAT_STEP_VOLUME
@@ -20,8 +22,6 @@ import com.mvproject.tinyiptvkmp.core.common.INT_VALUE_1
 import com.mvproject.tinyiptvkmp.core.common.INT_VALUE_ZERO
 import com.mvproject.tinyiptvkmp.core.common.UI_SHOW_DELAY
 import com.mvproject.tinyiptvkmp.core.common.VOLUME_SHOW_DELAY
-import com.mvproject.tinyiptvkmp.core.common.mvi.MviCore
-import com.mvproject.tinyiptvkmp.core.common.mvi.mviCore
 import com.mvproject.tinyiptvkmp.core.common.utils.CommonUtils.empty
 import com.mvproject.tinyiptvkmp.core.datastore.repository.PreferenceRepository
 import com.mvproject.tinyiptvkmp.core.domain.enums.FavoriteType

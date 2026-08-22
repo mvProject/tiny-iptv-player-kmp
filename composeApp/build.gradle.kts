@@ -48,6 +48,8 @@ kotlin {
         val desktopMain by getting
 
         commonMain.dependencies {
+            implementation(project(":core:base"))
+            implementation(project(":core:network"))
             implementation(project(":core:ui"))
             implementation(project(":core:designsystem"))
             implementation(project(":infrastructure:logging"))
@@ -72,9 +74,6 @@ kotlin {
 
             // Room
             implementation(libs.bundles.room)
-
-            // Network
-            implementation(libs.bundles.ktor)
 
             // Navigation
             implementation(libs.bundles.navigation)
@@ -102,9 +101,6 @@ kotlin {
 
             implementation(libs.androidx.compose.activity)
 
-            // Network
-            implementation(libs.ktor.client.android)
-
             // DI
             implementation(libs.koin.android)
 
@@ -128,15 +124,11 @@ kotlin {
             // Coroutines
             implementation(libs.kotlinx.coroutines.swing)
 
-            // Network
-            implementation(libs.ktor.client.okhttp)
-
             // Vlc player
             implementation(libs.caprica.vlcj)
         }
 
         nativeMain.dependencies {
-            implementation(libs.ktor.client.darwin)
         }
     }
 }
