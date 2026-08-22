@@ -7,10 +7,8 @@
 
 package com.mvproject.tinyiptvkmp.core.database.di
 
-import androidx.room.RoomDatabase
+import com.mvproject.tinyiptvkmp.core.database.builder.createRoomDatabase
 import com.mvproject.tinyiptvkmp.core.database.db.AppDatabase
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.IO
 import org.koin.dsl.module
 
 val databaseModule =
@@ -20,8 +18,3 @@ val databaseModule =
             createRoomDatabase(get())
         }
     }
-
-private fun createRoomDatabase(builder: RoomDatabase.Builder<AppDatabase>): AppDatabase =
-    builder
-        .setQueryCoroutineContext(Dispatchers.IO)
-        .build()

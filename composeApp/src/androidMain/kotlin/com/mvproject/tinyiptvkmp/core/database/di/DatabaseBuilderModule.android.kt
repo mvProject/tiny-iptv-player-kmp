@@ -7,10 +7,9 @@
 
 package com.mvproject.tinyiptvkmp.core.database.di
 
-import android.content.Context
-import androidx.room.Room
 import androidx.room.RoomDatabase
-import androidx.sqlite.driver.AndroidSQLiteDriver
+import com.mvproject.tinyiptvkmp.core.database.builder.createRoomDatabaseBuilder
+import com.mvproject.tinyiptvkmp.core.database.config.DatabaseConfig
 import com.mvproject.tinyiptvkmp.core.database.db.AppDatabase
 import com.mvproject.tinyiptvkmp.core.database.db.dbFileName
 import org.koin.core.module.Module
@@ -18,12 +17,7 @@ import org.koin.dsl.module
 
 actual fun databaseBuilderModule(): Module =
     module {
-        single<RoomDatabase.Builder<AppDatabase>> { createRoomDatabaseBuilder(get()) }
+        single<RoomDatabase.Builder<AppDatabase>> {
+            createRoomDatabaseBuilder(get(), DatabaseConfig(dbFileName))
+        }
     }
-
-private fun createRoomDatabaseBuilder(ctx: Context): RoomDatabase.Builder<AppDatabase> {
-    val dbFile = ctx.getDatabasePath(dbFileName)
-    return Room
-        .databaseBuilder<AppDatabase>(ctx, dbFile.absolutePath)
-        .setDriver(AndroidSQLiteDriver())
-}

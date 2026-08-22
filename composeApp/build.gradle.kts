@@ -49,6 +49,8 @@ kotlin {
 
         commonMain.dependencies {
             implementation(project(":core:base"))
+            implementation(project(":core:database"))
+            implementation(project(":core:datastore"))
             implementation(project(":core:network"))
             implementation(project(":core:ui"))
             implementation(project(":core:designsystem"))
@@ -68,12 +70,6 @@ kotlin {
             // DI
             implementation(project.dependencies.platform(libs.koin.bom))
             implementation(libs.bundles.koin)
-
-            // Storage
-            implementation(libs.androidx.datastore.core)
-
-            // Room
-            implementation(libs.bundles.room)
 
             // Navigation
             implementation(libs.bundles.navigation)
