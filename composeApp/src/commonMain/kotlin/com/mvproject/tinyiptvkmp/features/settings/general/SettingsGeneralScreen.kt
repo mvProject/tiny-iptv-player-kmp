@@ -9,8 +9,10 @@ package com.mvproject.tinyiptvkmp.features.settings.general
 
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
@@ -32,6 +34,8 @@ import com.mvproject.tinyiptvkmp.core.common.WEIGHT_1
 import com.mvproject.tinyiptvkmp.core.common.mvi.CollectUiEffect
 import com.mvproject.tinyiptvkmp.core.domain.enums.UpdatePeriod
 import com.mvproject.tinyiptvkmp.core.theme.dimensionSize
+import com.mvproject.tinyiptvkmp.core.ui.adaptive.adaptiveContentWidth
+import com.mvproject.tinyiptvkmp.core.ui.adaptive.rememberAdaptiveLayoutState
 import com.mvproject.tinyiptvkmp.core.ui.buttons.MenuButton
 import com.mvproject.tinyiptvkmp.core.ui.toolbars.AppBarWithBackNav
 import com.mvproject.tinyiptvkmp.features.settings.components.SettingsSelector
@@ -73,6 +77,8 @@ private fun SettingsGeneralScreen(
     uiState: SettingsGeneralUiState,
     onAction: (SettingsGeneralUiAction) -> Unit,
 ) {
+    val adaptiveLayoutState = rememberAdaptiveLayoutState()
+
     Scaffold(
         modifier = Modifier.fillMaxSize(),
         topBar = {
@@ -83,135 +89,146 @@ private fun SettingsGeneralScreen(
         },
     ) { paddingValues ->
 
-        Column(
+        Box(
             modifier = Modifier
                 .padding(paddingValues)
-                .fillMaxSize()
-                .padding(MaterialTheme.dimensionSize.size8),
-            verticalArrangement = Arrangement.spacedBy(MaterialTheme.dimensionSize.size12),
+                .fillMaxSize(),
+            contentAlignment = Alignment.TopCenter,
         ) {
-            Column {
-                ListItem(
-                    modifier =
-                    Modifier
-                        .clickable(onClick = { onAction(SettingsGeneralUiAction.NavigateToPlaylistSettings) })
-                        .clip(MaterialTheme.shapes.extraSmall),
-                    colors =
-                    ListItemDefaults.colors(
-                        containerColor = MaterialTheme.colorScheme.background,
-                    ),
-                    headlineContent = {
-                        Text(
-                            text = stringResource(Res.string.scr_playlist_settings_title),
-                            color = MaterialTheme.colorScheme.onPrimary,
-                            style = MaterialTheme.typography.titleMedium,
-                        )
-                    },
-                    trailingContent = {
-                        MenuButton(
-                            imageVector = Icons.AutoMirrored.Filled.ArrowRight,
-                            onClick = {
-                                onAction(SettingsGeneralUiAction.NavigateToPlaylistSettings)
-                            }
-                        )
-                    },
-                )
-                HorizontalDivider(
-                    modifier =
-                    Modifier
-                        .padding(horizontal = MaterialTheme.dimensionSize.size8),
-                    color = MaterialTheme.colorScheme.onPrimary,
-                )
-            }
-
-            Column {
-                ListItem(
-                    modifier =
-                    Modifier
-                        .clickable(onClick = { onAction(SettingsGeneralUiAction.NavigateToPlayerSettings) })
-                        .clip(MaterialTheme.shapes.extraSmall),
-                    colors =
-                    ListItemDefaults.colors(
-                        containerColor = MaterialTheme.colorScheme.background,
-                    ),
-                    headlineContent = {
-                        Text(
-                            text = stringResource(Res.string.scr_player_settings_title),
-                            color = MaterialTheme.colorScheme.onPrimary,
-                            style = MaterialTheme.typography.titleMedium,
-                        )
-                    },
-                    trailingContent = {
-                        MenuButton(
-                            imageVector = Icons.AutoMirrored.Filled.ArrowRight,
-                            onClick = {
-                                onAction(SettingsGeneralUiAction.NavigateToPlayerSettings)
-                            }
-                        )
-                    },
-                )
-
-                HorizontalDivider(
-                    modifier =
-                    Modifier
-                        .padding(horizontal = MaterialTheme.dimensionSize.size8),
-                    color = MaterialTheme.colorScheme.onPrimary,
-                )
-            }
-
-            Row(
+            Column(
                 modifier =
-                Modifier
-                    .fillMaxWidth()
-                    .padding(horizontal = MaterialTheme.dimensionSize.size8),
-                horizontalArrangement =
-                Arrangement.spacedBy(
-                    space = MaterialTheme.dimensionSize.size8,
-                ),
-                verticalAlignment = Alignment.CenterVertically,
+                    Modifier
+                        .fillMaxHeight()
+                        .adaptiveContentWidth(adaptiveLayoutState)
+                        .padding(
+                            horizontal = adaptiveLayoutState.contentHorizontalPadding,
+                            vertical = MaterialTheme.dimensionSize.size8,
+                        ),
+                verticalArrangement = Arrangement.spacedBy(MaterialTheme.dimensionSize.size12),
             ) {
-                HorizontalDivider(
-                    modifier = Modifier.weight(WEIGHT_1),
-                    color = MaterialTheme.colorScheme.onPrimary,
+                Column {
+                    ListItem(
+                        modifier =
+                            Modifier
+                                .clickable(onClick = { onAction(SettingsGeneralUiAction.NavigateToPlaylistSettings) })
+                                .clip(MaterialTheme.shapes.extraSmall),
+                        colors =
+                            ListItemDefaults.colors(
+                                containerColor = MaterialTheme.colorScheme.background,
+                            ),
+                        headlineContent = {
+                            Text(
+                                text = stringResource(Res.string.scr_playlist_settings_title),
+                                color = MaterialTheme.colorScheme.onPrimary,
+                                style = MaterialTheme.typography.titleMedium,
+                            )
+                        },
+                        trailingContent = {
+                            MenuButton(
+                                imageVector = Icons.AutoMirrored.Filled.ArrowRight,
+                                onClick = {
+                                    onAction(SettingsGeneralUiAction.NavigateToPlaylistSettings)
+                                }
+                            )
+                        },
+                    )
+                    HorizontalDivider(
+                        modifier =
+                            Modifier
+                                .padding(horizontal = MaterialTheme.dimensionSize.size8),
+                        color = MaterialTheme.colorScheme.onPrimary,
+                    )
+                }
+
+                Column {
+                    ListItem(
+                        modifier =
+                            Modifier
+                                .clickable(onClick = { onAction(SettingsGeneralUiAction.NavigateToPlayerSettings) })
+                                .clip(MaterialTheme.shapes.extraSmall),
+                        colors =
+                            ListItemDefaults.colors(
+                                containerColor = MaterialTheme.colorScheme.background,
+                            ),
+                        headlineContent = {
+                            Text(
+                                text = stringResource(Res.string.scr_player_settings_title),
+                                color = MaterialTheme.colorScheme.onPrimary,
+                                style = MaterialTheme.typography.titleMedium,
+                            )
+                        },
+                        trailingContent = {
+                            MenuButton(
+                                imageVector = Icons.AutoMirrored.Filled.ArrowRight,
+                                onClick = {
+                                    onAction(SettingsGeneralUiAction.NavigateToPlayerSettings)
+                                }
+                            )
+                        },
+                    )
+
+                    HorizontalDivider(
+                        modifier =
+                            Modifier
+                                .padding(horizontal = MaterialTheme.dimensionSize.size8),
+                        color = MaterialTheme.colorScheme.onPrimary,
+                    )
+                }
+
+                Row(
+                    modifier =
+                        Modifier
+                            .fillMaxWidth()
+                            .padding(horizontal = MaterialTheme.dimensionSize.size8),
+                    horizontalArrangement =
+                        Arrangement.spacedBy(
+                            space = MaterialTheme.dimensionSize.size8,
+                        ),
+                    verticalAlignment = Alignment.CenterVertically,
+                ) {
+                    HorizontalDivider(
+                        modifier = Modifier.weight(WEIGHT_1),
+                        color = MaterialTheme.colorScheme.onPrimary,
+                    )
+
+                    Text(
+                        text = stringResource(Res.string.option_update_title),
+                        style = MaterialTheme.typography.bodyMedium,
+                        color = MaterialTheme.colorScheme.onSurface,
+                    )
+
+                    HorizontalDivider(
+                        modifier = Modifier.weight(WEIGHT_1),
+                        color = MaterialTheme.colorScheme.onPrimary,
+                    )
+                }
+
+                SettingsSelector(
+                    title = stringResource(Res.string.option_update_epg_info),
+                    selectedIndex = uiState.infoUpdatePeriod,
+                    isExpanded = uiState.settingsType == SettingsGeneral.InfoUpdate,
+                    options = UpdatePeriod.entries.map { stringResource(it.title) },
+                    onClick = {
+                        onAction(SettingsGeneralUiAction.ToggleOption(SettingsGeneral.InfoUpdate))
+                    },
+                    onSelect = {
+                        onAction(SettingsGeneralUiAction.SetInfoUpdatePeriod(type = it))
+                    }
                 )
 
-                Text(
-                    text = stringResource(Res.string.option_update_title),
-                    style = MaterialTheme.typography.bodyMedium,
-                    color = MaterialTheme.colorScheme.onSurface,
-                )
-
-                HorizontalDivider(
-                    modifier = Modifier.weight(WEIGHT_1),
-                    color = MaterialTheme.colorScheme.onPrimary,
+                SettingsSelector(
+                    title = stringResource(Res.string.option_update_epg_data),
+                    selectedIndex = uiState.epgUpdatePeriod,
+                    isExpanded = uiState.settingsType == SettingsGeneral.ProgramsUpdate,
+                    options = UpdatePeriod.entries.map { stringResource(it.title) },
+                    onClick = {
+                        onAction(SettingsGeneralUiAction.ToggleOption(SettingsGeneral.ProgramsUpdate))
+                    },
+                    onSelect = {
+                        onAction(SettingsGeneralUiAction.SetEpgUpdatePeriod(type = it))
+                    }
                 )
             }
-
-            SettingsSelector(
-                title = stringResource(Res.string.option_update_epg_info),
-                selectedIndex = uiState.infoUpdatePeriod,
-                isExpanded = uiState.settingsType == SettingsGeneral.InfoUpdate,
-                options = UpdatePeriod.entries.map { stringResource(it.title) },
-                onClick = {
-                    onAction(SettingsGeneralUiAction.ToggleOption(SettingsGeneral.InfoUpdate))
-                },
-                onSelect = {
-                    onAction(SettingsGeneralUiAction.SetInfoUpdatePeriod(type = it))
-                }
-            )
-
-            SettingsSelector(
-                title = stringResource(Res.string.option_update_epg_data),
-                selectedIndex = uiState.epgUpdatePeriod,
-                isExpanded = uiState.settingsType == SettingsGeneral.ProgramsUpdate,
-                options = UpdatePeriod.entries.map { stringResource(it.title) },
-                onClick = {
-                    onAction(SettingsGeneralUiAction.ToggleOption(SettingsGeneral.ProgramsUpdate))
-                },
-                onSelect = {
-                    onAction(SettingsGeneralUiAction.SetEpgUpdatePeriod(type = it))
-                }
-            )
 
             /* OptionSelector(
                  modifier =

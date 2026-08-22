@@ -11,6 +11,7 @@ import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.WindowInsets
+import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.navigationBars
@@ -27,9 +28,12 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import com.mvproject.tinyiptvkmp.core.common.mvi.CollectUiEffect
 import com.mvproject.tinyiptvkmp.core.theme.dimensionSize
+import com.mvproject.tinyiptvkmp.core.ui.adaptive.adaptiveContentWidth
+import com.mvproject.tinyiptvkmp.core.ui.adaptive.rememberAdaptiveLayoutState
 import com.mvproject.tinyiptvkmp.core.ui.indicators.LoadingIndicator
 import com.mvproject.tinyiptvkmp.core.ui.toolbars.AppBarWithBackNav
 import com.mvproject.tinyiptvkmp.core.ui.views.NoItemsView
@@ -66,6 +70,8 @@ private fun SettingsPlaylistScreen(
     uiState: SettingsPlaylistUiState,
     onAction: (SettingsPlaylistUiAction) -> Unit,
 ) {
+    val adaptiveLayoutState = rememberAdaptiveLayoutState()
+
     Scaffold(
         modifier =
         Modifier
@@ -78,25 +84,30 @@ private fun SettingsPlaylistScreen(
             )
         },
         bottomBar = {
-            ElevatedButton(
-                onClick = {
-                    onAction(SettingsPlaylistUiAction.NavigateToPlaylist())
-                },
+            Box(
                 modifier =
                 Modifier
                     .padding(MaterialTheme.dimensionSize.size8)
                     .fillMaxWidth(),
-                colors =
-                ButtonDefaults.buttonColors(
-                    containerColor = MaterialTheme.colorScheme.onSurface,
-                ),
-                shape = MaterialTheme.shapes.small,
+                contentAlignment = Alignment.Center,
             ) {
-                Text(
-                    text = stringResource(Res.string.btn_add_new),
-                    color = MaterialTheme.colorScheme.primary,
-                    style = MaterialTheme.typography.titleMedium,
-                )
+                ElevatedButton(
+                    onClick = {
+                        onAction(SettingsPlaylistUiAction.NavigateToPlaylist())
+                    },
+                    modifier = Modifier.adaptiveContentWidth(adaptiveLayoutState),
+                    colors =
+                        ButtonDefaults.buttonColors(
+                            containerColor = MaterialTheme.colorScheme.onSurface,
+                        ),
+                    shape = MaterialTheme.shapes.small,
+                ) {
+                    Text(
+                        text = stringResource(Res.string.btn_add_new),
+                        color = MaterialTheme.colorScheme.primary,
+                        style = MaterialTheme.typography.titleMedium,
+                    )
+                }
             }
         },
     ) { paddingValues ->
@@ -105,6 +116,7 @@ private fun SettingsPlaylistScreen(
             Modifier
                 .padding(paddingValues)
                 .fillMaxSize(),
+            contentAlignment = Alignment.TopCenter,
         ) {
             when (val playlistState = uiState.playlistState) {
                 SettingsPlaylistUiState.PlaylistState.Empty -> {
@@ -119,10 +131,14 @@ private fun SettingsPlaylistScreen(
                     LazyColumn(
                         modifier =
                         Modifier
-                            .fillMaxSize(),
+                            .fillMaxHeight()
+                            .adaptiveContentWidth(adaptiveLayoutState),
                         state = rememberLazyListState(),
                         verticalArrangement = Arrangement.spacedBy(MaterialTheme.dimensionSize.size4),
-                        contentPadding = PaddingValues(MaterialTheme.dimensionSize.size8),
+                        contentPadding = PaddingValues(
+                            horizontal = adaptiveLayoutState.contentHorizontalPadding,
+                            vertical = MaterialTheme.dimensionSize.size8,
+                        ),
                     ) {
                         items(
                             playlistState.playlists,
@@ -132,7 +148,7 @@ private fun SettingsPlaylistScreen(
                                 modifier = Modifier.fillMaxSize(),
                                 item = item,
                                 onSelect = {
-                                    onAction(SettingsPlaylistUiAction.NavigateToPlaylist(id = item.id.toString()))
+                                    onAction(SettingsPlaylistUiAction.NavigateToPlaylist(id = item.id))
                                 },
                                 onDelete = {
                                     onAction(SettingsPlaylistUiAction.DeletePlaylist(playlist = item))

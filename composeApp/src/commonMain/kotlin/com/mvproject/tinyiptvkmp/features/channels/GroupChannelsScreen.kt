@@ -10,6 +10,7 @@ package com.mvproject.tinyiptvkmp.features.channels
 import androidx.compose.animation.Crossfade
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.WindowInsets
 import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
@@ -30,8 +31,8 @@ import androidx.lifecycle.compose.LifecycleResumeEffect
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.mvproject.tinyiptvkmp.core.common.mvi.CollectUiEffect
 import com.mvproject.tinyiptvkmp.core.common.utils.CommonUtils.empty
-import com.mvproject.tinyiptvkmp.core.theme.dimensionFraction
 import com.mvproject.tinyiptvkmp.core.theme.dimensionSize
+import com.mvproject.tinyiptvkmp.core.ui.adaptive.rememberAdaptiveLayoutState
 import com.mvproject.tinyiptvkmp.core.ui.epg.ChannelPrograms
 import com.mvproject.tinyiptvkmp.core.ui.indicators.LoadingIndicator
 import com.mvproject.tinyiptvkmp.core.ui.overlay.OnScreenDisplay
@@ -73,6 +74,7 @@ private fun GroupChannelsScreen(
     uiState: GroupChannelsUiState,
     onAction: (GroupChannelsUiAction) -> Unit,
 ) {
+    val adaptiveLayoutState = rememberAdaptiveLayoutState()
     var searchString by remember {
         mutableStateOf(String.empty)
     }
@@ -116,6 +118,11 @@ private fun GroupChannelsScreen(
                     modifier = Modifier.fillMaxSize(),
                     viewType = viewType,
                     items = filteredResults,
+                    gridMinCellWidth = adaptiveLayoutState.channelGridMinCellWidth,
+                    contentPadding = PaddingValues(
+                        horizontal = adaptiveLayoutState.contentHorizontalPadding,
+                        vertical = MaterialTheme.dimensionSize.size4,
+                    ),
                     onChannelSelect = { selected ->
                         onAction(
                             GroupChannelsUiAction.SelectChannel(
@@ -166,8 +173,8 @@ private fun GroupChannelsScreen(
                         is GroupChannelsOSD.ChannelPrograms -> {
                             ChannelPrograms(
                                 modifier = Modifier
-                                    .fillMaxHeight(MaterialTheme.dimensionFraction.fraction90)
-                                    .fillMaxWidth(MaterialTheme.dimensionFraction.fraction80)
+                                    .fillMaxHeight(adaptiveLayoutState.overlayHeightFraction)
+                                    .fillMaxWidth(adaptiveLayoutState.overlayWidthFraction)
                                     .background(
                                         color = MaterialTheme.colorScheme.primary,
                                         shape =

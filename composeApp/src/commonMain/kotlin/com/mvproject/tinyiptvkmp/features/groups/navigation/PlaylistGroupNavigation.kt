@@ -7,23 +7,17 @@
 
 package com.mvproject.tinyiptvkmp.features.groups.navigation
 
-import androidx.navigation.NavGraphBuilder
-import androidx.navigation.NavHostController
-import androidx.navigation.compose.composable
+import androidx.navigation3.runtime.EntryProviderScope
 import com.mvproject.tinyiptvkmp.features.groups.GroupScreen
 import com.mvproject.tinyiptvkmp.features.groups.GroupViewModel
 import com.mvproject.tinyiptvkmp.navigation.AppRoutes
 import org.koin.compose.viewmodel.koinViewModel
 
-fun NavHostController.navigateToPlaylistGroup() {
-    this.navigate(AppRoutes.PlaylistGroup)
-}
-
-fun NavGraphBuilder.playlistGroups(
+fun EntryProviderScope<AppRoutes>.playlistGroups(
     onNavigateToSettings: () -> Unit,
     onNavigateToGroup: (String, String) -> Unit,
 ) {
-    composable<AppRoutes.PlaylistGroup> {
+    entry<AppRoutes.PlaylistGroup> {
         val groupViewModel = koinViewModel<GroupViewModel>()
 
         GroupScreen(

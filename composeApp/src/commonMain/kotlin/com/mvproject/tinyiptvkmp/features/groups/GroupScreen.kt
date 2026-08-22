@@ -30,6 +30,8 @@ import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.mvproject.tinyiptvkmp.core.common.mvi.CollectUiEffect
 import com.mvproject.tinyiptvkmp.core.theme.colorSchemeExtended
 import com.mvproject.tinyiptvkmp.core.theme.dimensionSize
+import com.mvproject.tinyiptvkmp.core.ui.adaptive.adaptiveContentWidth
+import com.mvproject.tinyiptvkmp.core.ui.adaptive.rememberAdaptiveLayoutState
 import com.mvproject.tinyiptvkmp.core.ui.indicators.LoadingIndicator
 import com.mvproject.tinyiptvkmp.core.ui.toolbars.AppBarWithSettings
 import com.mvproject.tinyiptvkmp.core.ui.views.NoItemsView
@@ -67,6 +69,8 @@ private fun GroupScreen(
     uiState: GroupUiState,
     onAction: (GroupUiAction) -> Unit = {},
 ) {
+    val adaptiveLayoutState = rememberAdaptiveLayoutState()
+
     LifecycleResumeEffect(Unit) {
         onAction(GroupUiAction.RefreshPlaylist)
 
@@ -84,12 +88,17 @@ private fun GroupScreen(
             Modifier
                 .padding(paddingValues)
                 .fillMaxSize(),
+            contentAlignment = Alignment.TopCenter,
         ) {
             Column(
                 modifier =
                 Modifier
-                    .fillMaxSize()
-                    .padding(MaterialTheme.dimensionSize.size8),
+                    .fillMaxHeight()
+                    .adaptiveContentWidth(adaptiveLayoutState)
+                    .padding(
+                        horizontal = adaptiveLayoutState.contentHorizontalPadding,
+                        vertical = MaterialTheme.dimensionSize.size8,
+                    ),
                 horizontalAlignment = Alignment.CenterHorizontally,
                 verticalArrangement = Arrangement.Center,
             ) {

@@ -7,27 +7,21 @@
 
 package com.mvproject.tinyiptvkmp.features.channels.navigation
 
-import androidx.navigation.NavGraphBuilder
-import androidx.navigation.NavHostController
-import androidx.navigation.compose.composable
+import androidx.navigation3.runtime.EntryProviderScope
 import com.mvproject.tinyiptvkmp.features.channels.GroupChannelsScreen
 import com.mvproject.tinyiptvkmp.features.channels.GroupChannelsViewModel
 import com.mvproject.tinyiptvkmp.navigation.AppRoutes
 import org.koin.compose.viewmodel.koinViewModel
+import org.koin.core.parameter.parametersOf
 
-fun NavHostController.navigateToGroupChannels(
-    group: String,
-    groupType: String,
-) {
-    this.navigate(AppRoutes.TvPlaylistChannels(group = group, groupType = groupType))
-}
-
-fun NavGraphBuilder.groupChannels(
+fun EntryProviderScope<AppRoutes>.groupChannels(
     onNavigateBack: () -> Unit,
     onNavigateToPlayer: (String, String, String) -> Unit,
 ) {
-    composable<AppRoutes.TvPlaylistChannels> {
-        val groupChannelsViewModel = koinViewModel<GroupChannelsViewModel>()
+    entry<AppRoutes.TvPlaylistChannels> { key ->
+        val groupChannelsViewModel = koinViewModel<GroupChannelsViewModel>(
+            parameters = { parametersOf(key) }
+        )
 
         GroupChannelsScreen(
             viewModel = groupChannelsViewModel,

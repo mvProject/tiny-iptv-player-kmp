@@ -44,7 +44,8 @@ actual fun PlayerView(
 ) {
     // todo network Available check
 
-    val videoPlayerState = remember { VideoPlayerStateImpl() }
+    val isVlcDiscovered = remember { NativeDiscovery().discover() }
+    val videoPlayerState = remember(isVlcDiscovered) { VideoPlayerStateImpl() }
 
     /*    LaunchedEffect(tvPlayerState.isRestartRequired) {
             if (tvPlayerState.isRestartRequired) {
@@ -77,7 +78,6 @@ actual fun PlayerView(
     VideoPlayerDirect(
         modifier = modifier.fillMaxSize(),
         state = videoPlayerState,
-        url = uiState.currentChannel.channelUrl,
         onPlaybackAction = onAction
     )
 }
@@ -94,6 +94,11 @@ class VideoPlayerStateImpl : PlayerState {
     }
 
     override fun setPlayingState(value: Boolean) {
+        val isPlaying = mediaPlayer.status().isPlaying
+        if (value == isPlaying) {
+            return
+        }
+
         if (value) {
             play()
         } else {
@@ -119,7 +124,9 @@ class VideoPlayerStateImpl : PlayerState {
     }
 
     override fun setPlayerChannel(channelUrl: String) {
+        mediaPlayer.controls().stop()
         mediaPlayer.media().play(channelUrl)
+        mediaPlayer.subpictures().setTrack(INT_NO_VALUE)
     }
 
     init {
@@ -131,15 +138,19 @@ class VideoPlayerStateImpl : PlayerState {
 fun VideoPlayerDirect(
     modifier: Modifier = Modifier,
     state: VideoPlayerStateImpl = remember { VideoPlayerStateImpl() },
-    url: String,
     onPlaybackAction: (PlayerUiAction) -> Unit
 ) {
-    NativeDiscovery().discover()
-
     DisposableEffect(state) {
         val eventListener = object : MediaPlayerEventAdapter() {
             override fun error(mediaPlayer: MediaPlayer) {
                 Logger.e("testing mediaPlayer error")
+                onPlaybackAction(
+                    PlayerUiAction.OnPlaybackStateChanged(
+                        PlayerUiState.PlayerPlaybackState.PlaybackIdle(
+                            null
+                        )
+                    )
+                )
             }
 
             override fun mediaPlayerReady(mediaPlayer: MediaPlayer) {
@@ -203,10 +214,7 @@ fun VideoPlayerDirect(
 
     var frameTime: Long by remember { mutableStateOf(LONG_VALUE_ZERO) }
 
-    LaunchedEffect(url) {
-        Logger.w("testing LaunchedEffect started")
-        state.mediaPlayer.media()?.start(url)
-        state.mediaPlayer.subpictures().setTrack(INT_NO_VALUE)
+    LaunchedEffect(state) {
         while (true) {
             withFrameMillis { time ->
                 frameTime = time

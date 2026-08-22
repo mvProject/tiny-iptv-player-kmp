@@ -8,21 +8,20 @@
 package com.mvproject.tinyiptvkmp.navigation
 
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.mutableStateListOf
+import androidx.compose.runtime.saveable.rememberSerializable
 import androidx.compose.ui.Modifier
-import androidx.navigation.compose.NavHost
-import androidx.navigation.compose.rememberNavController
+import androidx.lifecycle.viewmodel.navigation3.rememberViewModelStoreNavEntryDecorator
+import androidx.navigation3.runtime.entryProvider
+import androidx.navigation3.runtime.rememberSaveableStateHolderNavEntryDecorator
+import androidx.navigation3.ui.NavDisplay
+import androidx.savedstate.compose.serialization.serializers.SnapshotStateListSerializer
 import com.mvproject.tinyiptvkmp.features.channels.navigation.groupChannels
-import com.mvproject.tinyiptvkmp.features.channels.navigation.navigateToGroupChannels
 import com.mvproject.tinyiptvkmp.features.groups.navigation.playlistGroups
-import com.mvproject.tinyiptvkmp.features.player.navigation.navigateToPlayer
 import com.mvproject.tinyiptvkmp.features.player.navigation.player
-import com.mvproject.tinyiptvkmp.features.playlist.navigation.navigateToPlaylistDetail
 import com.mvproject.tinyiptvkmp.features.playlist.navigation.playlistDetail
-import com.mvproject.tinyiptvkmp.features.settings.general.navigation.navigateToGeneralSettings
 import com.mvproject.tinyiptvkmp.features.settings.general.navigation.settingsGeneral
-import com.mvproject.tinyiptvkmp.features.settings.player.navigation.navigateToPlayerSettings
 import com.mvproject.tinyiptvkmp.features.settings.player.navigation.settingsPlayer
-import com.mvproject.tinyiptvkmp.features.settings.playlist.navigation.navigateToPlaylistSettings
 import com.mvproject.tinyiptvkmp.features.settings.playlist.navigation.settingsPlaylist
 
 @Composable
@@ -30,46 +29,63 @@ fun NavigationHost(
     modifier: Modifier = Modifier,
     startDestination: AppRoutes
 ) {
-    val navController = rememberNavController()
-
-    NavHost(
-        modifier = modifier,
-        navController = navController,
-        startDestination = startDestination,
-    ) {
-
-        playlistGroups(
-            onNavigateToSettings = navController::navigateToGeneralSettings,
-            onNavigateToGroup = navController::navigateToGroupChannels
-        )
-
-        groupChannels(
-            onNavigateBack = navController::navigateUp,
-            onNavigateToPlayer = navController::navigateToPlayer
-        )
-
-        playlistDetail(
-            onNavigateBack = navController::navigateUp
-        )
-
-        player(
-            onNavigateBack = navController::navigateUp
-        )
-
-        settingsGeneral(
-            onNavigateBack = navController::navigateUp,
-            onNavigateToPlaylistSettings = navController::navigateToPlaylistSettings,
-            onNavigateToPlayerSettings = navController::navigateToPlayerSettings
-        )
-
-        settingsPlaylist(
-            onNavigateBack = navController::navigateUp,
-            onNavigatePlaylist = navController::navigateToPlaylistDetail
-        )
-
-        settingsPlayer(
-            onNavigateBack = navController::navigateUp
-        )
-
+    val backStack = rememberSerializable(serializer = SnapshotStateListSerializer()) {
+        mutableStateListOf(startDestination)
     }
+
+    fun navigate(route: AppRoutes) {
+        backStack.add(route)
+    }
+
+    fun navigateBack() {
+        backStack.removeLastOrNull()
+    }
+
+    NavDisplay(
+        modifier = modifier,
+        backStack = backStack,
+        onBack = ::navigateBack,
+        entryDecorators = listOf(
+            rememberSaveableStateHolderNavEntryDecorator(),
+            rememberViewModelStoreNavEntryDecorator(),
+        ),
+        entryProvider = entryProvider {
+            playlistGroups(
+                onNavigateToSettings = { navigate(AppRoutes.SettingsGeneral) },
+                onNavigateToGroup = { group, groupType ->
+                    navigate(AppRoutes.TvPlaylistChannels(group = group, groupType = groupType))
+                },
+            )
+
+            groupChannels(
+                onNavigateBack = ::navigateBack,
+                onNavigateToPlayer = { channelName, group, groupType ->
+                    navigate(
+                        AppRoutes.Player(
+                            channelName = channelName,
+                            group = group,
+                            groupType = groupType,
+                        )
+                    )
+                },
+            )
+
+            playlistDetail(onNavigateBack = ::navigateBack)
+
+            player(onNavigateBack = ::navigateBack)
+
+            settingsGeneral(
+                onNavigateBack = ::navigateBack,
+                onNavigateToPlaylistSettings = { navigate(AppRoutes.SettingsPlaylist) },
+                onNavigateToPlayerSettings = { navigate(AppRoutes.SettingsPlayer) },
+            )
+
+            settingsPlaylist(
+                onNavigateBack = ::navigateBack,
+                onNavigatePlaylist = { id -> navigate(AppRoutes.PlaylistDetail(id = id)) },
+            )
+
+            settingsPlayer(onNavigateBack = ::navigateBack)
+        },
+    )
 }

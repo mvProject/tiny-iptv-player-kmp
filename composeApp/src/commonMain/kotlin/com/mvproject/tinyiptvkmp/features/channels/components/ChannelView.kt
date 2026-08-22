@@ -19,6 +19,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clipToBounds
+import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import com.mvproject.tinyiptvkmp.core.common.INT_VALUE_1
 import com.mvproject.tinyiptvkmp.core.domain.enums.ChannelsViewType
@@ -33,14 +34,14 @@ fun ChannelView(
     onChannelSelect: (TvChannel) -> Unit = {},
     onFavoriteClick: (TvChannel) -> Unit = {},
     onShowProgramsClick: (TvChannel) -> Unit = {},
+    gridMinCellWidth: Dp = 180.dp,
+    contentPadding: PaddingValues? = null,
 ) {
 
-    // todo adaptive size depend on windowSizeClass
-
-    val columns = remember(viewType) {
+    val columns = remember(viewType, gridMinCellWidth) {
         when (viewType) {
             ChannelsViewType.LIST -> GridCells.Fixed(INT_VALUE_1)
-            else -> GridCells.Adaptive(180.dp)
+            else -> GridCells.Adaptive(gridMinCellWidth)
         }
     }
 
@@ -50,7 +51,8 @@ fun ChannelView(
         state = rememberLazyGridState(),
         verticalArrangement = Arrangement.spacedBy(MaterialTheme.dimensionSize.size4),
         horizontalArrangement = Arrangement.spacedBy(MaterialTheme.dimensionSize.size4),
-        contentPadding = PaddingValues(vertical = MaterialTheme.dimensionSize.size4),
+        contentPadding = contentPadding
+            ?: PaddingValues(vertical = MaterialTheme.dimensionSize.size4),
         content = {
             items(
                 items = items,

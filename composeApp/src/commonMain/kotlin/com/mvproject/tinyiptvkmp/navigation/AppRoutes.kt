@@ -7,10 +7,11 @@
 
 package com.mvproject.tinyiptvkmp.navigation
 
+import androidx.navigation3.runtime.NavKey
 import kotlinx.serialization.Serializable
 
 @Serializable
-sealed interface AppRoutes {
+sealed interface AppRoutes : NavKey {
     @Serializable
     data class Player(
         val channelName: String,

@@ -7,22 +7,16 @@
 
 package com.mvproject.tinyiptvkmp.features.settings.player.navigation
 
-import androidx.navigation.NavGraphBuilder
-import androidx.navigation.NavHostController
-import androidx.navigation.compose.composable
+import androidx.navigation3.runtime.EntryProviderScope
 import com.mvproject.tinyiptvkmp.features.settings.player.SettingsPlayerScreen
 import com.mvproject.tinyiptvkmp.features.settings.player.SettingsPlayerViewModel
 import com.mvproject.tinyiptvkmp.navigation.AppRoutes
 import org.koin.compose.viewmodel.koinViewModel
 
-fun NavHostController.navigateToPlayerSettings() {
-    this.navigate(AppRoutes.SettingsPlayer)
-}
-
-fun NavGraphBuilder.settingsPlayer(
+fun EntryProviderScope<AppRoutes>.settingsPlayer(
     onNavigateBack: () -> Unit
 ) {
-    composable<AppRoutes.SettingsPlayer> {
+    entry<AppRoutes.SettingsPlayer> {
         val settingsPlayerViewModel = koinViewModel<SettingsPlayerViewModel>()
 
         SettingsPlayerScreen(

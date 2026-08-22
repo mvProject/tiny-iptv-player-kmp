@@ -8,10 +8,8 @@
 package com.mvproject.tinyiptvkmp.features.player
 
 import androidx.compose.runtime.Immutable
-import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import androidx.navigation.toRoute
 import co.touchlab.kermit.Logger
 import com.mvproject.tinyiptvkmp.core.common.DELAY_50
 import com.mvproject.tinyiptvkmp.core.common.DELAY_500
@@ -43,9 +41,10 @@ import com.mvproject.tinyiptvkmp.navigation.AppRoutes
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
+import kotlin.time.Duration.Companion.milliseconds
 
 class PlayerViewModel(
-    savedStateHandle: SavedStateHandle,
+    args: AppRoutes.Player,
     private val preferenceRepository: PreferenceRepository,
     private val getGroupChannelsUseCase: GetGroupChannelsUseCase,
     private val toggleFavoriteChannelUseCase: ToggleFavoriteChannelUseCase,
@@ -54,7 +53,6 @@ class PlayerViewModel(
 ) : ViewModel(),
     MviCore<PlayerUiState, PlayerUiAction, PlayerUiEffect> by mviCore(PlayerUiState()) {
 
-    private val args = savedStateHandle.toRoute<AppRoutes.Player>()
     private val media = args.channelName
     private val group = args.group
     private val groupType = args.groupType
@@ -195,7 +193,7 @@ class PlayerViewModel(
 
     private fun refreshGroupChannelsPrograms() {
         viewModelScope.launch {
-            delay(DELAY_500)
+            delay(DELAY_500.milliseconds)
             val currentChannels = uiState.value.groupChannels
             val channelsIds = currentChannels.mapProgramIds()
 
@@ -261,7 +259,7 @@ class PlayerViewModel(
             updateUiState {
                 copy(currentVolume = nextVolume)
             }
-            delay(DELAY_50)
+            delay(DELAY_50.milliseconds)
         }
     }
 
@@ -273,7 +271,7 @@ class PlayerViewModel(
             updateUiState {
                 copy(currentVolume = nextVolume)
             }
-            delay(DELAY_50)
+            delay(DELAY_50.milliseconds)
         }
     }
 
@@ -329,7 +327,7 @@ class PlayerViewModel(
                     copy(isControlUiVisible = true)
                 }
 
-                delay(UI_SHOW_DELAY)
+                delay(UI_SHOW_DELAY.milliseconds)
 
                 updateUiState {
                     copy(isControlUiVisible = false)
@@ -359,7 +357,7 @@ class PlayerViewModel(
         pollVolumeJob?.cancel()
         pollVolumeJob =
             viewModelScope.launch {
-                delay(hideVolumeAfterMs)
+                delay(hideVolumeAfterMs.milliseconds)
                 hideVolumeUi()
             }
     }

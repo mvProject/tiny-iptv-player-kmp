@@ -8,10 +8,8 @@
 package com.mvproject.tinyiptvkmp.features.playlist
 
 import androidx.compose.runtime.Immutable
-import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import androidx.navigation.toRoute
 import co.touchlab.kermit.Logger
 import com.mvproject.tinyiptvkmp.core.common.LONG_VALUE_ZERO
 import com.mvproject.tinyiptvkmp.core.common.mvi.MviCore
@@ -28,13 +26,11 @@ import kotlin.uuid.ExperimentalUuidApi
 import kotlin.uuid.Uuid
 
 class PlaylistViewModel(
-    savedStateHandle: SavedStateHandle,
+    args: AppRoutes.PlaylistDetail,
     private val getPlaylistUseCase: GetPlaylistUseCase,
     private val savePlaylistUseCase: SavePlaylistUseCase,
 ) : ViewModel(),
     MviCore<PlaylistUiState, PlaylistUiAction, PlaylistUiEffect> by mviCore(PlaylistUiState()) {
-
-    private val args = savedStateHandle.toRoute<AppRoutes.PlaylistDetail>()
 
     init {
         initPlaylist(playlistId = args.id)
