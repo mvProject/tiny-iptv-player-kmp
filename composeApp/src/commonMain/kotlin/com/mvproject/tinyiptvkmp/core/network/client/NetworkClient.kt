@@ -1,13 +1,12 @@
 package com.mvproject.tinyiptvkmp.core.network.client
 
+import com.mvproject.tinyiptvkmp.infrastructure.logging.ktorLogger
 import io.ktor.client.HttpClient
 import io.ktor.client.plugins.HttpTimeout
 import io.ktor.client.plugins.compression.ContentEncoding
 import io.ktor.client.plugins.contentnegotiation.ContentNegotiation
 import io.ktor.client.plugins.logging.LogLevel
-import io.ktor.client.plugins.logging.Logger
 import io.ktor.client.plugins.logging.Logging
-import io.ktor.client.plugins.logging.SIMPLE
 import io.ktor.serialization.kotlinx.json.json
 import kotlinx.serialization.json.Json
 
@@ -16,7 +15,7 @@ expect fun createPlatformHttpClient(): HttpClient
 internal fun createHttpClient(): HttpClient =
     createPlatformHttpClient().config {
         install(Logging) {
-            logger = Logger.SIMPLE
+            logger = ktorLogger()
             level = LogLevel.ALL
         }
 

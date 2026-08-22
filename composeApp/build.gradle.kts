@@ -50,6 +50,7 @@ kotlin {
         commonMain.dependencies {
             implementation(project(":core:ui"))
             implementation(project(":core:designsystem"))
+            implementation(project(":infrastructure:logging"))
 
             implementation(compose.runtime)
             implementation(compose.foundation)
@@ -74,9 +75,6 @@ kotlin {
 
             // Network
             implementation(libs.bundles.ktor)
-
-            // Logging
-            implementation(libs.kermit)
 
             // Navigation
             implementation(libs.bundles.navigation)

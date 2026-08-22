@@ -17,6 +17,7 @@ import com.mvproject.tinyiptvkmp.features.groups.di.groupsModule
 import com.mvproject.tinyiptvkmp.features.player.di.playerModule
 import com.mvproject.tinyiptvkmp.features.playlist.di.playlistModule
 import com.mvproject.tinyiptvkmp.features.settings.di.settingsModule
+import com.mvproject.tinyiptvkmp.infrastructure.logging.di.loggingModule
 import org.koin.core.context.startKoin
 import org.koin.dsl.KoinAppDeclaration
 
@@ -24,6 +25,7 @@ fun initKoin(appDeclaration: KoinAppDeclaration = {}) =
     startKoin {
         appDeclaration()
         modules(
+            loggingModule,
             datastoreModule,
             databaseModule,
             networkModule,

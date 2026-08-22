@@ -1,17 +1,20 @@
 package com.mvproject.tinyiptvkmp.core.domain.usecase
 
-import co.touchlab.kermit.Logger
 import com.mvproject.tinyiptvkmp.core.data.repository.EpgChannelRepository
 import com.mvproject.tinyiptvkmp.core.data.repository.FavoriteChannelsRepository
 import com.mvproject.tinyiptvkmp.core.data.repository.PlaylistChannelsRepository
 import com.mvproject.tinyiptvkmp.core.datastore.repository.PreferenceRepository
+import com.mvproject.tinyiptvkmp.infrastructure.logging.injectLogger
+import org.koin.core.component.KoinComponent
 
 class UpdateChannelsEpgInfoUseCase(
     private val preferenceRepository: PreferenceRepository,
     private val playlistChannelsRepository: PlaylistChannelsRepository,
     private val favoriteChannelsRepository: FavoriteChannelsRepository,
     private val epgChannelRepository: EpgChannelRepository,
-) {
+) : KoinComponent {
+    private val logger by injectLogger()
+
     suspend operator fun invoke() {
         val epgInfos = epgChannelRepository.loadEpgInfoData().asSequence()
         val channels = playlistChannelsRepository.loadAllChannels().asSequence()
@@ -31,14 +34,15 @@ class UpdateChannelsEpgInfoUseCase(
                     channel // If no match is found, keep the original Class1 object
                 }
             }
+                .toList()
 
-        Logger.w("testing update mappedChannels count:${mappedChannels.count()}")
+        logger.w { "testing update mappedChannels count:${mappedChannels.count()}" }
 
-        playlistChannelsRepository.savePlaylistChannels(mappedChannels.toList())
+        playlistChannelsRepository.savePlaylistChannels(mappedChannels)
 
         mappedChannels.forEach { channel ->
             if (channel.channelUrl in favorites) {
-                Logger.w("update in favorite ${channel.channelName}")
+                logger.w { "update in favorite ${channel.channelName}" }
                 favoriteChannelsRepository.updatePlaylistFavoriteChannels(
                     channelName = channel.channelName,
                     channelUrl = channel.channelUrl

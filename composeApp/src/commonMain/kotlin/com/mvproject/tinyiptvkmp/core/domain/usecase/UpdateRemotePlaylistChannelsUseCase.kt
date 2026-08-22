@@ -1,6 +1,5 @@
 package com.mvproject.tinyiptvkmp.core.domain.usecase
 
-import co.touchlab.kermit.Logger
 import com.mvproject.tinyiptvkmp.core.common.LONG_VALUE_ZERO
 import com.mvproject.tinyiptvkmp.core.common.utils.actualDate
 import com.mvproject.tinyiptvkmp.core.common.utils.typeToDuration
@@ -12,9 +11,11 @@ import com.mvproject.tinyiptvkmp.core.datastore.repository.PreferenceRepository
 import com.mvproject.tinyiptvkmp.core.domain.enums.PlaylistType
 import com.mvproject.tinyiptvkmp.core.domain.mappers.Mapper.toFavType
 import com.mvproject.tinyiptvkmp.core.domain.mappers.Mapper.toPlaylistChannel
+import com.mvproject.tinyiptvkmp.infrastructure.logging.injectLogger
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.IO
 import kotlinx.coroutines.withContext
+import org.koin.core.component.KoinComponent
 
 class UpdateRemotePlaylistChannelsUseCase(
     private val preferenceRepository: PreferenceRepository,
@@ -22,7 +23,9 @@ class UpdateRemotePlaylistChannelsUseCase(
     private val playlistChannelsRepository: PlaylistChannelsRepository,
     private val favoriteChannelsRepository: FavoriteChannelsRepository,
     private val playlistsRepository: PlaylistsRepository,
-) {
+) : KoinComponent {
+    private val logger by injectLogger()
+
     suspend operator fun invoke() {
         withContext(Dispatchers.IO) {
             var isRefreshEpgIdRequired = false
@@ -42,7 +45,7 @@ class UpdateRemotePlaylistChannelsUseCase(
                             currentDate - playlist.lastUpdateDate > updateDuration
                         val isUpdateAllowed = isUpdateSet && isRequiredUpdate
 
-                        Logger.w("testing remotePlaylists ${playlist.playlistName} isUpdateAllowed $isUpdateAllowed")
+                        logger.w { "testing remotePlaylists ${playlist.playlistName} isUpdateAllowed $isUpdateAllowed" }
                         if (isUpdateAllowed) {
                             add(playlist)
                         }
@@ -64,7 +67,7 @@ class UpdateRemotePlaylistChannelsUseCase(
                     val favoritesUrls = favorites.map { it.url }
 
                     if (channel.channelUrl in favoritesUrls) {
-                        Logger.w("update in favorite ${channel.channelName}")
+                        logger.w { "update in favorite ${channel.channelName}" }
                         favoriteChannelsRepository.updatePlaylistFavoriteChannels(
                             channelName = channel.channelName,
                             channelUrl = channel.channelUrl
@@ -78,7 +81,7 @@ class UpdateRemotePlaylistChannelsUseCase(
 
                 isRefreshEpgIdRequired = true
 
-                Logger.w("update channels finished")
+                logger.w { "update channels finished" }
             }
 
             preferenceRepository.setChannelsEpgInfoUpdateRequired(state = isRefreshEpgIdRequired)

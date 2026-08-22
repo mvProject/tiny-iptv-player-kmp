@@ -10,7 +10,6 @@ package com.mvproject.tinyiptvkmp.features.groups
 import androidx.compose.runtime.Immutable
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import co.touchlab.kermit.Logger
 import com.mvproject.tinyiptvkmp.core.common.FLOAT_VALUE_ZERO
 import com.mvproject.tinyiptvkmp.core.common.INT_VALUE_1
 import com.mvproject.tinyiptvkmp.core.common.mvi.MviCore
@@ -28,6 +27,7 @@ import com.mvproject.tinyiptvkmp.core.domain.usecase.SavePlaylistContentUseCase
 import com.mvproject.tinyiptvkmp.core.domain.usecase.SelectPlaylistUseCase
 import com.mvproject.tinyiptvkmp.core.domain.usecase.UpdateChannelsEpgInfoUseCase
 import com.mvproject.tinyiptvkmp.core.domain.usecase.UpdateRemotePlaylistChannelsUseCase
+import com.mvproject.tinyiptvkmp.infrastructure.logging.injectLogger
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.IO
 import kotlinx.coroutines.flow.combine
@@ -35,6 +35,7 @@ import kotlinx.coroutines.flow.flowOn
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.launch
+import org.koin.core.component.KoinComponent
 
 class GroupViewModel(
     private val preferenceRepository: PreferenceRepository,
@@ -47,7 +48,11 @@ class GroupViewModel(
     private val savePlaylistContentUseCase: SavePlaylistContentUseCase,
     private val updateChannelsEpgInfoUseCase: UpdateChannelsEpgInfoUseCase,
     private val cleanProgramsUseCase: CleanProgramsUseCase,
-) : ViewModel(), MviCore<GroupUiState, GroupUiAction, GroupUiEffect> by mviCore(GroupUiState()) {
+) : ViewModel(),
+    KoinComponent,
+    MviCore<GroupUiState, GroupUiAction, GroupUiEffect> by mviCore(GroupUiState()) {
+
+    private val logger by injectLogger()
 
     init {
         playlistsRepository
@@ -68,11 +73,11 @@ class GroupViewModel(
             preferenceRepository.isChannelsEpgInfoUpdateRequired(),
             preferenceRepository.idForPlaylistContentLoad()
         ) { isRequired, id ->
-            Logger.w("testing isChannelsEpgInfoUpdateRequired isRequired=$isRequired")
+            logger.w { "testing isChannelsEpgInfoUpdateRequired isRequired=$isRequired" }
             if (isRequired) {
                 updateChannelsEpgInfoUseCase()
             }
-            Logger.w("testing idForPlaylistContentLoad id=$id")
+            logger.w { "testing idForPlaylistContentLoad id=$id" }
             if (id.isNotBlank()) {
                 savePlaylistContentUseCase(playlistId = id)
             }

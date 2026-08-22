@@ -7,18 +7,21 @@
 
 package com.mvproject.tinyiptvkmp.core.data.repository
 
-import co.touchlab.kermit.Logger
 import com.mvproject.tinyiptvkmp.core.common.INT_VALUE_1
 import com.mvproject.tinyiptvkmp.core.database.db.AppDatabase
 import com.mvproject.tinyiptvkmp.core.database.entity.FavoriteChannelEntity
 import com.mvproject.tinyiptvkmp.core.domain.enums.FavoriteType
+import com.mvproject.tinyiptvkmp.infrastructure.logging.injectLogger
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.IO
 import kotlinx.coroutines.withContext
+import org.koin.core.component.KoinComponent
 
 class FavoriteChannelsRepository(
     private val appDatabase: AppDatabase,
-) {
+) : KoinComponent {
+    private val logger by injectLogger()
+
     private val favoriteChannelDao = appDatabase.favoriteChannelDao()
     private val playlistDao = appDatabase.playlistDao()
 
@@ -30,8 +33,8 @@ class FavoriteChannelsRepository(
         withContext(Dispatchers.IO) {
             val favoriteCount = favoriteChannelDao.getFavoriteChannelCount()
             val playlistId = playlistDao.getSelectedPlaylistId()
-            Logger.e("testing FavoriteChannelsRepository addChannelToFavorite favoriteCount:$favoriteCount")
-            Logger.e("testing FavoriteChannelsRepository addChannelToFavorite favoriteCount:$playlistId")
+            logger.e { "testing FavoriteChannelsRepository addChannelToFavorite favoriteCount:$favoriteCount" }
+            logger.e { "testing FavoriteChannelsRepository addChannelToFavorite favoriteCount:$playlistId" }
             val order = (favoriteCount + INT_VALUE_1).toLong()
 
             favoriteChannelDao.insertFavoriteChannel(
@@ -74,4 +77,3 @@ class FavoriteChannelsRepository(
         favoriteChannelDao.deletePlaylistFavoriteChannelEntities(id = listId)
     }
 }
-

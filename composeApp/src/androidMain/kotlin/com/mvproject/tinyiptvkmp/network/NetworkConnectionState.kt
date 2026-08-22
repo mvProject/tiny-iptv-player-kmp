@@ -14,11 +14,16 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.State
 import androidx.compose.runtime.produceState
 import androidx.compose.ui.platform.LocalContext
-import co.touchlab.kermit.Logger
+import com.mvproject.tinyiptvkmp.infrastructure.logging.injectLogger
 import kotlinx.coroutines.channels.awaitClose
 import kotlinx.coroutines.flow.callbackFlow
 import kotlinx.coroutines.flow.distinctUntilChanged
 import kotlinx.coroutines.launch
+import org.koin.core.component.KoinComponent
+
+private object NetworkConnectionLogger : KoinComponent {
+    val logger by injectLogger("NetworkConnectionState")
+}
 
 @Composable
 internal fun networkConnectionState(context: Context = LocalContext.current): State<ConnectionState> {
@@ -31,7 +36,7 @@ internal fun networkConnectionState(context: Context = LocalContext.current): St
                 object : ConnectivityManager.NetworkCallback() {
                     override fun onAvailable(network: Network) {
                         super.onAvailable(network)
-                        Logger.w("testing observeConnectivityAsFlow onAvailable")
+                        NetworkConnectionLogger.logger.w { "testing observeConnectivityAsFlow onAvailable" }
                         launch { send(ConnectionState.Available) }
                     }
 
@@ -40,19 +45,19 @@ internal fun networkConnectionState(context: Context = LocalContext.current): St
                         maxMsToLive: Int,
                     ) {
                         super.onLosing(network, maxMsToLive)
-                        Logger.w("testing observeConnectivityAsFlow onLosing")
+                        NetworkConnectionLogger.logger.w { "testing observeConnectivityAsFlow onLosing" }
                         launch { send(ConnectionState.Unavailable) }
                     }
 
                     override fun onLost(network: Network) {
                         super.onLost(network)
-                        Logger.w("testing observeConnectivityAsFlow onLost")
+                        NetworkConnectionLogger.logger.w { "testing observeConnectivityAsFlow onLost" }
                         launch { send(ConnectionState.Unavailable) }
                     }
 
                     override fun onUnavailable() {
                         super.onUnavailable()
-                        Logger.w("testing observeConnectivityAsFlow onUnavailable")
+                        NetworkConnectionLogger.logger.w { "testing observeConnectivityAsFlow onUnavailable" }
                         launch { send(ConnectionState.Unavailable) }
                     }
                 }
