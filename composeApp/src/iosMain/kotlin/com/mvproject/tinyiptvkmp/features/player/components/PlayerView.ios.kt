@@ -8,10 +8,11 @@ import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.viewinterop.UIKitView
-import co.touchlab.kermit.Logger
 import com.mvproject.tinyiptvkmp.features.player.PlayerUiAction
 import com.mvproject.tinyiptvkmp.features.player.PlayerUiState
+import com.mvproject.tinyiptvkmp.infrastructure.logging.injectLogger
 import kotlinx.cinterop.ExperimentalForeignApi
+import org.koin.core.component.KoinComponent
 import platform.AVFoundation.AVLayerVideoGravityResize
 import platform.AVFoundation.AVPlayer
 import platform.AVFoundation.AVPlayerItem
@@ -25,6 +26,10 @@ import platform.Foundation.NSURL
 import platform.QuartzCore.CATransaction
 import platform.QuartzCore.kCATransactionDisableActions
 import platform.UIKit.UIView
+
+private object PlayerViewLogger : KoinComponent {
+    val logger by injectLogger("PlayerView")
+}
 
 @Composable
 actual fun PlayerView(
@@ -100,7 +105,7 @@ fun VideoPlayer(modifier: Modifier, url: String) {
         }
 
         onDispose {
-            Logger.e("testing Video onDispose")
+            PlayerViewLogger.logger.e { "testing Video onDispose" }
             avPlayerViewController.player?.pause()
         }
     }

@@ -1,7 +1,12 @@
 package com.mvproject.tinyiptvkmp.features.player.components
 
 import androidx.media3.common.PlaybackException
-import co.touchlab.kermit.Logger
+import com.mvproject.tinyiptvkmp.infrastructure.logging.injectLogger
+import org.koin.core.component.KoinComponent
+
+private object MediaPlayableCheckLogger : KoinComponent {
+    val logger by injectLogger("MediaPlayableCheck")
+}
 
 actual fun isMediaPlayable(errorCode: Int?): Boolean {
     val isMediaPlayable =
@@ -11,6 +16,6 @@ actual fun isMediaPlayable(errorCode: Int?): Boolean {
             PlaybackException.ERROR_CODE_PARSING_MANIFEST_MALFORMED -> false
             else -> true
         }
-    Logger.e("testing errorCode:$errorCode, isMediaPlayable:$isMediaPlayable")
+    MediaPlayableCheckLogger.logger.e { "testing errorCode:$errorCode, isMediaPlayable:$isMediaPlayable" }
     return isMediaPlayable
 }

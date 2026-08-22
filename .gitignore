@@ -187,3 +187,16 @@ com_crashlytics_export_strings.xml
 crashlytics.properties
 crashlytics-build.properties
 fabric.properties
+
+# Local/tooling files
+.claude/
+.codex/
+tasks/
+scripts/
+graphify-out/
+.graphifyignore
+.mcp.json
+AGENTS.md
+CLAUDE.md
+OBSIDIAN.local.md
+generate_notes.py

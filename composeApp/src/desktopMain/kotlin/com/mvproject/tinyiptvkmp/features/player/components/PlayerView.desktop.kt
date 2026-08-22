@@ -16,7 +16,6 @@ import androidx.compose.ui.graphics.ImageBitmap
 import androidx.compose.ui.graphics.asComposeImageBitmap
 import androidx.compose.ui.unit.IntOffset
 import androidx.compose.ui.unit.IntSize
-import co.touchlab.kermit.Logger
 import com.mvproject.tinyiptvkmp.core.common.INT_NO_VALUE
 import com.mvproject.tinyiptvkmp.core.common.INT_VALUE_2
 import com.mvproject.tinyiptvkmp.core.common.INT_VALUE_4
@@ -24,7 +23,9 @@ import com.mvproject.tinyiptvkmp.core.common.INT_VALUE_ZERO
 import com.mvproject.tinyiptvkmp.core.common.LONG_VALUE_ZERO
 import com.mvproject.tinyiptvkmp.features.player.PlayerUiAction
 import com.mvproject.tinyiptvkmp.features.player.PlayerUiState
+import com.mvproject.tinyiptvkmp.infrastructure.logging.injectLogger
 import org.jetbrains.skia.Bitmap
+import org.koin.core.component.KoinComponent
 import uk.co.caprica.vlcj.factory.discovery.NativeDiscovery
 import uk.co.caprica.vlcj.media.MediaRef
 import uk.co.caprica.vlcj.player.base.MediaPlayer
@@ -35,6 +36,10 @@ import uk.co.caprica.vlcj.player.embedded.videosurface.callback.BufferFormatCall
 import uk.co.caprica.vlcj.player.embedded.videosurface.callback.RenderCallback
 import uk.co.caprica.vlcj.player.embedded.videosurface.callback.format.RV32BufferFormat
 import java.nio.ByteBuffer
+
+private object PlayerViewLogger : KoinComponent {
+    val logger by injectLogger("PlayerView")
+}
 
 @Composable
 actual fun PlayerView(
@@ -82,7 +87,9 @@ actual fun PlayerView(
     )
 }
 
-class VideoPlayerStateImpl : PlayerState {
+class VideoPlayerStateImpl : PlayerState, KoinComponent {
+    private val logger by injectLogger()
+
     internal val internalState = RenderState()
 
     val mediaPlayer: MediaPlayer
@@ -130,7 +137,7 @@ class VideoPlayerStateImpl : PlayerState {
     }
 
     init {
-        Logger.w("init VideoPlayerStateImpl")
+        logger.w { "init VideoPlayerStateImpl" }
     }
 }
 
@@ -143,7 +150,7 @@ fun VideoPlayerDirect(
     DisposableEffect(state) {
         val eventListener = object : MediaPlayerEventAdapter() {
             override fun error(mediaPlayer: MediaPlayer) {
-                Logger.e("testing mediaPlayer error")
+                PlayerViewLogger.logger.e { "testing mediaPlayer error" }
                 onPlaybackAction(
                     PlayerUiAction.OnPlaybackStateChanged(
                         PlayerUiState.PlayerPlaybackState.PlaybackIdle(
@@ -155,7 +162,7 @@ fun VideoPlayerDirect(
 
             override fun mediaPlayerReady(mediaPlayer: MediaPlayer) {
                 mediaPlayer.media().info().audioTracks().forEach { info ->
-                    Logger.i("testing audioTrack info: $info")
+                    PlayerViewLogger.logger.i { "testing audioTrack info: $info" }
                 }
 
                 onPlaybackAction(
@@ -240,7 +247,9 @@ fun VideoPlayerDirect(
     }
 }
 
-internal class RenderState {
+internal class RenderState : KoinComponent {
+    private val logger by injectLogger()
+
     var currentBuffer: ByteBuffer? = null
 
     private var buffer: ByteArray = ByteArray(INT_VALUE_ZERO)
@@ -248,7 +257,7 @@ internal class RenderState {
     private var composeImage: ImageBitmap? = null
 
     init {
-        Logger.w("init RenderState")
+        logger.w { "init RenderState" }
     }
 
     fun updateComposeImage(frameTime: Long): ImageBitmap? {
@@ -260,7 +269,7 @@ internal class RenderState {
                 return composeImage
             }
         } catch (ex: Exception) {
-            Logger.e("updateComposeImage exception ${ex.localizedMessage}")
+            logger.e(ex) { "updateComposeImage exception ${ex.localizedMessage}" }
         }
 
         return null

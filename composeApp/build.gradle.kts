@@ -48,13 +48,17 @@ kotlin {
         val desktopMain by getting
 
         commonMain.dependencies {
+            implementation(project(":core:ui"))
+            implementation(project(":core:designsystem"))
+            implementation(project(":infrastructure:logging"))
+
             implementation(compose.runtime)
             implementation(compose.foundation)
             implementation(compose.ui)
             implementation(compose.material3)
             implementation(compose.materialIconsExtended)
             implementation(compose.components.resources)
-            implementation(compose.components.uiToolingPreview)
+            implementation(libs.compose.ui.tooling.preview)
 
             // Coroutines
             implementation(libs.kotlinx.coroutines.core)
@@ -71,9 +75,6 @@ kotlin {
 
             // Network
             implementation(libs.bundles.ktor)
-
-            // Logging
-            implementation(libs.kermit)
 
             // Navigation
             implementation(libs.bundles.navigation)
@@ -201,7 +202,7 @@ android {
     }
     dependencies {
         //     implementation(fileTree(mapOf("dir" to "libs", "include" to listOf("*.aar"))))
-        debugImplementation(compose.uiTooling)
+        debugImplementation(libs.compose.ui.tooling)
     }
 }
 
@@ -226,7 +227,7 @@ compose.desktop {
 }
 
 dependencies {
-    debugImplementation(compose.uiTooling)
+    debugImplementation(libs.compose.ui.tooling)
     add("kspAndroid", libs.androidx.room.compiler)
     add("kspDesktop", libs.androidx.room.compiler)
     add("kspIosArm64", libs.androidx.room.compiler)

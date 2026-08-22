@@ -10,7 +10,6 @@ package com.mvproject.tinyiptvkmp.features.playlist
 import androidx.compose.runtime.Immutable
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import co.touchlab.kermit.Logger
 import com.mvproject.tinyiptvkmp.core.common.LONG_VALUE_ZERO
 import com.mvproject.tinyiptvkmp.core.common.mvi.MviCore
 import com.mvproject.tinyiptvkmp.core.common.mvi.mviCore
@@ -20,8 +19,10 @@ import com.mvproject.tinyiptvkmp.core.domain.enums.UpdatePeriod
 import com.mvproject.tinyiptvkmp.core.domain.model.Playlist
 import com.mvproject.tinyiptvkmp.core.domain.usecase.GetPlaylistUseCase
 import com.mvproject.tinyiptvkmp.core.domain.usecase.SavePlaylistUseCase
+import com.mvproject.tinyiptvkmp.infrastructure.logging.injectLogger
 import com.mvproject.tinyiptvkmp.navigation.AppRoutes
 import kotlinx.coroutines.launch
+import org.koin.core.component.KoinComponent
 import kotlin.uuid.ExperimentalUuidApi
 import kotlin.uuid.Uuid
 
@@ -30,7 +31,10 @@ class PlaylistViewModel(
     private val getPlaylistUseCase: GetPlaylistUseCase,
     private val savePlaylistUseCase: SavePlaylistUseCase,
 ) : ViewModel(),
+    KoinComponent,
     MviCore<PlaylistUiState, PlaylistUiAction, PlaylistUiEffect> by mviCore(PlaylistUiState()) {
+
+    private val logger by injectLogger()
 
     init {
         initPlaylist(playlistId = args.id)
@@ -131,7 +135,7 @@ class PlaylistViewModel(
                         isUpdate = isUpdate
                     )
                 }.onFailure {
-                    Logger.e("testing saveOrUpdatePlayList isUpdate=$isUpdate, failure ${it.message}")
+                    logger.e(it) { "testing saveOrUpdatePlayList isUpdate=$isUpdate, failure ${it.message}" }
                 }
 
             updateUiState {

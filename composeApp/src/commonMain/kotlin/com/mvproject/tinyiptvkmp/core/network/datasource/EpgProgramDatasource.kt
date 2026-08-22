@@ -1,8 +1,8 @@
 package com.mvproject.tinyiptvkmp.core.network.datasource
 
-import co.touchlab.kermit.Logger
 import com.mvproject.tinyiptvkmp.core.common.utils.CommonUtils.empty
 import com.mvproject.tinyiptvkmp.core.network.data.parse.ProgramParsed
+import com.mvproject.tinyiptvkmp.infrastructure.logging.injectLogger
 import io.ktor.client.HttpClient
 import io.ktor.client.request.prepareGet
 import io.ktor.client.statement.bodyAsChannel
@@ -15,11 +15,14 @@ import kotlinx.coroutines.runBlocking
 import kotlinx.coroutines.withContext
 import okio.GzipSource
 import okio.buffer
+import org.koin.core.component.KoinComponent
 import okio.use as okiouse
 
 class EpgProgramDatasource(
     private val client: HttpClient,
-) {
+) : KoinComponent {
+    private val logger by injectLogger()
+
     suspend fun downloadAndParseXml(
         url: String,
         onProgrammeParsed: suspend (ProgramParsed) -> Unit,
@@ -27,14 +30,14 @@ class EpgProgramDatasource(
         try {
             client.use { service ->
                 service.prepareGet(url).execute { response ->
-                    Logger.i("testing File download started. Content length: ${response.contentLength()}")
+                    logger.i { "testing File download started. Content length: ${response.contentLength()}" }
                     val channel = response.bodyAsChannel()
                     parseGzippedXml(channel, onProgrammeParsed)
                 }
             }
         } catch (ex: Exception) {
             client.close()
-            Logger.e("testing Error downloading or parsing XML: ${ex.message}")
+            logger.e(ex) { "testing Error downloading or parsing XML: ${ex.message}" }
         }
     }
 
@@ -42,7 +45,7 @@ class EpgProgramDatasource(
         channel: ByteReadChannel,
         onProgrammeParsed: suspend (ProgramParsed) -> Unit,
     ) = withContext(Dispatchers.Default) {
-        Logger.i("testing start parsing programmes")
+        logger.i { "testing start parsing programmes" }
 
         val buffer = ByteArray(8192) // 8KB buffer
         val gzipSource = GzipSource(object : okio.Source {

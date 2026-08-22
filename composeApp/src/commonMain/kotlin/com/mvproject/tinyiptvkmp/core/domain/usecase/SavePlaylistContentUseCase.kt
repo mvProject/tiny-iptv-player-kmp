@@ -1,6 +1,5 @@
 package com.mvproject.tinyiptvkmp.core.domain.usecase
 
-import co.touchlab.kermit.Logger
 import com.mvproject.tinyiptvkmp.core.common.utils.CommonUtils.empty
 import com.mvproject.tinyiptvkmp.core.data.repository.LocalPlaylistRepository
 import com.mvproject.tinyiptvkmp.core.data.repository.PlaylistChannelsRepository
@@ -9,6 +8,8 @@ import com.mvproject.tinyiptvkmp.core.data.repository.RemotePlaylistRepository
 import com.mvproject.tinyiptvkmp.core.datastore.repository.PreferenceRepository
 import com.mvproject.tinyiptvkmp.core.domain.enums.PlaylistType
 import com.mvproject.tinyiptvkmp.core.domain.mappers.Mapper.toPlaylistChannel
+import com.mvproject.tinyiptvkmp.infrastructure.logging.injectLogger
+import org.koin.core.component.KoinComponent
 
 class SavePlaylistContentUseCase(
     private val localPlaylistRepository: LocalPlaylistRepository,
@@ -16,7 +17,9 @@ class SavePlaylistContentUseCase(
     private val preferenceRepository: PreferenceRepository,
     private val remotePlaylistRepository: RemotePlaylistRepository,
     private val playlistsRepository: PlaylistsRepository,
-) {
+) : KoinComponent {
+    private val logger by injectLogger()
+
     suspend operator fun invoke(playlistId: String) {
         val playlist = playlistsRepository.getPlaylistById(id = playlistId)
         val parsedChannels =
@@ -32,7 +35,7 @@ class SavePlaylistContentUseCase(
                     )
             }
         if (parsedChannels.isEmpty()) {
-            Logger.e("SavePlaylistContentUseCase channels is empty")
+            logger.e { "SavePlaylistContentUseCase channels is empty" }
             return
         }
 

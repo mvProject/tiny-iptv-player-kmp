@@ -4,19 +4,23 @@ import com.fleeksoft.ksoup.Ksoup
 import com.fleeksoft.ksoup.network.parseGetRequest
 import com.fleeksoft.ksoup.nodes.Document
 import com.fleeksoft.ksoup.nodes.Element
+import com.mvproject.tinyiptvkmp.infrastructure.logging.injectLogger
+import org.koin.core.component.KoinComponent
 
-object ParserUtils {
+object ParserUtils : KoinComponent {
+    private val logger by injectLogger()
+
     private const val TABLE_TAG = "tr"
     private const val TABLE_ROW_TAG = "td"
     private const val IMAGE_QUERY_TAG = "img"
     private const val IMAGE_SRC_TAG = "src"
 
     suspend fun loadElements(sourceUrl: String): List<Element> {
-        println("testing loadElements from $sourceUrl")
+        logger.d { "testing loadElements from $sourceUrl" }
         val parsedDocument: Document = Ksoup.parseGetRequest(url = sourceUrl)
         val parsedTable = parsedDocument.select(TABLE_TAG).drop(1)
 
-        println("testing loadElements parsedDocument $parsedDocument parsedTable ${parsedTable.count()}")
+        logger.d { "testing loadElements parsedDocument $parsedDocument parsedTable ${parsedTable.count()}" }
 
         return parsedTable
     }

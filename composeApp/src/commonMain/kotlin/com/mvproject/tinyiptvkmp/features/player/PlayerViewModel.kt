@@ -10,7 +10,6 @@ package com.mvproject.tinyiptvkmp.features.player
 import androidx.compose.runtime.Immutable
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import co.touchlab.kermit.Logger
 import com.mvproject.tinyiptvkmp.core.common.DELAY_50
 import com.mvproject.tinyiptvkmp.core.common.DELAY_500
 import com.mvproject.tinyiptvkmp.core.common.FLOAT_STEP_VOLUME
@@ -37,10 +36,12 @@ import com.mvproject.tinyiptvkmp.core.domain.utils.mapPrograms
 import com.mvproject.tinyiptvkmp.core.domain.utils.replaceUpdated
 import com.mvproject.tinyiptvkmp.features.player.PlayerUiState.PlayerOSD
 import com.mvproject.tinyiptvkmp.features.player.components.isMediaPlayable
+import com.mvproject.tinyiptvkmp.infrastructure.logging.injectLogger
 import com.mvproject.tinyiptvkmp.navigation.AppRoutes
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
+import org.koin.core.component.KoinComponent
 import kotlin.time.Duration.Companion.milliseconds
 
 class PlayerViewModel(
@@ -51,6 +52,7 @@ class PlayerViewModel(
     private val getChannelsEpgUseCase: GetChannelsEpgUseCase,
     private val getGroupChannelsEpgUseCase: GetGroupChannelsEpgUseCase,
 ) : ViewModel(),
+    KoinComponent,
     MviCore<PlayerUiState, PlayerUiAction, PlayerUiEffect> by mviCore(PlayerUiState()) {
 
     private val media = args.channelName
@@ -59,11 +61,13 @@ class PlayerViewModel(
 
     private var pollVolumeJob: Job? = null
 
+    private val logger by injectLogger()
+
     // time after which [VideoViewState.isVolumeUiVisible] will be set to false
     private var hideVolumeAfterMs: Long = VOLUME_SHOW_DELAY
 
     init {
-        Logger.d("testing VideoViewViewModel init media:$media, group:$group, groupType:$groupType")
+        logger.d { "testing VideoViewViewModel init media:$media, group:$group, groupType:$groupType" }
 
         loadGroupChannels()
 

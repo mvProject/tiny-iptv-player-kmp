@@ -1,25 +1,28 @@
 package com.mvproject.tinyiptvkmp.core.domain.usecase
 
-import co.touchlab.kermit.Logger
 import com.mvproject.tinyiptvkmp.core.data.repository.FavoriteChannelsRepository
 import com.mvproject.tinyiptvkmp.core.data.repository.PlaylistChannelsRepository
 import com.mvproject.tinyiptvkmp.core.domain.enums.FavoriteType
 import com.mvproject.tinyiptvkmp.core.domain.enums.GroupType
 import com.mvproject.tinyiptvkmp.core.domain.mappers.Mapper.toFavType
 import com.mvproject.tinyiptvkmp.core.domain.mappers.Mapper.toTvChannel
+import com.mvproject.tinyiptvkmp.infrastructure.logging.injectLogger
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.IO
 import kotlinx.coroutines.withContext
+import org.koin.core.component.KoinComponent
 
 class GetGroupChannelsUseCase(
     private val playlistChannelsRepository: PlaylistChannelsRepository,
     private val favoriteChannelsRepository: FavoriteChannelsRepository,
-) {
+) : KoinComponent {
+    private val logger by injectLogger()
+
     suspend operator fun invoke(
         group: String,
         groupType: String,
     ) = withContext(Dispatchers.IO) {
-        Logger.d("testing GetGroupChannelsUseCase group = $group, groupType = $groupType")
+        logger.d { "testing GetGroupChannelsUseCase group = $group, groupType = $groupType" }
 
         val favorites = favoriteChannelsRepository
             .loadSelectedFavoriteChannels()

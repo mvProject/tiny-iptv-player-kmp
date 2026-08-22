@@ -40,6 +40,9 @@ import com.mvproject.tinyiptvkmp.core.ui.toolbars.AppBarWithSearch
 import com.mvproject.tinyiptvkmp.features.channels.GroupChannelsUiState.GroupChannelsOSD
 import com.mvproject.tinyiptvkmp.features.channels.components.ChannelFavoriteSelector
 import com.mvproject.tinyiptvkmp.features.channels.components.ChannelView
+import org.jetbrains.compose.resources.stringResource
+import tinyiptvkmp.composeapp.generated.resources.Res
+import tinyiptvkmp.composeapp.generated.resources.hint_msg_search
 
 @Composable
 internal fun GroupChannelsScreen(
@@ -88,6 +91,7 @@ private fun GroupChannelsScreen(
             AppBarWithSearch(
                 appBarTitle = uiState.currentGroup,
                 searchTextState = searchString,
+                searchPlaceholderText = stringResource(Res.string.hint_msg_search),
                 onBackClick = {
                     onAction(GroupChannelsUiAction.NavigateBack)
                 },

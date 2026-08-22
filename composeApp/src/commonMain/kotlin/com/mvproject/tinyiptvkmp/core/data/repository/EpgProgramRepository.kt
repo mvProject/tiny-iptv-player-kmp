@@ -8,16 +8,19 @@
 package com.mvproject.tinyiptvkmp.core.data.repository
 
 import androidx.room.Transaction
-import co.touchlab.kermit.Logger
 import com.mvproject.tinyiptvkmp.core.database.db.AppDatabase
 import com.mvproject.tinyiptvkmp.core.domain.mappers.Mapper.asProgramEntity
 import com.mvproject.tinyiptvkmp.core.domain.mappers.Mapper.toEpgProgram
 import com.mvproject.tinyiptvkmp.core.domain.model.EpgProgram
 import com.mvproject.tinyiptvkmp.core.network.data.response.EpgProgramResponse
+import com.mvproject.tinyiptvkmp.infrastructure.logging.injectLogger
+import org.koin.core.component.KoinComponent
 
 class EpgProgramRepository(
     private val appDatabase: AppDatabase,
-) {
+) : KoinComponent {
+    private val logger by injectLogger()
+
     private val epgProgramDao = appDatabase.epgProgramDao()
 
     suspend fun getEpgProgramsByIds(
@@ -38,7 +41,7 @@ class EpgProgramRepository(
 
     suspend fun cleanProgramsBeforeDate(date: Long) {
         val deleted = epgProgramDao.deleteProgramsByDate(timeStamp = date)
-        Logger.e("testing cleanProgramsBeforeDate deleted=$deleted")
+        logger.e { "testing cleanProgramsBeforeDate deleted=$deleted" }
     }
 
     @Transaction

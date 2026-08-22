@@ -14,19 +14,22 @@ import androidx.datastore.preferences.core.edit
 import androidx.datastore.preferences.core.intPreferencesKey
 import androidx.datastore.preferences.core.longPreferencesKey
 import androidx.datastore.preferences.core.stringPreferencesKey
-import co.touchlab.kermit.Logger
 import com.mvproject.tinyiptvkmp.core.common.INT_VALUE_1
 import com.mvproject.tinyiptvkmp.core.common.INT_VALUE_5
 import com.mvproject.tinyiptvkmp.core.common.INT_VALUE_ZERO
 import com.mvproject.tinyiptvkmp.core.common.LONG_NO_VALUE
 import com.mvproject.tinyiptvkmp.core.common.LONG_VALUE_ZERO
 import com.mvproject.tinyiptvkmp.core.common.utils.CommonUtils.empty
+import com.mvproject.tinyiptvkmp.infrastructure.logging.injectLogger
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.map
+import org.koin.core.component.KoinComponent
 
 class PreferenceRepository(
     private val dataStore: DataStore<Preferences>,
-) {
+) : KoinComponent {
+    private val logger by injectLogger()
+
     suspend fun setChannelsViewType(type: String) {
         dataStore.edit { settings ->
             settings[CHANNELS_VIEW_TYPE] = type
@@ -136,7 +139,7 @@ class PreferenceRepository(
         }
 
     suspend fun setEpgLastUpdate(timestamp: Long) {
-        Logger.d("testing setEpgLastUpdate timestamp $timestamp")
+        logger.d { "testing setEpgLastUpdate timestamp $timestamp" }
         dataStore.edit { settings ->
             settings[EPG_DATA_LAST_UPDATE] = timestamp
         }
