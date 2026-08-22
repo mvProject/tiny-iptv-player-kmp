@@ -19,6 +19,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.tooling.preview.Preview
 import com.mvproject.tinyiptvkmp.core.domain.PreviewTestData
 import com.mvproject.tinyiptvkmp.core.domain.enums.FavoriteType
 import com.mvproject.tinyiptvkmp.core.domain.model.TvChannel
@@ -31,7 +32,6 @@ import com.mvproject.tinyiptvkmp.core.ui.texts.ChannelTitle
 import com.mvproject.tinyiptvkmp.core.ui.texts.EmptyProgramTitle
 import com.mvproject.tinyiptvkmp.core.ui.texts.ProgramTitle
 import org.jetbrains.compose.resources.stringResource
-import org.jetbrains.compose.ui.tooling.preview.Preview
 import tinyiptvkmp.composeapp.generated.resources.Res
 import tinyiptvkmp.composeapp.generated.resources.msg_no_epg_found
 

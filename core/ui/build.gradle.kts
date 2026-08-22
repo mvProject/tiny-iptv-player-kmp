@@ -25,7 +25,7 @@ kotlin {
             implementation(compose.ui)
             implementation(compose.material3)
             implementation(compose.components.resources)
-            implementation(compose.components.uiToolingPreview)
+            implementation(libs.compose.ui.tooling.preview)
         }
     }
 }
@@ -50,4 +50,8 @@ android {
 
 compose.resources {
     packageOfResClass = "com.mvproject.tinyiptvkmp.core.ui.generated.resources"
+}
+
+dependencies {
+    debugImplementation(libs.compose.ui.tooling)
 }

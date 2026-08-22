@@ -27,7 +27,7 @@ kotlin {
             implementation(compose.material3)
             implementation(compose.materialIconsExtended)
             implementation(compose.components.resources)
-            implementation(compose.components.uiToolingPreview)
+            implementation(libs.compose.ui.tooling.preview)
             implementation(libs.compose.material3.adaptive)
         }
     }
@@ -49,4 +49,8 @@ android {
     buildFeatures {
         compose = true
     }
+}
+
+dependencies {
+    debugImplementation(libs.compose.ui.tooling)
 }

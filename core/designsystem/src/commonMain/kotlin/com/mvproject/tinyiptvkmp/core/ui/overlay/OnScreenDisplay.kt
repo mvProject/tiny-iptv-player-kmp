@@ -24,9 +24,9 @@ import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.alpha
+import androidx.compose.ui.tooling.preview.Preview
 import com.mvproject.tinyiptvkmp.core.theme.AppTheme
 import com.mvproject.tinyiptvkmp.core.theme.dimensionOpacity
-import org.jetbrains.compose.ui.tooling.preview.Preview
 
 @Composable
 fun OnScreenDisplay(

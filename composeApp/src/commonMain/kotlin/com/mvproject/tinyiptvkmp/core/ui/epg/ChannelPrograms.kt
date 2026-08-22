@@ -29,6 +29,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.style.TextAlign
+import androidx.compose.ui.tooling.preview.Preview
 import com.mvproject.tinyiptvkmp.core.common.COUNT_ZERO_FLOAT
 import com.mvproject.tinyiptvkmp.core.common.PROGRESS_STATE_COMPLETE
 import com.mvproject.tinyiptvkmp.core.common.utils.CommonUtils.delimiterDash
@@ -48,7 +49,6 @@ import com.mvproject.tinyiptvkmp.core.ui.modifiers.roundedHeader
 import com.mvproject.tinyiptvkmp.core.ui.texts.ProgramTitle
 import com.mvproject.tinyiptvkmp.core.ui.views.TimeItem
 import org.jetbrains.compose.resources.stringResource
-import org.jetbrains.compose.ui.tooling.preview.Preview
 import tinyiptvkmp.composeapp.generated.resources.Res
 import tinyiptvkmp.composeapp.generated.resources.msg_no_epg_found
 
