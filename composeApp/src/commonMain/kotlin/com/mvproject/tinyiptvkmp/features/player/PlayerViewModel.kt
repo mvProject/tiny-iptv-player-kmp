@@ -23,7 +23,8 @@ import com.mvproject.tinyiptvkmp.core.common.INT_VALUE_ZERO
 import com.mvproject.tinyiptvkmp.core.common.UI_SHOW_DELAY
 import com.mvproject.tinyiptvkmp.core.common.VOLUME_SHOW_DELAY
 import com.mvproject.tinyiptvkmp.core.common.utils.CommonUtils.empty
-import com.mvproject.tinyiptvkmp.core.datastore.repository.PreferenceRepository
+import com.mvproject.tinyiptvkmp.core.datastore.ProtoStore
+import com.mvproject.tinyiptvkmp.core.datastore.preferences.AppPreferencesProto
 import com.mvproject.tinyiptvkmp.core.domain.enums.FavoriteType
 import com.mvproject.tinyiptvkmp.core.domain.enums.VideoSize
 import com.mvproject.tinyiptvkmp.core.domain.model.TvChannel
@@ -40,6 +41,7 @@ import com.mvproject.tinyiptvkmp.infrastructure.logging.injectLogger
 import com.mvproject.tinyiptvkmp.navigation.AppRoutes
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.delay
+import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.launch
 import org.koin.core.annotation.InjectedParam
 import org.koin.core.component.KoinComponent
@@ -47,7 +49,7 @@ import kotlin.time.Duration.Companion.milliseconds
 
 class PlayerViewModel(
     @InjectedParam args: AppRoutes.Player,
-    private val preferenceRepository: PreferenceRepository,
+    private val preferencesStore: ProtoStore<AppPreferencesProto>,
     private val getGroupChannelsUseCase: GetGroupChannelsUseCase,
     private val toggleFavoriteChannelUseCase: ToggleFavoriteChannelUseCase,
     private val getChannelsEpgUseCase: GetChannelsEpgUseCase,
@@ -92,8 +94,9 @@ class PlayerViewModel(
 
     private fun initPlayBack(channelName: String) {
         viewModelScope.launch {
-            val videoSize = VideoSize.entries[preferenceRepository.getDefaultVideoSizeMode()]
-            val isFullscreen = preferenceRepository.getDefaultFullscreenMode()
+            val preferences = preferencesStore.data.first()
+            val videoSize = VideoSize.entries[preferences.defaultVideoSizeMode]
+            val isFullscreen = preferences.defaultFullscreenMode
 
             updateUiState {
                 copy(

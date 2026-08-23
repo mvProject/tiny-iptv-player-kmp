@@ -13,12 +13,14 @@ import androidx.lifecycle.viewModelScope
 import com.mvproject.tinyiptvkmp.core.base.mvi.MviCore
 import com.mvproject.tinyiptvkmp.core.base.mvi.mviCore
 import com.mvproject.tinyiptvkmp.core.common.INT_VALUE_ZERO
-import com.mvproject.tinyiptvkmp.core.datastore.repository.PreferenceRepository
+import com.mvproject.tinyiptvkmp.core.datastore.ProtoStore
+import com.mvproject.tinyiptvkmp.core.datastore.preferences.AppPreferencesProto
 import com.mvproject.tinyiptvkmp.features.settings.general.SettingsGeneralUiState.SettingsGeneral
+import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.launch
 
 class SettingsGeneralViewModel(
-    private val preferenceRepository: PreferenceRepository
+    private val preferencesStore: ProtoStore<AppPreferencesProto>,
 ) : ViewModel(),
     MviCore<SettingsGeneralUiState, SettingsGeneralUiAction, SettingsGeneralUiEffect> by mviCore(
         SettingsGeneralUiState()
@@ -26,12 +28,11 @@ class SettingsGeneralViewModel(
 
     init {
         viewModelScope.launch {
-            val infoUpdatePeriod = preferenceRepository.getEpgInfoUpdatePeriod()
-            val epgUpdatePeriod = preferenceRepository.getMainEpgUpdatePeriod()
+            val preferences = preferencesStore.data.first()
             updateUiState {
                 copy(
-                    infoUpdatePeriod = infoUpdatePeriod,
-                    epgUpdatePeriod = epgUpdatePeriod
+                    infoUpdatePeriod = preferences.epgInfoLastUpdatePeriod,
+                    epgUpdatePeriod = preferences.epgMainLastUpdatePeriod
                 )
             }
         }
@@ -66,7 +67,9 @@ class SettingsGeneralViewModel(
 
     private fun setUpdateInfoPeriod(type: Int) {
         viewModelScope.launch {
-            preferenceRepository.setEpgInfoUpdatePeriod(type = type)
+            preferencesStore.update { preferences ->
+                preferences.copy(epgInfoLastUpdatePeriod = type)
+            }
             updateUiState {
                 copy(infoUpdatePeriod = type, settingsType = null)
             }
@@ -75,7 +78,9 @@ class SettingsGeneralViewModel(
 
     private fun setUpdateEpgProgramsPeriod(type: Int) {
         viewModelScope.launch {
-            preferenceRepository.setMainEpgUpdatePeriod(type = type)
+            preferencesStore.update { preferences ->
+                preferences.copy(epgMainLastUpdatePeriod = type)
+            }
             updateUiState {
                 copy(epgUpdatePeriod = type, settingsType = null)
             }

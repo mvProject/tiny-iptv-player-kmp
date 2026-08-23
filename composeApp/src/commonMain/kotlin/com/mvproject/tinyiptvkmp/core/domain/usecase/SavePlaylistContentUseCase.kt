@@ -5,7 +5,8 @@ import com.mvproject.tinyiptvkmp.core.data.repository.LocalPlaylistRepository
 import com.mvproject.tinyiptvkmp.core.data.repository.PlaylistChannelsRepository
 import com.mvproject.tinyiptvkmp.core.data.repository.PlaylistsRepository
 import com.mvproject.tinyiptvkmp.core.data.repository.RemotePlaylistRepository
-import com.mvproject.tinyiptvkmp.core.datastore.repository.PreferenceRepository
+import com.mvproject.tinyiptvkmp.core.datastore.ProtoStore
+import com.mvproject.tinyiptvkmp.core.datastore.preferences.AppPreferencesProto
 import com.mvproject.tinyiptvkmp.core.domain.enums.PlaylistType
 import com.mvproject.tinyiptvkmp.core.domain.mappers.Mapper.toPlaylistChannel
 import com.mvproject.tinyiptvkmp.infrastructure.logging.injectLogger
@@ -14,7 +15,7 @@ import org.koin.core.component.KoinComponent
 class SavePlaylistContentUseCase(
     private val localPlaylistRepository: LocalPlaylistRepository,
     private val playlistChannelsRepository: PlaylistChannelsRepository,
-    private val preferenceRepository: PreferenceRepository,
+    private val preferencesStore: ProtoStore<AppPreferencesProto>,
     private val remotePlaylistRepository: RemotePlaylistRepository,
     private val playlistsRepository: PlaylistsRepository,
 ) : KoinComponent {
@@ -43,7 +44,11 @@ class SavePlaylistContentUseCase(
 
         playlistChannelsRepository.savePlaylistChannels(channels = channels)
 
-        preferenceRepository.setIdForPlaylistContentLoad(id = String.empty)
-        preferenceRepository.setChannelsEpgInfoUpdateRequired(state = true)
+        preferencesStore.update { preferences ->
+            preferences.copy(
+                playlistContentLoadRequired = String.empty,
+                channelsEpgInfoUpdateRequired = true,
+            )
+        }
     }
 }

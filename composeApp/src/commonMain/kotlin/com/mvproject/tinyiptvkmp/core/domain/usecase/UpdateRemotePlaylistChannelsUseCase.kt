@@ -7,7 +7,8 @@ import com.mvproject.tinyiptvkmp.core.data.repository.FavoriteChannelsRepository
 import com.mvproject.tinyiptvkmp.core.data.repository.PlaylistChannelsRepository
 import com.mvproject.tinyiptvkmp.core.data.repository.PlaylistsRepository
 import com.mvproject.tinyiptvkmp.core.data.repository.RemotePlaylistRepository
-import com.mvproject.tinyiptvkmp.core.datastore.repository.PreferenceRepository
+import com.mvproject.tinyiptvkmp.core.datastore.ProtoStore
+import com.mvproject.tinyiptvkmp.core.datastore.preferences.AppPreferencesProto
 import com.mvproject.tinyiptvkmp.core.domain.enums.PlaylistType
 import com.mvproject.tinyiptvkmp.core.domain.mappers.Mapper.toFavType
 import com.mvproject.tinyiptvkmp.core.domain.mappers.Mapper.toPlaylistChannel
@@ -18,7 +19,7 @@ import kotlinx.coroutines.withContext
 import org.koin.core.component.KoinComponent
 
 class UpdateRemotePlaylistChannelsUseCase(
-    private val preferenceRepository: PreferenceRepository,
+    private val preferencesStore: ProtoStore<AppPreferencesProto>,
     private val remotePlaylistRepository: RemotePlaylistRepository,
     private val playlistChannelsRepository: PlaylistChannelsRepository,
     private val favoriteChannelsRepository: FavoriteChannelsRepository,
@@ -84,7 +85,9 @@ class UpdateRemotePlaylistChannelsUseCase(
                 logger.w { "update channels finished" }
             }
 
-            preferenceRepository.setChannelsEpgInfoUpdateRequired(state = isRefreshEpgIdRequired)
+            preferencesStore.update { preferences ->
+                preferences.copy(channelsEpgInfoUpdateRequired = isRefreshEpgIdRequired)
+            }
         }
     }
 }

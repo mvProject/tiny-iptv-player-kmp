@@ -3,12 +3,13 @@ package com.mvproject.tinyiptvkmp.core.domain.usecase
 import com.mvproject.tinyiptvkmp.core.data.repository.EpgChannelRepository
 import com.mvproject.tinyiptvkmp.core.data.repository.FavoriteChannelsRepository
 import com.mvproject.tinyiptvkmp.core.data.repository.PlaylistChannelsRepository
-import com.mvproject.tinyiptvkmp.core.datastore.repository.PreferenceRepository
+import com.mvproject.tinyiptvkmp.core.datastore.ProtoStore
+import com.mvproject.tinyiptvkmp.core.datastore.preferences.AppPreferencesProto
 import com.mvproject.tinyiptvkmp.infrastructure.logging.injectLogger
 import org.koin.core.component.KoinComponent
 
 class UpdateChannelsEpgInfoUseCase(
-    private val preferenceRepository: PreferenceRepository,
+    private val preferencesStore: ProtoStore<AppPreferencesProto>,
     private val playlistChannelsRepository: PlaylistChannelsRepository,
     private val favoriteChannelsRepository: FavoriteChannelsRepository,
     private val epgChannelRepository: EpgChannelRepository,
@@ -50,6 +51,8 @@ class UpdateChannelsEpgInfoUseCase(
             }
         }
 
-        preferenceRepository.setChannelsEpgInfoUpdateRequired(state = false)
+        preferencesStore.update { preferences ->
+            preferences.copy(channelsEpgInfoUpdateRequired = false)
+        }
     }
 }

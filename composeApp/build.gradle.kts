@@ -58,6 +58,7 @@ kotlin {
             // Misc
             implementation(libs.androidx.annotation)
             implementation(libs.kotlinx.datetime)
+            implementation(libs.kotlinx.serialization.protobuf)
             implementation(libs.kotlinx.collections.immutable)
             implementation(libs.compose.material3.adaptive)
 
@@ -68,6 +69,12 @@ kotlin {
             implementation(libs.bundles.ksoup)
 
             implementation(libs.bundles.filekit)
+        }
+
+        commonTest.dependencies {
+            implementation(kotlin("test"))
+            implementation(libs.kotlinx.coroutines.core)
+            implementation(libs.kotlinx.coroutines.test)
         }
 
         androidMain.dependencies {

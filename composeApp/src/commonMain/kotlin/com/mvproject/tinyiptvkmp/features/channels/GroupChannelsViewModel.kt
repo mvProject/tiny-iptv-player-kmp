@@ -14,7 +14,8 @@ import com.mvproject.tinyiptvkmp.core.base.mvi.MviCore
 import com.mvproject.tinyiptvkmp.core.base.mvi.mviCore
 import com.mvproject.tinyiptvkmp.core.common.utils.CommonUtils.empty
 import com.mvproject.tinyiptvkmp.core.common.utils.actualDate
-import com.mvproject.tinyiptvkmp.core.datastore.repository.PreferenceRepository
+import com.mvproject.tinyiptvkmp.core.datastore.ProtoStore
+import com.mvproject.tinyiptvkmp.core.datastore.preferences.AppPreferencesProto
 import com.mvproject.tinyiptvkmp.core.domain.enums.ChannelsViewType
 import com.mvproject.tinyiptvkmp.core.domain.enums.ChannelsViewType.Companion.mapViewType
 import com.mvproject.tinyiptvkmp.core.domain.enums.FavoriteType
@@ -32,6 +33,7 @@ import com.mvproject.tinyiptvkmp.features.channels.GroupChannelsUiState.GroupCha
 import com.mvproject.tinyiptvkmp.navigation.AppRoutes
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.IO
+import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.launch
 import org.koin.core.annotation.InjectedParam
 import kotlin.time.Duration.Companion.minutes
@@ -42,7 +44,7 @@ class GroupChannelsViewModel(
     private val getGroupChannelsUseCase: GetGroupChannelsUseCase,
     private val getGroupChannelsEpgUseCase: GetGroupChannelsEpgUseCase,
     private val toggleFavoriteChannelUseCase: ToggleFavoriteChannelUseCase,
-    private val preferenceRepository: PreferenceRepository,
+    private val preferencesStore: ProtoStore<AppPreferencesProto>,
 ) : ViewModel(),
     MviCore<GroupChannelsUiState, GroupChannelsUiAction, GroupChannelsUiEffect> by mviCore(
         GroupChannelsUiState()
@@ -57,7 +59,7 @@ class GroupChannelsViewModel(
 
     init {
         viewModelScope.launch {
-            val viewType = preferenceRepository.getChannelsViewType().mapViewType()
+            val viewType = preferencesStore.data.first().channelsViewType.mapViewType()
             val groupChannels = getGroupChannelsUseCase(group = group, groupType = type)
             updateUiState {
                 copy(
@@ -163,7 +165,9 @@ class GroupChannelsViewModel(
     private fun viewTypeChange(type: ChannelsViewType) {
         if (uiState.value.viewType != type) {
             viewModelScope.launch {
-                preferenceRepository.setChannelsViewType(type = type.name)
+                preferencesStore.update { preferences ->
+                    preferences.copy(channelsViewType = type.name)
+                }
                 updateUiState {
                     copy(viewType = type)
                 }

@@ -12,13 +12,15 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.mvproject.tinyiptvkmp.core.base.mvi.MviCore
 import com.mvproject.tinyiptvkmp.core.base.mvi.mviCore
-import com.mvproject.tinyiptvkmp.core.datastore.repository.PreferenceRepository
+import com.mvproject.tinyiptvkmp.core.datastore.ProtoStore
+import com.mvproject.tinyiptvkmp.core.datastore.preferences.AppPreferencesProto
 import com.mvproject.tinyiptvkmp.core.domain.enums.VideoSize
 import com.mvproject.tinyiptvkmp.features.settings.player.SettingsPlayerUiState.SettingsPlayer
+import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.launch
 
 class SettingsPlayerViewModel(
-    private val preferenceRepository: PreferenceRepository
+    private val preferencesStore: ProtoStore<AppPreferencesProto>,
 ) : ViewModel(),
     MviCore<SettingsPlayerUiState, SettingsPlayerUiAction, SettingsPlayerUiEffect> by mviCore(
         SettingsPlayerUiState()
@@ -26,13 +28,12 @@ class SettingsPlayerViewModel(
 
     init {
         viewModelScope.launch {
-            val isFullscreenEnabled = preferenceRepository.getDefaultFullscreenMode()
-            val videoSize = preferenceRepository.getDefaultVideoSizeMode()
+            val preferences = preferencesStore.data.first()
 
             updateUiState {
                 copy(
-                    isFullscreenEnabled = isFullscreenEnabled,
-                    videoSize = videoSize
+                    isFullscreenEnabled = preferences.defaultFullscreenMode,
+                    videoSize = preferences.defaultVideoSizeMode
                 )
             }
         }
@@ -59,7 +60,9 @@ class SettingsPlayerViewModel(
 
     private fun setFullscreenMode(state: Boolean) {
         viewModelScope.launch {
-            preferenceRepository.setDefaultFullscreenMode(state = state)
+            preferencesStore.update { preferences ->
+                preferences.copy(defaultFullscreenMode = state)
+            }
             updateUiState {
                 copy(isFullscreenEnabled = state)
             }
@@ -68,7 +71,9 @@ class SettingsPlayerViewModel(
 
     private fun setVideoSizeMode(mode: Int) {
         viewModelScope.launch {
-            preferenceRepository.setDefaultVideoSizeMode(mode = mode)
+            preferencesStore.update { preferences ->
+                preferences.copy(defaultVideoSizeMode = mode)
+            }
             updateUiState {
                 copy(videoSize = mode, settingsType = null)
             }

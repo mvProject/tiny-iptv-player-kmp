@@ -1,12 +1,13 @@
 package com.mvproject.tinyiptvkmp.core.domain.usecase
 
 import com.mvproject.tinyiptvkmp.core.data.repository.PlaylistsRepository
-import com.mvproject.tinyiptvkmp.core.datastore.repository.PreferenceRepository
+import com.mvproject.tinyiptvkmp.core.datastore.ProtoStore
+import com.mvproject.tinyiptvkmp.core.datastore.preferences.AppPreferencesProto
 import com.mvproject.tinyiptvkmp.core.domain.enums.PlaylistType
 import com.mvproject.tinyiptvkmp.core.domain.model.Playlist
 
 class SavePlaylistUseCase(
-    private val preferenceRepository: PreferenceRepository,
+    private val preferencesStore: ProtoStore<AppPreferencesProto>,
     private val playlistsRepository: PlaylistsRepository,
 ) {
     suspend operator fun invoke(
@@ -18,7 +19,9 @@ class SavePlaylistUseCase(
         playlistsRepository.savePlaylist(playlist = list)
 
         if (!isUpdate || playlist.playlistType == PlaylistType.REMOTE) {
-            preferenceRepository.setIdForPlaylistContentLoad(id = playlist.id)
+            preferencesStore.update { preferences ->
+                preferences.copy(playlistContentLoadRequired = playlist.id)
+            }
         }
     }
 }

@@ -8,26 +8,28 @@ import com.mvproject.tinyiptvkmp.core.common.utils.actualDate
 import com.mvproject.tinyiptvkmp.core.common.utils.parseToInstant
 import com.mvproject.tinyiptvkmp.core.common.utils.typeToDuration
 import com.mvproject.tinyiptvkmp.core.data.repository.EpgProgramRepository
-import com.mvproject.tinyiptvkmp.core.datastore.repository.PreferenceRepository
+import com.mvproject.tinyiptvkmp.core.datastore.ProtoStore
+import com.mvproject.tinyiptvkmp.core.datastore.preferences.AppPreferencesProto
 import com.mvproject.tinyiptvkmp.core.network.data.response.EpgProgramResponse
 import com.mvproject.tinyiptvkmp.core.network.datasource.EpgProgramDatasource
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.IO
 import kotlinx.coroutines.delay
+import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.withContext
 import kotlin.time.Duration.Companion.minutes
 
 class RefreshEpgProgramsUseCase(
-    private val preferenceRepository: PreferenceRepository,
+    private val preferencesStore: ProtoStore<AppPreferencesProto>,
     private val epgProgramRepository: EpgProgramRepository,
     private val epgProgramDatasource: EpgProgramDatasource,
 ) {
     suspend operator fun invoke(onRefreshState: (RefreshState) -> Unit) {
         withContext(Dispatchers.IO) {
             val currentDate = actualDate
-            val lastUpdate = preferenceRepository.lastEpgUpdate()
-            val periodUpdate =
-                typeToDuration(preferenceRepository.getMainEpgUpdatePeriod())
+            val preferences = preferencesStore.data.first()
+            val lastUpdate = preferences.epgDataLastUpdate
+            val periodUpdate = typeToDuration(preferences.epgMainLastUpdatePeriod)
             val lastUpdateElapsed = currentDate - lastUpdate
             val isRequired = lastUpdateElapsed > periodUpdate
 
@@ -80,7 +82,9 @@ class RefreshEpgProgramsUseCase(
                 )
 
                 if (programmeCount != INT_VALUE_ZERO) {
-                    preferenceRepository.setEpgLastUpdate(timestamp = currentDate)
+                    preferencesStore.update { current ->
+                        current.copy(epgDataLastUpdate = currentDate)
+                    }
                 }
                 onRefreshState(RefreshState.Ended)
             }

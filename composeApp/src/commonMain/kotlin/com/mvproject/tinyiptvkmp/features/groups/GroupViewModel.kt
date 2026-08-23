@@ -15,7 +15,8 @@ import com.mvproject.tinyiptvkmp.core.base.mvi.mviCore
 import com.mvproject.tinyiptvkmp.core.common.FLOAT_VALUE_ZERO
 import com.mvproject.tinyiptvkmp.core.common.INT_VALUE_1
 import com.mvproject.tinyiptvkmp.core.data.repository.PlaylistsRepository
-import com.mvproject.tinyiptvkmp.core.datastore.repository.PreferenceRepository
+import com.mvproject.tinyiptvkmp.core.datastore.ProtoStore
+import com.mvproject.tinyiptvkmp.core.datastore.preferences.AppPreferencesProto
 import com.mvproject.tinyiptvkmp.core.domain.enums.GroupType
 import com.mvproject.tinyiptvkmp.core.domain.model.ChannelsGroup
 import com.mvproject.tinyiptvkmp.core.domain.model.Playlist
@@ -31,14 +32,16 @@ import com.mvproject.tinyiptvkmp.infrastructure.logging.injectLogger
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.IO
 import kotlinx.coroutines.flow.combine
+import kotlinx.coroutines.flow.distinctUntilChanged
 import kotlinx.coroutines.flow.flowOn
 import kotlinx.coroutines.flow.launchIn
+import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.launch
 import org.koin.core.component.KoinComponent
 
 class GroupViewModel(
-    private val preferenceRepository: PreferenceRepository,
+    private val preferencesStore: ProtoStore<AppPreferencesProto>,
     private val playlistsRepository: PlaylistsRepository,
     private val selectPlaylistUseCase: SelectPlaylistUseCase,
     private val getPlaylistGroupUseCase: GetPlaylistGroupUseCase,
@@ -70,8 +73,12 @@ class GroupViewModel(
             }.launchIn(viewModelScope)
 
         combine(
-            preferenceRepository.isChannelsEpgInfoUpdateRequired(),
-            preferenceRepository.idForPlaylistContentLoad()
+            preferencesStore.data
+                .map { preferences -> preferences.channelsEpgInfoUpdateRequired }
+                .distinctUntilChanged(),
+            preferencesStore.data
+                .map { preferences -> preferences.playlistContentLoadRequired }
+                .distinctUntilChanged(),
         ) { isRequired, id ->
             logger.w { "testing isChannelsEpgInfoUpdateRequired isRequired=$isRequired" }
             if (isRequired) {
