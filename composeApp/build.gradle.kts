@@ -6,6 +6,7 @@ plugins {
     alias(libs.plugins.tinyiptv.kmp.application.compose)
     alias(libs.plugins.kotlinx.serialization.plugin)
     alias(libs.plugins.ksp)
+    alias(libs.plugins.koin.compiler)
 }
 
 kotlin {
@@ -187,6 +188,10 @@ dependencies {
 }*/
 ksp {
     arg("room.schemaLocation", "$projectDir/schemas")
+}
+
+koinCompiler {
+    compileSafety = true
 }
 
 fun readProperties(propertiesFile: File) =

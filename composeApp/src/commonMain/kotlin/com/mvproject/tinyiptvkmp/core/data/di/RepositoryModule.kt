@@ -15,16 +15,16 @@ import com.mvproject.tinyiptvkmp.core.data.repository.PlaylistChannelsRepository
 import com.mvproject.tinyiptvkmp.core.data.repository.PlaylistsRepository
 
 import com.mvproject.tinyiptvkmp.core.data.repository.RemotePlaylistRepository
-import org.koin.core.module.dsl.singleOf
 import org.koin.dsl.module
+import org.koin.plugin.module.dsl.single
 
 val repositoryModule =
     module {
-        singleOf(::PlaylistsRepository)
-        singleOf(::PlaylistChannelsRepository)
-        singleOf(::EpgProgramRepository)
-        singleOf(::EpgChannelRepository)
-        singleOf(::FavoriteChannelsRepository)
-        singleOf(::RemotePlaylistRepository)
-        singleOf(::LocalPlaylistRepository)
+        single<PlaylistsRepository>()
+        single<PlaylistChannelsRepository>()
+        single<EpgProgramRepository>()
+        single<EpgChannelRepository>()
+        single<FavoriteChannelsRepository>()
+        single<RemotePlaylistRepository>()
+        single<LocalPlaylistRepository>()
     }

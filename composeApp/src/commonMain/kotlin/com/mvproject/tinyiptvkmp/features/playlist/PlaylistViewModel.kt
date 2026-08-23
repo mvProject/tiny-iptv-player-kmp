@@ -22,12 +22,13 @@ import com.mvproject.tinyiptvkmp.core.domain.usecase.SavePlaylistUseCase
 import com.mvproject.tinyiptvkmp.infrastructure.logging.injectLogger
 import com.mvproject.tinyiptvkmp.navigation.AppRoutes
 import kotlinx.coroutines.launch
+import org.koin.core.annotation.InjectedParam
 import org.koin.core.component.KoinComponent
 import kotlin.uuid.ExperimentalUuidApi
 import kotlin.uuid.Uuid
 
 class PlaylistViewModel(
-    args: AppRoutes.PlaylistDetail,
+    @InjectedParam args: AppRoutes.PlaylistDetail,
     private val getPlaylistUseCase: GetPlaylistUseCase,
     private val savePlaylistUseCase: SavePlaylistUseCase,
 ) : ViewModel(),

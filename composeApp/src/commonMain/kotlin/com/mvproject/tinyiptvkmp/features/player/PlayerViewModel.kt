@@ -41,11 +41,12 @@ import com.mvproject.tinyiptvkmp.navigation.AppRoutes
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
+import org.koin.core.annotation.InjectedParam
 import org.koin.core.component.KoinComponent
 import kotlin.time.Duration.Companion.milliseconds
 
 class PlayerViewModel(
-    args: AppRoutes.Player,
+    @InjectedParam args: AppRoutes.Player,
     private val preferenceRepository: PreferenceRepository,
     private val getGroupChannelsUseCase: GetGroupChannelsUseCase,
     private val toggleFavoriteChannelUseCase: ToggleFavoriteChannelUseCase,

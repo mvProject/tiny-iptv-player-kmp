@@ -4,8 +4,9 @@ compileSdk = "36"
 minSdk = "26"
 targetSdk = "35"
 
-kotlin = "2.3.0"
-ksp = "2.3.1"
+kotlin = "2.3.20"
+ksp = "2.3.10"
+koin-plugin = "1.0.2"
 
 gradle = "8.13.2"
 compose = "1.10.3"
@@ -26,7 +27,7 @@ kotlinx-coroutines-core = "1.10.2"
 
 ktor = "3.5.2"
 
-koin = "4.1.1"
+koin = "4.2.1"
 
 media3 = "1.7.1"
 
@@ -64,6 +65,7 @@ kotlinx-serialization-plugin = { id = "org.jetbrains.kotlin.plugin.serialization
 
 ksp = { id = "com.google.devtools.ksp", version.ref = "ksp" }
 room = { id = "androidx.room", version.ref = "androidx-room" }
+koin-compiler = { id = "io.insert-koin.compiler.plugin", version.ref = "koin-plugin" }
 
 [libraries]
 
@@ -135,6 +137,7 @@ koin-core = { group = "io.insert-koin", name = "koin-core", version.ref = "koin"
 koin-android = { group = "io.insert-koin", name = "koin-android", version.ref = "koin" }
 koin-compose = { group = "io.insert-koin", name = "koin-compose", version.ref = "koin" }
 koin-compose-viewmodel = { group = "io.insert-koin", name = "koin-compose-viewmodel", version.ref = "koin" }
+koin-annotations = { group = "io.insert-koin", name = "koin-annotations", version.ref = "koin" }
 
 # Logging
 kermit = { module = "co.touchlab:kermit", version.ref = "kermit" }
@@ -188,7 +191,8 @@ ksoup = [
 koin = [
     "koin-core",
     "koin-compose",
-    "koin-compose-viewmodel"
+    "koin-compose-viewmodel",
+    "koin-annotations"
 ]
 
 coil = [

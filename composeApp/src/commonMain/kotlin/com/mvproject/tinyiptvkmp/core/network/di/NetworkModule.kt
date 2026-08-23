@@ -12,12 +12,12 @@ import com.mvproject.tinyiptvkmp.core.network.client.createHttpClient
 import com.mvproject.tinyiptvkmp.core.network.datasource.EpgChannelDatasource
 import com.mvproject.tinyiptvkmp.core.network.datasource.EpgProgramDatasource
 import com.mvproject.tinyiptvkmp.core.network.datasource.NetworkPlaylistDatasource
-import org.koin.core.module.dsl.singleOf
 import org.koin.dsl.module
+import org.koin.plugin.module.dsl.single
 
 val networkModule = module {
     single { createHttpClient() }
-    singleOf(::EpgChannelDatasource)
-    singleOf(::EpgProgramDatasource)
-    singleOf(::NetworkPlaylistDatasource)
+    single<EpgChannelDatasource>()
+    single<EpgProgramDatasource>()
+    single<NetworkPlaylistDatasource>()
 }

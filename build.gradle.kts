@@ -13,4 +13,5 @@ plugins {
     alias(libs.plugins.kotlinx.serialization.plugin) apply false
     alias(libs.plugins.compose.compiler) apply false
     alias(libs.plugins.room) apply false
+    alias(libs.plugins.koin.compiler) apply false
 }

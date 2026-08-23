@@ -33,10 +33,11 @@ import com.mvproject.tinyiptvkmp.navigation.AppRoutes
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.IO
 import kotlinx.coroutines.launch
+import org.koin.core.annotation.InjectedParam
 import kotlin.time.Duration.Companion.minutes
 
 class GroupChannelsViewModel(
-    args: AppRoutes.TvPlaylistChannels,
+    @InjectedParam args: AppRoutes.TvPlaylistChannels,
     private val getChannelsEpgUseCase: GetChannelsEpgUseCase,
     private val getGroupChannelsUseCase: GetGroupChannelsUseCase,
     private val getGroupChannelsEpgUseCase: GetGroupChannelsEpgUseCase,
