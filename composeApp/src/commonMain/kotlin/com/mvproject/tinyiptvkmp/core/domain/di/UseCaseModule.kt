@@ -22,29 +22,29 @@ import com.mvproject.tinyiptvkmp.core.domain.usecase.SelectPlaylistUseCase
 import com.mvproject.tinyiptvkmp.core.domain.usecase.ToggleFavoriteChannelUseCase
 import com.mvproject.tinyiptvkmp.core.domain.usecase.UpdateChannelsEpgInfoUseCase
 import com.mvproject.tinyiptvkmp.core.domain.usecase.UpdateRemotePlaylistChannelsUseCase
-import org.koin.core.module.dsl.singleOf
 import org.koin.dsl.module
+import org.koin.plugin.module.dsl.single
 
 val useCaseModule =
     module {
-        singleOf(::SavePlaylistUseCase)
-        singleOf(::SavePlaylistContentUseCase)
-        singleOf(::DeletePlaylistUseCase)
+        single<SavePlaylistUseCase>()
+        single<SavePlaylistContentUseCase>()
+        single<DeletePlaylistUseCase>()
 
-        singleOf(::GetPlaylistUseCase)
+        single<GetPlaylistUseCase>()
 
-        singleOf(::UpdateRemotePlaylistChannelsUseCase)
-        singleOf(::UpdateChannelsEpgInfoUseCase)
+        single<UpdateRemotePlaylistChannelsUseCase>()
+        single<UpdateChannelsEpgInfoUseCase>()
 
-        singleOf(::GetPlaylistGroupUseCase)
-        singleOf(::GetGroupChannelsUseCase)
+        single<GetPlaylistGroupUseCase>()
+        single<GetGroupChannelsUseCase>()
 
-        singleOf(::ToggleFavoriteChannelUseCase)
+        single<ToggleFavoriteChannelUseCase>()
 
-        singleOf(::GetGroupChannelsEpgUseCase)
-        singleOf(::GetChannelsEpgUseCase)
-        singleOf(::RefreshEpgChannelsUseCase)
-        singleOf(::RefreshEpgProgramsUseCase)
-        singleOf(::SelectPlaylistUseCase)
-        singleOf(::CleanProgramsUseCase)
+        single<GetGroupChannelsEpgUseCase>()
+        single<GetChannelsEpgUseCase>()
+        single<RefreshEpgChannelsUseCase>()
+        single<RefreshEpgProgramsUseCase>()
+        single<SelectPlaylistUseCase>()
+        single<CleanProgramsUseCase>()
     }

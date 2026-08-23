@@ -1,9 +1,9 @@
 package com.mvproject.tinyiptvkmp.features.channels.di
 
 import com.mvproject.tinyiptvkmp.features.channels.GroupChannelsViewModel
-import org.koin.core.module.dsl.factoryOf
 import org.koin.dsl.module
+import org.koin.plugin.module.dsl.viewModel
 
 val channelsModule = module {
-    factoryOf(::GroupChannelsViewModel)
+    viewModel<GroupChannelsViewModel>()
 }

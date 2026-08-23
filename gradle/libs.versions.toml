@@ -1,7 +1,12 @@
 [versions]
 
-kotlin = "2.3.0"
-ksp = "2.3.1"
+compileSdk = "36"
+minSdk = "26"
+targetSdk = "35"
+
+kotlin = "2.3.20"
+ksp = "2.3.10"
+koin-plugin = "1.0.2"
 
 gradle = "8.13.2"
 compose = "1.10.3"
@@ -22,7 +27,7 @@ kotlinx-coroutines-core = "1.10.2"
 
 ktor = "3.5.2"
 
-koin = "4.1.1"
+koin = "4.2.1"
 
 media3 = "1.7.1"
 
@@ -41,8 +46,15 @@ filekit = "0.7.0"
 nextlib = "1.7.1-0.9.0"
 
 adaptive-version = "1.2.0"
+compose-material3 = "1.9.0-beta03"
+compose-icons = "1.7.3"
 
 [plugins]
+tinyiptv-kmp-library = { id = "tinyiptv.kmp.library" }
+tinyiptv-kmp-library-compose = { id = "tinyiptv.kmp.library.compose" }
+tinyiptv-kmp-library-compose-ui = { id = "tinyiptv.kmp.library.compose.ui" }
+tinyiptv-kmp-application-compose = { id = "tinyiptv.kmp.application.compose" }
+
 compose-multiplatform = { id = "org.jetbrains.compose", version.ref = "compose" }
 compose-compiler = { id = "org.jetbrains.kotlin.plugin.compose", version.ref = "kotlin" }
 multiplatform = { id = "org.jetbrains.kotlin.multiplatform", version.ref = "kotlin" }
@@ -53,8 +65,15 @@ kotlinx-serialization-plugin = { id = "org.jetbrains.kotlin.plugin.serialization
 
 ksp = { id = "com.google.devtools.ksp", version.ref = "ksp" }
 room = { id = "androidx.room", version.ref = "androidx-room" }
+koin-compiler = { id = "io.insert-koin.compiler.plugin", version.ref = "koin-plugin" }
 
 [libraries]
+
+android-gradle-plugin = { module = "com.android.tools.build:gradle", version.ref = "gradle" }
+desktop = { module = "org.jetbrains.compose.desktop:desktop", version.ref = "compose" }
+kotlin-gradle-plugin = { module = "org.jetbrains.kotlin:kotlin-gradle-plugin", version.ref = "kotlin" }
+compose-gradle-plugin = { module = "org.jetbrains.compose:compose-gradle-plugin", version.ref = "compose" }
+ksp-gradle-plugin = { module = "com.google.devtools.ksp:symbol-processing-gradle-plugin", version.ref = "ksp" }
 
 androidx-compose-activity = { module = "androidx.activity:activity-compose", version.ref = "compose-activity" }
 
@@ -83,6 +102,12 @@ kotlinx-collections-immutable = { module = "org.jetbrains.kotlinx:kotlinx-collec
 kotlinx-datetime = { module = "org.jetbrains.kotlinx:kotlinx-datetime", version.ref = "kotlinx-datetime" }
 
 compose-material3-adaptive = { group = "org.jetbrains.compose.material3.adaptive", name = "adaptive", version.ref = "adaptive-version" }
+compose-runtime = { module = "org.jetbrains.compose.runtime:runtime", version.ref = "compose" }
+compose-foundation = { module = "org.jetbrains.compose.foundation:foundation", version.ref = "compose" }
+compose-ui = { module = "org.jetbrains.compose.ui:ui", version.ref = "compose" }
+compose-components-resources = { module = "org.jetbrains.compose.components:components-resources", version.ref = "compose" }
+compose-material3 = { module = "org.jetbrains.compose.material3:material3", version.ref = "compose-material3" }
+compose-material-icons-extended = { module = "org.jetbrains.compose.material:material-icons-extended", version.ref = "compose-icons" }
 compose-ui-tooling = { group = "org.jetbrains.compose.ui", name = "ui-tooling", version.ref = "compose" }
 compose-ui-tooling-preview = { group = "org.jetbrains.compose.ui", name = "ui-tooling-preview", version.ref = "compose" }
 
@@ -108,11 +133,11 @@ ktor-client-content-negotiation = { module = "io.ktor:ktor-client-content-negoti
 ktor-serialization-kotlinx-json = { module = "io.ktor:ktor-serialization-kotlinx-json", version.ref = "ktor" }
 
 # DI
-koin-bom = { group = "io.insert-koin", name = "koin-bom", version.ref = "koin" }
-koin-core = { group = "io.insert-koin", name = "koin-core" }
-koin-android = { group = "io.insert-koin", name = "koin-android" }
-koin-compose = { group = "io.insert-koin", name = "koin-compose" }
-koin-compose-viewmodel = { group = "io.insert-koin", name = "koin-compose-viewmodel" }
+koin-core = { group = "io.insert-koin", name = "koin-core", version.ref = "koin" }
+koin-android = { group = "io.insert-koin", name = "koin-android", version.ref = "koin" }
+koin-compose = { group = "io.insert-koin", name = "koin-compose", version.ref = "koin" }
+koin-compose-viewmodel = { group = "io.insert-koin", name = "koin-compose-viewmodel", version.ref = "koin" }
+koin-annotations = { group = "io.insert-koin", name = "koin-annotations", version.ref = "koin" }
 
 # Logging
 kermit = { module = "co.touchlab:kermit", version.ref = "kermit" }
@@ -166,7 +191,8 @@ ksoup = [
 koin = [
     "koin-core",
     "koin-compose",
-    "koin-compose-viewmodel"
+    "koin-compose-viewmodel",
+    "koin-annotations"
 ]
 
 coil = [

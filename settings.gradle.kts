@@ -6,6 +6,8 @@
  */
 
 pluginManagement {
+    includeBuild("build-logic")
+
     repositories {
         google {
             mavenContent {
@@ -18,6 +20,8 @@ pluginManagement {
         gradlePluginPortal()
     }
 }
+
+enableFeaturePreview("TYPESAFE_PROJECT_ACCESSORS")
 
 dependencyResolutionManagement {
     repositories {
