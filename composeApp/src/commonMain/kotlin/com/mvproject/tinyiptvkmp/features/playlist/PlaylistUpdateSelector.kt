@@ -26,11 +26,12 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
-import com.mvproject.tinyiptvkmp.core.domain.enums.PlaylistType
-import com.mvproject.tinyiptvkmp.core.domain.enums.UpdatePeriod
+import com.mvproject.tinyiptvkmp.core.foundation.model.UpdatePeriod
+import com.mvproject.tinyiptvkmp.core.mapper.mapToString
 import com.mvproject.tinyiptvkmp.core.theme.colorSchemeExtended
 import com.mvproject.tinyiptvkmp.core.theme.dimensionSize
 import com.mvproject.tinyiptvkmp.core.theme.dimensionText
+import com.mvproject.tinyiptvkmp.features.playlist.api.domain.model.PlaylistType
 import org.jetbrains.compose.resources.stringResource
 import tinyiptvkmp.composeapp.generated.resources.Res
 import tinyiptvkmp.composeapp.generated.resources.hint_update_period
@@ -48,7 +49,7 @@ fun PlaylistUpdateSelector(
         )
     ) {
         if (uiState.playlistType == PlaylistType.REMOTE) {
-            val options = UpdatePeriod.entries.map { stringResource(it.title) }
+            val options = UpdatePeriod.entries.map { stringResource(it.mapToString()) }
 
             var isSelectPlaylistOpen by remember { mutableStateOf(false) }
 

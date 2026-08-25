@@ -8,25 +8,6 @@
 <resources>
     <string name="app_name">Tiny Iptv Player</string>
 
-    <string name="playlist_update_6_hours">6 hodin</string>
-    <string name="playlist_update_12_hours">12 hodin</string>
-    <string name="playlist_update_24_hours">24 hodin</string>
-    <string name="playlist_update_2_days">2 dny</string>
-    <string name="playlist_update_1_week">1 týden</string>
-    <string name="playlist_update_never">Nikdy</string>
-
-    <string name="video_resize_mode_fill">Vyplnit</string>
-    <string name="video_resize_mode_fixed_width">Pevná šířka</string>
-    <string name="video_resize_mode_fixed_height">FixedHeight</string>
-    <string name="video_resize_mode_fit">Vejít se</string>
-    <string name="video_resize_mode_zoom">Zvětšení</string>
-
-    <string name="video_ratio_mode_original">Originál</string>
-    <string name="video_ratio_mode_wideScreen">Širokoúhlý (16:9)</string>
-    <string name="video_ratio_mode_fullScreen">Celá obrazovka (4:3)</string>
-    <string name="video_ratio_mode_cinematic">Filmový (21:9)</string>
-    <string name="video_ratio_mode_square">Čtverec (1:1)</string>
-
     <string name="channel_folder_all">Všechny kanály</string>
     <string name="channel_folder_favorite">Oblíbené</string>
 

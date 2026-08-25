@@ -12,29 +12,30 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.mvproject.tinyiptvkmp.core.base.mvi.MviCore
 import com.mvproject.tinyiptvkmp.core.base.mvi.mviCore
-import com.mvproject.tinyiptvkmp.core.common.DELAY_50
-import com.mvproject.tinyiptvkmp.core.common.DELAY_500
-import com.mvproject.tinyiptvkmp.core.common.FLOAT_STEP_VOLUME
-import com.mvproject.tinyiptvkmp.core.common.FLOAT_VALUE_1
-import com.mvproject.tinyiptvkmp.core.common.FLOAT_VALUE_ZERO
-import com.mvproject.tinyiptvkmp.core.common.INT_NO_VALUE
-import com.mvproject.tinyiptvkmp.core.common.INT_VALUE_1
-import com.mvproject.tinyiptvkmp.core.common.INT_VALUE_ZERO
-import com.mvproject.tinyiptvkmp.core.common.UI_SHOW_DELAY
-import com.mvproject.tinyiptvkmp.core.common.VOLUME_SHOW_DELAY
-import com.mvproject.tinyiptvkmp.core.common.utils.CommonUtils.empty
 import com.mvproject.tinyiptvkmp.core.datastore.ProtoStore
 import com.mvproject.tinyiptvkmp.core.datastore.preferences.AppPreferencesProto
-import com.mvproject.tinyiptvkmp.core.domain.enums.FavoriteType
-import com.mvproject.tinyiptvkmp.core.domain.enums.VideoSize
-import com.mvproject.tinyiptvkmp.core.domain.model.TvChannel
-import com.mvproject.tinyiptvkmp.core.domain.usecase.GetChannelsEpgUseCase
-import com.mvproject.tinyiptvkmp.core.domain.usecase.GetGroupChannelsEpgUseCase
-import com.mvproject.tinyiptvkmp.core.domain.usecase.GetGroupChannelsUseCase
-import com.mvproject.tinyiptvkmp.core.domain.usecase.ToggleFavoriteChannelUseCase
-import com.mvproject.tinyiptvkmp.core.domain.utils.mapProgramIds
-import com.mvproject.tinyiptvkmp.core.domain.utils.mapPrograms
-import com.mvproject.tinyiptvkmp.core.domain.utils.replaceUpdated
+import com.mvproject.tinyiptvkmp.core.foundation.common.DELAY_50
+import com.mvproject.tinyiptvkmp.core.foundation.common.DELAY_500
+import com.mvproject.tinyiptvkmp.core.foundation.common.FLOAT_STEP_VOLUME
+import com.mvproject.tinyiptvkmp.core.foundation.common.FLOAT_VALUE_1
+import com.mvproject.tinyiptvkmp.core.foundation.common.FLOAT_VALUE_ZERO
+import com.mvproject.tinyiptvkmp.core.foundation.common.INT_NO_VALUE
+import com.mvproject.tinyiptvkmp.core.foundation.common.INT_VALUE_1
+import com.mvproject.tinyiptvkmp.core.foundation.common.INT_VALUE_ZERO
+import com.mvproject.tinyiptvkmp.core.foundation.common.UI_SHOW_DELAY
+import com.mvproject.tinyiptvkmp.core.foundation.common.VOLUME_SHOW_DELAY
+import com.mvproject.tinyiptvkmp.core.foundation.model.VideoSize
+import com.mvproject.tinyiptvkmp.core.foundation.utils.CommonUtils.empty
+import com.mvproject.tinyiptvkmp.features.channels.api.domain.usecase.ToggleFavoriteChannelUseCase
+import com.mvproject.tinyiptvkmp.features.epg.api.domain.model.TvChannelWithPrograms
+import com.mvproject.tinyiptvkmp.features.epg.api.domain.usecase.GetChannelsEpgUseCase
+import com.mvproject.tinyiptvkmp.features.epg.api.domain.usecase.GetGroupChannelsEpgUseCase
+import com.mvproject.tinyiptvkmp.features.epg.api.domain.utils.mapProgramIds
+import com.mvproject.tinyiptvkmp.features.epg.api.domain.utils.mapPrograms
+import com.mvproject.tinyiptvkmp.features.epg.api.domain.utils.replaceUpdated
+import com.mvproject.tinyiptvkmp.features.epg.api.domain.utils.withPrograms
+import com.mvproject.tinyiptvkmp.features.groups.api.domain.model.FavoriteType
+import com.mvproject.tinyiptvkmp.features.groups.api.domain.usecase.GetGroupChannelsUseCase
 import com.mvproject.tinyiptvkmp.features.player.PlayerUiState.PlayerOSD
 import com.mvproject.tinyiptvkmp.features.player.components.isMediaPlayable
 import com.mvproject.tinyiptvkmp.infrastructure.logging.injectLogger
@@ -72,48 +73,46 @@ class PlayerViewModel(
     init {
         logger.d { "testing VideoViewViewModel init media:$media, group:$group, groupType:$groupType" }
 
-        loadGroupChannels()
+        viewModelScope.launch {
+            loadGroupChannels()
 
-        initPlayBack(channelName = media)
+            initPlayBack(channelName = media)
+        }
 
         refreshGroupChannelsPrograms()
     }
 
-    private fun loadGroupChannels() {
-        viewModelScope.launch {
-            val channelList = getGroupChannelsUseCase(group, groupType)
+    private suspend fun loadGroupChannels() {
+        val channelList = getGroupChannelsUseCase(group, groupType)
 
-            updateUiState {
-                copy(
-                    channelGroup = group,
-                    groupChannels = channelList
-                )
-            }
+        updateUiState {
+            copy(
+                channelGroup = group,
+                groupChannels = channelList.withPrograms()
+            )
         }
     }
 
-    private fun initPlayBack(channelName: String) {
-        viewModelScope.launch {
-            val preferences = preferencesStore.data.first()
-            val videoSize = VideoSize.entries[preferences.defaultVideoSizeMode]
-            val isFullscreen = preferences.defaultFullscreenMode
+    private suspend fun initPlayBack(channelName: String) {
+        val preferences = preferencesStore.data.first()
+        val videoSize = VideoSize.entries[preferences.defaultVideoSizeMode]
+        val isFullscreen = preferences.defaultFullscreenMode
 
-            updateUiState {
-                copy(
-                    isFullscreen = isFullscreen,
-                    videoSize = videoSize,
-                )
-            }
-
-            val name = uiState.value.currentChannel.channelName.ifBlank { channelName }
-
-            val currentItemPosition = getCurrentMediaPosition(channelName = name)
-
-            setCurrentChannel(channelIndex = currentItemPosition)
+        updateUiState {
+            copy(
+                isFullscreen = isFullscreen,
+                videoSize = videoSize,
+            )
         }
+
+        val name = uiState.value.currentChannel.channelName.ifBlank { channelName }
+
+        val currentItemPosition = getCurrentMediaPosition(channelName = name)
+
+        setCurrentChannel(channelIndex = currentItemPosition)
     }
 
-    private fun switchToChannel(channel: TvChannel) {
+    private fun switchToChannel(channel: TvChannelWithPrograms) {
         viewModelScope.launch {
             val newMediaPosition = getCurrentMediaPosition(channelName = channel.channelName)
 
@@ -223,9 +222,11 @@ class PlayerViewModel(
 
         val targetPos = groupChannels.indexOfFirst { it.channelName == channelName }
 
-        val mediaPosition = targetPos.coerceAtLeast(currentPos)
-
-        return mediaPosition
+        return if (targetPos >= INT_VALUE_ZERO) {
+            targetPos
+        } else {
+            currentPos.coerceAtLeast(INT_VALUE_ZERO)
+        }
     }
 
     private fun switchToNextChannel() {
@@ -285,7 +286,7 @@ class PlayerViewModel(
 
     private suspend fun setCurrentChannel(channelIndex: Int) {
         val currentChannels = uiState.value.groupChannels
-        val currentChannel = currentChannels[channelIndex]
+        val currentChannel = currentChannels.getOrNull(channelIndex) ?: return
 
         updateUiState {
             copy(
@@ -301,9 +302,11 @@ class PlayerViewModel(
     private fun toggleChannelFavorite(type: FavoriteType) {
         val currentChannel = uiState.value.currentChannel
 
-        if (currentChannel.favoriteType != type) {
+        if (currentChannel.favoriteType != type.name) {
 
-            val updatedChannel = currentChannel.copy(favoriteType = type)
+            val updatedChannel = currentChannel.copy(
+                channel = currentChannel.channel.copy(favoriteType = type.name),
+            )
 
             val updatedChannels = uiState.value.groupChannels
                 .replaceUpdated(channel = updatedChannel)
@@ -316,7 +319,7 @@ class PlayerViewModel(
                         osdType = null
                     )
                 }
-                toggleFavoriteChannelUseCase(channel = currentChannel, type = type)
+                toggleFavoriteChannelUseCase(channel = currentChannel.channel, type = type.name)
             }
         }
     }
@@ -382,7 +385,7 @@ class PlayerViewModel(
 @Immutable
 data class PlayerUiState(
     val channelGroup: String = String.empty,
-    val currentChannel: TvChannel = TvChannel(),
+    val currentChannel: TvChannelWithPrograms = TvChannelWithPrograms(),
     val isControlUiVisible: Boolean = false,
     val isVolumeUiVisible: Boolean = false,
     val isFullscreen: Boolean = false,
@@ -393,7 +396,7 @@ data class PlayerUiState(
     val isOnline: Boolean = true,
     val videoSize: VideoSize = VideoSize.WideScreen,
     val channelIndex: Int = INT_NO_VALUE,
-    val groupChannels: List<TvChannel> = emptyList(),
+    val groupChannels: List<TvChannelWithPrograms> = emptyList(),
     val osdType: PlayerOSD? = null,
 ) {
     sealed interface PlayerPlaybackState {
@@ -422,7 +425,7 @@ sealed interface PlayerUiAction {
     data object VolumeUp : PlayerUiAction
     data object VolumeDown : PlayerUiAction
 
-    data class SelectChannel(val channel: TvChannel) : PlayerUiAction
+    data class SelectChannel(val channel: TvChannelWithPrograms) : PlayerUiAction
 
     data class OnIsPlayingChanged(val state: Boolean) : PlayerUiAction
     data class OnPlaybackStateChanged(val state: PlayerUiState.PlayerPlaybackState) : PlayerUiAction

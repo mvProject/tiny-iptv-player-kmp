@@ -20,11 +20,11 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.text.style.TextAlign
-import com.mvproject.tinyiptvkmp.core.common.INT_VALUE_ZERO
-import com.mvproject.tinyiptvkmp.core.domain.enums.GroupType
-import com.mvproject.tinyiptvkmp.core.domain.model.ChannelsGroup
+import com.mvproject.tinyiptvkmp.core.foundation.common.INT_VALUE_ZERO
 import com.mvproject.tinyiptvkmp.core.theme.dimensionSize
 import com.mvproject.tinyiptvkmp.features.groups.GroupUiAction
+import com.mvproject.tinyiptvkmp.features.groups.api.domain.model.ChannelsGroup
+import com.mvproject.tinyiptvkmp.features.groups.api.domain.model.GroupType
 import org.jetbrains.compose.resources.stringResource
 import tinyiptvkmp.composeapp.generated.resources.Res
 import tinyiptvkmp.composeapp.generated.resources.channel_folder_all

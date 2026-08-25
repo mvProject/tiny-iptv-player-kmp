@@ -27,10 +27,10 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.painter.Painter
 import androidx.compose.ui.text.style.TextAlign
+import com.mvproject.tinyiptvkmp.core.components.modifiers.SpacerHeight
 import com.mvproject.tinyiptvkmp.core.theme.colorSchemeExtended
 import com.mvproject.tinyiptvkmp.core.theme.dimensionFraction
 import com.mvproject.tinyiptvkmp.core.theme.dimensionSize
-import com.mvproject.tinyiptvkmp.core.ui.modifiers.SpacerHeight
 
 @Composable
 fun NoPlaybackView(

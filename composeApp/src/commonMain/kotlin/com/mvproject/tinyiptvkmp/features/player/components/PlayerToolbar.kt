@@ -25,23 +25,23 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.alpha
 import androidx.compose.ui.text.style.TextAlign
-import com.mvproject.tinyiptvkmp.core.domain.enums.FavoriteType
-import com.mvproject.tinyiptvkmp.core.domain.enums.VideoSize
-import com.mvproject.tinyiptvkmp.core.domain.model.EpgProgram
-import com.mvproject.tinyiptvkmp.core.domain.model.TvChannel
+import com.mvproject.tinyiptvkmp.core.components.indicators.ProgramProgressIndicator
+import com.mvproject.tinyiptvkmp.core.components.modifiers.roundedHeader
+import com.mvproject.tinyiptvkmp.core.foundation.model.VideoSize
 import com.mvproject.tinyiptvkmp.core.theme.colorSchemeExtended
 import com.mvproject.tinyiptvkmp.core.theme.dimensionOpacity
 import com.mvproject.tinyiptvkmp.core.theme.dimensionSize
 import com.mvproject.tinyiptvkmp.core.theme.dimensionWeight
-import com.mvproject.tinyiptvkmp.core.ui.indicators.ProgramProgressIndicator
-import com.mvproject.tinyiptvkmp.core.ui.modifiers.roundedHeader
 import com.mvproject.tinyiptvkmp.core.ui.views.TimeItem
+import com.mvproject.tinyiptvkmp.features.epg.api.domain.model.EpgProgram
+import com.mvproject.tinyiptvkmp.features.epg.api.domain.model.TvChannelWithPrograms
+import com.mvproject.tinyiptvkmp.features.groups.api.domain.model.FavoriteType
 import com.mvproject.tinyiptvkmp.features.player.PlayerUiAction
 
 @Composable
 fun PlayerToolbar(
     modifier: Modifier = Modifier,
-    currentChannel: TvChannel,
+    currentChannel: TvChannelWithPrograms,
     programCount: Int = 2,
     videoSize: VideoSize,
     isVisible: Boolean = false,
@@ -84,7 +84,7 @@ fun PlayerToolbar(
 
                 PlayerControls(
                     modifier = Modifier.fillMaxWidth(),
-                    isFavorite = currentChannel.favoriteType != FavoriteType.NONE,
+                    isFavorite = currentChannel.favoriteType != FavoriteType.NONE.name,
                     isPlaying = isPlaying,
                     isFullScreen = isFullScreen,
                     videoSize = videoSize,

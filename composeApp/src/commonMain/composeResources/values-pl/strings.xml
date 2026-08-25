@@ -9,25 +9,6 @@
 <resources>
     <string name="app_name">Tiny Iptv Player</string>
 
-    <string name="playlist_update_6_hours">6 godzin</string>
-    <string name="playlist_update_12_hours">12 godzin</string>
-    <string name="playlist_update_24_hours">24 godziny</string>
-    <string name="playlist_update_2_days">2 dni</string>
-    <string name="playlist_update_1_week">1 tydzień</string>
-    <string name="playlist_update_never">Nigdy</string>
-
-    <string name="video_resize_mode_fill">Wypełnić</string>
-    <string name="video_resize_mode_fixed_width">Stała szerokość</string>
-    <string name="video_resize_mode_fixed_height">Stała wysokość</string>
-    <string name="video_resize_mode_fit">Pasować</string>
-    <string name="video_resize_mode_zoom">Powiększenie</string>
-
-    <string name="video_ratio_mode_original">Oryginalny</string>
-    <string name="video_ratio_mode_wideScreen">Szeroki ekran (16:9)</string>
-    <string name="video_ratio_mode_fullScreen">Pełny ekran (4:3)</string>
-    <string name="video_ratio_mode_cinematic">Filmowy (21:9)</string>
-    <string name="video_ratio_mode_square">Kwadrat (1:1)</string>
-
     <string name="channel_folder_all">Wszystkie kanały</string>
     <string name="channel_folder_favorite">Ulubione</string>
 

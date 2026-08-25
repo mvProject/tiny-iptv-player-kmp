@@ -20,19 +20,19 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
+import com.mvproject.tinyiptvkmp.core.components.buttons.FavoriteButton
+import com.mvproject.tinyiptvkmp.core.components.texts.ChannelTitleLarge
 import com.mvproject.tinyiptvkmp.core.domain.PreviewTestData
-import com.mvproject.tinyiptvkmp.core.domain.enums.FavoriteType
-import com.mvproject.tinyiptvkmp.core.domain.model.TvChannel
 import com.mvproject.tinyiptvkmp.core.theme.AppTheme
 import com.mvproject.tinyiptvkmp.core.theme.dimensionSize
-import com.mvproject.tinyiptvkmp.core.ui.buttons.FavoriteButton
-import com.mvproject.tinyiptvkmp.core.ui.texts.ChannelTitleLarge
+import com.mvproject.tinyiptvkmp.features.epg.api.domain.model.TvChannelWithPrograms
+import com.mvproject.tinyiptvkmp.features.groups.api.domain.model.FavoriteType
 
 @OptIn(ExperimentalFoundationApi::class)
 @Composable
 fun ChannelCardView(
     modifier: Modifier = Modifier,
-    channel: TvChannel,
+    channel: TvChannelWithPrograms,
     onChannelSelect: () -> Unit = {},
     onFavoriteClick: () -> Unit = {},
     onShowEpgClick: () -> Unit = {},
@@ -66,12 +66,12 @@ fun ChannelCardView(
                     .padding(horizontal = MaterialTheme.dimensionSize.size8)
                     .align(Alignment.BottomCenter),
                 title = channel.channelName,
-                isFavorite = channel.favoriteType != FavoriteType.NONE
+                isFavorite = channel.favoriteType != FavoriteType.NONE.name
             )
 
             FavoriteButton(
                 modifier = Modifier.align(Alignment.TopEnd),
-                isFavorite = channel.favoriteType != FavoriteType.NONE,
+                isFavorite = channel.favoriteType != FavoriteType.NONE.name,
                 onClick = onFavoriteClick
             )
         }
@@ -82,6 +82,6 @@ fun ChannelCardView(
 @Preview
 private fun PreviewChannelCardViewFavorite() {
     AppTheme {
-        ChannelCardView(channel = PreviewTestData.testProgram)
+        ChannelCardView(channel = PreviewTestData.testProgramWithPrograms)
     }
 }

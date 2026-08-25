@@ -37,19 +37,18 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import com.mvproject.tinyiptvkmp.core.base.mvi.CollectUiEffect
-import com.mvproject.tinyiptvkmp.core.common.WEIGHT_1
-import com.mvproject.tinyiptvkmp.core.common.utils.CommonUtils.tmpFolder
-import com.mvproject.tinyiptvkmp.core.common.utils.CommonUtils.typeM3U
-import com.mvproject.tinyiptvkmp.core.common.utils.CommonUtils.typeM3U8
-import com.mvproject.tinyiptvkmp.core.domain.enums.PlaylistType
+import com.mvproject.tinyiptvkmp.core.components.adaptive.adaptiveContentWidth
+import com.mvproject.tinyiptvkmp.core.components.adaptive.rememberAdaptiveLayoutState
+import com.mvproject.tinyiptvkmp.core.components.indicators.LoadingIndicator
+import com.mvproject.tinyiptvkmp.core.components.modifiers.SpacerHeight
+import com.mvproject.tinyiptvkmp.core.components.toolbars.AppBarWithBackNav
+import com.mvproject.tinyiptvkmp.core.foundation.common.WEIGHT_1
+import com.mvproject.tinyiptvkmp.core.foundation.utils.CommonUtils.typeM3U
+import com.mvproject.tinyiptvkmp.core.foundation.utils.CommonUtils.typeM3U8
 import com.mvproject.tinyiptvkmp.core.theme.colorSchemeExtended
 import com.mvproject.tinyiptvkmp.core.theme.dimensionSize
 import com.mvproject.tinyiptvkmp.core.theme.dimensionWeight
-import com.mvproject.tinyiptvkmp.core.ui.adaptive.adaptiveContentWidth
-import com.mvproject.tinyiptvkmp.core.ui.adaptive.rememberAdaptiveLayoutState
-import com.mvproject.tinyiptvkmp.core.ui.indicators.LoadingIndicator
-import com.mvproject.tinyiptvkmp.core.ui.modifiers.SpacerHeight
-import com.mvproject.tinyiptvkmp.core.ui.toolbars.AppBarWithBackNav
+import com.mvproject.tinyiptvkmp.features.playlist.api.domain.model.PlaylistType
 import io.github.vinceglb.filekit.compose.rememberFilePickerLauncher
 import io.github.vinceglb.filekit.core.PickerMode
 import io.github.vinceglb.filekit.core.PickerType
@@ -114,7 +113,7 @@ private fun PlaylistScreen(
             title = stringResource(Res.string.btn_add_local),
         ) { selectedFile ->
             selectedFile?.let { file ->
-                val folderFileTmp = tmpFolder / file.name
+                val folderFileTmp = FileSystem.SYSTEM_TEMPORARY_DIRECTORY / file.name
                 val fileTmp = FileSystem.SYSTEM.sink(folderFileTmp)
                 scope.launch {
                     fileTmp.buffer().use { sink ->

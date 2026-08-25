@@ -1,6 +1,7 @@
 plugins {
     alias(libs.plugins.tinyiptv.kmp.library)
     alias(libs.plugins.kotlinx.serialization.plugin)
+    alias(libs.plugins.koin.compiler)
 }
 
 kotlin {
@@ -9,6 +10,9 @@ kotlin {
 
         commonMain.dependencies {
             implementation(libs.bundles.ktor)
+            implementation(libs.bundles.ksoup)
+            implementation(libs.koin.core)
+            implementation(libs.okio)
             implementation(projects.infrastructure.logging)
         }
 

@@ -12,10 +12,10 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.mvproject.tinyiptvkmp.core.base.mvi.MviCore
 import com.mvproject.tinyiptvkmp.core.base.mvi.mviCore
-import com.mvproject.tinyiptvkmp.core.common.utils.CommonUtils.empty
-import com.mvproject.tinyiptvkmp.core.data.repository.PlaylistsRepository
-import com.mvproject.tinyiptvkmp.core.domain.model.Playlist
-import com.mvproject.tinyiptvkmp.core.domain.usecase.DeletePlaylistUseCase
+import com.mvproject.tinyiptvkmp.core.foundation.utils.CommonUtils.empty
+import com.mvproject.tinyiptvkmp.features.playlist.api.domain.model.Playlist
+import com.mvproject.tinyiptvkmp.features.playlist.api.domain.usecase.DeletePlaylistUseCase
+import com.mvproject.tinyiptvkmp.features.playlist.api.domain.usecase.ObservePlaylistsUseCase
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.IO
 import kotlinx.coroutines.flow.flowOn
@@ -25,7 +25,7 @@ import kotlinx.coroutines.flow.onStart
 import kotlinx.coroutines.launch
 
 class SettingsPlaylistViewModel(
-    private val playlistsRepository: PlaylistsRepository,
+    private val observePlaylistsUseCase: ObservePlaylistsUseCase,
     private val deletePlaylistUseCase: DeletePlaylistUseCase,
 ) : ViewModel(),
     MviCore<SettingsPlaylistUiState, SettingsPlaylistUiAction, SettingsPlaylistUiEffect> by mviCore(
@@ -33,8 +33,7 @@ class SettingsPlaylistViewModel(
     ) {
 
     init {
-        playlistsRepository
-            .allPlaylistsAsFlow()
+        observePlaylistsUseCase()
             .onStart {
                 updateUiState {
                     copy(isLoading = true)

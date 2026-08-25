@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<resources>
+    <string name="playlist_update_6_hours">6 horas</string>
+    <string name="playlist_update_12_hours">12 horas</string>
+    <string name="playlist_update_24_hours">24 horas</string>
+    <string name="playlist_update_2_days">2 dias</string>
+    <string name="playlist_update_1_week">1 semana</string>
+    <string name="playlist_update_never">Nunca</string>
+    <string name="video_resize_mode_fill">Preencher</string>
+    <string name="video_resize_mode_fixed_width">Largura fixa</string>
+    <string name="video_resize_mode_fixed_height">Altura Fixa</string>
+    <string name="video_resize_mode_fit">Ajustar</string>
+    <string name="video_resize_mode_zoom">Ampliação</string>
+    <string name="video_ratio_mode_original">Original</string>
+    <string name="video_ratio_mode_wideScreen">Tela ampla (16:9)</string>
+    <string name="video_ratio_mode_fullScreen">Tela Cheia (4:3)</string>
+    <string name="video_ratio_mode_cinematic">Cinematográfico (21:9)</string>
+    <string name="video_ratio_mode_square">Quadrado (1:1)</string>
+</resources>

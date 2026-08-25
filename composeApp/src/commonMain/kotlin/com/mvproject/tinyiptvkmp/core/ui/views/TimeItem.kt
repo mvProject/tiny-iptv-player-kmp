@@ -19,8 +19,8 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.style.TextAlign
-import com.mvproject.tinyiptvkmp.core.common.utils.CommonUtils.delimiterTime
-import com.mvproject.tinyiptvkmp.core.common.utils.convertToTime
+import com.mvproject.tinyiptvkmp.core.domain.convertToTime
+import com.mvproject.tinyiptvkmp.core.foundation.utils.CommonUtils.delimiterTime
 import com.mvproject.tinyiptvkmp.core.theme.dimensionSize
 
 @Composable

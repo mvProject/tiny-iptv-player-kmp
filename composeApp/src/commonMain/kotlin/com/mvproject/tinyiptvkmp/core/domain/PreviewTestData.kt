@@ -7,12 +7,12 @@
 
 package com.mvproject.tinyiptvkmp.core.domain
 
-import com.mvproject.tinyiptvkmp.core.common.utils.actualDate
-import com.mvproject.tinyiptvkmp.core.domain.enums.GroupType
-import com.mvproject.tinyiptvkmp.core.domain.model.ChannelsGroup
-import com.mvproject.tinyiptvkmp.core.domain.model.EpgProgram
-import com.mvproject.tinyiptvkmp.core.domain.model.Playlist
-import com.mvproject.tinyiptvkmp.core.domain.model.TvChannel
+import com.mvproject.tinyiptvkmp.features.channels.api.domain.model.TvChannel
+import com.mvproject.tinyiptvkmp.features.epg.api.domain.model.EpgProgram
+import com.mvproject.tinyiptvkmp.features.epg.api.domain.model.withPrograms
+import com.mvproject.tinyiptvkmp.features.groups.api.domain.model.ChannelsGroup
+import com.mvproject.tinyiptvkmp.features.groups.api.domain.model.GroupType
+import com.mvproject.tinyiptvkmp.features.playlist.api.domain.model.Playlist
 import kotlin.random.Random
 import kotlin.time.Duration.Companion.minutes
 
@@ -22,7 +22,6 @@ object PreviewTestData {
             channelName = "channelName",
             channelLogo = "",
             channelUrl = "",
-            programs = emptyList(),
         )
 
     val testEpgProgram =
@@ -59,6 +58,9 @@ object PreviewTestData {
                 )
             }
         }
+
+    val testProgramWithPrograms = testProgram.withPrograms(testEpgPrograms)
+
     val testPlaylists =
         buildList {
             repeat(2) {

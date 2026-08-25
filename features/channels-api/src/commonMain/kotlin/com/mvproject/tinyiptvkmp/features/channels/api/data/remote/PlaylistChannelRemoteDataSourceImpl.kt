@@ -1,0 +1,18 @@
+package com.mvproject.tinyiptvkmp.features.channels.api.data.remote
+
+import com.mvproject.tinyiptvkmp.core.network.datasource.NetworkPlaylistDatasource
+import com.mvproject.tinyiptvkmp.features.channels.api.data.local.PlaylistChannelParseModel
+import com.mvproject.tinyiptvkmp.features.channels.api.data.parser.M3UParser.parseStringToChannels
+import io.ktor.client.statement.bodyAsText
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.withContext
+
+internal class PlaylistChannelRemoteDataSourceImpl(
+    private val network: NetworkPlaylistDatasource,
+) : PlaylistChannelRemoteDataSource {
+    override suspend fun loadPlaylistContent(url: String): List<PlaylistChannelParseModel> =
+        withContext(Dispatchers.Default) {
+            val content = network.loadPlaylistData(url).bodyAsText()
+            parseStringToChannels(source = content)
+        }
+}

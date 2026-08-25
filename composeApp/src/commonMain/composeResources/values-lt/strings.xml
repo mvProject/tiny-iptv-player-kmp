@@ -9,25 +9,6 @@
 <resources>
     <string name="app_name">Tiny Iptv Player</string>
 
-    <string name="playlist_update_6_hours">6 valandos</string>
-    <string name="playlist_update_12_hours">12 valandų</string>
-    <string name="playlist_update_24_hours">24 valandos</string>
-    <string name="playlist_update_2_days">2 dienos</string>
-    <string name="playlist_update_1_week">1 savaitė</string>
-    <string name="playlist_update_never">Niekada</string>
-
-    <string name="video_resize_mode_fill">Užpildykite</string>
-    <string name="video_resize_mode_fixed_width">Fiksuotas plotis</string>
-    <string name="video_resize_mode_fixed_height">Fiksuotas aukštis</string>
-    <string name="video_resize_mode_fit">Tinka</string>
-    <string name="video_resize_mode_zoom">Padidinti</string>
-
-    <string name="video_ratio_mode_original">Originalus</string>
-    <string name="video_ratio_mode_wideScreen">Plačiaekranis (16:9)</string>
-    <string name="video_ratio_mode_fullScreen">Visas ekranas (4:3)</string>
-    <string name="video_ratio_mode_cinematic">Kino (21:9)</string>
-    <string name="video_ratio_mode_square">Kvadratas (1:1)</string>
-
     <string name="channel_folder_all">Visi kanalai</string>
     <string name="channel_folder_favorite">Mėgstamiausi</string>
 

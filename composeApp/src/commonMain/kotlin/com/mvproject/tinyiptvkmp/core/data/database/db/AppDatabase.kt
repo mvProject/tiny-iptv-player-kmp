@@ -1,0 +1,54 @@
+/*
+ *  Created by Medvediev Viktor [mvproject]
+ *  Copyright © 2024
+ *  last modified : 07.05.24, 10:06
+ *
+ */
+
+package com.mvproject.tinyiptvkmp.core.data.database.db
+
+import androidx.room.ConstructedBy
+import androidx.room.Database
+import androidx.room.RoomDatabase
+import androidx.room.RoomDatabaseConstructor
+import com.mvproject.tinyiptvkmp.features.channels.api.data.local.database.FavoriteChannelDao
+import com.mvproject.tinyiptvkmp.features.channels.api.data.local.database.FavoriteChannelEntity
+import com.mvproject.tinyiptvkmp.features.channels.api.data.local.database.PlaylistChannelDao
+import com.mvproject.tinyiptvkmp.features.channels.api.data.local.database.PlaylistChannelEntity
+import com.mvproject.tinyiptvkmp.features.epg.api.data.local.database.EpgChannelDao
+import com.mvproject.tinyiptvkmp.features.epg.api.data.local.database.EpgChannelEntity
+import com.mvproject.tinyiptvkmp.features.epg.api.data.local.database.EpgProgramDao
+import com.mvproject.tinyiptvkmp.features.epg.api.data.local.database.EpgProgramEntity
+import com.mvproject.tinyiptvkmp.features.playlist.api.data.local.database.PlaylistDao
+import com.mvproject.tinyiptvkmp.features.playlist.api.data.local.database.PlaylistEntity
+
+@Database(
+    entities = [
+        EpgChannelEntity::class,
+        EpgProgramEntity::class,
+        FavoriteChannelEntity::class,
+        PlaylistEntity::class,
+        PlaylistChannelEntity::class,
+    ],
+    version = 1,
+)
+
+@ConstructedBy(AppDatabaseCtor::class)
+abstract class AppDatabase : RoomDatabase() {
+    abstract fun epgInfoDao(): EpgChannelDao
+
+    abstract fun epgProgramDao(): EpgProgramDao
+
+    abstract fun favoriteChannelDao(): FavoriteChannelDao
+
+    abstract fun playlistDao(): PlaylistDao
+
+    abstract fun playlistChannelDao(): PlaylistChannelDao
+}
+
+internal const val dbFileName = "tinyiptvkmp.db"
+
+@Suppress("NO_ACTUAL_FOR_EXPECT")
+expect object AppDatabaseCtor : RoomDatabaseConstructor<AppDatabase> {
+    override fun initialize(): AppDatabase
+}

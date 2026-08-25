@@ -1,5 +1,7 @@
 plugins {
     alias(libs.plugins.tinyiptv.kmp.library)
+    alias(libs.plugins.kotlinx.serialization.plugin)
+    alias(libs.plugins.koin.compiler)
 }
 
 kotlin {
@@ -8,6 +10,7 @@ kotlin {
             api(libs.androidx.datastore.core.okio)
             api(libs.koin.core)
             implementation(libs.kotlinx.coroutines.core)
+            implementation(libs.kotlinx.serialization.protobuf)
         }
 
         commonTest.dependencies {

@@ -22,9 +22,9 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
-import com.mvproject.tinyiptvkmp.core.domain.enums.PlaylistType
-import com.mvproject.tinyiptvkmp.core.domain.model.Playlist
 import com.mvproject.tinyiptvkmp.core.theme.dimensionSize
+import com.mvproject.tinyiptvkmp.features.playlist.api.domain.model.Playlist
+import com.mvproject.tinyiptvkmp.features.playlist.api.domain.model.PlaylistType
 
 @Composable
 fun PlaylistItem(

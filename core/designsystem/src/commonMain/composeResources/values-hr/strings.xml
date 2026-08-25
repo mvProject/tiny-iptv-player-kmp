@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<resources>
+    <string name="playlist_update_6_hours">6 sati</string>
+    <string name="playlist_update_12_hours">12 sati</string>
+    <string name="playlist_update_24_hours">24 sata</string>
+    <string name="playlist_update_2_days">2 dana</string>
+    <string name="playlist_update_1_week">1 Tjedan</string>
+    <string name="playlist_update_never">Nikada</string>
+    <string name="video_resize_mode_fill">Ispunite</string>
+    <string name="video_resize_mode_fixed_width">FixedWidth</string>
+    <string name="video_resize_mode_fixed_height">Fiksna visina</string>
+    <string name="video_resize_mode_fit">Fit</string>
+    <string name="video_resize_mode_zoom">Zum</string>
+    <string name="video_ratio_mode_original">Izvornik</string>
+    <string name="video_ratio_mode_wideScreen">Široki zaslon (16:9)</string>
+    <string name="video_ratio_mode_fullScreen">Cijeli zaslon (4:3)</string>
+    <string name="video_ratio_mode_cinematic">Filmski (21:9)</string>
+    <string name="video_ratio_mode_square">Kvadrat (1:1)</string>
+</resources>

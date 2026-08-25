@@ -1,0 +1,159 @@
+package com.mvproject.tinyiptvkmp.core.domain
+
+import com.mvproject.tinyiptvkmp.core.foundation.common.LONG_NO_VALUE
+import com.mvproject.tinyiptvkmp.core.foundation.common.LONG_VALUE_ZERO
+import com.mvproject.tinyiptvkmp.core.foundation.model.UpdatePeriod
+import com.mvproject.tinyiptvkmp.core.foundation.utils.CommonUtils.delimiterTime
+import kotlinx.datetime.LocalDate
+import kotlinx.datetime.LocalDateTime
+import kotlinx.datetime.LocalTime
+import kotlinx.datetime.TimeZone
+import kotlinx.datetime.format.char
+import kotlinx.datetime.toInstant
+import kotlinx.datetime.toLocalDateTime
+import kotlin.time.Clock
+import kotlin.time.Duration.Companion.days
+import kotlin.time.Duration.Companion.hours
+import kotlin.time.Duration.Companion.milliseconds
+import kotlin.time.Instant
+
+private val tzSourceBerlin = TimeZone.of("Europe/Berlin")
+private val tzSourceMoscow = TimeZone.of("Europe/Moscow")
+private val tzCurrent = TimeZone.currentSystemDefault()
+
+val actualDate
+    get() = Clock.System.now().toEpochMilliseconds()
+
+private val dateFormat =
+    LocalDate.Format {
+        day()
+        char('/')
+        monthNumber()
+        char('/')
+        year()
+    }
+
+private val timeFormat =
+    LocalTime.Format {
+        hour()
+        char(':')
+        minute()
+    }
+
+private fun Int.pad(length: Int): String = this
+    .toString()
+    .padStart(length, '0')
+
+val sourceActualDate
+    get() = Instant.fromEpochMilliseconds(Clock.System.now().toEpochMilliseconds())
+        .toLocalDateTime(tzCurrent)
+        .toInstant(tzSourceMoscow)
+        .toEpochMilliseconds()
+
+
+/**
+ * Extension Method to non-null long variable which
+ * convert value to specified time with local timezone
+ *
+ * @return String converted time value
+ */
+fun Long.convertTimeToReadableFormat(): String {
+    return Instant.fromEpochMilliseconds(this)
+        .toLocalDateTime(tzCurrent)
+        .time
+        .let { timeFormat.format(it) }
+}
+
+fun typeToDuration(type: Int): Long =
+    when (type) {
+        UpdatePeriod.NO_UPDATE.value -> LONG_VALUE_ZERO
+        UpdatePeriod.HOURS_6.value -> 6.hours.inWholeMilliseconds
+        UpdatePeriod.HOURS_12.value -> 12.hours.inWholeMilliseconds
+        UpdatePeriod.HOURS_24.value -> 24.hours.inWholeMilliseconds
+        UpdatePeriod.DAYS_2.value -> 2.days.inWholeMilliseconds
+        UpdatePeriod.WEEK_1.value -> 7.days.inWholeMilliseconds
+        else -> LONG_NO_VALUE
+    }
+
+fun calculateProgramProgress(
+    startTime: Long,
+    endTime: Long,
+): Float {
+    var progressValue = 0f
+    val currTime = Clock.System.now().toEpochMilliseconds()
+    if (currTime > startTime) {
+        val endValue = (endTime - startTime).toInt()
+        val spendValue = (currTime - startTime).toDouble()
+        progressValue = (spendValue / endValue).toFloat()
+    }
+    return progressValue
+}
+
+private fun extractDate(input: String): String {
+    val year = input.substring(0, 4).toInt()
+    val month = input.substring(4, 6).toInt()
+    val day = input.substring(6, 8).toInt()
+    return "${day.pad(2)}/${month.pad(2)}/${year.pad(4)}"
+}
+
+private fun extractTime(input: String): String {
+    val hour = input.substring(8, 10).toInt()
+    val minute = input.substring(10, 12).toInt()
+    return "${hour.pad(2)}:${minute.pad(2)}"
+}
+
+private fun roundTimeString(time: String): String {
+    val (hour, minute) = time.split(String.delimiterTime).map { it.toInt() }
+    val lastDigit = minute % 10
+    if (hour > 23) {
+        throw IllegalArgumentException()
+    } else {
+        if (minute >= 57) {
+            // Edge case for 57, 58, and 59 minutes
+            return "${((hour + 1) % 24).pad(2)}:00"
+        }
+
+        val roundedMinute =
+            when (lastDigit) {
+                in 1..3 -> (minute / 10) * 10 // Rounds down (21 -> 20)
+                in 4..6 -> ((minute / 10) * 10) + 5 // Rounds to 5 (24, 26 -> 25)
+                in 7..9 -> ((minute / 10) + 1) * 10 // Rounds up (27, 29 -> 30)
+                else -> minute // If the last digit is 0, keep it unchanged
+            }
+
+        // Ensure the rounded minute is formatted properly with leading zero if needed
+        return "${hour.pad(2)}:${roundedMinute.pad(2)}"
+    }
+}
+
+fun parseToInstant(input: String): Long {
+    val date = extractDate(input)
+    val time = extractTime(input)
+
+    val localDate = dateFormat.parse(date)
+    val localTime = timeFormat.parse(roundTimeString(time = time))
+
+    val localDateTime = LocalDateTime(localDate, localTime)
+    return localDateTime.toInstant(tzSourceMoscow).toEpochMilliseconds()
+}
+
+fun calculateDuration(
+    start: Long,
+    end: Long
+): Pair<Long, Long> {
+    val duration = (end - start).milliseconds
+    val hours = duration.inWholeHours
+    val minutes = duration.inWholeMinutes % 60
+
+    return Pair(hours, minutes)
+}
+
+fun Long.convertToTime(): Pair<String, String> {
+    val local =
+        Instant.fromEpochMilliseconds(this)
+            .toLocalDateTime(tzCurrent)
+
+    val hour = local.hour.pad(2)
+    val minute = local.minute.pad(2)
+    return Pair(hour, minute)
+}

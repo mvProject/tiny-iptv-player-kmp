@@ -4,8 +4,9 @@ import java.util.Properties
 
 plugins {
     alias(libs.plugins.tinyiptv.kmp.application.compose)
-    alias(libs.plugins.kotlinx.serialization.plugin)
     alias(libs.plugins.ksp)
+    alias(libs.plugins.room)
+    alias(libs.plugins.kotlinx.serialization.plugin)
     alias(libs.plugins.koin.compiler)
 }
 
@@ -38,10 +39,15 @@ kotlin {
             implementation(projects.core.base)
             implementation(projects.core.database)
             implementation(projects.core.datastore)
+            implementation(projects.core.foundation)
             implementation(projects.core.network)
             implementation(projects.core.ui)
             implementation(projects.core.designsystem)
             implementation(projects.infrastructure.logging)
+            implementation(projects.features.channelsApi)
+            implementation(projects.features.groupsApi)
+            implementation(projects.features.epgApi)
+            implementation(projects.features.playlistApi)
 
             // Coroutines
             implementation(libs.kotlinx.coroutines.core)
@@ -69,6 +75,8 @@ kotlin {
             implementation(libs.bundles.ksoup)
 
             implementation(libs.bundles.filekit)
+
+            implementation(libs.bundles.room)
         }
 
         commonTest.dependencies {
@@ -110,6 +118,21 @@ kotlin {
         nativeMain.dependencies {
         }
     }
+}
+
+dependencies {
+    add("kspAndroid", libs.androidx.room.compiler)
+    add("kspDesktop", libs.androidx.room.compiler)
+    add("kspIosArm64", libs.androidx.room.compiler)
+    add("kspIosSimulatorArm64", libs.androidx.room.compiler)
+}
+
+room {
+    schemaDirectory("$projectDir/schemas")
+}
+
+ksp {
+    arg("room.schemaLocation", "$projectDir/schemas")
 }
 
 android {
@@ -183,22 +206,8 @@ compose.desktop {
     }
 }
 
-dependencies {
-    add("kspAndroid", libs.androidx.room.compiler)
-    add("kspDesktop", libs.androidx.room.compiler)
-    add("kspIosArm64", libs.androidx.room.compiler)
-    add("kspIosSimulatorArm64", libs.androidx.room.compiler)
-}
-
-/*room {
-    schemaDirectory("$projectDir/schemas")
-}*/
-ksp {
-    arg("room.schemaLocation", "$projectDir/schemas")
-}
-
 koinCompiler {
-    compileSafety = true
+    compileSafety = false
 }
 
 fun readProperties(propertiesFile: File) =

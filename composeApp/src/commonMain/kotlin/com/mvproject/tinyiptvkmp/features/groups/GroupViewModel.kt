@@ -12,22 +12,22 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.mvproject.tinyiptvkmp.core.base.mvi.MviCore
 import com.mvproject.tinyiptvkmp.core.base.mvi.mviCore
-import com.mvproject.tinyiptvkmp.core.common.FLOAT_VALUE_ZERO
-import com.mvproject.tinyiptvkmp.core.common.INT_VALUE_1
-import com.mvproject.tinyiptvkmp.core.data.repository.PlaylistsRepository
 import com.mvproject.tinyiptvkmp.core.datastore.ProtoStore
 import com.mvproject.tinyiptvkmp.core.datastore.preferences.AppPreferencesProto
-import com.mvproject.tinyiptvkmp.core.domain.enums.GroupType
-import com.mvproject.tinyiptvkmp.core.domain.model.ChannelsGroup
-import com.mvproject.tinyiptvkmp.core.domain.model.Playlist
-import com.mvproject.tinyiptvkmp.core.domain.usecase.CleanProgramsUseCase
-import com.mvproject.tinyiptvkmp.core.domain.usecase.GetPlaylistGroupUseCase
-import com.mvproject.tinyiptvkmp.core.domain.usecase.RefreshEpgChannelsUseCase
-import com.mvproject.tinyiptvkmp.core.domain.usecase.RefreshEpgProgramsUseCase
-import com.mvproject.tinyiptvkmp.core.domain.usecase.SavePlaylistContentUseCase
-import com.mvproject.tinyiptvkmp.core.domain.usecase.SelectPlaylistUseCase
-import com.mvproject.tinyiptvkmp.core.domain.usecase.UpdateChannelsEpgInfoUseCase
-import com.mvproject.tinyiptvkmp.core.domain.usecase.UpdateRemotePlaylistChannelsUseCase
+import com.mvproject.tinyiptvkmp.core.foundation.common.FLOAT_VALUE_ZERO
+import com.mvproject.tinyiptvkmp.core.foundation.common.INT_VALUE_1
+import com.mvproject.tinyiptvkmp.features.epg.api.domain.usecase.CleanProgramsUseCase
+import com.mvproject.tinyiptvkmp.features.epg.api.domain.usecase.RefreshEpgChannelsUseCase
+import com.mvproject.tinyiptvkmp.features.epg.api.domain.usecase.RefreshEpgProgramsUseCase
+import com.mvproject.tinyiptvkmp.features.epg.api.domain.usecase.UpdateChannelsEpgInfoUseCase
+import com.mvproject.tinyiptvkmp.features.groups.api.domain.model.ChannelsGroup
+import com.mvproject.tinyiptvkmp.features.groups.api.domain.model.GroupType
+import com.mvproject.tinyiptvkmp.features.groups.api.domain.usecase.GetPlaylistGroupUseCase
+import com.mvproject.tinyiptvkmp.features.playlist.api.domain.model.Playlist
+import com.mvproject.tinyiptvkmp.features.playlist.api.domain.usecase.ObservePlaylistsUseCase
+import com.mvproject.tinyiptvkmp.features.playlist.api.domain.usecase.SavePlaylistContentUseCase
+import com.mvproject.tinyiptvkmp.features.playlist.api.domain.usecase.SelectPlaylistUseCase
+import com.mvproject.tinyiptvkmp.features.playlist.api.domain.usecase.UpdateRemotePlaylistChannelsUseCase
 import com.mvproject.tinyiptvkmp.infrastructure.logging.injectLogger
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.IO
@@ -42,7 +42,7 @@ import org.koin.core.component.KoinComponent
 
 class GroupViewModel(
     private val preferencesStore: ProtoStore<AppPreferencesProto>,
-    private val playlistsRepository: PlaylistsRepository,
+    private val observePlaylistsUseCase: ObservePlaylistsUseCase,
     private val selectPlaylistUseCase: SelectPlaylistUseCase,
     private val getPlaylistGroupUseCase: GetPlaylistGroupUseCase,
     private val refreshEpgChannelsUseCase: RefreshEpgChannelsUseCase,
@@ -58,8 +58,7 @@ class GroupViewModel(
     private val logger by injectLogger()
 
     init {
-        playlistsRepository
-            .allPlaylistsAsFlow()
+        observePlaylistsUseCase()
             .flowOn(Dispatchers.IO)
             .onEach { playlists ->
                 updateUiState {

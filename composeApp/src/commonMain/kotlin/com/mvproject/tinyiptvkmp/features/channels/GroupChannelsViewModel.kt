@@ -12,24 +12,25 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.mvproject.tinyiptvkmp.core.base.mvi.MviCore
 import com.mvproject.tinyiptvkmp.core.base.mvi.mviCore
-import com.mvproject.tinyiptvkmp.core.common.utils.CommonUtils.empty
-import com.mvproject.tinyiptvkmp.core.common.utils.actualDate
 import com.mvproject.tinyiptvkmp.core.datastore.ProtoStore
 import com.mvproject.tinyiptvkmp.core.datastore.preferences.AppPreferencesProto
-import com.mvproject.tinyiptvkmp.core.domain.enums.ChannelsViewType
-import com.mvproject.tinyiptvkmp.core.domain.enums.ChannelsViewType.Companion.mapViewType
-import com.mvproject.tinyiptvkmp.core.domain.enums.FavoriteType
-import com.mvproject.tinyiptvkmp.core.domain.model.EpgProgram
-import com.mvproject.tinyiptvkmp.core.domain.model.TvChannel
-import com.mvproject.tinyiptvkmp.core.domain.usecase.GetChannelsEpgUseCase
-import com.mvproject.tinyiptvkmp.core.domain.usecase.GetGroupChannelsEpgUseCase
-import com.mvproject.tinyiptvkmp.core.domain.usecase.GetGroupChannelsUseCase
-import com.mvproject.tinyiptvkmp.core.domain.usecase.ToggleFavoriteChannelUseCase
-import com.mvproject.tinyiptvkmp.core.domain.utils.mapProgramIds
-import com.mvproject.tinyiptvkmp.core.domain.utils.mapPrograms
-import com.mvproject.tinyiptvkmp.core.domain.utils.replaceUpdated
-import com.mvproject.tinyiptvkmp.core.domain.utils.toggleFavorite
+import com.mvproject.tinyiptvkmp.core.domain.actualDate
+import com.mvproject.tinyiptvkmp.core.foundation.model.ChannelsViewType
+import com.mvproject.tinyiptvkmp.core.foundation.model.ChannelsViewType.Companion.mapViewType
+import com.mvproject.tinyiptvkmp.core.foundation.utils.CommonUtils.empty
 import com.mvproject.tinyiptvkmp.features.channels.GroupChannelsUiState.GroupChannelsOSD
+import com.mvproject.tinyiptvkmp.features.channels.api.domain.usecase.ToggleFavoriteChannelUseCase
+import com.mvproject.tinyiptvkmp.features.epg.api.domain.model.EpgProgram
+import com.mvproject.tinyiptvkmp.features.epg.api.domain.model.TvChannelWithPrograms
+import com.mvproject.tinyiptvkmp.features.epg.api.domain.usecase.GetChannelsEpgUseCase
+import com.mvproject.tinyiptvkmp.features.epg.api.domain.usecase.GetGroupChannelsEpgUseCase
+import com.mvproject.tinyiptvkmp.features.epg.api.domain.utils.mapProgramIds
+import com.mvproject.tinyiptvkmp.features.epg.api.domain.utils.mapPrograms
+import com.mvproject.tinyiptvkmp.features.epg.api.domain.utils.replaceUpdated
+import com.mvproject.tinyiptvkmp.features.epg.api.domain.utils.toggleFavorite
+import com.mvproject.tinyiptvkmp.features.epg.api.domain.utils.withPrograms
+import com.mvproject.tinyiptvkmp.features.groups.api.domain.model.FavoriteType
+import com.mvproject.tinyiptvkmp.features.groups.api.domain.usecase.GetGroupChannelsUseCase
 import com.mvproject.tinyiptvkmp.navigation.AppRoutes
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.IO
@@ -65,7 +66,7 @@ class GroupChannelsViewModel(
                 copy(
                     viewType = viewType,
                     currentGroup = group,
-                    channels = groupChannels
+                    channels = groupChannels.withPrograms()
                 )
             }
         }
@@ -176,11 +177,11 @@ class GroupChannelsViewModel(
     }
 
     private fun toggleFavorites(
-        channel: TvChannel,
+        channel: TvChannelWithPrograms,
         type: FavoriteType,
     ) {
         viewModelScope.launch(Dispatchers.IO) {
-            val updatedChannel = channel.toggleFavorite(type = type)
+            val updatedChannel = channel.toggleFavorite(type = type.name)
 
             val updatedChannels = uiState.value.channels
                 .replaceUpdated(channel = updatedChannel)
@@ -189,7 +190,7 @@ class GroupChannelsViewModel(
                 copy(channels = updatedChannels, osdType = null)
             }
 
-            toggleFavoriteChannelUseCase(channel = channel, type = type)
+            toggleFavoriteChannelUseCase(channel = channel.channel, type = type.name)
         }
     }
 }
@@ -200,20 +201,20 @@ data class GroupChannelsUiState(
     val isLoading: Boolean = false,
     val searchString: String = String.empty,
     val viewType: ChannelsViewType = ChannelsViewType.LIST,
-    val channels: List<TvChannel> = emptyList(),
+    val channels: List<TvChannelWithPrograms> = emptyList(),
     val selectedName: String = String.empty,
     val selectedPrograms: List<EpgProgram> = emptyList(),
     val osdType: GroupChannelsOSD? = null
 ) {
     sealed interface GroupChannelsOSD {
-        data class ChannelPrograms(val channel: TvChannel) : GroupChannelsOSD
-        data class ChannelFavorites(val channel: TvChannel) : GroupChannelsOSD
+        data class ChannelPrograms(val channel: TvChannelWithPrograms) : GroupChannelsOSD
+        data class ChannelFavorites(val channel: TvChannelWithPrograms) : GroupChannelsOSD
     }
 }
 
 sealed interface GroupChannelsUiAction {
     data class ToggleFavorite(
-        val channel: TvChannel,
+        val channel: TvChannelWithPrograms,
         val type: FavoriteType
     ) : GroupChannelsUiAction
 

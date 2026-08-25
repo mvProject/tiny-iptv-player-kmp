@@ -5,6 +5,7 @@ plugins {
 kotlin {
     sourceSets {
         commonMain.dependencies {
+            api(projects.core.foundation)
             implementation(projects.core.ui)
             implementation(libs.compose.material3.adaptive)
         }
@@ -13,4 +14,8 @@ kotlin {
 
 android {
     namespace = "com.mvproject.tinyiptvkmp.core.designsystem"
+}
+
+compose.resources {
+    packageOfResClass = "com.mvproject.tinyiptvkmp.core.designsystem.generated.resources"
 }

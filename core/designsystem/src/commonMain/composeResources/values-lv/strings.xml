@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<resources>
+    <string name="playlist_update_6_hours">6 stundas</string>
+    <string name="playlist_update_12_hours">12 stundas</string>
+    <string name="playlist_update_24_hours">24 stundas</string>
+    <string name="playlist_update_2_days">2 dienas</string>
+    <string name="playlist_update_1_week">1 nedēļa</string>
+    <string name="playlist_update_never">Nekad</string>
+    <string name="video_resize_mode_fill">Aizpildiet</string>
+    <string name="video_resize_mode_fixed_width">Fiksēts platums</string>
+    <string name="video_resize_mode_fixed_height">Fiksēts augstums</string>
+    <string name="video_resize_mode_fit">Fit</string>
+    <string name="video_resize_mode_zoom">Tālummaiņa</string>
+    <string name="video_ratio_mode_original">Oriģināls</string>
+    <string name="video_ratio_mode_wideScreen">Platekrāna (16:9)</string>
+    <string name="video_ratio_mode_fullScreen">Pilnekrāna režīms (4:3)</string>
+    <string name="video_ratio_mode_cinematic">Kino (21:9)</string>
+    <string name="video_ratio_mode_square">Kvadrāts (1:1)</string>
+</resources>

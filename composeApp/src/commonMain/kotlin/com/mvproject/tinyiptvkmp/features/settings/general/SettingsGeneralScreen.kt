@@ -31,13 +31,14 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.mvproject.tinyiptvkmp.core.base.mvi.CollectUiEffect
-import com.mvproject.tinyiptvkmp.core.common.WEIGHT_1
-import com.mvproject.tinyiptvkmp.core.domain.enums.UpdatePeriod
+import com.mvproject.tinyiptvkmp.core.components.adaptive.adaptiveContentWidth
+import com.mvproject.tinyiptvkmp.core.components.adaptive.rememberAdaptiveLayoutState
+import com.mvproject.tinyiptvkmp.core.components.buttons.MenuButton
+import com.mvproject.tinyiptvkmp.core.components.toolbars.AppBarWithBackNav
+import com.mvproject.tinyiptvkmp.core.foundation.common.WEIGHT_1
+import com.mvproject.tinyiptvkmp.core.foundation.model.UpdatePeriod
+import com.mvproject.tinyiptvkmp.core.mapper.mapToString
 import com.mvproject.tinyiptvkmp.core.theme.dimensionSize
-import com.mvproject.tinyiptvkmp.core.ui.adaptive.adaptiveContentWidth
-import com.mvproject.tinyiptvkmp.core.ui.adaptive.rememberAdaptiveLayoutState
-import com.mvproject.tinyiptvkmp.core.ui.buttons.MenuButton
-import com.mvproject.tinyiptvkmp.core.ui.toolbars.AppBarWithBackNav
 import com.mvproject.tinyiptvkmp.features.settings.components.SettingsSelector
 import com.mvproject.tinyiptvkmp.features.settings.general.SettingsGeneralUiState.SettingsGeneral
 import org.jetbrains.compose.resources.stringResource
@@ -207,7 +208,7 @@ private fun SettingsGeneralScreen(
                     title = stringResource(Res.string.option_update_epg_info),
                     selectedIndex = uiState.infoUpdatePeriod,
                     isExpanded = uiState.settingsType == SettingsGeneral.InfoUpdate,
-                    options = UpdatePeriod.entries.map { stringResource(it.title) },
+                    options = UpdatePeriod.entries.map { stringResource(it.mapToString()) },
                     onClick = {
                         onAction(SettingsGeneralUiAction.ToggleOption(SettingsGeneral.InfoUpdate))
                     },
@@ -220,7 +221,7 @@ private fun SettingsGeneralScreen(
                     title = stringResource(Res.string.option_update_epg_data),
                     selectedIndex = uiState.epgUpdatePeriod,
                     isExpanded = uiState.settingsType == SettingsGeneral.ProgramsUpdate,
-                    options = UpdatePeriod.entries.map { stringResource(it.title) },
+                    options = UpdatePeriod.entries.map { stringResource(it.mapToString()) },
                     onClick = {
                         onAction(SettingsGeneralUiAction.ToggleOption(SettingsGeneral.ProgramsUpdate))
                     },
@@ -236,7 +237,7 @@ private fun SettingsGeneralScreen(
                      .fillMaxWidth()
                      .padding(horizontal = MaterialTheme.dimens.size8),
                  title = stringResource(Res.string.option_update_epg_info),
-                 selectedItem = stringResource(UpdatePeriod.entries[uiState.infoUpdatePeriod].title),
+                 selectedItem = stringResource(UpdatePeriod.entries[uiState.infoUpdatePeriod].mapToString()),
                  isExpanded = uiState.osdType == SettingsGeneralOSD.InfoUpdate,
                  onClick = {
                      onAction(SettingsGeneralUiAction.SetInfoUpdatePeriod(type = it))
@@ -249,7 +250,7 @@ private fun SettingsGeneralScreen(
                      .fillMaxWidth()
                      .padding(horizontal = MaterialTheme.dimens.size8),
                  title = stringResource(Res.string.option_update_epg_data),
-                 selectedItem = stringResource(UpdatePeriod.entries[uiState.epgUpdatePeriod].title),
+                 selectedItem = stringResource(UpdatePeriod.entries[uiState.epgUpdatePeriod].mapToString()),
                  isExpanded = uiState.osdType == SettingsGeneralOSD.ProgramsUpdate,
                  onClick = {
                      onAction(SettingsGeneralUiAction.OpenOsd(SettingsGeneralOSD.ProgramsUpdate))
@@ -267,7 +268,7 @@ private fun SettingsGeneralScreen(
                         OverlayOptionsMenu(
                             title = stringResource(Res.string.hint_update_period),
                             selectedIndex = uiState.infoUpdatePeriod,
-                            options = UpdatePeriod.entries.map { stringResource(it.title) },
+                            options = UpdatePeriod.entries.map { stringResource(it.mapToString()) },
                             onItemSelected = { index ->
                                 onAction(SettingsGeneralUiAction.SetInfoUpdatePeriod(type = index))
                             },
@@ -278,7 +279,7 @@ private fun SettingsGeneralScreen(
                         OverlayOptionsMenu(
                             title = stringResource(Res.string.hint_update_period),
                             selectedIndex = uiState.epgUpdatePeriod,
-                            options = UpdatePeriod.entries.map { stringResource(it.title) },
+                            options = UpdatePeriod.entries.map { stringResource(it.mapToString()) },
                             onItemSelected = { index ->
                                 onAction(SettingsGeneralUiAction.SetEpgUpdatePeriod(type = index))
                             },

@@ -30,24 +30,22 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
-import com.mvproject.tinyiptvkmp.core.common.COUNT_ZERO_FLOAT
-import com.mvproject.tinyiptvkmp.core.common.PROGRESS_STATE_COMPLETE
-import com.mvproject.tinyiptvkmp.core.common.utils.CommonUtils.delimiterDash
-import com.mvproject.tinyiptvkmp.core.common.utils.CommonUtils.empty
-import com.mvproject.tinyiptvkmp.core.common.utils.CommonUtils.space
-import com.mvproject.tinyiptvkmp.core.common.utils.calculateDuration
+import com.mvproject.tinyiptvkmp.core.components.modifiers.SpacerHeight
+import com.mvproject.tinyiptvkmp.core.components.modifiers.SpacerWidth
+import com.mvproject.tinyiptvkmp.core.components.modifiers.roundedHeader
 import com.mvproject.tinyiptvkmp.core.domain.PreviewTestData
-import com.mvproject.tinyiptvkmp.core.domain.model.EpgProgram
+import com.mvproject.tinyiptvkmp.core.domain.calculateDuration
+import com.mvproject.tinyiptvkmp.core.foundation.common.COUNT_ZERO_FLOAT
+import com.mvproject.tinyiptvkmp.core.foundation.common.PROGRESS_STATE_COMPLETE
+import com.mvproject.tinyiptvkmp.core.foundation.utils.CommonUtils.delimiterDash
+import com.mvproject.tinyiptvkmp.core.foundation.utils.CommonUtils.empty
+import com.mvproject.tinyiptvkmp.core.foundation.utils.CommonUtils.space
 import com.mvproject.tinyiptvkmp.core.theme.AppTheme
 import com.mvproject.tinyiptvkmp.core.theme.colorSchemeExtended
 import com.mvproject.tinyiptvkmp.core.theme.dimensionSize
 import com.mvproject.tinyiptvkmp.core.theme.dimensionWeight
-import com.mvproject.tinyiptvkmp.core.ui.indicators.ProgramProgressIndicator
-import com.mvproject.tinyiptvkmp.core.ui.modifiers.SpacerHeight
-import com.mvproject.tinyiptvkmp.core.ui.modifiers.SpacerWidth
-import com.mvproject.tinyiptvkmp.core.ui.modifiers.roundedHeader
-import com.mvproject.tinyiptvkmp.core.ui.texts.ProgramTitle
 import com.mvproject.tinyiptvkmp.core.ui.views.TimeItem
+import com.mvproject.tinyiptvkmp.features.epg.api.domain.model.EpgProgram
 import org.jetbrains.compose.resources.stringResource
 import tinyiptvkmp.composeapp.generated.resources.Res
 import tinyiptvkmp.composeapp.generated.resources.msg_no_epg_found
@@ -113,7 +111,7 @@ private fun ChannelProgramItem(
     Column(
         modifier = modifier.background(MaterialTheme.colorScheme.surface),
     ) {
-        ProgramTitle(
+        _root_ide_package_.com.mvproject.tinyiptvkmp.core.components.texts.ProgramTitle(
             modifier = Modifier
                 .padding(top = MaterialTheme.dimensionSize.size8)
                 .padding(horizontal = MaterialTheme.dimensionSize.size8),
@@ -157,7 +155,9 @@ private fun ChannelProgramItem(
 
         if (isProgramProgressShow) {
             SpacerHeight(MaterialTheme.dimensionSize.size8)
-            ProgramProgressIndicator(progress = program.programProgress)
+            _root_ide_package_.com.mvproject.tinyiptvkmp.core.components.indicators.ProgramProgressIndicator(
+                progress = program.programProgress
+            )
         }
     }
 }

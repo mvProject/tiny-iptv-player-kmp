@@ -7,7 +7,7 @@ import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.viewinterop.AndroidView
 import androidx.lifecycle.compose.LifecycleStartEffect
-import com.mvproject.tinyiptvkmp.core.common.INT_NO_VALUE
+import com.mvproject.tinyiptvkmp.core.foundation.common.INT_NO_VALUE
 import com.mvproject.tinyiptvkmp.features.player.PlayerUiAction
 import com.mvproject.tinyiptvkmp.features.player.PlayerUiState
 import com.mvproject.tinyiptvkmp.ui.rememberPlayerState

@@ -21,19 +21,19 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clipToBounds
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
-import com.mvproject.tinyiptvkmp.core.common.INT_VALUE_1
-import com.mvproject.tinyiptvkmp.core.domain.enums.ChannelsViewType
-import com.mvproject.tinyiptvkmp.core.domain.model.TvChannel
+import com.mvproject.tinyiptvkmp.core.foundation.common.INT_VALUE_1
+import com.mvproject.tinyiptvkmp.core.foundation.model.ChannelsViewType
 import com.mvproject.tinyiptvkmp.core.theme.dimensionSize
+import com.mvproject.tinyiptvkmp.features.epg.api.domain.model.TvChannelWithPrograms
 
 @Composable
 fun ChannelView(
     modifier: Modifier = Modifier,
     viewType: ChannelsViewType,
-    items: List<TvChannel>,
-    onChannelSelect: (TvChannel) -> Unit = {},
-    onFavoriteClick: (TvChannel) -> Unit = {},
-    onShowProgramsClick: (TvChannel) -> Unit = {},
+    items: List<TvChannelWithPrograms>,
+    onChannelSelect: (TvChannelWithPrograms) -> Unit = {},
+    onFavoriteClick: (TvChannelWithPrograms) -> Unit = {},
+    onShowProgramsClick: (TvChannelWithPrograms) -> Unit = {},
     gridMinCellWidth: Dp = 180.dp,
     contentPadding: PaddingValues? = null,
 ) {

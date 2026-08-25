@@ -1,12 +1,12 @@
 package com.mvproject.tinyiptvkmp.features.player.utils
 
-import com.mvproject.tinyiptvkmp.core.common.utils.CommonUtils.empty
-import com.mvproject.tinyiptvkmp.core.domain.model.TvChannel
+import com.mvproject.tinyiptvkmp.core.foundation.utils.CommonUtils.empty
+import com.mvproject.tinyiptvkmp.features.epg.api.domain.model.TvChannelWithPrograms
 
-val TvChannel.programTitle
+val TvChannelWithPrograms.programTitle
     get() = this.programs.firstOrNull()
         ?.title ?: String.empty
 
-val TvChannel.programDescription
+val TvChannelWithPrograms.programDescription
     get() = this.programs.firstOrNull()
         ?.description ?: String.empty

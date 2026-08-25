@@ -16,11 +16,11 @@ import androidx.compose.ui.graphics.ImageBitmap
 import androidx.compose.ui.graphics.asComposeImageBitmap
 import androidx.compose.ui.unit.IntOffset
 import androidx.compose.ui.unit.IntSize
-import com.mvproject.tinyiptvkmp.core.common.INT_NO_VALUE
-import com.mvproject.tinyiptvkmp.core.common.INT_VALUE_2
-import com.mvproject.tinyiptvkmp.core.common.INT_VALUE_4
-import com.mvproject.tinyiptvkmp.core.common.INT_VALUE_ZERO
-import com.mvproject.tinyiptvkmp.core.common.LONG_VALUE_ZERO
+import com.mvproject.tinyiptvkmp.core.foundation.common.INT_NO_VALUE
+import com.mvproject.tinyiptvkmp.core.foundation.common.INT_VALUE_2
+import com.mvproject.tinyiptvkmp.core.foundation.common.INT_VALUE_4
+import com.mvproject.tinyiptvkmp.core.foundation.common.INT_VALUE_ZERO
+import com.mvproject.tinyiptvkmp.core.foundation.common.LONG_VALUE_ZERO
 import com.mvproject.tinyiptvkmp.features.player.PlayerUiAction
 import com.mvproject.tinyiptvkmp.features.player.PlayerUiState
 import com.mvproject.tinyiptvkmp.infrastructure.logging.injectLogger

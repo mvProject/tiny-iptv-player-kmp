@@ -20,11 +20,11 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import com.mvproject.tinyiptvkmp.core.domain.enums.VideoSize
-import com.mvproject.tinyiptvkmp.core.domain.enums.VideoSize.Companion.mapToIcon
+import com.mvproject.tinyiptvkmp.core.components.buttons.ControlButton
+import com.mvproject.tinyiptvkmp.core.components.modifiers.SpacerWidth
+import com.mvproject.tinyiptvkmp.core.foundation.model.VideoSize
+import com.mvproject.tinyiptvkmp.core.mapper.mapToIcon
 import com.mvproject.tinyiptvkmp.core.theme.dimensionSize
-import com.mvproject.tinyiptvkmp.core.ui.buttons.ControlButton
-import com.mvproject.tinyiptvkmp.core.ui.modifiers.SpacerWidth
 import com.mvproject.tinyiptvkmp.features.player.PlayerUiAction
 import com.mvproject.tinyiptvkmp.features.player.PlayerUiState
 

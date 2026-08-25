@@ -31,12 +31,12 @@ import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import com.mvproject.tinyiptvkmp.core.base.mvi.CollectUiEffect
+import com.mvproject.tinyiptvkmp.core.components.NoItemsView
+import com.mvproject.tinyiptvkmp.core.components.adaptive.adaptiveContentWidth
+import com.mvproject.tinyiptvkmp.core.components.adaptive.rememberAdaptiveLayoutState
+import com.mvproject.tinyiptvkmp.core.components.indicators.LoadingIndicator
+import com.mvproject.tinyiptvkmp.core.components.toolbars.AppBarWithBackNav
 import com.mvproject.tinyiptvkmp.core.theme.dimensionSize
-import com.mvproject.tinyiptvkmp.core.ui.adaptive.adaptiveContentWidth
-import com.mvproject.tinyiptvkmp.core.ui.adaptive.rememberAdaptiveLayoutState
-import com.mvproject.tinyiptvkmp.core.ui.indicators.LoadingIndicator
-import com.mvproject.tinyiptvkmp.core.ui.toolbars.AppBarWithBackNav
-import com.mvproject.tinyiptvkmp.core.ui.views.NoItemsView
 import com.mvproject.tinyiptvkmp.features.settings.components.PlaylistItem
 import org.jetbrains.compose.resources.stringResource
 import tinyiptvkmp.composeapp.generated.resources.Res

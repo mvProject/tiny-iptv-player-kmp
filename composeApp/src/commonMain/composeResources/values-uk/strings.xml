@@ -8,25 +8,6 @@
 <resources>
     <string name="app_name">Tiny Iptv Player</string>
 
-    <string name="playlist_update_6_hours">6 годин</string>
-    <string name="playlist_update_12_hours">12 годин</string>
-    <string name="playlist_update_24_hours">24 години</string>
-    <string name="playlist_update_2_days">2 дні</string>
-    <string name="playlist_update_1_week">1 тиждень</string>
-    <string name="playlist_update_never">Ніколи</string>
-
-    <string name="video_resize_mode_fill">Заповнити</string>
-    <string name="video_resize_mode_fixed_width">Фіксована широта</string>
-    <string name="video_resize_mode_fixed_height">Фіксована висота</string>
-    <string name="video_resize_mode_fit">Умістити</string>
-    <string name="video_resize_mode_zoom">Збільшити</string>
-
-    <string name="video_ratio_mode_original">Оригінал</string>
-    <string name="video_ratio_mode_wideScreen">Широкий екран (16:9)</string>
-    <string name="video_ratio_mode_fullScreen">Повний екран (4:3)</string>
-    <string name="video_ratio_mode_cinematic">Кінематографічний (21:9)</string>
-    <string name="video_ratio_mode_square">Квадрат (1:1)</string>
-
     <string name="channel_folder_all">Усі канали</string>
     <string name="channel_folder_favorite">Вибране</string>
 

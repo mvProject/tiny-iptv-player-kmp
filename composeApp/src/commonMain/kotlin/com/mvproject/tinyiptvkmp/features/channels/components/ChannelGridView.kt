@@ -22,18 +22,18 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.tooling.preview.Preview
+import com.mvproject.tinyiptvkmp.core.components.buttons.FavoriteButton
+import com.mvproject.tinyiptvkmp.core.components.indicators.ProgramProgressIndicator
+import com.mvproject.tinyiptvkmp.core.components.modifiers.SpacerHeight
+import com.mvproject.tinyiptvkmp.core.components.texts.ChannelTitle
+import com.mvproject.tinyiptvkmp.core.components.texts.EmptyProgramTitle
+import com.mvproject.tinyiptvkmp.core.components.texts.ProgramTitle
 import com.mvproject.tinyiptvkmp.core.domain.PreviewTestData
-import com.mvproject.tinyiptvkmp.core.domain.enums.FavoriteType
-import com.mvproject.tinyiptvkmp.core.domain.model.TvChannel
 import com.mvproject.tinyiptvkmp.core.theme.AppTheme
 import com.mvproject.tinyiptvkmp.core.theme.dimensionSize
 import com.mvproject.tinyiptvkmp.core.theme.dimensionWeight
-import com.mvproject.tinyiptvkmp.core.ui.buttons.FavoriteButton
-import com.mvproject.tinyiptvkmp.core.ui.indicators.ProgramProgressIndicator
-import com.mvproject.tinyiptvkmp.core.ui.modifiers.SpacerHeight
-import com.mvproject.tinyiptvkmp.core.ui.texts.ChannelTitle
-import com.mvproject.tinyiptvkmp.core.ui.texts.EmptyProgramTitle
-import com.mvproject.tinyiptvkmp.core.ui.texts.ProgramTitle
+import com.mvproject.tinyiptvkmp.features.epg.api.domain.model.TvChannelWithPrograms
+import com.mvproject.tinyiptvkmp.features.groups.api.domain.model.FavoriteType
 import org.jetbrains.compose.resources.stringResource
 import tinyiptvkmp.composeapp.generated.resources.Res
 import tinyiptvkmp.composeapp.generated.resources.msg_no_epg_found
@@ -42,7 +42,7 @@ import tinyiptvkmp.composeapp.generated.resources.msg_no_epg_found
 @Composable
 fun ChannelGridView(
     modifier: Modifier = Modifier,
-    channel: TvChannel,
+    channel: TvChannelWithPrograms,
     onChannelSelect: () -> Unit = {},
     onFavoriteClick: () -> Unit = {},
     onShowEpgClick: () -> Unit = {},
@@ -80,11 +80,11 @@ fun ChannelGridView(
                 ChannelTitle(
                     modifier = Modifier.weight(MaterialTheme.dimensionWeight.weight1),
                     title = channel.channelName,
-                    isFavorite = channel.favoriteType != FavoriteType.NONE,
+                    isFavorite = channel.favoriteType != FavoriteType.NONE.name,
                     lines = 2
                 )
                 FavoriteButton(
-                    isFavorite = channel.favoriteType != FavoriteType.NONE,
+                    isFavorite = channel.favoriteType != FavoriteType.NONE.name,
                     onClick = onFavoriteClick
                 )
             }
@@ -116,6 +116,6 @@ fun ChannelGridView(
 @Composable
 private fun PreviewChannelGridViewFavorite() {
     AppTheme {
-        ChannelGridView(channel = PreviewTestData.testProgram)
+        ChannelGridView(channel = PreviewTestData.testProgramWithPrograms)
     }
 }

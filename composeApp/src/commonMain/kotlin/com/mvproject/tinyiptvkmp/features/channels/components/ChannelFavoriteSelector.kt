@@ -22,14 +22,14 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import com.mvproject.tinyiptvkmp.core.domain.enums.FavoriteType
 import com.mvproject.tinyiptvkmp.core.theme.colorSchemeExtended
 import com.mvproject.tinyiptvkmp.core.theme.dimensionSize
+import com.mvproject.tinyiptvkmp.features.groups.api.domain.model.FavoriteType
 
 @Composable
 fun ChannelFavoriteSelector(
     modifier: Modifier = Modifier,
-    favoriteType: FavoriteType = FavoriteType.NONE,
+    favoriteType: String = FavoriteType.NONE.name,
     onSelectFavorite: (FavoriteType) -> Unit = {},
 ) {
     Surface(
@@ -53,7 +53,7 @@ fun ChannelFavoriteSelector(
             favTypes.forEach { fav ->
 
                 val favoriteTextColor =
-                    if (favoriteType == fav) {
+                    if (favoriteType == fav.name) {
                         MaterialTheme.colorScheme.onSurface
                     } else {
                         MaterialTheme.colorScheme.onPrimary

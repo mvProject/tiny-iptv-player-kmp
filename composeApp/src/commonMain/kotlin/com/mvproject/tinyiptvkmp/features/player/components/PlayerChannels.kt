@@ -22,18 +22,18 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.style.TextAlign
-import com.mvproject.tinyiptvkmp.core.domain.model.TvChannel
+import com.mvproject.tinyiptvkmp.core.components.modifiers.roundedHeader
 import com.mvproject.tinyiptvkmp.core.theme.dimensionFraction
 import com.mvproject.tinyiptvkmp.core.theme.dimensionSize
-import com.mvproject.tinyiptvkmp.core.ui.modifiers.roundedHeader
 import com.mvproject.tinyiptvkmp.features.channels.components.ChannelListView
+import com.mvproject.tinyiptvkmp.features.epg.api.domain.model.TvChannelWithPrograms
 
 @Composable
 fun PlayerChannels(
     group: String,
-    channels: List<TvChannel> = emptyList(),
+    channels: List<TvChannelWithPrograms> = emptyList(),
     current: Int = 0,
-    onChannelSelect: (TvChannel) -> Unit = {},
+    onChannelSelect: (TvChannelWithPrograms) -> Unit = {},
 ) {
     val listState = rememberLazyListState()
     LaunchedEffect(key1 = current) {
