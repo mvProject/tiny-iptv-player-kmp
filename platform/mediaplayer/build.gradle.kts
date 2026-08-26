@@ -14,8 +14,10 @@ kotlin {
 
         androidMain.dependencies {
             implementation(libs.androidx.lifecycle.runtime.compose)
+            implementation(libs.compose.runtime.retain)
             implementation(libs.bundles.media3)
             implementation(libs.bundles.nextlib)
+            implementation(libs.ktor.client.android)
         }
 
         desktopMain.dependencies {

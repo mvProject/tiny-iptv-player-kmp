@@ -1,14 +1,19 @@
 package com.mvproject.tinyiptvkmp.platform.mediaplayer
 
-import android.view.SurfaceView
-import android.view.ViewGroup
+import androidx.annotation.OptIn
+import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.viewinterop.AndroidView
 import androidx.lifecycle.compose.LifecycleStartEffect
+import androidx.media3.common.util.UnstableApi
+import androidx.media3.ui.compose.PlayerSurface
+import androidx.media3.ui.compose.SURFACE_TYPE_SURFACE_VIEW
+import androidx.media3.ui.compose.state.rememberCurrentMediaItemState
+import androidx.media3.ui.compose.state.rememberErrorState
 import com.mvproject.tinyiptvkmp.core.foundation.common.INT_NO_VALUE
 
+@OptIn(UnstableApi::class)
 @Composable
 actual fun MediaPlayerView(
     modifier: Modifier,
@@ -28,6 +33,8 @@ actual fun MediaPlayerView(
     val playerState = rememberPlayerState(
         onEvent = onEvent,
     )
+    val currentMediaItemState = rememberCurrentMediaItemState(player = playerState.player)
+    val errorState = rememberErrorState(player = playerState.player)
 
     //LaunchedEffect(tvPlayerState.isRestartRequired) {
     //    if (tvPlayerState.isRestartRequired) {
@@ -40,8 +47,17 @@ actual fun MediaPlayerView(
         playerState.setVolume(state.volume)
     }
 
-    LaunchedEffect(state.channelKey) {
-        if (state.channelKey > INT_NO_VALUE) {
+    LaunchedEffect(
+        state.channelKey,
+        state.url,
+        currentMediaItemState.mediaItem,
+    ) {
+        val currentUrl = currentMediaItemState.mediaItem
+            ?.localConfiguration
+            ?.uri
+            ?.toString()
+
+        if (state.channelKey > INT_NO_VALUE && currentUrl != state.url) {
             playerState.setPlayerChannel(
                 channelUrl = state.url,
             )
@@ -55,6 +71,15 @@ actual fun MediaPlayerView(
         }
     }
 
+    LaunchedEffect(errorState.error?.errorCode) {
+        val error = errorState.error ?: return@LaunchedEffect
+        onEvent(
+            MediaPlayerEvent.PlaybackStateChanged(
+                MediaPlaybackState.Idle(errorCode = error.errorCode)
+            )
+        )
+    }
+
     // LaunchedEffect(videoViewState.isFullscreen) {
     //     systemUIController.isSystemBarsVisible = !videoViewState.isFullscreen
 //
@@ -65,28 +90,17 @@ actual fun MediaPlayerView(
     //     }
     // }
 
-    AndroidView(
-        modifier = modifier,
-        factory = { context ->
-            SurfaceView(context)
-                .apply {
-                    layoutParams =
-                        ViewGroup.LayoutParams(
-                            ViewGroup.LayoutParams.MATCH_PARENT,
-                            ViewGroup.LayoutParams.MATCH_PARENT,
-                        )
-                    keepScreenOn = true
-                }.also { view ->
-                    playerState.player.setVideoSurfaceView(view)
-                }
-        },
+    PlayerSurface(
+        player = playerState.player,
+        modifier = modifier.fillMaxSize(),
+        surfaceType = SURFACE_TYPE_SURFACE_VIEW,
     )
 
     LifecycleStartEffect(
         key1 = playerState,
     ) {
         onStopOrDispose {
-            playerState.player.stop()
+            playerState.pause()
             //   systemUIController.isSystemBarsVisible = true
             //     activity.requestedOrientation = ActivityInfo.SCREEN_ORIENTATION_PORTRAIT
         }

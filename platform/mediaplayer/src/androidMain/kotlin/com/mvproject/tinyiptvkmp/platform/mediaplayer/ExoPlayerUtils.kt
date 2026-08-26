@@ -12,20 +12,27 @@ import androidx.annotation.OptIn
 import androidx.media3.common.AudioAttributes
 import androidx.media3.common.C
 import androidx.media3.common.MediaItem
+import androidx.media3.common.MimeTypes
 import androidx.media3.common.Player
 import androidx.media3.common.util.UnstableApi
-import androidx.media3.datasource.DefaultHttpDataSource
+import androidx.media3.datasource.DataSource
+import androidx.media3.datasource.DefaultDataSource
+import androidx.media3.datasource.ktor.KtorDataSource
 import androidx.media3.exoplayer.DefaultRenderersFactory
 import androidx.media3.exoplayer.ExoPlayer
-import androidx.media3.exoplayer.hls.HlsMediaSource
+import androidx.media3.exoplayer.source.DefaultMediaSourceFactory
 import androidx.media3.exoplayer.trackselection.AdaptiveTrackSelection
 import androidx.media3.exoplayer.trackselection.DefaultTrackSelector
 import androidx.media3.exoplayer.upstream.DefaultBandwidthMeter
 import io.github.anilbeesetti.nextlib.media3ext.ffdecoder.NextRenderersFactory
+import io.ktor.client.HttpClient
 
 internal object ExoPlayerUtils {
     @OptIn(UnstableApi::class)
-    fun createVideoPlayer(context: Context): ExoPlayer {
+    fun createVideoPlayer(
+        context: Context,
+        httpClient: HttpClient,
+    ): ExoPlayer {
         //  val renderersFactory = createRenderersFactory(context)
         val renderersFactory =
             NextRenderersFactory(context).apply {
@@ -34,12 +41,12 @@ internal object ExoPlayerUtils {
 
         val trackSelector = createTrackSelector(context)
 
-        val defaultDataSourceFactory = createDataSourceFactory()
+        val defaultDataSourceFactory = createDataSourceFactory(
+            context = context,
+            httpClient = httpClient,
+        )
 
-        val source =
-            HlsMediaSource
-                .Factory(defaultDataSourceFactory)
-                .setAllowChunklessPreparation(false)
+        val source = DefaultMediaSourceFactory(defaultDataSourceFactory)
 
         val audioAttributes = createAudioAttributes()
 
@@ -56,12 +63,14 @@ internal object ExoPlayerUtils {
     }
 
     @OptIn(UnstableApi::class)
-    private fun createDataSourceFactory(): DefaultHttpDataSource.Factory =
-        DefaultHttpDataSource
-            .Factory()
-            .setAllowCrossProtocolRedirects(true)
-            .setConnectTimeoutMs(DefaultHttpDataSource.DEFAULT_CONNECT_TIMEOUT_MILLIS)
-            .setReadTimeoutMs(DefaultHttpDataSource.DEFAULT_READ_TIMEOUT_MILLIS)
+    private fun createDataSourceFactory(
+        context: Context,
+        httpClient: HttpClient,
+    ): DataSource.Factory {
+        val ktorDataSourceFactory = KtorDataSource.Factory(httpClient = httpClient)
+
+        return DefaultDataSource.Factory(context, ktorDataSourceFactory)
+    }
 
     @OptIn(UnstableApi::class)
     private fun createTrackSelector(context: Context): DefaultTrackSelector =
@@ -106,9 +115,17 @@ internal object ExoPlayerUtils {
             else -> MediaPlaybackState.Ready
         }
 
-    fun createMediaItem(url: String): MediaItem =
-        MediaItem
+    fun createMediaItem(url: String): MediaItem {
+        val builder = MediaItem
             .Builder()
             .setUri(url)
-            .build()
+
+        if (url.contains(M3U8_EXTENSION, ignoreCase = true)) {
+            builder.setMimeType(MimeTypes.APPLICATION_M3U8)
+        }
+
+        return builder.build()
+    }
+
+    private const val M3U8_EXTENSION = ".m3u8"
 }
