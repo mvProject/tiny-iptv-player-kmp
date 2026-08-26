@@ -37,9 +37,9 @@ import com.mvproject.tinyiptvkmp.features.epg.api.domain.utils.withPrograms
 import com.mvproject.tinyiptvkmp.features.groups.api.domain.model.FavoriteType
 import com.mvproject.tinyiptvkmp.features.groups.api.domain.usecase.GetGroupChannelsUseCase
 import com.mvproject.tinyiptvkmp.features.player.PlayerUiState.PlayerOSD
-import com.mvproject.tinyiptvkmp.features.player.components.isMediaPlayable
 import com.mvproject.tinyiptvkmp.infrastructure.logging.injectLogger
 import com.mvproject.tinyiptvkmp.navigation.AppRoutes
+import com.mvproject.tinyiptvkmp.platform.mediaplayer.isMediaPlayable
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.first

@@ -48,6 +48,7 @@ kotlin {
             implementation(projects.features.groupsApi)
             implementation(projects.features.epgApi)
             implementation(projects.features.playlistApi)
+            implementation(projects.platform.mediaplayer)
 
             // Coroutines
             implementation(libs.kotlinx.coroutines.core)
@@ -91,13 +92,8 @@ kotlin {
             // DI
             implementation(libs.koin.android)
 
-            // Exoplayer
-            implementation(libs.bundles.media3)
-
             // Misc
             implementation(libs.kotlinx.collections.immutable)
-
-            implementation(libs.bundles.nextlib)
         }
 
         desktopMain.dependencies {
@@ -110,9 +106,6 @@ kotlin {
 
             // Coroutines
             implementation(libs.kotlinx.coroutines.swing)
-
-            // Vlc player
-            implementation(libs.caprica.vlcj)
         }
 
         nativeMain.dependencies {

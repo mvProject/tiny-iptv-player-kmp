@@ -27,6 +27,7 @@ import com.mvproject.tinyiptvkmp.core.mapper.mapToIcon
 import com.mvproject.tinyiptvkmp.core.theme.dimensionSize
 import com.mvproject.tinyiptvkmp.features.player.PlayerUiAction
 import com.mvproject.tinyiptvkmp.features.player.PlayerUiState
+import com.mvproject.tinyiptvkmp.platform.mediaplayer.AdditionalMediaPlayerControls
 
 @Composable
 fun PlayerControls(
@@ -42,9 +43,16 @@ fun PlayerControls(
         verticalAlignment = Alignment.CenterVertically,
         horizontalArrangement = Arrangement.Start,
     ) {
-        AdditionalPlayerControls(
+        AdditionalMediaPlayerControls(
             modifier = Modifier,
-            onClick = onAction
+            onNavigateBack = { onAction(PlayerUiAction.NavigateBack) },
+            onVolumeDown = { onAction(PlayerUiAction.VolumeDown) },
+            onVolumeUp = { onAction(PlayerUiAction.VolumeUp) },
+            onSelectPrevious = { onAction(PlayerUiAction.SelectPrevious) },
+            onSelectNext = { onAction(PlayerUiAction.SelectNext) },
+            onOpenPrograms = { onAction(PlayerUiAction.OpenOsd(PlayerUiState.PlayerOSD.ChannelPrograms)) },
+            onOpenChannels = { onAction(PlayerUiAction.OpenOsd(PlayerUiState.PlayerOSD.GroupChannels)) },
+            onOpenInfo = { onAction(PlayerUiAction.OpenOsd(PlayerUiState.PlayerOSD.ProgramInfo)) },
         )
 
         ControlButton(
