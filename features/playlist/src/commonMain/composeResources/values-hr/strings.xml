@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<resources>
+    <string name="msg_playlist_details">Detalji popisa za reprodukciju</string>
+    <string name="hint_name">Titula</string>
+    <string name="hint_address">URL</string>
+    <string name="btn_save">Spremi popis za reprodukciju</string>
+    <string name="btn_update">Ažurirajte popis za reprodukciju</string>
+    <string name="btn_add_local">Dodajte lokalni popis za reprodukciju</string>
+    <string name="label_or">ili</string>
+</resources>

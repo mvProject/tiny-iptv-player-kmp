@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<resources>
+    <string name="msg_playlist_details">Detalhes da lista de reprodução</string>
+    <string name="hint_name">Título</string>
+    <string name="hint_address">URL</string>
+    <string name="btn_save">Salvar lista de reprodução</string>
+    <string name="btn_update">Atualizar lista de reprodução</string>
+    <string name="btn_add_local">Adicionar playlist local</string>
+    <string name="label_or">ou</string>
+</resources>

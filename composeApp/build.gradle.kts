@@ -48,6 +48,7 @@ kotlin {
             implementation(projects.features.groupsApi)
             implementation(projects.features.epgApi)
             implementation(projects.features.playlistApi)
+            implementation(projects.features.playlist)
             implementation(projects.features.settings)
             implementation(projects.platform.mediaplayer)
 

@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<resources>
+    <string name="msg_playlist_details">Atskaņošanas saraksta informācija</string>
+    <string name="hint_name">Nosaukums</string>
+    <string name="hint_address">URL</string>
+    <string name="btn_save">Saglabāt atskaņošanas sarakstu</string>
+    <string name="btn_update">Atjaunināt atskaņošanas sarakstu</string>
+    <string name="btn_add_local">Pievienojiet vietējo atskaņošanas sarakstu</string>
+    <string name="label_or">vai</string>
+</resources>

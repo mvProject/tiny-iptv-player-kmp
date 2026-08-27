@@ -20,15 +20,18 @@ import com.mvproject.tinyiptvkmp.features.playlist.api.domain.model.PlaylistType
 import com.mvproject.tinyiptvkmp.features.playlist.api.domain.usecase.GetPlaylistUseCase
 import com.mvproject.tinyiptvkmp.features.playlist.api.domain.usecase.SavePlaylistUseCase
 import com.mvproject.tinyiptvkmp.infrastructure.logging.injectLogger
-import com.mvproject.tinyiptvkmp.navigation.AppRoutes
 import kotlinx.coroutines.launch
 import org.koin.core.annotation.InjectedParam
 import org.koin.core.component.KoinComponent
 import kotlin.uuid.ExperimentalUuidApi
 import kotlin.uuid.Uuid
 
+data class PlaylistDetailArgs(
+    val playlistId: String,
+)
+
 class PlaylistViewModel(
-    @InjectedParam args: AppRoutes.PlaylistDetail,
+    @InjectedParam args: PlaylistDetailArgs,
     private val getPlaylistUseCase: GetPlaylistUseCase,
     private val savePlaylistUseCase: SavePlaylistUseCase,
 ) : ViewModel(),
@@ -38,7 +41,7 @@ class PlaylistViewModel(
     private val logger by injectLogger()
 
     init {
-        initPlaylist(playlistId = args.id)
+        initPlaylist(playlistId = args.playlistId)
     }
 
     private fun initPlaylist(playlistId: String) {

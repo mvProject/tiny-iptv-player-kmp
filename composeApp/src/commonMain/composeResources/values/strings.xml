@@ -13,22 +13,13 @@
     <string name="msg_no_epg_found">epg not found</string>
     <string name="msg_no_internet_found">No Internet Connection</string>
     <string name="msg_no_playable_media_found">Can\'t play this media</string>
-    <string name="msg_playlist_details">Playlist details</string>
 
     <string name="hint_msg_search">type here…</string>
     <string name="hint_current_playlist">Current playlist</string>
-    <string name="hint_name">Title</string>
-    <string name="hint_address">Url</string>
-
-    <string name="btn_save">Save playlist</string>
-    <string name="btn_update">Update playlist</string>
     <string name="btn_close">Close</string>
     <string name="btn_add_first_playlist">Press to add playlist</string>
-    <string name="btn_add_local">Add local playlist</string>
     <string name="btn_delete_current">Delete playlist</string>
     <string name="btn_playlists_update">playlists update</string>
-
-    <string name="label_or">or</string>
     <string name="option_default_ratio_mode">Default aspect ratio mode</string>
     <string name="menu_view_type_list">List</string>
     <string name="menu_view_type_grid">Grid</string>

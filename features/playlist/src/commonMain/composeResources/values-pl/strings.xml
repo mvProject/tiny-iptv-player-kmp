@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<resources>
+    <string name="msg_playlist_details">Szczegóły playlisty</string>
+    <string name="hint_name">Tytuł</string>
+    <string name="hint_address">Adres URL</string>
+    <string name="btn_save">Zapisz listę odtwarzania</string>
+    <string name="btn_update">Zaktualizuj playlistę</string>
+    <string name="btn_add_local">Dodaj lokalną playlistę</string>
+    <string name="label_or">Lub</string>
+</resources>

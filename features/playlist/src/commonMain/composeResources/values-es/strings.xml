@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<resources>
+    <string name="msg_playlist_details">Detalles de la lista de reproducción</string>
+    <string name="hint_name">Título</string>
+    <string name="hint_address">URL</string>
+    <string name="btn_save">Guardar lista de reproducción</string>
+    <string name="btn_update">Actualizar lista de reproducción</string>
+    <string name="btn_add_local">Agregar lista de reproducción local</string>
+    <string name="label_or">o</string>
+</resources>

@@ -15,22 +15,13 @@
     <string name="msg_no_epg_found">epg não encontrado</string>
     <string name="msg_no_internet_found">Sem conexão com a Internet</string>
     <string name="msg_no_playable_media_found">Não é possível reproduzir esta mídia</string>
-    <string name="msg_playlist_details">Detalhes da lista de reprodução</string>
 
     <string name="hint_msg_search">digite aqui…</string>
     <string name="hint_current_playlist">Lista de reprodução atual</string>
-    <string name="hint_name">Título</string>
-    <string name="hint_address">URL</string>
-
-    <string name="btn_save">Salvar lista de reprodução</string>
-    <string name="btn_update">Atualizar lista de reprodução</string>
     <string name="btn_close">Fechar</string>
     <string name="btn_add_first_playlist">Pressione para adicionar lista de reprodução</string>
-    <string name="btn_add_local">Adicionar playlist local</string>
     <string name="btn_delete_current">Excluir lista de reprodução</string>
     <string name="btn_playlists_update">atualização de listas de reprodução</string>
-
-    <string name="label_or">ou</string>
     <string name="option_default_ratio_mode">Modo de proporção padrão</string>
     <string name="menu_view_type_list">Lista</string>
     <string name="menu_view_type_grid">Grade</string>

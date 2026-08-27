@@ -7,7 +7,6 @@ import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.IO
 import kotlinx.coroutines.SupervisorJob
-import okio.FileSystem
 import okio.Path.Companion.toPath
 
 object ProtoStoreFactory {
@@ -20,7 +19,7 @@ object ProtoStoreFactory {
             DataStoreFactory.create(
                 storage =
                     OkioStorage(
-                        fileSystem = FileSystem.SYSTEM,
+                        fileSystem = systemFileSystem(),
                         serializer = serializer,
                         producePath = { producePath().toPath() },
                     ),

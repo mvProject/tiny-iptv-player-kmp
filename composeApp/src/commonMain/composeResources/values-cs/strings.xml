@@ -14,22 +14,13 @@
     <string name="msg_no_epg_found">epg nenalezeno</string>
     <string name="msg_no_internet_found">Žádné internetové připojení</string>
     <string name="msg_no_playable_media_found">Toto médium nelze přehrát</string>
-    <string name="msg_playlist_details">Podrobnosti seznamu skladeb</string>
 
     <string name="hint_msg_search">napište sem…</string>
     <string name="hint_current_playlist">Aktuální seznam skladeb</string>
-    <string name="hint_name">Titul</string>
-    <string name="hint_address">URL</string>
-
-    <string name="btn_save">Uložit seznam skladeb</string>
-    <string name="btn_update">Aktualizovat seznam skladeb</string>
     <string name="btn_close">Zavřít</string>
     <string name="btn_add_first_playlist">Stisknutím přidáte seznam skladeb</string>
-    <string name="btn_add_local">Přidat místní seznam skladeb</string>
     <string name="btn_delete_current">Smazat seznam skladeb</string>
     <string name="btn_playlists_update">aktualizace seznamů skladeb</string>
-
-    <string name="label_or">nebo</string>
     <string name="option_default_ratio_mode">Výchozí režim poměru stran</string>
     <string name="menu_view_type_list">Seznam</string>
     <string name="menu_view_type_grid">Mřížka</string>

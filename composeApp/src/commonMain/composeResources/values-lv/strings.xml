@@ -15,22 +15,13 @@
     <string name="msg_no_epg_found">epg nav atrasts</string>
     <string name="msg_no_internet_found">Nav interneta savienojuma</string>
     <string name="msg_no_playable_media_found">Nevar atskaņot šo multividi</string>
-    <string name="msg_playlist_details">Atskaņošanas saraksta informācija</string>
 
     <string name="hint_msg_search">raksti šeit…</string>
     <string name="hint_current_playlist">Pašreizējais atskaņošanas saraksts</string>
-    <string name="hint_name">Nosaukums</string>
-    <string name="hint_address">URL</string>
-
-    <string name="btn_save">Saglabāt atskaņošanas sarakstu</string>
-    <string name="btn_update">Atjaunināt atskaņošanas sarakstu</string>
     <string name="btn_close">Aizvērt</string>
     <string name="btn_add_first_playlist">Nospiediet, lai pievienotu atskaņošanas sarakstu</string>
-    <string name="btn_add_local">Pievienojiet vietējo atskaņošanas sarakstu</string>
     <string name="btn_delete_current">Dzēst atskaņošanas sarakstu</string>
     <string name="btn_playlists_update">atskaņošanas sarakstu atjaunināšana</string>
-
-    <string name="label_or">vai</string>
     <string name="option_default_ratio_mode">Noklusējuma proporcijas režīms</string>
     <string name="menu_view_type_list">Saraksts</string>
     <string name="menu_view_type_grid">Režģis</string>

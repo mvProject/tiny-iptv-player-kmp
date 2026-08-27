@@ -15,22 +15,13 @@
     <string name="msg_no_epg_found">epg nerastas</string>
     <string name="msg_no_internet_found">Nėra interneto ryšio</string>
     <string name="msg_no_playable_media_found">Negalima paleisti šios medijos</string>
-    <string name="msg_playlist_details">Išsami grojaraščio informacija</string>
 
     <string name="hint_msg_search">rašykite čia…</string>
     <string name="hint_current_playlist">Dabartinis grojaraštis</string>
-    <string name="hint_name">Pavadinimas</string>
-    <string name="hint_address">URL</string>
-
-    <string name="btn_save">Išsaugoti grojaraštį</string>
-    <string name="btn_update">Atnaujinti grojaraštį</string>
     <string name="btn_close">Uždaryti</string>
     <string name="btn_add_first_playlist">Paspauskite, kad pridėtumėte grojaraštį</string>
-    <string name="btn_add_local">Pridėti vietinį grojaraštį</string>
     <string name="btn_delete_current">Ištrinti grojaraštį</string>
     <string name="btn_playlists_update">grojaraščių atnaujinimas</string>
-
-    <string name="label_or">arba</string>
     <string name="option_default_ratio_mode">Numatytasis formato režimas</string>
     <string name="menu_view_type_list">Sąrašas</string>
     <string name="menu_view_type_grid">Tinklelis</string>

@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<resources>
+    <string name="msg_playlist_details">Details van afspeellijst</string>
+    <string name="hint_name">Titel</string>
+    <string name="hint_address">URL</string>
+    <string name="btn_save">Afspeellijst opslaan</string>
+    <string name="btn_update">Update afspeellijst</string>
+    <string name="btn_add_local">Voeg lokale afspeellijst toe</string>
+    <string name="label_or">of</string>
+</resources>

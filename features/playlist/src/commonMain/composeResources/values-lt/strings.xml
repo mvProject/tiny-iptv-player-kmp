@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<resources>
+    <string name="msg_playlist_details">Išsami grojaraščio informacija</string>
+    <string name="hint_name">Pavadinimas</string>
+    <string name="hint_address">URL</string>
+    <string name="btn_save">Išsaugoti grojaraštį</string>
+    <string name="btn_update">Atnaujinti grojaraštį</string>
+    <string name="btn_add_local">Pridėti vietinį grojaraštį</string>
+    <string name="label_or">arba</string>
+</resources>

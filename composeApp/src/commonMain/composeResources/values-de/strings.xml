@@ -15,22 +15,13 @@
     <string name="msg_no_epg_found">epg nicht gefunden</string>
     <string name="msg_no_internet_found">Keine Internetverbindung</string>
     <string name="msg_no_playable_media_found">Dieses Medium kann nicht abgespielt werden</string>
-    <string name="msg_playlist_details">Details zur Playlist</string>
 
     <string name="hint_msg_search">Geben Sie hier ein ...</string>
     <string name="hint_current_playlist">Aktuelle Playlist</string>
-    <string name="hint_name">Titel</string>
-    <string name="hint_address">URL</string>
-
-    <string name="btn_save">Playlist speichern</string>
-    <string name="btn_update">Playlist aktualisieren</string>
     <string name="btn_close">Schließen</string>
     <string name="btn_add_first_playlist">Drücken Sie, um eine Wiedergabeliste hinzuzufügen</string>
-    <string name="btn_add_local">Lokale Playlist hinzufügen</string>
     <string name="btn_delete_current">Playlist löschen</string>
     <string name="btn_playlists_update">Aktualisierung der Wiedergabelisten</string>
-
-    <string name="label_or">oder</string>
     <string name="option_default_ratio_mode">Standard-Seitenverhältnismodus</string>
     <string name="menu_view_type_list">Aufführen</string>
     <string name="menu_view_type_grid">Netz</string>

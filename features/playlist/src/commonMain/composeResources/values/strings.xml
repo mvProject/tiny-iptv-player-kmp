@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<resources>
+    <string name="msg_playlist_details">Playlist details</string>
+    <string name="hint_name">Title</string>
+    <string name="hint_address">Url</string>
+    <string name="btn_save">Save playlist</string>
+    <string name="btn_update">Update playlist</string>
+    <string name="btn_add_local">Add local playlist</string>
+    <string name="label_or">or</string>
+</resources>

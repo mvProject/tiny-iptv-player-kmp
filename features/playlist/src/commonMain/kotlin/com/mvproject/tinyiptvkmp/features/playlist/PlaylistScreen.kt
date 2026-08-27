@@ -49,6 +49,14 @@ import com.mvproject.tinyiptvkmp.core.theme.colorSchemeExtended
 import com.mvproject.tinyiptvkmp.core.theme.dimensionSize
 import com.mvproject.tinyiptvkmp.core.theme.dimensionWeight
 import com.mvproject.tinyiptvkmp.features.playlist.api.domain.model.PlaylistType
+import com.mvproject.tinyiptvkmp.features.playlist.generated.resources.Res
+import com.mvproject.tinyiptvkmp.features.playlist.generated.resources.btn_add_local
+import com.mvproject.tinyiptvkmp.features.playlist.generated.resources.btn_save
+import com.mvproject.tinyiptvkmp.features.playlist.generated.resources.btn_update
+import com.mvproject.tinyiptvkmp.features.playlist.generated.resources.hint_address
+import com.mvproject.tinyiptvkmp.features.playlist.generated.resources.hint_name
+import com.mvproject.tinyiptvkmp.features.playlist.generated.resources.label_or
+import com.mvproject.tinyiptvkmp.features.playlist.generated.resources.msg_playlist_details
 import io.github.vinceglb.filekit.compose.rememberFilePickerLauncher
 import io.github.vinceglb.filekit.core.PickerMode
 import io.github.vinceglb.filekit.core.PickerType
@@ -58,14 +66,6 @@ import okio.SYSTEM
 import okio.buffer
 import okio.use
 import org.jetbrains.compose.resources.stringResource
-import tinyiptvkmp.composeapp.generated.resources.Res
-import tinyiptvkmp.composeapp.generated.resources.btn_add_local
-import tinyiptvkmp.composeapp.generated.resources.btn_save
-import tinyiptvkmp.composeapp.generated.resources.btn_update
-import tinyiptvkmp.composeapp.generated.resources.hint_address
-import tinyiptvkmp.composeapp.generated.resources.hint_name
-import tinyiptvkmp.composeapp.generated.resources.label_or
-import tinyiptvkmp.composeapp.generated.resources.msg_playlist_details
 
 @Composable
 internal fun PlaylistScreen(
@@ -103,13 +103,13 @@ private fun PlaylistScreen(
         rememberFilePickerLauncher(
             mode = PickerMode.Single,
             type =
-            PickerType.File(
-                extensions =
-                listOf(
-                    String.typeM3U,
-                    String.typeM3U8,
+                PickerType.File(
+                    extensions =
+                        listOf(
+                            String.typeM3U,
+                            String.typeM3U8,
+                        ),
                 ),
-            ),
             title = stringResource(Res.string.btn_add_local),
         ) { selectedFile ->
             selectedFile?.let { file ->
@@ -132,9 +132,9 @@ private fun PlaylistScreen(
 
     Scaffold(
         modifier =
-        Modifier
-            .fillMaxSize()
-            .windowInsetsPadding(WindowInsets.navigationBars),
+            Modifier
+                .fillMaxSize()
+                .windowInsetsPadding(WindowInsets.navigationBars),
         topBar = {
             AppBarWithBackNav(
                 appBarTitle = stringResource(Res.string.msg_playlist_details),
@@ -144,20 +144,20 @@ private fun PlaylistScreen(
     ) { paddingValues ->
         Box(
             modifier =
-            Modifier
-                .fillMaxSize()
-                .padding(paddingValues),
+                Modifier
+                    .fillMaxSize()
+                    .padding(paddingValues),
             contentAlignment = Alignment.TopCenter,
         ) {
             Column(
                 modifier =
-                Modifier
-                    .fillMaxHeight()
-                    .adaptiveContentWidth(adaptiveLayoutState)
-                    .padding(
-                        horizontal = adaptiveLayoutState.contentHorizontalPadding,
-                        vertical = MaterialTheme.dimensionSize.size12,
-                    ),
+                    Modifier
+                        .fillMaxHeight()
+                        .adaptiveContentWidth(adaptiveLayoutState)
+                        .padding(
+                            horizontal = adaptiveLayoutState.contentHorizontalPadding,
+                            vertical = MaterialTheme.dimensionSize.size12,
+                        ),
                 horizontalAlignment = Alignment.CenterHorizontally,
             ) {
                 TextField(
@@ -175,13 +175,13 @@ private fun PlaylistScreen(
                     },
                     textStyle = MaterialTheme.typography.labelMedium,
                     colors =
-                    TextFieldDefaults.colors(
-                        focusedTextColor = MaterialTheme.colorScheme.onSurface,
-                        focusedContainerColor = Color.Transparent,
-                        unfocusedContainerColor = Color.Transparent,
-                        cursorColor = MaterialTheme.colorSchemeExtended.activeInput,
-                        focusedIndicatorColor = MaterialTheme.colorSchemeExtended.activeInput,
-                    ),
+                        TextFieldDefaults.colors(
+                            focusedTextColor = MaterialTheme.colorScheme.onSurface,
+                            focusedContainerColor = Color.Transparent,
+                            unfocusedContainerColor = Color.Transparent,
+                            cursorColor = MaterialTheme.colorSchemeExtended.activeInput,
+                            focusedIndicatorColor = MaterialTheme.colorSchemeExtended.activeInput,
+                        ),
                 )
 
                 SpacerHeight(height = MaterialTheme.dimensionSize.size8)
@@ -202,14 +202,14 @@ private fun PlaylistScreen(
                     },
                     textStyle = MaterialTheme.typography.labelMedium,
                     colors =
-                    TextFieldDefaults.colors(
-                        focusedTextColor = MaterialTheme.colorScheme.onSurface,
-                        focusedContainerColor = Color.Transparent,
-                        unfocusedContainerColor = Color.Transparent,
-                        disabledContainerColor = Color.DarkGray,
-                        cursorColor = MaterialTheme.colorSchemeExtended.activeInput,
-                        focusedIndicatorColor = MaterialTheme.colorSchemeExtended.activeInput,
-                    ),
+                        TextFieldDefaults.colors(
+                            focusedTextColor = MaterialTheme.colorScheme.onSurface,
+                            focusedContainerColor = Color.Transparent,
+                            unfocusedContainerColor = Color.Transparent,
+                            disabledContainerColor = Color.DarkGray,
+                            cursorColor = MaterialTheme.colorSchemeExtended.activeInput,
+                            focusedIndicatorColor = MaterialTheme.colorSchemeExtended.activeInput,
+                        ),
                 )
 
                 if (!uiState.isEdit) {
@@ -219,9 +219,9 @@ private fun PlaylistScreen(
                     Row(
                         modifier = Modifier.fillMaxWidth(),
                         horizontalArrangement =
-                        Arrangement.spacedBy(
-                            space = MaterialTheme.dimensionSize.size8,
-                        ),
+                            Arrangement.spacedBy(
+                                space = MaterialTheme.dimensionSize.size8,
+                            ),
                         verticalAlignment = Alignment.CenterVertically,
                     ) {
                         HorizontalDivider(
@@ -249,9 +249,9 @@ private fun PlaylistScreen(
                         },
                         modifier = Modifier.fillMaxWidth(),
                         colors =
-                        ButtonDefaults.buttonColors(
-                            containerColor = MaterialTheme.colorScheme.primary,
-                        ),
+                            ButtonDefaults.buttonColors(
+                                containerColor = MaterialTheme.colorScheme.primary,
+                            ),
                         shape = MaterialTheme.shapes.small,
                     ) {
                         Text(
@@ -281,14 +281,14 @@ private fun PlaylistScreen(
                         }
                     },
                     modifier =
-                    Modifier
-                        .padding(vertical = MaterialTheme.dimensionSize.size8)
-                        .fillMaxWidth()
-                        .windowInsetsPadding(WindowInsets.ime),
+                        Modifier
+                            .padding(vertical = MaterialTheme.dimensionSize.size8)
+                            .fillMaxWidth()
+                            .windowInsetsPadding(WindowInsets.ime),
                     colors =
-                    ButtonDefaults.buttonColors(
-                        containerColor = MaterialTheme.colorScheme.onSurface,
-                    ),
+                        ButtonDefaults.buttonColors(
+                            containerColor = MaterialTheme.colorScheme.onSurface,
+                        ),
                     shape = MaterialTheme.shapes.small,
                 ) {
                     val text =

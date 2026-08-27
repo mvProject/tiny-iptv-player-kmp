@@ -17,22 +17,13 @@
     <string name="msg_no_playable_media_found">Impossibile riprodurre questo contenuto
         multimediale
     </string>
-    <string name="msg_playlist_details">Dettagli della playlist</string>
 
     <string name="hint_msg_search">digitare qui…</string>
     <string name="hint_current_playlist">Playlist attuale</string>
-    <string name="hint_name">Titolo</string>
-    <string name="hint_address">URL</string>
-
-    <string name="btn_save">Salva playlist</string>
-    <string name="btn_update">Aggiorna playlist</string>
     <string name="btn_close">Vicino</string>
     <string name="btn_add_first_playlist">Premi per aggiungere una playlist</string>
-    <string name="btn_add_local">Aggiungi playlist locale</string>
     <string name="btn_delete_current">Elimina playlist</string>
     <string name="btn_playlists_update">aggiornamento delle playlist</string>
-
-    <string name="label_or">O</string>
     <string name="option_default_ratio_mode">Modalità proporzioni predefinita</string>
     <string name="menu_view_type_list">Elenco</string>
     <string name="menu_view_type_grid">Griglia</string>

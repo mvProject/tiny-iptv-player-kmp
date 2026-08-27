@@ -5,12 +5,11 @@
  *
  */
 
-package com.mvproject.tinyiptvkmp.features.settings.player.navigation
+package com.mvproject.tinyiptvkmp.navigation
 
 import androidx.navigation3.runtime.EntryProviderScope
 import com.mvproject.tinyiptvkmp.features.settings.player.SettingsPlayerScreen
 import com.mvproject.tinyiptvkmp.features.settings.player.SettingsPlayerViewModel
-import com.mvproject.tinyiptvkmp.navigation.AppRoutes
 import org.koin.compose.viewmodel.koinViewModel
 
 fun EntryProviderScope<AppRoutes>.settingsPlayer(

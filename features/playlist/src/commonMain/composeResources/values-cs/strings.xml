@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<resources>
+    <string name="msg_playlist_details">Podrobnosti seznamu skladeb</string>
+    <string name="hint_name">Titul</string>
+    <string name="hint_address">URL</string>
+    <string name="btn_save">Uložit seznam skladeb</string>
+    <string name="btn_update">Aktualizovat seznam skladeb</string>
+    <string name="btn_add_local">Přidat místní seznam skladeb</string>
+    <string name="label_or">nebo</string>
+</resources>

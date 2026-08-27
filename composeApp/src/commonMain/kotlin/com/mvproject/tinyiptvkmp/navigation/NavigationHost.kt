@@ -19,10 +19,6 @@ import androidx.savedstate.compose.serialization.serializers.SnapshotStateListSe
 import com.mvproject.tinyiptvkmp.features.channels.navigation.groupChannels
 import com.mvproject.tinyiptvkmp.features.groups.navigation.playlistGroups
 import com.mvproject.tinyiptvkmp.features.player.navigation.player
-import com.mvproject.tinyiptvkmp.features.playlist.navigation.playlistDetail
-import com.mvproject.tinyiptvkmp.features.settings.general.navigation.settingsGeneral
-import com.mvproject.tinyiptvkmp.features.settings.player.navigation.settingsPlayer
-import com.mvproject.tinyiptvkmp.features.settings.playlist.navigation.settingsPlaylist
 
 @Composable
 fun NavigationHost(
