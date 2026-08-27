@@ -16,4 +16,8 @@
     <string name="video_ratio_mode_fullScreen">Visas ekranas (4:3)</string>
     <string name="video_ratio_mode_cinematic">Kino (21:9)</string>
     <string name="video_ratio_mode_square">Kvadratas (1:1)</string>
+    <string name="btn_add_new">Naujas grojaraštis</string>
+    <string name="msg_no_playlist">Nerasta jokių grojaraščių</string>
+    <string name="msg_no_items_found">Elementai nerasta</string>
+    <string name="hint_update_period">Atnaujinimo laikotarpis</string>
 </resources>

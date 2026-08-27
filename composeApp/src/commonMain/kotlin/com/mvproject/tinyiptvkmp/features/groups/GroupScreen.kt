@@ -33,6 +33,7 @@ import com.mvproject.tinyiptvkmp.core.components.adaptive.adaptiveContentWidth
 import com.mvproject.tinyiptvkmp.core.components.adaptive.rememberAdaptiveLayoutState
 import com.mvproject.tinyiptvkmp.core.components.indicators.LoadingIndicator
 import com.mvproject.tinyiptvkmp.core.components.toolbars.AppBarWithSettings
+import com.mvproject.tinyiptvkmp.core.designsystem.generated.resources.msg_no_items_found
 import com.mvproject.tinyiptvkmp.core.theme.colorSchemeExtended
 import com.mvproject.tinyiptvkmp.core.theme.dimensionSize
 import com.mvproject.tinyiptvkmp.features.groups.components.PlaylistGroupItem
@@ -41,7 +42,7 @@ import org.jetbrains.compose.resources.stringResource
 import tinyiptvkmp.composeapp.generated.resources.Res
 import tinyiptvkmp.composeapp.generated.resources.app_name
 import tinyiptvkmp.composeapp.generated.resources.btn_add_first_playlist
-import tinyiptvkmp.composeapp.generated.resources.msg_no_items_found
+import com.mvproject.tinyiptvkmp.core.designsystem.generated.resources.Res as DesignSystemRes
 
 
 @Composable
@@ -129,7 +130,7 @@ private fun GroupScreen(
                 when (val groupState = uiState.groupState) {
                     GroupUiState.GroupState.Empty -> NoItemsView(
                         modifier = Modifier.fillMaxSize(),
-                        title = stringResource(Res.string.msg_no_items_found),
+                        title = stringResource(DesignSystemRes.string.msg_no_items_found),
                         navigateTitle = stringResource(Res.string.btn_add_first_playlist),
                         onNavigateClick = { onAction(GroupUiAction.NavigateToSettings) },
                     )

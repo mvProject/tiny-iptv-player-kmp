@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<resources>
+
+    <string name="scr_settings_title">Ustawienia</string>
+    <string name="scr_playlist_settings_title">Ustawienia list odtwarzania</string>
+    <string name="scr_player_settings_title">Ustawienia gracza</string>
+
+    <string name="option_update_title">Aktualizacja</string>
+    <string name="option_update_epg_info">Informacje o EPG</string>
+    <string name="option_update_epg_data">Dane EPG</string>
+    <string name="option_default_resize_mode">Domyślny tryb zmiany rozmiaru</string>
+    <string name="option_default_fullscreen_mode">Domyślnie używaj trybu pełnoekranowego</string>
+</resources>

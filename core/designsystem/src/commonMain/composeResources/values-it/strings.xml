@@ -16,4 +16,8 @@
     <string name="video_ratio_mode_fullScreen">Schermo intero (4:3)</string>
     <string name="video_ratio_mode_cinematic">Cinematografico (21:9)</string>
     <string name="video_ratio_mode_square">Quadrato (1:1)</string>
+    <string name="btn_add_new">Nuova playlist</string>
+    <string name="msg_no_playlist">Nessuna playlist trovata</string>
+    <string name="msg_no_items_found">Articoli non trovati</string>
+    <string name="hint_update_period">Periodo di aggiornamento</string>
 </resources>

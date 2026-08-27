@@ -20,4 +20,8 @@
     <string name="menu_view_type_list">List</string>
     <string name="menu_view_type_grid">Grid</string>
     <string name="menu_view_type_card">Card</string>
+    <string name="btn_add_new">New playlist</string>
+    <string name="msg_no_playlist">No playlists found</string>
+    <string name="msg_no_items_found">Items not found</string>
+    <string name="hint_update_period">Update period</string>
 </resources>

@@ -36,17 +36,18 @@ import com.mvproject.tinyiptvkmp.core.components.adaptive.adaptiveContentWidth
 import com.mvproject.tinyiptvkmp.core.components.adaptive.rememberAdaptiveLayoutState
 import com.mvproject.tinyiptvkmp.core.components.indicators.LoadingIndicator
 import com.mvproject.tinyiptvkmp.core.components.toolbars.AppBarWithBackNav
+import com.mvproject.tinyiptvkmp.core.designsystem.generated.resources.btn_add_new
+import com.mvproject.tinyiptvkmp.core.designsystem.generated.resources.msg_no_items_found
+import com.mvproject.tinyiptvkmp.core.designsystem.generated.resources.msg_no_playlist
 import com.mvproject.tinyiptvkmp.core.theme.dimensionSize
 import com.mvproject.tinyiptvkmp.features.settings.components.PlaylistItem
+import com.mvproject.tinyiptvkmp.features.settings.generated.resources.scr_playlist_settings_title
 import org.jetbrains.compose.resources.stringResource
-import tinyiptvkmp.composeapp.generated.resources.Res
-import tinyiptvkmp.composeapp.generated.resources.btn_add_new
-import tinyiptvkmp.composeapp.generated.resources.msg_no_items_found
-import tinyiptvkmp.composeapp.generated.resources.msg_no_playlist
-import tinyiptvkmp.composeapp.generated.resources.scr_playlist_settings_title
+import com.mvproject.tinyiptvkmp.core.designsystem.generated.resources.Res as DesignSystemRes
+import com.mvproject.tinyiptvkmp.features.settings.generated.resources.Res as SettingsRes
 
 @Composable
-internal fun SettingsPlaylistScreen(
+fun SettingsPlaylistScreen(
     viewModel: SettingsPlaylistViewModel,
     onNavigateBack: () -> Unit = {},
     onNavigatePlaylist: (String) -> Unit = {},
@@ -74,21 +75,21 @@ private fun SettingsPlaylistScreen(
 
     Scaffold(
         modifier =
-        Modifier
-            .fillMaxSize()
-            .windowInsetsPadding(WindowInsets.navigationBars),
+            Modifier
+                .fillMaxSize()
+                .windowInsetsPadding(WindowInsets.navigationBars),
         topBar = {
             AppBarWithBackNav(
-                appBarTitle = stringResource(Res.string.scr_playlist_settings_title),
+                appBarTitle = stringResource(SettingsRes.string.scr_playlist_settings_title),
                 onBackClick = { onAction(SettingsPlaylistUiAction.NavigateBack) },
             )
         },
         bottomBar = {
             Box(
                 modifier =
-                Modifier
-                    .padding(MaterialTheme.dimensionSize.size8)
-                    .fillMaxWidth(),
+                    Modifier
+                        .padding(MaterialTheme.dimensionSize.size8)
+                        .fillMaxWidth(),
                 contentAlignment = Alignment.Center,
             ) {
                 ElevatedButton(
@@ -103,7 +104,7 @@ private fun SettingsPlaylistScreen(
                     shape = MaterialTheme.shapes.small,
                 ) {
                     Text(
-                        text = stringResource(Res.string.btn_add_new),
+                        text = stringResource(DesignSystemRes.string.btn_add_new),
                         color = MaterialTheme.colorScheme.primary,
                         style = MaterialTheme.typography.titleMedium,
                     )
@@ -113,26 +114,26 @@ private fun SettingsPlaylistScreen(
     ) { paddingValues ->
         Box(
             modifier =
-            Modifier
-                .padding(paddingValues)
-                .fillMaxSize(),
+                Modifier
+                    .padding(paddingValues)
+                    .fillMaxSize(),
             contentAlignment = Alignment.TopCenter,
         ) {
             when (val playlistState = uiState.playlistState) {
                 SettingsPlaylistUiState.PlaylistState.Empty -> {
                     NoItemsView(
                         modifier = Modifier.fillMaxSize(),
-                        title = stringResource(Res.string.msg_no_items_found),
-                        navigateTitle = stringResource(Res.string.msg_no_playlist),
+                        title = stringResource(DesignSystemRes.string.msg_no_items_found),
+                        navigateTitle = stringResource(DesignSystemRes.string.msg_no_playlist),
                     )
                 }
 
                 is SettingsPlaylistUiState.PlaylistState.Success -> {
                     LazyColumn(
                         modifier =
-                        Modifier
-                            .fillMaxHeight()
-                            .adaptiveContentWidth(adaptiveLayoutState),
+                            Modifier
+                                .fillMaxHeight()
+                                .adaptiveContentWidth(adaptiveLayoutState),
                         state = rememberLazyListState(),
                         verticalArrangement = Arrangement.spacedBy(MaterialTheme.dimensionSize.size4),
                         contentPadding = PaddingValues(

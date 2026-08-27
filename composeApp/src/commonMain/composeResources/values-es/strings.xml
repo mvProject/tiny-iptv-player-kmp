@@ -13,14 +13,11 @@
     <string name="channel_folder_favorite">Favoritos</string>
 
     <string name="msg_no_epg_found">epg no encontrado</string>
-    <string name="msg_no_items_found">Artículos no encontrados</string>
     <string name="msg_no_internet_found">Sin conexión a Internet</string>
     <string name="msg_no_playable_media_found">No se puede reproducir este medio</string>
-    <string name="msg_no_playlist">No se encontraron listas de reproducción</string>
     <string name="msg_playlist_details">Detalles de la lista de reproducción</string>
 
     <string name="hint_msg_search">escriba aquí…</string>
-    <string name="hint_update_period">Período de actualización</string>
     <string name="hint_current_playlist">Lista de reproducción actual</string>
     <string name="hint_name">Título</string>
     <string name="hint_address">URL</string>
@@ -30,23 +27,11 @@
     <string name="btn_close">Cerca</string>
     <string name="btn_add_first_playlist">Presione para agregar lista de reproducción</string>
     <string name="btn_add_local">Agregar lista de reproducción local</string>
-    <string name="btn_add_new">Nueva lista de reproducción</string>
     <string name="btn_delete_current">Eliminar lista de reproducción</string>
     <string name="btn_playlists_update">actualización de listas de reproducción</string>
 
     <string name="label_or">o</string>
-
-    <string name="scr_settings_title">Ajustes</string>
-    <string name="scr_playlist_settings_title">Configuración de listas de reproducción</string>
-    <string name="scr_player_settings_title">Configuración del reproductor</string>
-
-    <string name="option_update_title">Actualizar</string>
-    <string name="option_update_epg_info">información epg</string>
-    <string name="option_update_epg_data">datos epg</string>
-    <string name="option_default_resize_mode">Modo de cambio de tamaño predeterminado</string>
     <string name="option_default_ratio_mode">Modo de relación de aspecto predeterminado</string>
-    <string name="option_default_fullscreen_mode">Usar pantalla completa por defecto</string>
-
     <string name="menu_view_type_list">Lista</string>
     <string name="menu_view_type_grid">Red</string>
     <string name="menu_view_type_card">Tarjeta</string>

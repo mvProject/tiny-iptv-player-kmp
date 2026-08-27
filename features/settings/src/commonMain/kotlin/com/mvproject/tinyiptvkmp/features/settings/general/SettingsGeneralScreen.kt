@@ -41,17 +41,17 @@ import com.mvproject.tinyiptvkmp.core.mapper.mapToString
 import com.mvproject.tinyiptvkmp.core.theme.dimensionSize
 import com.mvproject.tinyiptvkmp.features.settings.components.SettingsSelector
 import com.mvproject.tinyiptvkmp.features.settings.general.SettingsGeneralUiState.SettingsGeneral
+import com.mvproject.tinyiptvkmp.features.settings.generated.resources.Res
+import com.mvproject.tinyiptvkmp.features.settings.generated.resources.option_update_epg_data
+import com.mvproject.tinyiptvkmp.features.settings.generated.resources.option_update_epg_info
+import com.mvproject.tinyiptvkmp.features.settings.generated.resources.option_update_title
+import com.mvproject.tinyiptvkmp.features.settings.generated.resources.scr_player_settings_title
+import com.mvproject.tinyiptvkmp.features.settings.generated.resources.scr_playlist_settings_title
+import com.mvproject.tinyiptvkmp.features.settings.generated.resources.scr_settings_title
 import org.jetbrains.compose.resources.stringResource
-import tinyiptvkmp.composeapp.generated.resources.Res
-import tinyiptvkmp.composeapp.generated.resources.option_update_epg_data
-import tinyiptvkmp.composeapp.generated.resources.option_update_epg_info
-import tinyiptvkmp.composeapp.generated.resources.option_update_title
-import tinyiptvkmp.composeapp.generated.resources.scr_player_settings_title
-import tinyiptvkmp.composeapp.generated.resources.scr_playlist_settings_title
-import tinyiptvkmp.composeapp.generated.resources.scr_settings_title
 
 @Composable
-internal fun SettingsGeneralScreen(
+fun SettingsGeneralScreen(
     viewModel: SettingsGeneralViewModel,
     onNavigateBack: () -> Unit,
     onNavigateToPlayerSettings: () -> Unit,
@@ -230,64 +230,7 @@ private fun SettingsGeneralScreen(
                     }
                 )
             }
-
-            /* OptionSelector(
-                 modifier =
-                 Modifier
-                     .fillMaxWidth()
-                     .padding(horizontal = MaterialTheme.dimens.size8),
-                 title = stringResource(Res.string.option_update_epg_info),
-                 selectedItem = stringResource(UpdatePeriod.entries[uiState.infoUpdatePeriod].mapToString()),
-                 isExpanded = uiState.osdType == SettingsGeneralOSD.InfoUpdate,
-                 onClick = {
-                     onAction(SettingsGeneralUiAction.SetInfoUpdatePeriod(type = it))
-                 },
-             )
-
-             OptionSelector(
-                 modifier =
-                 Modifier
-                     .fillMaxWidth()
-                     .padding(horizontal = MaterialTheme.dimens.size8),
-                 title = stringResource(Res.string.option_update_epg_data),
-                 selectedItem = stringResource(UpdatePeriod.entries[uiState.epgUpdatePeriod].mapToString()),
-                 isExpanded = uiState.osdType == SettingsGeneralOSD.ProgramsUpdate,
-                 onClick = {
-                     onAction(SettingsGeneralUiAction.OpenOsd(SettingsGeneralOSD.ProgramsUpdate))
-                 },
-             )*/
         }
-
-        /*OverlayContent(
-            isVisible = uiState.osdType != null,
-            onViewTap = { onAction(SettingsGeneralUiAction.CloseOsd) },
-        ) {
-            uiState.osdType?.let { osdType ->
-                when (osdType) {
-                    SettingsGeneralOSD.InfoUpdate -> {
-                        OverlayOptionsMenu(
-                            title = stringResource(Res.string.hint_update_period),
-                            selectedIndex = uiState.infoUpdatePeriod,
-                            options = UpdatePeriod.entries.map { stringResource(it.mapToString()) },
-                            onItemSelected = { index ->
-                                onAction(SettingsGeneralUiAction.SetInfoUpdatePeriod(type = index))
-                            },
-                        )
-                    }
-
-                    SettingsGeneralOSD.ProgramsUpdate -> {
-                        OverlayOptionsMenu(
-                            title = stringResource(Res.string.hint_update_period),
-                            selectedIndex = uiState.epgUpdatePeriod,
-                            options = UpdatePeriod.entries.map { stringResource(it.mapToString()) },
-                            onItemSelected = { index ->
-                                onAction(SettingsGeneralUiAction.SetEpgUpdatePeriod(type = index))
-                            },
-                        )
-                    }
-                }
-            }
-        }*/
     }
 }
 // todo replace preview

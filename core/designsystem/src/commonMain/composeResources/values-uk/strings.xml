@@ -16,4 +16,8 @@
     <string name="video_ratio_mode_fullScreen">Повний екран (4:3)</string>
     <string name="video_ratio_mode_cinematic">Кінематографічний (21:9)</string>
     <string name="video_ratio_mode_square">Квадрат (1:1)</string>
+    <string name="btn_add_new">Новий плейлист</string>
+    <string name="msg_no_playlist">Плейлистів не знайдено</string>
+    <string name="msg_no_items_found">Даних не знайдено</string>
+    <string name="hint_update_period">Період оновлення</string>
 </resources>

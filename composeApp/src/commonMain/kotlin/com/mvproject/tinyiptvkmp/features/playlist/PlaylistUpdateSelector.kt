@@ -26,6 +26,8 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
+import com.mvproject.tinyiptvkmp.core.designsystem.generated.resources.Res
+import com.mvproject.tinyiptvkmp.core.designsystem.generated.resources.hint_update_period
 import com.mvproject.tinyiptvkmp.core.foundation.model.UpdatePeriod
 import com.mvproject.tinyiptvkmp.core.mapper.mapToString
 import com.mvproject.tinyiptvkmp.core.theme.colorSchemeExtended
@@ -33,8 +35,6 @@ import com.mvproject.tinyiptvkmp.core.theme.dimensionSize
 import com.mvproject.tinyiptvkmp.core.theme.dimensionText
 import com.mvproject.tinyiptvkmp.features.playlist.api.domain.model.PlaylistType
 import org.jetbrains.compose.resources.stringResource
-import tinyiptvkmp.composeapp.generated.resources.Res
-import tinyiptvkmp.composeapp.generated.resources.hint_update_period
 
 @Composable
 fun PlaylistUpdateSelector(

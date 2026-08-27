@@ -18,4 +18,5 @@ android {
 
 compose.resources {
     packageOfResClass = "com.mvproject.tinyiptvkmp.core.designsystem.generated.resources"
+    publicResClass = true
 }

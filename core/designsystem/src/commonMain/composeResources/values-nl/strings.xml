@@ -16,4 +16,8 @@
     <string name="video_ratio_mode_fullScreen">Volledig scherm (4:3)</string>
     <string name="video_ratio_mode_cinematic">Filmisch (21:9)</string>
     <string name="video_ratio_mode_square">Vierkant (1:1)</string>
+    <string name="btn_add_new">Nieuwe afspeellijst</string>
+    <string name="msg_no_playlist">Geen afspeellijsten gevonden</string>
+    <string name="msg_no_items_found">Artikelen niet gevonden</string>
+    <string name="hint_update_period">Updateperiode</string>
 </resources>

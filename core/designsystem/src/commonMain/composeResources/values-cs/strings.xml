@@ -16,4 +16,8 @@
     <string name="video_ratio_mode_fullScreen">Celá obrazovka (4:3)</string>
     <string name="video_ratio_mode_cinematic">Filmový (21:9)</string>
     <string name="video_ratio_mode_square">Čtverec (1:1)</string>
+    <string name="btn_add_new">Nový seznam skladeb</string>
+    <string name="msg_no_playlist">Nebyly nalezeny žádné seznamy skladeb</string>
+    <string name="msg_no_items_found">Položky nenalezeny</string>
+    <string name="hint_update_period">Období aktualizace</string>
 </resources>

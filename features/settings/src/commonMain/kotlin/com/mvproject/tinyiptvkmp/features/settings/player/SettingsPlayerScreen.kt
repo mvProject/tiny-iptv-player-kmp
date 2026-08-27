@@ -39,15 +39,15 @@ import com.mvproject.tinyiptvkmp.core.theme.colorSchemeExtended
 import com.mvproject.tinyiptvkmp.core.theme.dimensionOpacity
 import com.mvproject.tinyiptvkmp.core.theme.dimensionSize
 import com.mvproject.tinyiptvkmp.features.settings.components.SettingsSelector
+import com.mvproject.tinyiptvkmp.features.settings.generated.resources.Res
+import com.mvproject.tinyiptvkmp.features.settings.generated.resources.option_default_fullscreen_mode
+import com.mvproject.tinyiptvkmp.features.settings.generated.resources.option_default_resize_mode
+import com.mvproject.tinyiptvkmp.features.settings.generated.resources.scr_player_settings_title
 import com.mvproject.tinyiptvkmp.features.settings.player.SettingsPlayerUiState.SettingsPlayer
 import org.jetbrains.compose.resources.stringResource
-import tinyiptvkmp.composeapp.generated.resources.Res
-import tinyiptvkmp.composeapp.generated.resources.option_default_fullscreen_mode
-import tinyiptvkmp.composeapp.generated.resources.option_default_resize_mode
-import tinyiptvkmp.composeapp.generated.resources.scr_player_settings_title
 
 @Composable
-internal fun SettingsPlayerScreen(
+fun SettingsPlayerScreen(
     viewModel: SettingsPlayerViewModel,
     onNavigateBack: () -> Unit
 ) {
@@ -73,9 +73,9 @@ private fun SettingsPlayerScreen(
 
     Scaffold(
         modifier =
-        Modifier
-            .fillMaxSize()
-            .windowInsetsPadding(WindowInsets.navigationBars),
+            Modifier
+                .fillMaxSize()
+                .windowInsetsPadding(WindowInsets.navigationBars),
         topBar = {
             AppBarWithBackNav(
                 appBarTitle = stringResource(Res.string.scr_player_settings_title),

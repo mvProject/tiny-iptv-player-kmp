@@ -16,4 +16,8 @@
     <string name="video_ratio_mode_fullScreen">Cijeli zaslon (4:3)</string>
     <string name="video_ratio_mode_cinematic">Filmski (21:9)</string>
     <string name="video_ratio_mode_square">Kvadrat (1:1)</string>
+    <string name="btn_add_new">Nova lista za reprodukciju</string>
+    <string name="msg_no_playlist">Nema pronađenih popisa za reprodukciju</string>
+    <string name="msg_no_items_found">Stavke nisu pronađene</string>
+    <string name="hint_update_period">Razdoblje ažuriranja</string>
 </resources>

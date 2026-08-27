@@ -107,20 +107,20 @@ fun SettingsSelector(
                                 text = item,
                                 style = MaterialTheme.typography.titleSmall,
                                 color =
-                                if (isSelected) {
-                                    MaterialTheme.colorSchemeExtended.activeInput
-                                } else {
-                                    MaterialTheme.colorScheme.onSurface
-                                },
+                                    if (isSelected) {
+                                        MaterialTheme.colorSchemeExtended.activeInput
+                                    } else {
+                                        MaterialTheme.colorScheme.onSurface
+                                    },
                             )
                         }
 
                         if (index < options.lastIndex) {
                             HorizontalDivider(
                                 modifier =
-                                Modifier
-                                    .fillMaxWidth()
-                                    .padding(horizontal = MaterialTheme.dimensionSize.size16),
+                                    Modifier
+                                        .fillMaxWidth()
+                                        .padding(horizontal = MaterialTheme.dimensionSize.size16),
                                 color = MaterialTheme.colorScheme.onSurface,
                             )
                         }
