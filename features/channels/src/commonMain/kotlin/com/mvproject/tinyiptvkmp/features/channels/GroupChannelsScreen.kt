@@ -22,6 +22,7 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.derivedStateOf
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -39,10 +40,10 @@ import com.mvproject.tinyiptvkmp.core.theme.dimensionSize
 import com.mvproject.tinyiptvkmp.features.channels.GroupChannelsUiState.GroupChannelsOSD
 import com.mvproject.tinyiptvkmp.features.channels.components.ChannelFavoriteSelector
 import com.mvproject.tinyiptvkmp.features.channels.components.ChannelView
+import com.mvproject.tinyiptvkmp.features.channels.generated.resources.Res
+import com.mvproject.tinyiptvkmp.features.channels.generated.resources.hint_msg_search
 import com.mvproject.tinyiptvkmp.features.epg.ChannelPrograms
 import org.jetbrains.compose.resources.stringResource
-import tinyiptvkmp.composeapp.generated.resources.Res
-import tinyiptvkmp.composeapp.generated.resources.hint_msg_search
 
 @Composable
 internal fun GroupChannelsScreen(
@@ -114,8 +115,12 @@ private fun GroupChannelsScreen(
                 targetState = uiState.viewType
             ) { viewType ->
 
-                val filteredResults = uiState.channels.filter { channel ->
-                    channel.channelName.contains(searchString, true)
+                val filteredResults by remember(uiState.channels, searchString) {
+                    derivedStateOf {
+                        uiState.channels.filter { channel ->
+                            channel.channelName.contains(searchString, true)
+                        }
+                    }
                 }
 
                 ChannelView(

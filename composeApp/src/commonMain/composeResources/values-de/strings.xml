@@ -12,7 +12,6 @@
     <string name="msg_no_internet_found">Keine Internetverbindung</string>
     <string name="msg_no_playable_media_found">Dieses Medium kann nicht abgespielt werden</string>
 
-    <string name="hint_msg_search">Geben Sie hier ein ...</string>
     <string name="btn_close">Schließen</string>
     <string name="btn_delete_current">Playlist löschen</string>
     <string name="btn_playlists_update">Aktualisierung der Wiedergabelisten</string>

@@ -23,9 +23,9 @@ import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.unit.Dp
 import coil3.compose.AsyncImage
 import com.mvproject.tinyiptvkmp.core.theme.dimensionSize
+import com.mvproject.tinyiptvkmp.features.channels.generated.resources.Res
+import com.mvproject.tinyiptvkmp.features.channels.generated.resources.no_channel_logo
 import org.jetbrains.compose.resources.painterResource
-import tinyiptvkmp.composeapp.generated.resources.Res
-import tinyiptvkmp.composeapp.generated.resources.no_channel_logo
 
 @Composable
 internal fun ChannelLogo(

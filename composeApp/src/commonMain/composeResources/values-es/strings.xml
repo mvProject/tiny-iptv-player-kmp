@@ -12,7 +12,6 @@
     <string name="msg_no_internet_found">Sin conexión a Internet</string>
     <string name="msg_no_playable_media_found">No se puede reproducir este medio</string>
 
-    <string name="hint_msg_search">escriba aquí…</string>
     <string name="btn_close">Cerca</string>
     <string name="btn_delete_current">Eliminar lista de reproducción</string>
     <string name="btn_playlists_update">actualización de listas de reproducción</string>

@@ -22,7 +22,6 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.tooling.preview.Preview
-import com.mvproject.tinyiptvkmp.PreviewTestData
 import com.mvproject.tinyiptvkmp.core.components.buttons.FavoriteButton
 import com.mvproject.tinyiptvkmp.core.components.indicators.ProgramProgressIndicator
 import com.mvproject.tinyiptvkmp.core.components.modifiers.SpacerHeight
@@ -116,6 +115,6 @@ fun ChannelGridView(
 @Composable
 private fun PreviewChannelGridViewFavorite() {
     AppTheme {
-        ChannelGridView(channel = PreviewTestData.testProgramWithPrograms)
+        ChannelGridView(channel = ChannelPreviewData.channelWithPrograms)
     }
 }

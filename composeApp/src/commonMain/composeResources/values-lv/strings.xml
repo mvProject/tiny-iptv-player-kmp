@@ -12,7 +12,6 @@
     <string name="msg_no_internet_found">Nav interneta savienojuma</string>
     <string name="msg_no_playable_media_found">Nevar atskaņot šo multividi</string>
 
-    <string name="hint_msg_search">raksti šeit…</string>
     <string name="btn_close">Aizvērt</string>
     <string name="btn_delete_current">Dzēst atskaņošanas sarakstu</string>
     <string name="btn_playlists_update">atskaņošanas sarakstu atjaunināšana</string>

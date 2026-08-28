@@ -10,7 +10,6 @@
     <string name="msg_no_internet_found">No Internet Connection</string>
     <string name="msg_no_playable_media_found">Can\'t play this media</string>
 
-    <string name="hint_msg_search">type here…</string>
     <string name="btn_close">Close</string>
     <string name="btn_delete_current">Delete playlist</string>
     <string name="btn_playlists_update">playlists update</string>

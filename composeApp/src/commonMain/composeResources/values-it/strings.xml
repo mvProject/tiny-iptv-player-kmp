@@ -14,7 +14,6 @@
         multimediale
     </string>
 
-    <string name="hint_msg_search">digitare qui…</string>
     <string name="btn_close">Vicino</string>
     <string name="btn_delete_current">Elimina playlist</string>
     <string name="btn_playlists_update">aggiornamento delle playlist</string>

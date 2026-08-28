@@ -20,7 +20,6 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.tooling.preview.Preview
-import com.mvproject.tinyiptvkmp.PreviewTestData
 import com.mvproject.tinyiptvkmp.core.components.buttons.FavoriteButton
 import com.mvproject.tinyiptvkmp.core.components.indicators.ProgramProgressIndicator
 import com.mvproject.tinyiptvkmp.core.components.texts.ChannelTitle
@@ -92,6 +91,6 @@ fun ChannelListView(
 @Composable
 private fun ChannelListViewPreview() {
     AppTheme {
-        ChannelListView(channel = PreviewTestData.testProgramWithPrograms)
+        ChannelListView(channel = ChannelPreviewData.channelWithPrograms)
     }
 }

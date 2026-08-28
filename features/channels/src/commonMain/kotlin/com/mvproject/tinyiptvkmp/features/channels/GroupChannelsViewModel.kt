@@ -31,7 +31,6 @@ import com.mvproject.tinyiptvkmp.features.epg.api.domain.utils.toggleFavorite
 import com.mvproject.tinyiptvkmp.features.epg.api.domain.utils.withPrograms
 import com.mvproject.tinyiptvkmp.features.groups.api.domain.model.FavoriteType
 import com.mvproject.tinyiptvkmp.features.groups.api.domain.usecase.GetGroupChannelsUseCase
-import com.mvproject.tinyiptvkmp.navigation.AppRoutes
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.IO
 import kotlinx.coroutines.flow.first
@@ -40,7 +39,7 @@ import org.koin.core.annotation.InjectedParam
 import kotlin.time.Duration.Companion.minutes
 
 class GroupChannelsViewModel(
-    @InjectedParam args: AppRoutes.TvPlaylistChannels,
+    @InjectedParam args: GroupChannelsArgs,
     private val getChannelsEpgUseCase: GetChannelsEpgUseCase,
     private val getGroupChannelsUseCase: GetGroupChannelsUseCase,
     private val getGroupChannelsEpgUseCase: GetGroupChannelsEpgUseCase,

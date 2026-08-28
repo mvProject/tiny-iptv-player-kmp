@@ -49,6 +49,7 @@ kotlin {
             implementation(projects.features.epgApi)
             implementation(projects.features.playlistApi)
             implementation(projects.features.epg)
+            implementation(projects.features.channels)
             implementation(projects.features.groups)
             implementation(projects.features.playlist)
             implementation(projects.features.settings)
