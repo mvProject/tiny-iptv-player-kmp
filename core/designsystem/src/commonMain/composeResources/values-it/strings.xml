@@ -19,5 +19,6 @@
     <string name="btn_add_new">Nuova playlist</string>
     <string name="msg_no_playlist">Nessuna playlist trovata</string>
     <string name="msg_no_items_found">Articoli non trovati</string>
+    <string name="msg_no_epg_found">ePG non trovato</string>
     <string name="hint_update_period">Periodo di aggiornamento</string>
 </resources>

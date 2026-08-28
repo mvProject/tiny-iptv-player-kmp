@@ -3,10 +3,12 @@ package com.mvproject.tinyiptvkmp.core.base.mvi
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.Stable
-import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.rememberUpdatedState
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.LifecycleOwner
 import androidx.lifecycle.compose.LocalLifecycleOwner
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.lifecycle.repeatOnLifecycle
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
@@ -18,7 +20,7 @@ import kotlin.coroutines.EmptyCoroutineContext
 @Stable
 @Composable
 fun <UiState, UiAction, UiEffect> MviCore<UiState, UiAction, UiEffect>.unpack() =
-    Triple(uiState.collectAsState().value, ::onAction, uiEffect)
+    Triple(uiState.collectAsStateWithLifecycle().value, ::onAction, uiEffect)
 
 @Composable
 fun <UiEffect> CollectUiEffect(
@@ -28,13 +30,14 @@ fun <UiEffect> CollectUiEffect(
     context: CoroutineContext = Dispatchers.Main.immediate,
     onUiEffect: suspend CoroutineScope.(effect: UiEffect) -> Unit,
 ) {
+    val currentOnUiEffect by rememberUpdatedState(onUiEffect)
     LaunchedEffect(effect, lifecycleOwner) {
         lifecycleOwner.lifecycle.repeatOnLifecycle(minActiveState) {
             if (context == EmptyCoroutineContext) {
-                effect.collect { onUiEffect(it) }
+                effect.collect { currentOnUiEffect(it) }
             } else {
                 withContext(context) {
-                    effect.collect { onUiEffect(it) }
+                    effect.collect { currentOnUiEffect(it) }
                 }
             }
         }

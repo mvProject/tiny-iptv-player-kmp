@@ -22,21 +22,21 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.tooling.preview.Preview
+import com.mvproject.tinyiptvkmp.PreviewTestData
 import com.mvproject.tinyiptvkmp.core.components.buttons.FavoriteButton
 import com.mvproject.tinyiptvkmp.core.components.indicators.ProgramProgressIndicator
 import com.mvproject.tinyiptvkmp.core.components.modifiers.SpacerHeight
 import com.mvproject.tinyiptvkmp.core.components.texts.ChannelTitle
 import com.mvproject.tinyiptvkmp.core.components.texts.EmptyProgramTitle
 import com.mvproject.tinyiptvkmp.core.components.texts.ProgramTitle
-import com.mvproject.tinyiptvkmp.core.domain.PreviewTestData
+import com.mvproject.tinyiptvkmp.core.designsystem.generated.resources.Res
+import com.mvproject.tinyiptvkmp.core.designsystem.generated.resources.msg_no_epg_found
 import com.mvproject.tinyiptvkmp.core.theme.AppTheme
 import com.mvproject.tinyiptvkmp.core.theme.dimensionSize
 import com.mvproject.tinyiptvkmp.core.theme.dimensionWeight
 import com.mvproject.tinyiptvkmp.features.epg.api.domain.model.TvChannelWithPrograms
 import com.mvproject.tinyiptvkmp.features.groups.api.domain.model.FavoriteType
 import org.jetbrains.compose.resources.stringResource
-import tinyiptvkmp.composeapp.generated.resources.Res
-import tinyiptvkmp.composeapp.generated.resources.msg_no_epg_found
 
 @OptIn(ExperimentalFoundationApi::class)
 @Composable

@@ -14,10 +14,10 @@ import com.mvproject.tinyiptvkmp.core.base.mvi.MviCore
 import com.mvproject.tinyiptvkmp.core.base.mvi.mviCore
 import com.mvproject.tinyiptvkmp.core.datastore.ProtoStore
 import com.mvproject.tinyiptvkmp.core.datastore.preferences.AppPreferencesProto
-import com.mvproject.tinyiptvkmp.core.domain.actualDate
 import com.mvproject.tinyiptvkmp.core.foundation.model.ChannelsViewType
 import com.mvproject.tinyiptvkmp.core.foundation.model.ChannelsViewType.Companion.mapViewType
 import com.mvproject.tinyiptvkmp.core.foundation.utils.CommonUtils.empty
+import com.mvproject.tinyiptvkmp.core.foundation.utils.actualDate
 import com.mvproject.tinyiptvkmp.features.channels.GroupChannelsUiState.GroupChannelsOSD
 import com.mvproject.tinyiptvkmp.features.channels.api.domain.usecase.ToggleFavoriteChannelUseCase
 import com.mvproject.tinyiptvkmp.features.epg.api.domain.model.EpgProgram

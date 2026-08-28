@@ -48,6 +48,7 @@ kotlin {
             implementation(projects.features.groupsApi)
             implementation(projects.features.epgApi)
             implementation(projects.features.playlistApi)
+            implementation(projects.features.epg)
             implementation(projects.features.playlist)
             implementation(projects.features.settings)
             implementation(projects.platform.mediaplayer)
@@ -66,7 +67,6 @@ kotlin {
 
             // Misc
             implementation(libs.androidx.annotation)
-            implementation(libs.kotlinx.datetime)
             implementation(libs.kotlinx.serialization.protobuf)
             implementation(libs.kotlinx.collections.immutable)
             implementation(libs.compose.material3.adaptive)

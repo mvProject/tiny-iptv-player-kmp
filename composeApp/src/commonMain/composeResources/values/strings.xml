@@ -10,7 +10,6 @@
     <string name="channel_folder_all">All Channels</string>
     <string name="channel_folder_favorite">Favorites</string>
 
-    <string name="msg_no_epg_found">epg not found</string>
     <string name="msg_no_internet_found">No Internet Connection</string>
     <string name="msg_no_playable_media_found">Can\'t play this media</string>
 

@@ -25,14 +25,15 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.alpha
 import androidx.compose.ui.text.style.TextAlign
+import com.mvproject.tinyiptvkmp.core.components.TimeItem
 import com.mvproject.tinyiptvkmp.core.components.indicators.ProgramProgressIndicator
 import com.mvproject.tinyiptvkmp.core.components.modifiers.roundedHeader
 import com.mvproject.tinyiptvkmp.core.foundation.model.VideoSize
+import com.mvproject.tinyiptvkmp.core.foundation.utils.convertToTime
 import com.mvproject.tinyiptvkmp.core.theme.colorSchemeExtended
 import com.mvproject.tinyiptvkmp.core.theme.dimensionOpacity
 import com.mvproject.tinyiptvkmp.core.theme.dimensionSize
 import com.mvproject.tinyiptvkmp.core.theme.dimensionWeight
-import com.mvproject.tinyiptvkmp.core.ui.views.TimeItem
 import com.mvproject.tinyiptvkmp.features.epg.api.domain.model.EpgProgram
 import com.mvproject.tinyiptvkmp.features.epg.api.domain.model.TvChannelWithPrograms
 import com.mvproject.tinyiptvkmp.features.groups.api.domain.model.FavoriteType
@@ -138,8 +139,10 @@ private fun PlayerProgress(
         verticalAlignment = Alignment.CenterVertically,
         horizontalArrangement = Arrangement.spacedBy(MaterialTheme.dimensionSize.size8)
     ) {
+        val (hourStart, minuteStart) = programStart.convertToTime()
         TimeItem(
-            timeStamp = programStart,
+            hour = hourStart,
+            minute = minuteStart,
             timeColor = MaterialTheme.colorSchemeExtended.timeColor
         )
 
@@ -147,9 +150,10 @@ private fun PlayerProgress(
             modifier = Modifier.weight(MaterialTheme.dimensionWeight.weight1),
             progress = programProgress
         )
-
+        val (hourEnd, minuteEnd) = programEnd.convertToTime()
         TimeItem(
-            timeStamp = programEnd,
+            hour = hourEnd,
+            minute = minuteEnd,
             timeColor = MaterialTheme.colorSchemeExtended.timeColor
         )
     }

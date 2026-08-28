@@ -9,7 +9,12 @@ import java.io.File
 inline fun <reified T : RoomDatabase> createRoomDatabaseBuilder(
     config: DatabaseConfig,
 ): RoomDatabase.Builder<T> {
-    val dbFile = File(System.getProperty("java.io.tmpdir"), config.name)
+    val appDirectory =
+        File(System.getProperty("user.home"), ".tinyiptv").apply {
+            mkdirs()
+        }
+    val dbFile = File(appDirectory, config.name)
+
     return Room
         .databaseBuilder<T>(name = dbFile.absolutePath)
         .setDriver(BundledSQLiteDriver())

@@ -5,7 +5,7 @@
  *
  */
 
-package com.mvproject.tinyiptvkmp.core.ui.views
+package com.mvproject.tinyiptvkmp.core.components
 
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Row
@@ -19,18 +19,18 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.style.TextAlign
-import com.mvproject.tinyiptvkmp.core.domain.convertToTime
 import com.mvproject.tinyiptvkmp.core.foundation.utils.CommonUtils.delimiterTime
 import com.mvproject.tinyiptvkmp.core.theme.dimensionSize
 
 @Composable
 fun TimeItem(
     modifier: Modifier = Modifier,
-    timeStamp: Long,
+    hour: String,
+    minute: String,
     timeColor: Color = MaterialTheme.colorScheme.onSurface,
     timeStyle: TextStyle = MaterialTheme.typography.bodyMedium,
 ) {
-    val (hour, minute) = timeStamp.convertToTime()
+
 
     Row(
         modifier = modifier.wrapContentSize(),

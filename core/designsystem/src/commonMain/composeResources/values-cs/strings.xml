@@ -19,5 +19,6 @@
     <string name="btn_add_new">Nový seznam skladeb</string>
     <string name="msg_no_playlist">Nebyly nalezeny žádné seznamy skladeb</string>
     <string name="msg_no_items_found">Položky nenalezeny</string>
+    <string name="msg_no_epg_found">epg nenalezeno</string>
     <string name="hint_update_period">Období aktualizace</string>
 </resources>

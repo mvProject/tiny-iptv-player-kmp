@@ -12,7 +12,6 @@
     <string name="channel_folder_all">Visi kanalai</string>
     <string name="channel_folder_favorite">Mėgstamiausi</string>
 
-    <string name="msg_no_epg_found">epg nerastas</string>
     <string name="msg_no_internet_found">Nėra interneto ryšio</string>
     <string name="msg_no_playable_media_found">Negalima paleisti šios medijos</string>
 

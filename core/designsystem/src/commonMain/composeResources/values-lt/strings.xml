@@ -19,5 +19,6 @@
     <string name="btn_add_new">Naujas grojaraštis</string>
     <string name="msg_no_playlist">Nerasta jokių grojaraščių</string>
     <string name="msg_no_items_found">Elementai nerasta</string>
+    <string name="msg_no_epg_found">epg nerastas</string>
     <string name="hint_update_period">Atnaujinimo laikotarpis</string>
 </resources>

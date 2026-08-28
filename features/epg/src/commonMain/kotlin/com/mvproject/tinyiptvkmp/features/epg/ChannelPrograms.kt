@@ -5,7 +5,7 @@
  *
  */
 
-package com.mvproject.tinyiptvkmp.core.ui.epg
+package com.mvproject.tinyiptvkmp.features.epg
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
@@ -30,11 +30,14 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
+import com.mvproject.tinyiptvkmp.core.components.TimeItem
+import com.mvproject.tinyiptvkmp.core.components.indicators.ProgramProgressIndicator
 import com.mvproject.tinyiptvkmp.core.components.modifiers.SpacerHeight
 import com.mvproject.tinyiptvkmp.core.components.modifiers.SpacerWidth
 import com.mvproject.tinyiptvkmp.core.components.modifiers.roundedHeader
-import com.mvproject.tinyiptvkmp.core.domain.PreviewTestData
-import com.mvproject.tinyiptvkmp.core.domain.calculateDuration
+import com.mvproject.tinyiptvkmp.core.components.texts.ProgramTitle
+import com.mvproject.tinyiptvkmp.core.designsystem.generated.resources.Res
+import com.mvproject.tinyiptvkmp.core.designsystem.generated.resources.msg_no_epg_found
 import com.mvproject.tinyiptvkmp.core.foundation.common.COUNT_ZERO_FLOAT
 import com.mvproject.tinyiptvkmp.core.foundation.common.PROGRESS_STATE_COMPLETE
 import com.mvproject.tinyiptvkmp.core.foundation.utils.CommonUtils.delimiterDash
@@ -44,14 +47,15 @@ import com.mvproject.tinyiptvkmp.core.theme.AppTheme
 import com.mvproject.tinyiptvkmp.core.theme.colorSchemeExtended
 import com.mvproject.tinyiptvkmp.core.theme.dimensionSize
 import com.mvproject.tinyiptvkmp.core.theme.dimensionWeight
-import com.mvproject.tinyiptvkmp.core.ui.views.TimeItem
 import com.mvproject.tinyiptvkmp.features.epg.api.domain.model.EpgProgram
+import kotlinx.datetime.TimeZone
+import kotlinx.datetime.toLocalDateTime
 import org.jetbrains.compose.resources.stringResource
-import tinyiptvkmp.composeapp.generated.resources.Res
-import tinyiptvkmp.composeapp.generated.resources.msg_no_epg_found
+import kotlin.time.Duration.Companion.milliseconds
+import kotlin.time.Instant
 
 @Composable
-internal fun ChannelPrograms(
+fun ChannelPrograms(
     modifier: Modifier = Modifier,
     title: String = String.empty,
     programs: List<EpgProgram>,
@@ -111,7 +115,7 @@ private fun ChannelProgramItem(
     Column(
         modifier = modifier.background(MaterialTheme.colorScheme.surface),
     ) {
-        _root_ide_package_.com.mvproject.tinyiptvkmp.core.components.texts.ProgramTitle(
+        ProgramTitle(
             modifier = Modifier
                 .padding(top = MaterialTheme.dimensionSize.size8)
                 .padding(horizontal = MaterialTheme.dimensionSize.size8),
@@ -126,8 +130,10 @@ private fun ChannelProgramItem(
                 .padding(bottom = MaterialTheme.dimensionSize.size8),
             verticalAlignment = Alignment.CenterVertically
         ) {
+            val (hourStart, minuteStart) = program.dateTimeStart.convertToTime()
             TimeItem(
-                timeStamp = program.dateTimeStart,
+                hour = hourStart,
+                minute = minuteStart,
                 timeColor = contentColor,
                 timeStyle = MaterialTheme.typography.labelMedium
             )
@@ -136,9 +142,10 @@ private fun ChannelProgramItem(
                 text = String.delimiterDash,
                 color = contentColor,
             )
-
+            val (hourEnd, minuteEnd) = program.dateTimeEnd.convertToTime()
             TimeItem(
-                timeStamp = program.dateTimeEnd,
+                hour = hourEnd,
+                minute = minuteEnd,
                 timeColor = contentColor,
                 timeStyle = MaterialTheme.typography.labelMedium
             )
@@ -155,7 +162,7 @@ private fun ChannelProgramItem(
 
         if (isProgramProgressShow) {
             SpacerHeight(MaterialTheme.dimensionSize.size8)
-            _root_ide_package_.com.mvproject.tinyiptvkmp.core.components.indicators.ProgramProgressIndicator(
+            ProgramProgressIndicator(
                 progress = program.programProgress
             )
         }
@@ -230,10 +237,41 @@ private fun ProgramDuration(
     )
 }
 
+private fun calculateDuration(
+    start: Long,
+    end: Long
+): Pair<Long, Long> {
+    val duration = (end - start).milliseconds
+    val hours = duration.inWholeHours
+    val minutes = duration.inWholeMinutes % 60
+
+    return Pair(hours, minutes)
+}
+
+private fun Long.convertToTime(): Pair<String, String> {
+    val local = Instant.fromEpochMilliseconds(this)
+        .toLocalDateTime(TimeZone.currentSystemDefault())
+
+    val hour = local.hour.toString().padStart(2, '0')
+    val minute = local.minute.toString().padStart(2, '0')
+    return Pair(hour, minute)
+}
+
 @Composable
 @Preview
 private fun ChannelProgramsPreview() {
     AppTheme {
-        ChannelPrograms(programs = PreviewTestData.testEpgPrograms)
+        ChannelPrograms(
+            programs = listOf(
+                EpgProgram(
+                    programId = "preview-program",
+                    title = "Morning news",
+                    channelId = "preview-channel",
+                    dateTimeStart = 0L,
+                    dateTimeEnd = 3_600_000L,
+                    description = "Preview program",
+                )
+            )
+        )
     }
 }

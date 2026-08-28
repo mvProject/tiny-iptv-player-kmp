@@ -19,5 +19,6 @@
     <string name="btn_add_new">Nova lista za reprodukciju</string>
     <string name="msg_no_playlist">Nema pronađenih popisa za reprodukciju</string>
     <string name="msg_no_items_found">Stavke nisu pronađene</string>
+    <string name="msg_no_epg_found">epg nije pronađen</string>
     <string name="hint_update_period">Razdoblje ažuriranja</string>
 </resources>

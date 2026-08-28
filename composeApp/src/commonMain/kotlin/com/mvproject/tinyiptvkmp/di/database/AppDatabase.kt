@@ -5,7 +5,7 @@
  *
  */
 
-package com.mvproject.tinyiptvkmp.core.data.database.db
+package com.mvproject.tinyiptvkmp.di.database
 
 import androidx.room.ConstructedBy
 import androidx.room.Database

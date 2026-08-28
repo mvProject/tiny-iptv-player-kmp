@@ -7,7 +7,6 @@
 
 package com.mvproject.tinyiptvkmp.di.database
 
-import com.mvproject.tinyiptvkmp.core.data.database.db.AppDatabase
 import com.mvproject.tinyiptvkmp.core.database.builder.createRoomDatabase
 import com.mvproject.tinyiptvkmp.features.channels.api.data.local.database.FavoriteChannelDao
 import com.mvproject.tinyiptvkmp.features.channels.api.data.local.database.PlaylistChannelDao

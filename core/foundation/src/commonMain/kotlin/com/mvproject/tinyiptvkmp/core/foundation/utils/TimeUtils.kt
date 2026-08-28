@@ -1,4 +1,4 @@
-package com.mvproject.tinyiptvkmp.core.domain
+package com.mvproject.tinyiptvkmp.core.foundation.utils
 
 import com.mvproject.tinyiptvkmp.core.foundation.common.LONG_NO_VALUE
 import com.mvproject.tinyiptvkmp.core.foundation.common.LONG_VALUE_ZERO

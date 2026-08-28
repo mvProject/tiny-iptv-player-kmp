@@ -1,12 +1,6 @@
-/*
- *  Created by Medvediev Viktor [mvproject]
- *  Copyright © 2024
- *  last modified : 26.07.24, 12:57
- *
- */
+package com.mvproject.tinyiptvkmp
 
-package com.mvproject.tinyiptvkmp.core.domain
-
+import com.mvproject.tinyiptvkmp.core.foundation.utils.actualDate
 import com.mvproject.tinyiptvkmp.features.channels.api.domain.model.TvChannel
 import com.mvproject.tinyiptvkmp.features.epg.api.domain.model.EpgProgram
 import com.mvproject.tinyiptvkmp.features.epg.api.domain.model.withPrograms

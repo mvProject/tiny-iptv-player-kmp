@@ -30,15 +30,16 @@ import androidx.compose.ui.Modifier
 import androidx.lifecycle.compose.LifecycleResumeEffect
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.mvproject.tinyiptvkmp.core.base.mvi.CollectUiEffect
+import com.mvproject.tinyiptvkmp.core.components.adaptive.rememberAdaptiveLayoutState
 import com.mvproject.tinyiptvkmp.core.components.indicators.LoadingIndicator
 import com.mvproject.tinyiptvkmp.core.components.overlay.OnScreenDisplay
 import com.mvproject.tinyiptvkmp.core.components.toolbars.AppBarWithSearch
 import com.mvproject.tinyiptvkmp.core.foundation.utils.CommonUtils.empty
 import com.mvproject.tinyiptvkmp.core.theme.dimensionSize
-import com.mvproject.tinyiptvkmp.core.ui.epg.ChannelPrograms
 import com.mvproject.tinyiptvkmp.features.channels.GroupChannelsUiState.GroupChannelsOSD
 import com.mvproject.tinyiptvkmp.features.channels.components.ChannelFavoriteSelector
 import com.mvproject.tinyiptvkmp.features.channels.components.ChannelView
+import com.mvproject.tinyiptvkmp.features.epg.ChannelPrograms
 import org.jetbrains.compose.resources.stringResource
 import tinyiptvkmp.composeapp.generated.resources.Res
 import tinyiptvkmp.composeapp.generated.resources.hint_msg_search
@@ -76,8 +77,7 @@ private fun GroupChannelsScreen(
     uiState: GroupChannelsUiState,
     onAction: (GroupChannelsUiAction) -> Unit,
 ) {
-    val adaptiveLayoutState =
-        _root_ide_package_.com.mvproject.tinyiptvkmp.core.components.adaptive.rememberAdaptiveLayoutState()
+    val adaptiveLayoutState = rememberAdaptiveLayoutState()
     var searchString by remember {
         mutableStateOf(String.empty)
     }

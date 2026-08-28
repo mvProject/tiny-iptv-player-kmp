@@ -12,7 +12,6 @@
     <string name="channel_folder_all">Tutti i canali</string>
     <string name="channel_folder_favorite">Preferiti</string>
 
-    <string name="msg_no_epg_found">ePG non trovato</string>
     <string name="msg_no_internet_found">Nessuna connessione internet</string>
     <string name="msg_no_playable_media_found">Impossibile riprodurre questo contenuto
         multimediale

@@ -32,8 +32,8 @@ import com.mvproject.tinyiptvkmp.core.components.indicators.VolumeIndicator
 import com.mvproject.tinyiptvkmp.core.components.overlay.OnScreenDisplay
 import com.mvproject.tinyiptvkmp.core.theme.dimensionSize
 import com.mvproject.tinyiptvkmp.core.theme.dimensionWeight
-import com.mvproject.tinyiptvkmp.core.ui.epg.ChannelPrograms
 import com.mvproject.tinyiptvkmp.features.channels.components.ChannelFavoriteSelector
+import com.mvproject.tinyiptvkmp.features.epg.ChannelPrograms
 import com.mvproject.tinyiptvkmp.features.player.PlayerUiState.PlayerOSD
 import com.mvproject.tinyiptvkmp.features.player.components.NoPlaybackView
 import com.mvproject.tinyiptvkmp.features.player.components.PlayerChannels
