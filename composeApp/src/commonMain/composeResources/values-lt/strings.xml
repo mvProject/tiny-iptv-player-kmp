@@ -7,18 +7,13 @@
   -->
 
 <resources>
-    <string name="app_name">Tiny Iptv Player</string>
-
-    <string name="channel_folder_all">Visi kanalai</string>
     <string name="channel_folder_favorite">Mėgstamiausi</string>
 
     <string name="msg_no_internet_found">Nėra interneto ryšio</string>
     <string name="msg_no_playable_media_found">Negalima paleisti šios medijos</string>
 
     <string name="hint_msg_search">rašykite čia…</string>
-    <string name="hint_current_playlist">Dabartinis grojaraštis</string>
     <string name="btn_close">Uždaryti</string>
-    <string name="btn_add_first_playlist">Paspauskite, kad pridėtumėte grojaraštį</string>
     <string name="btn_delete_current">Ištrinti grojaraštį</string>
     <string name="btn_playlists_update">grojaraščių atnaujinimas</string>
     <string name="option_default_ratio_mode">Numatytasis formato režimas</string>

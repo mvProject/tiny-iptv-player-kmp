@@ -17,7 +17,6 @@ import androidx.navigation3.runtime.rememberSaveableStateHolderNavEntryDecorator
 import androidx.navigation3.ui.NavDisplay
 import androidx.savedstate.compose.serialization.serializers.SnapshotStateListSerializer
 import com.mvproject.tinyiptvkmp.features.channels.navigation.groupChannels
-import com.mvproject.tinyiptvkmp.features.groups.navigation.playlistGroups
 import com.mvproject.tinyiptvkmp.features.player.navigation.player
 
 @Composable

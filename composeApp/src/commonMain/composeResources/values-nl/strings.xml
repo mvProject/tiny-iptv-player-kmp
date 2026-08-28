@@ -7,18 +7,13 @@
   -->
 
 <resources>
-    <string name="app_name">Tiny Iptv Player</string>
-
-    <string name="channel_folder_all">Alle kanalen</string>
     <string name="channel_folder_favorite">Favorieten</string>
 
     <string name="msg_no_internet_found">Geen internet verbinding</string>
     <string name="msg_no_playable_media_found">Kan deze media niet afspelen</string>
 
     <string name="hint_msg_search">typ hier…</string>
-    <string name="hint_current_playlist">Huidige afspeellijst</string>
     <string name="btn_close">Dichtbij</string>
-    <string name="btn_add_first_playlist">Druk hierop om een afspeellijst toe te voegen</string>
     <string name="btn_delete_current">Speellijst verwijderen</string>
     <string name="btn_playlists_update">afspeellijsten worden bijgewerkt</string>
     <string name="option_default_ratio_mode">Standaard beeldverhoudingmodus</string>

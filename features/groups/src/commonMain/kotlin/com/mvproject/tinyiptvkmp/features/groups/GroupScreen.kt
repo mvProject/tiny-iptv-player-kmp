@@ -33,15 +33,15 @@ import com.mvproject.tinyiptvkmp.core.components.adaptive.adaptiveContentWidth
 import com.mvproject.tinyiptvkmp.core.components.adaptive.rememberAdaptiveLayoutState
 import com.mvproject.tinyiptvkmp.core.components.indicators.LoadingIndicator
 import com.mvproject.tinyiptvkmp.core.components.toolbars.AppBarWithSettings
+import com.mvproject.tinyiptvkmp.core.designsystem.generated.resources.app_name
 import com.mvproject.tinyiptvkmp.core.designsystem.generated.resources.msg_no_items_found
 import com.mvproject.tinyiptvkmp.core.theme.colorSchemeExtended
 import com.mvproject.tinyiptvkmp.core.theme.dimensionSize
 import com.mvproject.tinyiptvkmp.features.groups.components.PlaylistGroupItem
 import com.mvproject.tinyiptvkmp.features.groups.components.PlaylistSelector
+import com.mvproject.tinyiptvkmp.features.groups.generated.resources.Res
+import com.mvproject.tinyiptvkmp.features.groups.generated.resources.btn_add_first_playlist
 import org.jetbrains.compose.resources.stringResource
-import tinyiptvkmp.composeapp.generated.resources.Res
-import tinyiptvkmp.composeapp.generated.resources.app_name
-import tinyiptvkmp.composeapp.generated.resources.btn_add_first_playlist
 import com.mvproject.tinyiptvkmp.core.designsystem.generated.resources.Res as DesignSystemRes
 
 
@@ -83,27 +83,27 @@ private fun GroupScreen(
         modifier = Modifier.fillMaxSize(),
         topBar = {
             AppBarWithSettings(
-                appBarTitle = stringResource(Res.string.app_name),
+                appBarTitle = stringResource(DesignSystemRes.string.app_name),
                 onSettingsClicked = { onAction(GroupUiAction.NavigateToSettings) },
             )
         },
     ) { paddingValues ->
         Box(
             modifier =
-            Modifier
-                .padding(paddingValues)
-                .fillMaxSize(),
+                Modifier
+                    .padding(paddingValues)
+                    .fillMaxSize(),
             contentAlignment = Alignment.TopCenter,
         ) {
             Column(
                 modifier =
-                Modifier
-                    .fillMaxHeight()
-                    .adaptiveContentWidth(adaptiveLayoutState)
-                    .padding(
-                        horizontal = adaptiveLayoutState.contentHorizontalPadding,
-                        vertical = MaterialTheme.dimensionSize.size8,
-                    ),
+                    Modifier
+                        .fillMaxHeight()
+                        .adaptiveContentWidth(adaptiveLayoutState)
+                        .padding(
+                            horizontal = adaptiveLayoutState.contentHorizontalPadding,
+                            vertical = MaterialTheme.dimensionSize.size8,
+                        ),
                 horizontalAlignment = Alignment.CenterHorizontally,
                 verticalArrangement = Arrangement.Center,
             ) {
@@ -138,9 +138,9 @@ private fun GroupScreen(
                     is GroupUiState.GroupState.Success -> {
                         Column(
                             modifier =
-                            Modifier
-                                .fillMaxSize()
-                                .padding(vertical = MaterialTheme.dimensionSize.size8),
+                                Modifier
+                                    .fillMaxSize()
+                                    .padding(vertical = MaterialTheme.dimensionSize.size8),
                             horizontalAlignment = Alignment.CenterHorizontally,
                             verticalArrangement = Arrangement.Center,
                         ) {

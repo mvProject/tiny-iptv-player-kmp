@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<resources>
+    <string name="channel_folder_all">Visi kanalai</string>
+    <string name="hint_current_playlist">Dabartinis grojaraštis</string>
+    <string name="btn_add_first_playlist">Paspauskite, kad pridėtumėte grojaraštį</string>
+</resources>

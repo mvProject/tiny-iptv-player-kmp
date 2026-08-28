@@ -7,18 +7,13 @@
   -->
 
 <resources>
-    <string name="app_name">Tiny Iptv Player</string>
-
-    <string name="channel_folder_all">Svi kanali</string>
     <string name="channel_folder_favorite">Favoriti</string>
 
     <string name="msg_no_internet_found">Nema internetske veze</string>
     <string name="msg_no_playable_media_found">Ne mogu reproducirati ovaj medij</string>
 
     <string name="hint_msg_search">Upiši ovdje…</string>
-    <string name="hint_current_playlist">Trenutačni popis za reprodukciju</string>
     <string name="btn_close">Zatvoriti</string>
-    <string name="btn_add_first_playlist">Pritisnite za dodavanje popisa za reprodukciju</string>
     <string name="btn_delete_current">Izbriši popis za reprodukciju</string>
     <string name="btn_playlists_update">ažuriranje popisa pjesama</string>
     <string name="option_default_ratio_mode">Zadani način omjera slike</string>

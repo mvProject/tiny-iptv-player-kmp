@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<resources>
+    <string name="channel_folder_all">Všechny kanály</string>
+    <string name="hint_current_playlist">Aktuální seznam skladeb</string>
+    <string name="btn_add_first_playlist">Stisknutím přidáte seznam skladeb</string>
+</resources>

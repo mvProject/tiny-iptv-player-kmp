@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<resources>
+    <string name="channel_folder_all">Усі канали</string>
+    <string name="hint_current_playlist">Поточний плейлист</string>
+    <string name="btn_add_first_playlist">Натисніть, щоб додати плейлист</string>
+</resources>

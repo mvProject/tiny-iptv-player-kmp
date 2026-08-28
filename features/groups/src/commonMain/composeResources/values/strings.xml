@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<resources>
+    <string name="channel_folder_all">All Channels</string>
+    <string name="hint_current_playlist">Current playlist</string>
+    <string name="btn_add_first_playlist">Press to add playlist</string>
+</resources>

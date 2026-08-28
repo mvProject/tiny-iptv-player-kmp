@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<resources>
+    <string name="channel_folder_all">Tutti i canali</string>
+    <string name="hint_current_playlist">Playlist attuale</string>
+    <string name="btn_add_first_playlist">Premi per aggiungere una playlist</string>
+</resources>

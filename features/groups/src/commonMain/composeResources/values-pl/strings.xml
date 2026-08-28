@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<resources>
+    <string name="channel_folder_all">Wszystkie kanały</string>
+    <string name="hint_current_playlist">Aktualna playlista</string>
+    <string name="btn_add_first_playlist">Naciśnij, aby dodać listę odtwarzania</string>
+</resources>

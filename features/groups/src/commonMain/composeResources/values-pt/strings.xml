@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<resources>
+    <string name="channel_folder_all">Todos os canais</string>
+    <string name="hint_current_playlist">Lista de reprodução atual</string>
+    <string name="btn_add_first_playlist">Pressione para adicionar lista de reprodução</string>
+</resources>

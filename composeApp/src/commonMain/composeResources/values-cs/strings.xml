@@ -6,18 +6,13 @@
   -->
 
 <resources>
-    <string name="app_name">Tiny Iptv Player</string>
-
-    <string name="channel_folder_all">Všechny kanály</string>
     <string name="channel_folder_favorite">Oblíbené</string>
 
     <string name="msg_no_internet_found">Žádné internetové připojení</string>
     <string name="msg_no_playable_media_found">Toto médium nelze přehrát</string>
 
     <string name="hint_msg_search">napište sem…</string>
-    <string name="hint_current_playlist">Aktuální seznam skladeb</string>
     <string name="btn_close">Zavřít</string>
-    <string name="btn_add_first_playlist">Stisknutím přidáte seznam skladeb</string>
     <string name="btn_delete_current">Smazat seznam skladeb</string>
     <string name="btn_playlists_update">aktualizace seznamů skladeb</string>
     <string name="option_default_ratio_mode">Výchozí režim poměru stran</string>

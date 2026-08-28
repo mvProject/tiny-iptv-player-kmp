@@ -27,9 +27,9 @@ import com.mvproject.tinyiptvkmp.core.theme.dimensionSize
 import com.mvproject.tinyiptvkmp.core.theme.dimensionText
 import com.mvproject.tinyiptvkmp.features.groups.GroupUiAction
 import com.mvproject.tinyiptvkmp.features.groups.GroupUiState
+import com.mvproject.tinyiptvkmp.features.groups.generated.resources.Res
+import com.mvproject.tinyiptvkmp.features.groups.generated.resources.hint_current_playlist
 import org.jetbrains.compose.resources.stringResource
-import tinyiptvkmp.composeapp.generated.resources.Res
-import tinyiptvkmp.composeapp.generated.resources.hint_current_playlist
 
 @Composable
 fun PlaylistSelector(
@@ -92,20 +92,20 @@ fun PlaylistSelector(
                                     text = item.playlistName,
                                     style = MaterialTheme.typography.titleSmall,
                                     color =
-                                    if (item.isSelected) {
-                                        MaterialTheme.colorSchemeExtended.activeProgramTitle
-                                    } else {
-                                        MaterialTheme.colorScheme.onSurface
-                                    },
+                                        if (item.isSelected) {
+                                            MaterialTheme.colorSchemeExtended.activeProgramTitle
+                                        } else {
+                                            MaterialTheme.colorScheme.onSurface
+                                        },
                                 )
                             }
 
                             if (index < uiState.playlists.lastIndex) {
                                 HorizontalDivider(
                                     modifier =
-                                    Modifier
-                                        .fillMaxWidth()
-                                        .padding(horizontal = MaterialTheme.dimensionSize.size16),
+                                        Modifier
+                                            .fillMaxWidth()
+                                            .padding(horizontal = MaterialTheme.dimensionSize.size16),
                                     color = MaterialTheme.colorScheme.onSurface,
                                 )
                             }

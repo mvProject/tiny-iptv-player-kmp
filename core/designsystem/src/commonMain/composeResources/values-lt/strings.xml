@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <resources>
+    <string name="app_name">Tiny Iptv Player</string>
     <string name="playlist_update_6_hours">6 valandos</string>
     <string name="playlist_update_12_hours">12 valandų</string>
     <string name="playlist_update_24_hours">24 valandos</string>

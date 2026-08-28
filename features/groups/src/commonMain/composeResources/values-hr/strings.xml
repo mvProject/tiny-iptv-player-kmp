@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<resources>
+    <string name="channel_folder_all">Svi kanali</string>
+    <string name="hint_current_playlist">Trenutačni popis za reprodukciju</string>
+    <string name="btn_add_first_playlist">Pritisnite za dodavanje popisa za reprodukciju</string>
+</resources>

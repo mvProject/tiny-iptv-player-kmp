@@ -25,9 +25,9 @@ import com.mvproject.tinyiptvkmp.core.theme.dimensionSize
 import com.mvproject.tinyiptvkmp.features.groups.GroupUiAction
 import com.mvproject.tinyiptvkmp.features.groups.api.domain.model.ChannelsGroup
 import com.mvproject.tinyiptvkmp.features.groups.api.domain.model.GroupType
+import com.mvproject.tinyiptvkmp.features.groups.generated.resources.Res
+import com.mvproject.tinyiptvkmp.features.groups.generated.resources.channel_folder_all
 import org.jetbrains.compose.resources.stringResource
-import tinyiptvkmp.composeapp.generated.resources.Res
-import tinyiptvkmp.composeapp.generated.resources.channel_folder_all
 
 @Composable
 fun PlaylistGroupItem(
@@ -44,21 +44,21 @@ fun PlaylistGroupItem(
 
     ListItem(
         modifier =
-        modifier
-            .clickable {
-                onUiAction(
-                    GroupUiAction.NavigateToGroup(
-                        title = title,
-                        group = group.groupType.name
+            modifier
+                .clickable {
+                    onUiAction(
+                        GroupUiAction.NavigateToGroup(
+                            title = title,
+                            group = group.groupType.name
+                        )
                     )
-                )
-            },
+                },
         leadingContent = {
             Icon(
                 modifier =
-                Modifier
-                    .size(MaterialTheme.dimensionSize.size42)
-                    .clip(MaterialTheme.shapes.small),
+                    Modifier
+                        .size(MaterialTheme.dimensionSize.size42)
+                        .clip(MaterialTheme.shapes.small),
                 imageVector = Icons.Filled.Folder,
                 contentDescription = group.groupName,
                 tint = MaterialTheme.colorScheme.onSurface,

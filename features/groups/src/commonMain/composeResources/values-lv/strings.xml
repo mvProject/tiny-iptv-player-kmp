@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<resources>
+    <string name="channel_folder_all">Visi kanāli</string>
+    <string name="hint_current_playlist">Pašreizējais atskaņošanas saraksts</string>
+    <string name="btn_add_first_playlist">Nospiediet, lai pievienotu atskaņošanas sarakstu</string>
+</resources>
