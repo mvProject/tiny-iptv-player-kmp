@@ -15,6 +15,7 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.unit.dp
 import com.mvproject.tinyiptvkmp.core.theme.colorSchemeExtended
 import com.mvproject.tinyiptvkmp.core.theme.dimensionSize
 
@@ -27,7 +28,7 @@ fun ChannelFavoriteSelector(
     Surface(
         modifier = modifier
             .wrapContentHeight()
-            .width(MaterialTheme.dimensionSize.size310)
+            .width(310.dp)
             .padding(MaterialTheme.dimensionSize.size8),
         shape = MaterialTheme.shapes.medium,
         shadowElevation = MaterialTheme.dimensionSize.size8,

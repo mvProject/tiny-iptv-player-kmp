@@ -19,6 +19,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.style.TextAlign
+import androidx.compose.ui.unit.dp
 import com.mvproject.tinyiptvkmp.core.components.TimeItem
 import com.mvproject.tinyiptvkmp.core.components.indicators.ProgramProgressIndicator
 import com.mvproject.tinyiptvkmp.core.components.modifiers.SpacerHeight
@@ -64,7 +65,7 @@ fun ChannelPrograms(
         LazyColumn(
             modifier = Modifier.fillMaxSize(),
             state = rememberLazyListState(),
-            verticalArrangement = Arrangement.spacedBy(MaterialTheme.dimensionSize.size2),
+            verticalArrangement = Arrangement.spacedBy(2.dp),
         ) {
             items(
                 items = programs,

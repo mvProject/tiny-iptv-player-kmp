@@ -27,6 +27,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.painter.Painter
 import androidx.compose.ui.text.style.TextAlign
+import androidx.compose.ui.unit.dp
 import com.mvproject.tinyiptvkmp.core.components.modifiers.SpacerHeight
 import com.mvproject.tinyiptvkmp.core.theme.colorSchemeExtended
 import com.mvproject.tinyiptvkmp.core.theme.dimensionFraction
@@ -58,7 +59,7 @@ fun NoPlaybackView(
                 Image(
                     painter = logo,
                     modifier = Modifier
-                        .size(MaterialTheme.dimensionSize.size96)
+                        .size(96.dp)
                         .clip(CircleShape)
                         .background(
                             color = MaterialTheme.colorSchemeExtended.emptyProgramTitle
@@ -67,7 +68,7 @@ fun NoPlaybackView(
                     contentDescription = text
                 )
 
-                SpacerHeight(height = MaterialTheme.dimensionSize.size16)
+                SpacerHeight(height = 16.dp)
                 Text(
                     text = text,
                     style = MaterialTheme.typography.headlineMedium,

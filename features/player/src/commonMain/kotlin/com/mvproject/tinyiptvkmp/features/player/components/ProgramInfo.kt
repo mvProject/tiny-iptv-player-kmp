@@ -20,6 +20,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.style.TextAlign
+import androidx.compose.ui.unit.dp
 import com.mvproject.tinyiptvkmp.core.components.modifiers.roundedHeader
 import com.mvproject.tinyiptvkmp.core.designsystem.generated.resources.Res
 import com.mvproject.tinyiptvkmp.core.designsystem.generated.resources.msg_no_epg_found
@@ -51,7 +52,7 @@ fun ProgramInfo(
 
         if (description.isEmpty()) {
             ProgramDescriptionEmpty(
-                modifier = Modifier.height(MaterialTheme.dimensionSize.size180),
+                modifier = Modifier.height(180.dp),
                 title = stringResource(Res.string.msg_no_epg_found)
             )
         } else {

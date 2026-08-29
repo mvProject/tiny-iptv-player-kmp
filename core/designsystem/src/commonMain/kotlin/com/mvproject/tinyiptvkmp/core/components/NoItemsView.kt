@@ -24,9 +24,9 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.style.TextAlign
+import androidx.compose.ui.unit.dp
 import com.mvproject.tinyiptvkmp.core.foundation.utils.CommonUtils.empty
 import com.mvproject.tinyiptvkmp.core.theme.colorSchemeExtended
-import com.mvproject.tinyiptvkmp.core.theme.dimensionSize
 
 @Composable
 fun NoItemsView(
@@ -44,9 +44,7 @@ fun NoItemsView(
             horizontalAlignment = Alignment.CenterHorizontally,
         ) {
             Icon(
-                modifier =
-                Modifier
-                    .size(MaterialTheme.dimensionSize.size96),
+                modifier = Modifier.size(96.dp),
                 imageVector = Icons.Filled.Info,
                 tint = MaterialTheme.colorSchemeExtended.emptyProgramTitle,
                 contentDescription = title,
@@ -54,12 +52,12 @@ fun NoItemsView(
 
             Text(
                 modifier =
-                Modifier
-                    .fillMaxWidth()
-                    .padding(
-                        top = MaterialTheme.dimensionSize.size16,
-                        bottom = MaterialTheme.dimensionSize.size24,
-                    ),
+                    Modifier
+                        .fillMaxWidth()
+                        .padding(
+                            top = 16.dp,
+                            bottom = 24.dp,
+                        ),
                 text = title,
                 style = MaterialTheme.typography.headlineLarge,
                 color = MaterialTheme.colorSchemeExtended.emptyProgramTitle,
@@ -69,13 +67,13 @@ fun NoItemsView(
             if (navigateTitle.isNotEmpty()) {
                 Text(
                     modifier =
-                    Modifier
-                        .fillMaxWidth()
-                        .padding(
-                            top = MaterialTheme.dimensionSize.size16,
-                            bottom = MaterialTheme.dimensionSize.size24,
-                        )
-                        .clickable(onClick = onNavigateClick),
+                        Modifier
+                            .fillMaxWidth()
+                            .clickable(onClick = onNavigateClick)
+                            .padding(
+                                top = 16.dp,
+                                bottom = 24.dp,
+                            ),
                     text = navigateTitle,
                     style = MaterialTheme.typography.displaySmall,
                     color = MaterialTheme.colorScheme.onSurface,

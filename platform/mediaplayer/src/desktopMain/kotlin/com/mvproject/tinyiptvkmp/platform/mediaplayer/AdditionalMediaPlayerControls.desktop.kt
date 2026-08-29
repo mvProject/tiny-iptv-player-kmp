@@ -11,13 +11,12 @@ import androidx.compose.material.icons.rounded.Close
 import androidx.compose.material.icons.rounded.Info
 import androidx.compose.material.icons.rounded.SkipNext
 import androidx.compose.material.icons.rounded.SkipPrevious
-import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.unit.dp
 import com.mvproject.tinyiptvkmp.core.components.buttons.ControlButton
 import com.mvproject.tinyiptvkmp.core.components.modifiers.SpacerWidth
-import com.mvproject.tinyiptvkmp.core.theme.dimensionSize
 
 @Composable
 actual fun AdditionalMediaPlayerControls(
@@ -41,48 +40,48 @@ actual fun AdditionalMediaPlayerControls(
             onClick = onNavigateBack,
         )
 
-        SpacerWidth(width = MaterialTheme.dimensionSize.size32)
+        SpacerWidth(width = 32.dp)
         ControlButton(
             imageVector = Icons.AutoMirrored.Rounded.VolumeDown,
             onClick = onVolumeDown,
         )
 
-        SpacerWidth(width = MaterialTheme.dimensionSize.size8)
+        SpacerWidth(width = 8.dp)
         ControlButton(
             imageVector = Icons.AutoMirrored.Rounded.VolumeUp,
             onClick = onVolumeUp,
         )
 
-        SpacerWidth(width = MaterialTheme.dimensionSize.size24)
+        SpacerWidth(width = 24.dp)
         ControlButton(
             imageVector = Icons.Rounded.SkipPrevious,
             onClick = onSelectPrevious,
         )
 
-        SpacerWidth(width = MaterialTheme.dimensionSize.size8)
+        SpacerWidth(width = 8.dp)
         ControlButton(
             imageVector = Icons.Rounded.SkipNext,
             onClick = onSelectNext,
         )
 
-        SpacerWidth(width = MaterialTheme.dimensionSize.size24)
+        SpacerWidth(width = 24.dp)
         ControlButton(
             imageVector = Icons.AutoMirrored.Rounded.ViewList,
             onClick = onOpenPrograms,
         )
 
-        SpacerWidth(width = MaterialTheme.dimensionSize.size8)
+        SpacerWidth(width = 8.dp)
         ControlButton(
             imageVector = Icons.AutoMirrored.Rounded.FeaturedPlayList,
             onClick = onOpenChannels,
         )
 
-        SpacerWidth(width = MaterialTheme.dimensionSize.size8)
+        SpacerWidth(width = 8.dp)
         ControlButton(
             imageVector = Icons.Rounded.Info,
             onClick = onOpenInfo,
         )
 
-        SpacerWidth(width = MaterialTheme.dimensionSize.size24)
+        SpacerWidth(width = 24.dp)
     }
 }
