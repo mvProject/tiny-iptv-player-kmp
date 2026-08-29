@@ -7,6 +7,8 @@
 
 package com.mvproject.tinyiptvkmp.navigation
 
+import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.imePadding
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.mutableStateListOf
 import androidx.compose.runtime.saveable.rememberSerializable
@@ -16,14 +18,27 @@ import androidx.navigation3.runtime.entryProvider
 import androidx.navigation3.runtime.rememberSaveableStateHolderNavEntryDecorator
 import androidx.navigation3.ui.NavDisplay
 import androidx.savedstate.compose.serialization.serializers.SnapshotStateListSerializer
+import com.mvproject.tinyiptvkmp.core.base.mvi.CollectUiEffect
+import org.koin.compose.koinInject
 
 @Composable
 fun NavigationHost(
     modifier: Modifier = Modifier,
     startDestination: AppRoutes
 ) {
+
+    val navigator = koinInject<Navigator>()
+
     val backStack = rememberSerializable(serializer = SnapshotStateListSerializer()) {
-        mutableStateListOf(startDestination)
+        mutableStateListOf(navigator.startDestination)
+    }
+
+    CollectUiEffect(navigator.navigationActions) { action ->
+        when (action) {
+            is NavigationAction.Navigate -> backStack.add(action.destination)
+
+            NavigationAction.NavigateUp -> backStack.removeLastOrNull()
+        }
     }
 
     fun navigate(route: AppRoutes) {
@@ -35,13 +50,15 @@ fun NavigationHost(
     }
 
     NavDisplay(
-        modifier = modifier,
+        modifier = modifier.fillMaxSize().imePadding(),
         backStack = backStack,
-        onBack = ::navigateBack,
         entryDecorators = listOf(
             rememberSaveableStateHolderNavEntryDecorator(),
             rememberViewModelStoreNavEntryDecorator(),
         ),
+        transitionSpec = { appTransitionSpec() },
+        popTransitionSpec = { appPopTransitionSpec() },
+        predictivePopTransitionSpec = { _ -> appPopTransitionSpec() },
         entryProvider = entryProvider {
             playlistGroups(
                 onNavigateToSettings = { navigate(AppRoutes.SettingsGeneral) },
@@ -67,18 +84,11 @@ fun NavigationHost(
 
             player(onNavigateBack = ::navigateBack)
 
-            settingsGeneral(
-                onNavigateBack = ::navigateBack,
-                onNavigateToPlaylistSettings = { navigate(AppRoutes.SettingsPlaylist) },
-                onNavigateToPlayerSettings = { navigate(AppRoutes.SettingsPlayer) },
-            )
+            settingsGeneral()
 
-            settingsPlaylist(
-                onNavigateBack = ::navigateBack,
-                onNavigatePlaylist = { id -> navigate(AppRoutes.PlaylistDetail(id = id)) },
-            )
+            settingsPlaylist()
 
-            settingsPlayer(onNavigateBack = ::navigateBack)
+            settingsPlayer()
         },
     )
 }

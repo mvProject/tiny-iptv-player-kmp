@@ -7,92 +7,54 @@
 
 package com.mvproject.tinyiptvkmp.features.settings.playlist
 
-import androidx.compose.runtime.Immutable
-import androidx.lifecycle.ViewModel
-import androidx.lifecycle.viewModelScope
-import com.mvproject.tinyiptvkmp.core.base.mvi.MviCore
-import com.mvproject.tinyiptvkmp.core.base.mvi.mviCore
-import com.mvproject.tinyiptvkmp.core.foundation.utils.CommonUtils.empty
+import com.mvproject.tinyiptvkmp.core.base.mvi.MviViewModel
 import com.mvproject.tinyiptvkmp.features.playlist.api.domain.model.Playlist
 import com.mvproject.tinyiptvkmp.features.playlist.api.domain.usecase.DeletePlaylistUseCase
 import com.mvproject.tinyiptvkmp.features.playlist.api.domain.usecase.ObservePlaylistsUseCase
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.IO
-import kotlinx.coroutines.flow.flowOn
-import kotlinx.coroutines.flow.launchIn
-import kotlinx.coroutines.flow.onEach
-import kotlinx.coroutines.flow.onStart
-import kotlinx.coroutines.launch
+import com.mvproject.tinyiptvkmp.features.settings.nav.SettingsNavigator
+import kotlinx.coroutines.flow.distinctUntilChanged
+import org.koin.core.component.inject
 
 class SettingsPlaylistViewModel(
     private val observePlaylistsUseCase: ObservePlaylistsUseCase,
     private val deletePlaylistUseCase: DeletePlaylistUseCase,
-) : ViewModel(),
-    MviCore<SettingsPlaylistUiState, SettingsPlaylistUiAction, SettingsPlaylistUiEffect> by mviCore(
-        SettingsPlaylistUiState()
-    ) {
+) : MviViewModel<SettingsPlaylistState, SettingsPlaylistAction, SettingsPlaylistEffect>() {
 
-    init {
+    private val navigator: SettingsNavigator by inject()
+
+    override fun createStore() = createStore(
+        initialState = SettingsPlaylistState(),
+        invokeOnStart = { listenPlaylists() },
+    )
+
+    override fun onIntent(intent: SettingsPlaylistAction) {
+        when (intent) {
+            is SettingsPlaylistAction.DeletePlaylist -> launch { deletePlaylist(playlist = intent.playlist) }
+            SettingsPlaylistAction.NavigateBack -> launch { navigator.navigateUp() }
+            is SettingsPlaylistAction.NavigateToPlaylist -> launch { navigator.navigateToPlaylist(id = intent.id) }
+        }
+    }
+
+    private suspend fun listenPlaylists() {
+        setState { copy(isLoading = true) }
         observePlaylistsUseCase()
-            .onStart {
-                updateUiState {
-                    copy(isLoading = true)
-                }
-            }
-            .flowOn(Dispatchers.IO)
-            .onEach { lists ->
-
+            .distinctUntilChanged()
+            .collect { lists ->
                 val playlistState = if (lists.isEmpty())
-                    SettingsPlaylistUiState.PlaylistState.Empty
+                    SettingsPlaylistState.PlaylistState.Empty
                 else
-                    SettingsPlaylistUiState.PlaylistState.Success(lists)
+                    SettingsPlaylistState.PlaylistState.Success(lists)
 
-                updateUiState {
+                setState {
                     copy(
                         playlistState = playlistState,
                         isLoading = false,
                     )
                 }
-            }.launchIn(viewModelScope)
+            }
     }
 
-    override fun onAction(uiAction: SettingsPlaylistUiAction) {
-        when (uiAction) {
-            is SettingsPlaylistUiAction.DeletePlaylist -> deletePlaylist(playlist = uiAction.playlist)
-            SettingsPlaylistUiAction.NavigateBack -> viewModelScope.postUiEffect(
-                SettingsPlaylistUiEffect.OnNavigateBack
-            )
-
-            is SettingsPlaylistUiAction.NavigateToPlaylist ->
-                viewModelScope.postUiEffect(SettingsPlaylistUiEffect.OnNavigateToPlaylist(uiAction.id))
-        }
+    private suspend fun deletePlaylist(playlist: Playlist) {
+        deletePlaylistUseCase(playlist = playlist)
     }
-
-    private fun deletePlaylist(playlist: Playlist) {
-        viewModelScope.launch {
-            deletePlaylistUseCase(playlist = playlist)
-        }
-    }
-}
-
-@Immutable
-data class SettingsPlaylistUiState(
-    val playlistState: PlaylistState = PlaylistState.Empty,
-    val isLoading: Boolean = true,
-) {
-    sealed interface PlaylistState {
-        data class Success(val playlists: List<Playlist>) : PlaylistState
-        data object Empty : PlaylistState
-    }
-}
-
-sealed interface SettingsPlaylistUiAction {
-    data class DeletePlaylist(val playlist: Playlist) : SettingsPlaylistUiAction
-    data class NavigateToPlaylist(val id: String = String.empty) : SettingsPlaylistUiAction
-    data object NavigateBack : SettingsPlaylistUiAction
-}
-
-sealed interface SettingsPlaylistUiEffect {
-    data class OnNavigateToPlaylist(val id: String) : SettingsPlaylistUiEffect
-    data object OnNavigateBack : SettingsPlaylistUiEffect
 }

@@ -19,10 +19,16 @@ import com.mvproject.tinyiptvkmp.features.groups.di.groupsModule
 import com.mvproject.tinyiptvkmp.features.player.di.playerModule
 import com.mvproject.tinyiptvkmp.features.playlist.api.di.playlistApiModule
 import com.mvproject.tinyiptvkmp.features.playlist.di.playlistModule
+import com.mvproject.tinyiptvkmp.features.settings.api.di.settingsApiModule
 import com.mvproject.tinyiptvkmp.features.settings.di.settingsModule
+import com.mvproject.tinyiptvkmp.features.settings.nav.SettingsNavigator
 import com.mvproject.tinyiptvkmp.infrastructure.logging.di.loggingModule
+import com.mvproject.tinyiptvkmp.navigation.AppRoutes
+import com.mvproject.tinyiptvkmp.navigation.DefaultNavigator
+import com.mvproject.tinyiptvkmp.navigation.Navigator
 import org.koin.core.context.startKoin
 import org.koin.dsl.KoinAppDeclaration
+import org.koin.dsl.binds
 import org.koin.dsl.module
 
 private val appModule =
@@ -37,6 +43,7 @@ private val appModule =
             groupsApiModule,
             epgApiModule,
             playlistApiModule,
+            settingsApiModule,
             channelsModule,
             groupsModule,
             playerModule,
@@ -45,8 +52,17 @@ private val appModule =
         )
     }
 
+val navModule = module {
+    single<Navigator> {
+        DefaultNavigator(startDestination = AppRoutes.PlaylistGroup)
+    } binds arrayOf(
+        Navigator::class,
+        SettingsNavigator::class
+    )
+}
+
 fun initKoin(appDeclaration: KoinAppDeclaration = {}) =
     startKoin {
         appDeclaration()
-        modules(appModule)
+        modules(appModule, navModule)
     }

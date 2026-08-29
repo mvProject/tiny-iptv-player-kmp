@@ -7,99 +7,62 @@
 
 package com.mvproject.tinyiptvkmp.features.settings.player
 
-import androidx.compose.runtime.Immutable
-import androidx.lifecycle.ViewModel
-import androidx.lifecycle.viewModelScope
-import com.mvproject.tinyiptvkmp.core.base.mvi.MviCore
-import com.mvproject.tinyiptvkmp.core.base.mvi.mviCore
-import com.mvproject.tinyiptvkmp.core.datastore.ProtoStore
-import com.mvproject.tinyiptvkmp.core.datastore.preferences.AppPreferencesProto
-import com.mvproject.tinyiptvkmp.core.foundation.model.VideoSize
-import com.mvproject.tinyiptvkmp.features.settings.player.SettingsPlayerUiState.SettingsPlayer
-import kotlinx.coroutines.flow.first
-import kotlinx.coroutines.launch
+import com.mvproject.tinyiptvkmp.core.base.mvi.MviViewModel
+import com.mvproject.tinyiptvkmp.features.settings.api.domain.usecase.ObservePlayerSettingsUseCase
+import com.mvproject.tinyiptvkmp.features.settings.api.domain.usecase.UpdateFullscreenModeUseCase
+import com.mvproject.tinyiptvkmp.features.settings.api.domain.usecase.UpdateVideoSizeUseCase
+import com.mvproject.tinyiptvkmp.features.settings.nav.SettingsNavigator
+import com.mvproject.tinyiptvkmp.features.settings.player.SettingsPlayerState.SettingsPlayer
+import org.koin.core.component.inject
 
 class SettingsPlayerViewModel(
-    private val preferencesStore: ProtoStore<AppPreferencesProto>,
-) : ViewModel(),
-    MviCore<SettingsPlayerUiState, SettingsPlayerUiAction, SettingsPlayerUiEffect> by mviCore(
-        SettingsPlayerUiState()
-    ) {
+    private val observePlayerSettings: ObservePlayerSettingsUseCase,
+    private val updateFullscreenMode: UpdateFullscreenModeUseCase,
+    private val updateVideoSize: UpdateVideoSizeUseCase,
+) : MviViewModel<SettingsPlayerState, SettingsPlayerAction, SettingsPlayerEffect>() {
 
-    init {
-        viewModelScope.launch {
-            val preferences = preferencesStore.data.first()
+    private val navigator: SettingsNavigator by inject()
 
-            updateUiState {
+    override fun createStore() = createStore(
+        initialState = SettingsPlayerState(),
+        invokeOnStart = { listenSettings() },
+    )
+
+    override fun onIntent(intent: SettingsPlayerAction) {
+        when (intent) {
+            SettingsPlayerAction.NavigateBack -> launch { navigator.navigateUp() }
+            is SettingsPlayerAction.SetFullScreenMode -> launch { setFullscreenMode(state = intent.state) }
+            is SettingsPlayerAction.SetVideoSize -> launch { setVideoSizeMode(mode = intent.mode) }
+            is SettingsPlayerAction.ToggleOption -> toggleOption(type = intent.type)
+        }
+    }
+
+    private suspend fun listenSettings() {
+        observePlayerSettings().collect { settings ->
+            setState {
                 copy(
-                    isFullscreenEnabled = preferences.defaultFullscreenMode,
-                    videoSize = preferences.defaultVideoSizeMode
+                    isFullscreenEnabled = settings.isFullscreenEnabled,
+                    videoSize = settings.videoSize,
                 )
             }
         }
     }
 
-    override fun onAction(uiAction: SettingsPlayerUiAction) {
-        when (uiAction) {
-            SettingsPlayerUiAction.NavigateBack -> viewModelScope.postUiEffect(
-                SettingsPlayerUiEffect.OnNavigateBack
-            )
-
-            is SettingsPlayerUiAction.SetFullScreenMode -> setFullscreenMode(state = uiAction.state)
-            is SettingsPlayerUiAction.ToggleOption -> toggleOption(type = uiAction.type)
-            is SettingsPlayerUiAction.SetVideoSize -> setVideoSizeMode(mode = uiAction.mode)
-        }
-    }
-
     private fun toggleOption(type: SettingsPlayer) {
-        val settingsType = if (uiState.value.settingsType == type) null else type
-        updateUiState {
+        val settingsType = if (state.value.settingsType == type) null else type
+        setState {
             copy(settingsType = settingsType)
         }
     }
 
-    private fun setFullscreenMode(state: Boolean) {
-        viewModelScope.launch {
-            preferencesStore.update { preferences ->
-                preferences.copy(defaultFullscreenMode = state)
-            }
-            updateUiState {
-                copy(isFullscreenEnabled = state)
-            }
+    private suspend fun setFullscreenMode(state: Boolean) {
+        updateFullscreenMode(state)
+    }
+
+    private suspend fun setVideoSizeMode(mode: Int) {
+        updateVideoSize(mode)
+        setState {
+            copy(settingsType = null)
         }
     }
-
-    private fun setVideoSizeMode(mode: Int) {
-        viewModelScope.launch {
-            preferencesStore.update { preferences ->
-                preferences.copy(defaultVideoSizeMode = mode)
-            }
-            updateUiState {
-                copy(videoSize = mode, settingsType = null)
-            }
-        }
-    }
-}
-
-@Immutable
-data class SettingsPlayerUiState(
-    val videoSize: Int = VideoSize.WideScreen.ordinal,
-    val isFullscreenEnabled: Boolean = true,
-    val settingsType: SettingsPlayer? = null,
-) {
-    sealed interface SettingsPlayer {
-        data object VideoSize : SettingsPlayer
-    }
-}
-
-sealed interface SettingsPlayerUiAction {
-    data class SetVideoSize(val mode: Int) : SettingsPlayerUiAction
-    data class SetFullScreenMode(val state: Boolean) : SettingsPlayerUiAction
-    data class ToggleOption(val type: SettingsPlayer) : SettingsPlayerUiAction
-    data object NavigateBack : SettingsPlayerUiAction
-
-}
-
-sealed interface SettingsPlayerUiEffect {
-    data object OnNavigateBack : SettingsPlayerUiEffect
 }

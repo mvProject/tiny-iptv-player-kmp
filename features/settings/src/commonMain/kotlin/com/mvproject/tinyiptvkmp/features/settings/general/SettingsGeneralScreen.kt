@@ -30,7 +30,6 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
-import com.mvproject.tinyiptvkmp.core.base.mvi.CollectUiEffect
 import com.mvproject.tinyiptvkmp.core.components.adaptive.adaptiveContentWidth
 import com.mvproject.tinyiptvkmp.core.components.adaptive.rememberAdaptiveLayoutState
 import com.mvproject.tinyiptvkmp.core.components.buttons.MenuButton
@@ -40,7 +39,7 @@ import com.mvproject.tinyiptvkmp.core.foundation.model.UpdatePeriod
 import com.mvproject.tinyiptvkmp.core.mapper.mapToString
 import com.mvproject.tinyiptvkmp.core.theme.dimensionSize
 import com.mvproject.tinyiptvkmp.features.settings.components.SettingsSelector
-import com.mvproject.tinyiptvkmp.features.settings.general.SettingsGeneralUiState.SettingsGeneral
+import com.mvproject.tinyiptvkmp.features.settings.general.SettingsGeneralState.SettingsGeneral
 import com.mvproject.tinyiptvkmp.features.settings.generated.resources.Res
 import com.mvproject.tinyiptvkmp.features.settings.generated.resources.option_update_epg_data
 import com.mvproject.tinyiptvkmp.features.settings.generated.resources.option_update_epg_info
@@ -52,31 +51,20 @@ import org.jetbrains.compose.resources.stringResource
 
 @Composable
 fun SettingsGeneralScreen(
-    viewModel: SettingsGeneralViewModel,
-    onNavigateBack: () -> Unit,
-    onNavigateToPlayerSettings: () -> Unit,
-    onNavigateToPlaylistSettings: () -> Unit
+    viewModel: SettingsGeneralViewModel
 ) {
-    val uiState by viewModel.uiState.collectAsStateWithLifecycle()
-
-    CollectUiEffect(viewModel.uiEffect) { effect ->
-        when (effect) {
-            SettingsGeneralUiEffect.OnNavigateBack -> onNavigateBack()
-            SettingsGeneralUiEffect.OnNavigateToPlayerSettings -> onNavigateToPlayerSettings()
-            SettingsGeneralUiEffect.OnNavigateToPlaylistSettings -> onNavigateToPlaylistSettings()
-        }
-    }
+    val state by viewModel.state.collectAsStateWithLifecycle()
 
     SettingsGeneralScreen(
-        uiState = uiState,
-        onAction = viewModel::onAction,
+        state = state,
+        onAction = viewModel::onIntent,
     )
 }
 
 @Composable
 private fun SettingsGeneralScreen(
-    uiState: SettingsGeneralUiState,
-    onAction: (SettingsGeneralUiAction) -> Unit,
+    state: SettingsGeneralState,
+    onAction: (SettingsGeneralAction) -> Unit,
 ) {
     val adaptiveLayoutState = rememberAdaptiveLayoutState()
 
@@ -85,7 +73,7 @@ private fun SettingsGeneralScreen(
         topBar = {
             AppBarWithBackNav(
                 appBarTitle = stringResource(Res.string.scr_settings_title),
-                onBackClick = { onAction(SettingsGeneralUiAction.NavigateBack) },
+                onBackClick = { onAction(SettingsGeneralAction.NavigateBack) },
             )
         },
     ) { paddingValues ->
@@ -111,8 +99,8 @@ private fun SettingsGeneralScreen(
                     ListItem(
                         modifier =
                             Modifier
-                                .clickable(onClick = { onAction(SettingsGeneralUiAction.NavigateToPlaylistSettings) })
-                                .clip(MaterialTheme.shapes.extraSmall),
+                                .clip(MaterialTheme.shapes.extraSmall)
+                                .clickable(onClick = { onAction(SettingsGeneralAction.NavigateToPlaylistSettings) }),
                         colors =
                             ListItemDefaults.colors(
                                 containerColor = MaterialTheme.colorScheme.background,
@@ -128,7 +116,7 @@ private fun SettingsGeneralScreen(
                             MenuButton(
                                 imageVector = Icons.AutoMirrored.Filled.ArrowRight,
                                 onClick = {
-                                    onAction(SettingsGeneralUiAction.NavigateToPlaylistSettings)
+                                    onAction(SettingsGeneralAction.NavigateToPlaylistSettings)
                                 }
                             )
                         },
@@ -145,8 +133,8 @@ private fun SettingsGeneralScreen(
                     ListItem(
                         modifier =
                             Modifier
-                                .clickable(onClick = { onAction(SettingsGeneralUiAction.NavigateToPlayerSettings) })
-                                .clip(MaterialTheme.shapes.extraSmall),
+                                .clip(MaterialTheme.shapes.extraSmall)
+                                .clickable(onClick = { onAction(SettingsGeneralAction.NavigateToPlayerSettings) }),
                         colors =
                             ListItemDefaults.colors(
                                 containerColor = MaterialTheme.colorScheme.background,
@@ -162,16 +150,15 @@ private fun SettingsGeneralScreen(
                             MenuButton(
                                 imageVector = Icons.AutoMirrored.Filled.ArrowRight,
                                 onClick = {
-                                    onAction(SettingsGeneralUiAction.NavigateToPlayerSettings)
+                                    onAction(SettingsGeneralAction.NavigateToPlayerSettings)
                                 }
                             )
                         },
                     )
 
                     HorizontalDivider(
-                        modifier =
-                            Modifier
-                                .padding(horizontal = MaterialTheme.dimensionSize.size8),
+                        modifier = Modifier
+                            .padding(horizontal = MaterialTheme.dimensionSize.size8),
                         color = MaterialTheme.colorScheme.onPrimary,
                     )
                 }
@@ -206,27 +193,27 @@ private fun SettingsGeneralScreen(
 
                 SettingsSelector(
                     title = stringResource(Res.string.option_update_epg_info),
-                    selectedIndex = uiState.infoUpdatePeriod,
-                    isExpanded = uiState.settingsType == SettingsGeneral.InfoUpdate,
+                    selectedIndex = state.infoUpdatePeriod,
+                    isExpanded = state.settingsType == SettingsGeneral.InfoUpdate,
                     options = UpdatePeriod.entries.map { stringResource(it.mapToString()) },
                     onClick = {
-                        onAction(SettingsGeneralUiAction.ToggleOption(SettingsGeneral.InfoUpdate))
+                        onAction(SettingsGeneralAction.ToggleOption(SettingsGeneral.InfoUpdate))
                     },
                     onSelect = {
-                        onAction(SettingsGeneralUiAction.SetInfoUpdatePeriod(type = it))
+                        onAction(SettingsGeneralAction.SetInfoUpdatePeriod(type = it))
                     }
                 )
 
                 SettingsSelector(
                     title = stringResource(Res.string.option_update_epg_data),
-                    selectedIndex = uiState.epgUpdatePeriod,
-                    isExpanded = uiState.settingsType == SettingsGeneral.ProgramsUpdate,
+                    selectedIndex = state.epgUpdatePeriod,
+                    isExpanded = state.settingsType == SettingsGeneral.ProgramsUpdate,
                     options = UpdatePeriod.entries.map { stringResource(it.mapToString()) },
                     onClick = {
-                        onAction(SettingsGeneralUiAction.ToggleOption(SettingsGeneral.ProgramsUpdate))
+                        onAction(SettingsGeneralAction.ToggleOption(SettingsGeneral.ProgramsUpdate))
                     },
                     onSelect = {
-                        onAction(SettingsGeneralUiAction.SetEpgUpdatePeriod(type = it))
+                        onAction(SettingsGeneralAction.SetEpgUpdatePeriod(type = it))
                     }
                 )
             }

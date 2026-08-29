@@ -23,12 +23,11 @@ import androidx.compose.material3.Switch
 import androidx.compose.material3.SwitchDefaults
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
-import com.mvproject.tinyiptvkmp.core.base.mvi.CollectUiEffect
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.mvproject.tinyiptvkmp.core.components.adaptive.adaptiveContentWidth
 import com.mvproject.tinyiptvkmp.core.components.adaptive.rememberAdaptiveLayoutState
 import com.mvproject.tinyiptvkmp.core.components.toolbars.AppBarWithBackNav
@@ -43,31 +42,25 @@ import com.mvproject.tinyiptvkmp.features.settings.generated.resources.Res
 import com.mvproject.tinyiptvkmp.features.settings.generated.resources.option_default_fullscreen_mode
 import com.mvproject.tinyiptvkmp.features.settings.generated.resources.option_default_resize_mode
 import com.mvproject.tinyiptvkmp.features.settings.generated.resources.scr_player_settings_title
-import com.mvproject.tinyiptvkmp.features.settings.player.SettingsPlayerUiState.SettingsPlayer
+import com.mvproject.tinyiptvkmp.features.settings.player.SettingsPlayerState.SettingsPlayer
 import org.jetbrains.compose.resources.stringResource
 
 @Composable
 fun SettingsPlayerScreen(
-    viewModel: SettingsPlayerViewModel,
-    onNavigateBack: () -> Unit
+    viewModel: SettingsPlayerViewModel
 ) {
-    val uiState by viewModel.uiState.collectAsState()
+    val state by viewModel.state.collectAsStateWithLifecycle()
 
-    CollectUiEffect(viewModel.uiEffect) { effect ->
-        when (effect) {
-            SettingsPlayerUiEffect.OnNavigateBack -> onNavigateBack()
-        }
-    }
     SettingsPlayerScreen(
-        uiState = uiState,
-        onAction = viewModel::onAction,
+        state = state,
+        onAction = viewModel::onIntent,
     )
 }
 
 @Composable
 private fun SettingsPlayerScreen(
-    uiState: SettingsPlayerUiState,
-    onAction: (SettingsPlayerUiAction) -> Unit,
+    state: SettingsPlayerState,
+    onAction: (SettingsPlayerAction) -> Unit,
 ) {
     val adaptiveLayoutState = rememberAdaptiveLayoutState()
 
@@ -79,7 +72,7 @@ private fun SettingsPlayerScreen(
         topBar = {
             AppBarWithBackNav(
                 appBarTitle = stringResource(Res.string.scr_player_settings_title),
-                onBackClick = { onAction(SettingsPlayerUiAction.NavigateBack) },
+                onBackClick = { onAction(SettingsPlayerAction.NavigateBack) },
             )
         },
     ) { paddingValues ->
@@ -112,7 +105,7 @@ private fun SettingsPlayerScreen(
                     },
                     trailingContent = {
                         Switch(
-                            checked = uiState.isFullscreenEnabled,
+                            checked = state.isFullscreenEnabled,
                             colors =
                                 SwitchDefaults.colors(
                                     checkedThumbColor = MaterialTheme.colorScheme.primary,
@@ -123,7 +116,7 @@ private fun SettingsPlayerScreen(
                                     uncheckedTrackColor = MaterialTheme.colorScheme.onSurface,
                                 ),
                             onCheckedChange = { state ->
-                                onAction(SettingsPlayerUiAction.SetFullScreenMode(state = state))
+                                onAction(SettingsPlayerAction.SetFullScreenMode(state = state))
                             },
                         )
                     }
@@ -131,14 +124,14 @@ private fun SettingsPlayerScreen(
 
                 SettingsSelector(
                     title = stringResource(Res.string.option_default_resize_mode),
-                    selectedIndex = uiState.videoSize,
-                    isExpanded = uiState.settingsType == SettingsPlayer.VideoSize,
+                    selectedIndex = state.videoSize,
+                    isExpanded = state.settingsType == SettingsPlayer.VideoSize,
                     options = VideoSize.entries.map { stringResource(it.mapToString()) },
                     onClick = {
-                        onAction(SettingsPlayerUiAction.ToggleOption(SettingsPlayer.VideoSize))
+                        onAction(SettingsPlayerAction.ToggleOption(SettingsPlayer.VideoSize))
                     },
                     onSelect = {
-                        onAction(SettingsPlayerUiAction.SetVideoSize(mode = it))
+                        onAction(SettingsPlayerAction.SetVideoSize(mode = it))
                     }
                 )
             }
@@ -152,7 +145,7 @@ private fun SettingsPlayerScreen(
 fun PreviewDarkSettingsPlayerView() {
     AppTheme {
         SettingsPlayerScreen(
-            uiState = SettingsPlayerUiState(),
+            state = SettingsPlayerState(),
             onAction = {}
         )
     }

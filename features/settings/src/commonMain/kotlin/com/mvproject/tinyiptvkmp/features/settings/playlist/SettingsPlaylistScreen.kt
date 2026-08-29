@@ -26,11 +26,10 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import com.mvproject.tinyiptvkmp.core.base.mvi.CollectUiEffect
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.mvproject.tinyiptvkmp.core.components.NoItemsView
 import com.mvproject.tinyiptvkmp.core.components.adaptive.adaptiveContentWidth
 import com.mvproject.tinyiptvkmp.core.components.adaptive.rememberAdaptiveLayoutState
@@ -48,28 +47,20 @@ import com.mvproject.tinyiptvkmp.features.settings.generated.resources.Res as Se
 
 @Composable
 fun SettingsPlaylistScreen(
-    viewModel: SettingsPlaylistViewModel,
-    onNavigateBack: () -> Unit = {},
-    onNavigatePlaylist: (String) -> Unit = {},
+    viewModel: SettingsPlaylistViewModel
 ) {
-    val uiState by viewModel.uiState.collectAsState()
+    val state by viewModel.state.collectAsStateWithLifecycle()
 
-    CollectUiEffect(viewModel.uiEffect) { effect ->
-        when (effect) {
-            SettingsPlaylistUiEffect.OnNavigateBack -> onNavigateBack()
-            is SettingsPlaylistUiEffect.OnNavigateToPlaylist -> onNavigatePlaylist(effect.id)
-        }
-    }
     SettingsPlaylistScreen(
-        uiState = uiState,
-        onAction = viewModel::onAction
+        state = state,
+        onAction = viewModel::onIntent
     )
 }
 
 @Composable
 private fun SettingsPlaylistScreen(
-    uiState: SettingsPlaylistUiState,
-    onAction: (SettingsPlaylistUiAction) -> Unit,
+    state: SettingsPlaylistState,
+    onAction: (SettingsPlaylistAction) -> Unit,
 ) {
     val adaptiveLayoutState = rememberAdaptiveLayoutState()
 
@@ -81,7 +72,7 @@ private fun SettingsPlaylistScreen(
         topBar = {
             AppBarWithBackNav(
                 appBarTitle = stringResource(SettingsRes.string.scr_playlist_settings_title),
-                onBackClick = { onAction(SettingsPlaylistUiAction.NavigateBack) },
+                onBackClick = { onAction(SettingsPlaylistAction.NavigateBack) },
             )
         },
         bottomBar = {
@@ -94,7 +85,7 @@ private fun SettingsPlaylistScreen(
             ) {
                 ElevatedButton(
                     onClick = {
-                        onAction(SettingsPlaylistUiAction.NavigateToPlaylist())
+                        onAction(SettingsPlaylistAction.NavigateToPlaylist())
                     },
                     modifier = Modifier.adaptiveContentWidth(adaptiveLayoutState),
                     colors =
@@ -119,8 +110,8 @@ private fun SettingsPlaylistScreen(
                     .fillMaxSize(),
             contentAlignment = Alignment.TopCenter,
         ) {
-            when (val playlistState = uiState.playlistState) {
-                SettingsPlaylistUiState.PlaylistState.Empty -> {
+            when (val playlistState = state.playlistState) {
+                SettingsPlaylistState.PlaylistState.Empty -> {
                     NoItemsView(
                         modifier = Modifier.fillMaxSize(),
                         title = stringResource(DesignSystemRes.string.msg_no_items_found),
@@ -128,7 +119,7 @@ private fun SettingsPlaylistScreen(
                     )
                 }
 
-                is SettingsPlaylistUiState.PlaylistState.Success -> {
+                is SettingsPlaylistState.PlaylistState.Success -> {
                     LazyColumn(
                         modifier =
                             Modifier
@@ -149,10 +140,10 @@ private fun SettingsPlaylistScreen(
                                 modifier = Modifier.fillMaxSize(),
                                 item = item,
                                 onSelect = {
-                                    onAction(SettingsPlaylistUiAction.NavigateToPlaylist(id = item.id))
+                                    onAction(SettingsPlaylistAction.NavigateToPlaylist(id = item.id))
                                 },
                                 onDelete = {
-                                    onAction(SettingsPlaylistUiAction.DeletePlaylist(playlist = item))
+                                    onAction(SettingsPlaylistAction.DeletePlaylist(playlist = item))
                                 },
                             )
                         }
@@ -160,7 +151,7 @@ private fun SettingsPlaylistScreen(
                 }
             }
 
-            LoadingIndicator(isVisible = uiState.isLoading)
+            LoadingIndicator(isVisible = state.isLoading)
         }
     }
 }
