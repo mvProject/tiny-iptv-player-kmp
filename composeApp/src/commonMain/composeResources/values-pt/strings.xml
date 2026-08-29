@@ -9,9 +9,6 @@
 <resources>
     <string name="channel_folder_favorite">Favoritos</string>
 
-    <string name="msg_no_internet_found">Sem conexão com a Internet</string>
-    <string name="msg_no_playable_media_found">Não é possível reproduzir esta mídia</string>
-
     <string name="btn_close">Fechar</string>
     <string name="btn_delete_current">Excluir lista de reprodução</string>
     <string name="btn_playlists_update">atualização de listas de reprodução</string>

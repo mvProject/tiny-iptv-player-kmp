@@ -30,12 +30,11 @@ import androidx.compose.material3.TextField
 import androidx.compose.material3.TextFieldDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
-import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.mvproject.tinyiptvkmp.core.base.mvi.CollectUiEffect
 import com.mvproject.tinyiptvkmp.core.components.adaptive.adaptiveContentWidth
 import com.mvproject.tinyiptvkmp.core.components.adaptive.rememberAdaptiveLayoutState
@@ -60,11 +59,6 @@ import com.mvproject.tinyiptvkmp.features.playlist.generated.resources.msg_playl
 import io.github.vinceglb.filekit.compose.rememberFilePickerLauncher
 import io.github.vinceglb.filekit.core.PickerMode
 import io.github.vinceglb.filekit.core.PickerType
-import kotlinx.coroutines.launch
-import okio.FileSystem
-import okio.SYSTEM
-import okio.buffer
-import okio.use
 import org.jetbrains.compose.resources.stringResource
 
 @Composable
@@ -72,7 +66,7 @@ internal fun PlaylistScreen(
     viewModel: PlaylistViewModel,
     onNavigateBack: () -> Unit = {},
 ) {
-    val uiState by viewModel.uiState.collectAsState()
+    val uiState by viewModel.uiState.collectAsStateWithLifecycle()
 
     CollectUiEffect(viewModel.uiEffect) { effect ->
         when (effect) {
@@ -90,7 +84,6 @@ private fun PlaylistScreen(
     uiState: PlaylistUiState,
     onAction: (PlaylistUiAction) -> Unit = {},
 ) {
-    val scope = rememberCoroutineScope()
     val adaptiveLayoutState = rememberAdaptiveLayoutState()
 
     LaunchedEffect(uiState.isComplete) {
@@ -113,20 +106,7 @@ private fun PlaylistScreen(
             title = stringResource(Res.string.btn_add_local),
         ) { selectedFile ->
             selectedFile?.let { file ->
-                val folderFileTmp = FileSystem.SYSTEM_TEMPORARY_DIRECTORY / file.name
-                val fileTmp = FileSystem.SYSTEM.sink(folderFileTmp)
-                scope.launch {
-                    fileTmp.buffer().use { sink ->
-                        sink.write(file.readBytes())
-                    }
-                }
-
-                onAction(
-                    PlaylistUiAction.SetLocalUri(
-                        name = file.name,
-                        uri = folderFileTmp.toString(),
-                    )
-                )
+                onAction(PlaylistUiAction.ImportLocalFile(file = file))
             }
         }
 
@@ -265,8 +245,11 @@ private fun PlaylistScreen(
                 SpacerHeight(height = MaterialTheme.dimensionSize.size16)
 
                 PlaylistUpdateSelector(
-                    uiState = uiState,
-                    onAction = onAction
+                    playlistType = uiState.playlistType,
+                    updatePeriod = uiState.updatePeriod,
+                    onPeriodSelected = { period ->
+                        onAction(PlaylistUiAction.SetUpdatePeriod(period = period))
+                    },
                 )
 
                 SpacerHeight(weight = MaterialTheme.dimensionWeight.weight1)
@@ -307,7 +290,7 @@ private fun PlaylistScreen(
             }
 
             LoadingIndicator(
-                isVisible = uiState.isSaving,
+                isVisible = uiState.isSaving || uiState.isImportingLocalFile,
             )
         }
     }

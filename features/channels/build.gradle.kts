@@ -14,12 +14,11 @@ kotlin {
             implementation(projects.features.channelsApi)
             implementation(projects.features.groupsApi)
             implementation(projects.features.epgApi)
-            implementation(projects.features.epg)
             implementation(projects.infrastructure.logging)
             implementation(libs.kotlinx.coroutines.core)
             implementation(libs.bundles.koin)
             implementation(libs.bundles.lifecycle)
-            implementation(libs.bundles.coil)
+            implementation(libs.kotlinx.datetime)
         }
     }
 }

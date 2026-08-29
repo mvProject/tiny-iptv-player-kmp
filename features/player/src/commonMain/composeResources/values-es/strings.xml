@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8"?><!--
+  ~  Created by Medvediev Viktor [mvproject]
+  ~  Copyright © 2024
+  ~  last modified : 22.11.23, 18:54
+  ~
+  -->
+
+<resources>
+
+    <string name="msg_no_internet_found">Sin conexión a Internet</string>
+    <string name="msg_no_playable_media_found">No se puede reproducir este medio</string>
+</resources>

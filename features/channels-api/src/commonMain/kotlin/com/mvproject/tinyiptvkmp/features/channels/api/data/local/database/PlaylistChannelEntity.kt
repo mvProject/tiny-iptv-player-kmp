@@ -8,8 +8,16 @@
 package com.mvproject.tinyiptvkmp.features.channels.api.data.local.database
 
 import androidx.room.Entity
+import androidx.room.Index
 
-@Entity(tableName = "playlistChannels", primaryKeys = ["channelUrl", "parentListId"])
+@Entity(
+    tableName = "playlistChannels",
+    primaryKeys = ["channelUrl", "parentListId"],
+    indices = [
+        Index(value = ["parentListId"]),
+        Index(value = ["parentListId", "channelGroup"]),
+    ],
+)
 data class PlaylistChannelEntity(
     val channelUrl: String,
     val channelName: String,

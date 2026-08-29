@@ -11,12 +11,24 @@ internal class FavoriteChannelLocalDataSourceImpl(
     }
 
     override suspend fun updateFavoriteChannel(
+        playlistId: String,
         channelName: String,
         channelUrl: String,
     ) {
-        favoriteChannelDao.updateFavoriteChannels(
+        favoriteChannelDao.updateFavoriteChannel(
+            playlistId = playlistId,
             channelName = channelName,
             channelUrl = channelUrl,
+        )
+    }
+
+    override suspend fun updateFavoriteChannels(
+        playlistId: String,
+        channelNamesByUrl: Map<String, String>,
+    ) {
+        favoriteChannelDao.updateFavoriteChannels(
+            playlistId = playlistId,
+            channelNamesByUrl = channelNamesByUrl,
         )
     }
 
@@ -41,6 +53,9 @@ internal class FavoriteChannelLocalDataSourceImpl(
 
     override suspend fun loadFavoriteChannelUrls(): List<String> =
         favoriteChannelDao.getFavoriteChannelUrls()
+
+    override suspend fun loadFavoriteChannelUrls(playlistId: String): List<String> =
+        favoriteChannelDao.getFavoriteChannelUrls(playlistId = playlistId)
 
     override suspend fun deletePlaylistFavoriteChannels(playlistId: String) {
         favoriteChannelDao.deletePlaylistFavoriteChannelEntities(playlistId = playlistId)

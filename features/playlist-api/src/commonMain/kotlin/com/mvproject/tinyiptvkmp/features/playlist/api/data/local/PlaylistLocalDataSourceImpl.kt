@@ -16,6 +16,18 @@ internal class PlaylistLocalDataSourceImpl(
     override suspend fun getAllPlaylists(): List<PlaylistEntity> =
         playlistDao.getAllPlaylists()
 
+    override suspend fun getSelectedPlaylistId(): String? =
+        playlistDao.getSelectedPlaylistId()
+
+    override suspend fun getRemotePlaylistsWithUpdatePeriod(
+        playlistType: String,
+        noUpdatePeriod: Long,
+    ): List<PlaylistEntity> =
+        playlistDao.getRemotePlaylistsWithUpdatePeriod(
+            playlistType = playlistType,
+            noUpdatePeriod = noUpdatePeriod,
+        )
+
     override suspend fun deletePlaylist(id: String) {
         playlistDao.deletePlaylist(id = id)
     }
@@ -26,5 +38,9 @@ internal class PlaylistLocalDataSourceImpl(
 
     override suspend fun savePlaylist(playlist: PlaylistEntity) {
         playlistDao.savePlaylist(data = playlist)
+    }
+
+    override suspend fun selectPlaylist(id: String) {
+        playlistDao.selectPlaylist(id = id)
     }
 }

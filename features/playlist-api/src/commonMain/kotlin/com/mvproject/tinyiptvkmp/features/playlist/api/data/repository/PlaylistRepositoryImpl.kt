@@ -4,7 +4,9 @@ import com.mvproject.tinyiptvkmp.features.playlist.api.data.local.PlaylistLocalD
 import com.mvproject.tinyiptvkmp.features.playlist.api.data.mapper.toPlaylist
 import com.mvproject.tinyiptvkmp.features.playlist.api.data.mapper.toPlaylistEntity
 import com.mvproject.tinyiptvkmp.features.playlist.api.domain.model.Playlist
+import com.mvproject.tinyiptvkmp.features.playlist.api.domain.model.PlaylistType
 import com.mvproject.tinyiptvkmp.features.playlist.api.domain.repository.PlaylistRepository
+import com.mvproject.tinyiptvkmp.features.playlist.api.domain.util.playlistUpdatePeriodToDuration
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.map
 
@@ -20,6 +22,16 @@ internal class PlaylistRepositoryImpl(
     override suspend fun getAllPlaylists(): List<Playlist> =
         local.getAllPlaylists().map { it.toPlaylist() }
 
+    override suspend fun getDueRemotePlaylists(nowMillis: Long): List<Playlist> =
+        local.getRemotePlaylistsWithUpdatePeriod(
+            playlistType = PlaylistType.REMOTE.name,
+            noUpdatePeriod = 0L,
+        ).map { it.toPlaylist() }
+            .filter { playlist ->
+                val updateDuration = playlistUpdatePeriodToDuration(playlist.updatePeriod.toInt())
+                updateDuration > 0L && nowMillis - playlist.lastUpdateDate > updateDuration
+            }
+
     override suspend fun deletePlaylist(playlist: Playlist) {
         local.deletePlaylist(id = playlist.id)
     }
@@ -30,5 +42,9 @@ internal class PlaylistRepositoryImpl(
 
     override suspend fun savePlaylist(playlist: Playlist) {
         local.savePlaylist(playlist.toPlaylistEntity())
+    }
+
+    override suspend fun selectPlaylist(id: String) {
+        local.selectPlaylist(id = id)
     }
 }

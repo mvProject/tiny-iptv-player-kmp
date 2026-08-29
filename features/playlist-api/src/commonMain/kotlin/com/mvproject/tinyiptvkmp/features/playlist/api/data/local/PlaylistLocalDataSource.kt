@@ -10,9 +10,18 @@ internal interface PlaylistLocalDataSource {
 
     suspend fun getAllPlaylists(): List<PlaylistEntity>
 
+    suspend fun getSelectedPlaylistId(): String?
+
+    suspend fun getRemotePlaylistsWithUpdatePeriod(
+        playlistType: String,
+        noUpdatePeriod: Long,
+    ): List<PlaylistEntity>
+
     suspend fun deletePlaylist(id: String)
 
     suspend fun savePlaylists(playlists: List<PlaylistEntity>)
 
     suspend fun savePlaylist(playlist: PlaylistEntity)
+
+    suspend fun selectPlaylist(id: String)
 }

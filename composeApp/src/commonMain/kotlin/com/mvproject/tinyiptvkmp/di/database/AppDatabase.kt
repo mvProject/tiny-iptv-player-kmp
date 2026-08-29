@@ -7,6 +7,7 @@
 
 package com.mvproject.tinyiptvkmp.di.database
 
+import androidx.room.AutoMigration
 import androidx.room.ConstructedBy
 import androidx.room.Database
 import androidx.room.RoomDatabase
@@ -30,7 +31,10 @@ import com.mvproject.tinyiptvkmp.features.playlist.api.data.local.database.Playl
         PlaylistEntity::class,
         PlaylistChannelEntity::class,
     ],
-    version = 1,
+    version = 2,
+    autoMigrations = [
+        AutoMigration(from = 1, to = 2),
+    ],
 )
 
 @ConstructedBy(AppDatabaseCtor::class)

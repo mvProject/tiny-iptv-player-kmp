@@ -50,6 +50,7 @@ internal class UpdateChannelsEpgInfoUseCaseImpl(
             if (channel.channelUrl in favorites) {
                 logger.w { "update in favorite ${channel.channelName}" }
                 channelFavoriteRepository.updateFavoriteChannel(
+                    playlistId = channel.parentListId,
                     channelName = channel.channelName,
                     channelUrl = channel.channelUrl,
                 )

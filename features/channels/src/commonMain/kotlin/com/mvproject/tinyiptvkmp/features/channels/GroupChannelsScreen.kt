@@ -39,10 +39,10 @@ import com.mvproject.tinyiptvkmp.core.foundation.utils.CommonUtils.empty
 import com.mvproject.tinyiptvkmp.core.theme.dimensionSize
 import com.mvproject.tinyiptvkmp.features.channels.GroupChannelsUiState.GroupChannelsOSD
 import com.mvproject.tinyiptvkmp.features.channels.components.ChannelFavoriteSelector
+import com.mvproject.tinyiptvkmp.features.channels.components.ChannelPrograms
 import com.mvproject.tinyiptvkmp.features.channels.components.ChannelView
 import com.mvproject.tinyiptvkmp.features.channels.generated.resources.Res
 import com.mvproject.tinyiptvkmp.features.channels.generated.resources.hint_msg_search
-import com.mvproject.tinyiptvkmp.features.epg.ChannelPrograms
 import org.jetbrains.compose.resources.stringResource
 
 @Composable

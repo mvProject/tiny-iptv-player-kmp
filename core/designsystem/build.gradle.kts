@@ -8,6 +8,7 @@ kotlin {
             api(projects.core.foundation)
             implementation(projects.core.ui)
             implementation(libs.compose.material3.adaptive)
+            implementation(libs.bundles.coil)
         }
     }
 }

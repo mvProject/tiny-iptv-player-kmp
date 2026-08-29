@@ -10,9 +10,11 @@ import kotlinx.coroutines.withContext
 internal class PlaylistChannelRemoteDataSourceImpl(
     private val network: NetworkPlaylistDatasource,
 ) : PlaylistChannelRemoteDataSource {
-    override suspend fun loadPlaylistContent(url: String): List<PlaylistChannelParseModel> =
-        withContext(Dispatchers.Default) {
-            val content = network.loadPlaylistData(url).bodyAsText()
+    override suspend fun loadPlaylistContent(url: String): List<PlaylistChannelParseModel> {
+        val content = network.loadPlaylistData(url).bodyAsText()
+
+        return withContext(Dispatchers.Default) {
             parseStringToChannels(source = content)
         }
+    }
 }

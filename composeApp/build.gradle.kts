@@ -48,11 +48,11 @@ kotlin {
             implementation(projects.features.groupsApi)
             implementation(projects.features.epgApi)
             implementation(projects.features.playlistApi)
-            implementation(projects.features.epg)
             implementation(projects.features.channels)
             implementation(projects.features.groups)
             implementation(projects.features.playlist)
             implementation(projects.features.settings)
+            implementation(projects.features.player)
             implementation(projects.platform.mediaplayer)
 
             // Coroutines

@@ -25,13 +25,11 @@ import com.mvproject.tinyiptvkmp.features.groups.api.domain.model.GroupType
 import com.mvproject.tinyiptvkmp.features.groups.api.domain.usecase.GetPlaylistGroupUseCase
 import com.mvproject.tinyiptvkmp.features.playlist.api.domain.model.Playlist
 import com.mvproject.tinyiptvkmp.features.playlist.api.domain.usecase.ObservePlaylistsUseCase
-import com.mvproject.tinyiptvkmp.features.playlist.api.domain.usecase.SavePlaylistContentUseCase
 import com.mvproject.tinyiptvkmp.features.playlist.api.domain.usecase.SelectPlaylistUseCase
 import com.mvproject.tinyiptvkmp.features.playlist.api.domain.usecase.UpdateRemotePlaylistChannelsUseCase
 import com.mvproject.tinyiptvkmp.infrastructure.logging.injectLogger
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.IO
-import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.flow.distinctUntilChanged
 import kotlinx.coroutines.flow.flowOn
 import kotlinx.coroutines.flow.launchIn
@@ -48,7 +46,6 @@ class GroupViewModel(
     private val refreshEpgChannelsUseCase: RefreshEpgChannelsUseCase,
     private val refreshEpgProgramsUseCase: RefreshEpgProgramsUseCase,
     private val updateRemotePlaylistChannelsUseCase: UpdateRemotePlaylistChannelsUseCase,
-    private val savePlaylistContentUseCase: SavePlaylistContentUseCase,
     private val updateChannelsEpgInfoUseCase: UpdateChannelsEpgInfoUseCase,
     private val cleanProgramsUseCase: CleanProgramsUseCase,
 ) : ViewModel(),
@@ -71,23 +68,15 @@ class GroupViewModel(
                 refreshGroups()
             }.launchIn(viewModelScope)
 
-        combine(
-            preferencesStore.data
-                .map { preferences -> preferences.channelsEpgInfoUpdateRequired }
-                .distinctUntilChanged(),
-            preferencesStore.data
-                .map { preferences -> preferences.playlistContentLoadRequired }
-                .distinctUntilChanged(),
-        ) { isRequired, id ->
-            logger.w { "testing isChannelsEpgInfoUpdateRequired isRequired=$isRequired" }
-            if (isRequired) {
-                updateChannelsEpgInfoUseCase()
-            }
-            logger.w { "testing idForPlaylistContentLoad id=$id" }
-            if (id.isNotBlank()) {
-                savePlaylistContentUseCase(playlistId = id)
-            }
-        }.launchIn(viewModelScope)
+        preferencesStore.data
+            .map { preferences -> preferences.channelsEpgInfoUpdateRequired }
+            .distinctUntilChanged()
+            .onEach { isRequired ->
+                logger.w { "testing isChannelsEpgInfoUpdateRequired isRequired=$isRequired" }
+                if (isRequired) {
+                    updateChannelsEpgInfoUseCase()
+                }
+            }.launchIn(viewModelScope)
 
         viewModelScope.launch(Dispatchers.IO) {
             updateRemotePlaylistChannelsUseCase()

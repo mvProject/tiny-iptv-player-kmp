@@ -10,9 +10,13 @@ interface PlaylistRepository {
 
     suspend fun getAllPlaylists(): List<Playlist>
 
+    suspend fun getDueRemotePlaylists(nowMillis: Long): List<Playlist>
+
     suspend fun deletePlaylist(playlist: Playlist)
 
     suspend fun savePlaylists(playlists: List<Playlist>)
 
     suspend fun savePlaylist(playlist: Playlist)
+
+    suspend fun selectPlaylist(id: String)
 }

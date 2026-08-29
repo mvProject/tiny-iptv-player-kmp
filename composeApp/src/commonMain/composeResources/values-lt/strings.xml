@@ -9,9 +9,6 @@
 <resources>
     <string name="channel_folder_favorite">Mėgstamiausi</string>
 
-    <string name="msg_no_internet_found">Nėra interneto ryšio</string>
-    <string name="msg_no_playable_media_found">Negalima paleisti šios medijos</string>
-
     <string name="btn_close">Uždaryti</string>
     <string name="btn_delete_current">Ištrinti grojaraštį</string>
     <string name="btn_playlists_update">grojaraščių atnaujinimas</string>

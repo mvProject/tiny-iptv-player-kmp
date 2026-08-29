@@ -8,9 +8,6 @@
 <resources>
     <string name="channel_folder_favorite">Вибране</string>
 
-    <string name="msg_no_internet_found">Немає підключення до Інтернету</string>
-    <string name="msg_no_playable_media_found">Не вдається відтворити цей медіафайл</string>
-
     <string name="btn_close">Закрити</string>
     <string name="btn_delete_current">Видалити плейлист</string>
     <string name="btn_playlists_update">Оновлення плейлистів</string>

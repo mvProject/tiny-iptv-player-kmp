@@ -9,9 +9,6 @@
 <resources>
     <string name="channel_folder_favorite">Favoriti</string>
 
-    <string name="msg_no_internet_found">Nema internetske veze</string>
-    <string name="msg_no_playable_media_found">Ne mogu reproducirati ovaj medij</string>
-
     <string name="btn_close">Zatvoriti</string>
     <string name="btn_delete_current">Izbriši popis za reprodukciju</string>
     <string name="btn_playlists_update">ažuriranje popisa pjesama</string>

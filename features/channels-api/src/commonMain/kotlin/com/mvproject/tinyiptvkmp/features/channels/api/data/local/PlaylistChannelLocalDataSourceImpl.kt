@@ -5,6 +5,7 @@ import com.mvproject.tinyiptvkmp.features.channels.api.data.local.database.Playl
 import com.mvproject.tinyiptvkmp.features.channels.api.data.local.database.PlaylistChannelEntity
 import com.mvproject.tinyiptvkmp.features.channels.api.data.parser.M3UParser.parseStringToChannels
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.IO
 import kotlinx.coroutines.withContext
 import okio.FileSystem
 import okio.Path.Companion.toPath
@@ -62,8 +63,10 @@ internal class PlaylistChannelLocalDataSourceImpl(
     }
 
     override suspend fun loadPlaylistContent(source: String): List<PlaylistChannelParseModel> =
-        withContext(Dispatchers.Default) {
+        withContext(Dispatchers.IO) {
             val content = FileSystem.SYSTEM.read(source.toPath()) { readUtf8() }
-            parseStringToChannels(source = content)
+            withContext(Dispatchers.Default) {
+                parseStringToChannels(source = content)
+            }
         }
 }

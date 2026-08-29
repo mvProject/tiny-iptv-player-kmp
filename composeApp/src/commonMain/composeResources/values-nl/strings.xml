@@ -9,9 +9,6 @@
 <resources>
     <string name="channel_folder_favorite">Favorieten</string>
 
-    <string name="msg_no_internet_found">Geen internet verbinding</string>
-    <string name="msg_no_playable_media_found">Kan deze media niet afspelen</string>
-
     <string name="btn_close">Dichtbij</string>
     <string name="btn_delete_current">Speellijst verwijderen</string>
     <string name="btn_playlists_update">afspeellijsten worden bijgewerkt</string>

@@ -47,17 +47,29 @@ internal class ChannelFavoriteRepositoryImpl(
         local.loadFavoriteChannelUrls()
 
     override suspend fun loadFavoriteChannelUrls(playlistId: String): List<String> =
-        local
-            .loadFavoriteChannelsByPlaylistId(playlistId = playlistId)
-            .map { entity -> entity.channelUrl }
+        local.loadFavoriteChannelUrls(playlistId = playlistId)
 
     override suspend fun updateFavoriteChannel(
+        playlistId: String,
         channelName: String,
         channelUrl: String,
     ) {
         local.updateFavoriteChannel(
+            playlistId = playlistId,
             channelName = channelName,
             channelUrl = channelUrl,
+        )
+    }
+
+    override suspend fun updateFavoriteChannels(
+        playlistId: String,
+        channelNamesByUrl: Map<String, String>,
+    ) {
+        if (channelNamesByUrl.isEmpty()) return
+
+        local.updateFavoriteChannels(
+            playlistId = playlistId,
+            channelNamesByUrl = channelNamesByUrl,
         )
     }
 

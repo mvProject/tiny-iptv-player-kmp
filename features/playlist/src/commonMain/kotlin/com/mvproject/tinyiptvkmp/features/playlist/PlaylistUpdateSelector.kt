@@ -9,8 +9,6 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.lazy.LazyColumn
-import androidx.compose.foundation.lazy.itemsIndexed
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ArrowDropDown
 import androidx.compose.material.icons.filled.ArrowDropUp
@@ -38,8 +36,9 @@ import org.jetbrains.compose.resources.stringResource
 
 @Composable
 fun PlaylistUpdateSelector(
-    uiState: PlaylistUiState,
-    onAction: (PlaylistUiAction) -> Unit = {},
+    playlistType: PlaylistType,
+    updatePeriod: Int,
+    onPeriodSelected: (Int) -> Unit = {},
 ) {
     Column(
         modifier = Modifier.fillMaxWidth().border(
@@ -48,7 +47,7 @@ fun PlaylistUpdateSelector(
             shape = MaterialTheme.shapes.extraSmall
         )
     ) {
-        if (uiState.playlistType == PlaylistType.REMOTE) {
+        if (playlistType == PlaylistType.REMOTE) {
             val options = UpdatePeriod.entries.map { stringResource(it.mapToString()) }
 
             var isSelectPlaylistOpen by remember { mutableStateOf(false) }
@@ -68,7 +67,7 @@ fun PlaylistUpdateSelector(
                 headlineContent = {
                     Text(
                         modifier = Modifier.fillMaxWidth(),
-                        text = options[uiState.updatePeriod],
+                        text = options[updatePeriod],
                         style = MaterialTheme.typography.bodyMedium,
                         color = MaterialTheme.colorScheme.onSurface,
                     )
@@ -97,30 +96,16 @@ fun PlaylistUpdateSelector(
             ) { isOpen ->
 
                 if (isOpen) {
-                    LazyColumn(modifier = Modifier.fillMaxWidth()) {
-                        itemsIndexed(options) { index, item ->
-                            val isSelected = index == uiState.updatePeriod
-
-                            TextButton(
-                                modifier = Modifier.fillMaxWidth(),
-                                shape = MaterialTheme.shapes.small,
-                                contentPadding = PaddingValues(),
+                    Column(modifier = Modifier.fillMaxWidth()) {
+                        options.forEachIndexed { index, item ->
+                            UpdatePeriodOption(
+                                label = item,
+                                isSelected = index == updatePeriod,
                                 onClick = {
                                     isSelectPlaylistOpen = false
-                                    onAction(PlaylistUiAction.SetUpdatePeriod(period = index))
+                                    onPeriodSelected(index)
                                 },
-                            ) {
-                                Text(
-                                    text = item,
-                                    style = MaterialTheme.typography.titleSmall,
-                                    color =
-                                        if (isSelected) {
-                                            MaterialTheme.colorSchemeExtended.activeInput
-                                        } else {
-                                            MaterialTheme.colorScheme.onSurface
-                                        },
-                                )
-                            }
+                            )
 
                             if (index < options.lastIndex) {
                                 HorizontalDivider(
@@ -136,5 +121,30 @@ fun PlaylistUpdateSelector(
                 }
             }
         }
+    }
+}
+
+@Composable
+private fun UpdatePeriodOption(
+    label: String,
+    isSelected: Boolean,
+    onClick: () -> Unit,
+) {
+    TextButton(
+        modifier = Modifier.fillMaxWidth(),
+        shape = MaterialTheme.shapes.small,
+        contentPadding = PaddingValues(),
+        onClick = onClick,
+    ) {
+        Text(
+            text = label,
+            style = MaterialTheme.typography.titleSmall,
+            color =
+                if (isSelected) {
+                    MaterialTheme.colorSchemeExtended.activeInput
+                } else {
+                    MaterialTheme.colorScheme.onSurface
+                },
+        )
     }
 }

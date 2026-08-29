@@ -198,8 +198,14 @@ private class FakeChannelFavoriteRepository : ChannelFavoriteRepository {
         loadFavoriteChannelUrls()
 
     override suspend fun updateFavoriteChannel(
+        playlistId: String,
         channelName: String,
         channelUrl: String,
+    ) = Unit
+
+    override suspend fun updateFavoriteChannels(
+        playlistId: String,
+        channelNamesByUrl: Map<String, String>,
     ) = Unit
 
     override suspend fun deletePlaylistFavoriteChannels(playlistId: String) = Unit
