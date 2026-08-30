@@ -25,7 +25,6 @@ import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clipToBounds
-import androidx.lifecycle.compose.LifecycleResumeEffect
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.mvproject.tinyiptvkmp.core.components.NoItemsView
 import com.mvproject.tinyiptvkmp.core.components.adaptive.adaptiveContentWidth
@@ -48,33 +47,27 @@ import com.mvproject.tinyiptvkmp.core.designsystem.generated.resources.Res as De
 fun GroupScreen(
     viewModel: GroupViewModel
 ) {
-    val uiState by viewModel.uiState.collectAsStateWithLifecycle()
+    val state by viewModel.state.collectAsStateWithLifecycle()
 
     GroupScreen(
-        uiState = uiState,
-        onAction = viewModel::onAction,
+        state = state,
+        onAction = viewModel::onIntent,
     )
 }
 
 @Composable
 private fun GroupScreen(
-    uiState: GroupUiState,
-    onAction: (GroupUiAction) -> Unit = {},
+    state: GroupState,
+    onAction: (GroupAction) -> Unit = {},
 ) {
     val adaptiveLayoutState = rememberAdaptiveLayoutState()
-
-    LifecycleResumeEffect(Unit) {
-        onAction(GroupUiAction.RefreshPlaylist)
-
-        onPauseOrDispose { }
-    }
 
     Scaffold(
         modifier = Modifier.fillMaxSize(),
         topBar = {
             AppBarWithSettings(
                 appBarTitle = stringResource(DesignSystemRes.string.app_name),
-                onSettingsClicked = { onAction(GroupUiAction.NavigateToSettings) },
+                onSettingsClicked = { onAction(GroupAction.NavigateToSettings) },
             )
         },
     ) { paddingValues ->
@@ -98,13 +91,13 @@ private fun GroupScreen(
                 verticalArrangement = Arrangement.Center,
             ) {
 
-                AnimatedContent(targetState = uiState.isUpdating) { isUpdating ->
+                AnimatedContent(targetState = state.isUpdating) { isUpdating ->
                     if (isUpdating) {
                         LinearProgressIndicator(
                             modifier = Modifier
                                 .padding(vertical = MaterialTheme.dimensionSize.size8)
                                 .fillMaxWidth(),
-                            progress = { uiState.progress },
+                            progress = { state.progress },
                             trackColor = MaterialTheme.colorScheme.primary,
                             color = MaterialTheme.colorSchemeExtended.progress,
                             drawStopIndicator = {}
@@ -113,19 +106,19 @@ private fun GroupScreen(
                 }
 
                 PlaylistSelector(
-                    uiState = uiState,
+                    uiState = state,
                     onAction = onAction
                 )
 
-                when (val groupState = uiState.groupState) {
-                    GroupUiState.GroupState.Empty -> NoItemsView(
+                when (val groupState = state.groupState) {
+                    GroupState.GroupState.Empty -> NoItemsView(
                         modifier = Modifier.fillMaxSize(),
                         title = stringResource(DesignSystemRes.string.msg_no_items_found),
                         navigateTitle = stringResource(Res.string.btn_add_first_playlist),
-                        onNavigateClick = { onAction(GroupUiAction.NavigateToSettings) },
+                        onNavigateClick = { onAction(GroupAction.NavigateToSettings) },
                     )
 
-                    is GroupUiState.GroupState.Success -> {
+                    is GroupState.GroupState.Success -> {
                         Column(
                             modifier =
                                 Modifier
@@ -154,7 +147,7 @@ private fun GroupScreen(
                 }
             }
 
-            LoadingIndicator(isVisible = uiState.isLoading)
+            LoadingIndicator(isVisible = state.isLoading)
         }
     }
 }

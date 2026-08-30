@@ -4,6 +4,8 @@ import com.mvproject.tinyiptvkmp.features.settings.api.data.local.SettingsLocalD
 import com.mvproject.tinyiptvkmp.features.settings.api.data.local.SettingsLocalDataSourceImpl
 import com.mvproject.tinyiptvkmp.features.settings.api.data.repository.SettingsRepositoryImpl
 import com.mvproject.tinyiptvkmp.features.settings.api.domain.repository.SettingsRepository
+import com.mvproject.tinyiptvkmp.features.settings.api.domain.usecase.ObserveChannelsEpgInfoUpdateRequiredUseCase
+import com.mvproject.tinyiptvkmp.features.settings.api.domain.usecase.ObserveChannelsEpgInfoUpdateRequiredUseCaseImpl
 import com.mvproject.tinyiptvkmp.features.settings.api.domain.usecase.ObserveGeneralSettingsUseCase
 import com.mvproject.tinyiptvkmp.features.settings.api.domain.usecase.ObserveGeneralSettingsUseCaseImpl
 import com.mvproject.tinyiptvkmp.features.settings.api.domain.usecase.ObservePlayerSettingsUseCase
@@ -24,6 +26,9 @@ val settingsApiModule =
     module {
         single<SettingsLocalDataSource> { SettingsLocalDataSourceImpl(get()) }
         single<SettingsRepository> { SettingsRepositoryImpl(get()) }
+        single<ObserveChannelsEpgInfoUpdateRequiredUseCase> {
+            ObserveChannelsEpgInfoUpdateRequiredUseCaseImpl(get())
+        }
         single<ObserveGeneralSettingsUseCase> { ObserveGeneralSettingsUseCaseImpl(get()) }
         single<ObservePlayerSettingsUseCase> { ObservePlayerSettingsUseCaseImpl(get()) }
         single<UpdateInfoUpdatePeriodUseCase> { UpdateInfoUpdatePeriodUseCaseImpl(get()) }

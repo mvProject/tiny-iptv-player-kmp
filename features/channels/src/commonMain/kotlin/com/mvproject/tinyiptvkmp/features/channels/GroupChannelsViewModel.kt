@@ -97,6 +97,7 @@ class GroupChannelsViewModel(
     }
 
     fun loadChannelsByGroups() {
+        // TODO(performance): Skip resume EPG refresh when channels are empty or a refresh is already running.
         // TODO: Serialize EPG refreshes with a refresh Job/Mutex or update the refresh gate before fetching.
         viewModelScope.launch(Dispatchers.IO) {
             refreshEpgPrograms()

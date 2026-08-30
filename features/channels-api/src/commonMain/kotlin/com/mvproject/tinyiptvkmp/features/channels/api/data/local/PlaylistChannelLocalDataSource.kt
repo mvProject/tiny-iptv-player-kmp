@@ -7,6 +7,8 @@ internal interface PlaylistChannelLocalDataSource {
 
     suspend fun loadPlaylistGroups(playlistId: String): List<String>
 
+    suspend fun loadPlaylistGroupCounts(playlistId: String): Map<String, Int>
+
     suspend fun loadPlaylistChannelsCount(playlistId: String): Int
 
     suspend fun loadPlaylistGroupChannelsCount(

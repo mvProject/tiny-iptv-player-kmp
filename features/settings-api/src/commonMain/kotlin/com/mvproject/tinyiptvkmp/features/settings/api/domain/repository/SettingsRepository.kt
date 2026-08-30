@@ -8,6 +8,8 @@ import kotlinx.coroutines.flow.Flow
 interface SettingsRepository {
     fun observeGeneralSettings(): Flow<GeneralSettings>
 
+    fun observeChannelsEpgInfoUpdateRequired(): Flow<Boolean>
+
     fun observePlayerSettings(): Flow<PlayerSettings>
 
     suspend fun updateInfoUpdatePeriod(period: Int)

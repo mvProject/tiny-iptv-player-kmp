@@ -52,6 +52,15 @@ interface PlaylistChannelDao {
     @Query("SELECT channelGroup FROM playlistChannels WHERE parentListId == :playlistId")
     suspend fun getPlaylistChannelsGroups(playlistId: String): List<String>
 
+    @Query(
+        "SELECT channelGroup AS groupName, COUNT(*) AS groupContentCount " +
+                "FROM playlistChannels " +
+                "WHERE parentListId == :playlistId " +
+                "GROUP BY channelGroup " +
+                "ORDER BY channelGroup",
+    )
+    suspend fun getPlaylistGroupCounts(playlistId: String): List<PlaylistGroupCount>
+
     @Query("DELETE FROM playlistChannels WHERE parentListId = :id")
     suspend fun deletePlaylistChannels(id: String)
 }

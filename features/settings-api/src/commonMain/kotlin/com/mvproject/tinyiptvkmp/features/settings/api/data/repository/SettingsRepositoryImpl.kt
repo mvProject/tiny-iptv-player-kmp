@@ -21,6 +21,9 @@ internal class SettingsRepositoryImpl(
             )
         }
 
+    override fun observeChannelsEpgInfoUpdateRequired(): Flow<Boolean> =
+        localDataSource.channelsEpgInfoUpdateRequired
+
     override fun observePlayerSettings(): Flow<PlayerSettings> =
         localDataSource.preferences.map { preferences ->
             PlayerSettings(

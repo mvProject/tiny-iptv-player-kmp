@@ -19,23 +19,23 @@ import com.mvproject.tinyiptvkmp.core.foundation.common.SCREEN_PERCENTAGE_25
 import com.mvproject.tinyiptvkmp.core.foundation.common.SCREEN_PERCENTAGE_30
 import com.mvproject.tinyiptvkmp.core.foundation.common.SCREEN_PERCENTAGE_40
 import com.mvproject.tinyiptvkmp.core.foundation.common.SCREEN_PERCENTAGE_75
-import com.mvproject.tinyiptvkmp.features.player.PlayerUiAction
-import com.mvproject.tinyiptvkmp.features.player.PlayerUiState
+import com.mvproject.tinyiptvkmp.features.player.PlayerAction
+import com.mvproject.tinyiptvkmp.features.player.PlayerState
 import kotlinx.coroutines.coroutineScope
 import kotlin.math.abs
 
 fun Modifier.handleTapGestures(
-    onAction: (PlayerUiAction) -> Unit
+    onAction: (PlayerAction) -> Unit
 ) = this then pointerInput(Unit) {
     detectTapGestures(
-        onDoubleTap = { onAction(PlayerUiAction.ToggleFullScreen) },
-        onTap = { onAction(PlayerUiAction.TogglePlayerUi) },
-        onLongPress = { onAction(PlayerUiAction.OpenOsd(PlayerUiState.PlayerOSD.ChannelPrograms)) }
+        onDoubleTap = { onAction(PlayerAction.ToggleFullScreen) },
+        onTap = { onAction(PlayerAction.TogglePlayer) },
+        onLongPress = { onAction(PlayerAction.OpenOsd(PlayerState.PlayerOSD.ChannelPrograms)) }
     )
 }
 
 fun Modifier.handleVerticalGestures(
-    onAction: (PlayerUiAction) -> Unit
+    onAction: (PlayerAction) -> Unit
 ) = this then Modifier.pointerInput(Unit) {
 
     val screenMiddlePart =
@@ -56,9 +56,9 @@ fun Modifier.handleVerticalGestures(
                 if (startX.toInt() in screenMiddlePart) {
                     if (abs(totalDrag) > dragThreshold) {
                         val action = if (totalDrag > 0) {
-                            PlayerUiAction.OpenOsd(PlayerUiState.PlayerOSD.GroupChannels)
+                            PlayerAction.OpenOsd(PlayerState.PlayerOSD.GroupChannels)
                         } else {
-                            PlayerUiAction.OpenOsd(PlayerUiState.PlayerOSD.ProgramInfo)
+                            PlayerAction.OpenOsd(PlayerState.PlayerOSD.ProgramInfo)
                         }
                         onAction(action)
                     }
@@ -70,9 +70,9 @@ fun Modifier.handleVerticalGestures(
                 if (startX.toInt() !in screenMiddlePart) {
                     while (abs(totalDrag) >= volumeThreshold) {
                         val volumeAction = if (totalDrag > 0) {
-                            PlayerUiAction.VolumeDown
+                            PlayerAction.VolumeDown
                         } else {
-                            PlayerUiAction.VolumeUp
+                            PlayerAction.VolumeUp
                         }
                         onAction(volumeAction)
                         totalDrag -= if (totalDrag > 0) volumeThreshold else -volumeThreshold
@@ -86,7 +86,7 @@ fun Modifier.handleVerticalGestures(
 }
 
 fun Modifier.handleHorizontalGestures(
-    onAction: (PlayerUiAction) -> Unit
+    onAction: (PlayerAction) -> Unit
 ) = this then Modifier.pointerInput(Unit) {
     var totalDrag = FLOAT_VALUE_ZERO
     val dragThreshold = size.width * SCREEN_PERCENTAGE_30
@@ -96,9 +96,9 @@ fun Modifier.handleHorizontalGestures(
             onDragEnd = {
                 if (abs(totalDrag) > dragThreshold) {
                     val action = if (totalDrag > FLOAT_VALUE_ZERO) {
-                        PlayerUiAction.SelectNext
+                        PlayerAction.SelectNext
                     } else {
-                        PlayerUiAction.SelectPrevious
+                        PlayerAction.SelectPrevious
                     }
                     onAction(action)
                 }

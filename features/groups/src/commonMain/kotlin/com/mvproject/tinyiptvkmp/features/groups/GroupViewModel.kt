@@ -7,17 +7,15 @@
 
 package com.mvproject.tinyiptvkmp.features.groups
 
-import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.mvproject.tinyiptvkmp.core.base.mvi.MviCore
-import com.mvproject.tinyiptvkmp.core.base.mvi.mviCore
-import com.mvproject.tinyiptvkmp.core.datastore.ProtoStore
-import com.mvproject.tinyiptvkmp.core.datastore.preferences.AppPreferencesProto
+import com.mvproject.tinyiptvkmp.core.base.mvi.MviViewModel
+import com.mvproject.tinyiptvkmp.core.base.mvi.runCatchingSuspend
 import com.mvproject.tinyiptvkmp.core.foundation.common.INT_VALUE_1
 import com.mvproject.tinyiptvkmp.features.epg.api.domain.usecase.CleanProgramsUseCase
 import com.mvproject.tinyiptvkmp.features.epg.api.domain.usecase.RefreshEpgChannelsUseCase
 import com.mvproject.tinyiptvkmp.features.epg.api.domain.usecase.RefreshEpgProgramsUseCase
 import com.mvproject.tinyiptvkmp.features.epg.api.domain.usecase.UpdateChannelsEpgInfoUseCase
+import com.mvproject.tinyiptvkmp.features.groups.api.domain.model.ChannelsGroup
 import com.mvproject.tinyiptvkmp.features.groups.api.domain.model.GroupType
 import com.mvproject.tinyiptvkmp.features.groups.api.domain.usecase.GetPlaylistGroupUseCase
 import com.mvproject.tinyiptvkmp.features.groups.nav.GroupNavigator
@@ -25,20 +23,14 @@ import com.mvproject.tinyiptvkmp.features.playlist.api.domain.model.Playlist
 import com.mvproject.tinyiptvkmp.features.playlist.api.domain.usecase.ObservePlaylistsUseCase
 import com.mvproject.tinyiptvkmp.features.playlist.api.domain.usecase.SelectPlaylistUseCase
 import com.mvproject.tinyiptvkmp.features.playlist.api.domain.usecase.UpdateRemotePlaylistChannelsUseCase
-import com.mvproject.tinyiptvkmp.infrastructure.logging.injectLogger
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.IO
+import com.mvproject.tinyiptvkmp.features.settings.api.domain.usecase.ObserveChannelsEpgInfoUpdateRequiredUseCase
 import kotlinx.coroutines.flow.distinctUntilChanged
-import kotlinx.coroutines.flow.flowOn
 import kotlinx.coroutines.flow.launchIn
-import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.onEach
-import kotlinx.coroutines.launch
-import org.koin.core.component.KoinComponent
 import org.koin.core.component.inject
 
 class GroupViewModel(
-    private val preferencesStore: ProtoStore<AppPreferencesProto>,
+    private val observeChannelsEpgInfoUpdateRequiredUseCase: ObserveChannelsEpgInfoUpdateRequiredUseCase,
     private val observePlaylistsUseCase: ObservePlaylistsUseCase,
     private val selectPlaylistUseCase: SelectPlaylistUseCase,
     private val getPlaylistGroupUseCase: GetPlaylistGroupUseCase,
@@ -47,29 +39,56 @@ class GroupViewModel(
     private val updateRemotePlaylistChannelsUseCase: UpdateRemotePlaylistChannelsUseCase,
     private val updateChannelsEpgInfoUseCase: UpdateChannelsEpgInfoUseCase,
     private val cleanProgramsUseCase: CleanProgramsUseCase,
-) : ViewModel(),
-    KoinComponent,
-    MviCore<GroupUiState, GroupUiAction, GroupUiEffect> by mviCore(GroupUiState()) {
+) : MviViewModel<GroupState, GroupAction, GroupEffect>() {
 
-    private val logger by injectLogger()
     private val navigator: GroupNavigator by inject()
 
-    init {
+    override fun createStore() = createStore(
+        initialState = GroupState(),
+        invokeOnStart = { listenPlaylists() },
+    )
+
+    override fun onIntent(intent: GroupAction) {
+        when (intent) {
+            is GroupAction.NavigateToGroup -> launch {
+                navigator.navigateToPlaylist(
+                    title = intent.title,
+                    group = intent.group
+                )
+            }
+
+            GroupAction.NavigateToSettings -> launch { navigator.navigateToSettings() }
+            is GroupAction.SelectPlaylist -> launch { selectPlaylist(playlistId = intent.playlistId) }
+        }
+    }
+
+    private suspend fun listenPlaylists() {
         observePlaylistsUseCase()
-            .flowOn(Dispatchers.IO)
-            .onEach { playlists ->
-                updateUiState {
+            .distinctUntilChanged()
+            .collect { playlists ->
+                val selectedPlaylist = playlists.firstOrNull { playlist -> playlist.isSelected }
+                setState {
                     copy(
-                        isPlaylistSelectorVisible = playlists.count() > INT_VALUE_1,
+                        isPlaylistSelectorVisible = playlists.size > INT_VALUE_1,
                         playlists = playlists,
-                        selectedPlaylist = playlists.firstOrNull { it.isSelected } ?: Playlist(),
+                        selectedPlaylist = selectedPlaylist ?: Playlist(),
+                        groupState = if (selectedPlaylist == null) {
+                            GroupState.GroupState.Empty
+                        } else {
+                            groupState
+                        },
+                        isLoading = if (selectedPlaylist == null) false else isLoading,
                     )
                 }
-                refreshGroups()
-            }.launchIn(viewModelScope)
+                if (selectedPlaylist != null) {
+                    refreshGroups()
+                }
+            }
+    }
 
-        preferencesStore.data
-            .map { preferences -> preferences.channelsEpgInfoUpdateRequired }
+    // Temporarily disabled while the EPG source is unstable and the refresh pipeline is redesigned.
+    private suspend fun listenUpdates() {
+        observeChannelsEpgInfoUpdateRequiredUseCase()
             .distinctUntilChanged()
             .onEach { isRequired ->
                 logger.w { "testing isChannelsEpgInfoUpdateRequired isRequired=$isRequired" }
@@ -78,65 +97,42 @@ class GroupViewModel(
                 }
             }.launchIn(viewModelScope)
 
-        viewModelScope.launch(Dispatchers.IO) {
-            updateRemotePlaylistChannelsUseCase()
+        updateRemotePlaylistChannelsUseCase()
 
-            // Temporarily disabled while the EPG source is unstable and the refresh pipeline is redesigned.
-            // refreshEpgChannelsUseCase()
-            // cleanProgramsUseCase()
-            // refreshEpgProgramsUseCase(...)
-        }
+        // Temporarily disabled while the EPG source is unstable and the refresh pipeline is redesigned.
+        // refreshEpgChannelsUseCase()
+        // cleanProgramsUseCase()
+        // refreshEpgProgramsUseCase(...)
     }
 
-    override fun onAction(uiAction: GroupUiAction) {
-        when (uiAction) {
-            GroupUiAction.RefreshPlaylist -> refresh()
-            is GroupUiAction.SelectPlaylist -> {
-                val selected = uiAction.playlist
-                if (!selected.isSelected) {
-                    viewModelScope.launch {
-                        selectPlaylistUseCase(playlist = selected)
-                    }
-                }
-            }
-
-            is GroupUiAction.NavigateToGroup -> {
-                viewModelScope.launch {
-                    navigator.navigateToPlaylist(
-                        title = uiAction.title,
-                        group = uiAction.group
-                    )
-                }
-            }
-
-            GroupUiAction.NavigateToSettings -> {
-                viewModelScope.launch { navigator.navigateToSettings() }
-            }
-        }
-    }
-
-    private fun refresh() {
-        viewModelScope.launch(Dispatchers.IO) {
-            refreshGroups()
+    private suspend fun selectPlaylist(playlistId: String) {
+        if (playlistId != getState().selectedPlaylist.id) {
+            selectPlaylistUseCase(playlistId = playlistId)
         }
     }
 
     private suspend fun refreshGroups() {
-        updateUiState { copy(isLoading = true) }
+        setState { copy(isLoading = true) }
 
-        val channelGroups = getPlaylistGroupUseCase()
-
-        val groupState = if (channelGroups.none { it.groupType == GroupType.SPECIFIED }) {
-            GroupUiState.GroupState.Empty
-        } else {
-            GroupUiState.GroupState.Success(channelGroups)
-        }
-
-        updateUiState {
-            copy(
-                groupState = groupState,
-                isLoading = false
-            )
+        runCatchingSuspend {
+            getPlaylistGroupUseCase()
+        }.onSuccess { channelGroups ->
+            setState {
+                copy(
+                    groupState = channelGroups.toGroupState(),
+                    isLoading = false
+                )
+            }
+        }.onFailure { throwable ->
+            logger.e(throwable) { "Failed to refresh playlist groups" }
+            setState { copy(isLoading = false) }
         }
     }
+
+    private fun List<ChannelsGroup>.toGroupState(): GroupState.GroupState =
+        if (none { group -> group.groupType == GroupType.SPECIFIED }) {
+            GroupState.GroupState.Empty
+        } else {
+            GroupState.GroupState.Success(this)
+        }
 }

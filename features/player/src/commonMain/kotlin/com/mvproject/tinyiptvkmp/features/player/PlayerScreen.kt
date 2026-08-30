@@ -34,7 +34,7 @@ import com.mvproject.tinyiptvkmp.core.components.overlay.OnScreenDisplay
 import com.mvproject.tinyiptvkmp.core.theme.dimensionSize
 import com.mvproject.tinyiptvkmp.core.theme.dimensionWeight
 import com.mvproject.tinyiptvkmp.features.groups.api.domain.model.FavoriteType
-import com.mvproject.tinyiptvkmp.features.player.PlayerUiState.PlayerOSD
+import com.mvproject.tinyiptvkmp.features.player.PlayerState.PlayerOSD
 import com.mvproject.tinyiptvkmp.features.player.components.NoPlaybackView
 import com.mvproject.tinyiptvkmp.features.player.components.PlayerChannels
 import com.mvproject.tinyiptvkmp.features.player.components.PlayerContainer
@@ -69,8 +69,8 @@ fun PlayerScreen(
 
 @Composable
 private fun PlayerScreen(
-    uiState: PlayerUiState,
-    onAction: (PlayerUiAction) -> Unit
+    uiState: PlayerState,
+    onAction: (PlayerAction) -> Unit
 ) {
     val adaptiveLayoutState = rememberAdaptiveLayoutState()
 
@@ -121,7 +121,7 @@ private fun PlayerScreen(
 
         OnScreenDisplay(
             isVisible = uiState.osdType != null,
-            onViewTap = { onAction(PlayerUiAction.CloseOsd) }
+            onViewTap = { onAction(PlayerAction.CloseOsd) }
         ) {
             uiState.osdType?.let { osdType ->
                 when (osdType) {
@@ -149,7 +149,7 @@ private fun PlayerScreen(
                             channels = uiState.groupChannels,
                             current = uiState.channelIndex,
                             group = uiState.channelGroup,
-                            onChannelSelect = { chn -> onAction(PlayerUiAction.SelectChannel(chn)) }
+                            onChannelSelect = { chn -> onAction(PlayerAction.SelectChannel(chn)) }
                         )
                     }
 
@@ -165,7 +165,7 @@ private fun PlayerScreen(
                         ChannelFavoriteSelector(
                             options = favoriteOptionsUiModels(uiState.currentChannel.favoriteType),
                             onSelectFavorite = { option ->
-                                onAction(PlayerUiAction.UpdateFavorite(FavoriteType.valueOf(option.id)))
+                                onAction(PlayerAction.UpdateFavorite(FavoriteType.valueOf(option.id)))
                             }
                         )
                     }
@@ -178,8 +178,8 @@ private fun PlayerScreen(
 @Composable
 private fun PlayerContent(
     modifier: Modifier = Modifier,
-    uiState: PlayerUiState,
-    onAction: (PlayerUiAction) -> Unit
+    uiState: PlayerState,
+    onAction: (PlayerAction) -> Unit
 ) {
     PlayerContainer(
         modifier = modifier

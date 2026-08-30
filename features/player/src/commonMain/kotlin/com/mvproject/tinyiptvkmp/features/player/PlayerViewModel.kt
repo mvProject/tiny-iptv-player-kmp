@@ -33,7 +33,7 @@ import com.mvproject.tinyiptvkmp.features.epg.api.domain.utils.replaceUpdated
 import com.mvproject.tinyiptvkmp.features.epg.api.domain.utils.withPrograms
 import com.mvproject.tinyiptvkmp.features.groups.api.domain.model.FavoriteType
 import com.mvproject.tinyiptvkmp.features.groups.api.domain.usecase.GetGroupChannelsUseCase
-import com.mvproject.tinyiptvkmp.features.player.PlayerUiState.PlayerOSD
+import com.mvproject.tinyiptvkmp.features.player.PlayerState.PlayerOSD
 import com.mvproject.tinyiptvkmp.features.player.nav.PlayerNavigator
 import com.mvproject.tinyiptvkmp.infrastructure.logging.injectLogger
 import com.mvproject.tinyiptvkmp.platform.mediaplayer.isMediaPlayable
@@ -55,7 +55,7 @@ class PlayerViewModel(
     private val getGroupChannelsEpgUseCase: GetGroupChannelsEpgUseCase,
 ) : ViewModel(),
     KoinComponent,
-    MviCore<PlayerUiState, PlayerUiAction, PlayerUiEffect> by mviCore(PlayerUiState()) {
+    MviCore<PlayerState, PlayerAction, PlayerUiEffect> by mviCore(PlayerState()) {
 
     private val media = args.channelName
     private val group = args.group
@@ -120,28 +120,28 @@ class PlayerViewModel(
         }
     }
 
-    override fun onAction(uiAction: PlayerUiAction) {
+    override fun onAction(uiAction: PlayerAction) {
         when (uiAction) {
-            PlayerUiAction.SelectNext -> switchToNextChannel()
-            PlayerUiAction.SelectPrevious -> switchToPreviousChannel()
-            PlayerUiAction.ToggleFullScreen -> toggleFullScreen()
-            PlayerUiAction.ChangeVideoSize -> toggleVideoSizeMode()
-            PlayerUiAction.TogglePlayback -> togglePlayingState()
-            PlayerUiAction.TogglePlayerUi -> toggleControlUiState()
-            PlayerUiAction.VolumeDown -> decreaseVolume()
-            PlayerUiAction.VolumeUp -> increaseVolume()
-            is PlayerUiAction.SelectChannel -> switchToChannel(channel = uiAction.channel)
-            is PlayerUiAction.OnIsPlayingChanged -> changePlayingState(state = uiAction.state)
-            is PlayerUiAction.OnPlaybackStateChanged -> changePlaybackState(state = uiAction.state)
-            PlayerUiAction.NavigateBack -> {
+            PlayerAction.SelectNext -> switchToNextChannel()
+            PlayerAction.SelectPrevious -> switchToPreviousChannel()
+            PlayerAction.ToggleFullScreen -> toggleFullScreen()
+            PlayerAction.ChangeVideoSize -> toggleVideoSizeMode()
+            PlayerAction.TogglePlayback -> togglePlayingState()
+            PlayerAction.TogglePlayer -> toggleControlUiState()
+            PlayerAction.VolumeDown -> decreaseVolume()
+            PlayerAction.VolumeUp -> increaseVolume()
+            is PlayerAction.SelectChannel -> switchToChannel(channel = uiAction.channel)
+            is PlayerAction.OnIsPlayingChanged -> changePlayingState(state = uiAction.state)
+            is PlayerAction.OnPlaybackStateChanged -> changePlaybackState(state = uiAction.state)
+            PlayerAction.NavigateBack -> {
                 viewModelScope.launch {
                     navigator.navigateUp()
                 }
             }
 
-            is PlayerUiAction.OpenOsd -> openOsd(type = uiAction.type)
-            PlayerUiAction.CloseOsd -> closeOsd()
-            is PlayerUiAction.UpdateFavorite -> toggleChannelFavorite(type = uiAction.type)
+            is PlayerAction.OpenOsd -> openOsd(type = uiAction.type)
+            PlayerAction.CloseOsd -> closeOsd()
+            is PlayerAction.UpdateFavorite -> toggleChannelFavorite(type = uiAction.type)
         }
     }
 
@@ -166,16 +166,16 @@ class PlayerViewModel(
         }
     }
 
-    private fun changePlaybackState(state: PlayerUiState.PlayerPlaybackState) {
+    private fun changePlaybackState(state: PlayerState.PlayerPlaybackState) {
         var isMediaPlayable = uiState.value.isMediaPlayable
-        val isBuffering = state == PlayerUiState.PlayerPlaybackState.PlaybackBuffering
+        val isBuffering = state == PlayerState.PlayerPlaybackState.PlaybackBuffering
 
         when (state) {
-            is PlayerUiState.PlayerPlaybackState.PlaybackIdle -> {
+            is PlayerState.PlayerPlaybackState.PlaybackIdle -> {
                 isMediaPlayable = isMediaPlayable(state.errorCode)
             }
 
-            PlayerUiState.PlayerPlaybackState.PlaybackReady -> {
+            PlayerState.PlayerPlaybackState.PlaybackReady -> {
                 isMediaPlayable = true
             }
 

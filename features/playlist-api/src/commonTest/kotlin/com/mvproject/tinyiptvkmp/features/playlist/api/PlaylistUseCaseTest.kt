@@ -316,7 +316,7 @@ class PlaylistUseCaseTest {
         )
         val useCase = SelectPlaylistUseCaseImpl(playlistRepository = playlistRepository)
 
-        useCase(remotePlaylist(id = "new"))
+        useCase(playlistId = "new")
 
         assertEquals("new", playlistRepository.selectedPlaylistId)
         assertEquals(0, playlistRepository.getAllPlaylistsCalls)
@@ -462,6 +462,8 @@ private class FakePlaylistChannelRepository : PlaylistChannelRepository {
     }
 
     override suspend fun loadPlaylistGroups(): List<String> = emptyList()
+
+    override suspend fun loadPlaylistGroupCounts(): Map<String, Int> = emptyMap()
 
     override suspend fun loadPlaylistChannelsCount(): Int = 0
 

@@ -22,6 +22,10 @@ internal class PlaylistChannelLocalDataSourceImpl(
     override suspend fun loadPlaylistGroups(playlistId: String): List<String> =
         playlistChannelDao.getPlaylistChannelsGroups(playlistId = playlistId)
 
+    override suspend fun loadPlaylistGroupCounts(playlistId: String): Map<String, Int> =
+        playlistChannelDao.getPlaylistGroupCounts(playlistId = playlistId)
+            .associate { groupCount -> groupCount.groupName to groupCount.groupContentCount }
+
     override suspend fun loadPlaylistChannelsCount(playlistId: String): Int =
         playlistChannelDao.getPlaylistChannelsCount(playlistId = playlistId)
 

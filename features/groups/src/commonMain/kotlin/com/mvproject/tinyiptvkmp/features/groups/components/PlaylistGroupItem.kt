@@ -22,7 +22,7 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import com.mvproject.tinyiptvkmp.core.foundation.common.INT_VALUE_ZERO
-import com.mvproject.tinyiptvkmp.features.groups.GroupUiAction
+import com.mvproject.tinyiptvkmp.features.groups.GroupAction
 import com.mvproject.tinyiptvkmp.features.groups.api.domain.model.ChannelsGroup
 import com.mvproject.tinyiptvkmp.features.groups.api.domain.model.GroupType
 import com.mvproject.tinyiptvkmp.features.groups.generated.resources.Res
@@ -33,7 +33,7 @@ import org.jetbrains.compose.resources.stringResource
 fun PlaylistGroupItem(
     modifier: Modifier = Modifier,
     group: ChannelsGroup,
-    onUiAction: (GroupUiAction) -> Unit = {},
+    onUiAction: (GroupAction) -> Unit = {},
 ) {
     val title =
         when (group.groupType) {
@@ -47,7 +47,7 @@ fun PlaylistGroupItem(
             modifier
                 .clickable {
                     onUiAction(
-                        GroupUiAction.NavigateToGroup(
+                        GroupAction.NavigateToGroup(
                             title = title,
                             group = group.groupType.name
                         )

@@ -30,6 +30,11 @@ internal class PlaylistChannelRepositoryImpl(
             playlistId = selectedPlaylistProvider.getSelectedPlaylistId(),
         ).distinct()
 
+    override suspend fun loadPlaylistGroupCounts(): Map<String, Int> =
+        local.loadPlaylistGroupCounts(
+            playlistId = selectedPlaylistProvider.getSelectedPlaylistId(),
+        )
+
     override suspend fun loadPlaylistChannelsCount(): Int =
         local.loadPlaylistChannelsCount(
             playlistId = selectedPlaylistProvider.getSelectedPlaylistId(),

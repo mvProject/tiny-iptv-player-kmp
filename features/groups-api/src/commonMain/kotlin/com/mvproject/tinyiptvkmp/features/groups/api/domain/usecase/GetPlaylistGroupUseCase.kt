@@ -11,13 +11,11 @@ class GetPlaylistGroupUseCase(
     private val favoriteChannelsRepository: ChannelFavoriteRepository,
 ) {
     suspend operator fun invoke(): List<ChannelsGroup> {
-        val allChannelsCount =
-            playlistChannelRepository.loadPlaylistChannelsCount()
+        val groupCounts = playlistChannelRepository.loadPlaylistGroupCounts()
+        val allChannelsCount = groupCounts.values.sum()
 
         val favorites = favoriteChannelsRepository
             .loadSelectedFavoriteChannels()
-
-        val groups = playlistChannelRepository.loadPlaylistGroups()
 
         val allGroup =
             ChannelsGroup(
@@ -53,10 +51,7 @@ class GetPlaylistGroupUseCase(
 
         val playlistGroups =
             buildList {
-                groups.forEach { group ->
-                    val count =
-                        playlistChannelRepository
-                            .loadPlaylistGroupChannelsCount(group = group)
+                groupCounts.forEach { (group, count) ->
                     add(
                         ChannelsGroup(
                             groupName = group,

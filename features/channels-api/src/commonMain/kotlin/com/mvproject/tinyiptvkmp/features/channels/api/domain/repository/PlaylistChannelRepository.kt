@@ -10,6 +10,8 @@ interface PlaylistChannelRepository {
 
     suspend fun loadPlaylistGroups(): List<String>
 
+    suspend fun loadPlaylistGroupCounts(): Map<String, Int>
+
     suspend fun loadPlaylistChannelsCount(): Int
 
     suspend fun loadPlaylistGroupChannelsCount(group: String): Int

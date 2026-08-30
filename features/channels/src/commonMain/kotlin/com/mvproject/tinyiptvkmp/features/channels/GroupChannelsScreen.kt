@@ -66,9 +66,11 @@ private fun GroupChannelsScreen(
     onAction: (GroupChannelsAction) -> Unit,
 ) {
     val adaptiveLayoutState = rememberAdaptiveLayoutState()
+    // TODO(performance): Move search state to a single source of truth; GroupChannelsState already has searchString.
     var searchString by remember {
         mutableStateOf(String.empty)
     }
+    // TODO(performance): For large playlists, move filtering out of composition or cache a UI-search index.
     val filteredResults = remember(state.channels, searchString) {
         if (searchString.isBlank()) {
             state.channels
@@ -107,6 +109,7 @@ private fun GroupChannelsScreen(
                 .fillMaxSize()
                 .padding(paddingValues),
         ) {
+            // TODO(performance): ChannelView remaps the whole list to UI models and an id lookup map; precompute when channel state changes.
             ChannelView(
                 modifier = Modifier.fillMaxSize(),
                 viewType = state.viewType,

@@ -160,6 +160,14 @@ private class FakePlaylistChannelRepository : PlaylistChannelRepository {
             .map { channel -> channel.channelGroup }
             .distinct()
 
+    override suspend fun loadPlaylistGroupCounts(): Map<String, Int> =
+        channels
+            .map { channel -> channel.channelGroup }
+            .distinct()
+            .associateWith { group ->
+                channels.count { channel -> channel.channelGroup == group }
+            }
+
     override suspend fun loadPlaylistChannelsCount(): Int = channels.size
 
     override suspend fun loadPlaylistGroupChannelsCount(group: String): Int =

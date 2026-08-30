@@ -7,7 +7,7 @@ import com.mvproject.tinyiptvkmp.features.playlist.api.domain.model.Playlist
 
 
 @Immutable
-data class GroupUiState(
+data class GroupState(
     val groupState: GroupState = GroupState.Empty,
     val playlists: List<Playlist> = emptyList(),
     val selectedPlaylist: Playlist = Playlist(),
@@ -22,11 +22,10 @@ data class GroupUiState(
     }
 }
 
-sealed interface GroupUiAction {
-    data class SelectPlaylist(val playlist: Playlist) : GroupUiAction
-    data class NavigateToGroup(val title: String, val group: String) : GroupUiAction
-    data object NavigateToSettings : GroupUiAction
-    data object RefreshPlaylist : GroupUiAction
+sealed interface GroupAction {
+    data class SelectPlaylist(val playlistId: String) : GroupAction
+    data class NavigateToGroup(val title: String, val group: String) : GroupAction
+    data object NavigateToSettings : GroupAction
 }
 
-sealed interface GroupUiEffect
+sealed interface GroupEffect

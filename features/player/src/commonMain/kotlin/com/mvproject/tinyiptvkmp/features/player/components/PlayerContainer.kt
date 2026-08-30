@@ -4,8 +4,8 @@ import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
-import com.mvproject.tinyiptvkmp.features.player.PlayerUiAction
-import com.mvproject.tinyiptvkmp.features.player.PlayerUiState
+import com.mvproject.tinyiptvkmp.features.player.PlayerAction
+import com.mvproject.tinyiptvkmp.features.player.PlayerState
 import com.mvproject.tinyiptvkmp.platform.mediaplayer.MediaPlaybackState
 import com.mvproject.tinyiptvkmp.platform.mediaplayer.MediaPlayerEvent
 import com.mvproject.tinyiptvkmp.platform.mediaplayer.MediaPlayerState
@@ -14,8 +14,8 @@ import com.mvproject.tinyiptvkmp.platform.mediaplayer.MediaPlayerView
 @Composable
 fun PlayerContainer(
     modifier: Modifier,
-    uiState: PlayerUiState,
-    onAction: (PlayerUiAction) -> Unit,
+    uiState: PlayerState,
+    onAction: (PlayerAction) -> Unit,
     toolbar: @Composable () -> Unit,
 ) {
     Box(modifier = modifier.fillMaxSize()) {
@@ -33,7 +33,7 @@ fun PlayerContainer(
     }
 }
 
-private fun PlayerUiState.toMediaPlayerState() =
+private fun PlayerState.toMediaPlayerState() =
     MediaPlayerState(
         url = currentChannel.channelUrl,
         channelKey = channelIndex,
@@ -41,18 +41,18 @@ private fun PlayerUiState.toMediaPlayerState() =
         isPlaying = isPlaying,
     )
 
-private fun MediaPlayerEvent.toPlayerUiAction(): PlayerUiAction =
+private fun MediaPlayerEvent.toPlayerUiAction(): PlayerAction =
     when (this) {
-        is MediaPlayerEvent.PlayingChanged -> PlayerUiAction.OnIsPlayingChanged(isPlaying)
+        is MediaPlayerEvent.PlayingChanged -> PlayerAction.OnIsPlayingChanged(isPlaying)
         is MediaPlayerEvent.PlaybackStateChanged -> {
-            PlayerUiAction.OnPlaybackStateChanged(state.toPlayerPlaybackState())
+            PlayerAction.OnPlaybackStateChanged(state.toPlayerPlaybackState())
         }
     }
 
-private fun MediaPlaybackState.toPlayerPlaybackState(): PlayerUiState.PlayerPlaybackState =
+private fun MediaPlaybackState.toPlayerPlaybackState(): PlayerState.PlayerPlaybackState =
     when (this) {
-        MediaPlaybackState.Buffering -> PlayerUiState.PlayerPlaybackState.PlaybackBuffering
-        MediaPlaybackState.Ended -> PlayerUiState.PlayerPlaybackState.PlaybackEnded
-        is MediaPlaybackState.Idle -> PlayerUiState.PlayerPlaybackState.PlaybackIdle(errorCode)
-        MediaPlaybackState.Ready -> PlayerUiState.PlayerPlaybackState.PlaybackReady
+        MediaPlaybackState.Buffering -> PlayerState.PlayerPlaybackState.PlaybackBuffering
+        MediaPlaybackState.Ended -> PlayerState.PlayerPlaybackState.PlaybackEnded
+        is MediaPlaybackState.Idle -> PlayerState.PlayerPlaybackState.PlaybackIdle(errorCode)
+        MediaPlaybackState.Ready -> PlayerState.PlayerPlaybackState.PlaybackReady
     }

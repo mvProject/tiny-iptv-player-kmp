@@ -8,7 +8,7 @@ import com.mvproject.tinyiptvkmp.features.epg.api.domain.model.TvChannelWithProg
 import com.mvproject.tinyiptvkmp.features.groups.api.domain.model.FavoriteType
 
 @Immutable
-data class PlayerUiState(
+data class PlayerState(
     val channelGroup: String = String.empty,
     val currentChannel: TvChannelWithPrograms = TvChannelWithPrograms(),
     val isControlUiVisible: Boolean = false,
@@ -39,25 +39,25 @@ data class PlayerUiState(
     }
 }
 
-sealed interface PlayerUiAction {
-    data object NavigateBack : PlayerUiAction
-    data object TogglePlayback : PlayerUiAction
-    data object ChangeVideoSize : PlayerUiAction
-    data object ToggleFullScreen : PlayerUiAction
-    data object TogglePlayerUi : PlayerUiAction
-    data object SelectNext : PlayerUiAction
-    data object SelectPrevious : PlayerUiAction
-    data object VolumeUp : PlayerUiAction
-    data object VolumeDown : PlayerUiAction
+sealed interface PlayerAction {
+    data object NavigateBack : PlayerAction
+    data object TogglePlayback : PlayerAction
+    data object ChangeVideoSize : PlayerAction
+    data object ToggleFullScreen : PlayerAction
+    data object TogglePlayer : PlayerAction
+    data object SelectNext : PlayerAction
+    data object SelectPrevious : PlayerAction
+    data object VolumeUp : PlayerAction
+    data object VolumeDown : PlayerAction
 
-    data class SelectChannel(val channel: TvChannelWithPrograms) : PlayerUiAction
+    data class SelectChannel(val channel: TvChannelWithPrograms) : PlayerAction
 
-    data class OnIsPlayingChanged(val state: Boolean) : PlayerUiAction
-    data class OnPlaybackStateChanged(val state: PlayerUiState.PlayerPlaybackState) : PlayerUiAction
+    data class OnIsPlayingChanged(val state: Boolean) : PlayerAction
+    data class OnPlaybackStateChanged(val state: PlayerState.PlayerPlaybackState) : PlayerAction
 
-    data class UpdateFavorite(val type: FavoriteType) : PlayerUiAction
-    data class OpenOsd(val type: PlayerUiState.PlayerOSD) : PlayerUiAction
-    data object CloseOsd : PlayerUiAction
+    data class UpdateFavorite(val type: FavoriteType) : PlayerAction
+    data class OpenOsd(val type: PlayerState.PlayerOSD) : PlayerAction
+    data object CloseOsd : PlayerAction
 }
 
 sealed interface PlayerUiEffect

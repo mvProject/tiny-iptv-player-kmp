@@ -7,13 +7,13 @@ kotlin {
     sourceSets {
         commonMain.dependencies {
             implementation(projects.core.base)
-            implementation(projects.core.datastore)
             implementation(projects.core.navigation)
             implementation(projects.core.foundation)
             implementation(projects.core.ui)
             implementation(projects.core.designsystem)
             implementation(projects.features.groupsApi)
             implementation(projects.features.playlistApi)
+            implementation(projects.features.settingsApi)
             implementation(projects.features.epgApi)
             implementation(projects.infrastructure.logging)
             implementation(libs.kotlinx.coroutines.core)

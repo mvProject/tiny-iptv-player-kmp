@@ -25,16 +25,16 @@ import androidx.compose.ui.Modifier
 import com.mvproject.tinyiptvkmp.core.theme.colorSchemeExtended
 import com.mvproject.tinyiptvkmp.core.theme.dimensionSize
 import com.mvproject.tinyiptvkmp.core.theme.dimensionText
-import com.mvproject.tinyiptvkmp.features.groups.GroupUiAction
-import com.mvproject.tinyiptvkmp.features.groups.GroupUiState
+import com.mvproject.tinyiptvkmp.features.groups.GroupAction
+import com.mvproject.tinyiptvkmp.features.groups.GroupState
 import com.mvproject.tinyiptvkmp.features.groups.generated.resources.Res
 import com.mvproject.tinyiptvkmp.features.groups.generated.resources.hint_current_playlist
 import org.jetbrains.compose.resources.stringResource
 
 @Composable
 fun PlaylistSelector(
-    uiState: GroupUiState,
-    onAction: (GroupUiAction) -> Unit,
+    uiState: GroupState,
+    onAction: (GroupAction) -> Unit,
 ) {
     Column(
         modifier = Modifier.fillMaxWidth().border(
@@ -85,7 +85,7 @@ fun PlaylistSelector(
                                 contentPadding = PaddingValues(),
                                 onClick = {
                                     isSelectPlaylistOpen = false
-                                    onAction(GroupUiAction.SelectPlaylist(item))
+                                    onAction(GroupAction.SelectPlaylist(item.id))
                                 },
                             ) {
                                 Text(

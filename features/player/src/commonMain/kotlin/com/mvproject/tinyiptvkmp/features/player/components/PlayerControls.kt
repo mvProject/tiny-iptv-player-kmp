@@ -25,8 +25,8 @@ import com.mvproject.tinyiptvkmp.core.components.modifiers.SpacerWidth
 import com.mvproject.tinyiptvkmp.core.foundation.model.VideoSize
 import com.mvproject.tinyiptvkmp.core.mapper.mapToIcon
 import com.mvproject.tinyiptvkmp.core.theme.dimensionSize
-import com.mvproject.tinyiptvkmp.features.player.PlayerUiAction
-import com.mvproject.tinyiptvkmp.features.player.PlayerUiState
+import com.mvproject.tinyiptvkmp.features.player.PlayerAction
+import com.mvproject.tinyiptvkmp.features.player.PlayerState
 import com.mvproject.tinyiptvkmp.platform.mediaplayer.AdditionalMediaPlayerControls
 
 @Composable
@@ -36,7 +36,7 @@ fun PlayerControls(
     isFavorite: Boolean,
     isPlaying: Boolean,
     isFullScreen: Boolean,
-    onAction: (PlayerUiAction) -> Unit = {},
+    onAction: (PlayerAction) -> Unit = {},
 ) {
     Row(
         modifier = modifier,
@@ -45,19 +45,19 @@ fun PlayerControls(
     ) {
         AdditionalMediaPlayerControls(
             modifier = Modifier,
-            onNavigateBack = { onAction(PlayerUiAction.NavigateBack) },
-            onVolumeDown = { onAction(PlayerUiAction.VolumeDown) },
-            onVolumeUp = { onAction(PlayerUiAction.VolumeUp) },
-            onSelectPrevious = { onAction(PlayerUiAction.SelectPrevious) },
-            onSelectNext = { onAction(PlayerUiAction.SelectNext) },
-            onOpenPrograms = { onAction(PlayerUiAction.OpenOsd(PlayerUiState.PlayerOSD.ChannelPrograms)) },
-            onOpenChannels = { onAction(PlayerUiAction.OpenOsd(PlayerUiState.PlayerOSD.GroupChannels)) },
-            onOpenInfo = { onAction(PlayerUiAction.OpenOsd(PlayerUiState.PlayerOSD.ProgramInfo)) },
+            onNavigateBack = { onAction(PlayerAction.NavigateBack) },
+            onVolumeDown = { onAction(PlayerAction.VolumeDown) },
+            onVolumeUp = { onAction(PlayerAction.VolumeUp) },
+            onSelectPrevious = { onAction(PlayerAction.SelectPrevious) },
+            onSelectNext = { onAction(PlayerAction.SelectNext) },
+            onOpenPrograms = { onAction(PlayerAction.OpenOsd(PlayerState.PlayerOSD.ChannelPrograms)) },
+            onOpenChannels = { onAction(PlayerAction.OpenOsd(PlayerState.PlayerOSD.GroupChannels)) },
+            onOpenInfo = { onAction(PlayerAction.OpenOsd(PlayerState.PlayerOSD.ProgramInfo)) },
         )
 
         ControlButton(
             imageVector = if (isPlaying) Icons.Rounded.Pause else Icons.Rounded.PlayArrow,
-            onClick = { onAction(PlayerUiAction.TogglePlayback) },
+            onClick = { onAction(PlayerAction.TogglePlayback) },
         )
 
         Row(
@@ -67,19 +67,19 @@ fun PlayerControls(
         ) {
             ControlButton(
                 imageVector = if (isFavorite) Icons.Rounded.Favorite else Icons.Rounded.FavoriteBorder,
-                onClick = { onAction(PlayerUiAction.OpenOsd(PlayerUiState.PlayerOSD.ChannelFavorites)) },
+                onClick = { onAction(PlayerAction.OpenOsd(PlayerState.PlayerOSD.ChannelFavorites)) },
             )
 
             SpacerWidth(width = MaterialTheme.dimensionSize.size8)
             ControlButton(
                 imageVector = videoSize.mapToIcon(),
-                onClick = { onAction(PlayerUiAction.ChangeVideoSize) },
+                onClick = { onAction(PlayerAction.ChangeVideoSize) },
             )
 
             SpacerWidth(width = MaterialTheme.dimensionSize.size8)
             ControlButton(
                 imageVector = if (isFullScreen) Icons.Rounded.FullscreenExit else Icons.Rounded.Fullscreen,
-                onClick = { onAction(PlayerUiAction.ToggleFullScreen) },
+                onClick = { onAction(PlayerAction.ToggleFullScreen) },
             )
         }
     }

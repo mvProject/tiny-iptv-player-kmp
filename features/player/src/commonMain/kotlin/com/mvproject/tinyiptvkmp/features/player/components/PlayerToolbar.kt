@@ -37,7 +37,7 @@ import com.mvproject.tinyiptvkmp.core.theme.dimensionWeight
 import com.mvproject.tinyiptvkmp.features.epg.api.domain.model.EpgProgram
 import com.mvproject.tinyiptvkmp.features.epg.api.domain.model.TvChannelWithPrograms
 import com.mvproject.tinyiptvkmp.features.groups.api.domain.model.FavoriteType
-import com.mvproject.tinyiptvkmp.features.player.PlayerUiAction
+import com.mvproject.tinyiptvkmp.features.player.PlayerAction
 
 @Composable
 fun PlayerToolbar(
@@ -48,7 +48,7 @@ fun PlayerToolbar(
     isVisible: Boolean = false,
     isPlaying: Boolean = false,
     isFullScreen: Boolean = false,
-    onAction: (PlayerUiAction) -> Unit = {},
+    onAction: (PlayerAction) -> Unit = {},
 ) {
     AnimatedVisibility(
         visible = isVisible,
