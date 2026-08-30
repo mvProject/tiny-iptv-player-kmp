@@ -8,16 +8,14 @@
 package com.mvproject.tinyiptvkmp.navigation
 
 import androidx.navigation3.runtime.EntryProviderScope
-import com.mvproject.tinyiptvkmp.features.groups.navigation.PlaylistGroupsRoute
+import com.mvproject.tinyiptvkmp.features.groups.GroupScreen
+import com.mvproject.tinyiptvkmp.features.groups.GroupViewModel
+import org.koin.compose.viewmodel.koinViewModel
 
-fun EntryProviderScope<AppRoutes>.playlistGroups(
-    onNavigateToSettings: () -> Unit,
-    onNavigateToGroup: (String, String) -> Unit,
-) {
+fun EntryProviderScope<AppRoutes>.playlistGroups() {
     entry<AppRoutes.PlaylistGroup> {
-        PlaylistGroupsRoute(
-            onNavigateToSettings = onNavigateToSettings,
-            onNavigateToGroup = onNavigateToGroup,
-        )
+        val groupViewModel = koinViewModel<GroupViewModel>()
+
+        GroupScreen(viewModel = groupViewModel)
     }
 }

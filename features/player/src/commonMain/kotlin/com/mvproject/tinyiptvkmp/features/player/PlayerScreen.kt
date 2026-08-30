@@ -24,7 +24,6 @@ import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
-import com.mvproject.tinyiptvkmp.core.base.mvi.CollectUiEffect
 import com.mvproject.tinyiptvkmp.core.components.adaptive.PlayerProgramsPlacement
 import com.mvproject.tinyiptvkmp.core.components.adaptive.rememberAdaptiveLayoutState
 import com.mvproject.tinyiptvkmp.core.components.channels.ChannelFavoriteSelector
@@ -57,16 +56,11 @@ import org.jetbrains.compose.resources.painterResource
 import org.jetbrains.compose.resources.stringResource
 
 @Composable
-internal fun PlayerScreen(
-    viewModel: PlayerViewModel,
-    onNavigateBack: () -> Unit = {},
+fun PlayerScreen(
+    viewModel: PlayerViewModel
 ) {
     val uiState by viewModel.uiState.collectAsStateWithLifecycle()
-    CollectUiEffect(viewModel.uiEffect) { effect ->
-        when (effect) {
-            PlayerUiEffect.OnNavigateBack -> onNavigateBack()
-        }
-    }
+
     PlayerScreen(
         uiState = uiState,
         onAction = viewModel::onAction
@@ -82,10 +76,10 @@ private fun PlayerScreen(
 
     Box(
         modifier =
-        Modifier
-            .fillMaxSize()
-            .background(MaterialTheme.colorScheme.scrim)
-            .windowInsetsPadding(WindowInsets.systemBars),
+            Modifier
+                .fillMaxSize()
+                .background(MaterialTheme.colorScheme.scrim)
+                .windowInsetsPadding(WindowInsets.systemBars),
         contentAlignment = Alignment.TopCenter,
     ) {
 
@@ -134,17 +128,17 @@ private fun PlayerScreen(
                     PlayerOSD.ChannelPrograms -> {
                         ChannelPrograms(
                             modifier =
-                            Modifier
-                                .fillMaxHeight(adaptiveLayoutState.overlayHeightFraction)
-                                .fillMaxWidth(adaptiveLayoutState.overlayWidthFraction)
-                                .background(
-                                    color = MaterialTheme.colorScheme.primary,
-                                    shape =
-                                    RoundedCornerShape(
-                                        bottomStart = MaterialTheme.dimensionSize.size8,
-                                        bottomEnd = MaterialTheme.dimensionSize.size8,
+                                Modifier
+                                    .fillMaxHeight(adaptiveLayoutState.overlayHeightFraction)
+                                    .fillMaxWidth(adaptiveLayoutState.overlayWidthFraction)
+                                    .background(
+                                        color = MaterialTheme.colorScheme.primary,
+                                        shape =
+                                            RoundedCornerShape(
+                                                bottomStart = MaterialTheme.dimensionSize.size8,
+                                                bottomEnd = MaterialTheme.dimensionSize.size8,
+                                            ),
                                     ),
-                                ),
                             title = uiState.currentChannel.channelName,
                             programs = uiState.currentChannel.programs.map { it.toChannelProgramUiModel() },
                         )

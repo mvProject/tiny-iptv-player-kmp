@@ -30,7 +30,6 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.lifecycle.compose.LifecycleResumeEffect
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
-import com.mvproject.tinyiptvkmp.core.base.mvi.CollectUiEffect
 import com.mvproject.tinyiptvkmp.core.components.adaptive.rememberAdaptiveLayoutState
 import com.mvproject.tinyiptvkmp.core.components.indicators.LoadingIndicator
 import com.mvproject.tinyiptvkmp.core.components.overlay.OnScreenDisplay
@@ -46,10 +45,8 @@ import com.mvproject.tinyiptvkmp.features.channels.generated.resources.hint_msg_
 import org.jetbrains.compose.resources.stringResource
 
 @Composable
-internal fun GroupChannelsScreen(
-    viewModel: GroupChannelsViewModel,
-    onNavigateToPlayer: (String, String, String) -> Unit,
-    onNavigateBack: () -> Unit,
+fun GroupChannelsScreen(
+    viewModel: GroupChannelsViewModel
 ) {
     LifecycleResumeEffect(Unit) {
         viewModel.loadChannelsByGroups()
@@ -58,14 +55,6 @@ internal fun GroupChannelsScreen(
     }
 
     val uiState by viewModel.uiState.collectAsStateWithLifecycle()
-
-    CollectUiEffect(viewModel.uiEffect) { effect ->
-        when (effect) {
-            GroupChannelsUiEffect.OnNavigateBack -> onNavigateBack()
-            is GroupChannelsUiEffect.OnNavigateToPlayer ->
-                onNavigateToPlayer(effect.name, effect.group, effect.groupType)
-        }
-    }
 
     GroupChannelsScreen(
         uiState = uiState,

@@ -13,12 +13,16 @@ import com.mvproject.tinyiptvkmp.core.network.di.networkModule
 import com.mvproject.tinyiptvkmp.di.database.databaseModule
 import com.mvproject.tinyiptvkmp.features.channels.api.di.channelsApiModule
 import com.mvproject.tinyiptvkmp.features.channels.di.channelsModule
+import com.mvproject.tinyiptvkmp.features.channels.nav.GroupChannelsNavigator
 import com.mvproject.tinyiptvkmp.features.epg.api.di.epgApiModule
 import com.mvproject.tinyiptvkmp.features.groups.api.di.groupsApiModule
 import com.mvproject.tinyiptvkmp.features.groups.di.groupsModule
+import com.mvproject.tinyiptvkmp.features.groups.nav.GroupNavigator
 import com.mvproject.tinyiptvkmp.features.player.di.playerModule
+import com.mvproject.tinyiptvkmp.features.player.nav.PlayerNavigator
 import com.mvproject.tinyiptvkmp.features.playlist.api.di.playlistApiModule
 import com.mvproject.tinyiptvkmp.features.playlist.di.playlistModule
+import com.mvproject.tinyiptvkmp.features.playlist.nav.PlaylistNavigator
 import com.mvproject.tinyiptvkmp.features.settings.api.di.settingsApiModule
 import com.mvproject.tinyiptvkmp.features.settings.di.settingsModule
 import com.mvproject.tinyiptvkmp.features.settings.nav.SettingsNavigator
@@ -57,7 +61,11 @@ val navModule = module {
         DefaultNavigator(startDestination = AppRoutes.PlaylistGroup)
     } binds arrayOf(
         Navigator::class,
-        SettingsNavigator::class
+        SettingsNavigator::class,
+        PlaylistNavigator::class,
+        GroupNavigator::class,
+        GroupChannelsNavigator::class,
+        PlayerNavigator::class,
     )
 }
 

@@ -8,6 +8,7 @@ kotlin {
         commonMain.dependencies {
             implementation(projects.core.base)
             implementation(projects.core.datastore)
+            implementation(projects.core.navigation)
             implementation(projects.core.foundation)
             implementation(projects.core.ui)
             implementation(projects.core.designsystem)

@@ -1,6 +1,10 @@
 package com.mvproject.tinyiptvkmp.navigation
 
 import com.mvproject.tinyiptvkmp.core.navigation.AppNavigator
+import com.mvproject.tinyiptvkmp.features.channels.nav.GroupChannelsNavigator
+import com.mvproject.tinyiptvkmp.features.groups.nav.GroupNavigator
+import com.mvproject.tinyiptvkmp.features.player.nav.PlayerNavigator
+import com.mvproject.tinyiptvkmp.features.playlist.nav.PlaylistNavigator
 import com.mvproject.tinyiptvkmp.features.settings.nav.SettingsNavigator
 import com.mvproject.tinyiptvkmp.infrastructure.logging.injectLogger
 import kotlinx.coroutines.channels.Channel
@@ -27,7 +31,8 @@ sealed interface NavigationAction {
 
 class DefaultNavigator(
     override val startDestination: AppRoutes,
-) : KoinComponent, Navigator, AppNavigator, SettingsNavigator {
+) : KoinComponent, Navigator, AppNavigator, SettingsNavigator, PlaylistNavigator, GroupNavigator,
+    GroupChannelsNavigator, PlayerNavigator {
     private val logger by injectLogger()
     private val _navigationActions = Channel<NavigationAction>()
     override val navigationActions = _navigationActions.receiveAsFlow()
@@ -56,5 +61,36 @@ class DefaultNavigator(
     override suspend fun navigateToPlaylist(id: String) {
         logger.d { "navigateToPlaylist" }
         _navigationActions.send(NavigationAction.Navigate(destination = AppRoutes.PlaylistDetail(id = id)))
+    }
+
+    override suspend fun navigateToSettings() {
+        logger.d { "navigateToSettings" }
+        _navigationActions.send(NavigationAction.Navigate(destination = AppRoutes.SettingsGeneral))
+    }
+
+    override suspend fun navigateToPlaylist(title: String, group: String) {
+        logger.d { "navigateToPlaylist" }
+        _navigationActions.send(
+            NavigationAction.Navigate(
+                destination = AppRoutes.TvPlaylistChannels(group = title, groupType = group)
+            )
+        )
+    }
+
+    override suspend fun navigateToPlayer(
+        name: String,
+        group: String,
+        groupType: String
+    ) {
+        logger.d { "navigateToPlayer" }
+        _navigationActions.send(
+            NavigationAction.Navigate(
+                destination = AppRoutes.Player(
+                    channelName = name,
+                    group = group,
+                    groupType = groupType,
+                )
+            )
+        )
     }
 }

@@ -41,14 +41,6 @@ fun NavigationHost(
         }
     }
 
-    fun navigate(route: AppRoutes) {
-        backStack.add(route)
-    }
-
-    fun navigateBack() {
-        backStack.removeLastOrNull()
-    }
-
     NavDisplay(
         modifier = modifier.fillMaxSize().imePadding(),
         backStack = backStack,
@@ -60,29 +52,13 @@ fun NavigationHost(
         popTransitionSpec = { appPopTransitionSpec() },
         predictivePopTransitionSpec = { _ -> appPopTransitionSpec() },
         entryProvider = entryProvider {
-            playlistGroups(
-                onNavigateToSettings = { navigate(AppRoutes.SettingsGeneral) },
-                onNavigateToGroup = { group, groupType ->
-                    navigate(AppRoutes.TvPlaylistChannels(group = group, groupType = groupType))
-                },
-            )
+            playlistGroups()
 
-            groupChannels(
-                onNavigateBack = ::navigateBack,
-                onNavigateToPlayer = { channelName, group, groupType ->
-                    navigate(
-                        AppRoutes.Player(
-                            channelName = channelName,
-                            group = group,
-                            groupType = groupType,
-                        )
-                    )
-                },
-            )
+            groupChannels()
 
-            playlistDetail(onNavigateBack = ::navigateBack)
+            playlistDetail()
 
-            player(onNavigateBack = ::navigateBack)
+            playerScreen()
 
             settingsGeneral()
 

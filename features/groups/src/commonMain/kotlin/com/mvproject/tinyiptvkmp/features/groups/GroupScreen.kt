@@ -27,7 +27,6 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clipToBounds
 import androidx.lifecycle.compose.LifecycleResumeEffect
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
-import com.mvproject.tinyiptvkmp.core.base.mvi.CollectUiEffect
 import com.mvproject.tinyiptvkmp.core.components.NoItemsView
 import com.mvproject.tinyiptvkmp.core.components.adaptive.adaptiveContentWidth
 import com.mvproject.tinyiptvkmp.core.components.adaptive.rememberAdaptiveLayoutState
@@ -46,19 +45,10 @@ import com.mvproject.tinyiptvkmp.core.designsystem.generated.resources.Res as De
 
 
 @Composable
-internal fun GroupScreen(
-    viewModel: GroupViewModel,
-    onNavigateToSettings: () -> Unit = {},
-    onNavigateToGroup: (String, String) -> Unit,
+fun GroupScreen(
+    viewModel: GroupViewModel
 ) {
     val uiState by viewModel.uiState.collectAsStateWithLifecycle()
-
-    CollectUiEffect(viewModel.uiEffect) { effect ->
-        when (effect) {
-            is GroupUiEffect.OnNavigateToGroup -> onNavigateToGroup(effect.title, effect.group)
-            GroupUiEffect.OnNavigateToSettings -> onNavigateToSettings()
-        }
-    }
 
     GroupScreen(
         uiState = uiState,

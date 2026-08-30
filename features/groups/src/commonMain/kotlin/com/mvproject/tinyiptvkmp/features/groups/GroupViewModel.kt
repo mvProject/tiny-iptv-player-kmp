@@ -7,22 +7,20 @@
 
 package com.mvproject.tinyiptvkmp.features.groups
 
-import androidx.compose.runtime.Immutable
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.mvproject.tinyiptvkmp.core.base.mvi.MviCore
 import com.mvproject.tinyiptvkmp.core.base.mvi.mviCore
 import com.mvproject.tinyiptvkmp.core.datastore.ProtoStore
 import com.mvproject.tinyiptvkmp.core.datastore.preferences.AppPreferencesProto
-import com.mvproject.tinyiptvkmp.core.foundation.common.FLOAT_VALUE_ZERO
 import com.mvproject.tinyiptvkmp.core.foundation.common.INT_VALUE_1
 import com.mvproject.tinyiptvkmp.features.epg.api.domain.usecase.CleanProgramsUseCase
 import com.mvproject.tinyiptvkmp.features.epg.api.domain.usecase.RefreshEpgChannelsUseCase
 import com.mvproject.tinyiptvkmp.features.epg.api.domain.usecase.RefreshEpgProgramsUseCase
 import com.mvproject.tinyiptvkmp.features.epg.api.domain.usecase.UpdateChannelsEpgInfoUseCase
-import com.mvproject.tinyiptvkmp.features.groups.api.domain.model.ChannelsGroup
 import com.mvproject.tinyiptvkmp.features.groups.api.domain.model.GroupType
 import com.mvproject.tinyiptvkmp.features.groups.api.domain.usecase.GetPlaylistGroupUseCase
+import com.mvproject.tinyiptvkmp.features.groups.nav.GroupNavigator
 import com.mvproject.tinyiptvkmp.features.playlist.api.domain.model.Playlist
 import com.mvproject.tinyiptvkmp.features.playlist.api.domain.usecase.ObservePlaylistsUseCase
 import com.mvproject.tinyiptvkmp.features.playlist.api.domain.usecase.SelectPlaylistUseCase
@@ -37,6 +35,7 @@ import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.launch
 import org.koin.core.component.KoinComponent
+import org.koin.core.component.inject
 
 class GroupViewModel(
     private val preferencesStore: ProtoStore<AppPreferencesProto>,
@@ -53,6 +52,7 @@ class GroupViewModel(
     MviCore<GroupUiState, GroupUiAction, GroupUiEffect> by mviCore(GroupUiState()) {
 
     private val logger by injectLogger()
+    private val navigator: GroupNavigator by inject()
 
     init {
         observePlaylistsUseCase()
@@ -101,16 +101,16 @@ class GroupViewModel(
             }
 
             is GroupUiAction.NavigateToGroup -> {
-                viewModelScope.postUiEffect(
-                    GroupUiEffect.OnNavigateToGroup(
+                viewModelScope.launch {
+                    navigator.navigateToPlaylist(
                         title = uiAction.title,
                         group = uiAction.group
                     )
-                )
+                }
             }
 
             GroupUiAction.NavigateToSettings -> {
-                viewModelScope.postUiEffect(GroupUiEffect.OnNavigateToSettings)
+                viewModelScope.launch { navigator.navigateToSettings() }
             }
         }
     }
@@ -139,32 +139,4 @@ class GroupViewModel(
             )
         }
     }
-}
-
-@Immutable
-data class GroupUiState(
-    val groupState: GroupState = GroupState.Empty,
-    val playlists: List<Playlist> = emptyList(),
-    val selectedPlaylist: Playlist = Playlist(),
-    val isPlaylistSelectorVisible: Boolean = false,
-    val isLoading: Boolean = false,
-    val isUpdating: Boolean = false,
-    val progress: Float = FLOAT_VALUE_ZERO,
-) {
-    sealed interface GroupState {
-        data class Success(val groups: List<ChannelsGroup>) : GroupState
-        data object Empty : GroupState
-    }
-}
-
-sealed interface GroupUiAction {
-    data class SelectPlaylist(val playlist: Playlist) : GroupUiAction
-    data class NavigateToGroup(val title: String, val group: String) : GroupUiAction
-    data object NavigateToSettings : GroupUiAction
-    data object RefreshPlaylist : GroupUiAction
-}
-
-sealed interface GroupUiEffect {
-    data object OnNavigateToSettings : GroupUiEffect
-    data class OnNavigateToGroup(val title: String, val group: String) : GroupUiEffect
 }

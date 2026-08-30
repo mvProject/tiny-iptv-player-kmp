@@ -7,7 +7,6 @@
 
 package com.mvproject.tinyiptvkmp.features.channels
 
-import androidx.compose.runtime.Immutable
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.mvproject.tinyiptvkmp.core.base.mvi.MviCore
@@ -16,11 +15,10 @@ import com.mvproject.tinyiptvkmp.core.datastore.ProtoStore
 import com.mvproject.tinyiptvkmp.core.datastore.preferences.AppPreferencesProto
 import com.mvproject.tinyiptvkmp.core.foundation.model.ChannelsViewType
 import com.mvproject.tinyiptvkmp.core.foundation.model.ChannelsViewType.Companion.mapViewType
-import com.mvproject.tinyiptvkmp.core.foundation.utils.CommonUtils.empty
 import com.mvproject.tinyiptvkmp.core.foundation.utils.actualDate
 import com.mvproject.tinyiptvkmp.features.channels.GroupChannelsUiState.GroupChannelsOSD
 import com.mvproject.tinyiptvkmp.features.channels.api.domain.usecase.ToggleFavoriteChannelUseCase
-import com.mvproject.tinyiptvkmp.features.epg.api.domain.model.EpgProgram
+import com.mvproject.tinyiptvkmp.features.channels.nav.GroupChannelsNavigator
 import com.mvproject.tinyiptvkmp.features.epg.api.domain.model.TvChannelWithPrograms
 import com.mvproject.tinyiptvkmp.features.epg.api.domain.usecase.GetChannelsEpgUseCase
 import com.mvproject.tinyiptvkmp.features.epg.api.domain.usecase.GetGroupChannelsEpgUseCase
@@ -36,6 +34,8 @@ import kotlinx.coroutines.IO
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.launch
 import org.koin.core.annotation.InjectedParam
+import org.koin.core.component.KoinComponent
+import org.koin.core.component.inject
 import kotlin.time.Duration.Companion.minutes
 
 class GroupChannelsViewModel(
@@ -46,6 +46,7 @@ class GroupChannelsViewModel(
     private val toggleFavoriteChannelUseCase: ToggleFavoriteChannelUseCase,
     private val preferencesStore: ProtoStore<AppPreferencesProto>,
 ) : ViewModel(),
+    KoinComponent,
     MviCore<GroupChannelsUiState, GroupChannelsUiAction, GroupChannelsUiEffect> by mviCore(
         GroupChannelsUiState()
     ) {
@@ -54,6 +55,9 @@ class GroupChannelsViewModel(
     private val type = args.groupType
 
     private var lastRefresh: Long = 0
+
+    private val navigator: GroupChannelsNavigator by inject()
+
 
     // todo refresh after return from playback
 
@@ -73,14 +77,21 @@ class GroupChannelsViewModel(
 
     override fun onAction(uiAction: GroupChannelsUiAction) {
         when (uiAction) {
-            GroupChannelsUiAction.NavigateBack -> viewModelScope.postUiEffect(GroupChannelsUiEffect.OnNavigateBack)
-            is GroupChannelsUiAction.SelectChannel -> viewModelScope.postUiEffect(
-                GroupChannelsUiEffect.OnNavigateToPlayer(
-                    name = uiAction.name,
-                    group = uiAction.group,
-                    groupType = type
-                )
-            )
+            GroupChannelsUiAction.NavigateBack -> {
+                viewModelScope.launch {
+                    navigator.navigateUp()
+                }
+            }
+
+            is GroupChannelsUiAction.SelectChannel -> {
+                viewModelScope.launch {
+                    navigator.navigateToPlayer(
+                        name = uiAction.name,
+                        group = uiAction.group,
+                        groupType = type
+                    )
+                }
+            }
 
             is GroupChannelsUiAction.SearchTextChange -> searchTextChange(text = uiAction.text)
             is GroupChannelsUiAction.ToggleFavorite -> toggleFavorites(
@@ -194,47 +205,4 @@ class GroupChannelsViewModel(
     }
 }
 
-@Immutable
-data class GroupChannelsUiState(
-    val currentGroup: String = String.empty,
-    val isLoading: Boolean = false,
-    val searchString: String = String.empty,
-    val viewType: ChannelsViewType = ChannelsViewType.LIST,
-    val channels: List<TvChannelWithPrograms> = emptyList(),
-    val selectedName: String = String.empty,
-    val selectedPrograms: List<EpgProgram> = emptyList(),
-    val osdType: GroupChannelsOSD? = null
-) {
-    sealed interface GroupChannelsOSD {
-        data class ChannelPrograms(val channel: TvChannelWithPrograms) : GroupChannelsOSD
-        data class ChannelFavorites(val channel: TvChannelWithPrograms) : GroupChannelsOSD
-    }
-}
 
-sealed interface GroupChannelsUiAction {
-    data class ToggleFavorite(
-        val channel: TvChannelWithPrograms,
-        val type: FavoriteType
-    ) : GroupChannelsUiAction
-
-    data class SearchTextChange(val text: String) : GroupChannelsUiAction
-    data class ViewTypeChange(val type: ChannelsViewType) : GroupChannelsUiAction
-    data class SelectChannel(
-        val name: String,
-        val group: String
-    ) : GroupChannelsUiAction
-
-    data object NavigateBack : GroupChannelsUiAction
-    data class OpenOsd(val type: GroupChannelsOSD) : GroupChannelsUiAction
-    data object CloseOsd : GroupChannelsUiAction
-}
-
-sealed interface GroupChannelsUiEffect {
-    data class OnNavigateToPlayer(
-        val name: String,
-        val group: String,
-        val groupType: String
-    ) : GroupChannelsUiEffect
-
-    data object OnNavigateBack : GroupChannelsUiEffect
-}

@@ -7,7 +7,6 @@
 
 package com.mvproject.tinyiptvkmp.features.player
 
-import androidx.compose.runtime.Immutable
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.mvproject.tinyiptvkmp.core.base.mvi.MviCore
@@ -19,13 +18,11 @@ import com.mvproject.tinyiptvkmp.core.foundation.common.DELAY_500
 import com.mvproject.tinyiptvkmp.core.foundation.common.FLOAT_STEP_VOLUME
 import com.mvproject.tinyiptvkmp.core.foundation.common.FLOAT_VALUE_1
 import com.mvproject.tinyiptvkmp.core.foundation.common.FLOAT_VALUE_ZERO
-import com.mvproject.tinyiptvkmp.core.foundation.common.INT_NO_VALUE
 import com.mvproject.tinyiptvkmp.core.foundation.common.INT_VALUE_1
 import com.mvproject.tinyiptvkmp.core.foundation.common.INT_VALUE_ZERO
 import com.mvproject.tinyiptvkmp.core.foundation.common.UI_SHOW_DELAY
 import com.mvproject.tinyiptvkmp.core.foundation.common.VOLUME_SHOW_DELAY
 import com.mvproject.tinyiptvkmp.core.foundation.model.VideoSize
-import com.mvproject.tinyiptvkmp.core.foundation.utils.CommonUtils.empty
 import com.mvproject.tinyiptvkmp.features.channels.api.domain.usecase.ToggleFavoriteChannelUseCase
 import com.mvproject.tinyiptvkmp.features.epg.api.domain.model.TvChannelWithPrograms
 import com.mvproject.tinyiptvkmp.features.epg.api.domain.usecase.GetChannelsEpgUseCase
@@ -37,6 +34,7 @@ import com.mvproject.tinyiptvkmp.features.epg.api.domain.utils.withPrograms
 import com.mvproject.tinyiptvkmp.features.groups.api.domain.model.FavoriteType
 import com.mvproject.tinyiptvkmp.features.groups.api.domain.usecase.GetGroupChannelsUseCase
 import com.mvproject.tinyiptvkmp.features.player.PlayerUiState.PlayerOSD
+import com.mvproject.tinyiptvkmp.features.player.nav.PlayerNavigator
 import com.mvproject.tinyiptvkmp.infrastructure.logging.injectLogger
 import com.mvproject.tinyiptvkmp.platform.mediaplayer.isMediaPlayable
 import kotlinx.coroutines.Job
@@ -45,6 +43,7 @@ import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.launch
 import org.koin.core.annotation.InjectedParam
 import org.koin.core.component.KoinComponent
+import org.koin.core.component.inject
 import kotlin.time.Duration.Companion.milliseconds
 
 class PlayerViewModel(
@@ -61,6 +60,8 @@ class PlayerViewModel(
     private val media = args.channelName
     private val group = args.group
     private val groupType = args.groupType
+
+    private val navigator: PlayerNavigator by inject()
 
     private var pollVolumeJob: Job? = null
 
@@ -132,7 +133,12 @@ class PlayerViewModel(
             is PlayerUiAction.SelectChannel -> switchToChannel(channel = uiAction.channel)
             is PlayerUiAction.OnIsPlayingChanged -> changePlayingState(state = uiAction.state)
             is PlayerUiAction.OnPlaybackStateChanged -> changePlaybackState(state = uiAction.state)
-            PlayerUiAction.NavigateBack -> viewModelScope.postUiEffect(PlayerUiEffect.OnNavigateBack)
+            PlayerUiAction.NavigateBack -> {
+                viewModelScope.launch {
+                    navigator.navigateUp()
+                }
+            }
+
             is PlayerUiAction.OpenOsd -> openOsd(type = uiAction.type)
             PlayerUiAction.CloseOsd -> closeOsd()
             is PlayerUiAction.UpdateFavorite -> toggleChannelFavorite(type = uiAction.type)
@@ -381,59 +387,4 @@ class PlayerViewModel(
     }
 }
 
-@Immutable
-data class PlayerUiState(
-    val channelGroup: String = String.empty,
-    val currentChannel: TvChannelWithPrograms = TvChannelWithPrograms(),
-    val isControlUiVisible: Boolean = false,
-    val isVolumeUiVisible: Boolean = false,
-    val isFullscreen: Boolean = false,
-    val isPlaying: Boolean = false,
-    val currentVolume: Float = 0.5f,
-    val isBuffering: Boolean = false,
-    val isMediaPlayable: Boolean = true,
-    val isOnline: Boolean = true,
-    val videoSize: VideoSize = VideoSize.WideScreen,
-    val channelIndex: Int = INT_NO_VALUE,
-    val groupChannels: List<TvChannelWithPrograms> = emptyList(),
-    val osdType: PlayerOSD? = null,
-) {
-    sealed interface PlayerPlaybackState {
-        data object PlaybackReady : PlayerPlaybackState
-        data object PlaybackEnded : PlayerPlaybackState
-        data object PlaybackBuffering : PlayerPlaybackState
-        data class PlaybackIdle(val errorCode: Int?) : PlayerPlaybackState
-    }
 
-    sealed interface PlayerOSD {
-        data object GroupChannels : PlayerOSD
-        data object ChannelPrograms : PlayerOSD
-        data object ProgramInfo : PlayerOSD
-        data object ChannelFavorites : PlayerOSD
-    }
-}
-
-sealed interface PlayerUiAction {
-    data object NavigateBack : PlayerUiAction
-    data object TogglePlayback : PlayerUiAction
-    data object ChangeVideoSize : PlayerUiAction
-    data object ToggleFullScreen : PlayerUiAction
-    data object TogglePlayerUi : PlayerUiAction
-    data object SelectNext : PlayerUiAction
-    data object SelectPrevious : PlayerUiAction
-    data object VolumeUp : PlayerUiAction
-    data object VolumeDown : PlayerUiAction
-
-    data class SelectChannel(val channel: TvChannelWithPrograms) : PlayerUiAction
-
-    data class OnIsPlayingChanged(val state: Boolean) : PlayerUiAction
-    data class OnPlaybackStateChanged(val state: PlayerUiState.PlayerPlaybackState) : PlayerUiAction
-
-    data class UpdateFavorite(val type: FavoriteType) : PlayerUiAction
-    data class OpenOsd(val type: PlayerOSD) : PlayerUiAction
-    data object CloseOsd : PlayerUiAction
-}
-
-sealed interface PlayerUiEffect {
-    data object OnNavigateBack : PlayerUiEffect
-}
