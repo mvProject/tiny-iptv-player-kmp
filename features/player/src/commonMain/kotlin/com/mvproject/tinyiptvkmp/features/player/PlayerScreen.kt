@@ -21,12 +21,15 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.movableContentOf
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.mvproject.tinyiptvkmp.core.components.adaptive.PlayerProgramsPlacement
 import com.mvproject.tinyiptvkmp.core.components.adaptive.rememberAdaptiveLayoutState
 import com.mvproject.tinyiptvkmp.core.components.channels.ChannelFavoriteSelector
+import com.mvproject.tinyiptvkmp.core.components.channels.ChannelProgramUiModel
 import com.mvproject.tinyiptvkmp.core.components.channels.ChannelPrograms
 import com.mvproject.tinyiptvkmp.core.components.indicators.LoadingIndicator
 import com.mvproject.tinyiptvkmp.core.components.indicators.VolumeIndicator
@@ -59,20 +62,45 @@ import org.jetbrains.compose.resources.stringResource
 fun PlayerScreen(
     viewModel: PlayerViewModel
 ) {
-    val uiState by viewModel.uiState.collectAsStateWithLifecycle()
+    val state by viewModel.state.collectAsStateWithLifecycle()
 
     PlayerScreen(
-        uiState = uiState,
-        onAction = viewModel::onAction
+        state = state,
+        onAction = viewModel::onIntent
     )
 }
 
 @Composable
 private fun PlayerScreen(
-    uiState: PlayerState,
+    state: PlayerState,
     onAction: (PlayerAction) -> Unit
 ) {
     val adaptiveLayoutState = rememberAdaptiveLayoutState()
+    val currentProgramsUiModels =
+        remember(state.currentChannel.programs) {
+            state.currentChannel.programs.map { program -> program.toChannelProgramUiModel() }
+        }
+    val playerContent =
+        remember {
+            movableContentOf<Modifier, PlayerState, (PlayerAction) -> Unit>(
+                content = { modifier, uiState, action ->
+                    PlayerContent(
+                        modifier = modifier,
+                        uiState = uiState,
+                        onAction = action,
+                    )
+                },
+            )
+        }
+    val programsContent =
+        remember {
+            movableContentOf<Modifier, List<ChannelProgramUiModel>> { modifier, programs ->
+                ChannelPrograms(
+                    modifier = modifier,
+                    programs = programs,
+                )
+            }
+        }
 
     Box(
         modifier =
@@ -82,48 +110,19 @@ private fun PlayerScreen(
                 .windowInsetsPadding(WindowInsets.systemBars),
         contentAlignment = Alignment.TopCenter,
     ) {
-
-        if (adaptiveLayoutState.playerProgramsPlacement == PlayerProgramsPlacement.Side) {
-            Row(modifier = Modifier.fillMaxSize()) {
-                PlayerContent(
-                    modifier = Modifier.weight(MaterialTheme.dimensionWeight.weight2),
-                    uiState = uiState,
-                    onAction = onAction
-                )
-
-                if (!uiState.isFullscreen) {
-                    ChannelPrograms(
-                        modifier = Modifier
-                            .weight(MaterialTheme.dimensionWeight.weight1)
-                            .background(color = MaterialTheme.colorScheme.primary),
-                        programs = uiState.currentChannel.programs.map { it.toChannelProgramUiModel() },
-                    )
-                }
-            }
-        } else {
-            Column(modifier = Modifier.fillMaxSize()) {
-                PlayerContent(
-                    modifier = Modifier.weight(MaterialTheme.dimensionWeight.weight2),
-                    uiState = uiState,
-                    onAction = onAction
-                )
-
-                if (!uiState.isFullscreen) {
-                    ChannelPrograms(
-                        modifier = Modifier
-                            .weight(MaterialTheme.dimensionWeight.weight1)
-                            .background(color = MaterialTheme.colorScheme.primary),
-                        programs = uiState.currentChannel.programs.map { it.toChannelProgramUiModel() },
-                    )
-                }
-            }
-        }
+        PlayerAdaptiveContentLayout(
+            programsPlacement = adaptiveLayoutState.playerProgramsPlacement,
+            showPrograms = !state.isFullscreen,
+            modifier = Modifier.fillMaxSize(),
+            playerContent = { modifier -> playerContent(modifier, state, onAction) },
+            programsContent = { modifier -> programsContent(modifier, currentProgramsUiModels) },
+        )
 
         OnScreenDisplay(
-            isVisible = uiState.osdType != null,
+            isVisible = state.osdType != null,
             onViewTap = { onAction(PlayerAction.CloseOsd) }
         ) {
-            uiState.osdType?.let { osdType ->
+            state.osdType?.let { osdType ->
                 when (osdType) {
                     PlayerOSD.ChannelPrograms -> {
                         ChannelPrograms(
@@ -139,37 +138,72 @@ private fun PlayerScreen(
                                                 bottomEnd = MaterialTheme.dimensionSize.size8,
                                             ),
                                     ),
-                            title = uiState.currentChannel.channelName,
-                            programs = uiState.currentChannel.programs.map { it.toChannelProgramUiModel() },
+                            title = state.currentChannel.channelName,
+                            programs = currentProgramsUiModels,
                         )
                     }
 
                     PlayerOSD.GroupChannels -> {
                         PlayerChannels(
-                            channels = uiState.groupChannels,
-                            current = uiState.channelIndex,
-                            group = uiState.channelGroup,
+                            channels = state.groupChannels,
+                            current = state.channelIndex,
+                            group = state.channelGroup,
                             onChannelSelect = { chn -> onAction(PlayerAction.SelectChannel(chn)) }
                         )
                     }
 
                     PlayerOSD.ProgramInfo -> {
                         ProgramInfo(
-                            channelName = uiState.currentChannel.channelName,
-                            programName = uiState.currentChannel.programTitle,
-                            description = uiState.currentChannel.programDescription,
+                            channelName = state.currentChannel.channelName,
+                            programName = state.currentChannel.programTitle,
+                            description = state.currentChannel.programDescription,
                         )
                     }
 
                     PlayerOSD.ChannelFavorites -> {
                         ChannelFavoriteSelector(
-                            options = favoriteOptionsUiModels(uiState.currentChannel.favoriteType),
+                            options = favoriteOptionsUiModels(state.currentChannel.favoriteType),
                             onSelectFavorite = { option ->
                                 onAction(PlayerAction.UpdateFavorite(FavoriteType.valueOf(option.id)))
                             }
                         )
                     }
                 }
+            }
+        }
+    }
+}
+
+@Composable
+private fun PlayerAdaptiveContentLayout(
+    programsPlacement: PlayerProgramsPlacement,
+    showPrograms: Boolean,
+    modifier: Modifier = Modifier,
+    playerContent: @Composable (Modifier) -> Unit,
+    programsContent: @Composable (Modifier) -> Unit,
+) {
+    if (programsPlacement == PlayerProgramsPlacement.Side) {
+        Row(modifier = modifier) {
+            playerContent(Modifier.weight(MaterialTheme.dimensionWeight.weight2))
+
+            if (showPrograms) {
+                programsContent(
+                    Modifier
+                        .weight(MaterialTheme.dimensionWeight.weight1)
+                        .background(color = MaterialTheme.colorScheme.primary),
+                )
+            }
+        }
+    } else {
+        Column(modifier = modifier) {
+            playerContent(Modifier.weight(MaterialTheme.dimensionWeight.weight2))
+
+            if (showPrograms) {
+                programsContent(
+                    Modifier
+                        .weight(MaterialTheme.dimensionWeight.weight1)
+                        .background(color = MaterialTheme.colorScheme.primary),
+                )
             }
         }
     }

@@ -61,7 +61,7 @@ fun PlayerControls(
         )
 
         Row(
-            modifier = modifier,
+            modifier = Modifier,
             verticalAlignment = Alignment.CenterVertically,
             horizontalArrangement = Arrangement.End,
         ) {

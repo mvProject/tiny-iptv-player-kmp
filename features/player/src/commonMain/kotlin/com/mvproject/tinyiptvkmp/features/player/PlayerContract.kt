@@ -60,7 +60,7 @@ sealed interface PlayerAction {
     data object CloseOsd : PlayerAction
 }
 
-sealed interface PlayerUiEffect
+sealed interface PlayerEffect
 
 data class PlayerArgs(
     val channelName: String,
