@@ -20,11 +20,8 @@ import androidx.compose.foundation.layout.windowInsetsPadding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.lazy.rememberLazyListState
-import androidx.compose.material3.ButtonDefaults
-import androidx.compose.material3.ElevatedButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
-import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
@@ -33,6 +30,7 @@ import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.mvproject.tinyiptvkmp.core.components.NoItemsView
 import com.mvproject.tinyiptvkmp.core.components.adaptive.adaptiveContentWidth
 import com.mvproject.tinyiptvkmp.core.components.adaptive.rememberAdaptiveLayoutState
+import com.mvproject.tinyiptvkmp.core.components.buttons.ActionButton
 import com.mvproject.tinyiptvkmp.core.components.indicators.LoadingIndicator
 import com.mvproject.tinyiptvkmp.core.components.toolbars.AppBarWithBackNav
 import com.mvproject.tinyiptvkmp.core.designsystem.generated.resources.btn_add_new
@@ -83,23 +81,13 @@ private fun SettingsPlaylistScreen(
                         .fillMaxWidth(),
                 contentAlignment = Alignment.Center,
             ) {
-                ElevatedButton(
+                ActionButton(
+                    title = stringResource(DesignSystemRes.string.btn_add_new),
                     onClick = {
                         onAction(SettingsPlaylistAction.NavigateToPlaylist())
                     },
                     modifier = Modifier.adaptiveContentWidth(adaptiveLayoutState),
-                    colors =
-                        ButtonDefaults.buttonColors(
-                            containerColor = MaterialTheme.colorScheme.onSurface,
-                        ),
-                    shape = MaterialTheme.shapes.small,
-                ) {
-                    Text(
-                        text = stringResource(DesignSystemRes.string.btn_add_new),
-                        color = MaterialTheme.colorScheme.primary,
-                        style = MaterialTheme.typography.titleMedium,
-                    )
-                }
+                )
             }
         },
     ) { paddingValues ->

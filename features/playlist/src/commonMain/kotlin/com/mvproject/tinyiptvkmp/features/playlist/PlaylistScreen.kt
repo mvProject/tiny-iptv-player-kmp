@@ -19,11 +19,8 @@ import androidx.compose.foundation.layout.ime
 import androidx.compose.foundation.layout.navigationBars
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.windowInsetsPadding
-import androidx.compose.material3.ButtonDefaults
-import androidx.compose.material3.ElevatedButton
 import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.OutlinedButton
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextField
@@ -37,6 +34,8 @@ import androidx.compose.ui.graphics.Color
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.mvproject.tinyiptvkmp.core.components.adaptive.adaptiveContentWidth
 import com.mvproject.tinyiptvkmp.core.components.adaptive.rememberAdaptiveLayoutState
+import com.mvproject.tinyiptvkmp.core.components.buttons.ActionButton
+import com.mvproject.tinyiptvkmp.core.components.buttons.SelectButton
 import com.mvproject.tinyiptvkmp.core.components.indicators.LoadingIndicator
 import com.mvproject.tinyiptvkmp.core.components.modifiers.SpacerHeight
 import com.mvproject.tinyiptvkmp.core.components.toolbars.AppBarWithBackNav
@@ -217,23 +216,12 @@ private fun PlaylistScreen(
 
                     SpacerHeight(height = MaterialTheme.dimensionSize.size16)
 
-                    OutlinedButton(
+                    SelectButton(
+                        title = stringResource(Res.string.btn_add_local),
                         onClick = {
                             launcher.launch()
                         },
-                        modifier = Modifier.fillMaxWidth(),
-                        colors =
-                            ButtonDefaults.buttonColors(
-                                containerColor = MaterialTheme.colorScheme.primary,
-                            ),
-                        shape = MaterialTheme.shapes.small,
-                    ) {
-                        Text(
-                            text = stringResource(Res.string.btn_add_local),
-                            color = MaterialTheme.colorScheme.onSurface,
-                            style = MaterialTheme.typography.bodyLarge,
-                        )
-                    }
+                    )
                 }
 
                 SpacerHeight(height = MaterialTheme.dimensionSize.size16)
@@ -248,7 +236,15 @@ private fun PlaylistScreen(
 
                 SpacerHeight(weight = MaterialTheme.dimensionWeight.weight1)
 
-                ElevatedButton(
+                ActionButton(
+                    title =
+                        stringResource(
+                            if (state.isEdit) {
+                                Res.string.btn_update
+                            } else {
+                                Res.string.btn_save
+                            },
+                        ),
                     enabled = state.isReadyToSave,
                     onClick = {
                         if (state.isEdit) {
@@ -262,25 +258,7 @@ private fun PlaylistScreen(
                             .padding(vertical = MaterialTheme.dimensionSize.size8)
                             .fillMaxWidth()
                             .windowInsetsPadding(WindowInsets.ime),
-                    colors =
-                        ButtonDefaults.buttonColors(
-                            containerColor = MaterialTheme.colorScheme.onSurface,
-                        ),
-                    shape = MaterialTheme.shapes.small,
-                ) {
-                    val text =
-                        if (state.isEdit) {
-                            Res.string.btn_update
-                        } else {
-                            Res.string.btn_save
-                        }
-
-                    Text(
-                        text = stringResource(text),
-                        color = MaterialTheme.colorScheme.primary,
-                        style = MaterialTheme.typography.titleMedium,
-                    )
-                }
+                )
             }
 
             LoadingIndicator(
