@@ -35,7 +35,6 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
-import com.mvproject.tinyiptvkmp.core.base.mvi.CollectUiEffect
 import com.mvproject.tinyiptvkmp.core.components.adaptive.adaptiveContentWidth
 import com.mvproject.tinyiptvkmp.core.components.adaptive.rememberAdaptiveLayoutState
 import com.mvproject.tinyiptvkmp.core.components.indicators.LoadingIndicator
@@ -48,6 +47,7 @@ import com.mvproject.tinyiptvkmp.core.theme.colorSchemeExtended
 import com.mvproject.tinyiptvkmp.core.theme.dimensionSize
 import com.mvproject.tinyiptvkmp.core.theme.dimensionWeight
 import com.mvproject.tinyiptvkmp.features.playlist.api.domain.model.PlaylistType
+import com.mvproject.tinyiptvkmp.features.playlist.components.PlaylistUpdateSelector
 import com.mvproject.tinyiptvkmp.features.playlist.generated.resources.Res
 import com.mvproject.tinyiptvkmp.features.playlist.generated.resources.btn_add_local
 import com.mvproject.tinyiptvkmp.features.playlist.generated.resources.btn_save
@@ -62,33 +62,27 @@ import io.github.vinceglb.filekit.core.PickerType
 import org.jetbrains.compose.resources.stringResource
 
 @Composable
-internal fun PlaylistScreen(
-    viewModel: PlaylistViewModel,
-    onNavigateBack: () -> Unit = {},
+fun PlaylistScreen(
+    viewModel: PlaylistViewModel
 ) {
-    val uiState by viewModel.uiState.collectAsStateWithLifecycle()
+    val uiState by viewModel.state.collectAsStateWithLifecycle()
 
-    CollectUiEffect(viewModel.uiEffect) { effect ->
-        when (effect) {
-            PlaylistUiEffect.OnNavigateBack -> onNavigateBack()
-        }
-    }
     PlaylistScreen(
-        uiState = uiState,
-        onAction = viewModel::onAction,
+        state = uiState,
+        onAction = viewModel::onIntent,
     )
 }
 
 @Composable
 private fun PlaylistScreen(
-    uiState: PlaylistUiState,
-    onAction: (PlaylistUiAction) -> Unit = {},
+    state: PlaylistState,
+    onAction: (PlaylistAction) -> Unit = {},
 ) {
     val adaptiveLayoutState = rememberAdaptiveLayoutState()
 
-    LaunchedEffect(uiState.isComplete) {
-        if (uiState.isComplete) {
-            onAction(PlaylistUiAction.NavigateBack)
+    LaunchedEffect(state.isComplete) {
+        if (state.isComplete) {
+            onAction(PlaylistAction.NavigateBack)
         }
     }
 
@@ -106,7 +100,7 @@ private fun PlaylistScreen(
             title = stringResource(Res.string.btn_add_local),
         ) { selectedFile ->
             selectedFile?.let { file ->
-                onAction(PlaylistUiAction.ImportLocalFile(file = file))
+                onAction(PlaylistAction.ImportLocalFile(file = file))
             }
         }
 
@@ -118,7 +112,7 @@ private fun PlaylistScreen(
         topBar = {
             AppBarWithBackNav(
                 appBarTitle = stringResource(Res.string.msg_playlist_details),
-                onBackClick = { onAction(PlaylistUiAction.NavigateBack) },
+                onBackClick = { onAction(PlaylistAction.NavigateBack) },
             )
         },
     ) { paddingValues ->
@@ -142,9 +136,9 @@ private fun PlaylistScreen(
             ) {
                 TextField(
                     modifier = Modifier.fillMaxWidth(),
-                    value = uiState.playlistName,
+                    value = state.playlistName,
                     onValueChange = {
-                        onAction(PlaylistUiAction.SetTitle(title = it))
+                        onAction(PlaylistAction.SetTitle(title = it))
                     },
                     placeholder = {
                         Text(
@@ -168,10 +162,10 @@ private fun PlaylistScreen(
 
                 TextField(
                     modifier = Modifier.fillMaxWidth(),
-                    enabled = uiState.playlistType == PlaylistType.REMOTE,
-                    value = if (uiState.playlistType == PlaylistType.LOCAL) uiState.playlistName else uiState.playlistSource,
+                    enabled = state.playlistType == PlaylistType.REMOTE,
+                    value = if (state.playlistType == PlaylistType.LOCAL) state.playlistName else state.playlistSource,
                     onValueChange = {
-                        onAction(PlaylistUiAction.SetRemoteUrl(url = it))
+                        onAction(PlaylistAction.SetRemoteUrl(url = it))
                     },
                     placeholder = {
                         Text(
@@ -192,7 +186,7 @@ private fun PlaylistScreen(
                         ),
                 )
 
-                if (!uiState.isEdit) {
+                if (!state.isEdit) {
 
                     SpacerHeight(height = MaterialTheme.dimensionSize.size16)
 
@@ -245,22 +239,22 @@ private fun PlaylistScreen(
                 SpacerHeight(height = MaterialTheme.dimensionSize.size16)
 
                 PlaylistUpdateSelector(
-                    playlistType = uiState.playlistType,
-                    updatePeriod = uiState.updatePeriod,
+                    playlistType = state.playlistType,
+                    updatePeriod = state.updatePeriod,
                     onPeriodSelected = { period ->
-                        onAction(PlaylistUiAction.SetUpdatePeriod(period = period))
+                        onAction(PlaylistAction.SetUpdatePeriod(period = period))
                     },
                 )
 
                 SpacerHeight(weight = MaterialTheme.dimensionWeight.weight1)
 
                 ElevatedButton(
-                    enabled = uiState.isReadyToSave,
+                    enabled = state.isReadyToSave,
                     onClick = {
-                        if (uiState.isEdit) {
-                            onAction(PlaylistUiAction.UpdatePlaylist)
+                        if (state.isEdit) {
+                            onAction(PlaylistAction.UpdatePlaylist)
                         } else {
-                            onAction(PlaylistUiAction.SavePlaylist)
+                            onAction(PlaylistAction.SavePlaylist)
                         }
                     },
                     modifier =
@@ -275,7 +269,7 @@ private fun PlaylistScreen(
                     shape = MaterialTheme.shapes.small,
                 ) {
                     val text =
-                        if (uiState.isEdit) {
+                        if (state.isEdit) {
                             Res.string.btn_update
                         } else {
                             Res.string.btn_save
@@ -290,7 +284,7 @@ private fun PlaylistScreen(
             }
 
             LoadingIndicator(
-                isVisible = uiState.isSaving || uiState.isImportingLocalFile,
+                isVisible = state.isSaving || state.isImportingLocalFile,
             )
         }
     }

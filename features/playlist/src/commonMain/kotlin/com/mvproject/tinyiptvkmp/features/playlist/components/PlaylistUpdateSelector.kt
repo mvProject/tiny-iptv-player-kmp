@@ -1,4 +1,4 @@
-package com.mvproject.tinyiptvkmp.features.playlist
+package com.mvproject.tinyiptvkmp.features.playlist.components
 
 import androidx.compose.animation.AnimatedContent
 import androidx.compose.animation.AnimatedContentTransitionScope
