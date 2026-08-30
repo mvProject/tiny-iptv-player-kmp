@@ -8,7 +8,7 @@ import com.mvproject.tinyiptvkmp.features.epg.api.domain.model.TvChannelWithProg
 import com.mvproject.tinyiptvkmp.features.groups.api.domain.model.FavoriteType
 
 @Immutable
-data class GroupChannelsUiState(
+data class GroupChannelsState(
     val currentGroup: String = String.empty,
     val isLoading: Boolean = false,
     val searchString: String = String.empty,
@@ -24,25 +24,25 @@ data class GroupChannelsUiState(
     }
 }
 
-sealed interface GroupChannelsUiAction {
+sealed interface GroupChannelsAction {
     data class ToggleFavorite(
         val channel: TvChannelWithPrograms,
         val type: FavoriteType
-    ) : GroupChannelsUiAction
+    ) : GroupChannelsAction
 
-    data class SearchTextChange(val text: String) : GroupChannelsUiAction
-    data class ViewTypeChange(val type: ChannelsViewType) : GroupChannelsUiAction
+    data class SearchTextChange(val text: String) : GroupChannelsAction
+    data class ViewTypeChange(val type: ChannelsViewType) : GroupChannelsAction
     data class SelectChannel(
         val name: String,
         val group: String
-    ) : GroupChannelsUiAction
+    ) : GroupChannelsAction
 
-    data object NavigateBack : GroupChannelsUiAction
-    data class OpenOsd(val type: GroupChannelsUiState.GroupChannelsOSD) : GroupChannelsUiAction
-    data object CloseOsd : GroupChannelsUiAction
+    data object NavigateBack : GroupChannelsAction
+    data class OpenOsd(val type: GroupChannelsState.GroupChannelsOSD) : GroupChannelsAction
+    data object CloseOsd : GroupChannelsAction
 }
 
-sealed interface GroupChannelsUiEffect
+sealed interface GroupChannelsEffect
 
 
 data class GroupChannelsArgs(

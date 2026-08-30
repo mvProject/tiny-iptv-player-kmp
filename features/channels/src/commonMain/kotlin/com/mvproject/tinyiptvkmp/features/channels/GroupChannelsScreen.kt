@@ -7,7 +7,6 @@
 
 package com.mvproject.tinyiptvkmp.features.channels
 
-import androidx.compose.animation.Crossfade
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.PaddingValues
@@ -22,7 +21,6 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.derivedStateOf
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -36,7 +34,7 @@ import com.mvproject.tinyiptvkmp.core.components.overlay.OnScreenDisplay
 import com.mvproject.tinyiptvkmp.core.components.toolbars.AppBarWithSearch
 import com.mvproject.tinyiptvkmp.core.foundation.utils.CommonUtils.empty
 import com.mvproject.tinyiptvkmp.core.theme.dimensionSize
-import com.mvproject.tinyiptvkmp.features.channels.GroupChannelsUiState.GroupChannelsOSD
+import com.mvproject.tinyiptvkmp.features.channels.GroupChannelsState.GroupChannelsOSD
 import com.mvproject.tinyiptvkmp.features.channels.components.ChannelFavoriteSelector
 import com.mvproject.tinyiptvkmp.features.channels.components.ChannelPrograms
 import com.mvproject.tinyiptvkmp.features.channels.components.ChannelView
@@ -54,22 +52,31 @@ fun GroupChannelsScreen(
         onPauseOrDispose { }
     }
 
-    val uiState by viewModel.uiState.collectAsStateWithLifecycle()
+    val state by viewModel.state.collectAsStateWithLifecycle()
 
     GroupChannelsScreen(
-        uiState = uiState,
-        onAction = viewModel::onAction,
+        state = state,
+        onAction = viewModel::onIntent,
     )
 }
 
 @Composable
 private fun GroupChannelsScreen(
-    uiState: GroupChannelsUiState,
-    onAction: (GroupChannelsUiAction) -> Unit,
+    state: GroupChannelsState,
+    onAction: (GroupChannelsAction) -> Unit,
 ) {
     val adaptiveLayoutState = rememberAdaptiveLayoutState()
     var searchString by remember {
         mutableStateOf(String.empty)
+    }
+    val filteredResults = remember(state.channels, searchString) {
+        if (searchString.isBlank()) {
+            state.channels
+        } else {
+            state.channels.filter { channel ->
+                channel.channelName.contains(searchString, true)
+            }
+        }
     }
 
     Scaffold(
@@ -79,14 +86,14 @@ private fun GroupChannelsScreen(
             .windowInsetsPadding(WindowInsets.ime),
         topBar = {
             AppBarWithSearch(
-                appBarTitle = uiState.currentGroup,
+                appBarTitle = state.currentGroup,
                 searchTextState = searchString,
                 searchPlaceholderText = stringResource(Res.string.hint_msg_search),
                 onBackClick = {
-                    onAction(GroupChannelsUiAction.NavigateBack)
+                    onAction(GroupChannelsAction.NavigateBack)
                 },
                 onViewTypeChange = { type ->
-                    onAction(GroupChannelsUiAction.ViewTypeChange(type))
+                    onAction(GroupChannelsAction.ViewTypeChange(type))
                 },
                 onTextChange = { text ->
                     searchString = text
@@ -100,66 +107,53 @@ private fun GroupChannelsScreen(
                 .fillMaxSize()
                 .padding(paddingValues),
         ) {
-            Crossfade(
-                targetState = uiState.viewType
-            ) { viewType ->
-
-                val filteredResults by remember(uiState.channels, searchString) {
-                    derivedStateOf {
-                        uiState.channels.filter { channel ->
-                            channel.channelName.contains(searchString, true)
-                        }
-                    }
-                }
-
-                ChannelView(
-                    modifier = Modifier.fillMaxSize(),
-                    viewType = viewType,
-                    items = filteredResults,
-                    gridMinCellWidth = adaptiveLayoutState.channelGridMinCellWidth,
-                    contentPadding = PaddingValues(
-                        horizontal = adaptiveLayoutState.contentHorizontalPadding,
-                        vertical = MaterialTheme.dimensionSize.size4,
-                    ),
-                    onChannelSelect = { selected ->
-                        onAction(
-                            GroupChannelsUiAction.SelectChannel(
-                                name = selected.channelName,
-                                group = uiState.currentGroup
-                            )
+            ChannelView(
+                modifier = Modifier.fillMaxSize(),
+                viewType = state.viewType,
+                items = filteredResults,
+                gridMinCellWidth = adaptiveLayoutState.channelGridMinCellWidth,
+                contentPadding = PaddingValues(
+                    horizontal = adaptiveLayoutState.contentHorizontalPadding,
+                    vertical = MaterialTheme.dimensionSize.size4,
+                ),
+                onChannelSelect = { selected ->
+                    onAction(
+                        GroupChannelsAction.SelectChannel(
+                            name = selected.channelName,
+                            group = state.currentGroup
                         )
-                    },
-                    onFavoriteClick = { selected ->
-                        onAction(
-                            GroupChannelsUiAction.OpenOsd(
-                                GroupChannelsOSD.ChannelFavorites(channel = selected)
-                            )
+                    )
+                },
+                onFavoriteClick = { selected ->
+                    onAction(
+                        GroupChannelsAction.OpenOsd(
+                            GroupChannelsOSD.ChannelFavorites(channel = selected)
                         )
-                    },
-                    onShowProgramsClick = { selected ->
-                        onAction(
-                            GroupChannelsUiAction.OpenOsd(
-                                GroupChannelsOSD.ChannelPrograms(channel = selected)
-                            )
+                    )
+                },
+                onShowProgramsClick = { selected ->
+                    onAction(
+                        GroupChannelsAction.OpenOsd(
+                            GroupChannelsOSD.ChannelPrograms(channel = selected)
                         )
-                    },
-                )
-            }
+                    )
+                },
+            )
 
-            LoadingIndicator(isVisible = uiState.isLoading)
+            LoadingIndicator(isVisible = state.isLoading)
 
             OnScreenDisplay(
-                isVisible = uiState.osdType != null,
-                onViewTap = { onAction(GroupChannelsUiAction.CloseOsd) },
+                isVisible = state.osdType != null,
+                onViewTap = { onAction(GroupChannelsAction.CloseOsd) },
             ) {
-                uiState.osdType?.let { osdType ->
+                state.osdType?.let { osdType ->
                     when (osdType) {
                         is GroupChannelsOSD.ChannelFavorites -> {
                             ChannelFavoriteSelector(
                                 favoriteType = osdType.channel.favoriteType,
                                 onSelectFavorite = { favType ->
                                     onAction(
-                                        GroupChannelsUiAction.ToggleFavorite(
+                                        GroupChannelsAction.ToggleFavorite(
                                             channel = osdType.channel,
                                             type = favType
                                         )
@@ -181,8 +175,8 @@ private fun GroupChannelsScreen(
                                             bottomEnd = MaterialTheme.dimensionSize.size8,
                                         ),
                                     ),
-                                title = uiState.selectedName,
-                                programs = uiState.selectedPrograms,
+                                title = state.selectedName,
+                                programs = state.selectedPrograms,
                             )
                         }
                     }

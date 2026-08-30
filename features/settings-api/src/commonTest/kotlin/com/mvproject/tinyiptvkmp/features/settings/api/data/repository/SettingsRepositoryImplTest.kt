@@ -1,6 +1,7 @@
 package com.mvproject.tinyiptvkmp.features.settings.api.data.repository
 
 import com.mvproject.tinyiptvkmp.core.datastore.preferences.AppPreferencesProto
+import com.mvproject.tinyiptvkmp.core.foundation.model.ChannelsViewType
 import com.mvproject.tinyiptvkmp.features.settings.api.data.local.SettingsLocalDataSource
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -17,11 +18,16 @@ class SettingsRepositoryImplTest {
 
         repository.updateInfoUpdatePeriod(10)
         repository.updateEpgUpdatePeriod(20)
+        repository.updateChannelsViewType(ChannelsViewType.GRID)
         repository.updateFullscreenMode(true)
         repository.updateVideoSize(3)
 
         assertEquals(10, repository.observeGeneralSettings().first().infoUpdatePeriod)
         assertEquals(20, repository.observeGeneralSettings().first().epgUpdatePeriod)
+        assertEquals(
+            ChannelsViewType.GRID,
+            repository.observeGeneralSettings().first().channelsViewType
+        )
         assertEquals(true, repository.observePlayerSettings().first().isFullscreenEnabled)
         assertEquals(3, repository.observePlayerSettings().first().videoSize)
     }

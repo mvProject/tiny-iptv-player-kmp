@@ -7,16 +7,11 @@
 
 package com.mvproject.tinyiptvkmp.features.channels
 
-import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.mvproject.tinyiptvkmp.core.base.mvi.MviCore
-import com.mvproject.tinyiptvkmp.core.base.mvi.mviCore
-import com.mvproject.tinyiptvkmp.core.datastore.ProtoStore
-import com.mvproject.tinyiptvkmp.core.datastore.preferences.AppPreferencesProto
+import com.mvproject.tinyiptvkmp.core.base.mvi.MviViewModel
 import com.mvproject.tinyiptvkmp.core.foundation.model.ChannelsViewType
-import com.mvproject.tinyiptvkmp.core.foundation.model.ChannelsViewType.Companion.mapViewType
 import com.mvproject.tinyiptvkmp.core.foundation.utils.actualDate
-import com.mvproject.tinyiptvkmp.features.channels.GroupChannelsUiState.GroupChannelsOSD
+import com.mvproject.tinyiptvkmp.features.channels.GroupChannelsState.GroupChannelsOSD
 import com.mvproject.tinyiptvkmp.features.channels.api.domain.usecase.ToggleFavoriteChannelUseCase
 import com.mvproject.tinyiptvkmp.features.channels.nav.GroupChannelsNavigator
 import com.mvproject.tinyiptvkmp.features.epg.api.domain.model.TvChannelWithPrograms
@@ -29,12 +24,13 @@ import com.mvproject.tinyiptvkmp.features.epg.api.domain.utils.toggleFavorite
 import com.mvproject.tinyiptvkmp.features.epg.api.domain.utils.withPrograms
 import com.mvproject.tinyiptvkmp.features.groups.api.domain.model.FavoriteType
 import com.mvproject.tinyiptvkmp.features.groups.api.domain.usecase.GetGroupChannelsUseCase
+import com.mvproject.tinyiptvkmp.features.settings.api.domain.usecase.ObserveGeneralSettingsUseCase
+import com.mvproject.tinyiptvkmp.features.settings.api.domain.usecase.UpdateChannelsViewTypeUseCase
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.IO
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.launch
 import org.koin.core.annotation.InjectedParam
-import org.koin.core.component.KoinComponent
 import org.koin.core.component.inject
 import kotlin.time.Duration.Companion.minutes
 
@@ -44,12 +40,9 @@ class GroupChannelsViewModel(
     private val getGroupChannelsUseCase: GetGroupChannelsUseCase,
     private val getGroupChannelsEpgUseCase: GetGroupChannelsEpgUseCase,
     private val toggleFavoriteChannelUseCase: ToggleFavoriteChannelUseCase,
-    private val preferencesStore: ProtoStore<AppPreferencesProto>,
-) : ViewModel(),
-    KoinComponent,
-    MviCore<GroupChannelsUiState, GroupChannelsUiAction, GroupChannelsUiEffect> by mviCore(
-        GroupChannelsUiState()
-    ) {
+    private val observeGeneralSettings: ObserveGeneralSettingsUseCase,
+    private val updateChannelsViewType: UpdateChannelsViewTypeUseCase,
+) : MviViewModel<GroupChannelsState, GroupChannelsAction, GroupChannelsEffect>() {
 
     private val group = args.group
     private val type = args.groupType
@@ -61,79 +54,79 @@ class GroupChannelsViewModel(
 
     // todo refresh after return from playback
 
-    init {
-        viewModelScope.launch {
-            val viewType = preferencesStore.data.first().channelsViewType.mapViewType()
-            val groupChannels = getGroupChannelsUseCase(group = group, groupType = type)
-            updateUiState {
-                copy(
-                    viewType = viewType,
-                    currentGroup = group,
-                    channels = groupChannels.withPrograms()
+    override fun createStore() = createStore(
+        initialState = GroupChannelsState(),
+        invokeOnStart = { loadGroupChannels() },
+    )
+
+    override fun onIntent(intent: GroupChannelsAction) {
+        when (intent) {
+            GroupChannelsAction.CloseOsd -> closeOsd()
+            GroupChannelsAction.NavigateBack -> launch { navigator.navigateUp() }
+            is GroupChannelsAction.OpenOsd -> launch { openOsd(type = intent.type) }
+            is GroupChannelsAction.SearchTextChange -> searchTextChange(text = intent.text)
+            is GroupChannelsAction.SelectChannel -> launch {
+                navigator.navigateToPlayer(
+                    name = intent.name,
+                    group = intent.group,
+                    groupType = type
                 )
             }
+
+            is GroupChannelsAction.ToggleFavorite -> launch {
+                toggleFavorites(
+                    channel = intent.channel,
+                    type = intent.type
+                )
+            }
+
+            is GroupChannelsAction.ViewTypeChange -> launch { viewTypeChange(type = intent.type) }
         }
     }
 
-    override fun onAction(uiAction: GroupChannelsUiAction) {
-        when (uiAction) {
-            GroupChannelsUiAction.NavigateBack -> {
-                viewModelScope.launch {
-                    navigator.navigateUp()
-                }
-            }
-
-            is GroupChannelsUiAction.SelectChannel -> {
-                viewModelScope.launch {
-                    navigator.navigateToPlayer(
-                        name = uiAction.name,
-                        group = uiAction.group,
-                        groupType = type
-                    )
-                }
-            }
-
-            is GroupChannelsUiAction.SearchTextChange -> searchTextChange(text = uiAction.text)
-            is GroupChannelsUiAction.ToggleFavorite -> toggleFavorites(
-                channel = uiAction.channel,
-                type = uiAction.type
+    private suspend fun loadGroupChannels() {
+        val viewType = observeGeneralSettings().first().channelsViewType
+        val groupChannels = getGroupChannelsUseCase(group = group, groupType = type)
+        setState {
+            copy(
+                viewType = viewType,
+                currentGroup = group,
+                channels = groupChannels.withPrograms()
             )
-
-            is GroupChannelsUiAction.ViewTypeChange -> viewTypeChange(type = uiAction.type)
-            GroupChannelsUiAction.CloseOsd -> closeOsd()
-            is GroupChannelsUiAction.OpenOsd -> openOsd(type = uiAction.type)
         }
     }
 
     fun loadChannelsByGroups() {
+        // TODO: Serialize EPG refreshes with a refresh Job/Mutex or update the refresh gate before fetching.
         viewModelScope.launch(Dispatchers.IO) {
             refreshEpgPrograms()
         }
     }
 
-    private fun openOsd(type: GroupChannelsOSD) {
+    private fun searchTextChange(text: String) {
+        setState { copy(searchString = text) }
+    }
+
+    private fun closeOsd() {
+        setState { copy(osdType = null) }
+    }
+
+    private suspend fun openOsd(type: GroupChannelsOSD) {
+        // TODO: Combine selected channel/programs and osdType into one state update after programs are loaded.
         if (type is GroupChannelsOSD.ChannelPrograms) {
             toggleProgramVisibility(
                 name = type.channel.channelName,
                 programId = type.channel.programId
             )
         }
-        updateUiState {
-            copy(osdType = type)
-        }
-    }
-
-    private fun closeOsd() {
-        updateUiState {
-            copy(osdType = null)
-        }
+        setState { copy(osdType = type) }
     }
 
     private suspend fun refreshEpgPrograms() {
         if (actualDate - lastRefresh < 1.minutes.inWholeMilliseconds) {
             return
         }
-        val channels = uiState.value.channels
+        val channels = state.value.channels
         val channelsIds = channels.mapProgramIds()
 
         if (channelsIds.isNotEmpty()) {
@@ -141,68 +134,48 @@ class GroupChannelsViewModel(
             if (channelsEpgData.entries.isNotEmpty()) {
                 val channelsWithPrograms = channels.mapPrograms(channelEpgMap = channelsEpgData)
 
-                updateUiState {
-                    copy(channels = channelsWithPrograms)
-                }
+                setState { copy(channels = channelsWithPrograms) }
             }
 
             lastRefresh = actualDate
         }
     }
 
-    private fun searchTextChange(text: String) {
-        updateUiState {
-            copy(searchString = text)
+    private suspend fun toggleProgramVisibility(name: String, programId: String) {
+        val programs = if (programId.isNotBlank()) {
+            getChannelsEpgUseCase(channelId = programId)
+        } else {
+            emptyList()
+        }
+
+        setState {
+            copy(
+                selectedName = name,
+                selectedPrograms = programs
+            )
         }
     }
 
-    private fun toggleProgramVisibility(name: String, programId: String) {
-        viewModelScope.launch(Dispatchers.IO) {
-            val programs = if (programId.isNotBlank()) {
-                getChannelsEpgUseCase(channelId = programId)
-            } else {
-                emptyList()
-            }
-
-            updateUiState {
-                copy(
-                    selectedName = name,
-                    selectedPrograms = programs
-                )
-            }
+    private suspend fun viewTypeChange(type: ChannelsViewType) {
+        if (state.value.viewType != type) {
+            updateChannelsViewType(type)
+            setState { copy(viewType = type) }
         }
     }
 
-    private fun viewTypeChange(type: ChannelsViewType) {
-        if (uiState.value.viewType != type) {
-            viewModelScope.launch {
-                preferencesStore.update { preferences ->
-                    preferences.copy(channelsViewType = type.name)
-                }
-                updateUiState {
-                    copy(viewType = type)
-                }
-            }
-        }
-    }
-
-    private fun toggleFavorites(
+    private suspend fun toggleFavorites(
         channel: TvChannelWithPrograms,
         type: FavoriteType,
     ) {
-        viewModelScope.launch(Dispatchers.IO) {
-            val updatedChannel = channel.toggleFavorite(type = type.name)
+        val updatedChannel = channel.toggleFavorite(type = type.name)
 
-            val updatedChannels = uiState.value.channels
-                .replaceUpdated(channel = updatedChannel)
+        val updatedChannels = state.value.channels
+            .replaceUpdated(channel = updatedChannel)
 
-            updateUiState {
-                copy(channels = updatedChannels, osdType = null)
-            }
-
-            toggleFavoriteChannelUseCase(channel = channel.channel, type = type.name)
+        setState {
+            copy(channels = updatedChannels, osdType = null)
         }
+
+        toggleFavoriteChannelUseCase(channel = channel.channel, type = type.name)
     }
 }
-
-

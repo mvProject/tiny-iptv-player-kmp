@@ -8,6 +8,8 @@ import com.mvproject.tinyiptvkmp.features.settings.api.domain.usecase.ObserveGen
 import com.mvproject.tinyiptvkmp.features.settings.api.domain.usecase.ObserveGeneralSettingsUseCaseImpl
 import com.mvproject.tinyiptvkmp.features.settings.api.domain.usecase.ObservePlayerSettingsUseCase
 import com.mvproject.tinyiptvkmp.features.settings.api.domain.usecase.ObservePlayerSettingsUseCaseImpl
+import com.mvproject.tinyiptvkmp.features.settings.api.domain.usecase.UpdateChannelsViewTypeUseCase
+import com.mvproject.tinyiptvkmp.features.settings.api.domain.usecase.UpdateChannelsViewTypeUseCaseImpl
 import com.mvproject.tinyiptvkmp.features.settings.api.domain.usecase.UpdateEpgUpdatePeriodUseCase
 import com.mvproject.tinyiptvkmp.features.settings.api.domain.usecase.UpdateEpgUpdatePeriodUseCaseImpl
 import com.mvproject.tinyiptvkmp.features.settings.api.domain.usecase.UpdateFullscreenModeUseCase
@@ -26,6 +28,7 @@ val settingsApiModule =
         single<ObservePlayerSettingsUseCase> { ObservePlayerSettingsUseCaseImpl(get()) }
         single<UpdateInfoUpdatePeriodUseCase> { UpdateInfoUpdatePeriodUseCaseImpl(get()) }
         single<UpdateEpgUpdatePeriodUseCase> { UpdateEpgUpdatePeriodUseCaseImpl(get()) }
+        single<UpdateChannelsViewTypeUseCase> { UpdateChannelsViewTypeUseCaseImpl(get()) }
         single<UpdateFullscreenModeUseCase> { UpdateFullscreenModeUseCaseImpl(get()) }
         single<UpdateVideoSizeUseCase> { UpdateVideoSizeUseCaseImpl(get()) }
     }
