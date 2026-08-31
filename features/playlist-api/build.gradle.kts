@@ -9,18 +9,7 @@ kotlin {
     sourceSets {
         commonMain.dependencies {
             api(libs.bundles.room)
-            implementation(projects.features.channelsApi)
             implementation(projects.core.database)
-            implementation(projects.core.datastore)
-            implementation(projects.infrastructure.logging)
-            implementation(libs.kotlinx.coroutines.core)
-            implementation(libs.koin.core)
-        }
-
-        commonTest.dependencies {
-            implementation(kotlin("test"))
-            implementation(libs.kotlinx.coroutines.core)
-            implementation(libs.kotlinx.coroutines.test)
         }
     }
 }

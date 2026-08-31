@@ -9,16 +9,8 @@ kotlin {
         commonMain.dependencies {
             api(libs.androidx.datastore.core.okio)
             api(libs.koin.core)
-            implementation(libs.kotlinx.coroutines.core)
             implementation(libs.kotlinx.serialization.protobuf)
         }
-
-        commonTest.dependencies {
-            implementation(kotlin("test"))
-            implementation(libs.kotlinx.coroutines.core)
-            implementation(libs.kotlinx.coroutines.test)
-        }
-
         androidMain.dependencies {
             implementation(libs.koin.android)
         }

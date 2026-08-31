@@ -11,9 +11,7 @@ kotlin {
         commonMain.dependencies {
             implementation(libs.bundles.ktor)
             implementation(libs.bundles.ksoup)
-            implementation(libs.koin.core)
             implementation(libs.okio)
-            implementation(projects.infrastructure.logging)
         }
 
         androidMain.dependencies {

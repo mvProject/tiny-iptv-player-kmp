@@ -8,16 +8,13 @@ kotlin {
         commonMain.dependencies {
             implementation(projects.core.base)
             implementation(projects.core.navigation)
-            implementation(projects.core.foundation)
             implementation(projects.core.ui)
             implementation(projects.core.designsystem)
             implementation(projects.features.channelsApi)
             implementation(projects.features.groupsApi)
             implementation(projects.features.epgApi)
             implementation(projects.features.settingsApi)
-            implementation(projects.infrastructure.logging)
             implementation(projects.platform.mediaplayer)
-            implementation(libs.kotlinx.coroutines.core)
             implementation(libs.bundles.koin)
             implementation(libs.bundles.lifecycle)
         }

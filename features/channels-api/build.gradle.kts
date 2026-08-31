@@ -11,16 +11,7 @@ kotlin {
             api(libs.bundles.room)
             implementation(projects.core.database)
             implementation(projects.core.network)
-            implementation(projects.infrastructure.logging)
-            implementation(libs.kotlinx.coroutines.core)
-            implementation(libs.koin.core)
             implementation(libs.okio)
-        }
-
-        commonTest.dependencies {
-            implementation(kotlin("test"))
-            implementation(libs.kotlinx.coroutines.core)
-            implementation(libs.kotlinx.coroutines.test)
         }
     }
 }

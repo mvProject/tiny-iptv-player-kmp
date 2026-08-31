@@ -6,16 +6,7 @@ plugins {
 kotlin {
     sourceSets {
         commonMain.dependencies {
-            implementation(projects.core.foundation)
             implementation(projects.core.datastore)
-            implementation(libs.kotlinx.coroutines.core)
-            implementation(libs.bundles.koin)
-        }
-
-        commonTest.dependencies {
-            implementation(kotlin("test"))
-            implementation(libs.kotlinx.coroutines.core)
-            implementation(libs.kotlinx.coroutines.test)
         }
     }
 }

@@ -7,15 +7,6 @@ kotlin {
     sourceSets {
         commonMain.dependencies {
             implementation(projects.features.channelsApi)
-            implementation(projects.infrastructure.logging)
-            implementation(libs.kotlinx.coroutines.core)
-            implementation(libs.koin.core)
-        }
-
-        commonTest.dependencies {
-            implementation(kotlin("test"))
-            implementation(libs.kotlinx.coroutines.core)
-            implementation(libs.kotlinx.coroutines.test)
         }
     }
 }

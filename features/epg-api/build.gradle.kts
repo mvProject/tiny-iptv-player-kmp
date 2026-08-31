@@ -10,19 +10,10 @@ kotlin {
         commonMain.dependencies {
             api(libs.bundles.room)
             implementation(projects.core.database)
-            implementation(projects.core.datastore)
             implementation(projects.core.network)
             implementation(projects.features.channelsApi)
-            implementation(projects.infrastructure.logging)
-            implementation(libs.kotlinx.coroutines.core)
+            implementation(projects.features.settingsApi)
             implementation(libs.kotlinx.datetime)
-            implementation(libs.koin.core)
-        }
-
-        commonTest.dependencies {
-            implementation(kotlin("test"))
-            implementation(libs.kotlinx.coroutines.core)
-            implementation(libs.kotlinx.coroutines.test)
         }
     }
 }
