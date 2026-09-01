@@ -1,27 +1,27 @@
 package com.mvproject.tinyiptvkmp.features.playlist.api.data.local
 
-import com.mvproject.tinyiptvkmp.features.playlist.api.data.local.database.PlaylistEntity
+import com.mvproject.tinyiptvkmp.features.playlist.api.domain.model.Playlist
 import kotlinx.coroutines.flow.Flow
 
-internal interface PlaylistLocalDataSource {
-    suspend fun getPlaylistById(id: String): PlaylistEntity
+interface PlaylistLocalDataSource {
+    suspend fun getPlaylistById(id: String): Playlist
 
-    fun observePlaylists(): Flow<List<PlaylistEntity>>
+    fun observePlaylists(): Flow<List<Playlist>>
 
-    suspend fun getAllPlaylists(): List<PlaylistEntity>
+    suspend fun getAllPlaylists(): List<Playlist>
 
     suspend fun getSelectedPlaylistId(): String?
 
     suspend fun getRemotePlaylistsWithUpdatePeriod(
         playlistType: String,
         noUpdatePeriod: Long,
-    ): List<PlaylistEntity>
+    ): List<Playlist>
 
     suspend fun deletePlaylist(id: String)
 
-    suspend fun savePlaylists(playlists: List<PlaylistEntity>)
+    suspend fun savePlaylists(playlists: List<Playlist>)
 
-    suspend fun savePlaylist(playlist: PlaylistEntity)
+    suspend fun savePlaylist(playlist: Playlist)
 
     suspend fun selectPlaylist(id: String)
 }

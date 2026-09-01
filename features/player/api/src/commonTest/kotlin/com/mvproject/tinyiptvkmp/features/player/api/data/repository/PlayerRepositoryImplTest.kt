@@ -1,7 +1,7 @@
 package com.mvproject.tinyiptvkmp.features.player.api.data.repository
 
-import com.mvproject.tinyiptvkmp.features.player.api.data.local.PlayerLocalDataSource
-import com.mvproject.tinyiptvkmp.features.player.api.data.local.PlayerPreferencesProto
+import com.mvproject.tinyiptvkmp.features.player.api.data.storage.PlayerLocalDataSource
+import com.mvproject.tinyiptvkmp.features.player.api.data.storage.PlayerPreferencesProto
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.first

@@ -7,7 +7,7 @@
 
 package com.mvproject.tinyiptvkmp.features.channels.api.data.parser
 
-import com.mvproject.tinyiptvkmp.features.channels.api.data.local.PlaylistChannelParseModel
+import com.mvproject.tinyiptvkmp.features.channels.api.data.datasource.content.PlaylistChannelParseModel
 
 internal object M3UParser {
     private const val TAG_PLAYLIST_HEADER = "#EXTM3U"

@@ -3,21 +3,17 @@ package com.mvproject.tinyiptvkmp.features.epg.api.di
 import com.mvproject.tinyiptvkmp.core.datastore.DataStorePathProvider
 import com.mvproject.tinyiptvkmp.core.datastore.ProtoStore
 import com.mvproject.tinyiptvkmp.core.datastore.ProtoStoreFactory
-import com.mvproject.tinyiptvkmp.features.epg.api.data.local.EpgChannelLocalDataSource
-import com.mvproject.tinyiptvkmp.features.epg.api.data.local.EpgChannelLocalDataSourceImpl
-import com.mvproject.tinyiptvkmp.features.epg.api.data.local.EpgPreferencesProto
-import com.mvproject.tinyiptvkmp.features.epg.api.data.local.EpgPreferencesSerializer
-import com.mvproject.tinyiptvkmp.features.epg.api.data.local.EpgProgramLocalDataSource
-import com.mvproject.tinyiptvkmp.features.epg.api.data.local.EpgProgramLocalDataSourceImpl
-import com.mvproject.tinyiptvkmp.features.epg.api.data.local.EpgSettingsLocalDataSource
-import com.mvproject.tinyiptvkmp.features.epg.api.data.local.EpgSettingsLocalDataSourceImpl
-import com.mvproject.tinyiptvkmp.features.epg.api.data.remote.EpgChannelRemoteDataSource
-import com.mvproject.tinyiptvkmp.features.epg.api.data.remote.EpgChannelRemoteDataSourceImpl
-import com.mvproject.tinyiptvkmp.features.epg.api.data.remote.EpgProgramRemoteDataSource
-import com.mvproject.tinyiptvkmp.features.epg.api.data.remote.EpgProgramRemoteDataSourceImpl
+import com.mvproject.tinyiptvkmp.features.epg.api.data.datasource.remote.EpgChannelRemoteDataSource
+import com.mvproject.tinyiptvkmp.features.epg.api.data.datasource.remote.EpgChannelRemoteDataSourceImpl
+import com.mvproject.tinyiptvkmp.features.epg.api.data.datasource.remote.EpgProgramRemoteDataSource
+import com.mvproject.tinyiptvkmp.features.epg.api.data.datasource.remote.EpgProgramRemoteDataSourceImpl
 import com.mvproject.tinyiptvkmp.features.epg.api.data.repository.EpgChannelRepositoryImpl
 import com.mvproject.tinyiptvkmp.features.epg.api.data.repository.EpgProgramRepositoryImpl
 import com.mvproject.tinyiptvkmp.features.epg.api.data.repository.EpgRepositoryImpl
+import com.mvproject.tinyiptvkmp.features.epg.api.data.storage.EpgPreferencesProto
+import com.mvproject.tinyiptvkmp.features.epg.api.data.storage.EpgPreferencesSerializer
+import com.mvproject.tinyiptvkmp.features.epg.api.data.storage.EpgSettingsLocalDataSource
+import com.mvproject.tinyiptvkmp.features.epg.api.data.storage.EpgSettingsLocalDataSourceImpl
 import com.mvproject.tinyiptvkmp.features.epg.api.domain.repository.EpgChannelRepository
 import com.mvproject.tinyiptvkmp.features.epg.api.domain.repository.EpgProgramRepository
 import com.mvproject.tinyiptvkmp.features.epg.api.domain.repository.EpgRepository
@@ -55,8 +51,6 @@ val epgApiModule =
                 },
             )
         }
-        single<EpgChannelLocalDataSource> { EpgChannelLocalDataSourceImpl(get()) }
-        single<EpgProgramLocalDataSource> { EpgProgramLocalDataSourceImpl(get()) }
         single<EpgSettingsLocalDataSource> {
             EpgSettingsLocalDataSourceImpl(get(named(EPG_PREFERENCES)))
         }

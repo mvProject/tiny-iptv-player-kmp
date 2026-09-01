@@ -8,11 +8,11 @@
 package com.mvproject.tinyiptvkmp.di.database
 
 import com.mvproject.tinyiptvkmp.core.database.builder.createRoomDatabase
-import com.mvproject.tinyiptvkmp.features.channels.api.data.local.database.FavoriteChannelDao
-import com.mvproject.tinyiptvkmp.features.channels.api.data.local.database.PlaylistChannelDao
-import com.mvproject.tinyiptvkmp.features.epg.api.data.local.database.EpgChannelDao
-import com.mvproject.tinyiptvkmp.features.epg.api.data.local.database.EpgProgramDao
-import com.mvproject.tinyiptvkmp.features.playlist.api.data.local.database.PlaylistDao
+import com.mvproject.tinyiptvkmp.persistence.channels.room.database.FavoriteChannelDao
+import com.mvproject.tinyiptvkmp.persistence.channels.room.database.PlaylistChannelDao
+import com.mvproject.tinyiptvkmp.persistence.epg.room.database.EpgChannelDao
+import com.mvproject.tinyiptvkmp.persistence.epg.room.database.EpgProgramDao
+import com.mvproject.tinyiptvkmp.persistence.playlist.room.database.PlaylistDao
 import org.koin.dsl.module
 
 val databaseModule =

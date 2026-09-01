@@ -1,5 +1,7 @@
 package com.mvproject.tinyiptvkmp.features.channels.api.data.local
 
+import com.mvproject.tinyiptvkmp.features.channels.api.data.storage.ChannelsPreferencesProto
+import com.mvproject.tinyiptvkmp.features.channels.api.data.storage.ChannelsPreferencesSerializer
 import kotlinx.coroutines.test.runTest
 import okio.Buffer
 import kotlin.test.Test

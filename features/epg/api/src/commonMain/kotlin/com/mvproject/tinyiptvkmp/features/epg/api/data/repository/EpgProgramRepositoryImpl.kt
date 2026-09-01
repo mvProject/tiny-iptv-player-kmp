@@ -8,10 +8,9 @@
 package com.mvproject.tinyiptvkmp.features.epg.api.data.repository
 
 import com.mvproject.tinyiptvkmp.core.network.data.response.EpgProgramResponse
-import com.mvproject.tinyiptvkmp.features.epg.api.data.local.EpgProgramLocalDataSource
-import com.mvproject.tinyiptvkmp.features.epg.api.data.mapper.EpgMappers.toEpgProgram
-import com.mvproject.tinyiptvkmp.features.epg.api.data.mapper.EpgMappers.toEpgProgramEntity
-import com.mvproject.tinyiptvkmp.features.epg.api.data.remote.EpgProgramRemoteDataSource
+import com.mvproject.tinyiptvkmp.features.epg.api.data.datasource.local.EpgProgramLocalDataSource
+import com.mvproject.tinyiptvkmp.features.epg.api.data.datasource.remote.EpgProgramRemoteDataSource
+import com.mvproject.tinyiptvkmp.features.epg.api.data.mapper.toEpgProgram
 import com.mvproject.tinyiptvkmp.features.epg.api.domain.model.EpgProgram
 import com.mvproject.tinyiptvkmp.features.epg.api.domain.repository.EpgProgramRepository
 import com.mvproject.tinyiptvkmp.features.epg.api.domain.utils.parseEpgInstant
@@ -31,7 +30,6 @@ internal class EpgProgramRepositoryImpl(
     ): List<EpgProgram> =
         localDataSource
             .getPrograms(channelIds = channelIds, time = time)
-            .map { it.toEpgProgram() }
 
     override suspend fun getEpgProgramsById(
         channelId: String,
@@ -39,7 +37,6 @@ internal class EpgProgramRepositoryImpl(
     ): List<EpgProgram> =
         localDataSource
             .getProgram(channelId = channelId, time = time)
-            .map { it.toEpgProgram() }
 
     override suspend fun cleanProgramsBeforeDate(date: Long) {
         val deleted = localDataSource.cleanProgramsBeforeDate(date = date)
@@ -109,7 +106,7 @@ internal class EpgProgramRepositoryImpl(
     ) {
         localDataSource.replacePrograms(
             channelId = channelId,
-            programs = programs.map { it.toEpgProgramEntity(channelId = channelId) },
+            programs = programs.map { it.toEpgProgram(channelId = channelId) },
         )
     }
 }

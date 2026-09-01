@@ -1,7 +1,6 @@
 package com.mvproject.tinyiptvkmp.features.playlist.api
 
 import com.mvproject.tinyiptvkmp.features.playlist.api.data.local.PlaylistLocalDataSource
-import com.mvproject.tinyiptvkmp.features.playlist.api.data.local.database.PlaylistEntity
 import com.mvproject.tinyiptvkmp.features.playlist.api.data.repository.PlaylistRepositoryImpl
 import com.mvproject.tinyiptvkmp.features.playlist.api.domain.model.Playlist
 import com.mvproject.tinyiptvkmp.features.playlist.api.domain.model.PlaylistType
@@ -183,7 +182,7 @@ class PlaylistUseCaseTest {
                 ),
                 selectedPlaylistId = "selected",
             )
-        val repository = PlaylistRepositoryImpl(local = localDataSource)
+        val repository = PlaylistRepositoryImpl(localDataSource = localDataSource)
 
         assertEquals("selected", repository.getSelectedPlaylistId())
         assertEquals(1, localDataSource.selectedPlaylistIdCalls)
@@ -220,19 +219,19 @@ class PlaylistUseCaseTest {
 }
 
 private class FakePlaylistLocalDataSource(
-    private val playlists: List<PlaylistEntity>,
+    private val playlists: List<Playlist>,
     private val selectedPlaylistId: String? = null,
 ) : PlaylistLocalDataSource {
     var allPlaylistsCalls = 0
     var selectedPlaylistIdCalls = 0
 
-    override suspend fun getPlaylistById(id: String): PlaylistEntity =
+    override suspend fun getPlaylistById(id: String): Playlist =
         playlists.first { playlist -> playlist.id == id }
 
-    override fun observePlaylists(): Flow<List<PlaylistEntity>> =
+    override fun observePlaylists(): Flow<List<Playlist>> =
         flowOf(playlists)
 
-    override suspend fun getAllPlaylists(): List<PlaylistEntity> {
+    override suspend fun getAllPlaylists(): List<Playlist> {
         allPlaylistsCalls += 1
         return playlists
     }
@@ -245,16 +244,16 @@ private class FakePlaylistLocalDataSource(
     override suspend fun getRemotePlaylistsWithUpdatePeriod(
         playlistType: String,
         noUpdatePeriod: Long,
-    ): List<PlaylistEntity> =
+    ): List<Playlist> =
         playlists.filter { playlist ->
-            playlist.playlistType == playlistType && playlist.updatePeriod != noUpdatePeriod
+            playlist.playlistType == PlaylistType.valueOf(playlistType) && playlist.updatePeriod != noUpdatePeriod
         }
 
     override suspend fun deletePlaylist(id: String) = Unit
 
-    override suspend fun savePlaylists(playlists: List<PlaylistEntity>) = Unit
+    override suspend fun savePlaylists(playlists: List<Playlist>) = Unit
 
-    override suspend fun savePlaylist(playlist: PlaylistEntity) = Unit
+    override suspend fun savePlaylist(playlist: Playlist) = Unit
 
     override suspend fun selectPlaylist(id: String) = Unit
 }
@@ -341,11 +340,11 @@ private fun entity(
     type: PlaylistType,
     updatePeriod: Long,
     lastUpdateDate: Long = 0L,
-) = PlaylistEntity(
+) = Playlist(
     id = id,
     playlistName = id,
     playlistSource = "source",
-    playlistType = type.name,
+    playlistType = PlaylistType.valueOf(type.name),
     lastUpdateDate = lastUpdateDate,
     updatePeriod = updatePeriod,
     isSelected = false,

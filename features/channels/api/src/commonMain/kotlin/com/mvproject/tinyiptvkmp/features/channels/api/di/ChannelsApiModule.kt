@@ -3,19 +3,17 @@ package com.mvproject.tinyiptvkmp.features.channels.api.di
 import com.mvproject.tinyiptvkmp.core.datastore.DataStorePathProvider
 import com.mvproject.tinyiptvkmp.core.datastore.ProtoStore
 import com.mvproject.tinyiptvkmp.core.datastore.ProtoStoreFactory
-import com.mvproject.tinyiptvkmp.features.channels.api.data.local.ChannelsLocalDataSource
-import com.mvproject.tinyiptvkmp.features.channels.api.data.local.ChannelsLocalDataSourceImpl
-import com.mvproject.tinyiptvkmp.features.channels.api.data.local.ChannelsPreferencesProto
-import com.mvproject.tinyiptvkmp.features.channels.api.data.local.ChannelsPreferencesSerializer
-import com.mvproject.tinyiptvkmp.features.channels.api.data.local.FavoriteChannelLocalDataSource
-import com.mvproject.tinyiptvkmp.features.channels.api.data.local.FavoriteChannelLocalDataSourceImpl
-import com.mvproject.tinyiptvkmp.features.channels.api.data.local.PlaylistChannelLocalDataSource
-import com.mvproject.tinyiptvkmp.features.channels.api.data.local.PlaylistChannelLocalDataSourceImpl
-import com.mvproject.tinyiptvkmp.features.channels.api.data.remote.PlaylistChannelRemoteDataSource
-import com.mvproject.tinyiptvkmp.features.channels.api.data.remote.PlaylistChannelRemoteDataSourceImpl
+import com.mvproject.tinyiptvkmp.features.channels.api.data.datasource.content.PlaylistContentLocalDataSource
+import com.mvproject.tinyiptvkmp.features.channels.api.data.datasource.content.PlaylistContentLocalDataSourceImpl
+import com.mvproject.tinyiptvkmp.features.channels.api.data.datasource.remote.PlaylistChannelRemoteDataSource
+import com.mvproject.tinyiptvkmp.features.channels.api.data.datasource.remote.PlaylistChannelRemoteDataSourceImpl
 import com.mvproject.tinyiptvkmp.features.channels.api.data.repository.ChannelFavoriteRepositoryImpl
 import com.mvproject.tinyiptvkmp.features.channels.api.data.repository.ChannelsRepositoryImpl
 import com.mvproject.tinyiptvkmp.features.channels.api.data.repository.PlaylistChannelRepositoryImpl
+import com.mvproject.tinyiptvkmp.features.channels.api.data.storage.ChannelsLocalDataSource
+import com.mvproject.tinyiptvkmp.features.channels.api.data.storage.ChannelsLocalDataSourceImpl
+import com.mvproject.tinyiptvkmp.features.channels.api.data.storage.ChannelsPreferencesProto
+import com.mvproject.tinyiptvkmp.features.channels.api.data.storage.ChannelsPreferencesSerializer
 import com.mvproject.tinyiptvkmp.features.channels.api.domain.repository.ChannelFavoriteRepository
 import com.mvproject.tinyiptvkmp.features.channels.api.domain.repository.ChannelsRepository
 import com.mvproject.tinyiptvkmp.features.channels.api.domain.repository.PlaylistChannelRepository
@@ -51,12 +49,11 @@ val channelsApiModule =
         single<ChannelsLocalDataSource> {
             ChannelsLocalDataSourceImpl(get(named(CHANNELS_PREFERENCES)))
         }
-        single<FavoriteChannelLocalDataSource> { FavoriteChannelLocalDataSourceImpl(get()) }
-        single<PlaylistChannelLocalDataSource> { PlaylistChannelLocalDataSourceImpl(get()) }
+        single<PlaylistContentLocalDataSource> { PlaylistContentLocalDataSourceImpl() }
         single<PlaylistChannelRemoteDataSource> { PlaylistChannelRemoteDataSourceImpl(get()) }
         single<ChannelsRepository> { ChannelsRepositoryImpl(get()) }
         single<ChannelFavoriteRepository> { ChannelFavoriteRepositoryImpl(get()) }
-        single<PlaylistChannelRepository> { PlaylistChannelRepositoryImpl(get(), get()) }
+        single<PlaylistChannelRepository> { PlaylistChannelRepositoryImpl(get(), get(), get()) }
 
         single<ObserveChannelsSettingsUseCase> { ObserveChannelsSettingsUseCaseImpl(get()) }
         single<ObserveChannelsEpgInfoUpdateRequiredUseCase> {

@@ -1,5 +1,7 @@
 package com.mvproject.tinyiptvkmp.features.player.api.data.local
 
+import com.mvproject.tinyiptvkmp.features.player.api.data.storage.PlayerPreferencesProto
+import com.mvproject.tinyiptvkmp.features.player.api.data.storage.PlayerPreferencesSerializer
 import kotlinx.coroutines.test.runTest
 import okio.Buffer
 import kotlin.test.Test

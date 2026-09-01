@@ -1,8 +1,8 @@
 package com.mvproject.tinyiptvkmp.features.channels.api.data.repository
 
 import com.mvproject.tinyiptvkmp.core.foundation.model.ChannelsViewType
-import com.mvproject.tinyiptvkmp.features.channels.api.data.local.ChannelsLocalDataSource
-import com.mvproject.tinyiptvkmp.features.channels.api.data.local.ChannelsPreferencesProto
+import com.mvproject.tinyiptvkmp.features.channels.api.data.storage.ChannelsLocalDataSource
+import com.mvproject.tinyiptvkmp.features.channels.api.data.storage.ChannelsPreferencesProto
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.first

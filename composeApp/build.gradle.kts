@@ -55,6 +55,9 @@ kotlin {
             implementation(projects.features.playlist.presentation)
             implementation(projects.features.settings.presentation)
             implementation(projects.features.player.presentation)
+            implementation(projects.persistence.channelsRoom)
+            implementation(projects.persistence.epgRoom)
+            implementation(projects.persistence.playlistRoom)
             implementation(projects.platform.mediaplayer)
 
             // Coroutines

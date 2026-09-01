@@ -31,6 +31,9 @@ import com.mvproject.tinyiptvkmp.infrastructure.logging.di.loggingModule
 import com.mvproject.tinyiptvkmp.navigation.AppRoutes
 import com.mvproject.tinyiptvkmp.navigation.DefaultNavigator
 import com.mvproject.tinyiptvkmp.navigation.Navigator
+import com.mvproject.tinyiptvkmp.persistence.channels.room.di.channelsRoomModule
+import com.mvproject.tinyiptvkmp.persistence.epg.room.di.epgRoomModule
+import com.mvproject.tinyiptvkmp.persistence.playlist.room.di.playlistRoomModule
 import org.koin.core.context.startKoin
 import org.koin.dsl.KoinAppDeclaration
 import org.koin.dsl.binds
@@ -44,6 +47,9 @@ private val appModule =
             datastoreModule,
             appPreferencesModule,
             databaseModule,
+            channelsRoomModule,
+            epgRoomModule,
+            playlistRoomModule,
             networkModule,
             channelsApiModule,
             groupsApiModule,

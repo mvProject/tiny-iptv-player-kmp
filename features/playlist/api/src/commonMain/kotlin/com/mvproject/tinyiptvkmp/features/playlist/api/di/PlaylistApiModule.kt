@@ -1,7 +1,5 @@
 package com.mvproject.tinyiptvkmp.features.playlist.api.di
 
-import com.mvproject.tinyiptvkmp.features.playlist.api.data.local.PlaylistLocalDataSource
-import com.mvproject.tinyiptvkmp.features.playlist.api.data.local.PlaylistLocalDataSourceImpl
 import com.mvproject.tinyiptvkmp.features.playlist.api.data.repository.PlaylistRepositoryImpl
 import com.mvproject.tinyiptvkmp.features.playlist.api.domain.repository.PlaylistRepository
 import com.mvproject.tinyiptvkmp.features.playlist.api.domain.usecase.CreatePlaylistUseCase
@@ -24,7 +22,6 @@ import org.koin.dsl.module
 
 val playlistApiModule =
     module {
-        single<PlaylistLocalDataSource> { PlaylistLocalDataSourceImpl(get()) }
         single<PlaylistRepository> { PlaylistRepositoryImpl(get()) }
 
         single<GetPlaylistUseCase> { GetPlaylistUseCaseImpl(get()) }

@@ -2,7 +2,7 @@ package com.mvproject.tinyiptvkmp.features.channels.api.data.repository
 
 import com.mvproject.tinyiptvkmp.core.foundation.model.ChannelsViewType
 import com.mvproject.tinyiptvkmp.core.foundation.model.ChannelsViewType.Companion.mapViewType
-import com.mvproject.tinyiptvkmp.features.channels.api.data.local.ChannelsLocalDataSource
+import com.mvproject.tinyiptvkmp.features.channels.api.data.storage.ChannelsLocalDataSource
 import com.mvproject.tinyiptvkmp.features.channels.api.domain.model.ChannelsSettings
 import com.mvproject.tinyiptvkmp.features.channels.api.domain.repository.ChannelsRepository
 import kotlinx.coroutines.flow.Flow

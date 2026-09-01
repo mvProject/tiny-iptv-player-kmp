@@ -1,5 +1,7 @@
 package com.mvproject.tinyiptvkmp.features.epg.api.data.local
 
+import com.mvproject.tinyiptvkmp.features.epg.api.data.storage.EpgPreferencesProto
+import com.mvproject.tinyiptvkmp.features.epg.api.data.storage.EpgPreferencesSerializer
 import kotlinx.coroutines.test.runTest
 import okio.Buffer
 import kotlin.test.Test

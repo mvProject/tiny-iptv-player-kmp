@@ -12,16 +12,16 @@ import androidx.room.ConstructedBy
 import androidx.room.Database
 import androidx.room.RoomDatabase
 import androidx.room.RoomDatabaseConstructor
-import com.mvproject.tinyiptvkmp.features.channels.api.data.local.database.FavoriteChannelDao
-import com.mvproject.tinyiptvkmp.features.channels.api.data.local.database.FavoriteChannelEntity
-import com.mvproject.tinyiptvkmp.features.channels.api.data.local.database.PlaylistChannelDao
-import com.mvproject.tinyiptvkmp.features.channels.api.data.local.database.PlaylistChannelEntity
-import com.mvproject.tinyiptvkmp.features.epg.api.data.local.database.EpgChannelDao
-import com.mvproject.tinyiptvkmp.features.epg.api.data.local.database.EpgChannelEntity
-import com.mvproject.tinyiptvkmp.features.epg.api.data.local.database.EpgProgramDao
-import com.mvproject.tinyiptvkmp.features.epg.api.data.local.database.EpgProgramEntity
-import com.mvproject.tinyiptvkmp.features.playlist.api.data.local.database.PlaylistDao
-import com.mvproject.tinyiptvkmp.features.playlist.api.data.local.database.PlaylistEntity
+import com.mvproject.tinyiptvkmp.persistence.channels.room.database.FavoriteChannelDao
+import com.mvproject.tinyiptvkmp.persistence.channels.room.database.FavoriteChannelEntity
+import com.mvproject.tinyiptvkmp.persistence.channels.room.database.PlaylistChannelDao
+import com.mvproject.tinyiptvkmp.persistence.channels.room.database.PlaylistChannelEntity
+import com.mvproject.tinyiptvkmp.persistence.epg.room.database.EpgChannelDao
+import com.mvproject.tinyiptvkmp.persistence.epg.room.database.EpgChannelEntity
+import com.mvproject.tinyiptvkmp.persistence.epg.room.database.EpgProgramDao
+import com.mvproject.tinyiptvkmp.persistence.epg.room.database.EpgProgramEntity
+import com.mvproject.tinyiptvkmp.persistence.playlist.room.database.PlaylistDao
+import com.mvproject.tinyiptvkmp.persistence.playlist.room.database.PlaylistEntity
 
 @Database(
     entities = [

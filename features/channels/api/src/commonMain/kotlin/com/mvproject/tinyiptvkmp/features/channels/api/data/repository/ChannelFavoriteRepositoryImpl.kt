@@ -1,8 +1,6 @@
 package com.mvproject.tinyiptvkmp.features.channels.api.data.repository
 
-import com.mvproject.tinyiptvkmp.features.channels.api.data.local.FavoriteChannelLocalDataSource
-import com.mvproject.tinyiptvkmp.features.channels.api.data.mapper.favoriteChannelEntity
-import com.mvproject.tinyiptvkmp.features.channels.api.data.mapper.toFavoriteChannel
+import com.mvproject.tinyiptvkmp.features.channels.api.data.datasource.local.FavoriteChannelLocalDataSource
 import com.mvproject.tinyiptvkmp.features.channels.api.domain.model.FavoriteChannel
 import com.mvproject.tinyiptvkmp.features.channels.api.domain.repository.ChannelFavoriteRepository
 
@@ -18,13 +16,11 @@ internal class ChannelFavoriteRepositoryImpl(
         val order = local.loadFavoriteChannelCount(playlistId = playlistId) + 1L
 
         local.addFavoriteChannel(
-            favoriteChannelEntity(
-                channelName = channelName,
-                channelUrl = channelUrl,
-                channelOrder = order,
-                favoriteType = favoriteType,
-                playlistId = playlistId,
-            ),
+            channelName = channelName,
+            channelUrl = channelUrl,
+            channelOrder = order,
+            favoriteType = favoriteType,
+            playlistId = playlistId,
         )
     }
 
@@ -36,10 +32,7 @@ internal class ChannelFavoriteRepositoryImpl(
     }
 
     override suspend fun loadSelectedFavoriteChannels(playlistId: String): List<FavoriteChannel> =
-        local
-            .loadSelectedFavoriteChannels(
-                playlistId = playlistId,
-            ).map { entity -> entity.toFavoriteChannel() }
+        local.loadSelectedFavoriteChannels(playlistId = playlistId)
 
     override suspend fun loadFavoriteChannelUrls(): List<String> =
         local.loadFavoriteChannelUrls()

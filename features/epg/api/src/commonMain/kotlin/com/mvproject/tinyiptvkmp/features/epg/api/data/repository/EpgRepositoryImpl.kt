@@ -1,7 +1,7 @@
 package com.mvproject.tinyiptvkmp.features.epg.api.data.repository
 
-import com.mvproject.tinyiptvkmp.features.epg.api.data.local.EpgPreferencesProto
-import com.mvproject.tinyiptvkmp.features.epg.api.data.local.EpgSettingsLocalDataSource
+import com.mvproject.tinyiptvkmp.features.epg.api.data.storage.EpgPreferencesProto
+import com.mvproject.tinyiptvkmp.features.epg.api.data.storage.EpgSettingsLocalDataSource
 import com.mvproject.tinyiptvkmp.features.epg.api.domain.model.EpgSettings
 import com.mvproject.tinyiptvkmp.features.epg.api.domain.repository.EpgRepository
 import kotlinx.coroutines.flow.Flow
