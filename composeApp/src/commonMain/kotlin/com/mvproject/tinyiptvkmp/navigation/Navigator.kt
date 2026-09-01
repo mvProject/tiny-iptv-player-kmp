@@ -1,11 +1,11 @@
 package com.mvproject.tinyiptvkmp.navigation
 
 import com.mvproject.tinyiptvkmp.core.navigation.AppNavigator
-import com.mvproject.tinyiptvkmp.features.channels.nav.GroupChannelsNavigator
-import com.mvproject.tinyiptvkmp.features.groups.nav.GroupNavigator
-import com.mvproject.tinyiptvkmp.features.player.nav.PlayerNavigator
-import com.mvproject.tinyiptvkmp.features.playlist.nav.PlaylistNavigator
-import com.mvproject.tinyiptvkmp.features.settings.nav.SettingsNavigator
+import com.mvproject.tinyiptvkmp.features.channels.presentation.nav.GroupChannelsNavigator
+import com.mvproject.tinyiptvkmp.features.groups.presentation.nav.GroupNavigator
+import com.mvproject.tinyiptvkmp.features.player.presentation.nav.PlayerNavigator
+import com.mvproject.tinyiptvkmp.features.playlist.presentation.nav.PlaylistNavigator
+import com.mvproject.tinyiptvkmp.features.settings.presentation.nav.SettingsNavigator
 import com.mvproject.tinyiptvkmp.infrastructure.logging.injectLogger
 import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.flow.Flow

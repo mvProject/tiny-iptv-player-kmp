@@ -9,12 +9,12 @@ package com.mvproject.tinyiptvkmp.navigation
 
 import androidx.navigation3.runtime.EntryProviderScope
 import com.mvproject.tinyiptvkmp.RootViewModel
-import com.mvproject.tinyiptvkmp.features.settings.general.SettingsGeneralScreen
-import com.mvproject.tinyiptvkmp.features.settings.general.SettingsGeneralViewModel
-import com.mvproject.tinyiptvkmp.features.settings.player.SettingsPlayerScreen
-import com.mvproject.tinyiptvkmp.features.settings.player.SettingsPlayerViewModel
-import com.mvproject.tinyiptvkmp.features.settings.playlist.SettingsPlaylistScreen
-import com.mvproject.tinyiptvkmp.features.settings.playlist.SettingsPlaylistViewModel
+import com.mvproject.tinyiptvkmp.features.settings.presentation.general.SettingsGeneralScreen
+import com.mvproject.tinyiptvkmp.features.settings.presentation.general.SettingsGeneralViewModel
+import com.mvproject.tinyiptvkmp.features.settings.presentation.player.SettingsPlayerScreen
+import com.mvproject.tinyiptvkmp.features.settings.presentation.player.SettingsPlayerViewModel
+import com.mvproject.tinyiptvkmp.features.settings.presentation.playlist.SettingsPlaylistScreen
+import com.mvproject.tinyiptvkmp.features.settings.presentation.playlist.SettingsPlaylistViewModel
 import org.koin.compose.viewmodel.koinViewModel
 
 fun EntryProviderScope<AppRoutes>.settingsGeneral() {

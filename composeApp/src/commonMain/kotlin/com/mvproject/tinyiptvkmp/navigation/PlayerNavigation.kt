@@ -8,9 +8,9 @@
 package com.mvproject.tinyiptvkmp.navigation
 
 import androidx.navigation3.runtime.EntryProviderScope
-import com.mvproject.tinyiptvkmp.features.player.PlayerArgs
-import com.mvproject.tinyiptvkmp.features.player.PlayerScreen
-import com.mvproject.tinyiptvkmp.features.player.PlayerViewModel
+import com.mvproject.tinyiptvkmp.features.player.presentation.PlayerArgs
+import com.mvproject.tinyiptvkmp.features.player.presentation.PlayerScreen
+import com.mvproject.tinyiptvkmp.features.player.presentation.PlayerViewModel
 import org.koin.compose.viewmodel.koinViewModel
 import org.koin.core.parameter.parametersOf
 

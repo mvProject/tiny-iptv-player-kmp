@@ -8,9 +8,9 @@
 package com.mvproject.tinyiptvkmp.navigation
 
 import androidx.navigation3.runtime.EntryProviderScope
-import com.mvproject.tinyiptvkmp.features.channels.GroupChannelsArgs
-import com.mvproject.tinyiptvkmp.features.channels.GroupChannelsScreen
-import com.mvproject.tinyiptvkmp.features.channels.GroupChannelsViewModel
+import com.mvproject.tinyiptvkmp.features.channels.presentation.GroupChannelsArgs
+import com.mvproject.tinyiptvkmp.features.channels.presentation.GroupChannelsScreen
+import com.mvproject.tinyiptvkmp.features.channels.presentation.GroupChannelsViewModel
 import org.koin.compose.viewmodel.koinViewModel
 import org.koin.core.parameter.parametersOf
 
