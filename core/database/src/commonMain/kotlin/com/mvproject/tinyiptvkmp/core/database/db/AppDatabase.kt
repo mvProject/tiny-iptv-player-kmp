@@ -1,11 +1,4 @@
-/*
- *  Created by Medvediev Viktor [mvproject]
- *  Copyright © 2024
- *  last modified : 07.05.24, 10:06
- *
- */
-
-package com.mvproject.tinyiptvkmp.di.database
+package com.mvproject.tinyiptvkmp.core.database.db
 
 import androidx.room.AutoMigration
 import androidx.room.ConstructedBy
@@ -36,7 +29,6 @@ import com.mvproject.tinyiptvkmp.persistence.playlist.room.database.PlaylistEnti
         AutoMigration(from = 1, to = 2),
     ],
 )
-
 @ConstructedBy(AppDatabaseCtor::class)
 abstract class AppDatabase : RoomDatabase() {
     abstract fun epgInfoDao(): EpgChannelDao

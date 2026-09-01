@@ -1,13 +1,7 @@
-/*
- *  Created by Medvediev Viktor [mvproject]
- *  Copyright © 2024
- *  last modified : 13.06.24, 11:04
- *
- */
-
-package com.mvproject.tinyiptvkmp.di.database
+package com.mvproject.tinyiptvkmp.core.database.di
 
 import com.mvproject.tinyiptvkmp.core.database.builder.createRoomDatabase
+import com.mvproject.tinyiptvkmp.core.database.db.AppDatabase
 import com.mvproject.tinyiptvkmp.persistence.channels.room.database.FavoriteChannelDao
 import com.mvproject.tinyiptvkmp.persistence.channels.room.database.PlaylistChannelDao
 import com.mvproject.tinyiptvkmp.persistence.epg.room.database.EpgChannelDao

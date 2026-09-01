@@ -8,10 +8,10 @@
 package com.mvproject.tinyiptvkmp.di
 
 import com.mvproject.tinyiptvkmp.RootViewModel
+import com.mvproject.tinyiptvkmp.core.database.di.databaseModule
 import com.mvproject.tinyiptvkmp.core.datastore.di.appPreferencesModule
 import com.mvproject.tinyiptvkmp.core.datastore.di.datastoreModule
 import com.mvproject.tinyiptvkmp.core.network.di.networkModule
-import com.mvproject.tinyiptvkmp.di.database.databaseModule
 import com.mvproject.tinyiptvkmp.features.channels.api.di.channelsApiModule
 import com.mvproject.tinyiptvkmp.features.channels.presentation.di.channelsModule
 import com.mvproject.tinyiptvkmp.features.channels.presentation.nav.GroupChannelsNavigator

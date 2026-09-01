@@ -4,8 +4,6 @@ import java.util.Properties
 
 plugins {
     alias(libs.plugins.tinyiptv.kmp.application.compose)
-    alias(libs.plugins.ksp)
-    alias(libs.plugins.room)
     alias(libs.plugins.kotlinx.serialization.plugin)
     alias(libs.plugins.koin.compiler)
 }
@@ -85,8 +83,6 @@ kotlin {
             implementation(libs.bundles.ksoup)
 
             implementation(libs.bundles.filekit)
-
-            implementation(libs.bundles.room)
         }
 
         commonTest.dependencies {
@@ -120,21 +116,6 @@ kotlin {
         nativeMain.dependencies {
         }
     }
-}
-
-dependencies {
-    add("kspAndroid", libs.androidx.room.compiler)
-    add("kspDesktop", libs.androidx.room.compiler)
-    add("kspIosArm64", libs.androidx.room.compiler)
-    add("kspIosSimulatorArm64", libs.androidx.room.compiler)
-}
-
-room {
-    schemaDirectory("$projectDir/schemas")
-}
-
-ksp {
-    arg("room.schemaLocation", "$projectDir/schemas")
 }
 
 android {
