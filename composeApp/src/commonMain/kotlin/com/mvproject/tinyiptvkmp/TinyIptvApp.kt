@@ -8,6 +8,7 @@
 package com.mvproject.tinyiptvkmp
 
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import coil3.ImageLoader
 import coil3.PlatformContext
 import coil3.compose.setSingletonImageLoaderFactory
@@ -20,14 +21,23 @@ import com.mvproject.tinyiptvkmp.core.theme.AppTheme
 import com.mvproject.tinyiptvkmp.navigation.AppRoutes
 import com.mvproject.tinyiptvkmp.navigation.NavigationHost
 import okio.FileSystem
+import org.koin.compose.viewmodel.koinViewModel
 
 @Composable
 fun TinyIptvApp() {
+    val rootViewModel = koinViewModel<RootViewModel>()
+
     setSingletonImageLoaderFactory { context ->
         getAsyncImageLoader(context)
     }
+
+    LaunchedEffect(rootViewModel) {
+        rootViewModel.refreshRemotePlaylistContentOnStart()
+    }
+
     AppTheme {
         NavigationHost(
+            rootViewModel = rootViewModel,
             startDestination = AppRoutes.PlaylistGroup,
         )
     }

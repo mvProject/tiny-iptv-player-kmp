@@ -30,8 +30,8 @@ import com.mvproject.tinyiptvkmp.features.epg.api.domain.utils.withPrograms
 import com.mvproject.tinyiptvkmp.features.groups.api.domain.model.FavoriteType
 import com.mvproject.tinyiptvkmp.features.groups.api.domain.usecase.GetGroupChannelsUseCase
 import com.mvproject.tinyiptvkmp.features.player.PlayerState.PlayerOSD
+import com.mvproject.tinyiptvkmp.features.player.api.domain.usecase.ObservePlayerSettingsUseCase
 import com.mvproject.tinyiptvkmp.features.player.nav.PlayerNavigator
-import com.mvproject.tinyiptvkmp.features.settings.api.domain.usecase.ObservePlayerSettingsUseCase
 import com.mvproject.tinyiptvkmp.platform.mediaplayer.isMediaPlayable
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.delay
@@ -54,6 +54,7 @@ class PlayerViewModel(
     private val media = args.channelName
     private val group = args.group
     private val groupType = args.groupType
+    private val playlistId = args.playlistId
 
     private val navigator: PlayerNavigator by inject()
 
@@ -105,7 +106,11 @@ class PlayerViewModel(
     }
 
     private suspend fun loadGroupChannels() {
-        val channelList = getGroupChannelsUseCase(group, groupType)
+        val channelList = getGroupChannelsUseCase(
+            playlistId = playlistId,
+            group = group,
+            groupType = groupType,
+        )
 
         setState {
             copy(
@@ -313,7 +318,11 @@ class PlayerViewModel(
                     osdType = null
                 )
             }
-            toggleFavoriteChannelUseCase(channel = currentChannel.channel, type = type.name)
+            toggleFavoriteChannelUseCase(
+                playlistId = playlistId,
+                channel = currentChannel.channel,
+                type = type.name,
+            )
 
         }
     }
@@ -361,4 +370,3 @@ class PlayerViewModel(
         pollVolumeJob = null
     }
 }
-

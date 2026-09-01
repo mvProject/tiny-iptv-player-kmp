@@ -20,6 +20,7 @@ fun EntryProviderScope<AppRoutes>.playerScreen() {
             parameters = {
                 parametersOf(
                     PlayerArgs(
+                        playlistId = key.playlistId,
                         channelName = key.channelName,
                         group = key.group,
                         groupType = key.groupType,

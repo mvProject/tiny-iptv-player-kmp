@@ -8,15 +8,15 @@
 package com.mvproject.tinyiptvkmp.features.settings.general
 
 import com.mvproject.tinyiptvkmp.core.base.mvi.MviViewModel
-import com.mvproject.tinyiptvkmp.features.settings.api.domain.usecase.ObserveGeneralSettingsUseCase
-import com.mvproject.tinyiptvkmp.features.settings.api.domain.usecase.UpdateEpgUpdatePeriodUseCase
-import com.mvproject.tinyiptvkmp.features.settings.api.domain.usecase.UpdateInfoUpdatePeriodUseCase
+import com.mvproject.tinyiptvkmp.features.epg.api.domain.usecase.ObserveEpgSettingsUseCase
+import com.mvproject.tinyiptvkmp.features.epg.api.domain.usecase.UpdateEpgUpdatePeriodUseCase
+import com.mvproject.tinyiptvkmp.features.epg.api.domain.usecase.UpdateInfoUpdatePeriodUseCase
 import com.mvproject.tinyiptvkmp.features.settings.general.SettingsGeneralState.SettingsGeneral
 import com.mvproject.tinyiptvkmp.features.settings.nav.SettingsNavigator
 import org.koin.core.component.inject
 
 class SettingsGeneralViewModel(
-    private val observeGeneralSettings: ObserveGeneralSettingsUseCase,
+    private val observeEpgSettings: ObserveEpgSettingsUseCase,
     private val updateInfoUpdatePeriod: UpdateInfoUpdatePeriodUseCase,
     private val updateEpgUpdatePeriod: UpdateEpgUpdatePeriodUseCase,
 ) : MviViewModel<SettingsGeneralState, SettingsGeneralAction, SettingsGeneralEffect>() {
@@ -40,10 +40,10 @@ class SettingsGeneralViewModel(
     }
 
     private suspend fun listenSettings() {
-        observeGeneralSettings().collect { settings ->
+        observeEpgSettings().collect { settings ->
             setState {
                 copy(
-                    infoUpdatePeriod = settings.infoUpdatePeriod,
+                    infoUpdatePeriod = settings.epgInfoUpdatePeriod,
                     epgUpdatePeriod = settings.epgUpdatePeriod,
                 )
             }

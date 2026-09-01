@@ -18,18 +18,22 @@ class GetGroupChannelsUseCase(
     private val logger by injectLogger()
 
     suspend operator fun invoke(
+        playlistId: String,
         group: String,
         groupType: String,
     ) = withContext(Dispatchers.IO) {
         logger.d { "testing GetGroupChannelsUseCase group = $group, groupType = $groupType" }
 
         val favorites = favoriteChannelsRepository
-            .loadSelectedFavoriteChannels()
+            .loadSelectedFavoriteChannels(playlistId = playlistId)
 
         val channels =
             when (groupType) {
                 GroupType.SPECIFIED.name -> {
-                    playlistChannelRepository.loadPlaylistGroupChannels(group = group)
+                    playlistChannelRepository.loadPlaylistGroupChannels(
+                        playlistId = playlistId,
+                        group = group,
+                    )
                 }
 
                 GroupType.FAVORITE.name -> {
@@ -37,11 +41,14 @@ class GetGroupChannelsUseCase(
                         .filter { it.favoriteType == group }
                         .map { it.channelUrl }
 
-                    playlistChannelRepository.loadPlaylistChannelsByUrls(urls = filtered)
+                    playlistChannelRepository.loadPlaylistChannelsByUrls(
+                        playlistId = playlistId,
+                        urls = filtered,
+                    )
                 }
 
                 else -> {
-                    playlistChannelRepository.loadChannelsById()
+                    playlistChannelRepository.loadChannelsById(playlistId = playlistId)
                 }
             }
 

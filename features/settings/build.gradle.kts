@@ -10,8 +10,9 @@ kotlin {
             implementation(projects.core.navigation)
             implementation(projects.core.ui)
             implementation(projects.core.designsystem)
+            implementation(projects.features.epgApi)
+            implementation(projects.features.playerApi)
             implementation(projects.features.playlistApi)
-            implementation(projects.features.settingsApi)
             implementation(libs.bundles.koin)
             implementation(libs.bundles.lifecycle)
         }

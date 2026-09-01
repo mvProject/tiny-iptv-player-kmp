@@ -3,19 +3,20 @@ package com.mvproject.tinyiptvkmp.features.playlist.api.domain.usecase
 import com.mvproject.tinyiptvkmp.features.playlist.api.domain.model.Playlist
 import com.mvproject.tinyiptvkmp.features.playlist.api.domain.model.PlaylistType
 import com.mvproject.tinyiptvkmp.features.playlist.api.domain.repository.PlaylistRepository
-import com.mvproject.tinyiptvkmp.features.playlist.api.domain.repository.PlaylistSyncStateRepository
-import kotlin.time.Clock
 
 interface UpdatePlaylistUseCase {
-    suspend operator fun invoke(playlist: Playlist)
+    suspend operator fun invoke(playlist: Playlist): UpdatePlaylistResult
 }
+
+data class UpdatePlaylistResult(
+    val playlist: Playlist,
+    val contentRefreshRequired: Boolean,
+)
 
 internal class UpdatePlaylistUseCaseImpl(
     private val playlistRepository: PlaylistRepository,
-    private val contentUpdater: PlaylistContentUpdater,
-    private val syncStateRepository: PlaylistSyncStateRepository,
 ) : UpdatePlaylistUseCase {
-    override suspend operator fun invoke(playlist: Playlist) {
+    override suspend operator fun invoke(playlist: Playlist): UpdatePlaylistResult {
         val existing = playlistRepository.getPlaylistById(id = playlist.id)
         val updated = existing.updatedWith(playlist)
         val shouldReloadContent =
@@ -24,20 +25,10 @@ internal class UpdatePlaylistUseCaseImpl(
 
         playlistRepository.savePlaylist(playlist = updated)
 
-        if (shouldReloadContent) {
-            val contentReplaced = contentUpdater.replacePlaylistContent(
-                playlist = updated,
-                deleteBeforeLoad = true,
-            )
-            if (contentReplaced) {
-                syncStateRepository.markChannelsEpgInfoUpdateRequired()
-                playlistRepository.savePlaylist(
-                    playlist = updated.copy(
-                        lastUpdateDate = Clock.System.now().toEpochMilliseconds(),
-                    ),
-                )
-            }
-        }
+        return UpdatePlaylistResult(
+            playlist = updated,
+            contentRefreshRequired = shouldReloadContent,
+        )
     }
 }
 

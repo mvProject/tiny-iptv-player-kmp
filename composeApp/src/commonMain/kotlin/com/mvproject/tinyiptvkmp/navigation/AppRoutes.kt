@@ -14,6 +14,7 @@ import kotlinx.serialization.Serializable
 sealed interface AppRoutes : NavKey {
     @Serializable
     data class Player(
+        val playlistId: String,
         val channelName: String,
         val group: String,
         val groupType: String,
@@ -29,6 +30,7 @@ sealed interface AppRoutes : NavKey {
 
     @Serializable
     data class TvPlaylistChannels(
+        val playlistId: String,
         val group: String,
         val groupType: String,
     ) : AppRoutes

@@ -2,7 +2,6 @@ package com.mvproject.tinyiptvkmp.features.groups.api
 
 import com.mvproject.tinyiptvkmp.features.channels.api.domain.model.FavoriteChannel
 import com.mvproject.tinyiptvkmp.features.channels.api.domain.model.PlaylistChannel
-import com.mvproject.tinyiptvkmp.features.channels.api.domain.model.PlaylistChannelSource
 import com.mvproject.tinyiptvkmp.features.channels.api.domain.repository.ChannelFavoriteRepository
 import com.mvproject.tinyiptvkmp.features.channels.api.domain.repository.PlaylistChannelRepository
 import com.mvproject.tinyiptvkmp.features.groups.api.domain.model.FavoriteType
@@ -50,7 +49,7 @@ class GroupsUseCaseTest {
         val groups = GetPlaylistGroupUseCase(
             playlistChannelRepository = playlistRepository,
             favoriteChannelsRepository = favoriteRepository,
-        )()
+        )(playlistId = "playlist")
 
         assertEquals(GroupType.ALL, groups[0].groupType)
         assertEquals(3, groups[0].groupContentCount)
@@ -81,7 +80,7 @@ class GroupsUseCaseTest {
         val groups = GetPlaylistGroupUseCase(
             playlistChannelRepository = playlistRepository,
             favoriteChannelsRepository = favoriteRepository,
-        )()
+        )(playlistId = "playlist")
 
         val favoriteGroups = groups.filter { group -> group.groupType == GroupType.FAVORITE }
         assertEquals(
@@ -103,7 +102,7 @@ class GroupsUseCaseTest {
         val channels = GetGroupChannelsUseCase(
             playlistChannelRepository = playlistRepository,
             favoriteChannelsRepository = favoriteRepository,
-        )(group = "NEWS", groupType = GroupType.SPECIFIED.name)
+        )(playlistId = "playlist", group = "NEWS", groupType = GroupType.SPECIFIED.name)
 
         assertEquals(listOf("News 1"), channels.map { channel -> channel.channelName })
         assertEquals(FavoriteType.CARTOON.name, channels.single().favoriteType)
@@ -125,8 +124,16 @@ class GroupsUseCaseTest {
         )
 
         val favoriteChannels =
-            useCase(group = FavoriteType.MOVIE.name, groupType = GroupType.FAVORITE.name)
-        val allChannels = useCase(group = "", groupType = GroupType.ALL.name)
+            useCase(
+                playlistId = "playlist",
+                group = FavoriteType.MOVIE.name,
+                groupType = GroupType.FAVORITE.name,
+            )
+        val allChannels = useCase(
+            playlistId = "playlist",
+            group = "",
+            groupType = GroupType.ALL.name,
+        )
 
         assertEquals(listOf("Movie 1"), favoriteChannels.map { channel -> channel.channelName })
         assertEquals(
@@ -152,15 +159,24 @@ private class FakePlaylistChannelRepository : PlaylistChannelRepository {
 
     override suspend fun savePlaylistChannels(channels: List<PlaylistChannel>) = Unit
 
-    override suspend fun loadPlaylistChannels(source: PlaylistChannelSource): List<PlaylistChannel> =
+    override suspend fun loadLocalPlaylistChannels(
+        playlistId: String,
+        source: String,
+    ): List<PlaylistChannel> =
         channels
 
-    override suspend fun loadPlaylistGroups(): List<String> =
+    override suspend fun loadRemotePlaylistChannels(
+        playlistId: String,
+        source: String,
+    ): List<PlaylistChannel> =
+        channels
+
+    override suspend fun loadPlaylistGroups(playlistId: String): List<String> =
         channels
             .map { channel -> channel.channelGroup }
             .distinct()
 
-    override suspend fun loadPlaylistGroupCounts(): Map<String, Int> =
+    override suspend fun loadPlaylistGroupCounts(playlistId: String): Map<String, Int> =
         channels
             .map { channel -> channel.channelGroup }
             .distinct()
@@ -168,19 +184,25 @@ private class FakePlaylistChannelRepository : PlaylistChannelRepository {
                 channels.count { channel -> channel.channelGroup == group }
             }
 
-    override suspend fun loadPlaylistChannelsCount(): Int = channels.size
+    override suspend fun loadPlaylistChannelsCount(playlistId: String): Int = channels.size
 
-    override suspend fun loadPlaylistGroupChannelsCount(group: String): Int =
+    override suspend fun loadPlaylistGroupChannelsCount(playlistId: String, group: String): Int =
         channels.count { channel -> channel.channelGroup == group }
 
-    override suspend fun loadChannelsById(): List<PlaylistChannel> = channels
+    override suspend fun loadChannelsById(playlistId: String): List<PlaylistChannel> = channels
 
     override suspend fun loadAllChannels(): List<PlaylistChannel> = channels
 
-    override suspend fun loadPlaylistChannelsByUrls(urls: List<String>): List<PlaylistChannel> =
+    override suspend fun loadPlaylistChannelsByUrls(
+        playlistId: String,
+        urls: List<String>,
+    ): List<PlaylistChannel> =
         channels.filter { channel -> channel.channelUrl in urls }
 
-    override suspend fun loadPlaylistGroupChannels(group: String): List<PlaylistChannel> =
+    override suspend fun loadPlaylistGroupChannels(
+        playlistId: String,
+        group: String,
+    ): List<PlaylistChannel> =
         channels.filter { channel -> channel.channelGroup == group }
 
     override suspend fun deletePlaylistChannels(listId: String) = Unit
@@ -190,14 +212,16 @@ private class FakeChannelFavoriteRepository : ChannelFavoriteRepository {
     var favorites: List<FavoriteChannel> = emptyList()
 
     override suspend fun addChannelToFavorite(
+        playlistId: String,
         channelName: String,
         channelUrl: String,
         favoriteType: String,
     ) = Unit
 
-    override suspend fun deleteChannelFromFavorite(channelUrl: String) = Unit
+    override suspend fun deleteChannelFromFavorite(playlistId: String, channelUrl: String) = Unit
 
-    override suspend fun loadSelectedFavoriteChannels(): List<FavoriteChannel> = favorites
+    override suspend fun loadSelectedFavoriteChannels(playlistId: String): List<FavoriteChannel> =
+        favorites
 
     override suspend fun loadFavoriteChannelUrls(): List<String> =
         favorites.map { favorite -> favorite.channelUrl }

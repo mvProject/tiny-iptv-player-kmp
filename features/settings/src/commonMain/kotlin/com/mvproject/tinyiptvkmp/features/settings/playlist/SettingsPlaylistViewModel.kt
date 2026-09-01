@@ -9,7 +9,6 @@ package com.mvproject.tinyiptvkmp.features.settings.playlist
 
 import com.mvproject.tinyiptvkmp.core.base.mvi.MviViewModel
 import com.mvproject.tinyiptvkmp.features.playlist.api.domain.model.Playlist
-import com.mvproject.tinyiptvkmp.features.playlist.api.domain.usecase.DeletePlaylistUseCase
 import com.mvproject.tinyiptvkmp.features.playlist.api.domain.usecase.ObservePlaylistsUseCase
 import com.mvproject.tinyiptvkmp.features.settings.nav.SettingsNavigator
 import kotlinx.coroutines.flow.distinctUntilChanged
@@ -17,7 +16,6 @@ import org.koin.core.component.inject
 
 class SettingsPlaylistViewModel(
     private val observePlaylistsUseCase: ObservePlaylistsUseCase,
-    private val deletePlaylistUseCase: DeletePlaylistUseCase,
 ) : MviViewModel<SettingsPlaylistState, SettingsPlaylistAction, SettingsPlaylistEffect>() {
 
     private val navigator: SettingsNavigator by inject()
@@ -30,6 +28,8 @@ class SettingsPlaylistViewModel(
     override fun onIntent(intent: SettingsPlaylistAction) {
         when (intent) {
             is SettingsPlaylistAction.DeletePlaylist -> launch { deletePlaylist(playlist = intent.playlist) }
+            SettingsPlaylistAction.DeletePlaylistCompleted -> setState { copy(isLoading = false) }
+            is SettingsPlaylistAction.DeletePlaylistFailed -> handleDeleteFailure(intent.throwable)
             SettingsPlaylistAction.NavigateBack -> launch { navigator.navigateUp() }
             is SettingsPlaylistAction.NavigateToPlaylist -> launch { navigator.navigateToPlaylist(id = intent.id) }
         }
@@ -55,6 +55,12 @@ class SettingsPlaylistViewModel(
     }
 
     private suspend fun deletePlaylist(playlist: Playlist) {
-        deletePlaylistUseCase(playlist = playlist)
+        setState { copy(isLoading = true) }
+        sendEffect(SettingsPlaylistEffect.DeletePlaylist(playlist = playlist))
+    }
+
+    private fun handleDeleteFailure(throwable: Throwable) {
+        logger.e(throwable) { "Failed to delete playlist" }
+        setState { copy(isLoading = false) }
     }
 }

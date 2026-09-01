@@ -46,6 +46,7 @@ sealed interface GroupChannelsEffect
 
 
 data class GroupChannelsArgs(
+    val playlistId: String,
     val group: String,
     val groupType: String,
 )

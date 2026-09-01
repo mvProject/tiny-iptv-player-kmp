@@ -1,8 +1,7 @@
 package com.mvproject.tinyiptvkmp.features.epg.api.domain.usecase
 
-import com.mvproject.tinyiptvkmp.core.datastore.ProtoStore
-import com.mvproject.tinyiptvkmp.core.datastore.preferences.AppPreferencesProto
 import com.mvproject.tinyiptvkmp.features.channels.api.domain.repository.ChannelFavoriteRepository
+import com.mvproject.tinyiptvkmp.features.channels.api.domain.repository.ChannelsRepository
 import com.mvproject.tinyiptvkmp.features.channels.api.domain.repository.PlaylistChannelRepository
 import com.mvproject.tinyiptvkmp.features.epg.api.domain.repository.EpgChannelRepository
 import com.mvproject.tinyiptvkmp.infrastructure.logging.injectLogger
@@ -13,7 +12,7 @@ interface UpdateChannelsEpgInfoUseCase {
 }
 
 internal class UpdateChannelsEpgInfoUseCaseImpl(
-    private val preferencesStore: ProtoStore<AppPreferencesProto>,
+    private val channelsRepository: ChannelsRepository,
     private val playlistChannelRepository: PlaylistChannelRepository,
     private val channelFavoriteRepository: ChannelFavoriteRepository,
     private val epgChannelRepository: EpgChannelRepository,
@@ -57,8 +56,6 @@ internal class UpdateChannelsEpgInfoUseCaseImpl(
             }
         }
 
-        preferencesStore.update { preferences ->
-            preferences.copy(channelsEpgInfoUpdateRequired = false)
-        }
+        channelsRepository.markChannelsEpgInfoUpdated()
     }
 }

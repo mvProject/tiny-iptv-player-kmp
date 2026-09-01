@@ -18,12 +18,14 @@ import androidx.navigation3.runtime.entryProvider
 import androidx.navigation3.runtime.rememberSaveableStateHolderNavEntryDecorator
 import androidx.navigation3.ui.NavDisplay
 import androidx.savedstate.compose.serialization.serializers.SnapshotStateListSerializer
+import com.mvproject.tinyiptvkmp.RootViewModel
 import com.mvproject.tinyiptvkmp.core.base.mvi.CollectUiEffect
 import org.koin.compose.koinInject
 
 @Composable
 fun NavigationHost(
     modifier: Modifier = Modifier,
+    rootViewModel: RootViewModel,
     startDestination: AppRoutes
 ) {
 
@@ -56,13 +58,13 @@ fun NavigationHost(
 
             groupChannels()
 
-            playlistDetail()
+            playlistDetail(rootViewModel = rootViewModel)
 
             playerScreen()
 
             settingsGeneral()
 
-            settingsPlaylist()
+            settingsPlaylist(rootViewModel = rootViewModel)
 
             settingsPlayer()
         },

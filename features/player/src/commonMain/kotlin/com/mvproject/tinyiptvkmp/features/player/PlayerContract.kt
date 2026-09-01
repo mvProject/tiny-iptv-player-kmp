@@ -63,6 +63,7 @@ sealed interface PlayerAction {
 sealed interface PlayerEffect
 
 data class PlayerArgs(
+    val playlistId: String,
     val channelName: String,
     val group: String,
     val groupType: String,

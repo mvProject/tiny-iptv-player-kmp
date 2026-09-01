@@ -11,6 +11,7 @@ import androidx.lifecycle.viewModelScope
 import com.mvproject.tinyiptvkmp.core.base.mvi.MviViewModel
 import com.mvproject.tinyiptvkmp.core.base.mvi.runCatchingSuspend
 import com.mvproject.tinyiptvkmp.core.foundation.common.INT_VALUE_1
+import com.mvproject.tinyiptvkmp.features.channels.api.domain.usecase.ObserveChannelsEpgInfoUpdateRequiredUseCase
 import com.mvproject.tinyiptvkmp.features.epg.api.domain.usecase.CleanProgramsUseCase
 import com.mvproject.tinyiptvkmp.features.epg.api.domain.usecase.RefreshEpgChannelsUseCase
 import com.mvproject.tinyiptvkmp.features.epg.api.domain.usecase.RefreshEpgProgramsUseCase
@@ -22,8 +23,6 @@ import com.mvproject.tinyiptvkmp.features.groups.nav.GroupNavigator
 import com.mvproject.tinyiptvkmp.features.playlist.api.domain.model.Playlist
 import com.mvproject.tinyiptvkmp.features.playlist.api.domain.usecase.ObservePlaylistsUseCase
 import com.mvproject.tinyiptvkmp.features.playlist.api.domain.usecase.SelectPlaylistUseCase
-import com.mvproject.tinyiptvkmp.features.playlist.api.domain.usecase.UpdateRemotePlaylistChannelsUseCase
-import com.mvproject.tinyiptvkmp.features.settings.api.domain.usecase.ObserveChannelsEpgInfoUpdateRequiredUseCase
 import kotlinx.coroutines.flow.distinctUntilChanged
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
@@ -36,7 +35,6 @@ class GroupViewModel(
     private val getPlaylistGroupUseCase: GetPlaylistGroupUseCase,
     private val refreshEpgChannelsUseCase: RefreshEpgChannelsUseCase,
     private val refreshEpgProgramsUseCase: RefreshEpgProgramsUseCase,
-    private val updateRemotePlaylistChannelsUseCase: UpdateRemotePlaylistChannelsUseCase,
     private val updateChannelsEpgInfoUseCase: UpdateChannelsEpgInfoUseCase,
     private val cleanProgramsUseCase: CleanProgramsUseCase,
 ) : MviViewModel<GroupState, GroupAction, GroupEffect>() {
@@ -52,6 +50,7 @@ class GroupViewModel(
         when (intent) {
             is GroupAction.NavigateToGroup -> launch {
                 navigator.navigateToPlaylist(
+                    playlistId = getState().selectedPlaylist.id,
                     title = intent.title,
                     group = intent.group
                 )
@@ -96,9 +95,6 @@ class GroupViewModel(
                     updateChannelsEpgInfoUseCase()
                 }
             }.launchIn(viewModelScope)
-
-        updateRemotePlaylistChannelsUseCase()
-
         // Temporarily disabled while the EPG source is unstable and the refresh pipeline is redesigned.
         // refreshEpgChannelsUseCase()
         // cleanProgramsUseCase()
@@ -115,7 +111,7 @@ class GroupViewModel(
         setState { copy(isLoading = true) }
 
         runCatchingSuspend {
-            getPlaylistGroupUseCase()
+            getPlaylistGroupUseCase(playlistId = getState().selectedPlaylist.id)
         }.onSuccess { channelGroups ->
             setState {
                 copy(

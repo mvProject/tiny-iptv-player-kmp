@@ -8,9 +8,9 @@
 package com.mvproject.tinyiptvkmp.features.settings.player
 
 import com.mvproject.tinyiptvkmp.core.base.mvi.MviViewModel
-import com.mvproject.tinyiptvkmp.features.settings.api.domain.usecase.ObservePlayerSettingsUseCase
-import com.mvproject.tinyiptvkmp.features.settings.api.domain.usecase.UpdateFullscreenModeUseCase
-import com.mvproject.tinyiptvkmp.features.settings.api.domain.usecase.UpdateVideoSizeUseCase
+import com.mvproject.tinyiptvkmp.features.player.api.domain.usecase.ObservePlayerSettingsUseCase
+import com.mvproject.tinyiptvkmp.features.player.api.domain.usecase.UpdateFullscreenModeUseCase
+import com.mvproject.tinyiptvkmp.features.player.api.domain.usecase.UpdateVideoSizeUseCase
 import com.mvproject.tinyiptvkmp.features.settings.nav.SettingsNavigator
 import com.mvproject.tinyiptvkmp.features.settings.player.SettingsPlayerState.SettingsPlayer
 import org.koin.core.component.inject

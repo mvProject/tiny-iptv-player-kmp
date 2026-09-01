@@ -11,14 +11,12 @@ class AppPreferencesSerializerTest {
         runTest {
             val expected =
                 AppPreferencesProto(
-                    channelsViewType = "GRID",
                     epgDataLastUpdate = 123L,
                     epgInfoLastUpdatePeriod = 2,
                     epgMainLastUpdatePeriod = 3,
                     defaultVideoSizeMode = 1,
                     defaultFullscreenMode = true,
                     epgInfoDataLastUpdate = 456L,
-                    channelsEpgInfoUpdateRequired = true,
                     playlistContentLoadRequired = "playlist-id",
                     epgProgramClean = 789L,
                 )

@@ -13,7 +13,6 @@ kotlin {
             implementation(projects.features.channelsApi)
             implementation(projects.features.groupsApi)
             implementation(projects.features.epgApi)
-            implementation(projects.features.settingsApi)
             implementation(libs.bundles.koin)
             implementation(libs.bundles.lifecycle)
             implementation(libs.kotlinx.datetime)

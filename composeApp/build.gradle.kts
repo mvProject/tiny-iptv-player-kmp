@@ -49,7 +49,7 @@ kotlin {
             implementation(projects.features.groupsApi)
             implementation(projects.features.epgApi)
             implementation(projects.features.playlistApi)
-            implementation(projects.features.settingsApi)
+            implementation(projects.features.playerApi)
             implementation(projects.features.channels)
             implementation(projects.features.groups)
             implementation(projects.features.playlist)
@@ -87,7 +87,7 @@ kotlin {
         }
 
         commonTest.dependencies {
-            implementation(kotlin("test"))
+            implementation(libs.kotlin.test)
             implementation(libs.kotlinx.coroutines.core)
             implementation(libs.kotlinx.coroutines.test)
         }

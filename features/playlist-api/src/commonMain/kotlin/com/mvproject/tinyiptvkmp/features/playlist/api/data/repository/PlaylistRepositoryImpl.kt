@@ -13,6 +13,9 @@ import kotlinx.coroutines.flow.map
 internal class PlaylistRepositoryImpl(
     private val local: PlaylistLocalDataSource,
 ) : PlaylistRepository {
+    override suspend fun getSelectedPlaylistId(): String? =
+        local.getSelectedPlaylistId()
+
     override suspend fun getPlaylistById(id: String): Playlist =
         local.getPlaylistById(id = id).toPlaylist()
 
@@ -22,7 +25,7 @@ internal class PlaylistRepositoryImpl(
     override suspend fun getAllPlaylists(): List<Playlist> =
         local.getAllPlaylists().map { it.toPlaylist() }
 
-    override suspend fun getDueRemotePlaylists(nowMillis: Long): List<Playlist> =
+    override suspend fun getRemotePlaylistsToRefresh(nowMillis: Long): List<Playlist> =
         local.getRemotePlaylistsWithUpdatePeriod(
             playlistType = PlaylistType.REMOTE.name,
             noUpdatePeriod = 0L,

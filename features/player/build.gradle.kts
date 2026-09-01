@@ -13,7 +13,7 @@ kotlin {
             implementation(projects.features.channelsApi)
             implementation(projects.features.groupsApi)
             implementation(projects.features.epgApi)
-            implementation(projects.features.settingsApi)
+            implementation(projects.features.playerApi)
             implementation(projects.platform.mediaplayer)
             implementation(libs.bundles.koin)
             implementation(libs.bundles.lifecycle)

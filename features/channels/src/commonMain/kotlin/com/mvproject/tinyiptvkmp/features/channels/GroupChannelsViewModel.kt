@@ -12,7 +12,9 @@ import com.mvproject.tinyiptvkmp.core.base.mvi.MviViewModel
 import com.mvproject.tinyiptvkmp.core.foundation.model.ChannelsViewType
 import com.mvproject.tinyiptvkmp.core.foundation.utils.actualDate
 import com.mvproject.tinyiptvkmp.features.channels.GroupChannelsState.GroupChannelsOSD
+import com.mvproject.tinyiptvkmp.features.channels.api.domain.usecase.ObserveChannelsSettingsUseCase
 import com.mvproject.tinyiptvkmp.features.channels.api.domain.usecase.ToggleFavoriteChannelUseCase
+import com.mvproject.tinyiptvkmp.features.channels.api.domain.usecase.UpdateChannelsViewTypeUseCase
 import com.mvproject.tinyiptvkmp.features.channels.nav.GroupChannelsNavigator
 import com.mvproject.tinyiptvkmp.features.epg.api.domain.model.TvChannelWithPrograms
 import com.mvproject.tinyiptvkmp.features.epg.api.domain.usecase.GetChannelsEpgUseCase
@@ -24,8 +26,6 @@ import com.mvproject.tinyiptvkmp.features.epg.api.domain.utils.toggleFavorite
 import com.mvproject.tinyiptvkmp.features.epg.api.domain.utils.withPrograms
 import com.mvproject.tinyiptvkmp.features.groups.api.domain.model.FavoriteType
 import com.mvproject.tinyiptvkmp.features.groups.api.domain.usecase.GetGroupChannelsUseCase
-import com.mvproject.tinyiptvkmp.features.settings.api.domain.usecase.ObserveGeneralSettingsUseCase
-import com.mvproject.tinyiptvkmp.features.settings.api.domain.usecase.UpdateChannelsViewTypeUseCase
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.IO
 import kotlinx.coroutines.flow.first
@@ -40,12 +40,13 @@ class GroupChannelsViewModel(
     private val getGroupChannelsUseCase: GetGroupChannelsUseCase,
     private val getGroupChannelsEpgUseCase: GetGroupChannelsEpgUseCase,
     private val toggleFavoriteChannelUseCase: ToggleFavoriteChannelUseCase,
-    private val observeGeneralSettings: ObserveGeneralSettingsUseCase,
+    private val observeChannelsSettings: ObserveChannelsSettingsUseCase,
     private val updateChannelsViewType: UpdateChannelsViewTypeUseCase,
 ) : MviViewModel<GroupChannelsState, GroupChannelsAction, GroupChannelsEffect>() {
 
     private val group = args.group
     private val type = args.groupType
+    private val playlistId = args.playlistId
 
     private var lastRefresh: Long = 0
 
@@ -67,6 +68,7 @@ class GroupChannelsViewModel(
             is GroupChannelsAction.SearchTextChange -> searchTextChange(text = intent.text)
             is GroupChannelsAction.SelectChannel -> launch {
                 navigator.navigateToPlayer(
+                    playlistId = playlistId,
                     name = intent.name,
                     group = intent.group,
                     groupType = type
@@ -85,8 +87,12 @@ class GroupChannelsViewModel(
     }
 
     private suspend fun loadGroupChannels() {
-        val viewType = observeGeneralSettings().first().channelsViewType
-        val groupChannels = getGroupChannelsUseCase(group = group, groupType = type)
+        val viewType = observeChannelsSettings().first().channelsViewType
+        val groupChannels = getGroupChannelsUseCase(
+            playlistId = playlistId,
+            group = group,
+            groupType = type,
+        )
         setState {
             copy(
                 viewType = viewType,
@@ -177,6 +183,10 @@ class GroupChannelsViewModel(
             copy(channels = updatedChannels, osdType = null)
         }
 
-        toggleFavoriteChannelUseCase(channel = channel.channel, type = type.name)
+        toggleFavoriteChannelUseCase(
+            playlistId = playlistId,
+            channel = channel.channel,
+            type = type.name,
+        )
     }
 }

@@ -21,6 +21,7 @@ fun EntryProviderScope<AppRoutes>.groupChannels() {
             parameters = {
                 parametersOf(
                     GroupChannelsArgs(
+                        playlistId = key.playlistId,
                         group = key.group,
                         groupType = key.groupType
                     )

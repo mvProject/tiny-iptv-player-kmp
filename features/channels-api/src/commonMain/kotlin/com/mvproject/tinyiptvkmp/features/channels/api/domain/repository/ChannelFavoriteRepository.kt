@@ -4,14 +4,15 @@ import com.mvproject.tinyiptvkmp.features.channels.api.domain.model.FavoriteChan
 
 interface ChannelFavoriteRepository {
     suspend fun addChannelToFavorite(
+        playlistId: String,
         channelName: String,
         channelUrl: String,
         favoriteType: String,
     )
 
-    suspend fun deleteChannelFromFavorite(channelUrl: String)
+    suspend fun deleteChannelFromFavorite(playlistId: String, channelUrl: String)
 
-    suspend fun loadSelectedFavoriteChannels(): List<FavoriteChannel>
+    suspend fun loadSelectedFavoriteChannels(playlistId: String): List<FavoriteChannel>
 
     suspend fun loadFavoriteChannelUrls(): List<String>
 

@@ -10,9 +10,7 @@ package com.mvproject.tinyiptvkmp.features.playlist
 import com.mvproject.tinyiptvkmp.core.base.mvi.MviViewModel
 import com.mvproject.tinyiptvkmp.core.base.mvi.runCatchingSuspend
 import com.mvproject.tinyiptvkmp.features.playlist.api.domain.model.PlaylistType
-import com.mvproject.tinyiptvkmp.features.playlist.api.domain.usecase.CreatePlaylistUseCase
 import com.mvproject.tinyiptvkmp.features.playlist.api.domain.usecase.GetPlaylistUseCase
-import com.mvproject.tinyiptvkmp.features.playlist.api.domain.usecase.UpdatePlaylistUseCase
 import com.mvproject.tinyiptvkmp.features.playlist.nav.PlaylistNavigator
 import io.github.vinceglb.filekit.core.PlatformFile
 import kotlinx.coroutines.Dispatchers
@@ -33,8 +31,6 @@ import kotlin.uuid.Uuid
 class PlaylistViewModel(
     @InjectedParam args: PlaylistDetailArgs,
     private val getPlaylistUseCase: GetPlaylistUseCase,
-    private val createPlaylistUseCase: CreatePlaylistUseCase,
-    private val updatePlaylistUseCase: UpdatePlaylistUseCase,
 ) : MviViewModel<PlaylistState, PlaylistAction, PlaylistEffect>() {
 
     private val navigator: PlaylistNavigator by inject()
@@ -49,7 +45,9 @@ class PlaylistViewModel(
         when (intent) {
             is PlaylistAction.ImportLocalFile -> launch { importLocalPlaylistFile(file = intent.file) }
             PlaylistAction.NavigateBack -> launch { navigator.navigateUp() }
+            is PlaylistAction.SavePlaylistFailed -> handleSaveFailure(throwable = intent.throwable)
             PlaylistAction.SavePlaylist -> launch { savePlaylist() }
+            PlaylistAction.SavePlaylistCompleted -> handleSaveCompleted()
             is PlaylistAction.SetLocalUri -> setLocalPlaylistUri(
                 name = intent.name,
                 uri = intent.uri
@@ -152,21 +150,22 @@ class PlaylistViewModel(
     }
 
     private suspend fun saveOrUpdatePlayList(isUpdate: Boolean = false) {
-
         val playlist = state.value.toPlaylist()
 
-        runCatchingSuspend {
-            if (isUpdate) {
-                updatePlaylistUseCase(playlist = playlist)
-            } else {
-                createPlaylistUseCase(playlist = playlist)
-            }
-        }.onSuccess {
-            setState { copy(isComplete = true, isSaving = false) }
-        }.onFailure {
-            logger.e(it) { "testing saveOrUpdatePlayList isUpdate=$isUpdate, failure ${it.message}" }
-            setState { copy(isComplete = false, isSaving = false) }
+        if (isUpdate) {
+            sendEffect(PlaylistEffect.UpdatePlaylist(playlist = playlist))
+        } else {
+            sendEffect(PlaylistEffect.CreatePlaylist(playlist = playlist))
         }
+    }
+
+    private fun handleSaveCompleted() {
+        setState { copy(isComplete = true, isSaving = false) }
+    }
+
+    private fun handleSaveFailure(throwable: Throwable) {
+        logger.e(throwable) { "testing saveOrUpdatePlayList failure ${throwable.message}" }
+        setState { copy(isComplete = false, isSaving = false) }
     }
 }
 

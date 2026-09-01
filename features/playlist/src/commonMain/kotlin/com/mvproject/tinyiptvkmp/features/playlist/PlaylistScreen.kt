@@ -32,6 +32,8 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
+import com.mvproject.tinyiptvkmp.core.base.mvi.CollectUiEffect
+import com.mvproject.tinyiptvkmp.core.base.mvi.runCatchingSuspend
 import com.mvproject.tinyiptvkmp.core.components.adaptive.adaptiveContentWidth
 import com.mvproject.tinyiptvkmp.core.components.adaptive.rememberAdaptiveLayoutState
 import com.mvproject.tinyiptvkmp.core.components.buttons.ActionButton
@@ -45,6 +47,7 @@ import com.mvproject.tinyiptvkmp.core.foundation.utils.CommonUtils.typeM3U8
 import com.mvproject.tinyiptvkmp.core.theme.colorSchemeExtended
 import com.mvproject.tinyiptvkmp.core.theme.dimensionSize
 import com.mvproject.tinyiptvkmp.core.theme.dimensionWeight
+import com.mvproject.tinyiptvkmp.features.playlist.api.domain.model.Playlist
 import com.mvproject.tinyiptvkmp.features.playlist.api.domain.model.PlaylistType
 import com.mvproject.tinyiptvkmp.features.playlist.components.PlaylistUpdateSelector
 import com.mvproject.tinyiptvkmp.features.playlist.generated.resources.Res
@@ -62,9 +65,33 @@ import org.jetbrains.compose.resources.stringResource
 
 @Composable
 fun PlaylistScreen(
-    viewModel: PlaylistViewModel
+    viewModel: PlaylistViewModel,
+    onCreatePlaylist: suspend (Playlist) -> Unit,
+    onUpdatePlaylist: suspend (Playlist) -> Unit,
 ) {
     val uiState by viewModel.state.collectAsStateWithLifecycle()
+
+    CollectUiEffect(viewModel.effect) { effect ->
+        when (effect) {
+            is PlaylistEffect.CreatePlaylist ->
+                runCatchingSuspend {
+                    onCreatePlaylist(effect.playlist)
+                }.onSuccess {
+                    viewModel.onIntent(PlaylistAction.SavePlaylistCompleted)
+                }.onFailure { throwable ->
+                    viewModel.onIntent(PlaylistAction.SavePlaylistFailed(throwable))
+                }
+
+            is PlaylistEffect.UpdatePlaylist ->
+                runCatchingSuspend {
+                    onUpdatePlaylist(effect.playlist)
+                }.onSuccess {
+                    viewModel.onIntent(PlaylistAction.SavePlaylistCompleted)
+                }.onFailure { throwable ->
+                    viewModel.onIntent(PlaylistAction.SavePlaylistFailed(throwable))
+                }
+        }
+    }
 
     PlaylistScreen(
         state = uiState,
