@@ -35,10 +35,12 @@ import com.mvproject.tinyiptvkmp.core.designsystem.generated.resources.app_name
 import com.mvproject.tinyiptvkmp.core.designsystem.generated.resources.msg_no_items_found
 import com.mvproject.tinyiptvkmp.core.theme.colorSchemeExtended
 import com.mvproject.tinyiptvkmp.core.theme.dimensionSize
+import com.mvproject.tinyiptvkmp.features.groups.api.domain.model.ChannelsGroup
 import com.mvproject.tinyiptvkmp.features.groups.presentation.components.PlaylistGroupItem
 import com.mvproject.tinyiptvkmp.features.groups.presentation.components.PlaylistSelector
 import com.mvproject.tinyiptvkmp.features.groups.presentation.generated.resources.Res
 import com.mvproject.tinyiptvkmp.features.groups.presentation.generated.resources.btn_add_first_playlist
+import kotlinx.collections.immutable.ImmutableList
 import org.jetbrains.compose.resources.stringResource
 import com.mvproject.tinyiptvkmp.core.designsystem.generated.resources.Res as DesignSystemRes
 
@@ -90,64 +92,104 @@ private fun GroupScreen(
                 horizontalAlignment = Alignment.CenterHorizontally,
                 verticalArrangement = Arrangement.Center,
             ) {
-
-                AnimatedContent(targetState = state.isUpdating) { isUpdating ->
-                    if (isUpdating) {
-                        LinearProgressIndicator(
-                            modifier = Modifier
-                                .padding(vertical = MaterialTheme.dimensionSize.size8)
-                                .fillMaxWidth(),
-                            progress = { state.progress },
-                            trackColor = MaterialTheme.colorScheme.primary,
-                            color = MaterialTheme.colorSchemeExtended.progress,
-                            drawStopIndicator = {}
-                        )
-                    }
-                }
-
-                PlaylistSelector(
-                    uiState = state,
-                    onAction = onAction
+                GroupUpdateProgress(
+                    isUpdating = state.isUpdating,
+                    progress = state.progress,
                 )
 
-                when (val groupState = state.groupState) {
-                    GroupState.GroupState.Empty -> NoItemsView(
-                        modifier = Modifier.fillMaxSize(),
-                        title = stringResource(DesignSystemRes.string.msg_no_items_found),
-                        navigateTitle = stringResource(Res.string.btn_add_first_playlist),
-                        onNavigateClick = { onAction(GroupAction.NavigateToSettings) },
-                    )
+                PlaylistSelector(
+                    isVisible = state.isPlaylistSelectorVisible,
+                    selectedPlaylistName = state.selectedPlaylist.playlistName,
+                    playlists = state.playlists,
+                    onPlaylistSelected = { playlistId ->
+                        onAction(GroupAction.SelectPlaylist(playlistId))
+                    },
+                )
 
-                    is GroupState.GroupState.Success -> {
-                        Column(
-                            modifier =
-                                Modifier
-                                    .fillMaxSize()
-                                    .padding(vertical = MaterialTheme.dimensionSize.size8),
-                            horizontalAlignment = Alignment.CenterHorizontally,
-                            verticalArrangement = Arrangement.Center,
-                        ) {
-                            LazyColumn(
-                                modifier = Modifier.fillMaxHeight().clipToBounds(),
-                                verticalArrangement = Arrangement.spacedBy(MaterialTheme.dimensionSize.size4),
-                            ) {
-                                items(
-                                    items = groupState.groups,
-                                    key = { grp -> grp.groupId },
-                                ) { item ->
-                                    PlaylistGroupItem(
-                                        modifier = Modifier.fillMaxWidth().animateItem(),
-                                        group = item,
-                                        onUiAction = onAction
-                                    )
-                                }
-                            }
-                        }
-                    }
-                }
+                GroupContent(
+                    groupState = state.groupState,
+                    onAction = onAction,
+                )
             }
 
             LoadingIndicator(isVisible = state.isLoading)
+        }
+    }
+}
+
+@Composable
+private fun GroupUpdateProgress(
+    isUpdating: Boolean,
+    progress: Float,
+) {
+    AnimatedContent(targetState = isUpdating) { targetIsUpdating ->
+        if (targetIsUpdating) {
+            LinearProgressIndicator(
+                modifier = Modifier
+                    .padding(vertical = MaterialTheme.dimensionSize.size8)
+                    .fillMaxWidth(),
+                progress = { progress },
+                trackColor = MaterialTheme.colorScheme.primary,
+                color = MaterialTheme.colorSchemeExtended.progress,
+                drawStopIndicator = {},
+            )
+        }
+    }
+}
+
+@Composable
+private fun GroupContent(
+    groupState: GroupState.GroupState,
+    onAction: (GroupAction) -> Unit,
+) {
+    when (groupState) {
+        GroupState.GroupState.Empty -> EmptyGroups(onAction = onAction)
+        is GroupState.GroupState.Success -> GroupsList(
+            groups = groupState.groups,
+            onAction = onAction,
+        )
+    }
+}
+
+@Composable
+private fun EmptyGroups(
+    onAction: (GroupAction) -> Unit,
+) {
+    NoItemsView(
+        modifier = Modifier.fillMaxSize(),
+        title = stringResource(DesignSystemRes.string.msg_no_items_found),
+        navigateTitle = stringResource(Res.string.btn_add_first_playlist),
+        onNavigateClick = { onAction(GroupAction.NavigateToSettings) },
+    )
+}
+
+@Composable
+private fun GroupsList(
+    groups: ImmutableList<ChannelsGroup>,
+    onAction: (GroupAction) -> Unit,
+) {
+    Column(
+        modifier =
+            Modifier
+                .fillMaxSize()
+                .padding(vertical = MaterialTheme.dimensionSize.size8),
+        horizontalAlignment = Alignment.CenterHorizontally,
+        verticalArrangement = Arrangement.Center,
+    ) {
+        LazyColumn(
+            modifier = Modifier.fillMaxHeight().clipToBounds(),
+            verticalArrangement = Arrangement.spacedBy(MaterialTheme.dimensionSize.size4),
+        ) {
+            items(
+                items = groups,
+                key = { group -> group.groupId },
+            ) { item ->
+                PlaylistGroupItem(
+                    modifier = Modifier.fillMaxWidth().animateItem(),
+                    group = item,
+                    onUiAction = onAction,
+                )
+            }
         }
     }
 }

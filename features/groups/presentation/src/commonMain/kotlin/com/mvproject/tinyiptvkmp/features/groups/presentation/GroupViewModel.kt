@@ -23,6 +23,7 @@ import com.mvproject.tinyiptvkmp.features.groups.presentation.nav.GroupNavigator
 import com.mvproject.tinyiptvkmp.features.playlist.api.domain.model.Playlist
 import com.mvproject.tinyiptvkmp.features.playlist.api.domain.usecase.ObservePlaylistsUseCase
 import com.mvproject.tinyiptvkmp.features.playlist.api.domain.usecase.SelectPlaylistUseCase
+import kotlinx.collections.immutable.toImmutableList
 import kotlinx.coroutines.flow.distinctUntilChanged
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
@@ -66,10 +67,11 @@ class GroupViewModel(
             .distinctUntilChanged()
             .collect { playlists ->
                 val selectedPlaylist = playlists.firstOrNull { playlist -> playlist.isSelected }
+                val immutablePlaylists = playlists.toImmutableList()
                 setState {
                     copy(
                         isPlaylistSelectorVisible = playlists.size > INT_VALUE_1,
-                        playlists = playlists,
+                        playlists = immutablePlaylists,
                         selectedPlaylist = selectedPlaylist ?: Playlist(),
                         groupState = if (selectedPlaylist == null) {
                             GroupState.GroupState.Empty
@@ -129,6 +131,6 @@ class GroupViewModel(
         if (none { group -> group.groupType == GroupType.ALL && group.groupContentCount > 0 }) {
             GroupState.GroupState.Empty
         } else {
-            GroupState.GroupState.Success(this)
+            GroupState.GroupState.Success(toImmutableList())
         }
 }

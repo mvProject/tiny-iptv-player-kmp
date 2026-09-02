@@ -16,6 +16,7 @@ kotlin {
             implementation(projects.features.epg.api)
             implementation(libs.bundles.koin)
             implementation(libs.bundles.lifecycle)
+            implementation(libs.kotlinx.collections.immutable)
         }
     }
 }

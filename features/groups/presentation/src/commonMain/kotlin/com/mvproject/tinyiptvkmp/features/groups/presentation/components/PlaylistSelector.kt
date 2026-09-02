@@ -25,16 +25,18 @@ import androidx.compose.ui.Modifier
 import com.mvproject.tinyiptvkmp.core.theme.colorSchemeExtended
 import com.mvproject.tinyiptvkmp.core.theme.dimensionSize
 import com.mvproject.tinyiptvkmp.core.theme.dimensionText
-import com.mvproject.tinyiptvkmp.features.groups.presentation.GroupAction
-import com.mvproject.tinyiptvkmp.features.groups.presentation.GroupState
 import com.mvproject.tinyiptvkmp.features.groups.presentation.generated.resources.Res
 import com.mvproject.tinyiptvkmp.features.groups.presentation.generated.resources.hint_current_playlist
+import com.mvproject.tinyiptvkmp.features.playlist.api.domain.model.Playlist
+import kotlinx.collections.immutable.ImmutableList
 import org.jetbrains.compose.resources.stringResource
 
 @Composable
 fun PlaylistSelector(
-    uiState: GroupState,
-    onAction: (GroupAction) -> Unit,
+    isVisible: Boolean,
+    selectedPlaylistName: String,
+    playlists: ImmutableList<Playlist>,
+    onPlaylistSelected: (String) -> Unit,
 ) {
     Column(
         modifier = Modifier.fillMaxWidth().border(
@@ -43,7 +45,7 @@ fun PlaylistSelector(
             shape = MaterialTheme.shapes.extraSmall
         )
     ) {
-        if (uiState.isPlaylistSelectorVisible) {
+        if (isVisible) {
             var isSelectPlaylistOpen by remember { mutableStateOf(false) }
 
             ListItem(
@@ -61,7 +63,7 @@ fun PlaylistSelector(
                 headlineContent = {
                     Text(
                         modifier = Modifier.fillMaxWidth(),
-                        text = uiState.selectedPlaylist.playlistName,
+                        text = selectedPlaylistName,
                         style = MaterialTheme.typography.bodyMedium,
                         color = MaterialTheme.colorScheme.onSurface,
                     )
@@ -78,14 +80,17 @@ fun PlaylistSelector(
             ) { isOpen ->
                 if (isOpen) {
                     LazyColumn(modifier = Modifier.fillMaxWidth()) {
-                        itemsIndexed(uiState.playlists) { index, item ->
+                        itemsIndexed(
+                            items = playlists,
+                            key = { _, playlist -> playlist.id },
+                        ) { index, item ->
                             TextButton(
                                 modifier = Modifier.fillMaxWidth(),
                                 shape = MaterialTheme.shapes.small,
                                 contentPadding = PaddingValues(),
                                 onClick = {
                                     isSelectPlaylistOpen = false
-                                    onAction(GroupAction.SelectPlaylist(item.id))
+                                    onPlaylistSelected(item.id)
                                 },
                             ) {
                                 Text(
@@ -100,7 +105,7 @@ fun PlaylistSelector(
                                 )
                             }
 
-                            if (index < uiState.playlists.lastIndex) {
+                            if (index < playlists.lastIndex) {
                                 HorizontalDivider(
                                     modifier =
                                         Modifier

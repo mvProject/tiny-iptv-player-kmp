@@ -4,12 +4,14 @@ import androidx.compose.runtime.Immutable
 import com.mvproject.tinyiptvkmp.core.foundation.common.FLOAT_VALUE_ZERO
 import com.mvproject.tinyiptvkmp.features.groups.api.domain.model.ChannelsGroup
 import com.mvproject.tinyiptvkmp.features.playlist.api.domain.model.Playlist
+import kotlinx.collections.immutable.ImmutableList
+import kotlinx.collections.immutable.persistentListOf
 
 
 @Immutable
 data class GroupState(
     val groupState: GroupState = GroupState.Empty,
-    val playlists: List<Playlist> = emptyList(),
+    val playlists: ImmutableList<Playlist> = persistentListOf(),
     val selectedPlaylist: Playlist = Playlist(),
     val isPlaylistSelectorVisible: Boolean = false,
     val isLoading: Boolean = false,
@@ -17,7 +19,7 @@ data class GroupState(
     val progress: Float = FLOAT_VALUE_ZERO,
 ) {
     sealed interface GroupState {
-        data class Success(val groups: List<ChannelsGroup>) : GroupState
+        data class Success(val groups: ImmutableList<ChannelsGroup>) : GroupState
         data object Empty : GroupState
     }
 }
