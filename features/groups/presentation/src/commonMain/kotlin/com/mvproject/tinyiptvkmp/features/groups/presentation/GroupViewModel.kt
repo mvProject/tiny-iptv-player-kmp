@@ -126,7 +126,7 @@ class GroupViewModel(
     }
 
     private fun List<ChannelsGroup>.toGroupState(): GroupState.GroupState =
-        if (none { group -> group.groupType == GroupType.SPECIFIED }) {
+        if (none { group -> group.groupType == GroupType.ALL && group.groupContentCount > 0 }) {
             GroupState.GroupState.Empty
         } else {
             GroupState.GroupState.Success(this)

@@ -91,6 +91,53 @@ class GroupsUseCaseTest {
     }
 
     @Test
+    fun playlistGroupsHideBlankSpecifiedGroupsAndKeepAllCount() = runTest {
+        playlistRepository.channels = listOf(
+            playlistChannel(name = "Ungrouped 1", url = "url-ungrouped-1", group = ""),
+            playlistChannel(name = "Ungrouped 2", url = "url-ungrouped-2", group = "   "),
+            playlistChannel(name = "News 1", url = "url-news-1", group = "NEWS"),
+        )
+
+        val groups = GetPlaylistGroupUseCase(
+            playlistChannelRepository = playlistRepository,
+            favoriteChannelsRepository = favoriteRepository,
+        )(playlistId = "playlist")
+
+        val allGroup = groups.first { group -> group.groupType == GroupType.ALL }
+
+        assertEquals(3, allGroup.groupContentCount)
+        assertEquals(
+            listOf("NEWS"),
+            groups
+                .filter { group -> group.groupType == GroupType.SPECIFIED }
+                .map { group -> group.groupName },
+        )
+    }
+
+    @Test
+    fun playlistGroupsKeepAllWhenEveryChannelHasBlankGroup() = runTest {
+        playlistRepository.channels = listOf(
+            playlistChannel(name = "Ungrouped 1", url = "url-ungrouped-1", group = ""),
+            playlistChannel(name = "Ungrouped 2", url = "url-ungrouped-2", group = "   "),
+        )
+
+        val groups = GetPlaylistGroupUseCase(
+            playlistChannelRepository = playlistRepository,
+            favoriteChannelsRepository = favoriteRepository,
+        )(playlistId = "playlist")
+
+        val allGroup = groups.first { group -> group.groupType == GroupType.ALL }
+
+        assertEquals(2, allGroup.groupContentCount)
+        assertEquals(
+            emptyList<String>(),
+            groups
+                .filter { group -> group.groupType == GroupType.SPECIFIED }
+                .map { group -> group.groupName },
+        )
+    }
+
+    @Test
     fun groupChannelsLoadsSpecifiedGroupAndAppliesFavoriteNames() = runTest {
         playlistRepository.channels = listOf(
             playlistChannel(name = "News 1", url = "url-news-1", group = "NEWS"),

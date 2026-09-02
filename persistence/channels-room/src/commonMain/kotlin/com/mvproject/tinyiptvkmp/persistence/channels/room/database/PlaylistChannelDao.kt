@@ -49,13 +49,16 @@ interface PlaylistChannelDao {
     @Query("SELECT * FROM playlistChannels")
     suspend fun getAllChannels(): List<PlaylistChannelEntity>
 
-    @Query("SELECT channelGroup FROM playlistChannels WHERE parentListId == :playlistId")
+    @Query(
+        "SELECT channelGroup FROM playlistChannels " +
+                "WHERE parentListId == :playlistId AND TRIM(channelGroup) != ''",
+    )
     suspend fun getPlaylistChannelsGroups(playlistId: String): List<String>
 
     @Query(
         "SELECT channelGroup AS groupName, COUNT(*) AS groupContentCount " +
                 "FROM playlistChannels " +
-                "WHERE parentListId == :playlistId " +
+                "WHERE parentListId == :playlistId AND TRIM(channelGroup) != '' " +
                 "GROUP BY channelGroup " +
                 "ORDER BY channelGroup",
     )
