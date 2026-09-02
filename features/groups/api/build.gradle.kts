@@ -6,7 +6,7 @@ plugins {
 kotlin {
     sourceSets {
         commonMain.dependencies {
-            implementation(projects.features.channels.api)
+            api(projects.features.channels.api)
         }
     }
 }

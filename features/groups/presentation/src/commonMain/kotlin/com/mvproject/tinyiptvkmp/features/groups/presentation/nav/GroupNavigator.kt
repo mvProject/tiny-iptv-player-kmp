@@ -4,5 +4,5 @@ import com.mvproject.tinyiptvkmp.core.navigation.AppNavigator
 
 interface GroupNavigator : AppNavigator {
     suspend fun navigateToSettings()
-    suspend fun navigateToPlaylist(playlistId: String, title: String, group: String)
+    suspend fun navigateToPlaylist(playlistId: String, groupKey: String, groupType: String)
 }

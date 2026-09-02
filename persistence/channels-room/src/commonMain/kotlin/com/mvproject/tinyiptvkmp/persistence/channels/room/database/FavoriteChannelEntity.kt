@@ -8,6 +8,7 @@ import androidx.room.Index
     primaryKeys = ["channelUrl", "parentListId"],
     indices = [
         Index(value = ["parentListId"]),
+        Index(value = ["parentListId", "favoriteType"]),
     ],
 )
 data class FavoriteChannelEntity(

@@ -11,6 +11,7 @@ import androidx.lifecycle.viewModelScope
 import com.mvproject.tinyiptvkmp.core.base.mvi.MviViewModel
 import com.mvproject.tinyiptvkmp.core.foundation.model.ChannelsViewType
 import com.mvproject.tinyiptvkmp.core.foundation.utils.actualDate
+import com.mvproject.tinyiptvkmp.features.channels.api.domain.model.FavoriteType
 import com.mvproject.tinyiptvkmp.features.channels.api.domain.usecase.ObserveChannelsSettingsUseCase
 import com.mvproject.tinyiptvkmp.features.channels.api.domain.usecase.ToggleFavoriteChannelUseCase
 import com.mvproject.tinyiptvkmp.features.channels.api.domain.usecase.UpdateChannelsViewTypeUseCase
@@ -24,7 +25,7 @@ import com.mvproject.tinyiptvkmp.features.epg.api.domain.utils.mapPrograms
 import com.mvproject.tinyiptvkmp.features.epg.api.domain.utils.replaceUpdated
 import com.mvproject.tinyiptvkmp.features.epg.api.domain.utils.toggleFavorite
 import com.mvproject.tinyiptvkmp.features.epg.api.domain.utils.withPrograms
-import com.mvproject.tinyiptvkmp.features.groups.api.domain.model.FavoriteType
+import com.mvproject.tinyiptvkmp.features.groups.api.domain.model.ChannelGroupSelection
 import com.mvproject.tinyiptvkmp.features.groups.api.domain.usecase.GetGroupChannelsUseCase
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.IO
@@ -46,6 +47,10 @@ class GroupChannelsViewModel(
 
     private val group = args.group
     private val type = args.groupType
+    private val selection = ChannelGroupSelection.fromRoute(
+        group = args.group,
+        groupType = args.groupType,
+    )
     private val playlistId = args.playlistId
 
     private var lastRefresh: Long = 0
@@ -90,8 +95,7 @@ class GroupChannelsViewModel(
         val viewType = observeChannelsSettings().first().channelsViewType
         val groupChannels = getGroupChannelsUseCase(
             playlistId = playlistId,
-            group = group,
-            groupType = type,
+            selection = selection,
         )
         setState {
             copy(
@@ -174,7 +178,7 @@ class GroupChannelsViewModel(
         channel: TvChannelWithPrograms,
         type: FavoriteType,
     ) {
-        val updatedChannel = channel.toggleFavorite(type = type.name)
+        val updatedChannel = channel.toggleFavorite(type = type)
 
         val updatedChannels = state.value.channels
             .replaceUpdated(channel = updatedChannel)
@@ -186,7 +190,7 @@ class GroupChannelsViewModel(
         toggleFavoriteChannelUseCase(
             playlistId = playlistId,
             channel = channel.channel,
-            type = type.name,
+            type = type,
         )
     }
 }

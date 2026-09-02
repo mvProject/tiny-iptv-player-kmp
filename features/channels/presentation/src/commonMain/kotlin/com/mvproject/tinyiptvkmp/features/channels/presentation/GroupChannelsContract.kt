@@ -3,9 +3,9 @@ package com.mvproject.tinyiptvkmp.features.channels.presentation
 import androidx.compose.runtime.Immutable
 import com.mvproject.tinyiptvkmp.core.foundation.model.ChannelsViewType
 import com.mvproject.tinyiptvkmp.core.foundation.utils.CommonUtils.empty
+import com.mvproject.tinyiptvkmp.features.channels.api.domain.model.FavoriteType
 import com.mvproject.tinyiptvkmp.features.epg.api.domain.model.EpgProgram
 import com.mvproject.tinyiptvkmp.features.epg.api.domain.model.TvChannelWithPrograms
-import com.mvproject.tinyiptvkmp.features.groups.api.domain.model.FavoriteType
 
 @Immutable
 data class GroupChannelsState(

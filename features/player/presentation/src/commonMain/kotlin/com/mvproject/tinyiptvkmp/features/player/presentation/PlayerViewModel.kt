@@ -19,6 +19,7 @@ import com.mvproject.tinyiptvkmp.core.foundation.common.INT_VALUE_ZERO
 import com.mvproject.tinyiptvkmp.core.foundation.common.UI_SHOW_DELAY
 import com.mvproject.tinyiptvkmp.core.foundation.common.VOLUME_SHOW_DELAY
 import com.mvproject.tinyiptvkmp.core.foundation.model.VideoSize
+import com.mvproject.tinyiptvkmp.features.channels.api.domain.model.FavoriteType
 import com.mvproject.tinyiptvkmp.features.channels.api.domain.usecase.ToggleFavoriteChannelUseCase
 import com.mvproject.tinyiptvkmp.features.epg.api.domain.model.TvChannelWithPrograms
 import com.mvproject.tinyiptvkmp.features.epg.api.domain.usecase.GetChannelsEpgUseCase
@@ -26,8 +27,9 @@ import com.mvproject.tinyiptvkmp.features.epg.api.domain.usecase.GetGroupChannel
 import com.mvproject.tinyiptvkmp.features.epg.api.domain.utils.mapProgramIds
 import com.mvproject.tinyiptvkmp.features.epg.api.domain.utils.mapPrograms
 import com.mvproject.tinyiptvkmp.features.epg.api.domain.utils.replaceUpdated
+import com.mvproject.tinyiptvkmp.features.epg.api.domain.utils.toggleFavorite
 import com.mvproject.tinyiptvkmp.features.epg.api.domain.utils.withPrograms
-import com.mvproject.tinyiptvkmp.features.groups.api.domain.model.FavoriteType
+import com.mvproject.tinyiptvkmp.features.groups.api.domain.model.ChannelGroupSelection
 import com.mvproject.tinyiptvkmp.features.groups.api.domain.usecase.GetGroupChannelsUseCase
 import com.mvproject.tinyiptvkmp.features.player.api.domain.usecase.ObservePlayerSettingsUseCase
 import com.mvproject.tinyiptvkmp.features.player.presentation.PlayerState.PlayerOSD
@@ -54,6 +56,10 @@ class PlayerViewModel(
     private val media = args.channelName
     private val group = args.group
     private val groupType = args.groupType
+    private val selection = ChannelGroupSelection.fromRoute(
+        group = args.group,
+        groupType = args.groupType,
+    )
     private val playlistId = args.playlistId
 
     private val navigator: PlayerNavigator by inject()
@@ -108,8 +114,7 @@ class PlayerViewModel(
     private suspend fun loadGroupChannels() {
         val channelList = getGroupChannelsUseCase(
             playlistId = playlistId,
-            group = group,
-            groupType = groupType,
+            selection = selection,
         )
 
         setState {
@@ -301,30 +306,24 @@ class PlayerViewModel(
     private suspend fun toggleChannelFavorite(type: FavoriteType) {
         val currentChannel = state.value.currentChannel
 
-        if (currentChannel.favoriteType != type.name) {
+        val updatedChannel = currentChannel.toggleFavorite(type = type)
 
-            val updatedChannel = currentChannel.copy(
-                channel = currentChannel.channel.copy(favoriteType = type.name),
+        val updatedChannels = state.value.groupChannels
+            .replaceUpdated(channel = updatedChannel)
+
+
+        setState {
+            copy(
+                currentChannel = updatedChannel,
+                groupChannels = updatedChannels,
+                osdType = null,
             )
-
-            val updatedChannels = state.value.groupChannels
-                .replaceUpdated(channel = updatedChannel)
-
-
-            setState {
-                copy(
-                    currentChannel = updatedChannel,
-                    groupChannels = updatedChannels,
-                    osdType = null
-                )
-            }
-            toggleFavoriteChannelUseCase(
-                playlistId = playlistId,
-                channel = currentChannel.channel,
-                type = type.name,
-            )
-
         }
+        toggleFavoriteChannelUseCase(
+            playlistId = playlistId,
+            channel = currentChannel.channel,
+            type = type,
+        )
     }
 
     private fun toggleFullScreen() {

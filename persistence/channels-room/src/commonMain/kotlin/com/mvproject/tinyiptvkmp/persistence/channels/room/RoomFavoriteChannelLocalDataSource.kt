@@ -2,6 +2,7 @@ package com.mvproject.tinyiptvkmp.persistence.channels.room
 
 import com.mvproject.tinyiptvkmp.features.channels.api.data.datasource.local.FavoriteChannelLocalDataSource
 import com.mvproject.tinyiptvkmp.features.channels.api.domain.model.FavoriteChannel
+import com.mvproject.tinyiptvkmp.features.channels.api.domain.model.FavoriteType
 import com.mvproject.tinyiptvkmp.persistence.channels.room.database.FavoriteChannelDao
 import com.mvproject.tinyiptvkmp.persistence.channels.room.mapper.favoriteChannelEntity
 import com.mvproject.tinyiptvkmp.persistence.channels.room.mapper.toFavoriteChannel
@@ -13,7 +14,7 @@ internal class RoomFavoriteChannelLocalDataSource(
         channelName: String,
         channelUrl: String,
         channelOrder: Long,
-        favoriteType: String,
+        favoriteType: FavoriteType,
         playlistId: String,
     ) {
         favoriteChannelDao.insertFavoriteChannel(
@@ -22,7 +23,7 @@ internal class RoomFavoriteChannelLocalDataSource(
                 channelUrl = channelUrl,
                 channelOrder = channelOrder,
                 playlistId = playlistId,
-                favoriteType = favoriteType
+                favoriteType = favoriteType,
             )
         )
     }
@@ -56,6 +57,18 @@ internal class RoomFavoriteChannelLocalDataSource(
         favoriteChannelDao.deleteChannelFromFavorite(
             playlistId = playlistId,
             channelUrl = channelUrl,
+        )
+    }
+
+    override suspend fun updateFavoriteType(
+        playlistId: String,
+        channelUrl: String,
+        favoriteType: FavoriteType,
+    ) {
+        favoriteChannelDao.updateFavoriteType(
+            playlistId = playlistId,
+            channelUrl = channelUrl,
+            favoriteType = favoriteType.name,
         )
     }
 

@@ -10,7 +10,7 @@ kotlin {
             implementation(projects.core.datastore)
             implementation(projects.core.foundation)
             implementation(projects.core.network)
-            implementation(projects.features.channels.api)
+            api(projects.features.channels.api)
             implementation(libs.kotlinx.datetime)
             implementation(libs.kotlinx.serialization.protobuf)
             implementation(libs.okio)

@@ -12,7 +12,7 @@ data class TvChannel(
     val channelUrl: String = "",
     val channelLogo: String = "",
     val programId: String = "",
-    val favoriteType: String = "NONE",
+    val favoriteType: FavoriteType = FavoriteType.NONE,
 ) {
     override fun toString() = buildString {
         append("channelName: $channelName")

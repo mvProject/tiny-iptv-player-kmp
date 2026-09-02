@@ -2,6 +2,7 @@ package com.mvproject.tinyiptvkmp.features.channels.api.data.repository
 
 import com.mvproject.tinyiptvkmp.features.channels.api.data.datasource.local.FavoriteChannelLocalDataSource
 import com.mvproject.tinyiptvkmp.features.channels.api.domain.model.FavoriteChannel
+import com.mvproject.tinyiptvkmp.features.channels.api.domain.model.FavoriteType
 import com.mvproject.tinyiptvkmp.features.channels.api.domain.repository.ChannelFavoriteRepository
 
 internal class ChannelFavoriteRepositoryImpl(
@@ -11,7 +12,7 @@ internal class ChannelFavoriteRepositoryImpl(
         playlistId: String,
         channelName: String,
         channelUrl: String,
-        favoriteType: String,
+        favoriteType: FavoriteType,
     ) {
         val order = local.loadFavoriteChannelCount(playlistId = playlistId) + 1L
 
@@ -28,6 +29,18 @@ internal class ChannelFavoriteRepositoryImpl(
         local.deleteFavoriteChannel(
             playlistId = playlistId,
             channelUrl = channelUrl,
+        )
+    }
+
+    override suspend fun updateFavoriteType(
+        playlistId: String,
+        channelUrl: String,
+        favoriteType: FavoriteType,
+    ) {
+        local.updateFavoriteType(
+            playlistId = playlistId,
+            channelUrl = channelUrl,
+            favoriteType = favoriteType,
         )
     }
 

@@ -1,13 +1,14 @@
 package com.mvproject.tinyiptvkmp.features.channels.api.data.datasource.local
 
 import com.mvproject.tinyiptvkmp.features.channels.api.domain.model.FavoriteChannel
+import com.mvproject.tinyiptvkmp.features.channels.api.domain.model.FavoriteType
 
 interface FavoriteChannelLocalDataSource {
     suspend fun addFavoriteChannel(
         channelName: String,
         channelUrl: String,
         channelOrder: Long,
-        favoriteType: String,
+        favoriteType: FavoriteType,
         playlistId: String,
     )
 
@@ -25,6 +26,12 @@ interface FavoriteChannelLocalDataSource {
     suspend fun deleteFavoriteChannel(
         playlistId: String,
         channelUrl: String,
+    )
+
+    suspend fun updateFavoriteType(
+        playlistId: String,
+        channelUrl: String,
+        favoriteType: FavoriteType,
     )
 
     suspend fun loadFavoriteChannelCount(playlistId: String): Int

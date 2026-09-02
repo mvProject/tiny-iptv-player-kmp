@@ -48,8 +48,8 @@ fun PlaylistGroupItem(
                 .clickable {
                     onUiAction(
                         GroupAction.NavigateToGroup(
-                            title = title,
-                            group = group.groupType.name
+                            groupKey = title,
+                            groupType = group.groupType.name
                         )
                     )
                 },

@@ -51,8 +51,8 @@ class GroupViewModel(
             is GroupAction.NavigateToGroup -> launch {
                 navigator.navigateToPlaylist(
                     playlistId = getState().selectedPlaylist.id,
-                    title = intent.title,
-                    group = intent.group
+                    groupKey = intent.groupKey,
+                    groupType = intent.groupType,
                 )
             }
 

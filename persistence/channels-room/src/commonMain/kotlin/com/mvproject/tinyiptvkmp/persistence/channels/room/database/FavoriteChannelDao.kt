@@ -56,6 +56,16 @@ interface FavoriteChannelDao {
         channelUrl: String,
     )
 
+    @Query(
+        "UPDATE favoriteChannels SET favoriteType = :favoriteType " +
+                "WHERE parentListId = :playlistId AND channelUrl = :channelUrl",
+    )
+    suspend fun updateFavoriteType(
+        playlistId: String,
+        channelUrl: String,
+        favoriteType: String,
+    )
+
     @Query("DELETE FROM favoriteChannels WHERE parentListId = :playlistId")
     suspend fun deletePlaylistFavoriteChannelEntities(playlistId: String)
 }

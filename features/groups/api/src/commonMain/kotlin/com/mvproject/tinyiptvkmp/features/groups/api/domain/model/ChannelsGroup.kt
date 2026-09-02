@@ -7,6 +7,7 @@
 
 package com.mvproject.tinyiptvkmp.features.groups.api.domain.model
 
+import com.mvproject.tinyiptvkmp.features.channels.api.domain.model.FavoriteType
 import kotlin.uuid.ExperimentalUuidApi
 import kotlin.uuid.Uuid
 

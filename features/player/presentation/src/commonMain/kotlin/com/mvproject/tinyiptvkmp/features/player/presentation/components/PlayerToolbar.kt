@@ -34,9 +34,9 @@ import com.mvproject.tinyiptvkmp.core.theme.colorSchemeExtended
 import com.mvproject.tinyiptvkmp.core.theme.dimensionOpacity
 import com.mvproject.tinyiptvkmp.core.theme.dimensionSize
 import com.mvproject.tinyiptvkmp.core.theme.dimensionWeight
+import com.mvproject.tinyiptvkmp.features.channels.api.domain.model.FavoriteType
 import com.mvproject.tinyiptvkmp.features.epg.api.domain.model.EpgProgram
 import com.mvproject.tinyiptvkmp.features.epg.api.domain.model.TvChannelWithPrograms
-import com.mvproject.tinyiptvkmp.features.groups.api.domain.model.FavoriteType
 import com.mvproject.tinyiptvkmp.features.player.presentation.PlayerAction
 
 @Composable
@@ -85,7 +85,7 @@ fun PlayerToolbar(
 
                 PlayerControls(
                     modifier = Modifier.fillMaxWidth(),
-                    isFavorite = currentChannel.favoriteType != FavoriteType.NONE.name,
+                    isFavorite = currentChannel.favoriteType != FavoriteType.NONE,
                     isPlaying = isPlaying,
                     isFullScreen = isFullScreen,
                     videoSize = videoSize,

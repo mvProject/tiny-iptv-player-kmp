@@ -24,7 +24,7 @@ data class GroupState(
 
 sealed interface GroupAction {
     data class SelectPlaylist(val playlistId: String) : GroupAction
-    data class NavigateToGroup(val title: String, val group: String) : GroupAction
+    data class NavigateToGroup(val groupKey: String, val groupType: String) : GroupAction
     data object NavigateToSettings : GroupAction
 }
 

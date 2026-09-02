@@ -68,14 +68,18 @@ class DefaultNavigator(
         _navigationActions.send(NavigationAction.Navigate(destination = AppRoutes.SettingsGeneral))
     }
 
-    override suspend fun navigateToPlaylist(playlistId: String, title: String, group: String) {
+    override suspend fun navigateToPlaylist(
+        playlistId: String,
+        groupKey: String,
+        groupType: String,
+    ) {
         logger.d { "navigateToPlaylist" }
         _navigationActions.send(
             NavigationAction.Navigate(
                 destination = AppRoutes.TvPlaylistChannels(
                     playlistId = playlistId,
-                    group = title,
-                    groupType = group,
+                    group = groupKey,
+                    groupType = groupType,
                 )
             )
         )

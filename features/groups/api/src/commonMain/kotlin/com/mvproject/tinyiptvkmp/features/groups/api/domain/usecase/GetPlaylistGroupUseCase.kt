@@ -1,9 +1,9 @@
 package com.mvproject.tinyiptvkmp.features.groups.api.domain.usecase
 
+import com.mvproject.tinyiptvkmp.features.channels.api.domain.model.FavoriteType
 import com.mvproject.tinyiptvkmp.features.channels.api.domain.repository.ChannelFavoriteRepository
 import com.mvproject.tinyiptvkmp.features.channels.api.domain.repository.PlaylistChannelRepository
 import com.mvproject.tinyiptvkmp.features.groups.api.domain.model.ChannelsGroup
-import com.mvproject.tinyiptvkmp.features.groups.api.domain.model.FavoriteType
 import com.mvproject.tinyiptvkmp.features.groups.api.domain.model.GroupType
 
 class GetPlaylistGroupUseCase(
@@ -17,6 +17,10 @@ class GetPlaylistGroupUseCase(
         val favorites = favoriteChannelsRepository
             .loadSelectedFavoriteChannels(playlistId = playlistId)
 
+        val favoriteCounts = favorites
+            .groupingBy { favorite -> favorite.favoriteType }
+            .eachCount()
+
         val allGroup =
             ChannelsGroup(
                 groupType = GroupType.ALL,
@@ -27,7 +31,7 @@ class GetPlaylistGroupUseCase(
             buildList {
                 FavoriteType.entries.forEach { fav ->
                     if (fav != FavoriteType.NONE) {
-                        val favCount = favorites.count { it.favoriteType == fav.name }
+                        val favCount = favoriteCounts[fav] ?: 0
                         if (fav == FavoriteType.COMMON) {
                             add(
                                 ChannelsGroup(

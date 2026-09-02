@@ -1,5 +1,6 @@
 package com.mvproject.tinyiptvkmp.features.epg.api.domain.model
 
+import com.mvproject.tinyiptvkmp.features.channels.api.domain.model.FavoriteType
 import com.mvproject.tinyiptvkmp.features.channels.api.domain.model.TvChannel
 
 data class TvChannelWithPrograms(
@@ -18,7 +19,7 @@ data class TvChannelWithPrograms(
     val programId: String
         get() = channel.programId
 
-    val favoriteType: String
+    val favoriteType: FavoriteType
         get() = channel.favoriteType
 }
 

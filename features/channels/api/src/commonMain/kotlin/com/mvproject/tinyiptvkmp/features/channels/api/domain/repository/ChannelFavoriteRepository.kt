@@ -1,16 +1,23 @@
 package com.mvproject.tinyiptvkmp.features.channels.api.domain.repository
 
 import com.mvproject.tinyiptvkmp.features.channels.api.domain.model.FavoriteChannel
+import com.mvproject.tinyiptvkmp.features.channels.api.domain.model.FavoriteType
 
 interface ChannelFavoriteRepository {
     suspend fun addChannelToFavorite(
         playlistId: String,
         channelName: String,
         channelUrl: String,
-        favoriteType: String,
+        favoriteType: FavoriteType,
     )
 
     suspend fun deleteChannelFromFavorite(playlistId: String, channelUrl: String)
+
+    suspend fun updateFavoriteType(
+        playlistId: String,
+        channelUrl: String,
+        favoriteType: FavoriteType,
+    )
 
     suspend fun loadSelectedFavoriteChannels(playlistId: String): List<FavoriteChannel>
 

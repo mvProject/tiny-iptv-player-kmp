@@ -1,6 +1,7 @@
 package com.mvproject.tinyiptvkmp.features.channels.api
 
 import com.mvproject.tinyiptvkmp.features.channels.api.domain.model.FavoriteChannel
+import com.mvproject.tinyiptvkmp.features.channels.api.domain.model.FavoriteType
 import com.mvproject.tinyiptvkmp.features.channels.api.domain.model.PlaylistChannel
 import com.mvproject.tinyiptvkmp.features.channels.api.domain.repository.ChannelFavoriteRepository
 import com.mvproject.tinyiptvkmp.features.channels.api.domain.repository.PlaylistChannelRepository
@@ -212,10 +213,16 @@ private class FakeChannelFavoriteRepository(
         playlistId: String,
         channelName: String,
         channelUrl: String,
-        favoriteType: String,
+        favoriteType: FavoriteType,
     ) = Unit
 
     override suspend fun deleteChannelFromFavorite(playlistId: String, channelUrl: String) = Unit
+
+    override suspend fun updateFavoriteType(
+        playlistId: String,
+        channelUrl: String,
+        favoriteType: FavoriteType,
+    ) = Unit
 
     override suspend fun loadSelectedFavoriteChannels(playlistId: String): List<FavoriteChannel> =
         emptyList()

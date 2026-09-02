@@ -1,5 +1,6 @@
 package com.mvproject.tinyiptvkmp.features.epg.api.domain.utils
 
+import com.mvproject.tinyiptvkmp.features.channels.api.domain.model.FavoriteType
 import com.mvproject.tinyiptvkmp.features.channels.api.domain.model.TvChannel
 import com.mvproject.tinyiptvkmp.features.epg.api.domain.model.EpgProgram
 import com.mvproject.tinyiptvkmp.features.epg.api.domain.model.TvChannelWithPrograms
@@ -18,11 +19,11 @@ fun List<TvChannelWithPrograms>.mapPrograms(channelEpgMap: ChannelEpgMap) = this
 }
 
 fun TvChannelWithPrograms.toggleFavorite(
-    type: String,
+    type: FavoriteType,
 ): TvChannelWithPrograms {
     val favType =
         if (favoriteType == type) {
-            FAVORITE_TYPE_NONE
+            FavoriteType.NONE
         } else {
             type
         }
@@ -38,5 +39,3 @@ fun List<TvChannelWithPrograms>.replaceUpdated(
 }
 
 typealias ChannelEpgMap = Map<String, List<EpgProgram>>
-
-private const val FAVORITE_TYPE_NONE = "NONE"
