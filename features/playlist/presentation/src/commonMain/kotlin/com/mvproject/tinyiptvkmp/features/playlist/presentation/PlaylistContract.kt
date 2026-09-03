@@ -45,16 +45,9 @@ sealed interface PlaylistAction {
     data class SetLocalUri(val name: String, val uri: String) : PlaylistAction
     data class ImportLocalFile(val file: PlatformFile) : PlaylistAction
     data class SetUpdatePeriod(val period: Int) : PlaylistAction
-    data class SavePlaylistFailed(val throwable: Throwable) : PlaylistAction
     data object SavePlaylist : PlaylistAction
-    data object SavePlaylistCompleted : PlaylistAction
     data object UpdatePlaylist : PlaylistAction
     data object NavigateBack : PlaylistAction
-}
-
-sealed interface PlaylistEffect {
-    data class CreatePlaylist(val playlist: Playlist) : PlaylistEffect
-    data class UpdatePlaylist(val playlist: Playlist) : PlaylistEffect
 }
 
 

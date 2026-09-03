@@ -1,4 +1,4 @@
-package com.mvproject.tinyiptvkmp
+package com.mvproject.tinyiptvkmp.playlist
 
 import com.mvproject.tinyiptvkmp.features.channels.api.domain.usecase.DeletePlaylistContentUseCase
 import com.mvproject.tinyiptvkmp.features.channels.api.domain.usecase.MarkChannelsEpgInfoUpdateRequiredUseCase
@@ -15,7 +15,7 @@ import kotlinx.coroutines.test.runTest
 import kotlin.test.Test
 import kotlin.test.assertEquals
 
-class RootViewModelTest {
+class DefaultPlaylistContentCoordinatorTest {
     @Test
     fun createPlaylistReplacesContentAndMarksEpgWhenContentWasReplaced() = runTest {
         val createPlaylistUseCase = FakeCreatePlaylistUseCase()
@@ -23,15 +23,15 @@ class RootViewModelTest {
             FakeReplacePlaylistContentUseCase(contentReplaced = true)
         val updateLastUpdateDateUseCase = FakeUpdatePlaylistLastUpdateDateUseCase()
         val markEpgUseCase = FakeMarkChannelsEpgInfoUpdateRequiredUseCase()
-        val viewModel =
-            rootViewModel(
+        val coordinator =
+            playlistContentCoordinator(
                 createPlaylistUseCase = createPlaylistUseCase,
                 replacePlaylistContentUseCase = replacePlaylistContentUseCase,
                 updatePlaylistLastUpdateDateUseCase = updateLastUpdateDateUseCase,
                 markChannelsEpgInfoUpdateRequiredUseCase = markEpgUseCase,
             )
 
-        viewModel.createPlaylistWithContent(remotePlaylist(id = "playlist-1"))
+        coordinator.createPlaylistWithContent(remotePlaylist(id = "playlist-1"))
 
         assertEquals(listOf("playlist-1"), createPlaylistUseCase.createdPlaylistIds)
         assertEquals(listOf("remote:playlist-1:true"), replacePlaylistContentUseCase.replacements)
@@ -44,13 +44,13 @@ class RootViewModelTest {
         val replacePlaylistContentUseCase =
             FakeReplacePlaylistContentUseCase(contentReplaced = true)
         val updateLastUpdateDateUseCase = FakeUpdatePlaylistLastUpdateDateUseCase()
-        val viewModel =
-            rootViewModel(
+        val coordinator =
+            playlistContentCoordinator(
                 replacePlaylistContentUseCase = replacePlaylistContentUseCase,
                 updatePlaylistLastUpdateDateUseCase = updateLastUpdateDateUseCase,
             )
 
-        viewModel.createPlaylistWithContent(localPlaylist(id = "playlist-1"))
+        coordinator.createPlaylistWithContent(localPlaylist(id = "playlist-1"))
 
         assertEquals(listOf("local:playlist-1:true"), replacePlaylistContentUseCase.replacements)
         assertEquals(emptyList(), updateLastUpdateDateUseCase.updatedPlaylistIds)
@@ -61,8 +61,8 @@ class RootViewModelTest {
         val replacePlaylistContentUseCase =
             FakeReplacePlaylistContentUseCase(contentReplaced = true)
         val markEpgUseCase = FakeMarkChannelsEpgInfoUpdateRequiredUseCase()
-        val viewModel =
-            rootViewModel(
+        val coordinator =
+            playlistContentCoordinator(
                 updatePlaylistUseCase = FakeUpdatePlaylistUseCase(
                     result = UpdatePlaylistResult(
                         playlist = remotePlaylist(id = "playlist-1"),
@@ -73,7 +73,7 @@ class RootViewModelTest {
                 markChannelsEpgInfoUpdateRequiredUseCase = markEpgUseCase,
             )
 
-        viewModel.updatePlaylistWithContent(remotePlaylist(id = "playlist-1"))
+        coordinator.updatePlaylistWithContent(remotePlaylist(id = "playlist-1"))
 
         assertEquals(emptyList(), replacePlaylistContentUseCase.replacements)
         assertEquals(0, markEpgUseCase.markCount)
@@ -85,8 +85,8 @@ class RootViewModelTest {
             FakeReplacePlaylistContentUseCase(contentReplaced = true)
         val updateLastUpdateDateUseCase = FakeUpdatePlaylistLastUpdateDateUseCase()
         val markEpgUseCase = FakeMarkChannelsEpgInfoUpdateRequiredUseCase()
-        val viewModel =
-            rootViewModel(
+        val coordinator =
+            playlistContentCoordinator(
                 updatePlaylistUseCase = FakeUpdatePlaylistUseCase(
                     result = UpdatePlaylistResult(
                         playlist = remotePlaylist(id = "playlist-1"),
@@ -98,7 +98,7 @@ class RootViewModelTest {
                 markChannelsEpgInfoUpdateRequiredUseCase = markEpgUseCase,
             )
 
-        viewModel.updatePlaylistWithContent(remotePlaylist(id = "playlist-1"))
+        coordinator.updatePlaylistWithContent(remotePlaylist(id = "playlist-1"))
 
         assertEquals(listOf("remote:playlist-1:true"), replacePlaylistContentUseCase.replacements)
         assertEquals(listOf("playlist-1"), updateLastUpdateDateUseCase.updatedPlaylistIds)
@@ -109,13 +109,13 @@ class RootViewModelTest {
     fun deletePlaylistDeletesMetadataAndContent() = runTest {
         val deletePlaylistUseCase = FakeDeletePlaylistUseCase()
         val deletePlaylistContentUseCase = FakeDeletePlaylistContentUseCase()
-        val viewModel =
-            rootViewModel(
+        val coordinator =
+            playlistContentCoordinator(
                 deletePlaylistUseCase = deletePlaylistUseCase,
                 deletePlaylistContentUseCase = deletePlaylistContentUseCase,
             )
 
-        viewModel.deletePlaylistWithContent(remotePlaylist(id = "playlist-1"))
+        coordinator.deletePlaylistWithContent(remotePlaylist(id = "playlist-1"))
 
         assertEquals(listOf("playlist-1"), deletePlaylistUseCase.deletedPlaylistIds)
         assertEquals(listOf("playlist-1"), deletePlaylistContentUseCase.deletedPlaylistIds)
@@ -127,8 +127,8 @@ class RootViewModelTest {
             FakeReplacePlaylistContentUseCase(contentReplaced = true)
         val updateLastUpdateDateUseCase = FakeUpdatePlaylistLastUpdateDateUseCase()
         val markEpgUseCase = FakeMarkChannelsEpgInfoUpdateRequiredUseCase()
-        val viewModel =
-            rootViewModel(
+        val coordinator =
+            playlistContentCoordinator(
                 getRemotePlaylistsToRefreshUseCase = FakeGetRemotePlaylistsToRefreshUseCase(
                     playlists = listOf(remotePlaylist(id = "playlist-1")),
                 ),
@@ -137,7 +137,7 @@ class RootViewModelTest {
                 markChannelsEpgInfoUpdateRequiredUseCase = markEpgUseCase,
             )
 
-        viewModel.refreshRemotePlaylistContent()
+        coordinator.refreshRemotePlaylistContent()
 
         assertEquals(listOf("remote:playlist-1:false"), replacePlaylistContentUseCase.replacements)
         assertEquals(listOf("playlist-1"), updateLastUpdateDateUseCase.updatedPlaylistIds)
@@ -145,7 +145,7 @@ class RootViewModelTest {
     }
 }
 
-private fun rootViewModel(
+private fun playlistContentCoordinator(
     createPlaylistUseCase: CreatePlaylistUseCase = FakeCreatePlaylistUseCase(),
     updatePlaylistUseCase: UpdatePlaylistUseCase = FakeUpdatePlaylistUseCase(),
     deletePlaylistUseCase: DeletePlaylistUseCase = FakeDeletePlaylistUseCase(),
@@ -157,7 +157,7 @@ private fun rootViewModel(
     deletePlaylistContentUseCase: DeletePlaylistContentUseCase = FakeDeletePlaylistContentUseCase(),
     markChannelsEpgInfoUpdateRequiredUseCase: MarkChannelsEpgInfoUpdateRequiredUseCase =
         FakeMarkChannelsEpgInfoUpdateRequiredUseCase(),
-) = RootViewModel(
+) = DefaultPlaylistContentCoordinator(
     createPlaylistUseCase = createPlaylistUseCase,
     updatePlaylistUseCase = updatePlaylistUseCase,
     deletePlaylistUseCase = deletePlaylistUseCase,

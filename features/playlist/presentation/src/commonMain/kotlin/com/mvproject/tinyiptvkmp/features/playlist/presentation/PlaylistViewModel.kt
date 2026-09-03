@@ -11,6 +11,7 @@ import com.mvproject.tinyiptvkmp.core.base.mvi.MviViewModel
 import com.mvproject.tinyiptvkmp.core.base.mvi.runCatchingSuspend
 import com.mvproject.tinyiptvkmp.features.playlist.api.domain.model.PlaylistType
 import com.mvproject.tinyiptvkmp.features.playlist.api.domain.usecase.GetPlaylistUseCase
+import com.mvproject.tinyiptvkmp.features.playlist.api.domain.usecase.PlaylistContentCoordinator
 import com.mvproject.tinyiptvkmp.features.playlist.presentation.nav.PlaylistNavigator
 import io.github.vinceglb.filekit.core.PlatformFile
 import kotlinx.coroutines.Dispatchers
@@ -31,7 +32,8 @@ import kotlin.uuid.Uuid
 class PlaylistViewModel(
     @InjectedParam args: PlaylistDetailArgs,
     private val getPlaylistUseCase: GetPlaylistUseCase,
-) : MviViewModel<PlaylistState, PlaylistAction, PlaylistEffect>() {
+    private val playlistContentCoordinator: PlaylistContentCoordinator,
+) : MviViewModel<PlaylistState, PlaylistAction, Nothing>() {
 
     private val navigator: PlaylistNavigator by inject()
     private val id = args.playlistId
@@ -45,9 +47,7 @@ class PlaylistViewModel(
         when (intent) {
             is PlaylistAction.ImportLocalFile -> launch { importLocalPlaylistFile(file = intent.file) }
             PlaylistAction.NavigateBack -> launch { navigator.navigateUp() }
-            is PlaylistAction.SavePlaylistFailed -> handleSaveFailure(throwable = intent.throwable)
             PlaylistAction.SavePlaylist -> launch { savePlaylist() }
-            PlaylistAction.SavePlaylistCompleted -> handleSaveCompleted()
             is PlaylistAction.SetLocalUri -> setLocalPlaylistUri(
                 name = intent.name,
                 uri = intent.uri
@@ -132,7 +132,13 @@ class PlaylistViewModel(
         setState {
             copy(isSaving = true)
         }
-        saveOrUpdatePlayList(isUpdate = true)
+        runCatchingSuspend {
+            playlistContentCoordinator.updatePlaylistWithContent(state.value.toPlaylist())
+        }.onSuccess {
+            handleSaveCompleted()
+        }.onFailure { throwable ->
+            handleSaveFailure(throwable = throwable)
+        }
     }
 
     @OptIn(ExperimentalUuidApi::class)
@@ -146,16 +152,12 @@ class PlaylistViewModel(
                 isSaving = true
             )
         }
-        saveOrUpdatePlayList()
-    }
-
-    private suspend fun saveOrUpdatePlayList(isUpdate: Boolean = false) {
-        val playlist = state.value.toPlaylist()
-
-        if (isUpdate) {
-            sendEffect(PlaylistEffect.UpdatePlaylist(playlist = playlist))
-        } else {
-            sendEffect(PlaylistEffect.CreatePlaylist(playlist = playlist))
+        runCatchingSuspend {
+            playlistContentCoordinator.createPlaylistWithContent(state.value.toPlaylist())
+        }.onSuccess {
+            handleSaveCompleted()
+        }.onFailure { throwable ->
+            handleSaveFailure(throwable = throwable)
         }
     }
 
@@ -164,7 +166,7 @@ class PlaylistViewModel(
     }
 
     private fun handleSaveFailure(throwable: Throwable) {
-        logger.e(throwable) { "testing saveOrUpdatePlayList failure ${throwable.message}" }
+        logger.e(throwable) { "Failed to save playlist" }
         setState { copy(isComplete = false, isSaving = false) }
     }
 }

@@ -8,7 +8,6 @@
 package com.mvproject.tinyiptvkmp.navigation
 
 import androidx.navigation3.runtime.EntryProviderScope
-import com.mvproject.tinyiptvkmp.RootViewModel
 import com.mvproject.tinyiptvkmp.features.settings.presentation.general.SettingsGeneralScreen
 import com.mvproject.tinyiptvkmp.features.settings.presentation.general.SettingsGeneralViewModel
 import com.mvproject.tinyiptvkmp.features.settings.presentation.player.SettingsPlayerScreen
@@ -33,13 +32,10 @@ fun EntryProviderScope<AppRoutes>.settingsPlayer() {
     }
 }
 
-fun EntryProviderScope<AppRoutes>.settingsPlaylist(rootViewModel: RootViewModel) {
+fun EntryProviderScope<AppRoutes>.settingsPlaylist() {
     entry<AppRoutes.SettingsPlaylist> {
         val settingsPlaylistViewModel = koinViewModel<SettingsPlaylistViewModel>()
 
-        SettingsPlaylistScreen(
-            viewModel = settingsPlaylistViewModel,
-            onDeletePlaylist = rootViewModel::deletePlaylistWithContent,
-        )
+        SettingsPlaylistScreen(viewModel = settingsPlaylistViewModel)
     }
 }

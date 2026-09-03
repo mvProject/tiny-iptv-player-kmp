@@ -37,7 +37,6 @@ fun TinyIptvApp() {
 
     AppTheme {
         NavigationHost(
-            rootViewModel = rootViewModel,
             startDestination = AppRoutes.PlaylistGroup,
         )
     }

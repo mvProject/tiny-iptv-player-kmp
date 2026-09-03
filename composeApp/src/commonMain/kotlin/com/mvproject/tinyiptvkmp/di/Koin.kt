@@ -23,6 +23,7 @@ import com.mvproject.tinyiptvkmp.features.player.api.di.playerApiModule
 import com.mvproject.tinyiptvkmp.features.player.presentation.di.playerModule
 import com.mvproject.tinyiptvkmp.features.player.presentation.nav.PlayerNavigator
 import com.mvproject.tinyiptvkmp.features.playlist.api.di.playlistApiModule
+import com.mvproject.tinyiptvkmp.features.playlist.api.domain.usecase.PlaylistContentCoordinator
 import com.mvproject.tinyiptvkmp.features.playlist.presentation.di.playlistModule
 import com.mvproject.tinyiptvkmp.features.playlist.presentation.nav.PlaylistNavigator
 import com.mvproject.tinyiptvkmp.features.settings.presentation.di.settingsModule
@@ -34,6 +35,7 @@ import com.mvproject.tinyiptvkmp.navigation.Navigator
 import com.mvproject.tinyiptvkmp.persistence.channels.room.di.channelsRoomModule
 import com.mvproject.tinyiptvkmp.persistence.epg.room.di.epgRoomModule
 import com.mvproject.tinyiptvkmp.persistence.playlist.room.di.playlistRoomModule
+import com.mvproject.tinyiptvkmp.playlist.DefaultPlaylistContentCoordinator
 import org.koin.core.context.startKoin
 import org.koin.dsl.KoinAppDeclaration
 import org.koin.dsl.binds
@@ -63,6 +65,18 @@ private val appModule =
             settingsModule,
         )
 
+        single<PlaylistContentCoordinator> {
+            DefaultPlaylistContentCoordinator(
+                createPlaylistUseCase = get(),
+                updatePlaylistUseCase = get(),
+                deletePlaylistUseCase = get(),
+                getRemotePlaylistsToRefreshUseCase = get(),
+                updatePlaylistLastUpdateDateUseCase = get(),
+                replacePlaylistContentUseCase = get(),
+                deletePlaylistContentUseCase = get(),
+                markChannelsEpgInfoUpdateRequiredUseCase = get(),
+            )
+        }
         viewModel<RootViewModel>()
     }
 

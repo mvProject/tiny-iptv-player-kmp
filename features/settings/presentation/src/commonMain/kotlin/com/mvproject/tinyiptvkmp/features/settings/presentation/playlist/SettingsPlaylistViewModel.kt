@@ -8,15 +8,18 @@
 package com.mvproject.tinyiptvkmp.features.settings.presentation.playlist
 
 import com.mvproject.tinyiptvkmp.core.base.mvi.MviViewModel
+import com.mvproject.tinyiptvkmp.core.base.mvi.runCatchingSuspend
 import com.mvproject.tinyiptvkmp.features.playlist.api.domain.model.Playlist
 import com.mvproject.tinyiptvkmp.features.playlist.api.domain.usecase.ObservePlaylistsUseCase
+import com.mvproject.tinyiptvkmp.features.playlist.api.domain.usecase.PlaylistContentCoordinator
 import com.mvproject.tinyiptvkmp.features.settings.presentation.nav.SettingsNavigator
 import kotlinx.coroutines.flow.distinctUntilChanged
 import org.koin.core.component.inject
 
 class SettingsPlaylistViewModel(
     private val observePlaylistsUseCase: ObservePlaylistsUseCase,
-) : MviViewModel<SettingsPlaylistState, SettingsPlaylistAction, SettingsPlaylistEffect>() {
+    private val playlistContentCoordinator: PlaylistContentCoordinator,
+) : MviViewModel<SettingsPlaylistState, SettingsPlaylistAction, Nothing>() {
 
     private val navigator: SettingsNavigator by inject()
 
@@ -28,8 +31,6 @@ class SettingsPlaylistViewModel(
     override fun onIntent(intent: SettingsPlaylistAction) {
         when (intent) {
             is SettingsPlaylistAction.DeletePlaylist -> launch { deletePlaylist(playlist = intent.playlist) }
-            SettingsPlaylistAction.DeletePlaylistCompleted -> setState { copy(isLoading = false) }
-            is SettingsPlaylistAction.DeletePlaylistFailed -> handleDeleteFailure(intent.throwable)
             SettingsPlaylistAction.NavigateBack -> launch { navigator.navigateUp() }
             is SettingsPlaylistAction.NavigateToPlaylist -> launch { navigator.navigateToPlaylist(id = intent.id) }
         }
@@ -56,7 +57,13 @@ class SettingsPlaylistViewModel(
 
     private suspend fun deletePlaylist(playlist: Playlist) {
         setState { copy(isLoading = true) }
-        sendEffect(SettingsPlaylistEffect.DeletePlaylist(playlist = playlist))
+        runCatchingSuspend {
+            playlistContentCoordinator.deletePlaylistWithContent(playlist = playlist)
+        }.onSuccess {
+            setState { copy(isLoading = false) }
+        }.onFailure { throwable ->
+            handleDeleteFailure(throwable = throwable)
+        }
     }
 
     private fun handleDeleteFailure(throwable: Throwable) {

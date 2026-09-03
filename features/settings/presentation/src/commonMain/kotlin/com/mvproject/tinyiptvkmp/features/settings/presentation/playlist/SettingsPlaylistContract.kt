@@ -17,12 +17,6 @@ data class SettingsPlaylistState(
 
 sealed interface SettingsPlaylistAction {
     data class DeletePlaylist(val playlist: Playlist) : SettingsPlaylistAction
-    data class DeletePlaylistFailed(val throwable: Throwable) : SettingsPlaylistAction
     data class NavigateToPlaylist(val id: String = String.empty) : SettingsPlaylistAction
-    data object DeletePlaylistCompleted : SettingsPlaylistAction
     data object NavigateBack : SettingsPlaylistAction
-}
-
-sealed interface SettingsPlaylistEffect {
-    data class DeletePlaylist(val playlist: Playlist) : SettingsPlaylistEffect
 }

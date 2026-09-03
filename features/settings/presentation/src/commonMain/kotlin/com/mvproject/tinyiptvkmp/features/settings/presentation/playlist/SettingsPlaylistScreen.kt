@@ -27,8 +27,6 @@ import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
-import com.mvproject.tinyiptvkmp.core.base.mvi.CollectUiEffect
-import com.mvproject.tinyiptvkmp.core.base.mvi.runCatchingSuspend
 import com.mvproject.tinyiptvkmp.core.components.NoItemsView
 import com.mvproject.tinyiptvkmp.core.components.adaptive.adaptiveContentWidth
 import com.mvproject.tinyiptvkmp.core.components.adaptive.rememberAdaptiveLayoutState
@@ -39,7 +37,6 @@ import com.mvproject.tinyiptvkmp.core.designsystem.generated.resources.btn_add_n
 import com.mvproject.tinyiptvkmp.core.designsystem.generated.resources.msg_no_items_found
 import com.mvproject.tinyiptvkmp.core.designsystem.generated.resources.msg_no_playlist
 import com.mvproject.tinyiptvkmp.core.theme.dimensionSize
-import com.mvproject.tinyiptvkmp.features.playlist.api.domain.model.Playlist
 import com.mvproject.tinyiptvkmp.features.settings.presentation.components.PlaylistItem
 import com.mvproject.tinyiptvkmp.features.settings.presentation.generated.resources.scr_playlist_settings_title
 import org.jetbrains.compose.resources.stringResource
@@ -47,24 +44,8 @@ import com.mvproject.tinyiptvkmp.core.designsystem.generated.resources.Res as De
 import com.mvproject.tinyiptvkmp.features.settings.presentation.generated.resources.Res as SettingsRes
 
 @Composable
-fun SettingsPlaylistScreen(
-    viewModel: SettingsPlaylistViewModel,
-    onDeletePlaylist: suspend (Playlist) -> Unit,
-) {
+fun SettingsPlaylistScreen(viewModel: SettingsPlaylistViewModel) {
     val state by viewModel.state.collectAsStateWithLifecycle()
-
-    CollectUiEffect(viewModel.effect) { effect ->
-        when (effect) {
-            is SettingsPlaylistEffect.DeletePlaylist ->
-                runCatchingSuspend {
-                    onDeletePlaylist(effect.playlist)
-                }.onSuccess {
-                    viewModel.onIntent(SettingsPlaylistAction.DeletePlaylistCompleted)
-                }.onFailure { throwable ->
-                    viewModel.onIntent(SettingsPlaylistAction.DeletePlaylistFailed(throwable))
-                }
-        }
-    }
 
     SettingsPlaylistScreen(
         state = state,
