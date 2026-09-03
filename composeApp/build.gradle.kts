@@ -35,7 +35,7 @@ kotlin {
 
         commonMain.dependencies {
             implementation(projects.core.base)
-            implementation(projects.core.database)
+            implementation(projects.core.database.room)
             implementation(projects.core.datastore)
             implementation(projects.core.foundation)
             implementation(projects.core.network)
