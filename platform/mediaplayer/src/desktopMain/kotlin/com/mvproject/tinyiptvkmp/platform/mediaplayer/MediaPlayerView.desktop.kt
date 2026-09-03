@@ -281,7 +281,7 @@ internal class VideoPlayerStateImpl : PlatformPlayerState, KoinComponent {
     }
 
     init {
-        logger.w { "init VideoPlayerStateImpl" }
+        logger.d { "init VideoPlayerStateImpl" }
     }
 
     private companion object {
@@ -409,7 +409,7 @@ internal class RenderState : KoinComponent {
     private var renderedFrame: Long = LONG_VALUE_ZERO
 
     init {
-        logger.w { "init RenderState" }
+        logger.d { "init RenderState" }
     }
 
     fun updateComposeImage(frameTime: Long): ImageBitmap? {

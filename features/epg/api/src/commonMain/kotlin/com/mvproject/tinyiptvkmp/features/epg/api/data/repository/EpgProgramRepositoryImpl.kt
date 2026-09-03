@@ -40,7 +40,7 @@ internal class EpgProgramRepositoryImpl(
 
     override suspend fun cleanProgramsBeforeDate(date: Long) {
         val deleted = localDataSource.cleanProgramsBeforeDate(date = date)
-        logger.e { "testing cleanProgramsBeforeDate deleted=$deleted" }
+        logger.d { "cleanProgramsBeforeDate deleted=$deleted" }
     }
 
     override suspend fun updateProgramsFromSource(

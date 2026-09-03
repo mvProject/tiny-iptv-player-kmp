@@ -87,15 +87,16 @@ internal class ReplacePlaylistContentUseCaseImpl(
         playlistId: String,
         channels: List<PlaylistChannel>,
     ) {
-        val favoriteUrls =
-            channelFavoriteRepository
-                .loadFavoriteChannelUrls(playlistId = playlistId)
-                .toSet()
+        val currentFavoriteNamesByUrl =
+            channelFavoriteRepository.loadFavoriteChannelNamesByUrl(playlistId = playlistId)
 
-        val favoriteNamesByUrl =
+        val changedFavoriteNamesByUrl =
             buildMap {
                 channels.forEach { channel ->
-                    if (channel.channelUrl in favoriteUrls) {
+                    val currentName =
+                        currentFavoriteNamesByUrl[channel.channelUrl] ?: return@forEach
+
+                    if (currentName != channel.channelName) {
                         put(channel.channelUrl, channel.channelName)
                     }
                 }
@@ -103,7 +104,7 @@ internal class ReplacePlaylistContentUseCaseImpl(
 
         channelFavoriteRepository.updateFavoriteChannels(
             playlistId = playlistId,
-            channelNamesByUrl = favoriteNamesByUrl,
+            channelNamesByUrl = changedFavoriteNamesByUrl,
         )
     }
 }

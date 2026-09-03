@@ -44,5 +44,7 @@ interface FavoriteChannelLocalDataSource {
 
     suspend fun loadFavoriteChannelUrls(playlistId: String): List<String>
 
+    suspend fun loadFavoriteChannelNamesByUrl(playlistId: String): Map<String, String>
+
     suspend fun deletePlaylistFavoriteChannels(playlistId: String)
 }

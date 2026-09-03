@@ -103,7 +103,7 @@ internal fun VideoPlayer(modifier: Modifier, url: String) {
         }
 
         onDispose {
-            PlayerViewLogger.logger.e { "testing Video onDispose" }
+            PlayerViewLogger.logger.d { "Video onDispose" }
             avPlayerViewController.player?.pause()
         }
     }

@@ -25,6 +25,8 @@ interface ChannelFavoriteRepository {
 
     suspend fun loadFavoriteChannelUrls(playlistId: String): List<String>
 
+    suspend fun loadFavoriteChannelNamesByUrl(playlistId: String): Map<String, String>
+
     suspend fun updateFavoriteChannel(
         playlistId: String,
         channelName: String,

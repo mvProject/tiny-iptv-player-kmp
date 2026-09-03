@@ -36,7 +36,7 @@ internal fun networkConnectionState(context: Context = LocalContext.current): St
                 object : ConnectivityManager.NetworkCallback() {
                     override fun onAvailable(network: Network) {
                         super.onAvailable(network)
-                        NetworkConnectionLogger.logger.w { "testing observeConnectivityAsFlow onAvailable" }
+                        NetworkConnectionLogger.logger.d { "observeConnectivityAsFlow onAvailable" }
                         launch { send(ConnectionState.Available) }
                     }
 
@@ -45,19 +45,19 @@ internal fun networkConnectionState(context: Context = LocalContext.current): St
                         maxMsToLive: Int,
                     ) {
                         super.onLosing(network, maxMsToLive)
-                        NetworkConnectionLogger.logger.w { "testing observeConnectivityAsFlow onLosing" }
+                        NetworkConnectionLogger.logger.d { "observeConnectivityAsFlow onLosing" }
                         launch { send(ConnectionState.Unavailable) }
                     }
 
                     override fun onLost(network: Network) {
                         super.onLost(network)
-                        NetworkConnectionLogger.logger.w { "testing observeConnectivityAsFlow onLost" }
+                        NetworkConnectionLogger.logger.d { "observeConnectivityAsFlow onLost" }
                         launch { send(ConnectionState.Unavailable) }
                     }
 
                     override fun onUnavailable() {
                         super.onUnavailable()
-                        NetworkConnectionLogger.logger.w { "testing observeConnectivityAsFlow onUnavailable" }
+                        NetworkConnectionLogger.logger.d { "observeConnectivityAsFlow onUnavailable" }
                         launch { send(ConnectionState.Unavailable) }
                     }
                 }

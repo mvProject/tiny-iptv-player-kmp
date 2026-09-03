@@ -7,7 +7,7 @@
 
 package com.mvproject.tinyiptvkmp.features.channels.api.data.parser
 
-import com.mvproject.tinyiptvkmp.features.channels.api.data.datasource.content.PlaylistChannelParseModel
+import com.mvproject.tinyiptvkmp.features.channels.api.domain.model.PlaylistChannel
 
 internal object M3UParser {
     private const val TAG_PLAYLIST_HEADER = "#EXTM3U"
@@ -16,12 +16,15 @@ internal object M3UParser {
     private const val ATTR_GROUP_TITLE = "group-title"
     private const val TAG_GROUP = "#EXTGRP:"
 
-    fun parseStringToChannels(source: String): List<PlaylistChannelParseModel> =
+    fun parseLinesToChannels(
+        playlistId: String,
+        lines: Sequence<String>,
+    ): List<PlaylistChannel> =
         buildList {
             var pendingMeta: String? = null
             var pendingGroup = ""
 
-            source.lineSequence().forEach { rawLine ->
+            lines.forEach { rawLine ->
                 val line = rawLine.trim()
 
                 when {
@@ -39,6 +42,7 @@ internal object M3UParser {
 
                     pendingMeta != null -> {
                         parseEntry(
+                            playlistId = playlistId,
                             meta = pendingMeta.orEmpty(),
                             group = pendingGroup,
                             link = line,
@@ -52,10 +56,11 @@ internal object M3UParser {
         }
 
     private fun parseEntry(
+        playlistId: String,
         meta: String,
         group: String,
         link: String,
-    ): PlaylistChannelParseModel? {
+    ): PlaylistChannel? {
         val logo = extractAttribute(meta, ATTR_LOGO)
         val groupTitle = extractAttribute(meta, ATTR_GROUP_TITLE)
         val actualGroup = group.ifEmpty { groupTitle }.uppercase()
@@ -63,7 +68,13 @@ internal object M3UParser {
 
         if (title.isEmpty() || link.isEmpty()) return null
 
-        return PlaylistChannelParseModel(link, logo, actualGroup, title)
+        return PlaylistChannel(
+            channelName = title,
+            channelLogo = logo,
+            channelUrl = link,
+            channelGroup = actualGroup,
+            parentListId = playlistId,
+        )
     }
 
     private fun extractAttribute(meta: String, attr: String): String {

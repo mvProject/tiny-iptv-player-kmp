@@ -16,11 +16,11 @@ object ParserUtils : KoinComponent {
     private const val IMAGE_SRC_TAG = "src"
 
     suspend fun loadElements(sourceUrl: String): List<Element> {
-        logger.d { "testing loadElements from $sourceUrl" }
+        logger.d { "Loading elements from source" }
         val parsedDocument: Document = Ksoup.parseGetRequest(url = sourceUrl)
         val parsedTable = parsedDocument.select(TABLE_TAG).drop(1)
 
-        logger.d { "testing loadElements parsedDocument $parsedDocument parsedTable ${parsedTable.count()}" }
+        logger.d { "Loaded table rows count=${parsedTable.count()}" }
 
         return parsedTable
     }

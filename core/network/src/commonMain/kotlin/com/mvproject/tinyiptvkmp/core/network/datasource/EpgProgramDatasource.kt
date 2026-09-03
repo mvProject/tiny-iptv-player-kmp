@@ -27,12 +27,12 @@ class EpgProgramDatasource(
     ) {
         try {
             client.prepareGet(url).execute { response ->
-                logger.i { "testing File download started. Content length: ${response.contentLength()}" }
+                logger.d { "EPG download started. Content length=${response.contentLength()}" }
                 val channel = response.bodyAsChannel()
                 parseGzippedXml(channel, onProgrammeParsed)
             }
         } catch (ex: Exception) {
-            logger.e(ex) { "testing Error downloading or parsing XML: ${ex.message}" }
+            logger.e(ex) { "Failed to download or parse EPG XML" }
         }
     }
 
@@ -40,7 +40,7 @@ class EpgProgramDatasource(
         channel: ByteReadChannel,
         onProgrammeParsed: suspend (ProgramParsed) -> Unit,
     ) = withContext(Dispatchers.Default) {
-        logger.i { "testing start parsing programmes" }
+        logger.d { "Start parsing EPG programmes" }
 
         val buffer = ByteArray(8192) // 8KB buffer
         val gzipSource = GzipSource(object : okio.Source {

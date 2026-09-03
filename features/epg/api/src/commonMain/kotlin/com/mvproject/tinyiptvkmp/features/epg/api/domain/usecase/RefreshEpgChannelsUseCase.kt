@@ -33,10 +33,10 @@ internal class RefreshEpgChannelsUseCaseImpl(
             val lastUpdate = settings.epgInfoDataLastUpdate
             val updatePeriod = epgUpdatePeriodToDuration(settings.epgInfoUpdatePeriod)
             val isRequired = (currentDate - lastUpdate) > updatePeriod
-            logger.d { "testing RefreshEpgChannelsUseCase isRequired $isRequired" }
+            logger.d { "RefreshEpgChannelsUseCase isRequired=$isRequired" }
             if (isRequired) {
                 channelRepository.updateChannelsFromSource(sourceUrl = channelsSourceUrl)
-                logger.w { "testing RefreshEpgChannelsUseCase updateChannels complete" }
+                logger.d { "RefreshEpgChannelsUseCase updateChannels complete" }
                 epgRepository.markEpgChannelsRefreshed(lastUpdate = currentDate)
                 channelsRepository.markChannelsEpgInfoUpdateRequired()
             }

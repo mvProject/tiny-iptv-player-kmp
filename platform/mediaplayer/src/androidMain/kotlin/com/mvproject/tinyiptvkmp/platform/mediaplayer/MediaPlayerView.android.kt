@@ -25,8 +25,8 @@ actual fun MediaPlayerView(
     // val systemUIController = rememberSystemUIController()
 
     // when (connection) {
-    //     ConnectionState.Available -> KLog.i("testing connectivity is available")
-    //     ConnectionState.Unavailable -> KLog.e("testing connectivity is unavailable")
+    //     ConnectionState.Available -> KLog.i("connectivity is available")
+    //     ConnectionState.Unavailable -> KLog.e("connectivity is unavailable")
     // }
 
     val playerState = rememberPlayerState(

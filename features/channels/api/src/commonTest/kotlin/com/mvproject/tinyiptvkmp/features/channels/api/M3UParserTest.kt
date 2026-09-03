@@ -6,7 +6,7 @@ import kotlin.test.assertEquals
 
 class M3UParserTest {
     @Test
-    fun parseStringToChannelsParsesValidEntriesInSinglePassShape() {
+    fun parseLinesToChannelsParsesValidEntriesInSinglePassShape() {
         val content =
             """
             #EXTM3U
@@ -22,17 +22,22 @@ class M3UParserTest {
             plain-stream-id
             """.trimIndent()
 
-        val channels = M3UParser.parseStringToChannels(content)
+        val channels =
+            M3UParser.parseLinesToChannels(
+                playlistId = "playlist-1",
+                lines = content.lineSequence(),
+            )
 
         assertEquals(3, channels.size)
-        assertEquals("News Channel", channels[0].channel)
-        assertEquals("https://example.com/news.png", channels[0].logoURL)
-        assertEquals("NEWS", channels[0].groupTitle)
-        assertEquals("https://example.com/news.m3u8", channels[0].streamURL)
-        assertEquals("Sports Channel", channels[1].channel)
-        assertEquals("LIVE SPORTS", channels[1].groupTitle)
-        assertEquals("https://example.com/sports.m3u8", channels[1].streamURL)
-        assertEquals("Plain Fallback", channels[2].channel)
-        assertEquals("plain-stream-id", channels[2].streamURL)
+        assertEquals("News Channel", channels[0].channelName)
+        assertEquals("https://example.com/news.png", channels[0].channelLogo)
+        assertEquals("NEWS", channels[0].channelGroup)
+        assertEquals("https://example.com/news.m3u8", channels[0].channelUrl)
+        assertEquals("playlist-1", channels[0].parentListId)
+        assertEquals("Sports Channel", channels[1].channelName)
+        assertEquals("LIVE SPORTS", channels[1].channelGroup)
+        assertEquals("https://example.com/sports.m3u8", channels[1].channelUrl)
+        assertEquals("Plain Fallback", channels[2].channelName)
+        assertEquals("plain-stream-id", channels[2].channelUrl)
     }
 }

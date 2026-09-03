@@ -3,12 +3,13 @@ package com.mvproject.tinyiptvkmp.features.groups.api
 import com.mvproject.tinyiptvkmp.features.channels.api.domain.model.FavoriteChannel
 import com.mvproject.tinyiptvkmp.features.channels.api.domain.model.FavoriteType
 import com.mvproject.tinyiptvkmp.features.channels.api.domain.model.PlaylistChannel
+import com.mvproject.tinyiptvkmp.features.channels.api.domain.model.TvChannel
 import com.mvproject.tinyiptvkmp.features.channels.api.domain.repository.ChannelFavoriteRepository
 import com.mvproject.tinyiptvkmp.features.channels.api.domain.repository.PlaylistChannelRepository
 import com.mvproject.tinyiptvkmp.features.groups.api.domain.model.ChannelGroupSelection
 import com.mvproject.tinyiptvkmp.features.groups.api.domain.model.GroupType
-import com.mvproject.tinyiptvkmp.features.groups.api.domain.usecase.GetGroupChannelsUseCase
-import com.mvproject.tinyiptvkmp.features.groups.api.domain.usecase.GetPlaylistGroupUseCase
+import com.mvproject.tinyiptvkmp.features.groups.api.domain.usecase.GetGroupChannelsUseCaseImpl
+import com.mvproject.tinyiptvkmp.features.groups.api.domain.usecase.GetPlaylistGroupUseCaseImpl
 import com.mvproject.tinyiptvkmp.infrastructure.logging.di.loggingModule
 import kotlinx.coroutines.test.runTest
 import org.koin.core.context.startKoin
@@ -47,7 +48,7 @@ class GroupsUseCaseTest {
             FavoriteChannel(channelUrl = "url-sport-1", favoriteType = FavoriteType.SPORT),
         )
 
-        val groups = GetPlaylistGroupUseCase(
+        val groups = GetPlaylistGroupUseCaseImpl(
             playlistChannelRepository = playlistRepository,
             favoriteChannelsRepository = favoriteRepository,
         )(playlistId = "playlist")
@@ -78,7 +79,7 @@ class GroupsUseCaseTest {
             playlistChannel(name = "News 1", url = "url-news-1", group = "NEWS"),
         )
 
-        val groups = GetPlaylistGroupUseCase(
+        val groups = GetPlaylistGroupUseCaseImpl(
             playlistChannelRepository = playlistRepository,
             favoriteChannelsRepository = favoriteRepository,
         )(playlistId = "playlist")
@@ -98,7 +99,7 @@ class GroupsUseCaseTest {
             playlistChannel(name = "News 1", url = "url-news-1", group = "NEWS"),
         )
 
-        val groups = GetPlaylistGroupUseCase(
+        val groups = GetPlaylistGroupUseCaseImpl(
             playlistChannelRepository = playlistRepository,
             favoriteChannelsRepository = favoriteRepository,
         )(playlistId = "playlist")
@@ -121,7 +122,7 @@ class GroupsUseCaseTest {
             playlistChannel(name = "Ungrouped 2", url = "url-ungrouped-2", group = "   "),
         )
 
-        val groups = GetPlaylistGroupUseCase(
+        val groups = GetPlaylistGroupUseCaseImpl(
             playlistChannelRepository = playlistRepository,
             favoriteChannelsRepository = favoriteRepository,
         )(playlistId = "playlist")
@@ -143,20 +144,19 @@ class GroupsUseCaseTest {
             playlistChannel(name = "News 1", url = "url-news-1", group = "NEWS"),
             playlistChannel(name = "Sport 1", url = "url-sport-1", group = "SPORT"),
         )
-        favoriteRepository.favorites = listOf(
+        playlistRepository.favorites = listOf(
             FavoriteChannel(channelUrl = "url-news-1", favoriteType = FavoriteType.CARTOON),
         )
 
-        val channels = GetGroupChannelsUseCase(
+        val channels = GetGroupChannelsUseCaseImpl(
             playlistChannelRepository = playlistRepository,
-            favoriteChannelsRepository = favoriteRepository,
         )(
             playlistId = "playlist",
             selection = ChannelGroupSelection.Specified(groupName = "NEWS"),
         )
 
-        assertEquals(listOf("News 1"), channels.map { channel -> channel.channelName })
-        assertEquals(FavoriteType.CARTOON, channels.single().favoriteType)
+        assertEquals(listOf("News 1"), channels.channels.map { channel -> channel.channelName })
+        assertEquals(FavoriteType.CARTOON, channels.channels.single().favoriteType)
     }
 
     @Test
@@ -165,13 +165,12 @@ class GroupsUseCaseTest {
             playlistChannel(name = "Movie 1", url = "url-movie-1", group = "MOVIES"),
             playlistChannel(name = "Sport 1", url = "url-sport-1", group = "SPORT"),
         )
-        favoriteRepository.favorites = listOf(
+        playlistRepository.favorites = listOf(
             FavoriteChannel(channelUrl = "url-movie-1", favoriteType = FavoriteType.MOVIE),
         )
 
-        val useCase = GetGroupChannelsUseCase(
+        val useCase = GetGroupChannelsUseCaseImpl(
             playlistChannelRepository = playlistRepository,
-            favoriteChannelsRepository = favoriteRepository,
         )
 
         val favoriteChannels =
@@ -184,11 +183,53 @@ class GroupsUseCaseTest {
             selection = ChannelGroupSelection.All,
         )
 
-        assertEquals(listOf("Movie 1"), favoriteChannels.map { channel -> channel.channelName })
+        assertEquals(
+            listOf("Movie 1"),
+            favoriteChannels.channels.map { channel -> channel.channelName })
         assertEquals(
             listOf("Movie 1", "Sport 1"),
-            allChannels.map { channel -> channel.channelName })
-        assertEquals(FavoriteType.NONE, allChannels[1].favoriteType)
+            allChannels.channels.map { channel -> channel.channelName })
+        assertEquals(FavoriteType.NONE, allChannels.channels[1].favoriteType)
+    }
+
+    @Test
+    fun groupChannelsReturnsBoundedPageAndHasMore() = runTest {
+        playlistRepository.channels = listOf(
+            playlistChannel(name = "News 1", url = "url-news-1", group = "NEWS"),
+            playlistChannel(name = "News 2", url = "url-news-2", group = "NEWS"),
+            playlistChannel(name = "News 3", url = "url-news-3", group = "NEWS"),
+        )
+
+        val channels = GetGroupChannelsUseCaseImpl(
+            playlistChannelRepository = playlistRepository,
+        )(
+            playlistId = "playlist",
+            selection = ChannelGroupSelection.Specified(groupName = "NEWS"),
+            offset = 1,
+            limit = 1,
+        )
+
+        assertEquals(listOf("News 2"), channels.channels.map { channel -> channel.channelName })
+        assertEquals(2, channels.nextOffset)
+        assertEquals(true, channels.hasMore)
+    }
+
+    @Test
+    fun groupChannelsFiltersSearchInRepository() = runTest {
+        playlistRepository.channels = listOf(
+            playlistChannel(name = "News 1", url = "url-news-1", group = "NEWS"),
+            playlistChannel(name = "Sport 1", url = "url-sport-1", group = "NEWS"),
+        )
+
+        val channels = GetGroupChannelsUseCaseImpl(
+            playlistChannelRepository = playlistRepository,
+        )(
+            playlistId = "playlist",
+            selection = ChannelGroupSelection.Specified(groupName = "NEWS"),
+            searchQuery = "news",
+        )
+
+        assertEquals(listOf("News 1"), channels.channels.map { channel -> channel.channelName })
     }
 
     private fun playlistChannel(
@@ -205,6 +246,7 @@ class GroupsUseCaseTest {
 
 private class FakePlaylistChannelRepository : PlaylistChannelRepository {
     var channels: List<PlaylistChannel> = emptyList()
+    var favorites: List<FavoriteChannel> = emptyList()
 
     override suspend fun savePlaylistChannels(channels: List<PlaylistChannel>) = Unit
 
@@ -254,7 +296,75 @@ private class FakePlaylistChannelRepository : PlaylistChannelRepository {
     ): List<PlaylistChannel> =
         channels.filter { channel -> channel.channelGroup == group }
 
+    override suspend fun loadPlaylistChannelsWithFavorites(
+        playlistId: String,
+        offset: Int,
+        limit: Int,
+        searchQuery: String,
+    ): List<TvChannel> =
+        channels
+            .filterBySearch(searchQuery)
+            .drop(offset)
+            .take(limit)
+            .withFavoriteTypes()
+
+    override suspend fun loadPlaylistGroupChannelsWithFavorites(
+        playlistId: String,
+        group: String,
+        offset: Int,
+        limit: Int,
+        searchQuery: String,
+    ): List<TvChannel> =
+        channels
+            .filter { channel -> channel.channelGroup == group }
+            .filterBySearch(searchQuery)
+            .drop(offset)
+            .take(limit)
+            .withFavoriteTypes()
+
+    override suspend fun loadFavoritePlaylistChannels(
+        playlistId: String,
+        favoriteType: FavoriteType,
+        offset: Int,
+        limit: Int,
+        searchQuery: String,
+    ): List<TvChannel> {
+        val urls = favorites
+            .filter { favorite -> favorite.favoriteType == favoriteType }
+            .map { favorite -> favorite.channelUrl }
+            .toSet()
+
+        return channels
+            .filter { channel -> channel.channelUrl in urls }
+            .filterBySearch(searchQuery)
+            .drop(offset)
+            .take(limit)
+            .withFavoriteTypes()
+    }
+
     override suspend fun deletePlaylistChannels(listId: String) = Unit
+
+    private fun List<PlaylistChannel>.filterBySearch(searchQuery: String): List<PlaylistChannel> =
+        if (searchQuery.isBlank()) {
+            this
+        } else {
+            filter { channel -> channel.channelName.contains(searchQuery, ignoreCase = true) }
+        }
+
+    private fun List<PlaylistChannel>.withFavoriteTypes(): List<TvChannel> {
+        val favoritesByUrl = favorites.associateBy { favorite -> favorite.channelUrl }
+
+        return map { channel ->
+            TvChannel(
+                channelName = channel.channelName,
+                channelLogo = channel.channelLogo,
+                channelUrl = channel.channelUrl,
+                programId = channel.programId,
+                favoriteType = favoritesByUrl[channel.channelUrl]?.favoriteType
+                    ?: FavoriteType.NONE,
+            )
+        }
+    }
 }
 
 private class FakeChannelFavoriteRepository : ChannelFavoriteRepository {
@@ -283,6 +393,9 @@ private class FakeChannelFavoriteRepository : ChannelFavoriteRepository {
 
     override suspend fun loadFavoriteChannelUrls(playlistId: String): List<String> =
         loadFavoriteChannelUrls()
+
+    override suspend fun loadFavoriteChannelNamesByUrl(playlistId: String): Map<String, String> =
+        emptyMap()
 
     override suspend fun updateFavoriteChannel(
         playlistId: String,

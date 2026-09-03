@@ -14,7 +14,7 @@ kotlin {
             implementation(libs.compose.runtime.retain)
             implementation(libs.bundles.media3)
             implementation(libs.bundles.nextlib)
-            implementation(libs.ktor.client.android)
+            implementation(libs.ktor.client.okhttp)
         }
 
         desktopMain.dependencies {

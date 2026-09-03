@@ -41,13 +41,13 @@ internal class UpdateChannelsEpgInfoUseCaseImpl(
             }
                 .toList()
 
-        logger.w { "testing update mappedChannels count:${mappedChannels.count()}" }
+        logger.d { "Mapped channels count=${mappedChannels.count()}" }
 
         playlistChannelRepository.savePlaylistChannels(mappedChannels)
 
         mappedChannels.forEach { channel ->
             if (channel.channelUrl in favorites) {
-                logger.w { "update in favorite ${channel.channelName}" }
+                logger.d { "Updating favorite channel EPG info" }
                 channelFavoriteRepository.updateFavoriteChannel(
                     playlistId = channel.parentListId,
                     channelName = channel.channelName,

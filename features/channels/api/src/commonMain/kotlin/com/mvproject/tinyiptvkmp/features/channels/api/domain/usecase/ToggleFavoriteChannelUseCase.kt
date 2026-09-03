@@ -4,10 +4,18 @@ import com.mvproject.tinyiptvkmp.features.channels.api.domain.model.FavoriteType
 import com.mvproject.tinyiptvkmp.features.channels.api.domain.model.TvChannel
 import com.mvproject.tinyiptvkmp.features.channels.api.domain.repository.ChannelFavoriteRepository
 
-class ToggleFavoriteChannelUseCase(
+interface ToggleFavoriteChannelUseCase {
+    suspend operator fun invoke(playlistId: String, channel: TvChannel, type: FavoriteType)
+}
+
+class ToggleFavoriteChannelUseCaseImpl(
     private val favoriteChannelsRepository: ChannelFavoriteRepository,
-) {
-    suspend operator fun invoke(playlistId: String, channel: TvChannel, type: FavoriteType) {
+) : ToggleFavoriteChannelUseCase {
+    override suspend operator fun invoke(
+        playlistId: String,
+        channel: TvChannel,
+        type: FavoriteType
+    ) {
         when {
             channel.favoriteType == FavoriteType.NONE && type == FavoriteType.NONE -> Unit
 

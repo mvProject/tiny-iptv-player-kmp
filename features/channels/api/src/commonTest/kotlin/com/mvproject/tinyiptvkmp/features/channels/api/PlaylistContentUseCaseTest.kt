@@ -3,6 +3,7 @@ package com.mvproject.tinyiptvkmp.features.channels.api
 import com.mvproject.tinyiptvkmp.features.channels.api.domain.model.FavoriteChannel
 import com.mvproject.tinyiptvkmp.features.channels.api.domain.model.FavoriteType
 import com.mvproject.tinyiptvkmp.features.channels.api.domain.model.PlaylistChannel
+import com.mvproject.tinyiptvkmp.features.channels.api.domain.model.TvChannel
 import com.mvproject.tinyiptvkmp.features.channels.api.domain.repository.ChannelFavoriteRepository
 import com.mvproject.tinyiptvkmp.features.channels.api.domain.repository.PlaylistChannelRepository
 import com.mvproject.tinyiptvkmp.features.channels.api.domain.usecase.DeletePlaylistContentUseCaseImpl
@@ -114,7 +115,8 @@ class PlaylistContentUseCaseTest {
         val channelRepository = FakePlaylistChannelRepository()
         val favoriteRepository =
             FakeChannelFavoriteRepository(
-                favoriteUrlsByPlaylistId = mutableMapOf("playlist-1" to listOf("url-1")),
+                favoriteNamesByUrlByPlaylistId =
+                    mutableMapOf("playlist-1" to mapOf("url-1" to "Old News")),
             )
         val useCase =
             ReplacePlaylistContentUseCaseImpl(
@@ -123,6 +125,59 @@ class PlaylistContentUseCaseTest {
             )
         channelRepository.loadedChannels["playlist-1"] =
             listOf(channel("playlist-1", "Updated News", "url-1"))
+
+        useCase.replaceRemotePlaylistContent(
+            playlistId = "playlist-1",
+            source = "https://example.com/list.m3u",
+            clearExistingContentBeforeLoading = true,
+        )
+
+        assertEquals(listOf("playlist-1:Updated News:url-1"), favoriteRepository.updatedFavorites)
+    }
+
+    @Test
+    fun replaceContentSkipsUnchangedFavoriteNames() = runTest {
+        val channelRepository = FakePlaylistChannelRepository()
+        val favoriteRepository =
+            FakeChannelFavoriteRepository(
+                favoriteNamesByUrlByPlaylistId =
+                    mutableMapOf("playlist-1" to mapOf("url-1" to "News")),
+            )
+        val useCase =
+            ReplacePlaylistContentUseCaseImpl(
+                playlistChannelRepository = channelRepository,
+                channelFavoriteRepository = favoriteRepository,
+            )
+        channelRepository.loadedChannels["playlist-1"] =
+            listOf(channel("playlist-1", "News", "url-1"))
+
+        useCase.replaceRemotePlaylistContent(
+            playlistId = "playlist-1",
+            source = "https://example.com/list.m3u",
+            clearExistingContentBeforeLoading = true,
+        )
+
+        assertEquals(emptyList(), favoriteRepository.updatedFavorites)
+    }
+
+    @Test
+    fun replaceContentIgnoresImportedChannelsThatAreNotFavorites() = runTest {
+        val channelRepository = FakePlaylistChannelRepository()
+        val favoriteRepository =
+            FakeChannelFavoriteRepository(
+                favoriteNamesByUrlByPlaylistId =
+                    mutableMapOf("playlist-1" to mapOf("url-1" to "Old News")),
+            )
+        val useCase =
+            ReplacePlaylistContentUseCaseImpl(
+                playlistChannelRepository = channelRepository,
+                channelFavoriteRepository = favoriteRepository,
+            )
+        channelRepository.loadedChannels["playlist-1"] =
+            listOf(
+                channel("playlist-1", "Updated News", "url-1"),
+                channel("playlist-1", "Sports", "url-2"),
+            )
 
         useCase.replaceRemotePlaylistContent(
             playlistId = "playlist-1",
@@ -198,13 +253,40 @@ private class FakePlaylistChannelRepository : PlaylistChannelRepository {
     ): List<PlaylistChannel> =
         emptyList()
 
+    override suspend fun loadPlaylistChannelsWithFavorites(
+        playlistId: String,
+        offset: Int,
+        limit: Int,
+        searchQuery: String,
+    ): List<TvChannel> =
+        emptyList()
+
+    override suspend fun loadPlaylistGroupChannelsWithFavorites(
+        playlistId: String,
+        group: String,
+        offset: Int,
+        limit: Int,
+        searchQuery: String,
+    ): List<TvChannel> =
+        emptyList()
+
+    override suspend fun loadFavoritePlaylistChannels(
+        playlistId: String,
+        favoriteType: FavoriteType,
+        offset: Int,
+        limit: Int,
+        searchQuery: String,
+    ): List<TvChannel> =
+        emptyList()
+
     override suspend fun deletePlaylistChannels(listId: String) {
         operations += "delete:$listId"
     }
 }
 
 private class FakeChannelFavoriteRepository(
-    private val favoriteUrlsByPlaylistId: MutableMap<String, List<String>> = mutableMapOf(),
+    private val favoriteNamesByUrlByPlaylistId: MutableMap<String, Map<String, String>> =
+        mutableMapOf(),
 ) : ChannelFavoriteRepository {
     val updatedFavorites = mutableListOf<String>()
     val deletedPlaylists = mutableListOf<String>()
@@ -228,10 +310,15 @@ private class FakeChannelFavoriteRepository(
         emptyList()
 
     override suspend fun loadFavoriteChannelUrls(): List<String> =
-        favoriteUrlsByPlaylistId.values.flatten()
+        favoriteNamesByUrlByPlaylistId.values.flatMap { favoriteNamesByUrl ->
+            favoriteNamesByUrl.keys
+        }
 
     override suspend fun loadFavoriteChannelUrls(playlistId: String): List<String> =
-        favoriteUrlsByPlaylistId[playlistId].orEmpty()
+        favoriteNamesByUrlByPlaylistId[playlistId].orEmpty().keys.toList()
+
+    override suspend fun loadFavoriteChannelNamesByUrl(playlistId: String): Map<String, String> =
+        favoriteNamesByUrlByPlaylistId[playlistId].orEmpty()
 
     override suspend fun updateFavoriteChannel(
         playlistId: String,

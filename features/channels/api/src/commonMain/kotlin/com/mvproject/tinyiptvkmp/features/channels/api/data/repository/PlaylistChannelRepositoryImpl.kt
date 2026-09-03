@@ -3,8 +3,9 @@ package com.mvproject.tinyiptvkmp.features.channels.api.data.repository
 import com.mvproject.tinyiptvkmp.features.channels.api.data.datasource.content.PlaylistContentLocalDataSource
 import com.mvproject.tinyiptvkmp.features.channels.api.data.datasource.local.PlaylistChannelLocalDataSource
 import com.mvproject.tinyiptvkmp.features.channels.api.data.datasource.remote.PlaylistChannelRemoteDataSource
-import com.mvproject.tinyiptvkmp.features.channels.api.data.mappers.toPlaylistChannel
+import com.mvproject.tinyiptvkmp.features.channels.api.domain.model.FavoriteType
 import com.mvproject.tinyiptvkmp.features.channels.api.domain.model.PlaylistChannel
+import com.mvproject.tinyiptvkmp.features.channels.api.domain.model.TvChannel
 import com.mvproject.tinyiptvkmp.features.channels.api.domain.repository.PlaylistChannelRepository
 
 internal class PlaylistChannelRepositoryImpl(
@@ -20,18 +21,22 @@ internal class PlaylistChannelRepositoryImpl(
         playlistId: String,
         source: String,
     ): List<PlaylistChannel> =
-        localContentDataSource.loadPlaylistContent(source = source)
-            .map { it.toPlaylistChannel(id = playlistId) }
+        localContentDataSource.loadPlaylistContent(
+            playlistId = playlistId,
+            source = source,
+        )
 
     override suspend fun loadRemotePlaylistChannels(
         playlistId: String,
         source: String,
     ): List<PlaylistChannel> =
-        remoteDataSource.loadPlaylistContent(url = source)
-            .map { it.toPlaylistChannel(id = playlistId) }
+        remoteDataSource.loadPlaylistContent(
+            playlistId = playlistId,
+            url = source,
+        )
 
     override suspend fun loadPlaylistGroups(playlistId: String): List<String> =
-        localDataSource.loadPlaylistGroups(playlistId = playlistId).distinct()
+        localDataSource.loadPlaylistGroups(playlistId = playlistId)
 
     override suspend fun loadPlaylistGroupCounts(playlistId: String): Map<String, Int> =
         localDataSource.loadPlaylistGroupCounts(playlistId = playlistId)
@@ -67,6 +72,49 @@ internal class PlaylistChannelRepositoryImpl(
         localDataSource.loadPlaylistGroupChannels(
             playlistId = playlistId,
             group = group,
+        )
+
+    override suspend fun loadPlaylistChannelsWithFavorites(
+        playlistId: String,
+        offset: Int,
+        limit: Int,
+        searchQuery: String,
+    ): List<TvChannel> =
+        localDataSource.loadPlaylistChannelsWithFavorites(
+            playlistId = playlistId,
+            offset = offset,
+            limit = limit,
+            searchQuery = searchQuery,
+        )
+
+    override suspend fun loadPlaylistGroupChannelsWithFavorites(
+        playlistId: String,
+        group: String,
+        offset: Int,
+        limit: Int,
+        searchQuery: String,
+    ): List<TvChannel> =
+        localDataSource.loadPlaylistGroupChannelsWithFavorites(
+            playlistId = playlistId,
+            group = group,
+            offset = offset,
+            limit = limit,
+            searchQuery = searchQuery,
+        )
+
+    override suspend fun loadFavoritePlaylistChannels(
+        playlistId: String,
+        favoriteType: FavoriteType,
+        offset: Int,
+        limit: Int,
+        searchQuery: String,
+    ): List<TvChannel> =
+        localDataSource.loadFavoritePlaylistChannels(
+            playlistId = playlistId,
+            favoriteType = favoriteType,
+            offset = offset,
+            limit = limit,
+            searchQuery = searchQuery,
         )
 
     override suspend fun deletePlaylistChannels(listId: String) {

@@ -18,7 +18,7 @@ import com.mvproject.tinyiptvkmp.platform.mediaplayer.ExoPlayerUtils.createMedia
 import com.mvproject.tinyiptvkmp.platform.mediaplayer.ExoPlayerUtils.createVideoPlayer
 import com.mvproject.tinyiptvkmp.platform.mediaplayer.ExoPlayerUtils.mapToMediaPlaybackState
 import io.ktor.client.HttpClient
-import io.ktor.client.engine.android.Android
+import io.ktor.client.engine.okhttp.OkHttp
 
 /**
  * Build and remember default implementation of [PlatformPlayerState]
@@ -31,7 +31,7 @@ internal fun rememberPlayerState(
     onEvent: (MediaPlayerEvent) -> Unit = {},
 ) = retain {
     val applicationContext = context.applicationContext
-    val httpClient = HttpClient(Android)
+    val httpClient = HttpClient(OkHttp)
     PlayerStateImpl(
         player = createVideoPlayer(
             context = applicationContext,

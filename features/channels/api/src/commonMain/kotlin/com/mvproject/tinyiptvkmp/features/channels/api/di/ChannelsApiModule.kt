@@ -28,6 +28,7 @@ import com.mvproject.tinyiptvkmp.features.channels.api.domain.usecase.ObserveCha
 import com.mvproject.tinyiptvkmp.features.channels.api.domain.usecase.ReplacePlaylistContentUseCase
 import com.mvproject.tinyiptvkmp.features.channels.api.domain.usecase.ReplacePlaylistContentUseCaseImpl
 import com.mvproject.tinyiptvkmp.features.channels.api.domain.usecase.ToggleFavoriteChannelUseCase
+import com.mvproject.tinyiptvkmp.features.channels.api.domain.usecase.ToggleFavoriteChannelUseCaseImpl
 import com.mvproject.tinyiptvkmp.features.channels.api.domain.usecase.UpdateChannelsViewTypeUseCase
 import com.mvproject.tinyiptvkmp.features.channels.api.domain.usecase.UpdateChannelsViewTypeUseCaseImpl
 import org.koin.core.qualifier.named
@@ -63,7 +64,7 @@ val channelsApiModule =
             MarkChannelsEpgInfoUpdateRequiredUseCaseImpl(get())
         }
         single<UpdateChannelsViewTypeUseCase> { UpdateChannelsViewTypeUseCaseImpl(get()) }
-        single<ToggleFavoriteChannelUseCase> { ToggleFavoriteChannelUseCase(get()) }
+        single<ToggleFavoriteChannelUseCase> { ToggleFavoriteChannelUseCaseImpl(get()) }
         single<ReplacePlaylistContentUseCase> { ReplacePlaylistContentUseCaseImpl(get(), get()) }
         single<DeletePlaylistContentUseCase> { DeletePlaylistContentUseCaseImpl(get(), get()) }
     }

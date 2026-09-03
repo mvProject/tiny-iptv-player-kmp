@@ -1,6 +1,10 @@
 package com.mvproject.tinyiptvkmp.features.channels.api.data.datasource.content
 
-internal interface PlaylistContentLocalDataSource {
-    suspend fun loadPlaylistContent(source: String): List<PlaylistChannelParseModel>
-}
+import com.mvproject.tinyiptvkmp.features.channels.api.domain.model.PlaylistChannel
 
+internal interface PlaylistContentLocalDataSource {
+    suspend fun loadPlaylistContent(
+        playlistId: String,
+        source: String,
+    ): List<PlaylistChannel>
+}

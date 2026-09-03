@@ -53,6 +53,9 @@ internal class ChannelFavoriteRepositoryImpl(
     override suspend fun loadFavoriteChannelUrls(playlistId: String): List<String> =
         local.loadFavoriteChannelUrls(playlistId = playlistId)
 
+    override suspend fun loadFavoriteChannelNamesByUrl(playlistId: String): Map<String, String> =
+        local.loadFavoriteChannelNamesByUrl(playlistId = playlistId)
+
     override suspend fun updateFavoriteChannel(
         playlistId: String,
         channelName: String,

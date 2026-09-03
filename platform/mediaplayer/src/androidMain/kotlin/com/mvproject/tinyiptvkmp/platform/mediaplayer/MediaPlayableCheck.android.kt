@@ -16,6 +16,6 @@ actual fun isMediaPlayable(errorCode: Int?): Boolean {
             PlaybackException.ERROR_CODE_PARSING_MANIFEST_MALFORMED -> false
             else -> true
         }
-    MediaPlayableCheckLogger.logger.e { "testing errorCode:$errorCode, isMediaPlayable:$isMediaPlayable" }
+    MediaPlayableCheckLogger.logger.d { "errorCode=$errorCode, isMediaPlayable=$isMediaPlayable" }
     return isMediaPlayable
 }

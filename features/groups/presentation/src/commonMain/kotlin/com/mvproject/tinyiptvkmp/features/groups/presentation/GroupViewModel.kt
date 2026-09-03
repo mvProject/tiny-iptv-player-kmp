@@ -92,7 +92,7 @@ class GroupViewModel(
         observeChannelsEpgInfoUpdateRequiredUseCase()
             .distinctUntilChanged()
             .onEach { isRequired ->
-                logger.w { "testing isChannelsEpgInfoUpdateRequired isRequired=$isRequired" }
+                logger.d { "isChannelsEpgInfoUpdateRequired isRequired=$isRequired" }
                 if (isRequired) {
                     updateChannelsEpgInfoUseCase()
                 }

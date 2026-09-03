@@ -1,6 +1,8 @@
 package com.mvproject.tinyiptvkmp.features.channels.api.domain.repository
 
+import com.mvproject.tinyiptvkmp.features.channels.api.domain.model.FavoriteType
 import com.mvproject.tinyiptvkmp.features.channels.api.domain.model.PlaylistChannel
+import com.mvproject.tinyiptvkmp.features.channels.api.domain.model.TvChannel
 
 interface PlaylistChannelRepository {
     suspend fun savePlaylistChannels(channels: List<PlaylistChannel>)
@@ -30,6 +32,29 @@ interface PlaylistChannelRepository {
     ): List<PlaylistChannel>
 
     suspend fun loadPlaylistGroupChannels(playlistId: String, group: String): List<PlaylistChannel>
+
+    suspend fun loadPlaylistChannelsWithFavorites(
+        playlistId: String,
+        offset: Int,
+        limit: Int,
+        searchQuery: String,
+    ): List<TvChannel>
+
+    suspend fun loadPlaylistGroupChannelsWithFavorites(
+        playlistId: String,
+        group: String,
+        offset: Int,
+        limit: Int,
+        searchQuery: String,
+    ): List<TvChannel>
+
+    suspend fun loadFavoritePlaylistChannels(
+        playlistId: String,
+        favoriteType: FavoriteType,
+        offset: Int,
+        limit: Int,
+        searchQuery: String,
+    ): List<TvChannel>
 
     suspend fun deletePlaylistChannels(listId: String)
 }

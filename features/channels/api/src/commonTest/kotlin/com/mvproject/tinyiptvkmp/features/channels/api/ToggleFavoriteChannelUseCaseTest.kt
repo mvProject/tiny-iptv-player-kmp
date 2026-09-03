@@ -4,7 +4,7 @@ import com.mvproject.tinyiptvkmp.features.channels.api.domain.model.FavoriteChan
 import com.mvproject.tinyiptvkmp.features.channels.api.domain.model.FavoriteType
 import com.mvproject.tinyiptvkmp.features.channels.api.domain.model.TvChannel
 import com.mvproject.tinyiptvkmp.features.channels.api.domain.repository.ChannelFavoriteRepository
-import com.mvproject.tinyiptvkmp.features.channels.api.domain.usecase.ToggleFavoriteChannelUseCase
+import com.mvproject.tinyiptvkmp.features.channels.api.domain.usecase.ToggleFavoriteChannelUseCaseImpl
 import kotlinx.coroutines.test.runTest
 import kotlin.test.Test
 import kotlin.test.assertEquals
@@ -13,7 +13,7 @@ class ToggleFavoriteChannelUseCaseTest {
     @Test
     fun addsChannelWhenItIsNotFavorite() = runTest {
         val repository = RecordingFavoriteRepository()
-        val useCase = ToggleFavoriteChannelUseCase(repository)
+        val useCase = ToggleFavoriteChannelUseCaseImpl(repository)
 
         useCase(
             playlistId = "playlist",
@@ -27,7 +27,7 @@ class ToggleFavoriteChannelUseCaseTest {
     @Test
     fun updatesTypeWhenChannelAlreadyHasDifferentFavoriteType() = runTest {
         val repository = RecordingFavoriteRepository()
-        val useCase = ToggleFavoriteChannelUseCase(repository)
+        val useCase = ToggleFavoriteChannelUseCaseImpl(repository)
 
         useCase(
             playlistId = "playlist",
@@ -41,7 +41,7 @@ class ToggleFavoriteChannelUseCaseTest {
     @Test
     fun removesChannelWhenSameTypeIsSelectedAgain() = runTest {
         val repository = RecordingFavoriteRepository()
-        val useCase = ToggleFavoriteChannelUseCase(repository)
+        val useCase = ToggleFavoriteChannelUseCaseImpl(repository)
 
         useCase(
             playlistId = "playlist",
@@ -55,7 +55,7 @@ class ToggleFavoriteChannelUseCaseTest {
     @Test
     fun removesChannelWhenNoneIsSelected() = runTest {
         val repository = RecordingFavoriteRepository()
-        val useCase = ToggleFavoriteChannelUseCase(repository)
+        val useCase = ToggleFavoriteChannelUseCaseImpl(repository)
 
         useCase(
             playlistId = "playlist",
@@ -69,7 +69,7 @@ class ToggleFavoriteChannelUseCaseTest {
     @Test
     fun doesNothingWhenNoneIsSelectedForChannelThatIsNotFavorite() = runTest {
         val repository = RecordingFavoriteRepository()
-        val useCase = ToggleFavoriteChannelUseCase(repository)
+        val useCase = ToggleFavoriteChannelUseCaseImpl(repository)
 
         useCase(
             playlistId = "playlist",
@@ -118,6 +118,9 @@ private class RecordingFavoriteRepository : ChannelFavoriteRepository {
     override suspend fun loadFavoriteChannelUrls(): List<String> = emptyList()
 
     override suspend fun loadFavoriteChannelUrls(playlistId: String): List<String> = emptyList()
+
+    override suspend fun loadFavoriteChannelNamesByUrl(playlistId: String): Map<String, String> =
+        emptyMap()
 
     override suspend fun updateFavoriteChannel(
         playlistId: String,
