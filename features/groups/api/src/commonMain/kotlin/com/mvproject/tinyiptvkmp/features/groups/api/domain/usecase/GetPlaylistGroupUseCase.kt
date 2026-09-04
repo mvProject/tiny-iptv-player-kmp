@@ -6,11 +6,15 @@ import com.mvproject.tinyiptvkmp.features.channels.api.domain.repository.Playlis
 import com.mvproject.tinyiptvkmp.features.groups.api.domain.model.ChannelsGroup
 import com.mvproject.tinyiptvkmp.features.groups.api.domain.model.GroupType
 
-class GetPlaylistGroupUseCase(
+interface GetPlaylistGroupUseCase {
+    suspend operator fun invoke(playlistId: String): List<ChannelsGroup>
+}
+
+class GetPlaylistGroupUseCaseImpl(
     private val playlistChannelRepository: PlaylistChannelRepository,
     private val favoriteChannelsRepository: ChannelFavoriteRepository,
-) {
-    suspend operator fun invoke(playlistId: String): List<ChannelsGroup> {
+) : GetPlaylistGroupUseCase {
+    override suspend operator fun invoke(playlistId: String): List<ChannelsGroup> {
         val allChannelsCount =
             playlistChannelRepository.loadPlaylistChannelsCount(playlistId = playlistId)
         val groupCounts = playlistChannelRepository

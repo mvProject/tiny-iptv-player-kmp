@@ -11,6 +11,9 @@ import com.mvproject.tinyiptvkmp.features.epg.api.domain.model.TvChannelWithProg
 data class GroupChannelsState(
     val currentGroup: String = String.empty,
     val isLoading: Boolean = false,
+    val isLoadingMore: Boolean = false,
+    val hasMoreChannels: Boolean = false,
+    val nextChannelsOffset: Int = 0,
     val searchString: String = String.empty,
     val viewType: ChannelsViewType = ChannelsViewType.LIST,
     val channels: List<TvChannelWithPrograms> = emptyList(),
@@ -31,6 +34,7 @@ sealed interface GroupChannelsAction {
     ) : GroupChannelsAction
 
     data class SearchTextChange(val text: String) : GroupChannelsAction
+    data object LoadMore : GroupChannelsAction
     data class ViewTypeChange(val type: ChannelsViewType) : GroupChannelsAction
     data class SelectChannel(
         val name: String,

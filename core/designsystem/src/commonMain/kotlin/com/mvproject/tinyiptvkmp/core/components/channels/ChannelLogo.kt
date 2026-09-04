@@ -37,7 +37,7 @@ fun ChannelLogo(
             modifier = Modifier
                 .size(imageSize)
                 .clip(MaterialTheme.shapes.small),
-            model = channelLogo.ifBlank { null },
+            model = channelLogo,
             onLoading = { isLoading = true },
             onError = { isLoading = false },
             onSuccess = { isLoading = false },

@@ -50,6 +50,9 @@ interface FavoriteChannelDao {
     @Query("SELECT channelUrl FROM favoriteChannels WHERE parentListId = :playlistId")
     suspend fun getFavoriteChannelUrls(playlistId: String): List<String>
 
+    @Query("SELECT channelUrl, channelName FROM favoriteChannels WHERE parentListId = :playlistId")
+    suspend fun getFavoriteChannelNamesByUrl(playlistId: String): List<FavoriteChannelName>
+
     @Query("DELETE FROM favoriteChannels WHERE parentListId = :playlistId AND channelUrl = :channelUrl")
     suspend fun deleteChannelFromFavorite(
         playlistId: String,

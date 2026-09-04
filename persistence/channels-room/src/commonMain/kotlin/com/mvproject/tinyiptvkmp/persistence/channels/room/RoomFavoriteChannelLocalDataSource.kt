@@ -89,6 +89,10 @@ internal class RoomFavoriteChannelLocalDataSource(
     override suspend fun loadFavoriteChannelUrls(playlistId: String): List<String> =
         favoriteChannelDao.getFavoriteChannelUrls(playlistId = playlistId)
 
+    override suspend fun loadFavoriteChannelNamesByUrl(playlistId: String): Map<String, String> =
+        favoriteChannelDao.getFavoriteChannelNamesByUrl(playlistId = playlistId)
+            .associate { favoriteName -> favoriteName.channelUrl to favoriteName.channelName }
+
     override suspend fun deletePlaylistFavoriteChannels(playlistId: String) {
         favoriteChannelDao.deletePlaylistFavoriteChannelEntities(playlistId = playlistId)
     }

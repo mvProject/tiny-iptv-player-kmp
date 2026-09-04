@@ -100,7 +100,7 @@ class PlayerViewModel(
 
 
     init {
-        logger.d { "testing VideoViewViewModel init media:$media, group:$group, groupType:$groupType" }
+        logger.d { "VideoViewViewModel init groupType=$groupType" }
         /*
                 viewModelScope.launch {
                     loadGroupChannels()
@@ -115,7 +115,8 @@ class PlayerViewModel(
         val channelList = getGroupChannelsUseCase(
             playlistId = playlistId,
             selection = selection,
-        )
+            limit = Int.MAX_VALUE,
+        ).channels
 
         setState {
             copy(

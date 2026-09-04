@@ -7,8 +7,8 @@
 
 package com.mvproject.tinyiptvkmp.features.channels.presentation
 
-import androidx.lifecycle.viewModelScope
 import com.mvproject.tinyiptvkmp.core.base.mvi.MviViewModel
+import com.mvproject.tinyiptvkmp.core.base.mvi.runCatchingSuspend
 import com.mvproject.tinyiptvkmp.core.foundation.model.ChannelsViewType
 import com.mvproject.tinyiptvkmp.core.foundation.utils.actualDate
 import com.mvproject.tinyiptvkmp.features.channels.api.domain.model.FavoriteType
@@ -27,10 +27,11 @@ import com.mvproject.tinyiptvkmp.features.epg.api.domain.utils.toggleFavorite
 import com.mvproject.tinyiptvkmp.features.epg.api.domain.utils.withPrograms
 import com.mvproject.tinyiptvkmp.features.groups.api.domain.model.ChannelGroupSelection
 import com.mvproject.tinyiptvkmp.features.groups.api.domain.usecase.GetGroupChannelsUseCase
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.IO
+import kotlinx.coroutines.flow.SharingStarted
+import kotlinx.coroutines.flow.collectLatest
+import kotlinx.coroutines.flow.distinctUntilChanged
 import kotlinx.coroutines.flow.first
-import kotlinx.coroutines.launch
+import kotlinx.coroutines.flow.map
 import org.koin.core.annotation.InjectedParam
 import org.koin.core.component.inject
 import kotlin.time.Duration.Companion.minutes
@@ -62,12 +63,14 @@ class GroupChannelsViewModel(
 
     override fun createStore() = createStore(
         initialState = GroupChannelsState(),
-        invokeOnStart = { loadGroupChannels() },
+        started = SharingStarted.Eagerly,
+        invokeOnStart = { observeSearchQueries() },
     )
 
     override fun onIntent(intent: GroupChannelsAction) {
         when (intent) {
             GroupChannelsAction.CloseOsd -> closeOsd()
+            GroupChannelsAction.LoadMore -> requestNextPage()
             GroupChannelsAction.NavigateBack -> launch { navigator.navigateUp() }
             is GroupChannelsAction.OpenOsd -> launch { openOsd(type = intent.type) }
             is GroupChannelsAction.SearchTextChange -> searchTextChange(text = intent.text)
@@ -91,31 +94,117 @@ class GroupChannelsViewModel(
         }
     }
 
-    private suspend fun loadGroupChannels() {
+    private suspend fun observeSearchQueries() {
+        state
+            .map { state -> state.searchString }
+            .distinctUntilChanged()
+            .collectLatest { searchQuery ->
+                loadFirstPage(searchQuery = searchQuery)
+            }
+    }
+
+    private suspend fun loadFirstPage(searchQuery: String) {
         val viewType = observeChannelsSettings().first().channelsViewType
-        val groupChannels = getGroupChannelsUseCase(
-            playlistId = playlistId,
-            selection = selection,
-        )
         setState {
             copy(
-                viewType = viewType,
+                isLoading = true,
+                isLoadingMore = false,
                 currentGroup = group,
-                channels = groupChannels.withPrograms()
+                viewType = viewType,
+                nextChannelsOffset = 0,
+                hasMoreChannels = false,
             )
+        }
+
+        runCatchingSuspend {
+            getGroupChannelsUseCase(
+                playlistId = playlistId,
+                selection = selection,
+                offset = 0,
+                searchQuery = searchQuery,
+            )
+        }.onSuccess { channelsPage ->
+            setState {
+                if (this.searchString == searchQuery) {
+                    copy(
+                        isLoading = false,
+                        viewType = viewType,
+                        currentGroup = group,
+                        channels = channelsPage.channels.withPrograms(),
+                        nextChannelsOffset = channelsPage.nextOffset,
+                        hasMoreChannels = channelsPage.hasMore,
+                    )
+                } else {
+                    this
+                }
+            }
+        }.onFailure { throwable ->
+            logger.e(throwable) { "Failed to load group channels" }
+            setState {
+                if (this.searchString == searchQuery) {
+                    copy(isLoading = false, isLoadingMore = false)
+                } else {
+                    this
+                }
+            }
         }
     }
 
     fun loadChannelsByGroups() {
-        // TODO(performance): Skip resume EPG refresh when channels are empty or a refresh is already running.
-        // TODO: Serialize EPG refreshes with a refresh Job/Mutex or update the refresh gate before fetching.
-        viewModelScope.launch(Dispatchers.IO) {
-            refreshEpgPrograms()
-        }
+        launch { refreshEpgPrograms() }
     }
 
     private fun searchTextChange(text: String) {
         setState { copy(searchString = text) }
+    }
+
+    private fun requestNextPage() {
+        val currentState = getState()
+        if (
+            currentState.isLoading ||
+            currentState.isLoadingMore ||
+            !currentState.hasMoreChannels
+        ) {
+            return
+        }
+
+        val offset = currentState.nextChannelsOffset
+        val searchQuery = currentState.searchString
+        setState { copy(isLoadingMore = true) }
+        launch { loadNextPage(offset = offset, searchQuery = searchQuery) }
+    }
+
+    private suspend fun loadNextPage(offset: Int, searchQuery: String) {
+        runCatchingSuspend {
+            getGroupChannelsUseCase(
+                playlistId = playlistId,
+                selection = selection,
+                offset = offset,
+                searchQuery = searchQuery,
+            )
+        }.onSuccess { channelsPage ->
+            setState {
+                if (this.searchString == searchQuery && this.nextChannelsOffset == offset) {
+                    copy(
+                        isLoadingMore = false,
+                        channels = channels + channelsPage.channels.withPrograms(),
+                        nextChannelsOffset = channelsPage.nextOffset,
+                        hasMoreChannels = channelsPage.hasMore,
+                    )
+                } else {
+                    this
+                }
+            }
+        }.onFailure { throwable ->
+            logger.e(throwable) { "Failed to load more group channels" }
+            setState {
+                if (this.searchString == searchQuery && this.nextChannelsOffset == offset) {
+                    copy(isLoadingMore = false)
+                } else {
+                    this
+                }
+            }
+        }
     }
 
     private fun closeOsd() {

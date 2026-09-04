@@ -50,8 +50,62 @@ interface PlaylistChannelDao {
     suspend fun getAllChannels(): List<PlaylistChannelEntity>
 
     @Query(
-        "SELECT channelGroup FROM playlistChannels " +
-                "WHERE parentListId == :playlistId AND TRIM(channelGroup) != ''",
+        "SELECT pc.channelName, pc.channelUrl, pc.channelLogo, pc.programId, fc.favoriteType " +
+                "FROM playlistChannels pc " +
+                "LEFT JOIN favoriteChannels fc " +
+                "ON fc.parentListId = pc.parentListId AND fc.channelUrl = pc.channelUrl " +
+                "WHERE pc.parentListId = :playlistId " +
+                "AND (:searchQuery = '' OR LOWER(pc.channelName) LIKE '%' || LOWER(:searchQuery) || '%') " +
+                "ORDER BY pc.rowid " +
+                "LIMIT :limit OFFSET :offset",
+    )
+    suspend fun getPlaylistChannelsWithFavorites(
+        playlistId: String,
+        offset: Int,
+        limit: Int,
+        searchQuery: String,
+    ): List<PlaylistChannelFavorite>
+
+    @Query(
+        "SELECT pc.channelName, pc.channelUrl, pc.channelLogo, pc.programId, fc.favoriteType " +
+                "FROM playlistChannels pc " +
+                "LEFT JOIN favoriteChannels fc " +
+                "ON fc.parentListId = pc.parentListId AND fc.channelUrl = pc.channelUrl " +
+                "WHERE pc.parentListId = :playlistId AND pc.channelGroup = :group " +
+                "AND (:searchQuery = '' OR LOWER(pc.channelName) LIKE '%' || LOWER(:searchQuery) || '%') " +
+                "ORDER BY pc.rowid " +
+                "LIMIT :limit OFFSET :offset",
+    )
+    suspend fun getPlaylistGroupChannelsWithFavorites(
+        playlistId: String,
+        group: String,
+        offset: Int,
+        limit: Int,
+        searchQuery: String,
+    ): List<PlaylistChannelFavorite>
+
+    @Query(
+        "SELECT pc.channelName, pc.channelUrl, pc.channelLogo, pc.programId, fc.favoriteType " +
+                "FROM favoriteChannels fc " +
+                "INNER JOIN playlistChannels pc " +
+                "ON pc.parentListId = fc.parentListId AND pc.channelUrl = fc.channelUrl " +
+                "WHERE fc.parentListId = :playlistId AND fc.favoriteType = :favoriteType " +
+                "AND (:searchQuery = '' OR LOWER(pc.channelName) LIKE '%' || LOWER(:searchQuery) || '%') " +
+                "ORDER BY fc.channelOrder " +
+                "LIMIT :limit OFFSET :offset",
+    )
+    suspend fun getFavoritePlaylistChannels(
+        playlistId: String,
+        favoriteType: String,
+        offset: Int,
+        limit: Int,
+        searchQuery: String,
+    ): List<PlaylistChannelFavorite>
+
+    @Query(
+        "SELECT DISTINCT channelGroup FROM playlistChannels " +
+                "WHERE parentListId == :playlistId AND TRIM(channelGroup) != '' " +
+                "ORDER BY channelGroup",
     )
     suspend fun getPlaylistChannelsGroups(playlistId: String): List<String>
 
