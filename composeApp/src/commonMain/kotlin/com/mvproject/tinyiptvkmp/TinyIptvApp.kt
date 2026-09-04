@@ -18,6 +18,7 @@ import coil3.request.CachePolicy
 import coil3.request.crossfade
 import coil3.util.DebugLogger
 import com.mvproject.tinyiptvkmp.core.theme.AppTheme
+import com.mvproject.tinyiptvkmp.infrastructure.logging.AppLoggingConfig
 import com.mvproject.tinyiptvkmp.navigation.AppRoutes
 import com.mvproject.tinyiptvkmp.navigation.NavigationHost
 import okio.FileSystem
@@ -53,7 +54,11 @@ private fun getAsyncImageLoader(context: PlatformContext): ImageLoader =
         .diskCache {
             createDiskCache()
         }.crossfade(true)
-        .logger(DebugLogger())
+        .apply {
+            if (AppLoggingConfig.isImageDebugLoggingEnabled) {
+                logger(DebugLogger())
+            }
+        }
         .build()
 
 private fun createMemoryCache(context: PlatformContext): MemoryCache =

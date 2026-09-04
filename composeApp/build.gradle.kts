@@ -8,6 +8,9 @@ plugins {
     alias(libs.plugins.koin.compiler)
 }
 
+val appVersionCode = providers.gradleProperty("app.versionCode").map(String::toInt).get()
+val appVersionName = providers.gradleProperty("app.versionName").get()
+
 kotlin {
     targets.withType<KotlinNativeTarget>().configureEach {
         binaries.framework {
@@ -126,8 +129,8 @@ android {
 
     defaultConfig {
         applicationId = "com.mvproject.tinyiptvkmp"
-        versionCode = 1
-        versionName = "1.0"
+        versionCode = appVersionCode
+        versionName = appVersionName
     }
     packaging {
         resources {
@@ -174,16 +177,36 @@ compose.desktop {
         mainClass = "MainKt"
         nativeDistributions {
             packageName = "Tiny Iptv"
-            packageVersion = "1.0.0"
+            packageVersion = appVersionName
             description = "Iptv player multiplatform App"
             copyright = "©2023 MvProject. All rights reserved."
-            targetFormats(TargetFormat.Exe, TargetFormat.Dmg)
+            vendor = "MvProject"
+            targetFormats(TargetFormat.Exe, TargetFormat.Msi, TargetFormat.Dmg)
 
             //  modules("java.base", "java.instrument", "java.management", "java.net.http", "java.sql", "jdk.unsupported", "jdk.xml.dom")
             includeAllModules = true
 
             windows {
                 iconFile.set(project.file("tiny_iptv_kmp.ico"))
+                menuGroup = "Tiny IPTV"
+                shortcut = true
+                menu = true
+                perUserInstall = true
+                upgradeUuid = "455947F1-F344-4957-AB27-9C4BEAEA6C64"
+            }
+
+            macOS {
+                bundleID = "com.mvproject.tinyiptvkmp"
+                iconFile.set(project.file("tiny_iptv_kmp.icns"))
+                appCategory = "public.app-category.entertainment"
+            }
+        }
+
+        buildTypes {
+            release {
+                proguard {
+                    isEnabled.set(false)
+                }
             }
         }
     }

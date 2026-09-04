@@ -94,6 +94,56 @@ It uses ExoPlayer's ``ffmpeg`` extension
 with [all its audio formats](https://exoplayer.dev/supported-formats.html#ffmpeg-extension)
 enabled (it can handle even special formats like AC3, EAC3, DTS, DTS HD, TrueHD etc.).
 
+## Release and distribution
+
+Release version metadata is configured in `gradle.properties`:
+
+```properties
+app.versionCode=1
+app.versionName=1.0.0
+```
+
+### Android
+
+Build the signed release artifacts with the existing local signing configuration:
+
+```bash
+./gradlew :composeApp:assembleRelease :composeApp:bundleRelease
+```
+
+Use the Android App Bundle for Google Play and the APK for direct sideload distribution:
+
+```text
+composeApp/build/outputs/bundle/release/
+composeApp/build/outputs/apk/release/
+```
+
+WARNING: the Android manifest currently allows cleartext traffic for IPTV sources that still use
+HTTP. Keep this only as an explicit product decision; prefer HTTPS playlists and streams where
+providers support it.
+
+### Desktop
+
+Desktop direct installers are produced by Compose Multiplatform native distributions:
+
+```bash
+./gradlew :composeApp:packageReleaseDmg
+./gradlew :composeApp:packageReleaseExe
+./gradlew :composeApp:packageReleaseMsi
+```
+
+Build macOS DMG on macOS and Windows EXE/MSI on Windows. Publish the generated installers from:
+
+```text
+composeApp/build/compose/binaries/main-release/dmg/
+composeApp/build/compose/binaries/main-release/exe/
+composeApp/build/compose/binaries/main-release/msi/
+```
+
+For public macOS distribution, sign and notarize the DMG with a Developer ID certificate before
+publishing. Windows installers use a stable upgrade UUID so future versions can upgrade the
+installed app.
+
 ## Screenshots
 
 <img src="screenshots/tiny_iptv_player_1.png" height="680" width="340">
