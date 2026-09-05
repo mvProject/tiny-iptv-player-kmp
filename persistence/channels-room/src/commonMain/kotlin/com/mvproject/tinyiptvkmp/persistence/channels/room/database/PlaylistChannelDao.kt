@@ -36,11 +36,53 @@ interface PlaylistChannelDao {
     suspend fun getPlaylistChannelsCount(playlistId: String): Int
 
     @Query(
+        "SELECT rowid FROM playlistChannels " +
+                "WHERE parentListId = :playlistId AND channelUrl = :channelUrl " +
+                "LIMIT 1",
+    )
+    suspend fun getPlaylistChannelRowId(
+        playlistId: String,
+        channelUrl: String,
+    ): Long?
+
+    @Query(
+        "SELECT COUNT(*) FROM playlistChannels " +
+                "WHERE parentListId = :playlistId AND rowid < :rowId",
+    )
+    suspend fun getPlaylistChannelsBeforeRowId(
+        playlistId: String,
+        rowId: Long,
+    ): Int
+
+    @Query(
         "SELECT COUNT(*) FROM playlistChannels WHERE parentListId == :playlistId AND channelGroup = :group",
     )
     suspend fun getPlaylistGroupChannelsCount(
         playlistId: String,
         group: String,
+    ): Int
+
+    @Query(
+        "SELECT rowid FROM playlistChannels " +
+                "WHERE parentListId = :playlistId AND channelGroup = :group " +
+                "AND channelUrl = :channelUrl " +
+                "LIMIT 1",
+    )
+    suspend fun getPlaylistGroupChannelRowId(
+        playlistId: String,
+        group: String,
+        channelUrl: String,
+    ): Long?
+
+    @Query(
+        "SELECT COUNT(*) FROM playlistChannels " +
+                "WHERE parentListId = :playlistId AND channelGroup = :group " +
+                "AND rowid < :rowId",
+    )
+    suspend fun getPlaylistGroupChannelsBeforeRowId(
+        playlistId: String,
+        group: String,
+        rowId: Long,
     ): Int
 
     @Query("SELECT * FROM playlistChannels WHERE parentListId == :playlistId")
@@ -101,6 +143,44 @@ interface PlaylistChannelDao {
         limit: Int,
         searchQuery: String,
     ): List<PlaylistChannelFavorite>
+
+    @Query(
+        "SELECT COUNT(*) FROM favoriteChannels fc " +
+                "INNER JOIN playlistChannels pc " +
+                "ON pc.parentListId = fc.parentListId AND pc.channelUrl = fc.channelUrl " +
+                "WHERE fc.parentListId = :playlistId AND fc.favoriteType = :favoriteType",
+    )
+    suspend fun getFavoritePlaylistChannelsCount(
+        playlistId: String,
+        favoriteType: String,
+    ): Int
+
+    @Query(
+        "SELECT fc.channelOrder FROM favoriteChannels fc " +
+                "INNER JOIN playlistChannels pc " +
+                "ON pc.parentListId = fc.parentListId AND pc.channelUrl = fc.channelUrl " +
+                "WHERE fc.parentListId = :playlistId AND fc.favoriteType = :favoriteType " +
+                "AND fc.channelUrl = :channelUrl " +
+                "LIMIT 1",
+    )
+    suspend fun getFavoritePlaylistChannelOrder(
+        playlistId: String,
+        favoriteType: String,
+        channelUrl: String,
+    ): Long?
+
+    @Query(
+        "SELECT COUNT(*) FROM favoriteChannels fc " +
+                "INNER JOIN playlistChannels pc " +
+                "ON pc.parentListId = fc.parentListId AND pc.channelUrl = fc.channelUrl " +
+                "WHERE fc.parentListId = :playlistId AND fc.favoriteType = :favoriteType " +
+                "AND fc.channelOrder < :channelOrder",
+    )
+    suspend fun getFavoritePlaylistChannelsBeforeOrder(
+        playlistId: String,
+        favoriteType: String,
+        channelOrder: Long,
+    ): Int
 
     @Query(
         "SELECT DISTINCT channelGroup FROM playlistChannels " +

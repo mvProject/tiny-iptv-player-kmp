@@ -7,6 +7,7 @@ plugins {
 kotlin {
     sourceSets {
         commonMain.dependencies {
+            api(projects.core.foundation)
             implementation(projects.core.datastore)
             implementation(libs.kotlinx.serialization.protobuf)
             implementation(libs.okio)

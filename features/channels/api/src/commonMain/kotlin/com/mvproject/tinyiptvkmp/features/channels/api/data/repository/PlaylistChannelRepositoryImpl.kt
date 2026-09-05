@@ -5,6 +5,7 @@ import com.mvproject.tinyiptvkmp.features.channels.api.data.datasource.local.Pla
 import com.mvproject.tinyiptvkmp.features.channels.api.data.datasource.remote.PlaylistChannelRemoteDataSource
 import com.mvproject.tinyiptvkmp.features.channels.api.domain.model.FavoriteType
 import com.mvproject.tinyiptvkmp.features.channels.api.domain.model.PlaylistChannel
+import com.mvproject.tinyiptvkmp.features.channels.api.domain.model.PlaylistChannelWindow
 import com.mvproject.tinyiptvkmp.features.channels.api.domain.model.TvChannel
 import com.mvproject.tinyiptvkmp.features.channels.api.domain.repository.PlaylistChannelRepository
 
@@ -115,6 +116,49 @@ internal class PlaylistChannelRepositoryImpl(
             offset = offset,
             limit = limit,
             searchQuery = searchQuery,
+        )
+
+    override suspend fun loadPlaylistChannelWindowWithFavorites(
+        playlistId: String,
+        channelUrl: String,
+        before: Int,
+        after: Int,
+    ): PlaylistChannelWindow? =
+        localDataSource.loadPlaylistChannelWindowWithFavorites(
+            playlistId = playlistId,
+            channelUrl = channelUrl,
+            before = before,
+            after = after,
+        )
+
+    override suspend fun loadPlaylistGroupChannelWindowWithFavorites(
+        playlistId: String,
+        group: String,
+        channelUrl: String,
+        before: Int,
+        after: Int,
+    ): PlaylistChannelWindow? =
+        localDataSource.loadPlaylistGroupChannelWindowWithFavorites(
+            playlistId = playlistId,
+            group = group,
+            channelUrl = channelUrl,
+            before = before,
+            after = after,
+        )
+
+    override suspend fun loadFavoritePlaylistChannelWindow(
+        playlistId: String,
+        favoriteType: FavoriteType,
+        channelUrl: String,
+        before: Int,
+        after: Int,
+    ): PlaylistChannelWindow? =
+        localDataSource.loadFavoritePlaylistChannelWindow(
+            playlistId = playlistId,
+            favoriteType = favoriteType,
+            channelUrl = channelUrl,
+            before = before,
+            after = after,
         )
 
     override suspend fun deletePlaylistChannels(listId: String) {

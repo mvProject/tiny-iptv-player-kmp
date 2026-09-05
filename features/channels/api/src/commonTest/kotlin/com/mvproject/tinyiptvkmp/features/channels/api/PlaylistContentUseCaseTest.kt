@@ -3,6 +3,7 @@ package com.mvproject.tinyiptvkmp.features.channels.api
 import com.mvproject.tinyiptvkmp.features.channels.api.domain.model.FavoriteChannel
 import com.mvproject.tinyiptvkmp.features.channels.api.domain.model.FavoriteType
 import com.mvproject.tinyiptvkmp.features.channels.api.domain.model.PlaylistChannel
+import com.mvproject.tinyiptvkmp.features.channels.api.domain.model.PlaylistChannelWindow
 import com.mvproject.tinyiptvkmp.features.channels.api.domain.model.TvChannel
 import com.mvproject.tinyiptvkmp.features.channels.api.domain.repository.ChannelFavoriteRepository
 import com.mvproject.tinyiptvkmp.features.channels.api.domain.repository.PlaylistChannelRepository
@@ -278,6 +279,29 @@ private class FakePlaylistChannelRepository : PlaylistChannelRepository {
         searchQuery: String,
     ): List<TvChannel> =
         emptyList()
+
+    override suspend fun loadPlaylistChannelWindowWithFavorites(
+        playlistId: String,
+        channelUrl: String,
+        before: Int,
+        after: Int,
+    ): PlaylistChannelWindow? = null
+
+    override suspend fun loadPlaylistGroupChannelWindowWithFavorites(
+        playlistId: String,
+        group: String,
+        channelUrl: String,
+        before: Int,
+        after: Int,
+    ): PlaylistChannelWindow? = null
+
+    override suspend fun loadFavoritePlaylistChannelWindow(
+        playlistId: String,
+        favoriteType: FavoriteType,
+        channelUrl: String,
+        before: Int,
+        after: Int,
+    ): PlaylistChannelWindow? = null
 
     override suspend fun deletePlaylistChannels(listId: String) {
         operations += "delete:$listId"

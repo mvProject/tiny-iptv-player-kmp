@@ -1,5 +1,7 @@
 package com.mvproject.tinyiptvkmp.features.groups.api.di
 
+import com.mvproject.tinyiptvkmp.features.groups.api.domain.usecase.GetGroupChannelWindowUseCase
+import com.mvproject.tinyiptvkmp.features.groups.api.domain.usecase.GetGroupChannelWindowUseCaseImpl
 import com.mvproject.tinyiptvkmp.features.groups.api.domain.usecase.GetGroupChannelsUseCase
 import com.mvproject.tinyiptvkmp.features.groups.api.domain.usecase.GetGroupChannelsUseCaseImpl
 import com.mvproject.tinyiptvkmp.features.groups.api.domain.usecase.GetPlaylistGroupUseCase
@@ -10,4 +12,5 @@ val groupsApiModule =
     module {
         single<GetPlaylistGroupUseCase> { GetPlaylistGroupUseCaseImpl(get(), get()) }
         single<GetGroupChannelsUseCase> { GetGroupChannelsUseCaseImpl(get()) }
+        single<GetGroupChannelWindowUseCase> { GetGroupChannelWindowUseCaseImpl(get()) }
     }

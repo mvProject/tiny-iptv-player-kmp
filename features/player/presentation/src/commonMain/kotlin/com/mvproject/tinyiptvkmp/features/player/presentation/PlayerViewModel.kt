@@ -14,14 +14,17 @@ import com.mvproject.tinyiptvkmp.core.foundation.common.DELAY_500
 import com.mvproject.tinyiptvkmp.core.foundation.common.FLOAT_STEP_VOLUME
 import com.mvproject.tinyiptvkmp.core.foundation.common.FLOAT_VALUE_1
 import com.mvproject.tinyiptvkmp.core.foundation.common.FLOAT_VALUE_ZERO
+import com.mvproject.tinyiptvkmp.core.foundation.common.INT_NO_VALUE
 import com.mvproject.tinyiptvkmp.core.foundation.common.INT_VALUE_1
 import com.mvproject.tinyiptvkmp.core.foundation.common.INT_VALUE_ZERO
 import com.mvproject.tinyiptvkmp.core.foundation.common.UI_SHOW_DELAY
 import com.mvproject.tinyiptvkmp.core.foundation.common.VOLUME_SHOW_DELAY
 import com.mvproject.tinyiptvkmp.core.foundation.model.VideoSize
 import com.mvproject.tinyiptvkmp.features.channels.api.domain.model.FavoriteType
+import com.mvproject.tinyiptvkmp.features.channels.api.domain.model.TvChannel
 import com.mvproject.tinyiptvkmp.features.channels.api.domain.usecase.ToggleFavoriteChannelUseCase
 import com.mvproject.tinyiptvkmp.features.epg.api.domain.model.TvChannelWithPrograms
+import com.mvproject.tinyiptvkmp.features.epg.api.domain.model.withPrograms
 import com.mvproject.tinyiptvkmp.features.epg.api.domain.usecase.GetChannelsEpgUseCase
 import com.mvproject.tinyiptvkmp.features.epg.api.domain.usecase.GetGroupChannelsEpgUseCase
 import com.mvproject.tinyiptvkmp.features.epg.api.domain.utils.mapProgramIds
@@ -31,14 +34,12 @@ import com.mvproject.tinyiptvkmp.features.epg.api.domain.utils.toggleFavorite
 import com.mvproject.tinyiptvkmp.features.epg.api.domain.utils.withPrograms
 import com.mvproject.tinyiptvkmp.features.groups.api.domain.model.ChannelGroupSelection
 import com.mvproject.tinyiptvkmp.features.groups.api.domain.usecase.GetGroupChannelsUseCase
-import com.mvproject.tinyiptvkmp.features.player.api.domain.usecase.ObservePlayerSettingsUseCase
+import com.mvproject.tinyiptvkmp.features.player.api.domain.usecase.GetPlayerSettingsUseCase
 import com.mvproject.tinyiptvkmp.features.player.presentation.PlayerState.PlayerOSD
 import com.mvproject.tinyiptvkmp.features.player.presentation.nav.PlayerNavigator
 import com.mvproject.tinyiptvkmp.platform.mediaplayer.isMediaPlayable
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.delay
-import kotlinx.coroutines.flow.distinctUntilChanged
-import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.launch
 import org.koin.core.annotation.InjectedParam
 import org.koin.core.component.inject
@@ -46,7 +47,7 @@ import kotlin.time.Duration.Companion.milliseconds
 
 class PlayerViewModel(
     @InjectedParam args: PlayerArgs,
-    private val observePlayerSettings: ObservePlayerSettingsUseCase,
+    private val getPlayerSettings: GetPlayerSettingsUseCase,
     private val getGroupChannelsUseCase: GetGroupChannelsUseCase,
     private val toggleFavoriteChannelUseCase: ToggleFavoriteChannelUseCase,
     private val getChannelsEpgUseCase: GetChannelsEpgUseCase,
@@ -54,6 +55,7 @@ class PlayerViewModel(
 ) : MviViewModel<PlayerState, PlayerAction, PlayerEffect>() {
 
     private val media = args.channelName
+    private val mediaUrl = args.channelUrl
     private val group = args.group
     private val groupType = args.groupType
     private val selection = ChannelGroupSelection.fromRoute(
@@ -72,9 +74,9 @@ class PlayerViewModel(
     override fun createStore() = createStore(
         initialState = PlayerState(),
         invokeOnStart = {
-            loadGroupChannels()
-            initPlayBack(channelName = media)
-            refreshGroupChannelsPrograms()
+            loadPlayerSettings()
+            loadInitialSelectedChannel()
+            scheduleFullGroupChannelsLoad()
         },
     )
 
@@ -85,7 +87,7 @@ class PlayerViewModel(
             PlayerAction.NavigateBack -> launch { navigator.navigateUp() }
             is PlayerAction.OnIsPlayingChanged -> changePlayingState(state = intent.state)
             is PlayerAction.OnPlaybackStateChanged -> changePlaybackState(playerState = intent.state)
-            is PlayerAction.OpenOsd -> openOsd(type = intent.type)
+            is PlayerAction.OpenOsd -> launch { openOsd(type = intent.type) }
             is PlayerAction.SelectChannel -> launch { switchToChannel(channel = intent.channel) }
             PlayerAction.SelectNext -> launch { switchToNextChannel() }
             PlayerAction.SelectPrevious -> launch { switchToPreviousChannel() }
@@ -98,77 +100,63 @@ class PlayerViewModel(
         }
     }
 
-
     init {
         logger.d { "VideoViewViewModel init groupType=$groupType" }
-        /*
-                viewModelScope.launch {
-                    loadGroupChannels()
-
-                    initPlayBack(channelName = media)
-                }
-
-                refreshGroupChannelsPrograms()*/
-    }
-
-    private suspend fun loadGroupChannels() {
-        val channelList = getGroupChannelsUseCase(
-            playlistId = playlistId,
-            selection = selection,
-            limit = Int.MAX_VALUE,
-        ).channels
-
-        setState {
-            copy(
-                channelGroup = group,
-                groupChannels = channelList.withPrograms()
-            )
-        }
     }
 
     private suspend fun loadPlayerSettings() {
-        observePlayerSettings()
-            .distinctUntilChanged()
-            .collect { settings ->
-                val videoSize = VideoSize.entries[settings.videoSize]
-                val isFullscreen = settings.isFullscreenEnabled
-
-                setState {
-                    copy(
-                        isFullscreen = isFullscreen,
-                        videoSize = videoSize,
-                    )
-                }
-            }
-    }
-
-
-    private suspend fun initPlayBack(channelName: String) {
-        val settings = observePlayerSettings().first()
-        val videoSize = VideoSize.entries[settings.videoSize]
+        val settings = getPlayerSettings()
+        val videoSize = settings.videoSize
         val isFullscreen = settings.isFullscreenEnabled
-
         setState {
             copy(
                 isFullscreen = isFullscreen,
                 videoSize = videoSize,
             )
         }
+    }
 
-        val name = state.value.currentChannel.channelName.ifBlank { channelName }
+    private fun loadInitialSelectedChannel() {
+        val selectedChannel =
+            TvChannel(
+                channelName = media,
+                channelUrl = mediaUrl,
+            ).withPrograms()
 
-        val currentItemPosition = getCurrentMediaPosition(channelName = name)
+        setState {
+            copy(
+                channelGroup = group,
+                channelIndex = INT_NO_VALUE,
+                currentChannel = selectedChannel,
+                groupChannels = listOf(selectedChannel),
+            )
+        }
+    }
 
-        setCurrentChannel(channelIndex = currentItemPosition)
+    private fun scheduleFullGroupChannelsLoad() {
+        launch {
+            delay(DELAY_500.milliseconds)
+            loadFullGroupChannelsAndRefresh()
+        }
     }
 
     private suspend fun switchToChannel(channel: TvChannelWithPrograms) {
-        val newMediaPosition = getCurrentMediaPosition(channelName = channel.channelName)
-        setCurrentChannel(channelIndex = newMediaPosition)
+        val newMediaPosition = state.value.groupChannels.indexOfFirst {
+            it.channelUrl == channel.channelUrl
+        }
+        if (newMediaPosition >= INT_VALUE_ZERO) {
+            setCurrentChannel(
+                localChannelIndex = newMediaPosition,
+                absoluteChannelIndex = newMediaPosition,
+            )
+        }
     }
 
-    private fun openOsd(type: PlayerOSD) {
+    private suspend fun openOsd(type: PlayerOSD) {
         if (type == PlayerOSD.ChannelPrograms && !state.value.isFullscreen) {
+            return
+        }
+        if (type == PlayerOSD.GroupChannels && state.value.channelIndex < INT_VALUE_ZERO) {
             return
         }
         setState { copy(osdType = type) }
@@ -218,7 +206,6 @@ class PlayerViewModel(
     }
 
     private suspend fun refreshGroupChannelsPrograms() {
-        delay(DELAY_500.milliseconds)
         val currentChannels = state.value.groupChannels
         val channelsIds = currentChannels.mapProgramIds()
 
@@ -231,45 +218,24 @@ class PlayerViewModel(
         }
     }
 
-    private fun getCurrentMediaPosition(channelName: String): Int {
-        val currentPos = state.value.channelIndex
-        val groupChannels = state.value.groupChannels
-
-        val targetPos = groupChannels.indexOfFirst { it.channelName == channelName }
-
-        return if (targetPos >= INT_VALUE_ZERO) {
-            targetPos
-        } else {
-            currentPos.coerceAtLeast(INT_VALUE_ZERO)
+    private suspend fun switchToNextChannel() {
+        val nextIndex = state.value.channelIndex + INT_VALUE_1
+        if (state.value.channelIndex >= INT_VALUE_ZERO) {
+            setCurrentChannel(
+                localChannelIndex = nextIndex,
+                absoluteChannelIndex = nextIndex,
+            )
         }
     }
 
-    private suspend fun switchToNextChannel() {
-        val currentChannelsCount = state.value.groupChannels.count()
-        val nextIndex = state.value.channelIndex + INT_VALUE_1
-        val newMediaPosition =
-            if (nextIndex > currentChannelsCount - INT_VALUE_1) {
-                INT_VALUE_ZERO
-            } else {
-                nextIndex
-            }
-
-        setCurrentChannel(channelIndex = newMediaPosition)
-    }
-
     private suspend fun switchToPreviousChannel() {
-        val currentChannelsCount = state.value.groupChannels.count()
-        val nextIndex = state.value.channelIndex - INT_VALUE_1
-
-        val newMediaPosition =
-            if (nextIndex < INT_VALUE_ZERO) {
-                currentChannelsCount - INT_VALUE_1
-            } else {
-                nextIndex
-            }
-
-        setCurrentChannel(channelIndex = newMediaPosition)
-
+        val previousIndex = state.value.channelIndex - INT_VALUE_1
+        if (state.value.channelIndex >= INT_VALUE_ZERO) {
+            setCurrentChannel(
+                localChannelIndex = previousIndex,
+                absoluteChannelIndex = previousIndex,
+            )
+        }
     }
 
     private suspend fun increaseVolume() {
@@ -289,19 +255,68 @@ class PlayerViewModel(
         delay(DELAY_50.milliseconds)
     }
 
-    private suspend fun setCurrentChannel(channelIndex: Int) {
+    private suspend fun setCurrentChannel(
+        localChannelIndex: Int,
+        absoluteChannelIndex: Int,
+    ) {
         val currentChannels = state.value.groupChannels
-        val currentChannel = currentChannels.getOrNull(channelIndex) ?: return
+        val currentChannel = currentChannels.getOrNull(localChannelIndex) ?: return
 
         setState {
             copy(
-                channelIndex = channelIndex,
+                channelIndex = absoluteChannelIndex,
                 currentChannel = currentChannel,
                 osdType = null
             )
         }
 
         loadSelectedChannelEpg()
+    }
+
+    private suspend fun loadFullGroupChannelsAndRefresh() {
+        val loadedChannels = mutableListOf<TvChannelWithPrograms>()
+        var nextOffset = INT_VALUE_ZERO
+        var hasMore: Boolean
+        do {
+            val page =
+                getGroupChannelsUseCase(
+                    playlistId = playlistId,
+                    selection = selection,
+                    offset = nextOffset,
+                    limit = GetGroupChannelsUseCase.DEFAULT_PAGE_SIZE,
+                )
+            loadedChannels += page.channels.withPrograms()
+            nextOffset = page.nextOffset
+            hasMore = page.hasMore
+        } while (hasMore)
+
+        if (loadedChannels.isEmpty()) return
+
+        val currentState = state.value
+        val currentChannelIndex =
+            loadedChannels
+                .indexOfFirst { channel -> channel.channelUrl == currentState.currentChannel.channelUrl }
+                .takeIf { index -> index >= INT_VALUE_ZERO }
+                ?: INT_VALUE_ZERO
+        val currentChannel =
+            loadedChannels[currentChannelIndex].let { channel ->
+                if (channel.channelUrl == currentState.currentChannel.channelUrl) {
+                    channel.copy(programs = currentState.currentChannel.programs)
+                } else {
+                    channel
+                }
+            }
+        loadedChannels[currentChannelIndex] = currentChannel
+
+        setState {
+            copy(
+                channelIndex = currentChannelIndex,
+                currentChannel = currentChannel,
+                groupChannels = loadedChannels,
+            )
+        }
+        loadSelectedChannelEpg()
+        refreshGroupChannelsPrograms()
     }
 
     private suspend fun toggleChannelFavorite(type: FavoriteType) {

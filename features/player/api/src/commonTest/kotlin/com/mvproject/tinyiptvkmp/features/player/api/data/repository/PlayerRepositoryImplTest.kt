@@ -1,5 +1,6 @@
 package com.mvproject.tinyiptvkmp.features.player.api.data.repository
 
+import com.mvproject.tinyiptvkmp.core.foundation.model.VideoSize
 import com.mvproject.tinyiptvkmp.features.player.api.data.storage.PlayerLocalDataSource
 import com.mvproject.tinyiptvkmp.features.player.api.data.storage.PlayerPreferencesProto
 import kotlinx.coroutines.flow.Flow
@@ -28,7 +29,47 @@ class PlayerRepositoryImplTest {
             val settings = repository.observePlayerSettings().first()
 
             assertEquals(true, settings.isFullscreenEnabled)
-            assertEquals(2, settings.videoSize)
+            assertEquals(VideoSize.WideScreen, settings.videoSize)
+        }
+
+    @Test
+    fun getsStoredPlayerSettings() =
+        runTest {
+            val repository =
+                PlayerRepositoryImpl(
+                    FakePlayerLocalDataSource(
+                        MutableStateFlow(
+                            PlayerPreferencesProto(
+                                isFullscreenEnabled = true,
+                                videoSize = VideoSize.FullScreen.ordinal,
+                            ),
+                        ),
+                    ),
+                )
+
+            val settings = repository.getPlayerSettings()
+
+            assertEquals(true, settings.isFullscreenEnabled)
+            assertEquals(VideoSize.FullScreen, settings.videoSize)
+        }
+
+    @Test
+    fun mapsInvalidStoredVideoSizeToDefault() =
+        runTest {
+            val repository =
+                PlayerRepositoryImpl(
+                    FakePlayerLocalDataSource(
+                        MutableStateFlow(
+                            PlayerPreferencesProto(
+                                videoSize = Int.MAX_VALUE,
+                            ),
+                        ),
+                    ),
+                )
+
+            val settings = repository.getPlayerSettings()
+
+            assertEquals(VideoSize.Cinematic, settings.videoSize)
         }
 
     @Test
@@ -38,11 +79,12 @@ class PlayerRepositoryImplTest {
             val repository = PlayerRepositoryImpl(FakePlayerLocalDataSource(storedPreferences))
 
             repository.updateFullscreenMode(true)
-            repository.updateVideoSize(3)
+            repository.updateVideoSize(VideoSize.FillScreen)
 
             val settings = repository.observePlayerSettings().first()
             assertEquals(true, settings.isFullscreenEnabled)
-            assertEquals(3, settings.videoSize)
+            assertEquals(VideoSize.FillScreen, settings.videoSize)
+            assertEquals(VideoSize.FillScreen.ordinal, storedPreferences.value.videoSize)
         }
 }
 

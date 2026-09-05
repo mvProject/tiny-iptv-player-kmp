@@ -3,11 +3,14 @@ package com.mvproject.tinyiptvkmp.features.groups.api
 import com.mvproject.tinyiptvkmp.features.channels.api.domain.model.FavoriteChannel
 import com.mvproject.tinyiptvkmp.features.channels.api.domain.model.FavoriteType
 import com.mvproject.tinyiptvkmp.features.channels.api.domain.model.PlaylistChannel
+import com.mvproject.tinyiptvkmp.features.channels.api.domain.model.PlaylistChannelWindow
 import com.mvproject.tinyiptvkmp.features.channels.api.domain.model.TvChannel
 import com.mvproject.tinyiptvkmp.features.channels.api.domain.repository.ChannelFavoriteRepository
 import com.mvproject.tinyiptvkmp.features.channels.api.domain.repository.PlaylistChannelRepository
 import com.mvproject.tinyiptvkmp.features.groups.api.domain.model.ChannelGroupSelection
 import com.mvproject.tinyiptvkmp.features.groups.api.domain.model.GroupType
+import com.mvproject.tinyiptvkmp.features.groups.api.domain.usecase.GetGroupChannelWindowUseCase
+import com.mvproject.tinyiptvkmp.features.groups.api.domain.usecase.GetGroupChannelWindowUseCaseImpl
 import com.mvproject.tinyiptvkmp.features.groups.api.domain.usecase.GetGroupChannelsUseCaseImpl
 import com.mvproject.tinyiptvkmp.features.groups.api.domain.usecase.GetPlaylistGroupUseCaseImpl
 import com.mvproject.tinyiptvkmp.infrastructure.logging.di.loggingModule
@@ -232,6 +235,109 @@ class GroupsUseCaseTest {
         assertEquals(listOf("News 1"), channels.channels.map { channel -> channel.channelName })
     }
 
+    @Test
+    fun groupChannelWindowLoadsPreviousCurrentAndNextForMiddleChannel() = runTest {
+        playlistRepository.channels = listOf(
+            playlistChannel(name = "News 1", url = "url-news-1", group = "NEWS"),
+            playlistChannel(name = "News 2", url = "url-news-2", group = "NEWS"),
+            playlistChannel(name = "News 3", url = "url-news-3", group = "NEWS"),
+        )
+
+        val window =
+            GetGroupChannelWindowUseCaseImpl(playlistChannelRepository = playlistRepository)(
+                playlistId = "playlist",
+                selection = ChannelGroupSelection.Specified(groupName = "NEWS"),
+                channelUrl = "url-news-2",
+            )
+
+        assertEquals(listOf("News 1", "News 2", "News 3"), window.channels.map { it.channelName })
+        assertEquals(1, window.currentIndex)
+        assertEquals(3, window.totalCount)
+    }
+
+    @Test
+    fun groupChannelWindowLoadsCurrentAndNextForFirstChannel() = runTest {
+        playlistRepository.channels = listOf(
+            playlistChannel(name = "News 1", url = "url-news-1", group = "NEWS"),
+            playlistChannel(name = "News 2", url = "url-news-2", group = "NEWS"),
+            playlistChannel(name = "News 3", url = "url-news-3", group = "NEWS"),
+        )
+
+        val window =
+            GetGroupChannelWindowUseCaseImpl(playlistChannelRepository = playlistRepository)(
+                playlistId = "playlist",
+                selection = ChannelGroupSelection.Specified(groupName = "NEWS"),
+                channelUrl = "url-news-1",
+            )
+
+        assertEquals(listOf("News 1", "News 2"), window.channels.map { it.channelName })
+        assertEquals(0, window.currentIndex)
+        assertEquals(3, window.totalCount)
+    }
+
+    @Test
+    fun groupChannelWindowLoadsPreviousAndCurrentForLastChannel() = runTest {
+        playlistRepository.channels = listOf(
+            playlistChannel(name = "News 1", url = "url-news-1", group = "NEWS"),
+            playlistChannel(name = "News 2", url = "url-news-2", group = "NEWS"),
+            playlistChannel(name = "News 3", url = "url-news-3", group = "NEWS"),
+        )
+
+        val window =
+            GetGroupChannelWindowUseCaseImpl(playlistChannelRepository = playlistRepository)(
+                playlistId = "playlist",
+                selection = ChannelGroupSelection.Specified(groupName = "NEWS"),
+                channelUrl = "url-news-3",
+            )
+
+        assertEquals(listOf("News 2", "News 3"), window.channels.map { it.channelName })
+        assertEquals(2, window.currentIndex)
+        assertEquals(3, window.totalCount)
+    }
+
+    @Test
+    fun groupChannelWindowReturnsEmptyForMissingChannelUrl() = runTest {
+        playlistRepository.channels = listOf(
+            playlistChannel(name = "News 1", url = "url-news-1", group = "NEWS"),
+        )
+
+        val window =
+            GetGroupChannelWindowUseCaseImpl(playlistChannelRepository = playlistRepository)(
+                playlistId = "playlist",
+                selection = ChannelGroupSelection.Specified(groupName = "NEWS"),
+                channelUrl = "missing",
+            )
+
+        assertEquals(emptyList(), window.channels)
+        assertEquals(GetGroupChannelWindowUseCase.NO_CURRENT_INDEX, window.currentIndex)
+        assertEquals(0, window.totalCount)
+    }
+
+    @Test
+    fun groupChannelWindowUsesFavoriteOrdering() = runTest {
+        playlistRepository.channels = listOf(
+            playlistChannel(name = "News 1", url = "url-news-1", group = "NEWS"),
+            playlistChannel(name = "News 2", url = "url-news-2", group = "NEWS"),
+            playlistChannel(name = "News 3", url = "url-news-3", group = "NEWS"),
+        )
+        playlistRepository.favorites = listOf(
+            FavoriteChannel(channelUrl = "url-news-3", favoriteType = FavoriteType.COMMON),
+            FavoriteChannel(channelUrl = "url-news-1", favoriteType = FavoriteType.COMMON),
+            FavoriteChannel(channelUrl = "url-news-2", favoriteType = FavoriteType.COMMON),
+        )
+
+        val window =
+            GetGroupChannelWindowUseCaseImpl(playlistChannelRepository = playlistRepository)(
+                playlistId = "playlist",
+                selection = ChannelGroupSelection.Favorite(type = FavoriteType.COMMON),
+                channelUrl = "url-news-1",
+            )
+
+        assertEquals(listOf("News 3", "News 1", "News 2"), window.channels.map { it.channelName })
+        assertEquals(1, window.currentIndex)
+        assertEquals(3, window.totalCount)
+    }
+
     private fun playlistChannel(
         name: String,
         url: String,
@@ -342,6 +448,58 @@ private class FakePlaylistChannelRepository : PlaylistChannelRepository {
             .withFavoriteTypes()
     }
 
+    override suspend fun loadPlaylistChannelWindowWithFavorites(
+        playlistId: String,
+        channelUrl: String,
+        before: Int,
+        after: Int,
+    ): PlaylistChannelWindow? =
+        channels
+            .withFavoriteTypes()
+            .windowAround(
+                channelUrl = channelUrl,
+                before = before,
+                after = after,
+            )
+
+    override suspend fun loadPlaylistGroupChannelWindowWithFavorites(
+        playlistId: String,
+        group: String,
+        channelUrl: String,
+        before: Int,
+        after: Int,
+    ): PlaylistChannelWindow? =
+        channels
+            .filter { channel -> channel.channelGroup == group }
+            .withFavoriteTypes()
+            .windowAround(
+                channelUrl = channelUrl,
+                before = before,
+                after = after,
+            )
+
+    override suspend fun loadFavoritePlaylistChannelWindow(
+        playlistId: String,
+        favoriteType: FavoriteType,
+        channelUrl: String,
+        before: Int,
+        after: Int,
+    ): PlaylistChannelWindow? {
+        val favoriteUrls =
+            favorites
+                .filter { favorite -> favorite.favoriteType == favoriteType }
+                .map { favorite -> favorite.channelUrl }
+
+        return favoriteUrls
+            .mapNotNull { favoriteUrl -> channels.firstOrNull { channel -> channel.channelUrl == favoriteUrl } }
+            .withFavoriteTypes()
+            .windowAround(
+                channelUrl = channelUrl,
+                before = before,
+                after = after,
+            )
+    }
+
     override suspend fun deletePlaylistChannels(listId: String) = Unit
 
     private fun List<PlaylistChannel>.filterBySearch(searchQuery: String): List<PlaylistChannel> =
@@ -364,6 +522,23 @@ private class FakePlaylistChannelRepository : PlaylistChannelRepository {
                     ?: FavoriteType.NONE,
             )
         }
+    }
+
+    private fun List<TvChannel>.windowAround(
+        channelUrl: String,
+        before: Int,
+        after: Int,
+    ): PlaylistChannelWindow? {
+        val currentIndex = indexOfFirst { channel -> channel.channelUrl == channelUrl }
+        if (currentIndex < 0) return null
+
+        val fromIndex = (currentIndex - before).coerceAtLeast(0)
+        val toIndex = (currentIndex + after + 1).coerceAtMost(size)
+        return PlaylistChannelWindow(
+            channels = subList(fromIndex, toIndex),
+            currentIndex = currentIndex,
+            totalCount = size,
+        )
     }
 }
 

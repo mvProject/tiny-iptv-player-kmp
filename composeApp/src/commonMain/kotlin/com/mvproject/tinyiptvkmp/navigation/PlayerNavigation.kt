@@ -22,6 +22,7 @@ fun EntryProviderScope<AppRoutes>.playerScreen() {
                     PlayerArgs(
                         playlistId = key.playlistId,
                         channelName = key.channelName,
+                        channelUrl = key.channelUrl,
                         group = key.group,
                         groupType = key.groupType,
                     )

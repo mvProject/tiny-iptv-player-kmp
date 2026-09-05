@@ -9,6 +9,8 @@ import com.mvproject.tinyiptvkmp.features.player.api.data.storage.PlayerLocalDat
 import com.mvproject.tinyiptvkmp.features.player.api.data.storage.PlayerPreferencesProto
 import com.mvproject.tinyiptvkmp.features.player.api.data.storage.PlayerPreferencesSerializer
 import com.mvproject.tinyiptvkmp.features.player.api.domain.repository.PlayerRepository
+import com.mvproject.tinyiptvkmp.features.player.api.domain.usecase.GetPlayerSettingsUseCase
+import com.mvproject.tinyiptvkmp.features.player.api.domain.usecase.GetPlayerSettingsUseCaseImpl
 import com.mvproject.tinyiptvkmp.features.player.api.domain.usecase.ObservePlayerSettingsUseCase
 import com.mvproject.tinyiptvkmp.features.player.api.domain.usecase.ObservePlayerSettingsUseCaseImpl
 import com.mvproject.tinyiptvkmp.features.player.api.domain.usecase.UpdateFullscreenModeUseCase
@@ -35,6 +37,7 @@ val playerApiModule =
             PlayerLocalDataSourceImpl(get(named(PLAYER_PREFERENCES)))
         }
         single<PlayerRepository> { PlayerRepositoryImpl(get()) }
+        single<GetPlayerSettingsUseCase> { GetPlayerSettingsUseCaseImpl(get()) }
         single<ObservePlayerSettingsUseCase> { ObservePlayerSettingsUseCaseImpl(get()) }
         single<UpdateFullscreenModeUseCase> { UpdateFullscreenModeUseCaseImpl(get()) }
         single<UpdateVideoSizeUseCase> { UpdateVideoSizeUseCaseImpl(get()) }

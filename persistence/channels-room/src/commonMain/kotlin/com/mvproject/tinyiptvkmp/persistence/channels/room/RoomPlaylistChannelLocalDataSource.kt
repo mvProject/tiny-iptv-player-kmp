@@ -4,6 +4,7 @@ import androidx.room.Transaction
 import com.mvproject.tinyiptvkmp.features.channels.api.data.datasource.local.PlaylistChannelLocalDataSource
 import com.mvproject.tinyiptvkmp.features.channels.api.domain.model.FavoriteType
 import com.mvproject.tinyiptvkmp.features.channels.api.domain.model.PlaylistChannel
+import com.mvproject.tinyiptvkmp.features.channels.api.domain.model.PlaylistChannelWindow
 import com.mvproject.tinyiptvkmp.features.channels.api.domain.model.TvChannel
 import com.mvproject.tinyiptvkmp.persistence.channels.room.database.PlaylistChannelDao
 import com.mvproject.tinyiptvkmp.persistence.channels.room.mapper.toChannelEntity
@@ -105,7 +106,141 @@ internal class RoomPlaylistChannelLocalDataSource(
             searchQuery = searchQuery,
         ).map { it.toTvChannel() }
 
+    override suspend fun loadPlaylistChannelWindowWithFavorites(
+        playlistId: String,
+        channelUrl: String,
+        before: Int,
+        after: Int,
+    ): PlaylistChannelWindow? {
+        val rowId =
+            playlistChannelDao.getPlaylistChannelRowId(
+                playlistId = playlistId,
+                channelUrl = channelUrl,
+            ) ?: return null
+        val currentIndex =
+            playlistChannelDao.getPlaylistChannelsBeforeRowId(
+                playlistId = playlistId,
+                rowId = rowId,
+            )
+        val totalCount = playlistChannelDao.getPlaylistChannelsCount(playlistId = playlistId)
+
+        return buildWindow(
+            currentIndex = currentIndex,
+            totalCount = totalCount,
+            before = before,
+            after = after,
+        ) { offset, limit ->
+            loadPlaylistChannelsWithFavorites(
+                playlistId = playlistId,
+                offset = offset,
+                limit = limit,
+                searchQuery = "",
+            )
+        }
+    }
+
+    override suspend fun loadPlaylistGroupChannelWindowWithFavorites(
+        playlistId: String,
+        group: String,
+        channelUrl: String,
+        before: Int,
+        after: Int,
+    ): PlaylistChannelWindow? {
+        val rowId =
+            playlistChannelDao.getPlaylistGroupChannelRowId(
+                playlistId = playlistId,
+                group = group,
+                channelUrl = channelUrl,
+            ) ?: return null
+        val currentIndex =
+            playlistChannelDao.getPlaylistGroupChannelsBeforeRowId(
+                playlistId = playlistId,
+                group = group,
+                rowId = rowId,
+            )
+        val totalCount =
+            playlistChannelDao.getPlaylistGroupChannelsCount(
+                playlistId = playlistId,
+                group = group,
+            )
+
+        return buildWindow(
+            currentIndex = currentIndex,
+            totalCount = totalCount,
+            before = before,
+            after = after,
+        ) { offset, limit ->
+            loadPlaylistGroupChannelsWithFavorites(
+                playlistId = playlistId,
+                group = group,
+                offset = offset,
+                limit = limit,
+                searchQuery = "",
+            )
+        }
+    }
+
+    override suspend fun loadFavoritePlaylistChannelWindow(
+        playlistId: String,
+        favoriteType: FavoriteType,
+        channelUrl: String,
+        before: Int,
+        after: Int,
+    ): PlaylistChannelWindow? {
+        val favoriteTypeName = favoriteType.name
+        val channelOrder =
+            playlistChannelDao.getFavoritePlaylistChannelOrder(
+                playlistId = playlistId,
+                favoriteType = favoriteTypeName,
+                channelUrl = channelUrl,
+            ) ?: return null
+        val currentIndex =
+            playlistChannelDao.getFavoritePlaylistChannelsBeforeOrder(
+                playlistId = playlistId,
+                favoriteType = favoriteTypeName,
+                channelOrder = channelOrder,
+            )
+        val totalCount =
+            playlistChannelDao.getFavoritePlaylistChannelsCount(
+                playlistId = playlistId,
+                favoriteType = favoriteTypeName,
+            )
+
+        return buildWindow(
+            currentIndex = currentIndex,
+            totalCount = totalCount,
+            before = before,
+            after = after,
+        ) { offset, limit ->
+            loadFavoritePlaylistChannels(
+                playlistId = playlistId,
+                favoriteType = favoriteType,
+                offset = offset,
+                limit = limit,
+                searchQuery = "",
+            )
+        }
+    }
+
     override suspend fun deletePlaylistChannels(id: String) {
         playlistChannelDao.deletePlaylistChannels(id = id)
+    }
+
+    private suspend fun buildWindow(
+        currentIndex: Int,
+        totalCount: Int,
+        before: Int,
+        after: Int,
+        loadChannels: suspend (offset: Int, limit: Int) -> List<TvChannel>,
+    ): PlaylistChannelWindow {
+        val offset = (currentIndex - before).coerceAtLeast(0)
+        val endExclusive = (currentIndex + after + 1).coerceAtMost(totalCount)
+        val limit = (endExclusive - offset).coerceAtLeast(0)
+
+        return PlaylistChannelWindow(
+            channels = loadChannels(offset, limit),
+            currentIndex = currentIndex,
+            totalCount = totalCount,
+        )
     }
 }
