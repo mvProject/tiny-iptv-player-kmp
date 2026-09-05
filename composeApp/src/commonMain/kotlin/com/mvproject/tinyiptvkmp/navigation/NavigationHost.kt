@@ -30,20 +30,17 @@ fun NavigationHost(
     val navigator = koinInject<Navigator>()
 
     val backStack = rememberSerializable(serializer = SnapshotStateListSerializer()) {
-        mutableStateListOf(navigator.startDestination)
+        mutableStateListOf(startDestination)
     }
 
     CollectUiEffect(navigator.navigationActions) { action ->
-        when (action) {
-            is NavigationAction.Navigate -> backStack.add(action.destination)
-
-            NavigationAction.NavigateUp -> backStack.removeLastOrNull()
-        }
+        backStack.applyNavigationAction(action)
     }
 
     NavDisplay(
         modifier = modifier.fillMaxSize().imePadding(),
         backStack = backStack,
+        onBack = { backStack.navigateUp() },
         entryDecorators = listOf(
             rememberSaveableStateHolderNavEntryDecorator(),
             rememberViewModelStoreNavEntryDecorator(),

@@ -78,6 +78,7 @@ class GroupChannelsViewModel(
                 navigator.navigateToPlayer(
                     playlistId = playlistId,
                     name = intent.name,
+                    url = intent.url,
                     group = intent.group,
                     groupType = type
                 )

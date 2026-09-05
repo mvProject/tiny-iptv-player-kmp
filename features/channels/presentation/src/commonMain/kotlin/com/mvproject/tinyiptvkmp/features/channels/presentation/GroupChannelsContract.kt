@@ -38,6 +38,7 @@ sealed interface GroupChannelsAction {
     data class ViewTypeChange(val type: ChannelsViewType) : GroupChannelsAction
     data class SelectChannel(
         val name: String,
+        val url: String,
         val group: String
     ) : GroupChannelsAction
 

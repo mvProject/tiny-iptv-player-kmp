@@ -29,7 +29,6 @@ import com.mvproject.tinyiptvkmp.features.playlist.presentation.nav.PlaylistNavi
 import com.mvproject.tinyiptvkmp.features.settings.presentation.di.settingsModule
 import com.mvproject.tinyiptvkmp.features.settings.presentation.nav.SettingsNavigator
 import com.mvproject.tinyiptvkmp.infrastructure.logging.di.loggingModule
-import com.mvproject.tinyiptvkmp.navigation.AppRoutes
 import com.mvproject.tinyiptvkmp.navigation.DefaultNavigator
 import com.mvproject.tinyiptvkmp.navigation.Navigator
 import com.mvproject.tinyiptvkmp.persistence.channels.room.di.channelsRoomModule
@@ -82,7 +81,7 @@ private val appModule =
 
 val navModule = module {
     single<Navigator> {
-        DefaultNavigator(startDestination = AppRoutes.PlaylistGroup)
+        DefaultNavigator()
     } binds arrayOf(
         Navigator::class,
         SettingsNavigator::class,

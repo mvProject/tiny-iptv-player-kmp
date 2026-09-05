@@ -16,6 +16,7 @@ sealed interface AppRoutes : NavKey {
     data class Player(
         val playlistId: String,
         val channelName: String,
+        val channelUrl: String,
         val group: String,
         val groupType: String,
     ) : AppRoutes

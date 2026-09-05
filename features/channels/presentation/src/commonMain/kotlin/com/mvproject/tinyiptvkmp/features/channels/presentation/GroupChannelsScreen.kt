@@ -119,6 +119,7 @@ private fun GroupChannelsScreen(
                         onAction(
                             GroupChannelsAction.SelectChannel(
                                 name = channel.channelName,
+                                url = channel.channelUrl,
                                 group = state.currentGroup
                             )
                         )

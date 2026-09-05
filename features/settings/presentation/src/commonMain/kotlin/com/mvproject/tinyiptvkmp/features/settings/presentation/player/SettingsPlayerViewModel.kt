@@ -8,6 +8,7 @@
 package com.mvproject.tinyiptvkmp.features.settings.presentation.player
 
 import com.mvproject.tinyiptvkmp.core.base.mvi.MviViewModel
+import com.mvproject.tinyiptvkmp.core.foundation.model.VideoSize
 import com.mvproject.tinyiptvkmp.features.player.api.domain.usecase.ObservePlayerSettingsUseCase
 import com.mvproject.tinyiptvkmp.features.player.api.domain.usecase.UpdateFullscreenModeUseCase
 import com.mvproject.tinyiptvkmp.features.player.api.domain.usecase.UpdateVideoSizeUseCase
@@ -42,7 +43,7 @@ class SettingsPlayerViewModel(
             setState {
                 copy(
                     isFullscreenEnabled = settings.isFullscreenEnabled,
-                    videoSize = settings.videoSize,
+                    videoSize = settings.videoSize.ordinal,
                 )
             }
         }
@@ -60,7 +61,9 @@ class SettingsPlayerViewModel(
     }
 
     private suspend fun setVideoSizeMode(mode: Int) {
-        updateVideoSize(mode)
+        val videoSize = VideoSize.entries.getOrNull(mode) ?: return
+
+        updateVideoSize(videoSize)
         setState {
             copy(settingsType = null)
         }

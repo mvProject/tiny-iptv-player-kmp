@@ -8,6 +8,7 @@
 package com.mvproject.tinyiptvkmp.features.settings.presentation.general
 
 import com.mvproject.tinyiptvkmp.core.base.mvi.MviViewModel
+import com.mvproject.tinyiptvkmp.core.navigation.NavigationOptions
 import com.mvproject.tinyiptvkmp.features.epg.api.domain.usecase.ObserveEpgSettingsUseCase
 import com.mvproject.tinyiptvkmp.features.epg.api.domain.usecase.UpdateEpgUpdatePeriodUseCase
 import com.mvproject.tinyiptvkmp.features.epg.api.domain.usecase.UpdateInfoUpdatePeriodUseCase
@@ -31,8 +32,14 @@ class SettingsGeneralViewModel(
     override fun onIntent(intent: SettingsGeneralAction) {
         when (intent) {
             SettingsGeneralAction.NavigateBack -> launch { navigator.navigateUp() }
-            SettingsGeneralAction.NavigateToPlayerSettings -> launch { navigator.navigateToPlayerSettings() }
-            SettingsGeneralAction.NavigateToPlaylistSettings -> launch { navigator.navigateToPlaylistSettings() }
+            SettingsGeneralAction.NavigateToPlayerSettings -> launch {
+                navigator.navigateToPlayerSettings(options = settingsNavigationOptions)
+            }
+
+            SettingsGeneralAction.NavigateToPlaylistSettings -> launch {
+                navigator.navigateToPlaylistSettings(options = settingsNavigationOptions)
+            }
+
             is SettingsGeneralAction.SetEpgUpdatePeriod -> launch { setUpdateEpgProgramsPeriod(type = intent.type) }
             is SettingsGeneralAction.SetInfoUpdatePeriod -> launch { setUpdateInfoPeriod(type = intent.type) }
             is SettingsGeneralAction.ToggleOption -> toggleOption(type = intent.type)
@@ -71,3 +78,5 @@ class SettingsGeneralViewModel(
         }
     }
 }
+
+private val settingsNavigationOptions = NavigationOptions(launchSingleTop = true)
