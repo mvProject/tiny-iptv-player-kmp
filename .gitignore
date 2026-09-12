@@ -192,6 +192,7 @@ fabric.properties
 # Local/tooling files
 .claude/
 .codex/
+.codegraph/
 tasks/
 scripts/
 graphify-out/
