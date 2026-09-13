@@ -12,12 +12,9 @@ import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.WindowInsets
-import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.systemBars
 import androidx.compose.foundation.layout.windowInsetsPadding
-import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
@@ -28,35 +25,25 @@ import androidx.compose.ui.Modifier
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.mvproject.tinyiptvkmp.core.components.adaptive.PlayerProgramsPlacement
 import com.mvproject.tinyiptvkmp.core.components.adaptive.rememberAdaptiveLayoutState
-import com.mvproject.tinyiptvkmp.core.components.channels.ChannelFavoriteSelector
 import com.mvproject.tinyiptvkmp.core.components.channels.ChannelProgramUiModel
 import com.mvproject.tinyiptvkmp.core.components.channels.ChannelPrograms
 import com.mvproject.tinyiptvkmp.core.components.indicators.LoadingIndicator
 import com.mvproject.tinyiptvkmp.core.components.indicators.VolumeIndicator
 import com.mvproject.tinyiptvkmp.core.components.overlay.OnScreenDisplay
 import com.mvproject.tinyiptvkmp.core.foundation.model.VideoSize
-import com.mvproject.tinyiptvkmp.core.theme.dimensionSize
 import com.mvproject.tinyiptvkmp.core.theme.dimensionWeight
-import com.mvproject.tinyiptvkmp.features.channels.api.domain.model.FavoriteType
 import com.mvproject.tinyiptvkmp.features.epg.api.domain.model.TvChannelWithPrograms
-import com.mvproject.tinyiptvkmp.features.player.presentation.PlayerState.PlayerOSD
 import com.mvproject.tinyiptvkmp.features.player.presentation.components.NoPlaybackView
-import com.mvproject.tinyiptvkmp.features.player.presentation.components.PlayerChannels
 import com.mvproject.tinyiptvkmp.features.player.presentation.components.PlayerContainer
+import com.mvproject.tinyiptvkmp.features.player.presentation.components.PlayerOsdContent
 import com.mvproject.tinyiptvkmp.features.player.presentation.components.PlayerToolbar
-import com.mvproject.tinyiptvkmp.features.player.presentation.components.ProgramInfo
-import com.mvproject.tinyiptvkmp.features.player.presentation.components.favoriteOptionsUiModels
-import com.mvproject.tinyiptvkmp.features.player.presentation.components.handleHorizontalGestures
-import com.mvproject.tinyiptvkmp.features.player.presentation.components.handleTapGestures
-import com.mvproject.tinyiptvkmp.features.player.presentation.components.handleVerticalGestures
+import com.mvproject.tinyiptvkmp.features.player.presentation.components.handlePlayerGestures
 import com.mvproject.tinyiptvkmp.features.player.presentation.components.toChannelProgramUiModel
 import com.mvproject.tinyiptvkmp.features.player.presentation.generated.resources.Res
 import com.mvproject.tinyiptvkmp.features.player.presentation.generated.resources.msg_no_internet_found
 import com.mvproject.tinyiptvkmp.features.player.presentation.generated.resources.msg_no_playable_media_found
 import com.mvproject.tinyiptvkmp.features.player.presentation.generated.resources.no_network
 import com.mvproject.tinyiptvkmp.features.player.presentation.generated.resources.sad_face
-import com.mvproject.tinyiptvkmp.features.player.presentation.utils.programDescription
-import com.mvproject.tinyiptvkmp.features.player.presentation.utils.programTitle
 import com.mvproject.tinyiptvkmp.platform.mediaplayer.MediaPlayerState
 import org.jetbrains.compose.resources.painterResource
 import org.jetbrains.compose.resources.stringResource
@@ -142,56 +129,19 @@ private fun PlayerScreen(
 
         OnScreenDisplay(
             isVisible = state.osdType != null,
-            onViewTap = { onAction(PlayerAction.CloseOsd) }
+            onViewTap = { onAction(PlayerAction.CloseOsd) },
         ) {
-            state.osdType?.let { osdType ->
-                when (osdType) {
-                    PlayerOSD.ChannelPrograms -> {
-                        ChannelPrograms(
-                            modifier =
-                                Modifier
-                                    .fillMaxHeight(adaptiveLayoutState.overlayHeightFraction)
-                                    .fillMaxWidth(adaptiveLayoutState.overlayWidthFraction)
-                                    .background(
-                                        color = MaterialTheme.colorScheme.primary,
-                                        shape =
-                                            RoundedCornerShape(
-                                                bottomStart = MaterialTheme.dimensionSize.size8,
-                                                bottomEnd = MaterialTheme.dimensionSize.size8,
-                                            ),
-                                    ),
-                            title = state.currentChannel.channelName,
-                            programs = currentProgramsUiModels,
-                        )
-                    }
-
-                    PlayerOSD.GroupChannels -> {
-                        PlayerChannels(
-                            channels = state.groupChannels,
-                            current = state.channelIndex,
-                            group = state.channelGroup,
-                            onChannelSelect = { chn -> onAction(PlayerAction.SelectChannel(chn)) }
-                        )
-                    }
-
-                    PlayerOSD.ProgramInfo -> {
-                        ProgramInfo(
-                            channelName = state.currentChannel.channelName,
-                            programName = state.currentChannel.programTitle,
-                            description = state.currentChannel.programDescription,
-                        )
-                    }
-
-                    PlayerOSD.ChannelFavorites -> {
-                        ChannelFavoriteSelector(
-                            options = favoriteOptionsUiModels(state.currentChannel.favoriteType),
-                            onSelectFavorite = { option ->
-                                onAction(PlayerAction.UpdateFavorite(FavoriteType.valueOf(option.id)))
-                            }
-                        )
-                    }
-                }
-            }
+            PlayerOsdContent(
+                osdType = state.osdType,
+                currentChannel = state.currentChannel,
+                currentPrograms = currentProgramsUiModels,
+                groupChannels = state.groupChannels,
+                currentChannelIndex = state.channelIndex,
+                channelGroup = state.channelGroup,
+                overlayHeightFraction = adaptiveLayoutState.overlayHeightFraction,
+                overlayWidthFraction = adaptiveLayoutState.overlayWidthFraction,
+                onAction = onAction,
+            )
         }
     }
 }
@@ -267,10 +217,7 @@ private fun PlayerContent(
     onAction: (PlayerAction) -> Unit
 ) {
     PlayerContainer(
-        modifier = modifier
-            .handleHorizontalGestures(onAction = onAction)
-            .handleVerticalGestures(onAction = onAction)
-            .handleTapGestures(onAction = onAction),
+        modifier = modifier.handlePlayerGestures(onAction = onAction),
         videoSize = state.videoSize,
         mediaPlayerState = state.mediaPlayerState,
         onAction = onAction,
@@ -303,7 +250,7 @@ private fun PlayerContent(
             currentChannel = state.currentChannel,
             isPlaying = state.isPlaying,
             isFullScreen = state.isFullscreen,
-            onAction = onAction
+            onAction = onAction,
         )
     }
 }

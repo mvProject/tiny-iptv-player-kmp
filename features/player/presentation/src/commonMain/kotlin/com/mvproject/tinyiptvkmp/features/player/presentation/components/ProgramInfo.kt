@@ -25,7 +25,6 @@ import com.mvproject.tinyiptvkmp.core.components.modifiers.roundedHeader
 import com.mvproject.tinyiptvkmp.core.designsystem.generated.resources.Res
 import com.mvproject.tinyiptvkmp.core.designsystem.generated.resources.msg_no_epg_found
 import com.mvproject.tinyiptvkmp.core.foundation.utils.CommonUtils.empty
-import com.mvproject.tinyiptvkmp.core.theme.dimensionFraction
 import com.mvproject.tinyiptvkmp.core.theme.dimensionSize
 import org.jetbrains.compose.resources.stringResource
 
@@ -34,12 +33,11 @@ fun ProgramInfo(
     channelName: String = String.empty,
     programName: String = String.empty,
     description: String = String.empty,
+    modifier: Modifier = Modifier,
 ) {
     Column(
-        modifier =
-        Modifier
+        modifier = modifier
             .wrapContentHeight()
-            .fillMaxWidth(MaterialTheme.dimensionFraction.fraction80)
             .background(
                 color = MaterialTheme.colorScheme.primary,
                 shape = MaterialTheme.shapes.small,
@@ -47,18 +45,18 @@ fun ProgramInfo(
     ) {
         ProgramTitle(
             modifier = Modifier.roundedHeader(),
-            title = programName.ifEmpty { channelName }
+            title = programName.ifEmpty { channelName },
         )
 
         if (description.isEmpty()) {
             ProgramDescriptionEmpty(
                 modifier = Modifier.height(180.dp),
-                title = stringResource(Res.string.msg_no_epg_found)
+                title = stringResource(Res.string.msg_no_epg_found),
             )
         } else {
             ProgramDescription(
                 modifier = Modifier.padding(all = MaterialTheme.dimensionSize.size16),
-                title = description
+                title = description,
             )
         }
     }
@@ -67,7 +65,7 @@ fun ProgramInfo(
 @Composable
 private fun ProgramTitle(
     modifier: Modifier = Modifier,
-    title: String = String.empty
+    title: String = String.empty,
 ) {
     Text(
         modifier = modifier.fillMaxWidth(),
@@ -81,7 +79,7 @@ private fun ProgramTitle(
 @Composable
 private fun ProgramDescription(
     modifier: Modifier = Modifier,
-    title: String = String.empty
+    title: String = String.empty,
 ) {
     Text(
         modifier = modifier.fillMaxWidth(),
@@ -94,11 +92,11 @@ private fun ProgramDescription(
 @Composable
 private fun ProgramDescriptionEmpty(
     modifier: Modifier = Modifier,
-    title: String = String.empty
+    title: String = String.empty,
 ) {
     Box(
         modifier = modifier.fillMaxWidth(),
-        contentAlignment = Alignment.Center
+        contentAlignment = Alignment.Center,
     ) {
         Text(
             modifier = Modifier
