@@ -17,6 +17,7 @@ class TinyIptvKmpApplicationComposePlugin : Plugin<Project> {
             configureKotlinMultiplatform(this)
         }
         configureComposeRuntime()
+        configureComposeReports()
         configureComposeUi()
         extensions.configure<ApplicationExtension> {
             configureAndroidApplication(this)

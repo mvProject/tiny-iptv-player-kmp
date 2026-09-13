@@ -4,6 +4,7 @@ import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
+import com.mvproject.tinyiptvkmp.core.foundation.model.VideoSize
 import com.mvproject.tinyiptvkmp.features.player.presentation.PlayerAction
 import com.mvproject.tinyiptvkmp.features.player.presentation.PlayerState
 import com.mvproject.tinyiptvkmp.platform.mediaplayer.MediaPlaybackState
@@ -14,17 +15,18 @@ import com.mvproject.tinyiptvkmp.platform.mediaplayer.MediaPlayerView
 @Composable
 fun PlayerContainer(
     modifier: Modifier,
-    uiState: PlayerState,
+    videoSize: VideoSize,
+    mediaPlayerState: MediaPlayerState,
     onAction: (PlayerAction) -> Unit,
     toolbar: @Composable () -> Unit,
 ) {
     Box(modifier = modifier.fillMaxSize()) {
         Box(
             modifier = Modifier
-                .adaptiveLayout(videoSize = uiState.videoSize)
+                .adaptiveLayout(videoSize = videoSize)
         ) {
             MediaPlayerView(
-                state = uiState.toMediaPlayerState(),
+                state = mediaPlayerState,
                 onEvent = { event -> onAction(event.toPlayerUiAction()) }
             )
         }
@@ -32,14 +34,6 @@ fun PlayerContainer(
         toolbar()
     }
 }
-
-private fun PlayerState.toMediaPlayerState() =
-    MediaPlayerState(
-        url = currentChannel.channelUrl,
-        channelKey = channelIndex,
-        volume = currentVolume,
-        isPlaying = isPlaying,
-    )
 
 private fun MediaPlayerEvent.toPlayerUiAction(): PlayerAction =
     when (this) {

@@ -34,9 +34,11 @@ import com.mvproject.tinyiptvkmp.core.components.channels.ChannelPrograms
 import com.mvproject.tinyiptvkmp.core.components.indicators.LoadingIndicator
 import com.mvproject.tinyiptvkmp.core.components.indicators.VolumeIndicator
 import com.mvproject.tinyiptvkmp.core.components.overlay.OnScreenDisplay
+import com.mvproject.tinyiptvkmp.core.foundation.model.VideoSize
 import com.mvproject.tinyiptvkmp.core.theme.dimensionSize
 import com.mvproject.tinyiptvkmp.core.theme.dimensionWeight
 import com.mvproject.tinyiptvkmp.features.channels.api.domain.model.FavoriteType
+import com.mvproject.tinyiptvkmp.features.epg.api.domain.model.TvChannelWithPrograms
 import com.mvproject.tinyiptvkmp.features.player.presentation.PlayerState.PlayerOSD
 import com.mvproject.tinyiptvkmp.features.player.presentation.components.NoPlaybackView
 import com.mvproject.tinyiptvkmp.features.player.presentation.components.PlayerChannels
@@ -55,6 +57,7 @@ import com.mvproject.tinyiptvkmp.features.player.presentation.generated.resource
 import com.mvproject.tinyiptvkmp.features.player.presentation.generated.resources.sad_face
 import com.mvproject.tinyiptvkmp.features.player.presentation.utils.programDescription
 import com.mvproject.tinyiptvkmp.features.player.presentation.utils.programTitle
+import com.mvproject.tinyiptvkmp.platform.mediaplayer.MediaPlayerState
 import org.jetbrains.compose.resources.painterResource
 import org.jetbrains.compose.resources.stringResource
 
@@ -80,13 +83,26 @@ private fun PlayerScreen(
         remember(state.currentChannel.programs) {
             state.currentChannel.programs.map { program -> program.toChannelProgramUiModel() }
         }
+    val mediaPlayerState = remember(
+        state.currentChannel.channelUrl,
+        state.channelIndex,
+        state.currentVolume,
+        state.isPlaying,
+    ) {
+        MediaPlayerState(
+            url = state.currentChannel.channelUrl,
+            channelKey = state.channelIndex,
+            volume = state.currentVolume,
+            isPlaying = state.isPlaying,
+        )
+    }
     val playerContent =
         remember {
-            movableContentOf<Modifier, PlayerState, (PlayerAction) -> Unit>(
-                content = { modifier, uiState, action ->
+            movableContentOf<Modifier, PlayerContentState, (PlayerAction) -> Unit>(
+                content = { modifier, contentState, action ->
                     PlayerContent(
                         modifier = modifier,
-                        uiState = uiState,
+                        state = contentState,
                         onAction = action,
                     )
                 },
@@ -114,7 +130,13 @@ private fun PlayerScreen(
             programsPlacement = adaptiveLayoutState.playerProgramsPlacement,
             showPrograms = !state.isFullscreen,
             modifier = Modifier.fillMaxSize(),
-            playerContent = { modifier -> playerContent(modifier, state, onAction) },
+            playerContent = { modifier ->
+                playerContent(
+                    modifier,
+                    state.toPlayerContentState(mediaPlayerState),
+                    onAction,
+                )
+            },
             programsContent = { modifier -> programsContent(modifier, currentProgramsUiModels) },
         )
 
@@ -209,10 +231,39 @@ private fun PlayerAdaptiveContentLayout(
     }
 }
 
+private data class PlayerContentState(
+    val videoSize: VideoSize,
+    val mediaPlayerState: MediaPlayerState,
+    val isOnline: Boolean,
+    val isMediaPlayable: Boolean,
+    val isVolumeUiVisible: Boolean,
+    val currentVolume: Float,
+    val isBuffering: Boolean,
+    val isControlUiVisible: Boolean,
+    val currentChannel: TvChannelWithPrograms,
+    val isPlaying: Boolean,
+    val isFullscreen: Boolean,
+)
+
+private fun PlayerState.toPlayerContentState(mediaPlayerState: MediaPlayerState) =
+    PlayerContentState(
+        videoSize = videoSize,
+        mediaPlayerState = mediaPlayerState,
+        isOnline = isOnline,
+        isMediaPlayable = isMediaPlayable,
+        isVolumeUiVisible = isVolumeUiVisible,
+        currentVolume = currentVolume,
+        isBuffering = isBuffering,
+        isControlUiVisible = isControlUiVisible,
+        currentChannel = currentChannel,
+        isPlaying = isPlaying,
+        isFullscreen = isFullscreen,
+    )
+
 @Composable
 private fun PlayerContent(
     modifier: Modifier = Modifier,
-    uiState: PlayerState,
+    state: PlayerContentState,
     onAction: (PlayerAction) -> Unit
 ) {
     PlayerContainer(
@@ -220,37 +271,38 @@ private fun PlayerContent(
             .handleHorizontalGestures(onAction = onAction)
             .handleVerticalGestures(onAction = onAction)
             .handleTapGestures(onAction = onAction),
-        uiState = uiState,
+        videoSize = state.videoSize,
+        mediaPlayerState = state.mediaPlayerState,
         onAction = onAction,
     ) {
 
         NoPlaybackView(
-            isVisible = !uiState.isOnline,
+            isVisible = !state.isOnline,
             text = stringResource(Res.string.msg_no_internet_found),
             logo = painterResource(Res.drawable.no_network),
         )
 
         NoPlaybackView(
-            isVisible = !uiState.isMediaPlayable,
+            isVisible = !state.isMediaPlayable,
             text = stringResource(Res.string.msg_no_playable_media_found),
             logo = painterResource(Res.drawable.sad_face),
         )
 
         VolumeIndicator(
             modifier = Modifier.fillMaxSize(),
-            isVisible = uiState.isVolumeUiVisible,
-            value = uiState.currentVolume,
+            isVisible = state.isVolumeUiVisible,
+            value = state.currentVolume,
         )
 
-        LoadingIndicator(isVisible = uiState.isBuffering)
+        LoadingIndicator(isVisible = state.isBuffering)
 
         PlayerToolbar(
             modifier = Modifier.fillMaxSize(),
-            isVisible = uiState.isControlUiVisible,
-            videoSize = uiState.videoSize,
-            currentChannel = uiState.currentChannel,
-            isPlaying = uiState.isPlaying,
-            isFullScreen = uiState.isFullscreen,
+            isVisible = state.isControlUiVisible,
+            videoSize = state.videoSize,
+            currentChannel = state.currentChannel,
+            isPlaying = state.isPlaying,
+            isFullScreen = state.isFullscreen,
             onAction = onAction
         )
     }

@@ -8,6 +8,8 @@ kotlin {
     sourceSets {
         commonMain.dependencies {
             api(projects.core.foundation)
+            api(projects.features.channels.api)
+            api(projects.features.groups.api)
             implementation(projects.core.datastore)
             implementation(libs.kotlinx.serialization.protobuf)
             implementation(libs.okio)

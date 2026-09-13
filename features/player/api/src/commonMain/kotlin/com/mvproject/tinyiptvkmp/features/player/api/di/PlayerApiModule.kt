@@ -3,11 +3,13 @@ package com.mvproject.tinyiptvkmp.features.player.api.di
 import com.mvproject.tinyiptvkmp.core.datastore.DataStorePathProvider
 import com.mvproject.tinyiptvkmp.core.datastore.ProtoStore
 import com.mvproject.tinyiptvkmp.core.datastore.ProtoStoreFactory
+import com.mvproject.tinyiptvkmp.features.player.api.data.coordinator.PlaybackSourceCoordinatorImpl
 import com.mvproject.tinyiptvkmp.features.player.api.data.repository.PlayerRepositoryImpl
 import com.mvproject.tinyiptvkmp.features.player.api.data.storage.PlayerLocalDataSource
 import com.mvproject.tinyiptvkmp.features.player.api.data.storage.PlayerLocalDataSourceImpl
 import com.mvproject.tinyiptvkmp.features.player.api.data.storage.PlayerPreferencesProto
 import com.mvproject.tinyiptvkmp.features.player.api.data.storage.PlayerPreferencesSerializer
+import com.mvproject.tinyiptvkmp.features.player.api.domain.coordinator.PlaybackSourceCoordinator
 import com.mvproject.tinyiptvkmp.features.player.api.domain.repository.PlayerRepository
 import com.mvproject.tinyiptvkmp.features.player.api.domain.usecase.GetPlayerSettingsUseCase
 import com.mvproject.tinyiptvkmp.features.player.api.domain.usecase.GetPlayerSettingsUseCaseImpl
@@ -41,4 +43,5 @@ val playerApiModule =
         single<ObservePlayerSettingsUseCase> { ObservePlayerSettingsUseCaseImpl(get()) }
         single<UpdateFullscreenModeUseCase> { UpdateFullscreenModeUseCaseImpl(get()) }
         single<UpdateVideoSizeUseCase> { UpdateVideoSizeUseCaseImpl(get()) }
+        single<PlaybackSourceCoordinator> { PlaybackSourceCoordinatorImpl() }
     }

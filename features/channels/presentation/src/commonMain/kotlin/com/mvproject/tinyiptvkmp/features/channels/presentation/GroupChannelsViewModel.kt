@@ -12,6 +12,7 @@ import com.mvproject.tinyiptvkmp.core.base.mvi.runCatchingSuspend
 import com.mvproject.tinyiptvkmp.core.foundation.model.ChannelsViewType
 import com.mvproject.tinyiptvkmp.core.foundation.utils.actualDate
 import com.mvproject.tinyiptvkmp.features.channels.api.domain.model.FavoriteType
+import com.mvproject.tinyiptvkmp.features.channels.api.domain.model.TvChannel
 import com.mvproject.tinyiptvkmp.features.channels.api.domain.usecase.ObserveChannelsSettingsUseCase
 import com.mvproject.tinyiptvkmp.features.channels.api.domain.usecase.ToggleFavoriteChannelUseCase
 import com.mvproject.tinyiptvkmp.features.channels.api.domain.usecase.UpdateChannelsViewTypeUseCase
@@ -27,11 +28,15 @@ import com.mvproject.tinyiptvkmp.features.epg.api.domain.utils.toggleFavorite
 import com.mvproject.tinyiptvkmp.features.epg.api.domain.utils.withPrograms
 import com.mvproject.tinyiptvkmp.features.groups.api.domain.model.ChannelGroupSelection
 import com.mvproject.tinyiptvkmp.features.groups.api.domain.usecase.GetGroupChannelsUseCase
+import com.mvproject.tinyiptvkmp.features.player.api.domain.coordinator.PlaybackSourceCoordinator
+import com.mvproject.tinyiptvkmp.features.player.api.domain.model.PlaybackSource
+import kotlinx.coroutines.coroutineScope
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.flow.distinctUntilChanged
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.map
+import kotlinx.coroutines.launch
 import org.koin.core.annotation.InjectedParam
 import org.koin.core.component.inject
 import kotlin.time.Duration.Companion.minutes
@@ -44,6 +49,7 @@ class GroupChannelsViewModel(
     private val toggleFavoriteChannelUseCase: ToggleFavoriteChannelUseCase,
     private val observeChannelsSettings: ObserveChannelsSettingsUseCase,
     private val updateChannelsViewType: UpdateChannelsViewTypeUseCase,
+    private val playbackSourceCoordinator: PlaybackSourceCoordinator,
 ) : MviViewModel<GroupChannelsState, GroupChannelsAction, GroupChannelsEffect>() {
 
     private val group = args.group
@@ -55,16 +61,20 @@ class GroupChannelsViewModel(
     private val playlistId = args.playlistId
 
     private var lastRefresh: Long = 0
+    private var skipInitialSearchLoad = false
 
     private val navigator: GroupChannelsNavigator by inject()
-
-
-    // todo refresh after return from playback
 
     override fun createStore() = createStore(
         initialState = GroupChannelsState(),
         started = SharingStarted.Eagerly,
-        invokeOnStart = { observeSearchQueries() },
+        invokeOnStart = {
+            restoreInitialPlaybackSource()
+            coroutineScope {
+                launch { observeSearchQueries() }
+                launch { observePlaybackSourceUpdates() }
+            }
+        },
     )
 
     override fun onIntent(intent: GroupChannelsAction) {
@@ -73,13 +83,17 @@ class GroupChannelsViewModel(
             GroupChannelsAction.LoadMore -> requestNextPage()
             GroupChannelsAction.NavigateBack -> launch { navigator.navigateUp() }
             is GroupChannelsAction.OpenOsd -> launch { openOsd(type = intent.type) }
+            GroupChannelsAction.ScrollRequestConsumed -> setState {
+                copy(scrollToChannelId = null)
+            }
             is GroupChannelsAction.SearchTextChange -> searchTextChange(text = intent.text)
             is GroupChannelsAction.SelectChannel -> launch {
+                publishPlaybackSource(channel = intent.channel)
                 navigator.navigateToPlayer(
                     playlistId = playlistId,
-                    name = intent.name,
-                    url = intent.url,
-                    group = intent.group,
+                    name = intent.channel.channelName,
+                    url = intent.channel.channelUrl,
+                    group = group,
                     groupType = type
                 )
             }
@@ -96,12 +110,34 @@ class GroupChannelsViewModel(
     }
 
     private suspend fun observeSearchQueries() {
+        var isFirstEmission = true
         state
             .map { state -> state.searchString }
             .distinctUntilChanged()
             .collectLatest { searchQuery ->
+                if (isFirstEmission && skipInitialSearchLoad && searchQuery.isBlank()) {
+                    isFirstEmission = false
+                    return@collectLatest
+                }
+                isFirstEmission = false
                 loadFirstPage(searchQuery = searchQuery)
             }
+    }
+
+    private suspend fun observePlaybackSourceUpdates() {
+        playbackSourceCoordinator.updates.collect { source ->
+            if (source.matchesCurrentRoute()) {
+                restorePlaybackSource(source = source)
+            }
+        }
+    }
+
+    private suspend fun restoreInitialPlaybackSource() {
+        val source = playbackSourceCoordinator.source.value
+        if (source != null && source.matchesCurrentRoute()) {
+            restorePlaybackSource(source = source)
+            skipInitialSearchLoad = true
+        }
     }
 
     private suspend fun loadFirstPage(searchQuery: String) {
@@ -125,19 +161,28 @@ class GroupChannelsViewModel(
                 searchQuery = searchQuery,
             )
         }.onSuccess { channelsPage ->
+            val channels = channelsPage.channels.withPrograms()
             setState {
                 if (this.searchString == searchQuery) {
                     copy(
                         isLoading = false,
                         viewType = viewType,
                         currentGroup = group,
-                        channels = channelsPage.channels.withPrograms(),
+                        channels = channels,
                         nextChannelsOffset = channelsPage.nextOffset,
                         hasMoreChannels = channelsPage.hasMore,
                     )
                 } else {
                     this
                 }
+            }
+            if (searchQuery.isBlank()) {
+                publishLoadedChannels(
+                    channels = channels,
+                    nextOffset = channelsPage.nextOffset,
+                    hasMore = channelsPage.hasMore,
+                    replace = true,
+                )
             }
         }.onFailure { throwable ->
             logger.e(throwable) { "Failed to load group channels" }
@@ -184,17 +229,26 @@ class GroupChannelsViewModel(
                 searchQuery = searchQuery,
             )
         }.onSuccess { channelsPage ->
+            val channels = channelsPage.channels.withPrograms()
             setState {
                 if (this.searchString == searchQuery && this.nextChannelsOffset == offset) {
                     copy(
                         isLoadingMore = false,
-                        channels = channels + channelsPage.channels.withPrograms(),
+                        channels = this.channels + channels,
                         nextChannelsOffset = channelsPage.nextOffset,
                         hasMoreChannels = channelsPage.hasMore,
                     )
                 } else {
                     this
                 }
+            }
+            if (searchQuery.isBlank()) {
+                publishLoadedChannels(
+                    channels = channels,
+                    nextOffset = channelsPage.nextOffset,
+                    hasMore = channelsPage.hasMore,
+                    replace = false,
+                )
             }
         }.onFailure { throwable ->
             logger.e(throwable) { "Failed to load more group channels" }
@@ -283,4 +337,86 @@ class GroupChannelsViewModel(
             type = type,
         )
     }
+
+    private fun publishPlaybackSource(channel: TvChannelWithPrograms) {
+        val currentState = state.value
+        val selectedIndex = currentState.channels.indexOfFirst {
+            it.channelUrl == channel.channelUrl
+        }
+        playbackSourceCoordinator.setSource(
+            PlaybackSource(
+                playlistId = playlistId,
+                group = group,
+                groupType = type,
+                selection = selection,
+                selectedChannel = channel.channel,
+                selectedIndex = selectedIndex,
+                loadedChannels = currentState.channels.map { it.channel },
+                nextChannelsOffset = currentState.nextChannelsOffset,
+                hasMoreChannels = currentState.hasMoreChannels,
+            )
+        )
+    }
+
+    private fun publishLoadedChannels(
+        channels: List<TvChannelWithPrograms>,
+        nextOffset: Int,
+        hasMore: Boolean,
+        replace: Boolean,
+    ) {
+        val source = playbackSourceCoordinator.source.value
+        if (source == null || !source.matchesCurrentRoute()) return
+
+        if (replace) {
+            val selectedIndex = channels.indexOfFirst {
+                it.channelUrl == source.selectedChannel.channelUrl
+            }
+            if (selectedIndex < 0) return
+            playbackSourceCoordinator.replaceLoadedChannels(
+                channels = channels.map { it.channel },
+                selectedIndex = selectedIndex,
+                nextOffset = nextOffset,
+                hasMore = hasMore,
+            )
+        } else {
+            playbackSourceCoordinator.appendLoadedChannels(
+                channels = channels.map { it.channel },
+                nextOffset = nextOffset,
+                hasMore = hasMore,
+            )
+        }
+    }
+
+    private fun restorePlaybackSource(source: PlaybackSource) {
+        val channels = source.loadedChannels.withPrograms()
+        val targetChannelId = source.selectedChannel.channelUiId
+        setState {
+            if (
+                currentGroup == source.group &&
+                channels.map { channel -> channel.channelUrl } ==
+                this.channels.map { channel -> channel.channelUrl } &&
+                nextChannelsOffset == source.nextChannelsOffset &&
+                hasMoreChannels == source.hasMoreChannels &&
+                scrollToChannelId == targetChannelId
+            ) {
+                return@setState this
+            }
+
+            copy(
+                currentGroup = source.group,
+                channels = channels,
+                nextChannelsOffset = source.nextChannelsOffset,
+                hasMoreChannels = source.hasMoreChannels,
+                scrollToChannelId = targetChannelId,
+            )
+        }
+    }
+
+    private fun PlaybackSource.matchesCurrentRoute(): Boolean =
+        playlistId == this@GroupChannelsViewModel.playlistId &&
+                group == this@GroupChannelsViewModel.group &&
+                groupType == this@GroupChannelsViewModel.type
+
+    private val TvChannel.channelUiId: String
+        get() = "$channelName$channelUrl"
 }

@@ -109,6 +109,7 @@ private fun GroupChannelsScreen(
                 modifier = Modifier.fillMaxSize(),
                 viewType = state.viewType,
                 items = channelItems,
+                scrollToChannelId = state.scrollToChannelId,
                 gridMinCellWidth = adaptiveLayoutState.channelGridMinCellWidth,
                 contentPadding = PaddingValues(
                     horizontal = adaptiveLayoutState.contentHorizontalPadding,
@@ -117,11 +118,7 @@ private fun GroupChannelsScreen(
                 onChannelSelect = { selected ->
                     channelById[selected.id]?.let { channel ->
                         onAction(
-                            GroupChannelsAction.SelectChannel(
-                                name = channel.channelName,
-                                url = channel.channelUrl,
-                                group = state.currentGroup
-                            )
+                            GroupChannelsAction.SelectChannel(channel = channel)
                         )
                     }
                 },
@@ -145,6 +142,9 @@ private fun GroupChannelsScreen(
                 },
                 onEndReached = {
                     onAction(GroupChannelsAction.LoadMore)
+                },
+                onScrollRequestConsumed = {
+                    onAction(GroupChannelsAction.ScrollRequestConsumed)
                 },
             )
 

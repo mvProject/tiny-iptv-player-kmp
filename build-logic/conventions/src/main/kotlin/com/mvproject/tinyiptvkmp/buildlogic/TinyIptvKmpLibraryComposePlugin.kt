@@ -15,5 +15,6 @@ class TinyIptvKmpLibraryComposePlugin : Plugin<Project> {
             configureAndroidCompose(this)
         }
         configureComposeRuntime()
+        configureComposeReports()
     }
 }

@@ -10,6 +10,7 @@ import androidx.compose.foundation.lazy.grid.rememberLazyGridState
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.derivedStateOf
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberUpdatedState
@@ -37,6 +38,8 @@ internal fun GroupChannelsContent(
     onFavoriteClick: (ChannelItemUiModel) -> Unit = {},
     onShowProgramsClick: (ChannelItemUiModel) -> Unit = {},
     onEndReached: () -> Unit = {},
+    onScrollRequestConsumed: () -> Unit = {},
+    scrollToChannelId: String? = null,
     gridMinCellWidth: Dp = 180.dp,
     contentPadding: PaddingValues? = null,
 ) {
@@ -46,6 +49,13 @@ internal fun GroupChannelsContent(
         when (viewType) {
             ChannelsViewType.LIST -> GridCells.Fixed(INT_VALUE_1)
             else -> GridCells.Adaptive(gridMinCellWidth)
+        }
+    }
+    val scrollTargetIndex by remember(scrollToChannelId, items) {
+        derivedStateOf {
+            scrollToChannelId?.let { targetId ->
+                items.indexOfFirst { item -> item.id == targetId }
+            }
         }
     }
 
@@ -67,6 +77,17 @@ internal fun GroupChannelsContent(
             .distinctUntilChanged()
             .filterNotNull()
             .collect { latestOnEndReached() }
+    }
+
+    LaunchedEffect(scrollTargetIndex) {
+        val targetIndex = scrollTargetIndex ?: return@LaunchedEffect
+        if (targetIndex < 0) return@LaunchedEffect
+
+        val visibleIndexes = gridState.layoutInfo.visibleItemsInfo.map { item -> item.index }
+        if (visibleIndexes.firstOrNull() != targetIndex) {
+            gridState.scrollToItem(targetIndex)
+        }
+        onScrollRequestConsumed()
     }
 
     LazyVerticalGrid(

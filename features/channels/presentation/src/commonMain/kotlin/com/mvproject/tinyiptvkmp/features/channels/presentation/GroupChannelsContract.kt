@@ -19,6 +19,7 @@ data class GroupChannelsState(
     val channels: List<TvChannelWithPrograms> = emptyList(),
     val selectedName: String = String.empty,
     val selectedPrograms: List<EpgProgram> = emptyList(),
+    val scrollToChannelId: String? = null,
     val osdType: GroupChannelsOSD? = null
 ) {
     sealed interface GroupChannelsOSD {
@@ -36,11 +37,9 @@ sealed interface GroupChannelsAction {
     data class SearchTextChange(val text: String) : GroupChannelsAction
     data object LoadMore : GroupChannelsAction
     data class ViewTypeChange(val type: ChannelsViewType) : GroupChannelsAction
-    data class SelectChannel(
-        val name: String,
-        val url: String,
-        val group: String
-    ) : GroupChannelsAction
+    data class SelectChannel(val channel: TvChannelWithPrograms) : GroupChannelsAction
+
+    data object ScrollRequestConsumed : GroupChannelsAction
 
     data object NavigateBack : GroupChannelsAction
     data class OpenOsd(val type: GroupChannelsState.GroupChannelsOSD) : GroupChannelsAction

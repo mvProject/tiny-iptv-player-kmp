@@ -36,8 +36,17 @@ fun PlayerChannels(
     onChannelSelect: (TvChannelWithPrograms) -> Unit = {},
 ) {
     val listState = rememberLazyListState()
-    LaunchedEffect(key1 = current) {
-        listState.animateScrollToItem(current)
+    LaunchedEffect(current, channels.size) {
+        if (current !in channels.indices) return@LaunchedEffect
+
+        val visibleRange = listState.layoutInfo.visibleItemsInfo
+            .map { item -> item.index }
+            .let { indexes -> indexes.minOrNull() to indexes.maxOrNull() }
+        if (current in (visibleRange.first ?: current)..(visibleRange.second ?: current)) {
+            return@LaunchedEffect
+        }
+
+        listState.scrollToItem(current)
     }
 
     Column(

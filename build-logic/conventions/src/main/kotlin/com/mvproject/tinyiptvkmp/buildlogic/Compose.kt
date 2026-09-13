@@ -4,6 +4,7 @@ import com.android.build.api.dsl.CommonExtension
 import org.gradle.api.Project
 import org.gradle.kotlin.dsl.configure
 import org.gradle.kotlin.dsl.invoke
+import org.jetbrains.kotlin.compose.compiler.gradle.ComposeCompilerGradlePluginExtension
 import org.jetbrains.kotlin.gradle.dsl.KotlinMultiplatformExtension
 
 internal fun configureAndroidCompose(
@@ -20,6 +21,19 @@ internal fun Project.configureComposeRuntime() {
             commonMain.dependencies {
                 implementation(library("compose-runtime"))
             }
+        }
+    }
+}
+
+internal fun Project.configureComposeReports() {
+    if (providers.gradleProperty("composeReports").orNull != "true") {
+        return
+    }
+
+    pluginManager.withPlugin("org.jetbrains.kotlin.plugin.compose") {
+        extensions.configure<ComposeCompilerGradlePluginExtension> {
+            reportsDestination.set(layout.buildDirectory.dir("reports/compose-compiler"))
+            metricsDestination.set(layout.buildDirectory.dir("reports/compose-compiler"))
         }
     }
 }
