@@ -8,5 +8,5 @@
 <resources>
 
     <string name="msg_no_internet_found">Brak połączenia z internetem</string>
-    <string name="msg_no_playable_media_found">Nie można odtworzyć tego multimediów</string>
+    <string name="msg_no_playable_media_found">Nie można odtworzyć tego pliku</string>
 </resources>

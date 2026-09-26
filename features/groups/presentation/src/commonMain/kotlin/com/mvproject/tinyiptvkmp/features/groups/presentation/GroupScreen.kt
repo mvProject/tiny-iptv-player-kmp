@@ -30,6 +30,7 @@ import com.mvproject.tinyiptvkmp.core.components.NoItemsView
 import com.mvproject.tinyiptvkmp.core.components.adaptive.adaptiveContentWidth
 import com.mvproject.tinyiptvkmp.core.components.adaptive.rememberAdaptiveLayoutState
 import com.mvproject.tinyiptvkmp.core.components.indicators.LoadingIndicator
+import com.mvproject.tinyiptvkmp.core.components.selectors.OptionSelector
 import com.mvproject.tinyiptvkmp.core.components.toolbars.AppBarWithSettings
 import com.mvproject.tinyiptvkmp.core.designsystem.generated.resources.app_name
 import com.mvproject.tinyiptvkmp.core.designsystem.generated.resources.msg_no_items_found
@@ -37,9 +38,9 @@ import com.mvproject.tinyiptvkmp.core.theme.colorSchemeExtended
 import com.mvproject.tinyiptvkmp.core.theme.dimensionSize
 import com.mvproject.tinyiptvkmp.features.groups.api.domain.model.ChannelsGroup
 import com.mvproject.tinyiptvkmp.features.groups.presentation.components.PlaylistGroupItem
-import com.mvproject.tinyiptvkmp.features.groups.presentation.components.PlaylistSelector
 import com.mvproject.tinyiptvkmp.features.groups.presentation.generated.resources.Res
 import com.mvproject.tinyiptvkmp.features.groups.presentation.generated.resources.btn_add_first_playlist
+import com.mvproject.tinyiptvkmp.features.groups.presentation.generated.resources.hint_current_playlist
 import kotlinx.collections.immutable.ImmutableList
 import org.jetbrains.compose.resources.stringResource
 import com.mvproject.tinyiptvkmp.core.designsystem.generated.resources.Res as DesignSystemRes
@@ -97,14 +98,17 @@ private fun GroupScreen(
                     progress = state.progress,
                 )
 
-                PlaylistSelector(
-                    isVisible = state.isPlaylistSelectorVisible,
-                    selectedPlaylistName = state.selectedPlaylist.playlistName,
-                    playlists = state.playlists,
-                    onPlaylistSelected = { playlistId ->
-                        onAction(GroupAction.SelectPlaylist(playlistId))
-                    },
-                )
+                if (state.isPlaylistSelectorVisible) {
+                    OptionSelector(
+                        label = stringResource(Res.string.hint_current_playlist),
+                        options = state.playlists,
+                        optionLabel = { playlist -> playlist.playlistName },
+                        selected = state.selectedPlaylist,
+                        onSelected = { playlist ->
+                            onAction(GroupAction.SelectPlaylist(playlist.id))
+                        },
+                    )
+                }
 
                 GroupContent(
                     groupState = state.groupState,
@@ -174,7 +178,6 @@ private fun GroupsList(
                 .fillMaxSize()
                 .padding(vertical = MaterialTheme.dimensionSize.size8),
         horizontalAlignment = Alignment.CenterHorizontally,
-        verticalArrangement = Arrangement.Center,
     ) {
         LazyColumn(
             modifier = Modifier.fillMaxHeight().clipToBounds(),
@@ -193,18 +196,3 @@ private fun GroupsList(
         }
     }
 }
-
-
-// todo replace preview
-/*
-@Preview(showBackground = true, showSystemUi = true)
-@Composable
-fun PreviewDarkPlaylistDataView() {
-    VideoAppTheme(darkTheme = true) {
-        GroupView(
-            dataState = GroupState(
-                groups = testChannelsGroups
-            )
-        )
-    }
-}*/

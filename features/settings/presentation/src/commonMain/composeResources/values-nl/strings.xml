@@ -2,12 +2,14 @@
 <resources>
 
     <string name="scr_settings_title">Instellingen</string>
-    <string name="scr_playlist_settings_title">Afspeellijsten Instellingen</string>
+    <string name="scr_playlist_settings_title">Afspeellijstinstellingen</string>
     <string name="scr_player_settings_title">Spelerinstellingen</string>
 
+    <string name="btn_delete_playlist">Afspeellijst verwijderen</string>
+
     <string name="option_update_title">Update</string>
-    <string name="option_update_epg_info">Epg-info</string>
-    <string name="option_update_epg_data">Epg-gegevens</string>
+    <string name="option_update_epg_info">EPG-info</string>
+    <string name="option_update_epg_data">EPG-gegevens</string>
     <string name="option_default_resize_mode">Standaard formaatwijzigingsmodus</string>
     <string name="option_default_fullscreen_mode">Gebruik standaard volledig scherm</string>
 </resources>

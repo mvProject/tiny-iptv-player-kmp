@@ -53,3 +53,70 @@ val hueBlack = Color(0xFF020D19)
 val obsidian = Color(0xFF0B1215)
 val hueBlue = Color(0xFF011222)
 val blackCarbor = Color(0xFF0C0A00)
+
+/**
+ * Tones backing the M3 [androidx.compose.material3.ColorScheme] roles that the app does not
+ * already source from the palette above.
+ *
+ * Grouped in an object rather than declared as loose top-level vals because most of these names
+ * collide with the `ColorScheme` constructor parameter they feed, and `role = role` reads as
+ * self-assignment even though it resolves to this property.
+ */
+internal object AppTones {
+    // Surface tonal ramp, anchored on the warm-black baseline. Ordered darkest -> lightest so the
+    // scale reads the way M3 does.
+    val surfaceContainerLowest = Color(0xFF090702)
+    val surfaceContainerLow = Color(0xFF131109)
+    val surfaceContainer = Color(0xFF1A1812)
+    val surfaceContainerHigh = Color(0xFF221F18)
+    val surfaceContainerHighest = Color(0xFF2B271E)
+    val surfaceBright = Color(0xFF2B271E)
+    val surfaceDim = Color(0xFF0C0A00)
+    val surfaceVariant = Color(0xFF302C22)
+    val onSurfaceVariant = Color(0xFFC9C3B6)
+
+    // Outline ramp, replacing the ad-hoc "divider = onSurface" styling.
+    val outline = Color(0xFF8A857A)
+    val outlineVariant = Color(0xFF3A362C)
+
+    // Primary family. `primary`/`onPrimary` stay on the black-cream pair the app already ships;
+    // the container tones carry the gold accent instead.
+    val primaryContainer = Color(0xFF2A2415)
+    val onPrimaryContainer = Color(0xFFFFDF9E)
+    val inversePrimary = Color(0xFFFFBF00)
+
+    // Secondary/tertiary families, carrying the app's existing gold/amber accents.
+    val secondary = Color(0xFFC7B77E)
+    val onSecondary = Color(0xFF2A2415)
+    val secondaryContainer = Color(0xFF3A3319)
+    val onSecondaryContainer = Color(0xFFE4D093)
+    val tertiary = Color(0xFFFFBF00)
+    val onTertiary = Color(0xFF3A2E00)
+    val tertiaryContainer = Color(0xFF4A3C00)
+    val onTertiaryContainer = Color(0xFFFFDF9E)
+
+    // Error family, giving destructive actions a real role instead of a hardcoded color.
+    val error = Color(0xFFFFB4AB)
+    val onError = Color(0xFF690005)
+    val errorContainer = Color(0xFF93000A)
+    val onErrorContainer = Color(0xFFFFDAD6)
+
+    // Inverse roles, used by snackbars and tooltips.
+    val inverseSurface = Color(0xFF31302C)
+    val inverseOnSurface = Color(0xFFF4EFE4)
+
+    // Fixed roles, kept in step with the families above so no default (purple) baseline tone can
+    // leak in from a component that uses them.
+    val primaryFixed = Color(0xFF221F18)
+    val primaryFixedDim = Color(0xFF0C0A00)
+    val onPrimaryFixed = Color(0xFFE5DFD3)
+    val onPrimaryFixedVariant = Color(0xFFC9C3B6)
+    val secondaryFixed = Color(0xFF3A3319)
+    val secondaryFixedDim = Color(0xFF1A1812)
+    val onSecondaryFixed = Color(0xFFE4D093)
+    val onSecondaryFixedVariant = Color(0xFFD4C58C)
+    val tertiaryFixed = Color(0xFF4A3C00)
+    val tertiaryFixedDim = Color(0xFF1A1812)
+    val onTertiaryFixed = Color(0xFFFFDF9E)
+    val onTertiaryFixedVariant = Color(0xFFF0D17A)
+}

@@ -19,6 +19,7 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.ArrowRight
 import androidx.compose.material3.HorizontalDivider
+import androidx.compose.material3.Icon
 import androidx.compose.material3.ListItem
 import androidx.compose.material3.ListItemDefaults
 import androidx.compose.material3.MaterialTheme
@@ -29,16 +30,17 @@ import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.semantics.Role
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.mvproject.tinyiptvkmp.core.components.adaptive.adaptiveContentWidth
 import com.mvproject.tinyiptvkmp.core.components.adaptive.rememberAdaptiveLayoutState
-import com.mvproject.tinyiptvkmp.core.components.buttons.MenuButton
+import com.mvproject.tinyiptvkmp.core.components.selectors.OptionSelector
+import com.mvproject.tinyiptvkmp.core.components.selectors.optionSetOf
 import com.mvproject.tinyiptvkmp.core.components.toolbars.AppBarWithBackNav
 import com.mvproject.tinyiptvkmp.core.foundation.common.WEIGHT_1
 import com.mvproject.tinyiptvkmp.core.foundation.model.UpdatePeriod
 import com.mvproject.tinyiptvkmp.core.mapper.mapToString
 import com.mvproject.tinyiptvkmp.core.theme.dimensionSize
-import com.mvproject.tinyiptvkmp.features.settings.presentation.components.SettingsSelector
 import com.mvproject.tinyiptvkmp.features.settings.presentation.general.SettingsGeneralState.SettingsGeneral
 import com.mvproject.tinyiptvkmp.features.settings.presentation.generated.resources.Res
 import com.mvproject.tinyiptvkmp.features.settings.presentation.generated.resources.option_update_epg_data
@@ -67,6 +69,10 @@ private fun SettingsGeneralScreen(
     onAction: (SettingsGeneralAction) -> Unit,
 ) {
     val adaptiveLayoutState = rememberAdaptiveLayoutState()
+    val periods = optionSetOf(
+        values = UpdatePeriod.entries,
+        label = { period -> stringResource(period.mapToString()) },
+    )
 
     Scaffold(
         modifier = Modifier.fillMaxSize(),
@@ -95,139 +101,97 @@ private fun SettingsGeneralScreen(
                         ),
                 verticalArrangement = Arrangement.spacedBy(MaterialTheme.dimensionSize.size12),
             ) {
-                Column {
-                    ListItem(
-                        modifier =
-                            Modifier
-                                .clip(MaterialTheme.shapes.extraSmall)
-                                .clickable(onClick = { onAction(SettingsGeneralAction.NavigateToPlaylistSettings) }),
-                        colors =
-                            ListItemDefaults.colors(
-                                containerColor = MaterialTheme.colorScheme.background,
-                            ),
-                        headlineContent = {
-                            Text(
-                                text = stringResource(Res.string.scr_playlist_settings_title),
-                                color = MaterialTheme.colorScheme.onPrimary,
-                                style = MaterialTheme.typography.titleMedium,
-                            )
-                        },
-                        trailingContent = {
-                            MenuButton(
-                                imageVector = Icons.AutoMirrored.Filled.ArrowRight,
-                                onClick = {
-                                    onAction(SettingsGeneralAction.NavigateToPlaylistSettings)
-                                }
-                            )
-                        },
-                    )
-                    HorizontalDivider(
-                        modifier =
-                            Modifier
-                                .padding(horizontal = MaterialTheme.dimensionSize.size8),
-                        color = MaterialTheme.colorScheme.onPrimary,
-                    )
-                }
+                SettingsNavigationRow(
+                    title = stringResource(Res.string.scr_playlist_settings_title),
+                    onClick = { onAction(SettingsGeneralAction.NavigateToPlaylistSettings) },
+                )
 
-                Column {
-                    ListItem(
-                        modifier =
-                            Modifier
-                                .clip(MaterialTheme.shapes.extraSmall)
-                                .clickable(onClick = { onAction(SettingsGeneralAction.NavigateToPlayerSettings) }),
-                        colors =
-                            ListItemDefaults.colors(
-                                containerColor = MaterialTheme.colorScheme.background,
-                            ),
-                        headlineContent = {
-                            Text(
-                                text = stringResource(Res.string.scr_player_settings_title),
-                                color = MaterialTheme.colorScheme.onPrimary,
-                                style = MaterialTheme.typography.titleMedium,
-                            )
-                        },
-                        trailingContent = {
-                            MenuButton(
-                                imageVector = Icons.AutoMirrored.Filled.ArrowRight,
-                                onClick = {
-                                    onAction(SettingsGeneralAction.NavigateToPlayerSettings)
-                                }
-                            )
-                        },
-                    )
-
-                    HorizontalDivider(
-                        modifier = Modifier
-                            .padding(horizontal = MaterialTheme.dimensionSize.size8),
-                        color = MaterialTheme.colorScheme.onPrimary,
-                    )
-                }
+                SettingsNavigationRow(
+                    title = stringResource(Res.string.scr_player_settings_title),
+                    onClick = { onAction(SettingsGeneralAction.NavigateToPlayerSettings) },
+                )
 
                 Row(
-                    modifier =
-                        Modifier
-                            .fillMaxWidth()
-                            .padding(horizontal = MaterialTheme.dimensionSize.size8),
-                    horizontalArrangement =
-                        Arrangement.spacedBy(
-                            space = MaterialTheme.dimensionSize.size8,
-                        ),
+                    modifier = Modifier.fillMaxWidth(),
+                    horizontalArrangement = Arrangement.spacedBy(space = MaterialTheme.dimensionSize.size8),
                     verticalAlignment = Alignment.CenterVertically,
                 ) {
                     HorizontalDivider(
                         modifier = Modifier.weight(WEIGHT_1),
-                        color = MaterialTheme.colorScheme.onPrimary,
+                        color = MaterialTheme.colorScheme.outlineVariant,
                     )
 
                     Text(
                         text = stringResource(Res.string.option_update_title),
-                        style = MaterialTheme.typography.bodyMedium,
-                        color = MaterialTheme.colorScheme.onSurface,
+                        style = MaterialTheme.typography.labelLarge,
+                        color = MaterialTheme.colorScheme.onSurfaceVariant,
                     )
 
                     HorizontalDivider(
                         modifier = Modifier.weight(WEIGHT_1),
-                        color = MaterialTheme.colorScheme.onPrimary,
+                        color = MaterialTheme.colorScheme.outlineVariant,
                     )
                 }
 
-                SettingsSelector(
-                    title = stringResource(Res.string.option_update_epg_info),
-                    selectedIndex = state.infoUpdatePeriod,
-                    isExpanded = state.settingsType == SettingsGeneral.InfoUpdate,
-                    options = UpdatePeriod.entries.map { stringResource(it.mapToString()) },
-                    onClick = {
+                OptionSelector(
+                    label = stringResource(Res.string.option_update_epg_info),
+                    options = periods.values,
+                    optionLabel = periods.label,
+                    selected = UpdatePeriod.entries.getOrNull(state.infoUpdatePeriod),
+                    expanded = state.settingsType == SettingsGeneral.InfoUpdate,
+                    onExpandedChange = {
                         onAction(SettingsGeneralAction.ToggleOption(SettingsGeneral.InfoUpdate))
                     },
-                    onSelect = {
-                        onAction(SettingsGeneralAction.SetInfoUpdatePeriod(type = it))
+                    onSelected = { period ->
+                        onAction(SettingsGeneralAction.SetInfoUpdatePeriod(type = period.ordinal))
                     }
                 )
 
-                SettingsSelector(
-                    title = stringResource(Res.string.option_update_epg_data),
-                    selectedIndex = state.epgUpdatePeriod,
-                    isExpanded = state.settingsType == SettingsGeneral.ProgramsUpdate,
-                    options = UpdatePeriod.entries.map { stringResource(it.mapToString()) },
-                    onClick = {
+                OptionSelector(
+                    label = stringResource(Res.string.option_update_epg_data),
+                    options = periods.values,
+                    optionLabel = periods.label,
+                    selected = UpdatePeriod.entries.getOrNull(state.epgUpdatePeriod),
+                    expanded = state.settingsType == SettingsGeneral.ProgramsUpdate,
+                    onExpandedChange = {
                         onAction(SettingsGeneralAction.ToggleOption(SettingsGeneral.ProgramsUpdate))
                     },
-                    onSelect = {
-                        onAction(SettingsGeneralAction.SetEpgUpdatePeriod(type = it))
+                    onSelected = { period ->
+                        onAction(SettingsGeneralAction.SetEpgUpdatePeriod(type = period.ordinal))
                     }
                 )
             }
         }
     }
 }
-// todo replace preview
-/*
 
-@Preview
 @Composable
-fun PreviewDarkSettingsView() {
-    VideoAppTheme(darkTheme = true) {
-        SettingsGeneralScreen(state = UiState(), onAction = {})
-    }
+private fun SettingsNavigationRow(
+    title: String,
+    onClick: () -> Unit,
+    modifier: Modifier = Modifier,
+) {
+    ListItem(
+        modifier = modifier
+            .fillMaxWidth()
+            .clip(MaterialTheme.shapes.small)
+            .clickable(role = Role.Button, onClick = onClick),
+        colors = ListItemDefaults.colors(
+            containerColor = MaterialTheme.colorScheme.surface,
+            headlineColor = MaterialTheme.colorScheme.onSurface,
+            trailingIconColor = MaterialTheme.colorScheme.onSurfaceVariant,
+        ),
+        headlineContent = {
+            Text(
+                text = title,
+                style = MaterialTheme.typography.titleMedium,
+            )
+        },
+        trailingContent = {
+            Icon(
+                imageVector = Icons.AutoMirrored.Filled.ArrowRight,
+                contentDescription = null,
+            )
+        },
+    )
 }
-*/

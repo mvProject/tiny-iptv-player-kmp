@@ -7,24 +7,23 @@
 
 package com.mvproject.tinyiptvkmp.features.settings.presentation.components
 
-import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.clickable
-import androidx.compose.foundation.layout.padding
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.Delete
-import androidx.compose.material3.Card
-import androidx.compose.material3.CardDefaults
-import androidx.compose.material3.FilledIconButton
+import androidx.compose.material.icons.outlined.Delete
 import androidx.compose.material3.Icon
-import androidx.compose.material3.IconButtonDefaults
+import androidx.compose.material3.IconButton
 import androidx.compose.material3.ListItem
+import androidx.compose.material3.ListItemDefaults
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
-import com.mvproject.tinyiptvkmp.core.theme.dimensionSize
+import androidx.compose.ui.draw.clip
 import com.mvproject.tinyiptvkmp.features.playlist.api.domain.model.Playlist
 import com.mvproject.tinyiptvkmp.features.playlist.api.domain.model.PlaylistType
+import com.mvproject.tinyiptvkmp.features.settings.presentation.generated.resources.Res
+import com.mvproject.tinyiptvkmp.features.settings.presentation.generated.resources.btn_delete_playlist
+import org.jetbrains.compose.resources.stringResource
 
 @Composable
 fun PlaylistItem(
@@ -33,69 +32,38 @@ fun PlaylistItem(
     onSelect: () -> Unit = {},
     onDelete: () -> Unit = {},
 ) {
-    Card(
-        modifier = modifier,
-        shape = MaterialTheme.shapes.small,
-        border =
-            BorderStroke(
-                width = MaterialTheme.dimensionSize.size1,
-                color = MaterialTheme.colorScheme.onSurface,
-            ),
+    ListItem(
+        modifier =
+            modifier
+                .clip(MaterialTheme.shapes.medium)
+                .clickable { onSelect() },
         colors =
-            CardDefaults.cardColors(
-                containerColor = MaterialTheme.colorScheme.primary,
+            ListItemDefaults.colors(
+                containerColor = MaterialTheme.colorScheme.surfaceContainerLow,
             ),
-    ) {
-        ListItem(
-            modifier =
-                modifier
-                    .clickable {
-                        onSelect()
-                    },
-            headlineContent = {
+        headlineContent = {
+            Text(
+                text = item.playlistName,
+                style = MaterialTheme.typography.bodyLarge,
+            )
+        },
+        supportingContent = {
+            if (item.playlistType == PlaylistType.REMOTE && item.playlistSource.isNotBlank()) {
                 Text(
-                    text = item.playlistName,
-                    style = MaterialTheme.typography.bodyLarge,
-                    color = MaterialTheme.colorScheme.onSurface,
+                    text = item.playlistSource,
+                    style = MaterialTheme.typography.bodyMedium,
+                    color = MaterialTheme.colorScheme.onSurfaceVariant,
                 )
-            },
-            supportingContent = {
-                if (item.playlistType == PlaylistType.REMOTE && item.playlistSource.isNotBlank()) {
-                    Text(
-                        text = item.playlistSource,
-                        style = MaterialTheme.typography.labelMedium,
-                        color = MaterialTheme.colorScheme.onPrimary,
-                    )
-                }
-            },
-            trailingContent = {
-                FilledIconButton(
-                    onClick = onDelete,
-                    modifier = Modifier.padding(MaterialTheme.dimensionSize.size8),
-                    colors =
-                        IconButtonDefaults.filledIconButtonColors(
-                            containerColor = MaterialTheme.colorScheme.onSurface,
-                            contentColor = MaterialTheme.colorScheme.primary,
-                        ),
-                ) {
-                    Icon(
-                        imageVector = Icons.Default.Delete,
-                        contentDescription = "Playlist Delete",
-                    )
-                }
-            },
-        )
-    }
+            }
+        },
+        trailingContent = {
+            IconButton(onClick = onDelete) {
+                Icon(
+                    imageVector = Icons.Outlined.Delete,
+                    contentDescription = stringResource(Res.string.btn_delete_playlist),
+                    tint = MaterialTheme.colorScheme.error,
+                )
+            }
+        },
+    )
 }
-
-// todo replace preview
-/*
-@Preview(showBackground = true, showSystemUi = true)
-@Composable
-fun PreviewDarkPlaylistsItemView() {
-    VideoAppTheme(darkTheme = true) {
-        PlaylistItemView(
-            item = PreviewTestData.testPlaylist
-        )
-    }
-}*/

@@ -15,6 +15,7 @@ import com.mvproject.tinyiptvkmp.core.theme.AppTheme
 fun ControlButton(
     modifier: Modifier = Modifier,
     imageVector: ImageVector = Icons.AutoMirrored.Rounded.ViewList,
+    contentDescription: String,
     onClick: () -> Unit = {},
 ) {
     IconButton(
@@ -23,7 +24,7 @@ fun ControlButton(
     ) {
         Icon(
             imageVector = imageVector,
-            contentDescription = imageVector.name,
+            contentDescription = contentDescription,
             tint = MaterialTheme.colorScheme.onSurface,
         )
     }
@@ -33,6 +34,6 @@ fun ControlButton(
 @Preview
 private fun ControlButtonPreview() {
     AppTheme {
-        ControlButton()
+        ControlButton(contentDescription = "View list")
     }
 }

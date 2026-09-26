@@ -81,6 +81,7 @@ private fun SettingsPlaylistScreen(
             ) {
                 ActionButton(
                     title = stringResource(DesignSystemRes.string.btn_add_new),
+                    enabled = !state.isLoading,
                     onClick = {
                         onAction(SettingsPlaylistAction.NavigateToPlaylist())
                     },
@@ -123,7 +124,7 @@ private fun SettingsPlaylistScreen(
                             key = { it.id },
                         ) { item ->
                             PlaylistItem(
-                                modifier = Modifier.fillMaxSize(),
+                                modifier = Modifier.fillMaxWidth(),
                                 item = item,
                                 onSelect = {
                                     onAction(SettingsPlaylistAction.NavigateToPlaylist(id = item.id))
@@ -141,18 +142,3 @@ private fun SettingsPlaylistScreen(
         }
     }
 }
-
-// todo replace preview
-/*
-@Preview(showBackground = true, showSystemUi = true)
-@Composable
-fun PreviewDarkSettingsPlaylistView() {
-    VideoAppTheme(darkTheme = true) {
-        SettingsPlaylistView(
-            SettingsPlaylistState(
-                playlists = testPlaylists
-            )
-        )
-    }
-}
-*/

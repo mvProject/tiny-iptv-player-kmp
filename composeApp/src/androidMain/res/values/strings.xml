@@ -6,5 +6,5 @@
   -->
 
 <resources>
-    <string name="app_name">Tiny Iptv Player</string>
+    <string name="app_name" translatable="false">Tiny IPTV Player</string>
 </resources>

@@ -27,16 +27,15 @@ import androidx.compose.ui.Modifier
 import androidx.lifecycle.compose.LifecycleResumeEffect
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.mvproject.tinyiptvkmp.core.components.adaptive.rememberAdaptiveLayoutState
-import com.mvproject.tinyiptvkmp.core.components.channels.ChannelFavoriteSelector
 import com.mvproject.tinyiptvkmp.core.components.channels.ChannelPrograms
 import com.mvproject.tinyiptvkmp.core.components.indicators.LoadingIndicator
 import com.mvproject.tinyiptvkmp.core.components.overlay.OnScreenDisplay
+import com.mvproject.tinyiptvkmp.core.components.selectors.OptionGroup
 import com.mvproject.tinyiptvkmp.core.components.toolbars.AppBarWithSearch
 import com.mvproject.tinyiptvkmp.core.theme.dimensionSize
-import com.mvproject.tinyiptvkmp.features.channels.api.domain.model.FavoriteType
 import com.mvproject.tinyiptvkmp.features.channels.presentation.GroupChannelsState.GroupChannelsOSD
 import com.mvproject.tinyiptvkmp.features.channels.presentation.components.GroupChannelsContent
-import com.mvproject.tinyiptvkmp.features.channels.presentation.components.favoriteOptionsUiModels
+import com.mvproject.tinyiptvkmp.features.channels.presentation.components.favoriteOptionSet
 import com.mvproject.tinyiptvkmp.features.channels.presentation.components.toChannelItemUiModel
 import com.mvproject.tinyiptvkmp.features.channels.presentation.components.toChannelProgramUiModel
 import com.mvproject.tinyiptvkmp.features.channels.presentation.generated.resources.Res
@@ -157,13 +156,17 @@ private fun GroupChannelsScreen(
                 state.osdType?.let { osdType ->
                     when (osdType) {
                         is GroupChannelsOSD.ChannelFavorites -> {
-                            ChannelFavoriteSelector(
-                                options = favoriteOptionsUiModels(osdType.channel.favoriteType),
-                                onSelectFavorite = { option ->
+                            val favorites = favoriteOptionSet(osdType.channel.favoriteType)
+
+                            OptionGroup(
+                                options = favorites.values,
+                                optionLabel = favorites.label,
+                                selected = osdType.channel.favoriteType,
+                                onSelected = { type ->
                                     onAction(
                                         GroupChannelsAction.ToggleFavorite(
                                             channel = osdType.channel,
-                                            type = FavoriteType.valueOf(option.id)
+                                            type = type
                                         )
                                     )
                                 }

@@ -5,7 +5,6 @@ import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
@@ -27,6 +26,8 @@ import com.mvproject.tinyiptvkmp.core.components.modifiers.SpacerWidth
 import com.mvproject.tinyiptvkmp.core.components.modifiers.roundedHeader
 import com.mvproject.tinyiptvkmp.core.components.texts.ProgramTitle
 import com.mvproject.tinyiptvkmp.core.designsystem.generated.resources.Res
+import com.mvproject.tinyiptvkmp.core.designsystem.generated.resources.duration_hours
+import com.mvproject.tinyiptvkmp.core.designsystem.generated.resources.duration_minutes
 import com.mvproject.tinyiptvkmp.core.designsystem.generated.resources.msg_no_epg_found
 import com.mvproject.tinyiptvkmp.core.foundation.common.COUNT_ZERO_FLOAT
 import com.mvproject.tinyiptvkmp.core.foundation.common.PROGRESS_STATE_COMPLETE
@@ -38,6 +39,7 @@ import com.mvproject.tinyiptvkmp.core.foundation.utils.convertToTime
 import com.mvproject.tinyiptvkmp.core.theme.colorSchemeExtended
 import com.mvproject.tinyiptvkmp.core.theme.dimensionSize
 import com.mvproject.tinyiptvkmp.core.theme.dimensionWeight
+import org.jetbrains.compose.resources.pluralStringResource
 import org.jetbrains.compose.resources.stringResource
 
 @Composable
@@ -56,14 +58,18 @@ fun ChannelPrograms(
 
         if (programs.isEmpty()) {
             ChannelProgramsEmpty(
-                modifier = Modifier.fillMaxSize(),
+                modifier = Modifier
+                    .weight(1f)
+                    .fillMaxWidth(),
                 title = stringResource(Res.string.msg_no_epg_found),
             )
             return@Column
         }
 
         LazyColumn(
-            modifier = Modifier.fillMaxSize(),
+            modifier = Modifier
+                .weight(1f)
+                .fillMaxWidth(),
             state = rememberLazyListState(),
             verticalArrangement = Arrangement.spacedBy(2.dp),
         ) {
@@ -193,19 +199,18 @@ private fun ProgramDuration(
 ) {
     val (hours, minutes) = calculateDuration(start = start, end = end)
 
-    val durationText = buildString {
-        if (hours > 0) {
-            append(hours)
-            append(String.space)
-            append("hr")
-            append(String.space)
-        }
-        if (minutes > 0) {
-            append(minutes)
-            append(String.space)
-            append("min")
-        }
+    val hoursText = if (hours > 0) {
+        pluralStringResource(Res.plurals.duration_hours, hours.toInt(), hours)
+    } else {
+        null
     }
+    val minutesText = if (minutes > 0 || hours == 0L) {
+        pluralStringResource(Res.plurals.duration_minutes, minutes.toInt(), minutes)
+    } else {
+        null
+    }
+    val durationText = listOfNotNull(hoursText, minutesText).joinToString(separator = String.space)
+
     Text(
         modifier = modifier,
         text = durationText,

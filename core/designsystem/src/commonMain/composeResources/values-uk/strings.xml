@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <resources>
-    <string name="app_name">Tiny Iptv Player</string>
+    <string name="app_name">Tiny IPTV Player</string>
     <string name="playlist_update_6_hours">6 годин</string>
     <string name="playlist_update_12_hours">12 годин</string>
     <string name="playlist_update_24_hours">24 години</string>
@@ -17,9 +17,49 @@
     <string name="video_ratio_mode_fullScreen">Повний екран (4:3)</string>
     <string name="video_ratio_mode_cinematic">Кінематографічний (21:9)</string>
     <string name="video_ratio_mode_square">Квадрат (1:1)</string>
+    <string name="menu_view_type_list">Список</string>
+    <string name="menu_view_type_grid">Сітка</string>
+    <string name="menu_view_type_card">Картка</string>
     <string name="btn_add_new">Новий плейлист</string>
     <string name="msg_no_playlist">Плейлистів не знайдено</string>
-    <string name="msg_no_items_found">Даних не знайдено</string>
+    <string name="msg_no_items_found">Елементів не знайдено</string>
     <string name="msg_no_epg_found">телепрограму не знайдено</string>
     <string name="hint_update_period">Період оновлення</string>
+    <string name="favorite_common">Загальні</string>
+    <string name="favorite_movie">Фільм</string>
+    <string name="favorite_show">Серіал</string>
+    <string name="favorite_sport">Спорт</string>
+    <string name="favorite_cartoon">Мультфільми</string>
+    <string name="favorite_documentary">Документальний</string>
+    <string name="favorite_add">Додати до обраних</string>
+    <string name="favorite_remove">Видалити з обраних</string>
+    <string name="action_back">Назад</string>
+    <string name="action_close">Закрити</string>
+    <string name="action_search">Пошук</string>
+    <string name="action_settings">Налаштування</string>
+    <string name="action_change_view_type">Змінити тип подання</string>
+    <string name="action_play">Відтворити</string>
+    <string name="action_pause">Пауза</string>
+    <string name="action_favorites">Обране</string>
+    <string name="action_change_video_size">Змінити розмір відео</string>
+    <string name="action_fullscreen">Повноекранний режим</string>
+    <string name="action_exit_fullscreen">Вийти з повноекранного режиму</string>
+    <string name="action_volume_down">Зменшити гучність</string>
+    <string name="action_volume_up">Збільшити гучність</string>
+    <string name="action_previous_channel">Попередній канал</string>
+    <string name="action_next_channel">Наступний канал</string>
+    <string name="action_open_programs">Відкрити програми</string>
+    <string name="action_open_channels">Відкрити канали</string>
+    <string name="action_open_info">Відкрити відомості</string>
+    <string name="action_clear_search">Очистити пошук</string>
+    <plurals name="duration_hours">
+        <item quantity="one">%1$d рік</item>
+        <item quantity="few">%1$d роки</item>
+        <item quantity="many">%1$d років</item>
+        <item quantity="other">%1$d року</item>
+    </plurals>
+    <plurals name="duration_minutes">
+        <item quantity="one">%1$d хв</item>
+        <item quantity="other">%1$d хв</item>
+    </plurals>
 </resources>

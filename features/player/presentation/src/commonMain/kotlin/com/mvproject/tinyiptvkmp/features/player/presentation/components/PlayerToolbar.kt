@@ -21,6 +21,7 @@ import androidx.compose.foundation.layout.wrapContentHeight
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.alpha
@@ -50,6 +51,15 @@ fun PlayerToolbar(
     isFullScreen: Boolean = false,
     onAction: (PlayerAction) -> Unit = {},
 ) {
+    val visiblePrograms =
+        remember(currentChannel.programs, programCount) {
+            currentChannel.programs.take(programCount)
+        }
+    val currentProgram =
+        remember(currentChannel.programs) {
+            currentChannel.programs.firstOrNull()
+        }
+
     AnimatedVisibility(
         visible = isVisible,
         enter = scaleIn() + fadeIn(),
@@ -57,8 +67,7 @@ fun PlayerToolbar(
     ) {
         Box(modifier = modifier) {
             Column(
-                modifier =
-                Modifier
+                modifier = Modifier
                     .fillMaxWidth()
                     .wrapContentHeight()
                     .alpha(MaterialTheme.dimensionOpacity.opacity80)
@@ -72,14 +81,13 @@ fun PlayerToolbar(
                     title = currentChannel.channelName,
                 )
 
-                if (currentChannel.programs.isNotEmpty()) {
-
-                    PlayerPrograms(programs = currentChannel.programs.take(programCount))
+                if (currentProgram != null) {
+                    PlayerPrograms(programs = visiblePrograms)
 
                     PlayerProgress(
-                        programStart = currentChannel.programs.first().dateTimeStart,
-                        programEnd = currentChannel.programs.first().dateTimeEnd,
-                        programProgress = currentChannel.programs.first().programProgress
+                        programStart = currentProgram.dateTimeStart,
+                        programEnd = currentProgram.dateTimeEnd,
+                        programProgress = currentProgram.programProgress,
                     )
                 }
 
@@ -89,7 +97,7 @@ fun PlayerToolbar(
                     isPlaying = isPlaying,
                     isFullScreen = isFullScreen,
                     videoSize = videoSize,
-                    onAction = onAction
+                    onAction = onAction,
                 )
             }
         }
@@ -99,7 +107,7 @@ fun PlayerToolbar(
 @Composable
 private fun PlayerChannel(
     modifier: Modifier,
-    title: String
+    title: String,
 ) {
     Text(
         modifier = modifier,
@@ -137,47 +145,24 @@ private fun PlayerProgress(
     Row(
         modifier = modifier,
         verticalAlignment = Alignment.CenterVertically,
-        horizontalArrangement = Arrangement.spacedBy(MaterialTheme.dimensionSize.size8)
+        horizontalArrangement = Arrangement.spacedBy(MaterialTheme.dimensionSize.size8),
     ) {
         val (hourStart, minuteStart) = programStart.convertToTime()
         TimeItem(
             hour = hourStart,
             minute = minuteStart,
-            timeColor = MaterialTheme.colorSchemeExtended.timeColor
+            timeColor = MaterialTheme.colorSchemeExtended.timeColor,
         )
 
         ProgramProgressIndicator(
             modifier = Modifier.weight(MaterialTheme.dimensionWeight.weight1),
-            progress = programProgress
+            progress = programProgress,
         )
         val (hourEnd, minuteEnd) = programEnd.convertToTime()
         TimeItem(
             hour = hourEnd,
             minute = minuteEnd,
-            timeColor = MaterialTheme.colorSchemeExtended.timeColor
+            timeColor = MaterialTheme.colorSchemeExtended.timeColor,
         )
     }
 }
-
-// todo replace preview
-/*
-@Composable
-@Preview(showBackground = true)
-fun DarkPreviewPlayerChannelView() {
-    VideoAppTheme(darkTheme = true) {
-        PlayerChannelView(
-            currentChannel = TvPlaylistChannel(
-                channelName = "Test",
-                channelEpg = listOf(
-                    EpgProgram(
-                        title = "Epg Title",
-                        channelId = "id",
-                        start = System.currentTimeMillis() - 30.minutes.inWholeMilliseconds,
-                        stop = System.currentTimeMillis() + 30.minutes.inWholeMilliseconds,
-                        description = "Epg Description"
-                    )
-                )
-            )
-        )
-    }
-}*/

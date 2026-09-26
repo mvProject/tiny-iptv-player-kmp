@@ -14,6 +14,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.semantics.Role
 import androidx.compose.ui.unit.dp
 import com.mvproject.tinyiptvkmp.core.components.buttons.FavoriteButton
 import com.mvproject.tinyiptvkmp.core.components.indicators.ProgramProgressIndicator
@@ -39,23 +40,18 @@ fun ChannelGridView(
     ElevatedCard(
         modifier = modifier
             .height(140.dp)
+            .clip(MaterialTheme.shapes.extraSmall)
             .combinedClickable(
                 onClick = onChannelSelect,
                 onLongClick = onShowEpgClick,
+                role = Role.Button,
             ),
         colors = CardDefaults.elevatedCardColors(
             containerColor = MaterialTheme.colorScheme.surface,
         ),
         shape = MaterialTheme.shapes.extraSmall,
     ) {
-        Column(
-            modifier = Modifier
-                .combinedClickable(
-                    onClick = onChannelSelect,
-                    onLongClick = onShowEpgClick,
-                )
-                .clip(MaterialTheme.shapes.extraSmall),
-        ) {
+        Column {
             Row(
                 modifier = Modifier.padding(MaterialTheme.dimensionSize.size8),
                 verticalAlignment = Alignment.CenterVertically,

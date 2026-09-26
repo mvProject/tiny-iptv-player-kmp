@@ -28,9 +28,13 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.tooling.preview.Preview
+import com.mvproject.tinyiptvkmp.core.designsystem.generated.resources.Res
+import com.mvproject.tinyiptvkmp.core.designsystem.generated.resources.action_clear_search
+import com.mvproject.tinyiptvkmp.core.designsystem.generated.resources.action_close
 import com.mvproject.tinyiptvkmp.core.theme.AppTheme
 import com.mvproject.tinyiptvkmp.core.theme.colorSchemeExtended
 import com.mvproject.tinyiptvkmp.core.theme.dimensionSize
+import org.jetbrains.compose.resources.stringResource
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -62,7 +66,7 @@ fun SearchAppBar(
                 leadingIcon = {
                     Icon(
                         imageVector = Icons.Outlined.Search,
-                        contentDescription = "Search Icon",
+                        contentDescription = null,
                         tint = MaterialTheme.colorScheme.onPrimary,
                     )
                 },
@@ -84,7 +88,14 @@ fun SearchAppBar(
                     ) {
                         Icon(
                             imageVector = Icons.Default.Close,
-                            contentDescription = "Close Icon",
+                            contentDescription =
+                                stringResource(
+                                    if (text.isNotEmpty()) {
+                                        Res.string.action_clear_search
+                                    } else {
+                                        Res.string.action_close
+                                    }
+                                ),
                         )
                     }
                 },

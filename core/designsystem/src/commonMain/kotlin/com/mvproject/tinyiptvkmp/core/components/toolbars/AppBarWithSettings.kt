@@ -17,7 +17,10 @@ import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.tooling.preview.Preview
 import com.mvproject.tinyiptvkmp.core.components.buttons.MenuButton
+import com.mvproject.tinyiptvkmp.core.designsystem.generated.resources.Res
+import com.mvproject.tinyiptvkmp.core.designsystem.generated.resources.action_settings
 import com.mvproject.tinyiptvkmp.core.theme.AppTheme
+import org.jetbrains.compose.resources.stringResource
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -36,6 +39,7 @@ fun AppBarWithSettings(
         actions = {
             MenuButton(
                 imageVector = Icons.Default.Settings,
+                contentDescription = stringResource(Res.string.action_settings),
                 onClick = onSettingsClicked
             )
         },
