@@ -2,7 +2,7 @@
 <resources>
     <string name="msg_playlist_details">Деталі плейлиста</string>
     <string name="hint_name">Назва</string>
-    <string name="hint_address">Url-адреса</string>
+    <string name="hint_address">URL-адреса</string>
     <string name="btn_save">Зберегти плейлист</string>
     <string name="btn_update">Оновити плейлист</string>
     <string name="btn_add_local">Додати локальний плейлист</string>

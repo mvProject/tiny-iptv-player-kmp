@@ -15,6 +15,7 @@ import com.mvproject.tinyiptvkmp.core.theme.AppTheme
 fun MenuButton(
     modifier: Modifier = Modifier,
     imageVector: ImageVector = Icons.Default.Settings,
+    contentDescription: String,
     onClick: () -> Unit = {},
 ) {
     IconButton(
@@ -23,7 +24,7 @@ fun MenuButton(
     ) {
         Icon(
             imageVector = imageVector,
-            contentDescription = imageVector.name,
+            contentDescription = contentDescription,
             tint = MaterialTheme.colorScheme.onPrimary,
         )
     }
@@ -33,6 +34,6 @@ fun MenuButton(
 @Preview
 private fun MenuButtonPreview() {
     AppTheme {
-        MenuButton()
+        MenuButton(contentDescription = "Settings")
     }
 }

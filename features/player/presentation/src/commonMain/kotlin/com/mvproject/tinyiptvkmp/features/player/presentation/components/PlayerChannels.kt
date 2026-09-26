@@ -10,7 +10,6 @@ package com.mvproject.tinyiptvkmp.features.player.presentation.components
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
@@ -66,7 +65,9 @@ fun PlayerChannels(
         )
 
         LazyColumn(
-            modifier = Modifier.fillMaxSize(),
+            modifier = Modifier
+                .weight(1f)
+                .fillMaxWidth(),
             state = listState,
             verticalArrangement = Arrangement.spacedBy(2.dp),
             content = {
@@ -83,40 +84,3 @@ fun PlayerChannels(
         )
     }
 }
-// todo replace preview
-/*
-@Composable
-@Preview(showBackground = true)
-fun DarkPreviewOOverlayChannels() {
-    VideoAppTheme(darkTheme = true) {
-        OverlayChannels(
-            group = "TestGroup",
-            channels = listOf(
-                TvPlaylistChannel(
-                    channelName = "test1",
-                    channelEpg = listOf(
-                        EpgProgram(
-                            title = "Epg1",
-                            channelId = "id1",
-                            start = System.currentTimeMillis() - 15.minutes.inWholeMilliseconds,
-                            stop = System.currentTimeMillis() + 15.minutes.inWholeMilliseconds,
-                            description = "Epg Description"
-                        )
-                    )
-                ),
-                TvPlaylistChannel(
-                    channelName = "test2",
-                    channelEpg = listOf(
-                        EpgProgram(
-                            title = "Epg2",
-                            channelId = "id2",
-                            start = System.currentTimeMillis() + 15.minutes.inWholeMilliseconds,
-                            stop = System.currentTimeMillis() + 30.minutes.inWholeMilliseconds,
-                            description = "Epg Description"
-                        )
-                    )
-                )
-            )
-        )
-    }
-}*/

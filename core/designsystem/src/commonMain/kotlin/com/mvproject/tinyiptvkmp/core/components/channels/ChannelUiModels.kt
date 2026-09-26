@@ -19,10 +19,3 @@ data class ChannelProgramUiModel(
     val endMillis: Long,
     val progress: Float,
 )
-
-@Immutable
-data class FavoriteOptionUiModel(
-    val id: String,
-    val label: String,
-    val isSelected: Boolean,
-)

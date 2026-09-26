@@ -23,10 +23,12 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.semantics.Role
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import com.mvproject.tinyiptvkmp.core.foundation.utils.CommonUtils.empty
 import com.mvproject.tinyiptvkmp.core.theme.colorSchemeExtended
+import com.mvproject.tinyiptvkmp.core.theme.dimensionSize
 
 @Composable
 fun NoItemsView(
@@ -47,7 +49,7 @@ fun NoItemsView(
                 modifier = Modifier.size(96.dp),
                 imageVector = Icons.Filled.Info,
                 tint = MaterialTheme.colorSchemeExtended.emptyProgramTitle,
-                contentDescription = title,
+                contentDescription = null,
             )
 
             Text(
@@ -55,8 +57,8 @@ fun NoItemsView(
                     Modifier
                         .fillMaxWidth()
                         .padding(
-                            top = 16.dp,
-                            bottom = 24.dp,
+                            top = MaterialTheme.dimensionSize.size16,
+                            bottom = MaterialTheme.dimensionSize.size24,
                         ),
                 text = title,
                 style = MaterialTheme.typography.headlineLarge,
@@ -69,10 +71,13 @@ fun NoItemsView(
                     modifier =
                         Modifier
                             .fillMaxWidth()
-                            .clickable(onClick = onNavigateClick)
+                            .clickable(
+                                onClick = onNavigateClick,
+                                role = Role.Button,
+                            )
                             .padding(
-                                top = 16.dp,
-                                bottom = 24.dp,
+                                top = MaterialTheme.dimensionSize.size16,
+                                bottom = MaterialTheme.dimensionSize.size24,
                             ),
                     text = navigateTitle,
                     style = MaterialTheme.typography.displaySmall,
@@ -83,13 +88,3 @@ fun NoItemsView(
         }
     }
 }
-
-// todo replace preview
-/*
-@Composable
-@Preview(showBackground = true)
-fun DarkPreviewNoItemsView() {
-    VideoAppTheme(darkTheme = true) {
-        NoItemsView(navigateTitle = stringResource(id = R.string.app_name))
-    }
-}*/

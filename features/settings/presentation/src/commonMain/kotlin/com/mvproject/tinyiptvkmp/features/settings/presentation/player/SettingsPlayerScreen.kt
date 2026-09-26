@@ -7,37 +7,40 @@
 
 package com.mvproject.tinyiptvkmp.features.settings.presentation.player
 
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.WindowInsets
 import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.navigationBars
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.windowInsetsPadding
 import androidx.compose.material3.ListItem
+import androidx.compose.material3.ListItemDefaults
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Switch
-import androidx.compose.material3.SwitchDefaults
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
+import androidx.compose.ui.semantics.Role
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.mvproject.tinyiptvkmp.core.components.adaptive.adaptiveContentWidth
 import com.mvproject.tinyiptvkmp.core.components.adaptive.rememberAdaptiveLayoutState
+import com.mvproject.tinyiptvkmp.core.components.selectors.OptionSelector
+import com.mvproject.tinyiptvkmp.core.components.selectors.optionSetOf
 import com.mvproject.tinyiptvkmp.core.components.toolbars.AppBarWithBackNav
 import com.mvproject.tinyiptvkmp.core.foundation.model.VideoSize
 import com.mvproject.tinyiptvkmp.core.mapper.mapToString
 import com.mvproject.tinyiptvkmp.core.theme.AppTheme
-import com.mvproject.tinyiptvkmp.core.theme.colorSchemeExtended
-import com.mvproject.tinyiptvkmp.core.theme.dimensionOpacity
 import com.mvproject.tinyiptvkmp.core.theme.dimensionSize
-import com.mvproject.tinyiptvkmp.features.settings.presentation.components.SettingsSelector
 import com.mvproject.tinyiptvkmp.features.settings.presentation.generated.resources.Res
 import com.mvproject.tinyiptvkmp.features.settings.presentation.generated.resources.option_default_fullscreen_mode
 import com.mvproject.tinyiptvkmp.features.settings.presentation.generated.resources.option_default_resize_mode
@@ -63,6 +66,10 @@ private fun SettingsPlayerScreen(
     onAction: (SettingsPlayerAction) -> Unit,
 ) {
     val adaptiveLayoutState = rememberAdaptiveLayoutState()
+    val videoSizes = optionSetOf(
+        values = VideoSize.entries,
+        label = { size -> stringResource(size.mapToString()) },
+    )
 
     Scaffold(
         modifier =
@@ -96,42 +103,45 @@ private fun SettingsPlayerScreen(
                 verticalArrangement = Arrangement.spacedBy(MaterialTheme.dimensionSize.size12)
             ) {
                 ListItem(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .clip(MaterialTheme.shapes.small)
+                        .clickable(role = Role.Switch) {
+                            onAction(
+                                SettingsPlayerAction.SetFullScreenMode(
+                                    state = !state.isFullscreenEnabled
+                                )
+                            )
+                        },
+                    colors = ListItemDefaults.colors(
+                        containerColor = MaterialTheme.colorScheme.surface,
+                        headlineColor = MaterialTheme.colorScheme.onSurface,
+                    ),
                     headlineContent = {
                         Text(
                             text = stringResource(Res.string.option_default_fullscreen_mode),
-                            style = MaterialTheme.typography.bodyMedium,
-                            color = MaterialTheme.colorScheme.onPrimary,
+                            style = MaterialTheme.typography.bodyLarge,
                         )
                     },
                     trailingContent = {
                         Switch(
                             checked = state.isFullscreenEnabled,
-                            colors =
-                                SwitchDefaults.colors(
-                                    checkedThumbColor = MaterialTheme.colorScheme.primary,
-                                    uncheckedThumbColor =
-                                        MaterialTheme.colorScheme.primary
-                                            .copy(alpha = MaterialTheme.dimensionOpacity.opacity50),
-                                    checkedTrackColor = MaterialTheme.colorSchemeExtended.activeInput,
-                                    uncheckedTrackColor = MaterialTheme.colorScheme.onSurface,
-                                ),
-                            onCheckedChange = { state ->
-                                onAction(SettingsPlayerAction.SetFullScreenMode(state = state))
-                            },
+                            onCheckedChange = null,
                         )
                     }
                 )
 
-                SettingsSelector(
-                    title = stringResource(Res.string.option_default_resize_mode),
-                    selectedIndex = state.videoSize,
-                    isExpanded = state.settingsType == SettingsPlayer.VideoSize,
-                    options = VideoSize.entries.map { stringResource(it.mapToString()) },
-                    onClick = {
+                OptionSelector(
+                    label = stringResource(Res.string.option_default_resize_mode),
+                    options = videoSizes.values,
+                    optionLabel = videoSizes.label,
+                    selected = VideoSize.entries.getOrNull(state.videoSize),
+                    expanded = state.settingsType == SettingsPlayer.VideoSize,
+                    onExpandedChange = {
                         onAction(SettingsPlayerAction.ToggleOption(SettingsPlayer.VideoSize))
                     },
-                    onSelect = {
-                        onAction(SettingsPlayerAction.SetVideoSize(mode = it))
+                    onSelected = { mode ->
+                        onAction(SettingsPlayerAction.SetVideoSize(mode = mode.ordinal))
                     }
                 )
             }

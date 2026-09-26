@@ -1,25 +1,63 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <resources>
-    <string name="app_name">Tiny Iptv Player</string>
+    <string name="app_name">Tiny IPTV Player</string>
     <string name="playlist_update_6_hours">6 stundas</string>
     <string name="playlist_update_12_hours">12 stundas</string>
     <string name="playlist_update_24_hours">24 stundas</string>
     <string name="playlist_update_2_days">2 dienas</string>
     <string name="playlist_update_1_week">1 nedēļa</string>
     <string name="playlist_update_never">Nekad</string>
-    <string name="video_resize_mode_fill">Aizpildiet</string>
+    <string name="video_resize_mode_fill">Aizpildīt</string>
     <string name="video_resize_mode_fixed_width">Fiksēts platums</string>
     <string name="video_resize_mode_fixed_height">Fiksēts augstums</string>
-    <string name="video_resize_mode_fit">Fit</string>
+    <string name="video_resize_mode_fit">Ietilpināt</string>
     <string name="video_resize_mode_zoom">Tālummaiņa</string>
     <string name="video_ratio_mode_original">Oriģināls</string>
     <string name="video_ratio_mode_wideScreen">Platekrāna (16:9)</string>
     <string name="video_ratio_mode_fullScreen">Pilnekrāna režīms (4:3)</string>
     <string name="video_ratio_mode_cinematic">Kino (21:9)</string>
     <string name="video_ratio_mode_square">Kvadrāts (1:1)</string>
+    <string name="menu_view_type_list">Saraksts</string>
+    <string name="menu_view_type_grid">Režģis</string>
+    <string name="menu_view_type_card">Kartīte</string>
     <string name="btn_add_new">Jauns atskaņošanas saraksts</string>
     <string name="msg_no_playlist">Nav atrasts neviens atskaņošanas saraksts</string>
     <string name="msg_no_items_found">Vienumi nav atrasti</string>
-    <string name="msg_no_epg_found">epg nav atrasts</string>
+    <string name="msg_no_epg_found">EPG nav atrasts</string>
     <string name="hint_update_period">Atjaunināšanas periods</string>
+    <string name="favorite_common">Vispārīgi</string>
+    <string name="favorite_movie">Films</string>
+    <string name="favorite_show">Serija</string>
+    <string name="favorite_sport">Sports</string>
+    <string name="favorite_cartoon">Animācija</string>
+    <string name="favorite_documentary">Dokumentāls</string>
+    <string name="favorite_add">Pievienot iecienākajiem</string>
+    <string name="favorite_remove">Noņemt no iecienākajiem</string>
+    <string name="action_back">Atpakaļ</string>
+    <string name="action_close">Aizvērt</string>
+    <string name="action_search">Meklēt</string>
+    <string name="action_settings">Iestatījumi</string>
+    <string name="action_change_view_type">Mainīt skata veidu</string>
+    <string name="action_play">Atskaņot</string>
+    <string name="action_pause">Apturēt</string>
+    <string name="action_favorites">Iecienītie</string>
+    <string name="action_change_video_size">Mainīt video izmēru</string>
+    <string name="action_fullscreen">Pilnekrāna režīms</string>
+    <string name="action_exit_fullscreen">Iziet no pilnekrāna režīma</string>
+    <string name="action_volume_down">Samazināt skaļumu</string>
+    <string name="action_volume_up">Palielināt skaļumu</string>
+    <string name="action_previous_channel">Iepriekšējais kanāls</string>
+    <string name="action_next_channel">Nākamais kanāls</string>
+    <string name="action_open_programs">Atvērt programmas</string>
+    <string name="action_open_channels">Atvērt kanālus</string>
+    <string name="action_open_info">Atvērt informāciju</string>
+    <string name="action_clear_search">Notīt meklājumu</string>
+    <plurals name="duration_hours">
+        <item quantity="one">%1$d h</item>
+        <item quantity="other">%1$d h</item>
+    </plurals>
+    <plurals name="duration_minutes">
+        <item quantity="one">%1$d min</item>
+        <item quantity="other">%1$d min</item>
+    </plurals>
 </resources>

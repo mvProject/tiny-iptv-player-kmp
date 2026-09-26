@@ -32,6 +32,9 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.style.TextOverflow
 import com.mvproject.tinyiptvkmp.core.components.buttons.MenuButton
 import com.mvproject.tinyiptvkmp.core.designsystem.generated.resources.Res
+import com.mvproject.tinyiptvkmp.core.designsystem.generated.resources.action_back
+import com.mvproject.tinyiptvkmp.core.designsystem.generated.resources.action_change_view_type
+import com.mvproject.tinyiptvkmp.core.designsystem.generated.resources.action_search
 import com.mvproject.tinyiptvkmp.core.designsystem.generated.resources.menu_view_type_card
 import com.mvproject.tinyiptvkmp.core.designsystem.generated.resources.menu_view_type_grid
 import com.mvproject.tinyiptvkmp.core.designsystem.generated.resources.menu_view_type_list
@@ -64,17 +67,20 @@ fun AppBarWithActions(
         navigationIcon = {
             MenuButton(
                 imageVector = Icons.AutoMirrored.Filled.ArrowBack,
+                contentDescription = stringResource(Res.string.action_back),
                 onClick = onBackClick
             )
         },
         actions = {
             MenuButton(
                 imageVector = Icons.Outlined.Search,
+                contentDescription = stringResource(Res.string.action_search),
                 onClick = onSearchClicked
             )
 
             MenuButton(
                 imageVector = Icons.AutoMirrored.Outlined.ViewList,
+                contentDescription = stringResource(Res.string.action_change_view_type),
                 onClick = { isMenuOpen = !isMenuOpen }
             )
 
@@ -96,7 +102,7 @@ fun AppBarWithActions(
                     },
                     onClick = {
                         onViewTypeChange(ChannelsViewType.LIST)
-                        isMenuOpen = !isMenuOpen
+                        isMenuOpen = false
                     },
                     colors =
                         MenuDefaults.itemColors(
@@ -119,7 +125,7 @@ fun AppBarWithActions(
                     },
                     onClick = {
                         onViewTypeChange(ChannelsViewType.GRID)
-                        isMenuOpen = !isMenuOpen
+                        isMenuOpen = false
                     },
                     colors =
                         MenuDefaults.itemColors(
@@ -142,7 +148,7 @@ fun AppBarWithActions(
                     },
                     onClick = {
                         onViewTypeChange(ChannelsViewType.CARD)
-                        isMenuOpen = !isMenuOpen
+                        isMenuOpen = false
                     },
                     colors =
                         MenuDefaults.itemColors(
@@ -157,15 +163,3 @@ fun AppBarWithActions(
             ),
     )
 }
-
-// todo replace preview
-/*
-@Preview(showBackground = true)
-@Composable
-fun PreviewDarkAppBarWithActions() {
-    VideoAppTheme(darkTheme = true) {
-        AppBarWithActions(
-            appBarTitle = stringResource(id = R.string.app_name)
-        )
-    }
-}*/

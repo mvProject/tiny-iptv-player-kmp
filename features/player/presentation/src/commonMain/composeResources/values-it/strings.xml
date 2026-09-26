@@ -8,7 +8,5 @@
 <resources>
 
     <string name="msg_no_internet_found">Nessuna connessione internet</string>
-    <string name="msg_no_playable_media_found">Impossibile riprodurre questo contenuto
-        multimediale
-    </string>
+    <string name="msg_no_playable_media_found">Impossibile riprodurre questo contenuto multimediale</string>
 </resources>

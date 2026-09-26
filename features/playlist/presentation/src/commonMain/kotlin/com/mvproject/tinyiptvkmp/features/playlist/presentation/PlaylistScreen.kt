@@ -38,15 +38,19 @@ import com.mvproject.tinyiptvkmp.core.components.buttons.ActionButton
 import com.mvproject.tinyiptvkmp.core.components.buttons.SelectButton
 import com.mvproject.tinyiptvkmp.core.components.indicators.LoadingIndicator
 import com.mvproject.tinyiptvkmp.core.components.modifiers.SpacerHeight
+import com.mvproject.tinyiptvkmp.core.components.selectors.OptionSelector
+import com.mvproject.tinyiptvkmp.core.components.selectors.optionSetOf
 import com.mvproject.tinyiptvkmp.core.components.toolbars.AppBarWithBackNav
+import com.mvproject.tinyiptvkmp.core.designsystem.generated.resources.hint_update_period
 import com.mvproject.tinyiptvkmp.core.foundation.common.WEIGHT_1
+import com.mvproject.tinyiptvkmp.core.foundation.model.UpdatePeriod
 import com.mvproject.tinyiptvkmp.core.foundation.utils.CommonUtils.typeM3U
 import com.mvproject.tinyiptvkmp.core.foundation.utils.CommonUtils.typeM3U8
+import com.mvproject.tinyiptvkmp.core.mapper.mapToString
 import com.mvproject.tinyiptvkmp.core.theme.colorSchemeExtended
 import com.mvproject.tinyiptvkmp.core.theme.dimensionSize
 import com.mvproject.tinyiptvkmp.core.theme.dimensionWeight
 import com.mvproject.tinyiptvkmp.features.playlist.api.domain.model.PlaylistType
-import com.mvproject.tinyiptvkmp.features.playlist.presentation.components.PlaylistUpdateSelector
 import com.mvproject.tinyiptvkmp.features.playlist.presentation.generated.resources.Res
 import com.mvproject.tinyiptvkmp.features.playlist.presentation.generated.resources.btn_add_local
 import com.mvproject.tinyiptvkmp.features.playlist.presentation.generated.resources.btn_save
@@ -59,6 +63,7 @@ import io.github.vinceglb.filekit.compose.rememberFilePickerLauncher
 import io.github.vinceglb.filekit.core.PickerMode
 import io.github.vinceglb.filekit.core.PickerType
 import org.jetbrains.compose.resources.stringResource
+import com.mvproject.tinyiptvkmp.core.designsystem.generated.resources.Res as DesignSystemRes
 
 @Composable
 fun PlaylistScreen(viewModel: PlaylistViewModel) {
@@ -76,6 +81,10 @@ private fun PlaylistScreen(
     onAction: (PlaylistAction) -> Unit = {},
 ) {
     val adaptiveLayoutState = rememberAdaptiveLayoutState()
+    val periods = optionSetOf(
+        values = UpdatePeriod.entries,
+        label = { period -> stringResource(period.mapToString()) },
+    )
 
     LaunchedEffect(state.isComplete) {
         if (state.isComplete) {
@@ -131,56 +140,23 @@ private fun PlaylistScreen(
                         ),
                 horizontalAlignment = Alignment.CenterHorizontally,
             ) {
-                TextField(
-                    modifier = Modifier.fillMaxWidth(),
+                PlaylistTextField(
+                    label = stringResource(Res.string.hint_name),
                     value = state.playlistName,
-                    onValueChange = {
-                        onAction(PlaylistAction.SetTitle(title = it))
-                    },
-                    placeholder = {
-                        Text(
-                            text = stringResource(Res.string.hint_name),
-                            style = MaterialTheme.typography.labelSmall,
-                            color = MaterialTheme.colorSchemeExtended.activeInput,
-                        )
-                    },
-                    textStyle = MaterialTheme.typography.labelMedium,
-                    colors =
-                        TextFieldDefaults.colors(
-                            focusedTextColor = MaterialTheme.colorScheme.onSurface,
-                            focusedContainerColor = Color.Transparent,
-                            unfocusedContainerColor = Color.Transparent,
-                            cursorColor = MaterialTheme.colorSchemeExtended.activeInput,
-                            focusedIndicatorColor = MaterialTheme.colorSchemeExtended.activeInput,
-                        ),
+                    onValueChange = { title -> onAction(PlaylistAction.SetTitle(title = title)) },
                 )
 
                 SpacerHeight(height = MaterialTheme.dimensionSize.size8)
 
-                TextField(
-                    modifier = Modifier.fillMaxWidth(),
+                PlaylistTextField(
+                    label = stringResource(Res.string.hint_address),
+                    value = if (state.playlistType == PlaylistType.LOCAL) {
+                        state.playlistName
+                    } else {
+                        state.playlistSource
+                    },
                     enabled = state.playlistType == PlaylistType.REMOTE,
-                    value = if (state.playlistType == PlaylistType.LOCAL) state.playlistName else state.playlistSource,
-                    onValueChange = {
-                        onAction(PlaylistAction.SetRemoteUrl(url = it))
-                    },
-                    placeholder = {
-                        Text(
-                            text = stringResource(Res.string.hint_address),
-                            style = MaterialTheme.typography.labelSmall,
-                            color = MaterialTheme.colorSchemeExtended.activeInput,
-                        )
-                    },
-                    textStyle = MaterialTheme.typography.labelMedium,
-                    colors =
-                        TextFieldDefaults.colors(
-                            focusedTextColor = MaterialTheme.colorScheme.onSurface,
-                            focusedContainerColor = Color.Transparent,
-                            unfocusedContainerColor = Color.Transparent,
-                            disabledContainerColor = Color.DarkGray,
-                            cursorColor = MaterialTheme.colorSchemeExtended.activeInput,
-                            focusedIndicatorColor = MaterialTheme.colorSchemeExtended.activeInput,
-                        ),
+                    onValueChange = { url -> onAction(PlaylistAction.SetRemoteUrl(url = url)) },
                 )
 
                 if (!state.isEdit) {
@@ -197,18 +173,18 @@ private fun PlaylistScreen(
                     ) {
                         HorizontalDivider(
                             modifier = Modifier.weight(WEIGHT_1),
-                            color = MaterialTheme.colorScheme.onPrimary,
+                            color = MaterialTheme.colorScheme.outlineVariant,
                         )
 
                         Text(
                             text = stringResource(Res.string.label_or),
-                            style = MaterialTheme.typography.bodyMedium,
-                            color = MaterialTheme.colorScheme.onSurface,
+                            style = MaterialTheme.typography.labelLarge,
+                            color = MaterialTheme.colorScheme.onSurfaceVariant,
                         )
 
                         HorizontalDivider(
                             modifier = Modifier.weight(WEIGHT_1),
-                            color = MaterialTheme.colorScheme.onPrimary,
+                            color = MaterialTheme.colorScheme.outlineVariant,
                         )
                     }
 
@@ -224,13 +200,17 @@ private fun PlaylistScreen(
 
                 SpacerHeight(height = MaterialTheme.dimensionSize.size16)
 
-                PlaylistUpdateSelector(
-                    playlistType = state.playlistType,
-                    updatePeriod = state.updatePeriod,
-                    onPeriodSelected = { period ->
-                        onAction(PlaylistAction.SetUpdatePeriod(period = period))
-                    },
-                )
+                if (state.playlistType == PlaylistType.REMOTE) {
+                    OptionSelector(
+                        label = stringResource(DesignSystemRes.string.hint_update_period),
+                        options = periods.values,
+                        optionLabel = periods.label,
+                        selected = UpdatePeriod.entries.getOrNull(state.updatePeriod),
+                        onSelected = { period ->
+                            onAction(PlaylistAction.SetUpdatePeriod(period = period.ordinal))
+                        },
+                    )
+                }
 
                 SpacerHeight(weight = MaterialTheme.dimensionWeight.weight1)
 
@@ -266,15 +246,40 @@ private fun PlaylistScreen(
     }
 }
 
-// todo replace preview
-/*
-@Preview(showBackground = true, showSystemUi = true)
+/**
+ * Shared field styling for the playlist form. The disabled state keeps a real container tone so a
+ * read-only field still reads as read-only, instead of a hardcoded grey.
+ */
 @Composable
-fun PreviewDarkPlaylistDetailViewContent() {
-    VideoAppTheme(darkTheme = true) {
-        PlaylistView(
-            state = PlaylistState()
-        )
-    }
+private fun PlaylistTextField(
+    label: String,
+    value: String,
+    onValueChange: (String) -> Unit,
+    modifier: Modifier = Modifier,
+    enabled: Boolean = true,
+) {
+    TextField(
+        modifier = modifier.fillMaxWidth(),
+        enabled = enabled,
+        value = value,
+        onValueChange = onValueChange,
+        placeholder = {
+            Text(
+                text = label,
+                style = MaterialTheme.typography.labelSmall,
+                color = MaterialTheme.colorSchemeExtended.activeInput,
+            )
+        },
+        textStyle = MaterialTheme.typography.labelMedium,
+        colors =
+            TextFieldDefaults.colors(
+                focusedTextColor = MaterialTheme.colorScheme.onSurface,
+                unfocusedTextColor = MaterialTheme.colorScheme.onSurface,
+                focusedContainerColor = Color.Transparent,
+                unfocusedContainerColor = Color.Transparent,
+                disabledContainerColor = MaterialTheme.colorScheme.surfaceContainerHighest,
+                cursorColor = MaterialTheme.colorSchemeExtended.activeInput,
+                focusedIndicatorColor = MaterialTheme.colorSchemeExtended.activeInput,
+            ),
+    )
 }
-*/

@@ -37,7 +37,9 @@ import com.mvproject.tinyiptvkmp.features.player.presentation.components.NoPlayb
 import com.mvproject.tinyiptvkmp.features.player.presentation.components.PlayerContainer
 import com.mvproject.tinyiptvkmp.features.player.presentation.components.PlayerOsdContent
 import com.mvproject.tinyiptvkmp.features.player.presentation.components.PlayerToolbar
-import com.mvproject.tinyiptvkmp.features.player.presentation.components.handlePlayerGestures
+import com.mvproject.tinyiptvkmp.features.player.presentation.components.handleHorizontalGestures
+import com.mvproject.tinyiptvkmp.features.player.presentation.components.handleTapGestures
+import com.mvproject.tinyiptvkmp.features.player.presentation.components.handleVerticalGestures
 import com.mvproject.tinyiptvkmp.features.player.presentation.components.toChannelProgramUiModel
 import com.mvproject.tinyiptvkmp.features.player.presentation.generated.resources.Res
 import com.mvproject.tinyiptvkmp.features.player.presentation.generated.resources.msg_no_internet_found
@@ -217,7 +219,10 @@ private fun PlayerContent(
     onAction: (PlayerAction) -> Unit
 ) {
     PlayerContainer(
-        modifier = modifier.handlePlayerGestures(onAction = onAction),
+        modifier = modifier
+            .handleHorizontalGestures(onAction = onAction)
+            .handleVerticalGestures(onAction = onAction)
+            .handleTapGestures(onAction = onAction),
         videoSize = state.videoSize,
         mediaPlayerState = state.mediaPlayerState,
         onAction = onAction,

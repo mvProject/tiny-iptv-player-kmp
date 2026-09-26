@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <resources>
-    <string name="app_name">Tiny Iptv Player</string>
+    <string name="app_name">Tiny IPTV Player</string>
     <string name="playlist_update_6_hours">6 hodin</string>
     <string name="playlist_update_12_hours">12 hodin</string>
     <string name="playlist_update_24_hours">24 hodin</string>
@@ -9,7 +9,7 @@
     <string name="playlist_update_never">Nikdy</string>
     <string name="video_resize_mode_fill">Vyplnit</string>
     <string name="video_resize_mode_fixed_width">Pevná šířka</string>
-    <string name="video_resize_mode_fixed_height">FixedHeight</string>
+    <string name="video_resize_mode_fixed_height">Pevná výška</string>
     <string name="video_resize_mode_fit">Vejít se</string>
     <string name="video_resize_mode_zoom">Zvětšení</string>
     <string name="video_ratio_mode_original">Originál</string>
@@ -17,9 +17,47 @@
     <string name="video_ratio_mode_fullScreen">Celá obrazovka (4:3)</string>
     <string name="video_ratio_mode_cinematic">Filmový (21:9)</string>
     <string name="video_ratio_mode_square">Čtverec (1:1)</string>
+    <string name="menu_view_type_list">Seznam</string>
+    <string name="menu_view_type_grid">Mřížka</string>
+    <string name="menu_view_type_card">Karta</string>
     <string name="btn_add_new">Nový seznam skladeb</string>
     <string name="msg_no_playlist">Nebyly nalezeny žádné seznamy skladeb</string>
     <string name="msg_no_items_found">Položky nenalezeny</string>
-    <string name="msg_no_epg_found">epg nenalezeno</string>
+    <string name="msg_no_epg_found">EPG nenalezeno</string>
     <string name="hint_update_period">Období aktualizace</string>
+    <string name="favorite_common">Obecné</string>
+    <string name="favorite_movie">Film</string>
+    <string name="favorite_show">Seriál</string>
+    <string name="favorite_sport">Sport</string>
+    <string name="favorite_cartoon">Animovaný</string>
+    <string name="favorite_documentary">Dokument</string>
+    <string name="favorite_add">Přidat do oblíbených</string>
+    <string name="favorite_remove">Odebrat z oblíbených</string>
+    <string name="action_back">Zpět</string>
+    <string name="action_close">Zavřít</string>
+    <string name="action_search">Hledat</string>
+    <string name="action_settings">Nastavení</string>
+    <string name="action_change_view_type">Změnit typ zobrazení</string>
+    <string name="action_play">Přehrát</string>
+    <string name="action_pause">Pozastavit</string>
+    <string name="action_favorites">Oblíbené</string>
+    <string name="action_change_video_size">Změnit velikost videa</string>
+    <string name="action_fullscreen">Celá obrazovka</string>
+    <string name="action_exit_fullscreen">Ukončit celou obrazovku</string>
+    <string name="action_volume_down">Snížit hlasitost</string>
+    <string name="action_volume_up">Zvýšit hlasitost</string>
+    <string name="action_previous_channel">Předchozí kanál</string>
+    <string name="action_next_channel">Následující kanál</string>
+    <string name="action_open_programs">Otevřít pořady</string>
+    <string name="action_open_channels">Otevřít kanály</string>
+    <string name="action_open_info">Otevřít informace</string>
+    <string name="action_clear_search">Vymazat hledání</string>
+    <plurals name="duration_hours">
+        <item quantity="one">%1$d h</item>
+        <item quantity="other">%1$d h</item>
+    </plurals>
+    <plurals name="duration_minutes">
+        <item quantity="one">%1$d min</item>
+        <item quantity="other">%1$d min</item>
+    </plurals>
 </resources>

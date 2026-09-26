@@ -17,7 +17,10 @@ import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.tooling.preview.Preview
 import com.mvproject.tinyiptvkmp.core.components.buttons.MenuButton
+import com.mvproject.tinyiptvkmp.core.designsystem.generated.resources.Res
+import com.mvproject.tinyiptvkmp.core.designsystem.generated.resources.action_back
 import com.mvproject.tinyiptvkmp.core.theme.AppTheme
+import org.jetbrains.compose.resources.stringResource
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -36,6 +39,7 @@ fun AppBarWithBackNav(
         navigationIcon = {
             MenuButton(
                 imageVector = Icons.AutoMirrored.Filled.ArrowBack,
+                contentDescription = stringResource(Res.string.action_back),
                 onClick = onBackClick
             )
         },

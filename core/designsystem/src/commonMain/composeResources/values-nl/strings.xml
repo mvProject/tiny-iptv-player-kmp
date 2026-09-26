@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <resources>
-    <string name="app_name">Tiny Iptv Player</string>
+    <string name="app_name">Tiny IPTV Player</string>
     <string name="playlist_update_6_hours">6 uur</string>
     <string name="playlist_update_12_hours">12 uren</string>
     <string name="playlist_update_24_hours">24 uur</string>
@@ -9,17 +9,55 @@
     <string name="playlist_update_never">Nooit</string>
     <string name="video_resize_mode_fill">Vullen</string>
     <string name="video_resize_mode_fixed_width">Vaste breedte</string>
-    <string name="video_resize_mode_fixed_height">Vaste Hoogte</string>
-    <string name="video_resize_mode_fit">Fit</string>
-    <string name="video_resize_mode_zoom">Zoom</string>
+    <string name="video_resize_mode_fixed_height">Vaste hoogte</string>
+    <string name="video_resize_mode_fit">Passen</string>
+    <string name="video_resize_mode_zoom">Zoomen</string>
     <string name="video_ratio_mode_original">Origineel</string>
     <string name="video_ratio_mode_wideScreen">Breedbeeld (16:9)</string>
     <string name="video_ratio_mode_fullScreen">Volledig scherm (4:3)</string>
-    <string name="video_ratio_mode_cinematic">Filmisch (21:9)</string>
+    <string name="video_ratio_mode_cinematic">Cinematisch (21:9)</string>
     <string name="video_ratio_mode_square">Vierkant (1:1)</string>
+    <string name="menu_view_type_list">Lijst</string>
+    <string name="menu_view_type_grid">Raster</string>
+    <string name="menu_view_type_card">Kaart</string>
     <string name="btn_add_new">Nieuwe afspeellijst</string>
     <string name="msg_no_playlist">Geen afspeellijsten gevonden</string>
     <string name="msg_no_items_found">Artikelen niet gevonden</string>
-    <string name="msg_no_epg_found">epg niet gevonden</string>
+    <string name="msg_no_epg_found">EPG niet gevonden</string>
     <string name="hint_update_period">Updateperiode</string>
+    <string name="favorite_common">Algemeen</string>
+    <string name="favorite_movie">Film</string>
+    <string name="favorite_show">Serie</string>
+    <string name="favorite_sport">Sport</string>
+    <string name="favorite_cartoon">Tekeningen</string>
+    <string name="favorite_documentary">Documentaire</string>
+    <string name="favorite_add">Toevoegen aan favorieten</string>
+    <string name="favorite_remove">Verwijderen uit favorieten</string>
+    <string name="action_back">Terug</string>
+    <string name="action_close">Sluiten</string>
+    <string name="action_search">Zoeken</string>
+    <string name="action_settings">Instellingen</string>
+    <string name="action_change_view_type">Weergavetype wijzigen</string>
+    <string name="action_play">Afspelen</string>
+    <string name="action_pause">Pauzeren</string>
+    <string name="action_favorites">Favorieten</string>
+    <string name="action_change_video_size">Videogrootte wijzigen</string>
+    <string name="action_fullscreen">Volledig scherm</string>
+    <string name="action_exit_fullscreen">Volledig scherm afsluiten</string>
+    <string name="action_volume_down">Volume verlagen</string>
+    <string name="action_volume_up">Volume verhogen</string>
+    <string name="action_previous_channel">Vorig kanaal</string>
+    <string name="action_next_channel">Volgend kanaal</string>
+    <string name="action_open_programs">Programma’s openen</string>
+    <string name="action_open_channels">Kanalen openen</string>
+    <string name="action_open_info">Informatie openen</string>
+    <string name="action_clear_search">Zoekopdracht wissen</string>
+    <plurals name="duration_hours">
+        <item quantity="one">%1$d u</item>
+        <item quantity="other">%1$d u</item>
+    </plurals>
+    <plurals name="duration_minutes">
+        <item quantity="one">%1$d min</item>
+        <item quantity="other">%1$d min</item>
+    </plurals>
 </resources>

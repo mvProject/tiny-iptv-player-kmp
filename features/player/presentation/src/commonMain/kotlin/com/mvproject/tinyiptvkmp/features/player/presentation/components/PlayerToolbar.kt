@@ -166,26 +166,3 @@ private fun PlayerProgress(
         )
     }
 }
-
-// todo replace preview
-/*
-@Composable
-@Preview(showBackground = true)
-fun DarkPreviewPlayerChannelView() {
-    VideoAppTheme(darkTheme = true) {
-        PlayerChannelView(
-            currentChannel = TvPlaylistChannel(
-                channelName = "Test",
-                channelEpg = listOf(
-                    EpgProgram(
-                        title = "Epg Title",
-                        channelId = "id",
-                        start = System.currentTimeMillis() - 30.minutes.inWholeMilliseconds,
-                        stop = System.currentTimeMillis() + 30.minutes.inWholeMilliseconds,
-                        description = "Epg Description"
-                    )
-                )
-            )
-        )
-    }
-}*/

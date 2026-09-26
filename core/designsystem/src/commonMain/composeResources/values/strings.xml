@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <resources>
-    <string name="app_name">Tiny Iptv Player</string>
+    <string name="app_name">Tiny IPTV Player</string>
     <string name="playlist_update_6_hours">6 Hours</string>
     <string name="playlist_update_12_hours">12 Hours</string>
     <string name="playlist_update_24_hours">24 Hours</string>
@@ -8,8 +8,8 @@
     <string name="playlist_update_1_week">1 Week</string>
     <string name="playlist_update_never">Never</string>
     <string name="video_resize_mode_fill">Fill</string>
-    <string name="video_resize_mode_fixed_width">FixedWidth</string>
-    <string name="video_resize_mode_fixed_height">FixedHeight</string>
+    <string name="video_resize_mode_fixed_width">Fixed width</string>
+    <string name="video_resize_mode_fixed_height">Fixed height</string>
     <string name="video_resize_mode_fit">Fit</string>
     <string name="video_resize_mode_zoom">Zoom</string>
     <string name="video_ratio_mode_original">Original</string>
@@ -24,6 +24,41 @@
     <string name="btn_add_new">New playlist</string>
     <string name="msg_no_playlist">No playlists found</string>
     <string name="msg_no_items_found">Items not found</string>
-    <string name="msg_no_epg_found">epg not found</string>
+    <string name="msg_no_epg_found">EPG not found</string>
     <string name="hint_update_period">Update period</string>
+    <string name="favorite_common">Common</string>
+    <string name="favorite_movie">Movie</string>
+    <string name="favorite_show">Show</string>
+    <string name="favorite_sport">Sport</string>
+    <string name="favorite_cartoon">Cartoon</string>
+    <string name="favorite_documentary">Documentary</string>
+    <string name="favorite_add">Add to favorites</string>
+    <string name="favorite_remove">Remove from favorites</string>
+    <string name="action_back">Back</string>
+    <string name="action_close">Close</string>
+    <string name="action_search">Search</string>
+    <string name="action_settings">Settings</string>
+    <string name="action_change_view_type">Change view type</string>
+    <string name="action_play">Play</string>
+    <string name="action_pause">Pause</string>
+    <string name="action_favorites">Favorites</string>
+    <string name="action_change_video_size">Change video size</string>
+    <string name="action_fullscreen">Fullscreen</string>
+    <string name="action_exit_fullscreen">Exit fullscreen</string>
+    <string name="action_volume_down">Volume down</string>
+    <string name="action_volume_up">Volume up</string>
+    <string name="action_previous_channel">Previous channel</string>
+    <string name="action_next_channel">Next channel</string>
+    <string name="action_open_programs">Open programs</string>
+    <string name="action_open_channels">Open channels</string>
+    <string name="action_open_info">Open info</string>
+    <string name="action_clear_search">Clear search</string>
+    <plurals name="duration_hours">
+        <item quantity="one">%1$d h</item>
+        <item quantity="other">%1$d h</item>
+    </plurals>
+    <plurals name="duration_minutes">
+        <item quantity="one">%1$d min</item>
+        <item quantity="other">%1$d min</item>
+    </plurals>
 </resources>

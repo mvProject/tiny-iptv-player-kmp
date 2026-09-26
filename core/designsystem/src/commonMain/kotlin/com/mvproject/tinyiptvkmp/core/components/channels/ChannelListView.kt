@@ -12,6 +12,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.semantics.Role
 import com.mvproject.tinyiptvkmp.core.components.buttons.FavoriteButton
 import com.mvproject.tinyiptvkmp.core.components.indicators.ProgramProgressIndicator
 import com.mvproject.tinyiptvkmp.core.components.texts.ChannelTitle
@@ -34,12 +35,13 @@ fun ChannelListView(
 ) {
     Column(
         modifier = modifier
+            .clip(MaterialTheme.shapes.extraSmall)
             .background(MaterialTheme.colorScheme.surface)
             .combinedClickable(
                 onClick = onChannelSelect,
                 onLongClick = onShowEpgClick,
-            )
-            .clip(MaterialTheme.shapes.extraSmall),
+                role = Role.Button,
+            ),
     ) {
         Row(
             modifier = Modifier.padding(MaterialTheme.dimensionSize.size8),

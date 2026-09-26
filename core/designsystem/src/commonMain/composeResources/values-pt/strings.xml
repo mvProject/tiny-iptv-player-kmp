@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <resources>
-    <string name="app_name">Tiny Iptv Player</string>
+    <string name="app_name">Tiny IPTV Player</string>
     <string name="playlist_update_6_hours">6 horas</string>
     <string name="playlist_update_12_hours">12 horas</string>
     <string name="playlist_update_24_hours">24 horas</string>
@@ -9,17 +9,55 @@
     <string name="playlist_update_never">Nunca</string>
     <string name="video_resize_mode_fill">Preencher</string>
     <string name="video_resize_mode_fixed_width">Largura fixa</string>
-    <string name="video_resize_mode_fixed_height">Altura Fixa</string>
+    <string name="video_resize_mode_fixed_height">Altura fixa</string>
     <string name="video_resize_mode_fit">Ajustar</string>
     <string name="video_resize_mode_zoom">Ampliação</string>
     <string name="video_ratio_mode_original">Original</string>
-    <string name="video_ratio_mode_wideScreen">Tela ampla (16:9)</string>
-    <string name="video_ratio_mode_fullScreen">Tela Cheia (4:3)</string>
+    <string name="video_ratio_mode_wideScreen">Ecrã largo (16:9)</string>
+    <string name="video_ratio_mode_fullScreen">Ecrã inteiro (4:3)</string>
     <string name="video_ratio_mode_cinematic">Cinematográfico (21:9)</string>
     <string name="video_ratio_mode_square">Quadrado (1:1)</string>
-    <string name="btn_add_new">Nova Playlist</string>
+    <string name="menu_view_type_list">Lista</string>
+    <string name="menu_view_type_grid">Grelha</string>
+    <string name="menu_view_type_card">Cartão</string>
+    <string name="btn_add_new">Nova playlist</string>
     <string name="msg_no_playlist">Nenhuma playlist encontrada</string>
     <string name="msg_no_items_found">Itens não encontrados</string>
-    <string name="msg_no_epg_found">epg não encontrado</string>
+    <string name="msg_no_epg_found">EPG não encontrado</string>
     <string name="hint_update_period">Período de atualização</string>
+    <string name="favorite_common">Geral</string>
+    <string name="favorite_movie">Filme</string>
+    <string name="favorite_show">Série</string>
+    <string name="favorite_sport">Desporto</string>
+    <string name="favorite_cartoon">Desenhos animados</string>
+    <string name="favorite_documentary">Documentário</string>
+    <string name="favorite_add">Adicionar aos favoritos</string>
+    <string name="favorite_remove">Remover dos favoritos</string>
+    <string name="action_back">Voltar</string>
+    <string name="action_close">Fechar</string>
+    <string name="action_search">Pesquisar</string>
+    <string name="action_settings">Definições</string>
+    <string name="action_change_view_type">Alterar tipo de vista</string>
+    <string name="action_play">Reproduzir</string>
+    <string name="action_pause">Pausa</string>
+    <string name="action_favorites">Favoritos</string>
+    <string name="action_change_video_size">Alterar tamanho do vídeo</string>
+    <string name="action_fullscreen">Ecrã inteiro</string>
+    <string name="action_exit_fullscreen">Sair do ecrã inteiro</string>
+    <string name="action_volume_down">Baixar o volume</string>
+    <string name="action_volume_up">Subir o volume</string>
+    <string name="action_previous_channel">Canal anterior</string>
+    <string name="action_next_channel">Canal seguinte</string>
+    <string name="action_open_programs">Abrir programas</string>
+    <string name="action_open_channels">Abrir canais</string>
+    <string name="action_open_info">Abrir informações</string>
+    <string name="action_clear_search">Limpar pesquisa</string>
+    <plurals name="duration_hours">
+        <item quantity="one">%1$d h</item>
+        <item quantity="other">%1$d h</item>
+    </plurals>
+    <plurals name="duration_minutes">
+        <item quantity="one">%1$d min</item>
+        <item quantity="other">%1$d min</item>
+    </plurals>
 </resources>

@@ -13,11 +13,10 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
-import com.mvproject.tinyiptvkmp.core.components.channels.ChannelFavoriteSelector
 import com.mvproject.tinyiptvkmp.core.components.channels.ChannelProgramUiModel
 import com.mvproject.tinyiptvkmp.core.components.channels.ChannelPrograms
+import com.mvproject.tinyiptvkmp.core.components.selectors.OptionGroup
 import com.mvproject.tinyiptvkmp.core.theme.dimensionFraction
-import com.mvproject.tinyiptvkmp.features.channels.api.domain.model.FavoriteType
 import com.mvproject.tinyiptvkmp.features.epg.api.domain.model.TvChannelWithPrograms
 import com.mvproject.tinyiptvkmp.features.player.presentation.PlayerAction
 import com.mvproject.tinyiptvkmp.features.player.presentation.PlayerState.PlayerOSD
@@ -82,10 +81,14 @@ fun PlayerOsdContent(
             }
 
             PlayerOSD.ChannelFavorites -> {
-                ChannelFavoriteSelector(
-                    options = favoriteOptionsUiModels(currentChannel.favoriteType),
-                    onSelectFavorite = { option ->
-                        onAction(PlayerAction.UpdateFavorite(FavoriteType.valueOf(option.id)))
+                val favorites = favoriteOptionSet(currentChannel.favoriteType)
+
+                OptionGroup(
+                    options = favorites.values,
+                    optionLabel = favorites.label,
+                    selected = currentChannel.favoriteType,
+                    onSelected = { type ->
+                        onAction(PlayerAction.UpdateFavorite(type))
                     },
                 )
             }

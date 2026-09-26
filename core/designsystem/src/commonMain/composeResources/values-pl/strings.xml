@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <resources>
-    <string name="app_name">Tiny Iptv Player</string>
+    <string name="app_name">Tiny IPTV Player</string>
     <string name="playlist_update_6_hours">6 godzin</string>
     <string name="playlist_update_12_hours">12 godzin</string>
     <string name="playlist_update_24_hours">24 godziny</string>
@@ -15,11 +15,49 @@
     <string name="video_ratio_mode_original">Oryginalny</string>
     <string name="video_ratio_mode_wideScreen">Szeroki ekran (16:9)</string>
     <string name="video_ratio_mode_fullScreen">Pełny ekran (4:3)</string>
-    <string name="video_ratio_mode_cinematic">Filmowy (21:9)</string>
+    <string name="video_ratio_mode_cinematic">Kinowy (21:9)</string>
     <string name="video_ratio_mode_square">Kwadrat (1:1)</string>
+    <string name="menu_view_type_list">Lista</string>
+    <string name="menu_view_type_grid">Siatka</string>
+    <string name="menu_view_type_card">Karta</string>
     <string name="btn_add_new">Nowa playlista</string>
     <string name="msg_no_playlist">Nie znaleziono playlist</string>
     <string name="msg_no_items_found">Nie znaleziono elementów</string>
-    <string name="msg_no_epg_found">Nie znaleziono epg</string>
+    <string name="msg_no_epg_found">Nie znaleziono EPG</string>
     <string name="hint_update_period">Okres aktualizacji</string>
+    <string name="favorite_common">Ogólne</string>
+    <string name="favorite_movie">Film</string>
+    <string name="favorite_show">Serial</string>
+    <string name="favorite_sport">Sport</string>
+    <string name="favorite_cartoon">Bajki</string>
+    <string name="favorite_documentary">Dokumentalny</string>
+    <string name="favorite_add">Dodaj do ulubionych</string>
+    <string name="favorite_remove">Usuń z ulubionych</string>
+    <string name="action_back">Wstecz</string>
+    <string name="action_close">Zamknij</string>
+    <string name="action_search">Szukaj</string>
+    <string name="action_settings">Ustawienia</string>
+    <string name="action_change_view_type">Zmień typ widoku</string>
+    <string name="action_play">Odtwórz</string>
+    <string name="action_pause">Pauza</string>
+    <string name="action_favorites">Ulubione</string>
+    <string name="action_change_video_size">Zmień rozmiar wideo</string>
+    <string name="action_fullscreen">Pełny ekran</string>
+    <string name="action_exit_fullscreen">Wyjdź z pełnego ekranu</string>
+    <string name="action_volume_down">Zmniejsz głośność</string>
+    <string name="action_volume_up">Zwiększ głośność</string>
+    <string name="action_previous_channel">Poprzedni kanał</string>
+    <string name="action_next_channel">Następny kanał</string>
+    <string name="action_open_programs">Otwórz programy</string>
+    <string name="action_open_channels">Otwórz kanały</string>
+    <string name="action_open_info">Otwórz informacje</string>
+    <string name="action_clear_search">Wyczyść wyszukiwanie</string>
+    <plurals name="duration_hours">
+        <item quantity="one">%1$d godz.</item>
+        <item quantity="other">%1$d godz.</item>
+    </plurals>
+    <plurals name="duration_minutes">
+        <item quantity="one">%1$d min</item>
+        <item quantity="other">%1$d min</item>
+    </plurals>
 </resources>

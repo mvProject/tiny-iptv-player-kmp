@@ -5,9 +5,11 @@
     <string name="scr_playlist_settings_title">Configuración de listas de reproducción</string>
     <string name="scr_player_settings_title">Configuración del reproductor</string>
 
+    <string name="btn_delete_playlist">Eliminar lista de reproducción</string>
+
     <string name="option_update_title">Actualizar</string>
-    <string name="option_update_epg_info">información epg</string>
-    <string name="option_update_epg_data">datos epg</string>
+    <string name="option_update_epg_info">Información de EPG</string>
+    <string name="option_update_epg_data">Datos de EPG</string>
     <string name="option_default_resize_mode">Modo de cambio de tamaño predeterminado</string>
     <string name="option_default_fullscreen_mode">Usar pantalla completa por defecto</string>
 </resources>

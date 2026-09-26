@@ -108,26 +108,3 @@ private fun ProgramDescriptionEmpty(
         )
     }
 }
-
-// todo replace preview
-/*
-@Composable
-@Preview(showBackground = true)
-fun DarkPreviewOverlayChannelInfo() {
-    VideoAppTheme(darkTheme = true) {
-        OverlayChannelInfo(
-            currentChannel = TvPlaylistChannel(
-                channelName = "Test",
-                channelEpg = listOf(
-                    EpgProgram(
-                        title = "Epg",
-                        channelId = "id",
-                        start = System.currentTimeMillis() - 30.minutes.inWholeMilliseconds,
-                        stop = System.currentTimeMillis() + 30.minutes.inWholeMilliseconds,
-                        description = "Epg Description"
-                    )
-                )
-            )
-        )
-    }
-}*/
